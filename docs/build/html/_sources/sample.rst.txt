@@ -92,6 +92,20 @@ Output
 .. literalinclude:: samples_output\system.txt
 
 
+.. _sample_services_demo:
+
+Services
+""""""""
+
+.. literalinclude:: ..\..\samples\service\service_demo.py
+
+Output
+
+.. literalinclude:: samples_output\service_service_demo.txt
+
+
+
+
 .. _sample_network_exploration:
 
 :class:`Network` - socket exploration
@@ -160,6 +174,27 @@ find objects
 Output
 
 .. literalinclude:: samples_output\object_manager_findobj.txt
+
+
+.. _sample_device_manager:
+
+Device manager
+""""""""""""""
+
+.. literalinclude:: ..\..\samples\device_manager\device_manager.py
+
+Output
+
+.. literalinclude:: samples_output\device_manager_device_manager.txt
+
+
+Enumerate devices
+'''''''''''''''''
+
+.. literalinclude:: ..\..\samples\device_manager\enum_devices.py
+
+
+.. literalinclude:: samples_output\device_manager_enum_devices.txt
 
 
 .. _sample_wintrust:
@@ -309,6 +344,18 @@ Ouput
 .. literalinclude:: samples_output\test_code.txt
 
 
+.. _sample_symbol_debugger:
+
+:class:`SymbolDebugger`
+'''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbol_debugger.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_debugger.txt
+
+
 .. _sample_local_debugger:
 
 
@@ -355,6 +402,43 @@ Ouput::
     I AM LOADING <C:\Windows\system32\shell32.dll>
     I AM LOADING <C:\Windows\SYSTEM32\WINMM.dll>
     I AM LOADING <C:\Windows\system32\ole32.dll>
+
+
+.. _sample_symbols:
+
+Symbols
+"""""""
+
+VirtualSymbolHandler
+''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\virtsymdemo.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_virtsymdemo.txt
+
+
+ProcessSymbolHandler
+''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\processsymdemo.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_processsymdemo.txt
+
+
+
+Symbol search
+'''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\symsearch.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_symsearch.txt
+
 
 
 .. _wmi_samples:
@@ -585,3 +669,27 @@ Query SACL
 Output
 
 .. literalinclude:: samples_output\security_query_sacl.txt
+
+
+.. _sample_etw:
+
+ETW (Event Tracing for Windows)
+"""""""""""""""""""""""""""""""
+
+Trace processing
+''''''''''''''''
+
+.. literalinclude:: ..\..\samples\etw\uac_trace.py
+
+Output
+
+.. literalinclude:: samples_output\etw_uac_trace.txt
+
+Enumeration
+'''''''''''
+
+.. literalinclude:: ..\..\samples\etw\etw_enumeration.py
+
+Output
+
+.. literalinclude:: samples_output\etw_etw_enumeration.txt

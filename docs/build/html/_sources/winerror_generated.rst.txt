@@ -1,7 +1,7 @@
 .. currentmodule:: windows.generated_def
 
 WinError
-------
+--------
 .. autodata:: FACILITY_NULL
 .. autodata:: FACILITY_RPC
 .. autodata:: FACILITY_DISPATCH

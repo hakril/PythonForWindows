@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.token &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.winobject.token &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -41,9 +44,10 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="c1"># import windows.security # at the end of this file (loop import)</span>
 
 <span class="n">bltn_type</span> <span class="o">=</span> <span class="nb">type</span>
 
@@ -85,7 +89,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">Sid</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> count=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GroupCount</span><span class="p">)</span></div>
 
 <span class="n">TokenGroupsType</span> <span class="o">=</span> <span class="n">TokenGroups</span> <span class="c1"># Prevent confusion with token.TokenGroups</span>
@@ -127,7 +131,7 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<div class="viewcode-block" id="TokenPrivileges.__getitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="TokenPrivileges.__getitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the attribute value for privilege ``name``</span>
 
 <span class="sd">        :raises: KeyError if privilege ``name`` not in the TokenPrivileges</span>
@@ -138,7 +142,7 @@
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">priv</span><span class="o">.</span><span class="n">Attributes</span></div>
 
-<div class="viewcode-block" id="TokenPrivileges.__setitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="TokenPrivileges.__setitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__setitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the attribute value for privilege ``name``</span>
 
 <span class="sd">        :raises: KeyError if privilege ``name`` not in the TokenPrivileges</span>
@@ -201,7 +205,7 @@
         <span class="n">array_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VALUE_ARRAY_PTR_BY_TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueType</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Values</span><span class="p">,</span> <span class="n">array_name</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueCount</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
@@ -215,7 +219,7 @@
 
 <span class="sd">        see `[MSDN] TOKEN_INFORMATION_CLASS &lt;https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ne-winnt-_token_information_class&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
 
     <span class="k">def</span> <span class="nf">_get_required_token_information_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">infos_class</span><span class="p">):</span>
@@ -347,7 +351,6 @@
 
 <span class="sd">        :type: :class:`windows.security.Acl`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">window.security</span> <span class="c1"># Beuk move token.py &amp; in a security/ directory ?</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token_infomations</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenDefaultDacl</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">PAcl</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># def source(self): (tok.TokenSource) ??</span>
@@ -650,13 +653,16 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> has no privilege &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjust_privileges</span><span class="p">(</span><span class="n">privs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">flag_repr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">Flag</span><span class="o">.</span><span class="fm">__repr__</span>
         <span class="n">tid_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="o">.</span><span class="n">TokenId</span><span class="p">)</span>
         <span class="n">toktype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
         <span class="k">if</span> <span class="n">toktype</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrimary</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> TokenId=</span><span class="si">{1:#x}</span><span class="s2"> Type=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tid_int</span><span class="p">,</span> <span class="n">flag_repr</span><span class="p">(</span><span class="n">toktype</span><span class="p">))</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> TokenId=</span><span class="si">{1:#x}</span><span class="s2"> Type=</span><span class="si">{2}</span><span class="s2"> ImpersonationLevel=</span><span class="si">{3}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tid_int</span><span class="p">,</span> <span class="n">flag_repr</span><span class="p">(</span><span class="n">toktype</span><span class="p">),</span> <span class="n">flag_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">impersonation_level</span><span class="p">))</span></div>
+
+
+<span class="kn">import</span> <span class="nn">windows.security</span>
 </pre></div>
 
           </div>
@@ -689,13 +695,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

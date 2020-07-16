@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.8. Service &#8212; PythonForWindows 0.5 documentation</title>
+    <title>2.8. Service &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2.9. Volume – The logical drives" href="volume.html" />
@@ -34,7 +37,7 @@
         <li class="right" >
           <a href="network.html" title="2.7. Network"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -46,69 +49,193 @@
             
   <div class="section" id="service">
 <h1>2.8. Service<a class="headerlink" href="#service" title="Permalink to this headline">¶</a></h1>
-<p>The list of services is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.services" title="windows.winobject.system.System.services"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.services</span></code></a></p>
+<p>The services manager is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.services" title="windows.winobject.system.System.services"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.services</span></code></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#sample-system"><span class="std std-ref">windows.system</span></a></p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-system"><span class="std std-ref">windows.system</span></a> &amp; <a class="reference internal" href="sample.html#sample-services-demo"><span class="std std-ref">Services</span></a></p>
 </div>
-<span class="target" id="module-windows.winobject.service"></span><dl class="class">
-<dt id="windows.winobject.service.ServiceStatus">
-<em class="property">class </em><code class="descclassname">windows.winobject.service.</code><code class="descname">ServiceStatus</code><span class="sig-paren">(</span><em>type</em>, <em>state</em>, <em>control_accepted</em>, <em>flags</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.service.ServiceStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal notranslate"><span class="pre">type</span></code> might be one of:</p>
-<blockquote>
-<div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_KERNEL_DRIVER(0x1L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_FILE_SYSTEM_DRIVER(0x2L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_WIN32_OWN_PROCESS(0x10L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_WIN32_SHARE_PROCESS(0x20L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_INTERACTIVE_PROCESS(0x100L)</span></code></li>
-</ul>
-</div></blockquote>
-<p><code class="docutils literal notranslate"><span class="pre">state</span></code> might be one of:</p>
-<blockquote>
-<div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_STOPPED(0x1L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_START_PENDING(0x2L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_STOP_PENDING(0x3L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_RUNNING(0x4L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_CONTINUE_PENDING(0x5L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_PAUSE_PENDING(0x6L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_PAUSED(0x7L)</span></code></li>
-</ul>
-</div></blockquote>
-<p><code class="docutils literal notranslate"><span class="pre">flags</span></code> might be one of:</p>
-<blockquote>
-<div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SERVICE_RUNS_IN_SYSTEM_PROCESS(0x1L)</span></code></li>
-</ul>
-</div></blockquote>
-<dl class="attribute">
-<dt id="windows.winobject.service.ServiceStatus.control_accepted">
-<code class="descname">control_accepted</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.control_accepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
+<span class="target" id="module-windows.winobject.service"></span><div class="section" id="servicemanager">
+<h2>2.8.1. ServiceManager<a class="headerlink" href="#servicemanager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.service.ServiceManager">
+<em class="property">class </em><code class="descclassname">windows.winobject.service.</code><code class="descname">ServiceManager</code><a class="reference internal" href="_modules/windows/winobject/service.html#ServiceManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.ServiceManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
+<p>An object to query, list and explore services</p>
+<dl class="method">
+<dt id="windows.winobject.service.ServiceManager.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>key</em>, <em>access=MAXIMUM_ALLOWED(0x2000000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.service.ServiceManager.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a service by its name/index or a list of services via a slice</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a> or [<a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a>] – A <a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a> or list of <a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.service.ServiceManager.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.service.ServiceManager.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iter over the services on the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.service.ServiceManager.get_service">
+<code class="descname">get_service</code><span class="sig-paren">(</span><em>key</em>, <em>access=MAXIMUM_ALLOWED(0x2000000)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#ServiceManager.get_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.ServiceManager.get_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a service by its name/index or a list of services via a slice</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a> or [<a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a>] – A <a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a> or list of <a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.winobject.service.ServiceStatus.flags">
-<code class="descname">flags</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.flags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
+<dt id="windows.winobject.service.ServiceManager.handle">
+<code class="descname">handle</code><a class="headerlink" href="#windows.winobject.service.ServiceManager.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>An handle on the object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first">HANDLE</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The handle is automaticaly closed when the object is destroyed</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.service.ServiceManager.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.service.ServiceManager.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>2.8.2. Service<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.service.Service">
+<em class="property">class </em><code class="descclassname">windows.winobject.service.</code><code class="descname">Service</code><span class="sig-paren">(</span><em>handle</em>, <em>name</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#Service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent a service on the system</p>
+<dl class="attribute">
+<dt id="windows.winobject.service.Service.description">
+<code class="descname">description</code><a class="headerlink" href="#windows.winobject.service.Service.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.winobject.service.ServiceStatus.state">
-<code class="descname">state</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
+<dt id="windows.winobject.service.Service.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#windows.winobject.service.Service.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.winobject.service.ServiceStatus.type">
-<code class="descname">type</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dt id="windows.winobject.service.Service.process">
+<code class="descname">process</code><a class="headerlink" href="#windows.winobject.service.Service.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>The process running the service (if any)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="process.html#windows.winobject.process.WinProcess" title="windows.winobject.process.WinProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">WinProcess</span></code></a> or <code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.Service.security_descriptor">
+<code class="descname">security_descriptor</code><a class="headerlink" href="#windows.winobject.service.Service.security_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The security descriptor of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="security.html#windows.security.SecurityDescriptor" title="windows.security.SecurityDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">SecurityDescriptor</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.service.Service.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>args=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#Service.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.Service.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> – a list of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.Service.status">
+<code class="descname">status</code><a class="headerlink" href="#windows.winobject.service.Service.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The status of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SERVICE_STATUS_PROCESS" title="windows.generated_def.winstructs.SERVICE_STATUS_PROCESS"><code class="xref py py-class docutils literal notranslate"><span class="pre">SERVICE_STATUS_PROCESS</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.service.Service.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#Service.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.Service.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the service</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.Service.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.service.Service.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -117,6 +244,15 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.8. Service</a><ul>
+<li><a class="reference internal" href="#servicemanager">2.8.1. ServiceManager</a></li>
+<li><a class="reference internal" href="#id1">2.8.2. Service</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="network.html"
                         title="previous chapter">2.7. Network</a></p>
@@ -161,13 +297,13 @@
         <li class="right" >
           <a href="network.html" title="2.7. Network"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

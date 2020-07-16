@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 0.5 documentation</title>
+    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="14. windows.generated_def – generated Windows defines and structures" href="generated.html" />
@@ -34,7 +37,7 @@
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -71,6 +74,12 @@
 <dt id="windows.rpc.RPCClient">
 <em class="property">class </em><code class="descclassname">windows.rpc.</code><code class="descname">RPCClient</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling</p>
+<dl class="attribute">
+<dt id="windows.rpc.RPCClient.alpc_client">
+<code class="descname">alpc_client</code><em class="property"> = None</em><a class="headerlink" href="#windows.rpc.RPCClient.alpc_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="alpc.html#windows.alpc.AlpcClient" title="windows.alpc.AlpcClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.alpc.AlpcClient</span></code></a> used to communicate with the server</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.rpc.RPCClient.bind">
 <code class="descname">bind</code><span class="sig-paren">(</span><em>IID_str</em>, <em>version=(1</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.bind" title="Permalink to this definition">¶</a></dt>
@@ -222,7 +231,7 @@ Can be used to craft request without directly sending it</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">find_alpc_endpoint_and_connect</span><span class="p">(</span><span class="n">UAC_UIID</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span>
 <span class="go">&lt;windows.rpc.client.RPCClient object at 0x046A1470&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">portname</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">port_name</span>
 <span class="go">&#39;\\RPC Control\\LRPC-c30c67fef2afa1612b&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">iid</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">UAC_UIID</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">iid</span>
@@ -264,7 +273,7 @@ Can be used to craft request without directly sending it</p>
 
 </dd></dl>
 
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="kn">as</span> <span class="nn">gdef</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sid</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_known_sid</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WinLocalSystemSid</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sid</span>
 <span class="go">c_void_p(78304040)</span>
@@ -342,7 +351,7 @@ Can be used to craft request without directly sending it</p>
 <dl class="class">
 <dt id="windows.rpc.ndr.NdrShort">
 <em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrShort</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrShort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrShort" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrShort</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="mh">0x0102</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
 <span class="go">&#39;\x02\x01&#39;</span>
@@ -484,7 +493,7 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a><ul>
 <li><a class="reference internal" href="#rpcclient">13.1. RPCClient</a></li>
@@ -545,12 +554,12 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

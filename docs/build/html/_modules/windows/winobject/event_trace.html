@@ -1,0 +1,532 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.winobject.event_trace &#8212; PythonForWindows 0.6 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.event_trace</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">basestring</span>
+
+<span class="c1"># Renommer le fichier etw ?</span>
+
+<span class="n">MAX_ETW_SESSIONS</span>  <span class="o">=</span> <span class="mi">64</span>
+<span class="n">MAX_SESSION_NAME_LEN</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">MAX_LOGFILE_PATH_LEN</span>  <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="n">MAX_SESSION_NAME_LEN_W</span> <span class="o">=</span> <span class="n">MAX_SESSION_NAME_LEN</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">MAX_LOGFILE_PATH_LEN_W</span> <span class="o">=</span> <span class="n">MAX_LOGFILE_PATH_LEN</span> <span class="o">*</span> <span class="mi">2</span>
+
+
+<div class="viewcode-block" id="EventRecord"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EventRecord">[docs]</a><span class="k">class</span> <span class="nc">EventRecord</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_RECORD</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Thread ID that provided the event&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">ThreadId</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Process ID that provided the event&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">ProcessId</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Guid of the Event&quot;&quot;&quot;</span>
+        <span class="c1"># Well, this is called &quot;ProviderId&quot; but seems to be the Event GUID</span>
+        <span class="c1"># As a provider can generated multiple event with differents GUID</span>
+        <span class="c1"># And this value reflect EVENT_TRACE_HEADER.Guid passed to TraceEvent</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">ProviderId</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ID of the Event&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">EventDescriptor</span><span class="o">.</span><span class="n">Id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">opcode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">EventDescriptor</span><span class="o">.</span><span class="n">Opcode</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">EventDescriptor</span><span class="o">.</span><span class="n">Version</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">EventDescriptor</span><span class="o">.</span><span class="n">Level</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">UserContext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">UserContext</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">user_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Event specific data</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">UserData</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">UserDataLength</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">dbuf</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UserDataLength</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">UserData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dbuf</span><span class="p">[:]</span>
+
+    <span class="c1"># def match(self, provider=None, id=None, opcode=None):</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">guid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">ProviderId</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> provider=&quot;</span><span class="si">{1}</span><span class="s2">&quot; id=</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+
+<span class="n">PEventRecord</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">EventRecord</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EventTraceProperties"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EventTraceProperties">[docs]</a><span class="k">class</span> <span class="nc">EventTraceProperties</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_PROPERTIES</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent an Event Trace session that may exist or now. (https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-event_trace_properties)</span>
+
+<span class="sd">    This class is widly used by :class:`EtwTrace`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Test: ascii / Use Wchar ?</span>
+    <span class="n">FULL_SIZE</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_PROPERTIES</span><span class="p">)</span> <span class="o">+</span> <span class="n">MAX_SESSION_NAME_LEN_W</span> <span class="o">+</span> <span class="n">MAX_LOGFILE_PATH_LEN_W</span>
+
+    <span class="c1"># def alloc(cls, size) ?</span>
+<div class="viewcode-block" id="EventTraceProperties.create"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EventTraceProperties.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new :class:`EventTraceProperties`&quot;&quot;&quot;</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="bp">cls</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">FULL_SIZE</span><span class="p">)</span>
+        <span class="c1"># ctypes.memset(buff, &quot;\x00&quot;, cls.FULL_SIZE)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">BufferSize</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">FULL_SIZE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LoggerNameOffset</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LogFileNameOffset</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">+</span> <span class="n">MAX_SESSION_NAME_LEN</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">get_logfilename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogFileNameOffset</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogFileNameOffset</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_logfilename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogFileNameOffset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogFileNameOffset</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">logfile</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_logfilename</span><span class="p">,</span> <span class="n">set_logfilename</span><span class="p">)</span> <span class="c1">#: The logfile associated with the session</span>
+
+    <span class="k">def</span> <span class="nf">get_logger_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoggerNameOffset</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoggerNameOffset</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">set_logfilename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoggerNameOffset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoggerNameOffset</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_logger_name</span><span class="p">,</span> <span class="n">set_logfilename</span><span class="p">)</span> <span class="c1">#: The name of the session</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The GUID of the Event Trace session (see ``Wnode.Guid``)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">Guid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The LoggerId if the session (see ``Wnode.HistoricalContext``)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">HistoricalContext</span>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot; guid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">)</span></div>
+
+
+    <span class="c1"># GUID setter ?</span>
+
+<span class="k">class</span> <span class="nc">CtxProcess</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">trace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">stop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timing</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_get_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILETIME</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemTimeAsFileTime</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">now</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timing</span><span class="p">[</span><span class="s2">&quot;begin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_time</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">timing</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="c1"># bad_end = self._get_time()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="c1"># End time after the flush is effective.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timing</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_time</span><span class="p">()</span>
+        <span class="c1"># print(&quot;Trace ctx: fake-end: {0:#x}&quot;.format(int(fake_end)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trace ctx: begin=</span><span class="si">{0:#x}</span><span class="s2"> | end=</span><span class="si">{1:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timing</span><span class="p">[</span><span class="s2">&quot;begin&quot;</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timing</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">timing</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EtwTrace"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace">[docs]</a><span class="k">class</span> <span class="nc">EtwTrace</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent an ETW Trace for tracing/processing events&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">guid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">raw_encode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="c1">#: The name of the trace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span> <span class="c1">#: The logging file of the trace (``None`` means real time trace)</span>
+        <span class="k">if</span> <span class="n">guid</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">guid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guid</span> <span class="o">=</span> <span class="n">guid</span> <span class="c1">#: The guid of the trace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="EtwTrace.exists"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return ``True`` if the trace already exist (based on its name)&quot;&quot;&quot;</span>
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ControlTraceA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_CONTROL_QUERY</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_WMI_INSTANCE_NOT_FOUND</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span> <span class="c1"># Not found -&gt; does not exists</span>
+            <span class="k">raise</span> <span class="c1"># Other error -&gt; reraise</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EtwTrace.start"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start the tracing&quot;&quot;&quot;</span>
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">NumberOfBuffers</span> <span class="o">=</span> <span class="mi">42</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">EnableFlags</span> <span class="o">=</span> <span class="n">flags</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">:</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">Guid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">:</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># Base REAL_TIME on option ? name presence ? logfile presence ?</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">LogFileMode</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_REAL_TIME_MODE</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TRACEHANDLE</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartTraceA</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guid</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">Guid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span></div>
+
+<div class="viewcode-block" id="EtwTrace.stop"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soft</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> <span class="c1"># Change name</span>
+        <span class="sd">&quot;&quot;&quot;stop the tracing.</span>
+
+<span class="sd">        ``soft`` will allow to stop a non-existing trace that do not exists/run.</span>
+<span class="sd">        This allow for simpler script that stop/start some EtwTrace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ControlTraceA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_CONTROL_STOP</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">soft</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_WMI_INSTANCE_NOT_FOUND</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="EtwTrace.flush"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.flush">[docs]</a>    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Flush the trace&quot;&quot;&quot;</span>
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ControlTraceA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_CONTROL_FLUSH</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EtwTrace.enable"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.enable">[docs]</a>    <span class="k">def</span> <span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mh">0xff</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mh">0xff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable the specified event trace provider.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">guid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnableTrace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span> <span class="c1"># EnableTraceEx ?</span></div>
+
+<div class="viewcode-block" id="EtwTrace.enable_ex"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.enable_ex">[docs]</a>    <span class="k">def</span> <span class="nf">enable_ex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mh">0xff</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mh">0xff</span><span class="p">,</span> <span class="n">any_keyword</span> <span class="o">=</span> <span class="mh">0xffffffff</span><span class="p">,</span> <span class="n">all_keyword</span><span class="o">=</span><span class="mh">0x00</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable the specified event trace provider.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">guid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+
+        <span class="c1"># TODO : implement EnableParameters</span>
+        <span class="n">EVENT_CONTROL_CODE_ENABLE_PROVIDER</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># EnableTraceEx only accept a UCHAR for the level param</span>
+        <span class="c1"># TODO : maybe raise an Exception instead of silently masking the value ?</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UCHAR</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">level</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnableTraceEx2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">EVENT_CONTROL_CODE_ENABLE_PROVIDER</span><span class="p">,</span> <span class="n">level</span> <span class="p">,</span> <span class="n">any_keyword</span><span class="p">,</span> <span class="n">all_keyword</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EtwTrace.process"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Process the event retrieved by the trace.</span>
+<span class="sd">        This function will call ``callback`` with any :class:`EventRecord` in the trace.</span>
+<span class="sd">        ``begin/end`` allow to filter and only process events in a given timeframe.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            If the trace if ``REALTIME`` (no logfile) this function will hang/process new event until the trace is stopped.</span>
+
+<span class="sd">            Using ``logman -ets stop TRACE_NAME`` for exemple.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="s2">&quot;now&quot;</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILETIME</span><span class="p">()</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemTimeAsFileTime</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">sprint</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_LOGFILEW</span><span class="p">()</span>
+        <span class="n">logfile</span><span class="o">.</span><span class="n">LoggerName</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">raw_decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># logfile.ProcessTraceMode = gdef.PROCESS_TRACE_MODE_EVENT_RECORD | gdef.PROCESS_TRACE_MODE_RAW_TIMESTAMP</span>
+        <span class="n">logfile</span><span class="o">.</span><span class="n">ProcessTraceMode</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_TRACE_MODE_EVENT_RECORD</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">:</span>
+            <span class="n">logfile</span><span class="o">.</span><span class="n">ProcessTraceMode</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_TRACE_MODE_REAL_TIME</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># logfile.ProcessTraceMode |= gdef.PROCESS_TRACE_MODE_REAL_TIME</span>
+            <span class="n">logfile</span><span class="o">.</span><span class="n">LogFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>
+
+        <span class="k">if</span> <span class="n">context</span><span class="p">:</span>
+            <span class="n">context_ptr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+            <span class="n">logfile</span><span class="o">.</span><span class="n">Context</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">context_ptr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)</span>
+
+        <span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">PEventRecord</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">real_callback</span><span class="p">(</span><span class="n">record_ptr</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">callback</span><span class="p">(</span><span class="n">record_ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CALLBACK ERROR: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PEVENT_TRACE_LOGFILEW</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">buffer_callback</span><span class="p">(</span><span class="n">trace</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Buffer-callback: event-lost=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">LogfileHeader</span><span class="o">.</span><span class="n">EventsLost</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Buffer-callback: buffer-lost=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">LogfileHeader</span><span class="o">.</span><span class="n">BuffersLost</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="n">logfile</span><span class="o">.</span><span class="n">EventRecordCallback</span>  <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">real_callback</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span>
+        <span class="c1"># logfile.BufferCallback  = ctypes.cast(buffer_callback, gdef.PVOID)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenTraceW</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">rh</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TRACEHANDLE</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ProcessTrace</span><span class="p">(</span><span class="n">rh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">CtxProcess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">CtxProcess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">stop</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=</span><span class="si">{1!r}</span><span class="s2"> logfile=</span><span class="si">{2!r}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span></div>
+
+<span class="k">class</span> <span class="nc">TraceProvider</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a ETW provider, which is just a GUID.</span>
+<span class="sd">    Corresponding name for a provider may be available trhought WMI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guid</span> <span class="o">=</span> <span class="n">guid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">infos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The :class:`TraceGuidInfo` associated with the provider.</span>
+<span class="sd">        Main use is to retrieve the instances of the provider (directly available with ``instances``)</span>
+
+<span class="sd">        :type: :class:`TraceGuidInfo`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">info_buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumerateTraceGuidsEx</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TraceGuidQueryInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">),</span> <span class="n">info_buffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info_buffer</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INSUFFICIENT_BUFFER</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="c1"># Buffer to small</span>
+            <span class="n">info_buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumerateTraceGuidsEx</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TraceGuidQueryInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">),</span> <span class="n">info_buffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info_buffer</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TraceGuidInfo</span><span class="o">.</span><span class="n">from_raw_buffer</span><span class="p">(</span><span class="n">info_buffer</span><span class="p">)</span>
+
+    <span class="c1"># We dont really care about the C struct layout</span>
+    <span class="c1"># Our trace providers should be able to directly returns its instances</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The instances of the provider.</span>
+
+<span class="sd">        :type: [:class:`TraceProviderInstanceInfo`] -- A list of :class:`TraceProviderInstanceInfo`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="o">.</span><span class="n">instances</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> for &quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TraceGuidInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TRACE_GUID_INFO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines the header to the list of sessions that enabled the provider</span>
+<span class="sd">    (see https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-trace_guid_info)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_raw_buffer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_buffer_</span> <span class="o">=</span> <span class="n">buffer</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_instance_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">InstanceCount</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">abs_offset</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">InstanceCount</span><span class="p">):</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">TraceProviderInstanceInfo</span><span class="o">.</span><span class="n">from_raw_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_buffer_</span><span class="p">,</span> <span class="n">abs_offset</span><span class="p">)</span>
+            <span class="n">abs_offset</span> <span class="o">+=</span> <span class="n">instance</span><span class="o">.</span><span class="n">NextOffset</span>
+            <span class="k">yield</span> <span class="n">instance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The instances of the provider.</span>
+
+<span class="sd">        :type: [:class:`TraceProviderInstanceInfo`] -- A list of :class:`TraceProviderInstanceInfo`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instance_generator</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> InstanceCount=</span><span class="si">{1}</span><span class="s2"> Reserved=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">InstanceCount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Reserved</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TraceProviderInstanceInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TRACE_PROVIDER_INSTANCE_INFO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines an instance of the provider</span>
+<span class="sd">    (see https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-trace_provider_instance_info)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_raw_buffer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_buffer_</span> <span class="o">=</span> <span class="n">buffer</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_instance_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">+</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">entry_size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TRACE_ENABLE_INFO</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EnableCount</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TRACE_ENABLE_INFO</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_buffer_</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">entry_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sessions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sessions for the instance</span>
+
+<span class="sd">        :type: [:class:`~windows.generated_def.winstructs.TRACE_ENABLE_INFO`] -- A list of session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instance_generator</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> Pid=</span><span class="si">{1}</span><span class="s2"> EnableCount=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">EnableCount</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EtwManager"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwManager">[docs]</a><span class="k">class</span> <span class="nc">EtwManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An object to query ETW session/providers and open new trace&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sessions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of currently active ETW session.</span>
+
+<span class="sd">        :type: [:class:`EventTraceProperties`] -- A list of :class:`EventTraceProperties`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create a tuple of MAX_ETW_SESSIONS EventTraceProperties ptr</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">MAX_ETW_SESSIONS</span><span class="p">)]</span>
+        <span class="c1"># Put this in a ctypes array</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">EventTraceProperties</span><span class="p">)</span> <span class="o">*</span> <span class="n">MAX_ETW_SESSIONS</span><span class="p">)(</span><span class="o">*</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">t</span><span class="p">))</span>
+        <span class="c1"># Cast as array/ptr does not handle subtypes very-well</span>
+        <span class="n">tarray</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_PROPERTIES</span><span class="p">)))</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">QueryAllTracesA</span><span class="p">(</span><span class="n">tarray</span><span class="p">,</span> <span class="n">MAX_ETW_SESSIONS</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">[:</span><span class="n">count</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">providers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of currently existing ETW providers.</span>
+
+<span class="sd">        :type: [:class:`TraceProvider`] -- A list of ETW providers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">,</span> <span class="mh">0x1000</span><span class="p">)()</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumerateTraceGuidsEx</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TraceGuidQueryList</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">TraceProvider</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span> <span class="o">//</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)]]</span>
+
+
+    <span class="c1"># Temp name / API ?</span>
+<div class="viewcode-block" id="EtwManager.open_trace"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwManager.open_trace">[docs]</a>    <span class="k">def</span> <span class="nf">open_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">guid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a new ETW Trace</span>
+
+<span class="sd">        :return: :class:`EtwTrace`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">EtwTrace</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">guid</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

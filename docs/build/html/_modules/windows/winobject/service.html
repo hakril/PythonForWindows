@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.service &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.winobject.service &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -40,16 +43,16 @@
 <span></span><span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">windows</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">int_types</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">security</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">basestring</span>
 
-<span class="c1"># TODO: RM :)</span>
-<span class="n">ServiceStatus</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;ServiceStatus&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="s2">&quot;control_accepted&quot;</span><span class="p">,</span> <span class="s2">&quot;flags&quot;</span><span class="p">])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">``type`` might be one of:</span>
 
@@ -77,20 +80,36 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">ServiceManager</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
-    <span class="n">_close_function</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">)</span>
-
+<div class="viewcode-block" id="ServiceManager"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.ServiceManager">[docs]</a><span class="k">class</span> <span class="nc">ServiceManager</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An object to query, list and explore services&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenSCManagerA</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">open_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenServiceA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span> <span class="c1"># Check service exists :)</span>
 
-    <span class="k">def</span> <span class="nf">get_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_service</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">NewService</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+<div class="viewcode-block" id="ServiceManager.get_service"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.ServiceManager.get_service">[docs]</a>    <span class="k">def</span> <span class="nf">get_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a service by its name/index or a list of services via a slice</span>
+
+<span class="sd">        :return: :class:`Service` or [:class:`Service`] -- A :class:`Service` or list of :class:`Service`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">int_types</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_services</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="c1"># Get service list</span>
+            <span class="n">servlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_services</span><span class="p">()</span>
+            <span class="c1"># Extract indexes matching the slice</span>
+            <span class="n">indexes</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">servlist</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">servlist</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">indexes</span><span class="p">)]</span>
+        <span class="c1"># Retrieve service by its name</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_service</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span></div>
 
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">get_service</span>
+    <span class="sd">&quot;&quot;&quot;Get a service by its name/index or a list of services via a slice</span>
+
+<span class="sd">    :return: :class:`Service` or [:class:`Service`] -- A :class:`Service` or list of :class:`Service`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">get_service_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c1"># This API is strange..</span>
@@ -102,6 +121,9 @@
         <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">_enumerate_services_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The generator code behind __iter__.</span>
+<span class="sd">        Allow to iter over the services on the system</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">nb_services</span> <span class="o">=</span>  <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">counter</span> <span class="o">=</span>  <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
@@ -121,20 +143,23 @@
         <span class="n">services_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ENUM_SERVICE_STATUS_PROCESSA</span> <span class="o">*</span> <span class="n">nb_services</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">service_info</span> <span class="ow">in</span> <span class="n">services_array</span><span class="p">:</span>
             <span class="n">shandle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_service</span><span class="p">(</span><span class="n">service_info</span><span class="o">.</span><span class="n">lpServiceName</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="n">NewService</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">shandle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">service_info</span><span class="o">.</span><span class="n">lpServiceName</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">service_info</span><span class="o">.</span><span class="n">lpDisplayName</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">Service</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">shandle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">service_info</span><span class="o">.</span><span class="n">lpServiceName</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">service_info</span><span class="o">.</span><span class="n">lpDisplayName</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="fm">__iter__</span> <span class="o">=</span> <span class="n">_enumerate_services_generator</span>
+    <span class="sd">&quot;&quot;&quot;Iter over the services on the system</span>
+
+<span class="sd">    :yield: :class:`Service`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">enumerate_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_enumerate_services_generator</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_enumerate_services_generator</span><span class="p">())</span></div>
 
 
-<span class="k">class</span> <span class="nc">NewService</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SC_HANDLE</span><span class="p">):</span>
-    <span class="c1"># close_function = windows.winproxy.CloseServiceHandle</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">NewService</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+<div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.Service">[docs]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SC_HANDLE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a service on the system&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Service</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="sd">&quot;&quot;&quot;The name of the service</span>
 
@@ -153,12 +178,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The status of the service</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.SERVICE_STATUS_PROCESS`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_STATUS_PROCESS</span><span class="p">)()</span>
         <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">QueryServiceStatusEx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SC_STATUS_PROCESS_INFO</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPBYTE</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">size_needed</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="nd">@property</span> <span class="c1"># Can change if service is started/stopped when the object exist</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The process running the service (if any)</span>
 
@@ -172,27 +201,36 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The security descriptor of the service</span>
+
+<span class="sd">        :type: :class:`~windows.security.SecurityDescriptor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_service</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Service.start"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.Service.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start the service</span>
+
+<span class="sd">        :param args: a list of :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nbelt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">anybuff</span><span class="p">):</span>
                 <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">]</span>
             <span class="n">nbelt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPCSTR</span> <span class="o">*</span> <span class="p">(</span><span class="n">nbelt</span><span class="p">))(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartServiceA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbelt</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartServiceA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbelt</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Service.stop"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.Service.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the service&quot;&quot;&quot;</span>
         <span class="n">status</span> <span class="o">=</span> <span class="n">SERVICE_STATUS</span><span class="p">()</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ControlService</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_CONTROL_STOP</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">status</span>
+        <span class="k">return</span> <span class="n">status</span></div>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; </span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; </span><span class="si">{2!r}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -225,13 +263,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

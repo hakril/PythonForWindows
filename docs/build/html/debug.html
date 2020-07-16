@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>9. windows.debug – Debugging &#8212; PythonForWindows 0.5 documentation</title>
+    <title>9. windows.debug – Debugging &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="10. windows.com - Component Object Model" href="com.html" />
@@ -34,7 +37,7 @@
         <li class="right" >
           <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -48,6 +51,11 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger"><span class="std std-ref">Debugging</span></a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you are interrested by symbols (PDB) handling, go to subsection <a class="reference internal" href="#debug-symbols-module"><span class="std std-ref">windows.debug.symbols – Using symbols</span></a>.</p>
+<p class="last">You can also look at the symbols-related samples: <a class="reference internal" href="sample.html#sample-symbols"><span class="std std-ref">Symbols</span></a></p>
 </div>
 <div class="section" id="debugger">
 <h2>9.1. <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
@@ -361,8 +369,25 @@ and <code class="docutils literal notranslate"><span class="pre">DBG_EXCEPTION_N
 </dd></dl>
 
 </div>
+<div class="section" id="symboldebugger">
+<h2>9.2. <a class="reference internal" href="#windows.debug.SymbolDebugger" title="windows.debug.SymbolDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolDebugger</span></code></a><a class="headerlink" href="#symboldebugger" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-symbol-debugger"><span class="std std-ref">SymbolDebugger</span></a></p>
+</div>
+<dl class="class">
+<dt id="windows.debug.SymbolDebugger">
+<em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">SymbolDebugger</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symboldbg.html#SymbolDebugger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.SymbolDebugger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.debugger.Debugger</span></code></p>
+<p>A debugger using the symbol API (hence PDB) for name resolution.
+To use PDB, a correct version of dbghelp should be configured as well as <code class="docutils literal notranslate"><span class="pre">_NT_SYMBOL_PATH</span></code>.
+(See <a class="reference internal" href="#debug-symbols-module"><span class="std std-ref">windows.debug.symbols – Using symbols</span></a>)</p>
+<p>This debugger add a <code class="docutils literal notranslate"><span class="pre">current_resolver</span></code> variable (A <a class="reference internal" href="#windows.debug.symbols.ProcessSymbolHandler" title="windows.debug.symbols.ProcessSymbolHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessSymbolHandler</span></code></a>) for the <code class="docutils literal notranslate"><span class="pre">current_process</span></code>.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="localdebugger">
-<h2>9.2. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
+<h2>9.3. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-local-debugger"><span class="std std-ref">LocalDebugger</span></a></p>
@@ -423,7 +448,7 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 
 </div>
 <div class="section" id="breakpoint">
-<h2>9.3. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
+<h2>9.4. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
 <p>Standard breakpoints types expect an address as argument.</p>
 <p>An address can be:</p>
 <blockquote>
@@ -507,6 +532,12 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.debug.FunctionCallBP.get_ret_addr">
+<code class="descname">get_ret_addr</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionCallBP.get_ret_addr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionCallBP.get_ret_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the return address of the current target, only valid in the trigger() function.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.debug.FunctionCallBP.ret_trigger">
 <code class="descname">ret_trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionCallBP.ret_trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionCallBP.ret_trigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the return of the function if <a class="reference internal" href="#windows.debug.FunctionCallBP.break_on_ret" title="windows.debug.FunctionCallBP.break_on_ret"><code class="xref py py-func docutils literal notranslate"><span class="pre">break_on_ret()</span></code></a> was called</p>
@@ -557,6 +588,12 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.debug.FunctionBP.get_ret_addr">
+<code class="descname">get_ret_addr</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.get_ret_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the return address of the current target, only valid in the trigger() function.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.debug.FunctionBP.ret_trigger">
 <code class="descname">ret_trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.ret_trigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the return of the function if <a class="reference internal" href="#windows.debug.FunctionBP.break_on_ret" title="windows.debug.FunctionBP.break_on_ret"><code class="xref py py-func docutils literal notranslate"><span class="pre">break_on_ret()</span></code></a> was called</p>
@@ -575,6 +612,681 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger-bp-functionbp"><span class="std std-ref">windows.debug.FunctionBP</span></a></p>
 </div>
 </div>
+<div class="section" id="module-windows.debug.symbols">
+<span id="windows-debug-symbols-using-symbols"></span><span id="debug-symbols-module"></span><h2>9.5. <a class="reference internal" href="#module-windows.debug.symbols" title="windows.debug.symbols"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug.symbols</span></code></a> – Using symbols<a class="headerlink" href="#module-windows.debug.symbols" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-windows.debug.symbols" title="windows.debug.symbols"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug.symbols</span></code></a> module provide classes to load PDB and resolve name/address.
+In its current state, this module does not handle types.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See samples <a class="reference internal" href="sample.html#sample-symbols"><span class="std std-ref">Symbols</span></a></p>
+</div>
+<div class="section" id="configuration">
+<h3>9.5.1. Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>In order to be able to automatically download PDB and parse remote <code class="docutils literal notranslate"><span class="pre">_NT_SYMBOL_PATH</span></code>, a debug version of the DLL <cite>dbghelp.dll</cite> must be used.
+(See <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/debug/dbghelp-versions">MSDN: DbgHelp Versions</a>)</p>
+<p>As it is NOT recommended to replace <code class="docutils literal notranslate"><span class="pre">system32/dbghelp.dll</span></code>, its path must be provided to PythonForWindows.
+This path must be provided before any call to the <code class="docutils literal notranslate"><span class="pre">dbghelp.dll</span></code> APIs.
+Also, the <code class="docutils literal notranslate"><span class="pre">symsrv.dll</span></code> DLL should be present in the same directory as <code class="docutils literal notranslate"><span class="pre">dbghelp.dll</span></code> (See <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/debug/using-symsrv#installation">SymSrv Installation</a>)</p>
+<p>There is 2 ways to pass this information to <code class="docutils literal notranslate"><span class="pre">PythonForWindows</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Using the function <a class="reference internal" href="#windows.debug.symbols.set_dbghelp_path" title="windows.debug.symbols.set_dbghelp_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_dbghelp_path()</span></code></a></li>
+<li><dl class="first docutils">
+<dt>Using the environment variable <code class="docutils literal notranslate"><span class="pre">PFW_DBGHELP_PATH</span></code></dt>
+<dd><ul class="first last">
+<li>If this variable exists it will simply trigger a call to <code class="docutils literal notranslate"><span class="pre">set_dbghelp_path(PFW_DBGHELP_PATH)</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>If the given path is a directory, the final path will be computer as <code class="docutils literal notranslate"><span class="pre">path\&lt;current_process_bitness&gt;\dbghelp.dll</span></code>.
+This allow to use the same script (or environment variable) transparently in bot 32b &amp; 64b python interpreters.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>For example, on my computer my setup is done through the environment variable: <code class="docutils literal notranslate"><span class="pre">PFW_DBGHELP_PATH=D:\pysym\bin</span></code></p>
+<p>This directory have the following layout:</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">$ tree /A /F %PFW_DBGHELP_PATH%</div>
+<div class="line-block">
+<div class="line">D:\PYSYM\BIN</div>
+<div class="line">| symsrv.yes</div>
+<div class="line">|</div>
+<div class="line">+---32</div>
+<div class="line">| dbghelp.dll</div>
+<div class="line">| symsrv.dll</div>
+<div class="line">|</div>
+<div class="line">\---64</div>
+<div class="line-block">
+<div class="line">dbghelp.dll</div>
+<div class="line">symsrv.dll</div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="helpers">
+<h3>9.5.2. Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="windows.debug.symbols.set_dbghelp_path">
+<code class="descclassname">windows.debug.symbols.</code><code class="descname">set_dbghelp_path</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#set_dbghelp_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.set_dbghelp_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the path of the <code class="docutils literal notranslate"><span class="pre">dbghelp.dll</span></code> file to use. It allow to configure a different version of the DLL handling PDB downloading.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a directory, the final <code class="docutils literal notranslate"><span class="pre">dbghelp.dll</span></code> will be computed as
+<code class="docutils literal notranslate"><span class="pre">path\&lt;current_process_bitness&gt;\dbghelp.dll</span></code>.</p>
+<p>This allow to use the same script transparently in both 32b &amp; 64b python interpreters.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.debug.symbols.SymbolEngine">
+<em class="property">class </em><code class="descclassname">windows.debug.symbols.</code><code class="descname">SymbolEngine</code><a class="reference internal" href="_modules/windows/debug/symbols.html#SymbolEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.SymbolEngine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the global symbol engine. Just a proxy to get/set global engine options</p>
+<p>Its instance can be accessed using <code class="docutils literal notranslate"><span class="pre">windows.debug.symbols.engine</span></code></p>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">options</span>
+<span class="go">6L</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYMOPT_UNDNAME</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">options</span>
+<span class="go">2L</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolEngine.options">
+<code class="descname">options</code><a class="headerlink" href="#windows.debug.symbols.SymbolEngine.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>The options of the Symbol engine
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symsetoptions#parameters">see options</a>)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Default options are: <code class="docutils literal notranslate"><span class="pre">gdef.SYMOPT_DEFERRED_LOADS</span> <span class="pre">+</span> <span class="pre">gdef.SYMOPT_UNDNAME</span></code></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="virtualsymbolhandler">
+<h3>9.5.3. <a class="reference internal" href="#windows.debug.symbols.VirtualSymbolHandler" title="windows.debug.symbols.VirtualSymbolHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSymbolHandler</span></code></a><a class="headerlink" href="#virtualsymbolhandler" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.debug.symbols.VirtualSymbolHandler">
+<em class="property">class </em><code class="descclassname">windows.debug.symbols.</code><code class="descname">VirtualSymbolHandler</code><span class="sig-paren">(</span><em>search_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#VirtualSymbolHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.symbols.SymbolHandler</span></code></p>
+<p>A SymbolHandler where its handle is not a valid process handle
+Allow to create/resolve symbol in a ‘virtual’ process
+But all API needing a real process handle will fail</p>
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name_or_addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve <code class="docutils literal notranslate"><span class="pre">name_or_addr</span></code>.</p>
+<p>If its an int -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> at the address.
+If its a string -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> corresponding to the symbol name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">resolve()</span></code></p>
+</div>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span>
+<span class="go">&lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x10000000&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFileInternal&quot;</span><span class="p">)</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">]</span>
+<span class="go">&lt;SymbolInfoA name=&quot;ReadFile&quot; addr=0x100f1ee0 displacement=0x162 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">])</span>
+<span class="go">&#39;kernelbase!ReadFile+0x162&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>path</em>, <em>name=None</em>, <em>addr=0</em>, <em>size=0</em>, <em>data=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#windows.debug.symbols.VirtualSymbolHandler.load_file" title="windows.debug.symbols.VirtualSymbolHandler.load_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">VirtualSymbolHandler.load_file()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.load_file">
+<code class="descname">load_file</code><span class="sig-paren">(</span><em>path</em>, <em>name=None</em>, <em>addr=0</em>, <em>size=0</em>, <em>data=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the module <code class="docutils literal notranslate"><span class="pre">path</span></code> at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a> – The loaded module</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.load_module">
+<code class="descname">load_module</code><span class="sig-paren">(</span><em>file_handle=None</em>, <em>path=None</em>, <em>name=None</em>, <em>addr=0</em>, <em>size=0</em>, <em>data=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.load_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a module at a given <code class="docutils literal notranslate"><span class="pre">addr</span></code>. The module to load can be pass via a <code class="docutils literal notranslate"><span class="pre">file_handle</span></code>
+or the direct <code class="docutils literal notranslate"><span class="pre">path</span></code> of the file to load.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a> – The loaded module</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The logic of <code class="docutils literal notranslate"><span class="pre">SymLoadModuleEx</span></code> seems somewhat strange about the naming of the loaded module.
+A custom module <code class="docutils literal notranslate"><span class="pre">name</span></code> is only taken into account if the file is passed via a File handle.
+To make it more intuitive, if this function is call with a <code class="docutils literal notranslate"><span class="pre">path</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> and no <code class="docutils literal notranslate"><span class="pre">file_handle</span></code>,
+it will open the path and directly call <code class="docutils literal notranslate"><span class="pre">SymLoadModuleEx</span></code> with a file handle and a name.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.modules">
+<code class="descname">modules</code><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of loaded modules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a>] – A list of modules</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#VirtualSymbolHandler.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing for a <a class="reference internal" href="#windows.debug.symbols.VirtualSymbolHandler" title="windows.debug.symbols.VirtualSymbolHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSymbolHandler</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.resolve">
+<code class="descname">resolve</code><span class="sig-paren">(</span><em>name_or_addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve <code class="docutils literal notranslate"><span class="pre">name_or_addr</span></code>.</p>
+<p>If its an int -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> at the address.
+If its a string -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> corresponding to the symbol name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">resolve()</span></code></p>
+</div>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span>
+<span class="go">&lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x10000000&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFileInternal&quot;</span><span class="p">)</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">]</span>
+<span class="go">&lt;SymbolInfoA name=&quot;ReadFile&quot; addr=0x100f1ee0 displacement=0x162 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">])</span>
+<span class="go">&#39;kernelbase!ReadFile+0x162&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>mask</em>, <em>mod=0</em>, <em>tag=0</em>, <em>options=SYMSEARCH_ALLITEMS(0x8)</em>, <em>callback=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the symbols matching <code class="docutils literal notranslate"><span class="pre">mask</span></code> (<code class="docutils literal notranslate"><span class="pre">Windbg</span></code> like).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a>] – A list of <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFile*&quot;</span><span class="p">)</span>
+<span class="go">[&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;,</span>
+<span class="go">    &lt;SymbolInfoA name=&quot;CreateFileMoniker&quot; addr=0x10117d80 tag=SymTagFunction&gt;,</span>
+<span class="go">    &lt;SymbolInfoA name=&quot;CreateFile2&quot; addr=0x1011e690 tag=SymTagFunction&gt;,</span>
+<span class="go">    ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.VirtualSymbolHandler.unload">
+<code class="descname">unload</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.VirtualSymbolHandler.unload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unload the module at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="processsymbolhandler">
+<h3>9.5.4. <a class="reference internal" href="#windows.debug.symbols.ProcessSymbolHandler" title="windows.debug.symbols.ProcessSymbolHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessSymbolHandler</span></code></a><a class="headerlink" href="#processsymbolhandler" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.debug.symbols.ProcessSymbolHandler">
+<em class="property">class </em><code class="descclassname">windows.debug.symbols.</code><code class="descname">ProcessSymbolHandler</code><span class="sig-paren">(</span><em>process</em>, <em>search_path=None</em>, <em>invade_process=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#ProcessSymbolHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.symbols.SymbolHandler</span></code></p>
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name_or_addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve <code class="docutils literal notranslate"><span class="pre">name_or_addr</span></code>.</p>
+<p>If its an int -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> at the address.
+If its a string -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> corresponding to the symbol name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">resolve()</span></code></p>
+</div>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span>
+<span class="go">&lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x10000000&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFileInternal&quot;</span><span class="p">)</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">]</span>
+<span class="go">&lt;SymbolInfoA name=&quot;ReadFile&quot; addr=0x100f1ee0 displacement=0x162 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">])</span>
+<span class="go">&#39;kernelbase!ReadFile+0x162&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#ProcessSymbolHandler.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the <a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a> associated with the loaded module <code class="docutils literal notranslate"><span class="pre">name</span></code> (as found in the PEB)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">ProcessSymbolHandler</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_64</span><span class="p">())</span>
+<span class="go">&lt;windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span>
+<span class="go">&lt;windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="go">&lt;SymbolModule name=&quot;kernelbase&quot; type=SymDeferred pdb=&quot;&quot; addr=0x7ffb5b090000&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="p">[</span><span class="s2">&quot;kernelbase!CreateProcessA&quot;</span><span class="p">]</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateProcessA&quot; start=0x7ffb5b2371f0 tag=SymTagPublicSymbol&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.load_file">
+<code class="descname">load_file</code><span class="sig-paren">(</span><em>path</em>, <em>name=None</em>, <em>addr=0</em>, <em>size=0</em>, <em>data=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the module <code class="docutils literal notranslate"><span class="pre">path</span></code> at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a> – The loaded module</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.load_module">
+<code class="descname">load_module</code><span class="sig-paren">(</span><em>file_handle=None</em>, <em>path=None</em>, <em>name=None</em>, <em>addr=0</em>, <em>size=0</em>, <em>data=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.load_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a module at a given <code class="docutils literal notranslate"><span class="pre">addr</span></code>. The module to load can be pass via a <code class="docutils literal notranslate"><span class="pre">file_handle</span></code>
+or the direct <code class="docutils literal notranslate"><span class="pre">path</span></code> of the file to load.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a> – The loaded module</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The logic of <code class="docutils literal notranslate"><span class="pre">SymLoadModuleEx</span></code> seems somewhat strange about the naming of the loaded module.
+A custom module <code class="docutils literal notranslate"><span class="pre">name</span></code> is only taken into account if the file is passed via a File handle.
+To make it more intuitive, if this function is call with a <code class="docutils literal notranslate"><span class="pre">path</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> and no <code class="docutils literal notranslate"><span class="pre">file_handle</span></code>,
+it will open the path and directly call <code class="docutils literal notranslate"><span class="pre">SymLoadModuleEx</span></code> with a file handle and a name.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.modules">
+<code class="descname">modules</code><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of loaded modules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a>] – A list of modules</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#ProcessSymbolHandler.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the list of loaded modules to match the modules present in the target process</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This function only call <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symrefreshmodulelist">SymRefreshModuleList</a> for now.
+It seems that this function do not handle refreshing a 64b target from a 32b python</p>
+<p class="last">Also, on a 32b target from a 64b python it seems to only load symbols for the 64b modules (ntdll + syswow dll)</p>
+</div>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">ProcessSymbolHandler</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_64</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">modules</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="go">44</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">modules</span>
+<span class="go">[&lt;SymbolModule name=&quot;notepad&quot; type=SymDeferred pdb=&quot;&quot; addr=0x7ff772b80000&gt;,</span>
+<span class="go">    &lt;SymbolModule name=&quot;ntdll&quot; type=SymDeferred pdb=&quot;&quot; addr=0x7ffb5d860000&gt;,</span>
+<span class="go">    &lt;SymbolModule name=&quot;KERNEL32&quot; type=SymDeferred pdb=&quot;&quot; addr=0x7ffb5bb90000&gt;,</span>
+<span class="go">    &lt;SymbolModule name=&quot;KERNELBASE&quot; type=SymDeferred pdb=&quot;&quot; addr=0x7ffb5b090000&gt;,</span>
+<span class="go">    ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.resolve">
+<code class="descname">resolve</code><span class="sig-paren">(</span><em>name_or_addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve <code class="docutils literal notranslate"><span class="pre">name_or_addr</span></code>.</p>
+<p>If its an int -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> at the address.
+If its a string -&gt; Return the <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a> corresponding to the symbol name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">resolve()</span></code></p>
+</div>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span>
+<span class="go">&lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x10000000&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFileInternal&quot;</span><span class="p">)</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">]</span>
+<span class="go">&lt;SymbolInfoA name=&quot;ReadFile&quot; addr=0x100f1ee0 displacement=0x162 tag=SymTagFunction&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mh">0x100f2042</span><span class="p">])</span>
+<span class="go">&#39;kernelbase!ReadFile+0x162&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>mask</em>, <em>mod=0</em>, <em>tag=0</em>, <em>options=SYMSEARCH_ALLITEMS(0x8)</em>, <em>callback=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the symbols matching <code class="docutils literal notranslate"><span class="pre">mask</span></code> (<code class="docutils literal notranslate"><span class="pre">Windbg</span></code> like).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a>] – A list of <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFile*&quot;</span><span class="p">)</span>
+<span class="go">[&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;,</span>
+<span class="go">    &lt;SymbolInfoA name=&quot;CreateFileMoniker&quot; addr=0x10117d80 tag=SymTagFunction&gt;,</span>
+<span class="go">    &lt;SymbolInfoA name=&quot;CreateFile2&quot; addr=0x1011e690 tag=SymTagFunction&gt;,</span>
+<span class="go">    ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.ProcessSymbolHandler.unload">
+<code class="descname">unload</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.ProcessSymbolHandler.unload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unload the module at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="symbolmodule">
+<h3>9.5.5. <a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a><a class="headerlink" href="#symbolmodule" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.debug.symbols.SymbolModule">
+<em class="property">class </em><code class="descclassname">windows.debug.symbols.</code><code class="descname">SymbolModule</code><span class="sig-paren">(</span><em>resolver</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/symbols.html#SymbolModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.SymbolModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._IMAGEHLP_MODULE64" title="windows.generated_def.winstructs._IMAGEHLP_MODULE64"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._IMAGEHLP_MODULE64</span></code></a></p>
+<p>Represent a loaded symbol module
+(see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_module64">MSDN IMAGEHLP_MODULE64</a>)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This represent a module in the <code class="docutils literal notranslate"><span class="pre">symbol</span> <span class="pre">space</span></code> for symbol resolution.
+This can be completly virtual (particularly in the case of <a class="reference internal" href="#windows.debug.symbols.VirtualSymbolHandler" title="windows.debug.symbols.VirtualSymbolHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSymbolHandler</span></code></a></p>
+</div>
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolModule.addr">
+<code class="descname">addr</code><a class="headerlink" href="#windows.debug.symbols.SymbolModule.addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The load address of the module</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolModule.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.debug.symbols.SymbolModule.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the module</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolModule.path">
+<code class="descname">path</code><a class="headerlink" href="#windows.debug.symbols.SymbolModule.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full path and file name of the file from which symbols were loaded.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolModule.pdb">
+<code class="descname">pdb</code><a class="headerlink" href="#windows.debug.symbols.SymbolModule.pdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>The local path of the loaded PDB if present</p>
+<dl class="docutils">
+<dt>Exemple:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">pdb</span>
+<span class="go">&#39;d:\symbols\wkernelbase.pdb\017FA9C5278235B7E6BFBA74A9A5AAD91\wkernelbase.pdb&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolModule.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.debug.symbols.SymbolModule.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of module (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SYM_TYPE" title="windows.generated_def.winstructs.SYM_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">SYM_TYPE</span></code></a>),
+which can be one of:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>SymCoff</td>
+<td>COFF symbols.</td>
+</tr>
+<tr class="row-even"><td>SymCv</td>
+<td>CodeView symbols.</td>
+</tr>
+<tr class="row-odd"><td>SymDeferred</td>
+<td>Symbol loading deferred.</td>
+</tr>
+<tr class="row-even"><td>SymDia</td>
+<td>DIA symbols.</td>
+</tr>
+<tr class="row-odd"><td>SymExport</td>
+<td>Symbols generated from a DLL export table.</td>
+</tr>
+<tr class="row-even"><td>SymNone</td>
+<td>No symbols are loaded.</td>
+</tr>
+<tr class="row-odd"><td>SymPdb</td>
+<td>PDB symbols.</td>
+</tr>
+<tr class="row-even"><td>SymSym</td>
+<td>.sym file.</td>
+</tr>
+<tr class="row-odd"><td>SymVirtual</td>
+<td>The virtual module created by SymLoadModuleEx with SLMFLAG_VIRTUAL.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="symbolinfo">
+<h3>9.5.6. <a class="reference internal" href="#windows.debug.symbols.SymbolInfo" title="windows.debug.symbols.SymbolInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a><a class="headerlink" href="#symbolinfo" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfo">
+<code class="descclassname">windows.debug.symbols.</code><code class="descname">SymbolInfo</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#windows.debug.symbols.SymbolInfoA" title="windows.debug.symbols.SymbolInfoA"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.symbols.SymbolInfoA</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.debug.symbols.SymbolInfoA">
+<em class="property">class </em><code class="descclassname">windows.debug.symbols.</code><code class="descname">SymbolInfoA</code><a class="reference internal" href="_modules/windows/debug/symbols.html#SymbolInfoA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._SYMBOL_INFO" title="windows.generated_def.winstructs._SYMBOL_INFO"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._SYMBOL_INFO</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.symbols.SymbolInfoBase</span></code></p>
+<p>Represent a Symbol.
+This class in based on the class <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info">SYMBOL_INFO</a>
+with the handling on displacement embeded into it.s</p>
+<p>Exemple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sym1</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="s2">&quot;kernelbase!CreateFileW&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sym2</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">sym1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sym2</span>
+<span class="go">&lt;SymbolInfoA name=&quot;CreateFileW&quot; start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hex</span><span class="p">(</span><span class="n">sym2</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+<span class="go">&#39;0x100f20b0L&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hex</span><span class="p">(</span><span class="n">sym2</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span>
+<span class="go">&#39;0x100f20b3L&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hex</span><span class="p">(</span><span class="n">sym2</span><span class="o">.</span><span class="n">displacement</span><span class="p">)</span>
+<span class="go">&#39;0x3L&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">sym2</span><span class="p">)</span>
+<span class="go">&#39;kernelbase!CreateFileW+0x3&#39;</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.displacement">
+<code class="descname">displacement</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>The displacement between the addresse and the start of the symbol (name)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.CHAR_TYPE">
+<code class="descname">CHAR_TYPE</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.CHAR_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.python.org/2.7/library/ctypes.html#ctypes.c_char" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_char</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.SymbolInfoA.__int__">
+<code class="descname">__int__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.__int__" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.symbols.SymbolInfoA.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fullname of the symbol in the windbg format <code class="docutils literal notranslate"><span class="pre">mod!sym+displacement</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.addr">
+<code class="descname">addr</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The address of the symbol</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.fullname">
+<code class="descname">fullname</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.fullname" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fullname of the symbol in the windbg format <code class="docutils literal notranslate"><span class="pre">mod!sym+displacement</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.module">
+<code class="descname">module</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.module" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module containing the symbol</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.debug.symbols.SymbolModule" title="windows.debug.symbols.SymbolModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolModule</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the symbol</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.start">
+<code class="descname">start</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>The address of the start of the symbol
+If the symbol include a displacement, it is not taken into account</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.debug.symbols.SymbolInfoA.tag">
+<code class="descname">tag</code><a class="headerlink" href="#windows.debug.symbols.SymbolInfoA.tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tag of the module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SymTagEnum" title="windows.generated_def.winstructs.SymTagEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymTagEnum</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
 </div>
 
 
@@ -583,12 +1295,22 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">9. <code class="docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a><ul>
 <li><a class="reference internal" href="#debugger">9.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
-<li><a class="reference internal" href="#localdebugger">9.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a></li>
-<li><a class="reference internal" href="#breakpoint">9.3. <code class="docutils literal notranslate"><span class="pre">Breakpoint</span></code></a></li>
+<li><a class="reference internal" href="#symboldebugger">9.2. <code class="docutils literal notranslate"><span class="pre">SymbolDebugger</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">9.3. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a></li>
+<li><a class="reference internal" href="#breakpoint">9.4. <code class="docutils literal notranslate"><span class="pre">Breakpoint</span></code></a></li>
+<li><a class="reference internal" href="#module-windows.debug.symbols">9.5. <code class="docutils literal notranslate"><span class="pre">windows.debug.symbols</span></code> – Using symbols</a><ul>
+<li><a class="reference internal" href="#configuration">9.5.1. Configuration</a></li>
+<li><a class="reference internal" href="#helpers">9.5.2. Helpers</a></li>
+<li><a class="reference internal" href="#virtualsymbolhandler">9.5.3. <code class="docutils literal notranslate"><span class="pre">VirtualSymbolHandler</span></code></a></li>
+<li><a class="reference internal" href="#processsymbolhandler">9.5.4. <code class="docutils literal notranslate"><span class="pre">ProcessSymbolHandler</span></code></a></li>
+<li><a class="reference internal" href="#symbolmodule">9.5.5. <code class="docutils literal notranslate"><span class="pre">SymbolModule</span></code></a></li>
+<li><a class="reference internal" href="#symbolinfo">9.5.6. <code class="docutils literal notranslate"><span class="pre">SymbolInfo</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -637,12 +1359,12 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
         <li class="right" >
           <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

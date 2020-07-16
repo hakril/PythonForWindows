@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.system &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.winobject.system &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -43,29 +46,30 @@
 <span class="kn">import</span> <span class="nn">struct</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">utils</span>
 
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 
 
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">network</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">registry</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">exception</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">service</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">volume</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">wmi</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">object_manager</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">handle</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">event_log</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">event_trace</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">task_scheduler</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">system_module</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">bits</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">process</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">network</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">registry</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">exception</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">service</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">volume</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">wmi</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">object_manager</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">device_manager</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">handle</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">event_log</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">event_trace</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">task_scheduler</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">system_module</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">bits</span>
 
-<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="kn">import</span> <span class="n">dbgprint</span>
 
 <div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../windows.html#windows.winobject.system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The state of the current ``Windows`` system ``Python`` is running on&quot;&quot;&quot;</span>
@@ -102,9 +106,10 @@
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of services</span>
+        <span class="sd">&quot;&quot;&quot;An object to query, list and explore services</span>
 
-<span class="sd">        :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service&quot;&quot;&quot;</span>
+<span class="sd">        :type: :class:`~windows.winobject.service.ServiceManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">ServiceManager</span><span class="p">()</span>
 
     <span class="nd">@property</span>
@@ -144,10 +149,18 @@
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">event_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An object to open Event channel/publisher and evtx file</span>
+
+<span class="sd">        :type: :class:`~windows.winobject.event_log.EvtlogManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">event_log</span><span class="o">.</span><span class="n">EvtlogManager</span><span class="p">()</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">etw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An object to interact with  ETW (Event Tracing for Windows)</span>
+
+<span class="sd">        :type: :class:`~windows.winobject.event_trace.EtwManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">event_trace</span><span class="o">.</span><span class="n">EtwManager</span><span class="p">()</span>
 
 
@@ -173,6 +186,14 @@
 <span class="sd">        :type: :class:`~windows.winobject.object_manager.ObjectManager`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">object_manager</span><span class="o">.</span><span class="n">ObjectManager</span><span class="p">()</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">device_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An object to query the device&amp;driver configured on the computer.</span>
+
+<span class="sd">        :type: :class:`~windows.winobject.device_manager.DeviceManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">device_manager</span><span class="o">.</span><span class="n">DeviceManager</span><span class="p">()</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -542,13 +563,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

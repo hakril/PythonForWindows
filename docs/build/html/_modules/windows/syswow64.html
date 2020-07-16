@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.syswow64 &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.syswow64 &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -39,18 +42,18 @@
   <h1>Source code for windows.syswow64</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
-<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">byref</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
-<span class="kn">from</span> <span class="nn">.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">.winproxy</span> <span class="k">import</span> <span class="n">NeededParameter</span>
-<span class="kn">from</span> <span class="nn">.pycompat</span> <span class="k">import</span> <span class="n">int_types</span>
+<span class="kn">from</span> <span class="nn">.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">process</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">.winproxy</span> <span class="kn">import</span> <span class="n">NeededParameter</span>
+<span class="kn">from</span> <span class="nn">.pycompat</span> <span class="kn">import</span> <span class="n">int_types</span>
 
 <span class="c1"># Special code for syswow64 process</span>
 <span class="n">CS_32bits</span> <span class="o">=</span> <span class="mh">0x23</span>
@@ -207,7 +210,7 @@
 
 
 <span class="k">class</span> <span class="nc">ReadSyswow64Process</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">Process</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bitness</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">bitness</span>
 
@@ -238,7 +241,7 @@
 
 <div class="viewcode-block" id="Syswow64ApiProxy"><a class="viewcode-back" href="../../internals.html#windows.syswow64.Syswow64ApiProxy">[docs]</a><span class="k">class</span> <span class="nc">Syswow64ApiProxy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a python wrapper around a function&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">winproxy_function</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">winproxy_function</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span> <span class="o">=</span> <span class="n">winproxy_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_call</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">errcheck</span>
@@ -248,7 +251,7 @@
 
 
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">python_proxy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">python_proxy</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -390,13 +393,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

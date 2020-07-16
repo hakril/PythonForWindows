@@ -32,4 +32,4 @@ KernelObject
 .. autoclass:: KernelObject
     :members:
     :undoc-members:
-    :special-members: __getitem__, __iter__
+    :special-members: __getitem__,__iter__

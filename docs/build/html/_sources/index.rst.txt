@@ -34,13 +34,17 @@ You can install PythonForWindows using the ``setup.py`` at the root of the proje
 
     python setup.py install
 
-In its current state the project only support Python2 and
-``setup.py`` will raise an :class:`NotImplementedError` if launched from python3.
-
-
 .. warning::
 
     PythonForWindows is not available on Pypi for now and thus cannot be directly installed using ``pip``.
+
+
+Python3
+^^^^^^^
+
+python3 support is still in beta.
+All the tests pass on master, but I did not test it heavily on real case.
+Do not hesitate report bugs and issues.
 
 
 Documentation

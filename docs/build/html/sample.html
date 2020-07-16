@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>18. Samples of code &#8212; PythonForWindows 0.5 documentation</title>
+    <title>18. Samples of code &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="17. Internals" href="internals.html" /> 
@@ -30,7 +33,7 @@
         <li class="right" >
           <a href="internals.html" title="17. Internals"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -583,53 +586,110 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
     <span class="n">version</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">bitness</span> <span class="o">=</span> <span class="mi">64</span>
     <span class="n">computer_name</span> <span class="o">=</span> <span class="n">WILLIE</span>
-    <span class="n">product_type</span> <span class="o">=</span> <span class="n">VER_NT_WORKSTATION</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">product_type</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">version_name</span> <span class="o">=</span> <span class="n">Windows</span> <span class="mi">10</span>
 
-<span class="n">There</span> <span class="ow">is</span> <span class="mi">194</span> <span class="n">processes</span>
-<span class="n">There</span> <span class="ow">is</span> <span class="mi">2324</span> <span class="n">threads</span>
+<span class="n">There</span> <span class="ow">is</span> <span class="mi">331</span> <span class="n">processes</span>
+<span class="n">There</span> <span class="ow">is</span> <span class="mi">4010</span> <span class="n">threads</span>
 
 <span class="n">Dumping</span> <span class="n">first</span> <span class="n">logical</span> <span class="n">drive</span><span class="p">:</span>
-    <span class="o">&lt;</span><span class="n">LogicalDrive</span> <span class="s2">&quot;C:</span><span class="se">\&quot;</span><span class="s2"> (DRIVE_FIXED)&gt;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">C</span><span class="p">:</span>\
-        <span class="nb">type</span> <span class="o">=</span> <span class="n">DRIVE_FIXED</span><span class="p">(</span><span class="mh">0x3</span><span class="n">L</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> \<span class="n">Device</span>\<span class="n">HarddiskVolume2</span>
+    <span class="o">&lt;</span><span class="n">LogicalDrive</span> <span class="s2">&quot;B:</span><span class="se">\&quot;</span><span class="s2"> (DRIVE_FIXED)&gt;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">B</span><span class="p">:</span>\
+        <span class="nb">type</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">path</span> <span class="o">=</span> \<span class="n">Device</span>\<span class="n">HarddiskVolume7</span>
 
 <span class="n">Dumping</span> <span class="n">first</span> <span class="n">service</span><span class="p">:</span>
-    <span class="o">&lt;</span><span class="n">ServiceA</span> <span class="s2">&quot;1394ohci&quot;</span> <span class="n">SERVICE_STOPPED</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">Service</span> <span class="s2">&quot;1394ohci&quot;</span> <span class="n">SERVICE_STOPPED</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span><span class="o">&gt;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="mi">1394</span><span class="n">ohci</span>
         <span class="n">description</span> <span class="o">=</span> <span class="mi">1394</span> <span class="n">OHCI</span> <span class="n">Compliant</span> <span class="n">Host</span> <span class="n">Controller</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">SERVICE_KERNEL_DRIVER</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">),</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_STOPPED</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">),</span> <span class="n">control_accepted</span><span class="o">=</span><span class="mi">0</span><span class="n">L</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">_SERVICE_STATUS_PROCESS</span> <span class="nb">type</span><span class="o">=</span><span class="n">SERVICE_KERNEL_DRIVER</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_STOPPED</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span><span class="o">&gt;</span>
         <span class="n">process</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">Finding</span> <span class="n">a</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">user</span> <span class="n">process</span><span class="p">:</span>
-    <span class="o">&lt;</span><span class="n">ServiceA</span> <span class="s2">&quot;AppIDSvc&quot;</span> <span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">Service</span> <span class="s2">&quot;AppIDSvc&quot;</span> <span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="p">)</span><span class="o">&gt;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">AppIDSvc</span>
         <span class="n">description</span> <span class="o">=</span> <span class="n">Application</span> <span class="n">Identity</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="mi">48</span><span class="n">L</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">),</span> <span class="n">control_accepted</span><span class="o">=</span><span class="mi">5</span><span class="n">L</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="n">L</span><span class="p">)</span>
-        <span class="n">process</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;!cannot-retrieve-name&quot;</span> <span class="n">pid</span> <span class="mi">7076</span> <span class="n">at</span> <span class="mh">0x631eb70</span><span class="o">&gt;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">_SERVICE_STATUS_PROCESS</span> <span class="nb">type</span><span class="o">=</span><span class="mi">48</span><span class="n">L</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;!cannot-retrieve-name&quot;</span> <span class="n">pid</span> <span class="mi">6060</span> <span class="n">at</span> <span class="mh">0x35851d0</span><span class="o">&gt;</span>
 
 <span class="n">Enumerating</span> <span class="n">handles</span><span class="p">:</span>
-    <span class="n">There</span> <span class="n">are</span> <span class="mi">78079</span> <span class="n">handles</span><span class="p">:</span>
-    <span class="n">First</span> <span class="n">handle</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Handle</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">4</span><span class="o">&gt;</span>
+    <span class="n">There</span> <span class="n">are</span> <span class="mi">208332</span> <span class="n">handles</span><span class="p">:</span>
+    <span class="n">First</span> <span class="n">handle</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">HandleWow64</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">4</span><span class="o">&gt;</span>
     <span class="n">Enumerating</span> <span class="n">handles</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">process</span><span class="p">:</span>
-        <span class="n">There</span> <span class="n">are</span> <span class="mi">260</span> <span class="n">handles</span> <span class="k">for</span> <span class="n">this</span> <span class="n">process</span>
+        <span class="n">There</span> <span class="n">are</span> <span class="mi">275</span> <span class="n">handles</span> <span class="k">for</span> <span class="n">this</span> <span class="n">process</span>
     <span class="n">Looking</span> <span class="k">for</span> <span class="n">a</span> <span class="n">File</span> <span class="n">handle</span><span class="p">:</span>
-        <span class="n">Handle</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">Handle</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">10968</span><span class="o">&gt;</span>
+        <span class="n">Handle</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">HandleWow64</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">15236</span><span class="o">&gt;</span>
         <span class="n">Name</span> <span class="ow">is</span> <span class="o">&lt;</span>\<span class="n">Device</span>\<span class="n">ConDrv</span><span class="o">&gt;</span>
 
 <span class="n">Dumping</span> <span class="n">the</span> <span class="n">first</span> <span class="n">system</span> <span class="n">module</span>
-    <span class="o">&lt;</span><span class="n">SystemModuleWow64</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;\SystemRoot\system32</span><span class="se">\n</span><span class="s2">toskrnl.exe&quot;</span> <span class="n">base</span><span class="o">=</span><span class="mh">0xfffff803f9697000</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">SystemModuleWow64</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;\SystemRoot\system32</span><span class="se">\n</span><span class="s2">toskrnl.exe&quot;</span> <span class="n">base</span><span class="o">=</span><span class="mh">0xfffff80023000000</span><span class="o">&gt;</span>
         <span class="n">ImageName</span> <span class="o">=</span> \<span class="n">SystemRoot</span>\<span class="n">system32</span>\<span class="n">ntoskrnl</span><span class="o">.</span><span class="n">exe</span>
-        <span class="n">Base</span> <span class="o">=</span> <span class="mh">0xfffff803f9697000</span>
-        <span class="n">Size</span> <span class="o">=</span> <span class="mh">0x8d5000</span>
+        <span class="n">Base</span> <span class="o">=</span> <span class="mh">0xfffff80023000000</span>
+        <span class="n">Size</span> <span class="o">=</span> <span class="mh">0xab7000</span>
         <span class="n">Flags</span> <span class="o">=</span> <span class="mh">0x8804000</span>
-        <span class="n">LoadCount</span> <span class="o">=</span> <span class="mi">139</span>
+        <span class="n">LoadCount</span> <span class="o">=</span> <span class="mi">240</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="services">
+<span id="sample-services-demo"></span><h2>18.4. Services<a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing the first 3 services:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">services</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">TARGET_SERVICE</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;TapiSrv&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Retriving service &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TARGET_SERVICE</span><span class="p">))</span>
+<span class="n">service</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">services</span><span class="p">[</span><span class="n">TARGET_SERVICE</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - name: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - description: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - state: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - type: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - process: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">process</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - security-description: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">security_descriptor</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">service</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_RUNNING</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Service already running, not trying to start it&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying to start the service&quot;</span><span class="p">)</span>
+    <span class="n">service</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">service</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_RUNNING</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Service started !&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - state: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - process: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">process</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python service\service_demo.py
+Listing the first 3 services:
+ * &lt;Service &quot;1394ohci&quot; SERVICE_STOPPED(0x1)&gt;
+ * &lt;Service &quot;3ware&quot; SERVICE_STOPPED(0x1)&gt;
+ * &lt;Service &quot;ACPI&quot; SERVICE_RUNNING(0x4)&gt;
+
+Retriving service &lt;TapiSrv&gt;
+&lt;Service &quot;TapiSrv&quot; SERVICE_STOPPED(0x1)&gt;
+ - name: &#39;TapiSrv&#39;
+ - description: &#39;Telephony&#39;
+ - state: SERVICE_STOPPED(0x1)
+ - type: 48L
+ - process: None
+ - security-description: O:SYG:SYD:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWRPLOCRRC;;;SU)
+Trying to start the service
+Service started !
+&lt;Service &quot;TapiSrv&quot; SERVICE_RUNNING(0x4)&gt;
+ - state: SERVICE_RUNNING(0x4)
+ - process: &lt;WinProcess &quot;!cannot-retrieve-name&quot; pid 14700 at 0x4a2c4f0&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="network-socket-exploration">
-<span id="sample-network-exploration"></span><h2>18.4. <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
+<span id="sample-network-exploration"></span><h2>18.5. <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">socket</span>
@@ -687,7 +747,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="registry">
-<span id="sample-registry"></span><h2>18.5. <code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
+<span id="sample-registry"></span><h2>18.6. <code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -750,7 +810,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="scheduled-tasks">
-<span id="sample-scheduled-task"></span><h2>18.6. Scheduled tasks<a class="headerlink" href="#scheduled-tasks" title="Permalink to this headline">¶</a></h2>
+<span id="sample-scheduled-task"></span><h2>18.7. Scheduled tasks<a class="headerlink" href="#scheduled-tasks" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -857,7 +917,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="event-log">
-<span id="sample-event-log"></span><h2>18.7. Event Log<a class="headerlink" href="#event-log" title="Permalink to this headline">¶</a></h2>
+<span id="sample-event-log"></span><h2>18.8. Event Log<a class="headerlink" href="#event-log" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
@@ -985,7 +1045,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="object-manager">
-<span id="sample-object-manager"></span><h2>18.8. Object manager<a class="headerlink" href="#object-manager" title="Permalink to this headline">¶</a></h2>
+<span id="sample-object-manager"></span><h2>18.9. Object manager<a class="headerlink" href="#object-manager" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -1058,7 +1118,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </pre></div>
 </div>
 <div class="section" id="find-objects">
-<h3>18.8.1. find objects<a class="headerlink" href="#find-objects" title="Permalink to this headline">¶</a></h3>
+<h3>18.9.1. find objects<a class="headerlink" href="#find-objects" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
@@ -1124,8 +1184,206 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 </div>
+<div class="section" id="device-manager">
+<span id="sample-device-manager"></span><h2>18.10. Device manager<a class="headerlink" href="#device-manager" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">devmgr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">device_manager</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Device manager is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">devmgr</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Enumerating the first 3 device classes&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">devmgr</span><span class="o">.</span><span class="n">classes</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finding device class &#39;System&#39;&quot;</span><span class="p">)</span>
+<span class="c1"># Allow devmgr.classes[&quot;name&quot;] ?</span>
+<span class="n">system_cls</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">devmgr</span><span class="o">.</span><span class="n">classes</span> <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;System&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">system_cls</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Enumerating some devices of &#39;System&#39;&quot;</span><span class="p">)</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">system_cls</span><span class="o">.</span><span class="n">devices</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">devinst</span> <span class="ow">in</span> <span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">devices</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">devices</span><span class="p">[</span><span class="mi">35</span><span class="p">]):</span> <span class="c1"># Some &quot;random&quot; devices to have interesting ones</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">devinst</span><span class="p">))</span>
+    <span class="n">devconf</span> <span class="o">=</span> <span class="n">devinst</span><span class="o">.</span><span class="n">allocated_configuration</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">devconf</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        Enumerating allocated resources:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">devconf</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;          * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resource</span><span class="p">))</span>
+
+
+<span class="c1"># python64  samples\device\device_manager.py</span>
+
+<span class="c1"># Device manager is &lt;windows.winobject.device_manager.DeviceManager object at 0x0000000003669908&gt;</span>
+<span class="c1"># Enumerating the first 3 device classes</span>
+<span class="c1">#  * &lt;DeviceClass name=&quot;XboxComposite&quot; guid=05F5CFE2-4733-4950-A6BB-07AAD01A3A84&gt;</span>
+<span class="c1">#  * &lt;DeviceClass name=&quot;DXGKrnl&quot; guid=1264760F-A5C8-4BFE-B314-D56A7B44A362&gt;</span>
+<span class="c1">#  * &lt;DeviceClass name=&quot;RemotePosDevice&quot; guid=13E42DFA-85D9-424D-8646-28A70F864F9C&gt;</span>
+<span class="c1"># Finding device class &#39;System&#39;</span>
+<span class="c1">#   * &lt;DeviceClass name=&quot;System&quot; guid=4D36E97D-E325-11CE-BFC1-08002BE10318&gt;</span>
+<span class="c1">#   Enumerating some devices of &#39;System&#39;</span>
+<span class="c1">#     * &lt;DeviceInstance &quot;Motherboard resources&quot; (id=1)&gt;</span>
+<span class="c1">#     * &lt;DeviceInstance &quot;Microsoft ACPI-Compliant Embedded Controller&quot; (id=26)&gt;</span>
+<span class="c1">#         Enumerating allocated resources:</span>
+<span class="c1">#           * &lt;IoResource : [0x00000000000062-0x00000000000062]&gt;</span>
+<span class="c1">#           * &lt;IoResource : [0x00000000000066-0x00000000000066]&gt;</span>
+<span class="c1">#     * &lt;DeviceInstance &quot;High Definition Audio Controller&quot; (id=36)&gt;</span>
+<span class="c1">#         Enumerating allocated resources:</span>
+<span class="c1">#           * &lt;MemoryResource : [0x000000f7080000-0x000000f7083fff]&gt;</span>
+<span class="c1">#           * &lt;DevicePrivateResource type=ResType_DevicePrivate(0x8001)&gt;</span>
+<span class="c1">#           * &lt;IrqResource : [0x00000000000011]&gt;</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python device_manager\device_manager.py
+Device manager is &lt;windows.winobject.device_manager.DeviceManager object at 0x00000000033442E8&gt;
+Enumerating the first 3 device classes
+ * &lt;DeviceClass name=&quot;XboxComposite&quot; guid=05F5CFE2-4733-4950-A6BB-07AAD01A3A84&gt;
+ * &lt;DeviceClass name=&quot;DXGKrnl&quot; guid=1264760F-A5C8-4BFE-B314-D56A7B44A362&gt;
+ * &lt;DeviceClass name=&quot;RemotePosDevice&quot; guid=13E42DFA-85D9-424D-8646-28A70F864F9C&gt;
+Finding device class &#39;System&#39;
+  * &lt;DeviceClass name=&quot;System&quot; guid=4D36E97D-E325-11CE-BFC1-08002BE10318&gt;
+  Enumerating some devices of &#39;System&#39;
+    * &lt;DeviceInstance &quot;Motherboard resources&quot; (id=1)&gt;
+    * &lt;DeviceInstance &quot;Microsoft ACPI-Compliant Embedded Controller&quot; (id=26)&gt;
+        Enumerating allocated resources:
+          * &lt;IoResource : [0x00000000000062-0x00000000000062]&gt;
+          * &lt;IoResource : [0x00000000000066-0x00000000000066]&gt;
+    * &lt;DeviceInstance &quot;High Definition Audio Controller&quot; (id=36)&gt;
+        Enumerating allocated resources:
+          * &lt;MemoryResource : [0x000000f7080000-0x000000f7083fff]&gt;
+          * &lt;DevicePrivateResource type=ResType_DevicePrivate(0x8001)&gt;
+          * &lt;IrqResource : [0x00000000000011]&gt;
+</pre></div>
+</div>
+<div class="section" id="enumerate-devices">
+<h3>18.10.1. Enumerate devices<a class="headerlink" href="#enumerate-devices" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">devmgr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">device_manager</span>
+
+<span class="k">def</span> <span class="nf">class_generator</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">devmgr</span><span class="o">.</span><span class="n">classes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="nb">filter</span><span class="o">.</span><span class="n">encode</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="k">yield</span> <span class="bp">cls</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">clsfilter</span><span class="p">,</span> <span class="n">enumerate_devices</span><span class="p">,</span> <span class="n">print_devinst_resources</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">devcls</span> <span class="ow">in</span> <span class="n">class_generator</span><span class="p">(</span><span class="n">clsfilter</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">devcls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">enumerate_devices</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># Enumerate devices</span>
+        <span class="k">for</span> <span class="n">devinst</span> <span class="ow">in</span> <span class="n">devcls</span><span class="o">.</span><span class="n">devices</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">devinst</span><span class="p">))</span>
+
+            <span class="c1"># Print attributes</span>
+            <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Attributes:&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">devinst</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * </span><span class="si">{0}</span><span class="s2">=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">print_devinst_resources</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Device resources</span>
+            <span class="n">devconf</span> <span class="o">=</span> <span class="n">devinst</span><span class="o">.</span><span class="n">allocated_configuration</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">devconf</span><span class="p">:</span>
+                <span class="c1"># No allocated configuration</span>
+                <span class="c1"># Check boot conf ?</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">devconf</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resource</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--class&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;clsfilter&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The classe to list: default all&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--no-print-devices&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prevent the listing of devices in the matching classes&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--print-resources&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print the resources allocated to the device instance&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--attributes&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The list of attributes to print for each discovered device instance&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">clsfilter</span><span class="p">,</span>
+            <span class="n">enumerate_devices</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_print_devices</span><span class="p">,</span>
+            <span class="n">print_devinst_resources</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">print_resources</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+
+
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python64 device_manager\enum_devices.py --no-print-devices
+Namespace(clsfilter=None, no_print_devices=True, print_resources=False)
+&lt;DeviceClass name=&quot;XboxComposite&quot; guid=05F5CFE2-4733-4950-A6BB-07AAD01A3A84&gt;
+&lt;DeviceClass name=&quot;DXGKrnl&quot; guid=1264760F-A5C8-4BFE-B314-D56A7B44A362&gt;
+&lt;DeviceClass name=&quot;RemotePosDevice&quot; guid=13E42DFA-85D9-424D-8646-28A70F864F9C&gt;
+&lt;DeviceClass name=&quot;DigitalMediaDevices&quot; guid=14B62F50-3F15-11DD-AE16-0800200C9A66&gt;
+&lt;DeviceClass name=&quot;PrintQueue&quot; guid=1ED2BBF9-11F0-4084-B21F-AD83A8E6DCDC&gt;
+&lt;DeviceClass name=&quot;WCEUSBS&quot; guid=25DBCE51-6C8F-4A72-8A6D-B54C2B4FC835&gt;
+&lt;DeviceClass name=&quot;SecurityAccelerator&quot; guid=268C95A1-EDFE-11D3-95C3-0010DC4050A5&gt;
+&lt;DeviceClass name=&quot;HidMsr&quot; guid=2A9FE532-0CDC-44F9-9827-76192F2CA2FB&gt;
+&lt;DeviceClass name=&quot;SystemRecovery&quot; guid=2DB15374-706E-4131-A0C7-D7C78EB0289A&gt;
+....
+
+$ python64 device_manager\enum_devices.py --class Processor --attributes name manufacturer device_object_name location_paths
+Namespace(attributes=[&#39;name&#39;, &#39;manufacturer&#39;, &#39;device_object_name&#39;, &#39;location_paths&#39;], clsfilter=&#39;Processor&#39;, no_print_devices=False, print_resources=False)
+&lt;DeviceClass name=&quot;Processor&quot; guid=50127DC3-0F36-415E-A6CC-4CB3BE910B65&gt;
+  * &lt;DeviceInstance &quot;Intel Processor&quot; (id=1)&gt;
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000017
+    * location_paths=[u&#39;ACPI(_SB_)#ACPI(CPU0)&#39;]
+  * &lt;DeviceInstance &quot;Intel Processor&quot; (id=2)&gt;
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000018
+    * location_paths=[u&#39;ACPI(_SB_)#ACPI(CPU1)&#39;]
+  * &lt;DeviceInstance &quot;Intel Processor&quot; (id=3)&gt;
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000019
+    * location_paths=[u&#39;ACPI(_SB_)#ACPI(CPU2)&#39;]
+  * &lt;DeviceInstance &quot;Intel Processor&quot; (id=4)&gt;
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\0000001a
+    * location_paths=[u&#39;ACPI(_SB_)#ACPI(CPU3)&#39;]
+
+
+$ python64 device_manager\enum_devices.py --class Display --print-resources
+Namespace(clsfilter=&#39;Display&#39;, no_print_devices=False, print_resources=True)
+&lt;DeviceClass name=&quot;Display&quot; guid=4D36E968-E325-11CE-BFC1-08002BE10318&gt;
+  * &lt;DeviceInstance &quot;NVIDIA GeForce GTX 1070&quot; (id=1)&gt;
+    * &lt;MemoryResource : [0x000000f6000000-0x000000f6ffffff]&gt;
+    * &lt;DevicePrivateResource type=ResType_DevicePrivate(0x8001)&gt;
+    * &lt;MemoryResource : [0x000000e0000000-0x000000efffffff]&gt;
+    * &lt;DevicePrivateResource type=ResType_DevicePrivate(0x8001)&gt;
+    * &lt;MemoryResource : [0x000000f0000000-0x000000f1ffffff]&gt;
+    * &lt;DevicePrivateResource type=ResType_DevicePrivate(0x8001)&gt;
+    * &lt;IoResource : [0x0000000000e000-0x0000000000e07f]&gt;
+    ...
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="windows-wintrust">
-<span id="sample-wintrust"></span><h2>18.9. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
+<span id="sample-wintrust"></span><h2>18.11. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -1177,9 +1435,9 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="vectoredexception">
-<span id="sample-vectoredexception"></span><h2>18.10. <code class="xref py py-func docutils literal notranslate"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
+<span id="sample-vectoredexception"></span><h2>18.12. <code class="xref py py-func docutils literal notranslate"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="in-local-process">
-<h3>18.10.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
+<h3>18.12.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1187,9 +1445,9 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">windows</span>
-<span class="kn">from</span> <span class="nn">windows.winobject.exception</span> <span class="k">import</span> <span class="n">VectoredException</span>
+<span class="kn">from</span> <span class="nn">windows.winobject.exception</span> <span class="kn">import</span> <span class="n">VectoredException</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def.windef</span> <span class="k">as</span> <span class="nn">windef</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <span class="nd">@VectoredException</span>
@@ -1249,7 +1507,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 </div>
 </div>
 <div class="section" id="in-remote-process">
-<h3>18.10.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
+<h3>18.12.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1258,7 +1516,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">python_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">import windows</span>
@@ -1351,9 +1609,9 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="debugging">
-<span id="sample-debugger"></span><h2>18.11. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<span id="sample-debugger"></span><h2>18.13. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="debugger">
-<h3>18.11.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
+<h3>18.13.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1363,7 +1621,7 @@ No more tracing !
 <span class="kn">import</span> <span class="nn">windows.test</span>
 <span class="kn">import</span> <span class="nn">windows.debug</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 
@@ -1375,7 +1633,7 @@ No more tracing !
 
 
 <span class="k">class</span> <span class="nc">PrintUnicodeString</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">argument_position</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">argument_position</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PrintUnicodeString</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arg_pos</span> <span class="o">=</span> <span class="n">argument_position</span>
 
@@ -1430,7 +1688,7 @@ No more tracing !
 </pre></div>
 </div>
 <div class="section" id="on-setup">
-<span id="sample-debugger-on-setup"></span><h4>18.11.1.1. on_setup<a class="headerlink" href="#on-setup" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-on-setup"></span><h4>18.13.1.1. on_setup<a class="headerlink" href="#on-setup" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.debug</span>
 
 <span class="k">class</span> <span class="nc">MySetupDebugger</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="p">):</span>
@@ -1477,7 +1735,7 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="single-stepping">
-<h4>18.11.1.2. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
+<h4>18.13.1.2. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1488,11 +1746,11 @@ No more tracing !
 <span class="kn">import</span> <span class="nn">windows.debug</span>
 
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <span class="k">class</span> <span class="nc">MyDebugger</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MyDebugger</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">single_step_counter</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -1563,7 +1821,7 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="windows-debug-functioncallbp">
-<span id="sample-debugger-bp-functioncallbp"></span><h4>18.11.1.3. <a class="reference internal" href="debug.html#windows.debug.FunctionCallBP" title="windows.debug.FunctionCallBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a><a class="headerlink" href="#windows-debug-functioncallbp" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-bp-functioncallbp"></span><h4>18.13.1.3. <a class="reference internal" href="debug.html#windows.debug.FunctionCallBP" title="windows.debug.FunctionCallBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a><a class="headerlink" href="#windows-debug-functioncallbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1592,7 +1850,7 @@ No more tracing !
 <span class="c1"># It only now how to break at the return of the function</span>
 <span class="c1"># This allow us to change the return value of any function</span>
 <span class="k">class</span> <span class="nc">IncrementReturnValue</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionCallBP</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">initialvalue</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">initialvalue</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IncrementReturnValue</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialvalue</span> <span class="o">=</span> <span class="n">initialvalue</span>
 
@@ -1626,7 +1884,7 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="windows-debug-functionbp">
-<span id="sample-debugger-bp-functionbp"></span><h4>18.11.1.4. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-bp-functionbp"></span><h4>18.13.1.4. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1636,7 +1894,7 @@ No more tracing !
 <span class="kn">import</span> <span class="nn">windows.test</span>
 <span class="kn">import</span> <span class="nn">windows.debug</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">FollowNtCreateFile</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionBP</span><span class="p">):</span>
     <span class="n">TARGET</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtCreateFile</span>
@@ -1693,7 +1951,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="debugger-attach">
-<span id="sample-debugger-attach"></span><h4>18.11.1.5. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-attach"></span><h4>18.13.1.5. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1703,10 +1961,10 @@ Exiting process
 <span class="kn">import</span> <span class="nn">windows.test</span>
 <span class="kn">import</span> <span class="nn">windows.debug</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Just a debugger that follow NtCreateFile and print filename &amp; handler</span>
-<span class="kn">from</span> <span class="nn">debug_functionbp</span> <span class="k">import</span> <span class="n">FollowNtCreateFile</span>
+<span class="kn">from</span> <span class="nn">debug_functionbp</span> <span class="kn">import</span> <span class="n">FollowNtCreateFile</span>
 
 
 <span class="k">def</span> <span class="nf">follow_create_file</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
@@ -1746,7 +2004,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="native-code-tester">
-<h4>18.11.1.6. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
+<h4>18.13.1.6. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 
@@ -1755,7 +2013,7 @@ Exiting process
 <span class="kn">import</span> <span class="nn">windows.debug</span> <span class="k">as</span> <span class="nn">dbg</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <span class="k">def</span> <span class="nf">hexdump</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">start_addr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -1806,7 +2064,7 @@ Exiting process
         <span class="n">dbg</span><span class="o">.</span><span class="n">on_single_step</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="c1"># Trigger single step processing</span>
 
 <span class="k">class</span> <span class="nc">CodeTesteur</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">Debugger</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">register_start</span><span class="o">=</span><span class="p">{},</span> <span class="n">steps</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">register_start</span><span class="o">=</span><span class="p">{},</span> <span class="n">steps</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CodeTesteur</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">initial_code</span> <span class="o">=</span> <span class="n">code</span>
@@ -2045,17 +2303,77 @@ Exiting process
 </div>
 </div>
 </div>
+<div class="section" id="symboldebugger">
+<span id="sample-symbol-debugger"></span><h3>18.13.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">SymbolDebugger</span></code><a class="headerlink" href="#symboldebugger" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.debug</span>
+<span class="kn">import</span> <span class="nn">windows.test</span>
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--dbghelp&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path of DBG help to use (default use env:PFW_DBGHELP_PATH)&#39;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">:</span>
+    <span class="n">symbols</span><span class="o">.</span><span class="n">set_dbghelp_path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not dbghelp path given and no environ var &#39;PFW_DBGHELP_PATH&#39; sample may fail&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MyInfoBP</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="n">COUNT</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="n">cursym</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_resolver</span><span class="p">[</span><span class="n">exc</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Breakpoint triggered at: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cursym</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">cursym</span><span class="p">))</span>
+        <span class="n">MyInfoBP</span><span class="o">.</span><span class="n">COUNT</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">MyInfoBP</span><span class="o">.</span><span class="n">COUNT</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Quitting&quot;</span><span class="p">)</span>
+            <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">dbg</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">SymbolDebugger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;c:</span><span class="se">\\</span><span class="s2">windows</span><span class="se">\\</span><span class="s2">system32</span><span class="se">\\</span><span class="s2">notepad.exe&quot;</span><span class="p">)</span>
+<span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">MyInfoBP</span><span class="p">(</span><span class="s2">&quot;kernelbase!CreateFileInternal+2&quot;</span><span class="p">))</span>
+<span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">MyInfoBP</span><span class="p">(</span><span class="s2">&quot;ntdll!LdrpInitializeProcess&quot;</span><span class="p">))</span>
+<span class="n">dbg</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python debug\symbol_debugger.py
+Namespace(dbghelp=None)
+Breakpoint triggered at: ntdll!LdrpInitializeProcess
+&lt;SymbolInfoA name=&quot;LdrpInitializeProcess&quot; start=0x77c676c0 tag=SymTagPublicSymbol&gt;
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; start=0x75be2120 displacement=0x2 tag=SymTagFunction&gt;
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; start=0x75be2120 displacement=0x2 tag=SymTagFunction&gt;
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; start=0x75be2120 displacement=0x2 tag=SymTagFunction&gt;
+Quitting
+
+</pre></div>
+</div>
+</div>
 <div class="section" id="localdebugger">
-<span id="sample-local-debugger"></span><h3>18.11.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
+<span id="sample-local-debugger"></span><h3>18.13.3. <code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="in-current-process">
-<h4>18.11.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
+<h4>18.13.3.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">windows.debug</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
 
 <span class="k">class</span> <span class="nc">SingleSteppingDebugger</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">LocalDebugger</span><span class="p">):</span>
@@ -2063,7 +2381,7 @@ Exiting process
     <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_code</span><span class="p">()</span>
         <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EXCEPTION !!!! Got a </span><span class="si">{0}</span><span class="s2"> at 0x</span><span class="si">{1:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">pc</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EXCEPTION !!!! Got a </span><span class="si">{0!r}</span><span class="s2"> at 0x</span><span class="si">{1:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">pc</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SINGLE_STEP_COUNT</span> <span class="o">-=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SINGLE_STEP_COUNT</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
@@ -2074,7 +2392,7 @@ Exiting process
         <span class="n">context</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GOT AN HXBP at 0x</span><span class="si">{0:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">pc</span><span class="p">))</span>
         <span class="c1"># Rewrite the infinite loop with 2 nop</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\x90\x90</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x90\x90</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># Ask for a single stepping</span>
         <span class="k">return</span> <span class="n">dbg</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
 
@@ -2107,7 +2425,7 @@ Done!
 </div>
 </div>
 <div class="section" id="id1">
-<h4>18.11.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>18.13.3.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -2117,7 +2435,7 @@ Done!
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">remote_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">import windows</span>
@@ -2182,10 +2500,254 @@ Done!
 </div>
 </div>
 </div>
+<div class="section" id="symbols">
+<span id="sample-symbols"></span><h2>18.14. Symbols<a class="headerlink" href="#symbols" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="virtualsymbolhandler">
+<h3>18.14.1. VirtualSymbolHandler<a class="headerlink" href="#virtualsymbolhandler" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.debug</span> <span class="kn">import</span> <span class="n">symbols</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--dbghelp&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path of DBG help to use (default use env:PFW_DBGHELP_PATH)&#39;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">:</span>
+    <span class="n">symbols</span><span class="o">.</span><span class="n">set_dbghelp_path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not dbghelp path given and no environ var &#39;PFW_DBGHELP_PATH&#39; sample may fail&quot;</span><span class="p">)</span>
+
+
+<span class="n">symbols</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Disable defered load</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+
+<span class="n">ntmod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\ntdll.dll&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="mh">0x420000</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ntdll module is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * name = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * addr = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="o">.</span><span class="n">addr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * path = </span><span class="si">{0:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * type = </span><span class="si">{0:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * pdb = </span><span class="si">{0:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ntmod</span><span class="o">.</span><span class="n">pdb</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">TEST_FUNCTION</span> <span class="o">=</span> <span class="s2">&quot;LdrLoadDll&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resolving function &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_FUNCTION</span><span class="p">))</span>
+<span class="n">loaddll</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="s2">&quot;ntdll!&quot;</span> <span class="o">+</span> <span class="n">TEST_FUNCTION</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symbol found !&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __repr__: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __str__: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * addr: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="o">.</span><span class="n">addr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * name: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * fullname: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="o">.</span><span class="n">fullname</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * module: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loaddll</span><span class="o">.</span><span class="n">module</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading kernelbase&quot;</span><span class="p">)</span>
+<span class="n">kbasemod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;c:\windows\system32\kernelbase.dll&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="mh">0x1230000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded modules are: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">modules</span><span class="p">))</span>
+<span class="n">LOOKUP_ADDR</span> <span class="o">=</span> <span class="mh">0x1231242</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking up address: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOOKUP_ADDR</span><span class="p">))</span>
+<span class="n">lookupsym</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="n">LOOKUP_ADDR</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symbol resolved !&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __repr__: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __str__: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * start: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * addr: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">addr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * displacement: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">displacement</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * name: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * fullname: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">fullname</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * module: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookupsym</span><span class="o">.</span><span class="n">module</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python debug\symbols\virtsymdemo.py
+Namespace(dbghelp=None)
+Ntdll module is: &lt;SymbolModule name=&quot;ntdll&quot; type=SymPdb pdb=&quot;wntdll.pdb&quot; addr=0x420000&gt;
+  * name = ntdll
+  * addr = 0x420000
+  * path = c:\windows\system32\ntdll.dll
+  * type = &lt;SYM_TYPE SymPdb(0x3L)&gt;
+  * pdb = d:\symbols\wntdll.pdb\3D038F31BBBF51C701937460DBAB1F531\wntdll.pdb
+
+Resolving function &lt;LdrLoadDll&gt;
+Symbol found !
+  * __repr__: &lt;SymbolInfoA name=&quot;LdrLoadDll&quot; start=0x464d30 tag=SymTagFunction&gt;
+  * __str__: ntdll!LdrLoadDll
+  * addr: 0x464d30
+  * name: LdrLoadDll
+  * fullname: ntdll!LdrLoadDll
+  * module: &lt;SymbolModule name=&quot;ntdll&quot; type=SymPdb pdb=&quot;wntdll.pdb&quot; addr=0x420000&gt;
+
+Loading kernelbase
+Loaded modules are: [&lt;SymbolModule name=&quot;ntdll&quot; type=SymPdb pdb=&quot;wntdll.pdb&quot; addr=0x420000&gt;, &lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x1230000&gt;]
+Looking up address: 0x1231242
+Symbol resolved !
+  * __repr__: &lt;SymbolInfoA name=&quot;__load_config_used&quot; start=0x1231230 displacement=0x12 tag=SymTagPublicSymbol&gt;
+  * __str__: kernelbase!__load_config_used+0x12
+  * start: 0x1231230
+  * addr: 0x1231242
+  * displacement: 0x12
+  * name: __load_config_used
+  * fullname: kernelbase!__load_config_used+0x12
+  * module: &lt;SymbolModule name=&quot;kernelbase&quot; type=SymPdb pdb=&quot;wkernelbase.pdb&quot; addr=0x1230000&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="processsymbolhandler">
+<h3>18.14.2. ProcessSymbolHandler<a class="headerlink" href="#processsymbolhandler" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.test</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.debug</span> <span class="kn">import</span> <span class="n">symbols</span>
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--dbghelp&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path of DBG help to use (default use env:PFW_DBGHELP_PATH)&#39;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">:</span>
+    <span class="n">symbols</span><span class="o">.</span><span class="n">set_dbghelp_path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not dbghelp path given and no environ var &#39;PFW_DBGHELP_PATH&#39; sample may fail&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_64</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">symbols</span><span class="o">.</span><span class="n">ProcessSymbolHandler</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="p">;</span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="c1"># Just wait for the process initialisation</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span> <span class="c1"># Refresh symbol list (Only meaningful for ProcessSymbolHandler)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Some loaded modules are:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="n">sh</span><span class="o">.</span><span class="n">modules</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sm</span><span class="p">))</span>
+
+<span class="n">createserv</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="s2">&quot;advapi32!CreateServiceEx&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">TEST_FUNCTION</span> <span class="o">=</span> <span class="s2">&quot;advapi32!CreateServiceEx&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resolving function &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_FUNCTION</span><span class="p">))</span>
+<span class="n">createserv</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="n">TEST_FUNCTION</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symbol found !&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __repr__: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * __str__: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * addr: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="o">.</span><span class="n">addr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * name: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * fullname: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="o">.</span><span class="n">fullname</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * module: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">createserv</span><span class="o">.</span><span class="n">module</span><span class="p">))</span>
+
+<span class="n">target</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python debug\symbols\processsymdemo.py
+Namespace(dbghelp=None)
+Target is &lt;WinProcess &quot;notepad.exe&quot; pid 14280 at 0x4e177b0&gt;
+Some loaded modules are:
+ * &lt;SymbolModule name=&quot;notepad&quot; type=SymDeferred pdb=&quot;&quot; addr=0xc10000&gt;
+ * &lt;SymbolModule name=&quot;ntdll&quot; type=SymDeferred pdb=&quot;&quot; addr=0x77bc0000&gt;
+ * &lt;SymbolModule name=&quot;KERNEL32&quot; type=SymDeferred pdb=&quot;&quot; addr=0x77480000&gt;
+
+Resolving function &lt;advapi32!CreateServiceEx&gt;
+Symbol found !
+  * __repr__: &lt;SymbolInfoA name=&quot;CreateServiceEx&quot; start=0x764647b0 tag=SymTagPublicSymbol&gt;
+  * __str__: advapi32!CreateServiceEx
+  * addr: 0x764647b0
+  * name: CreateServiceEx
+  * fullname: advapi32!CreateServiceEx
+  * module: &lt;SymbolModule name=&quot;advapi32&quot; type=SymPdb pdb=&quot;advapi32.pdb&quot; addr=0x76440000&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="symbol-search">
+<h3>18.14.3. Symbol search<a class="headerlink" href="#symbol-search" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.debug.symbols</span> <span class="k">as</span> <span class="nn">symbols</span>
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The PE file to load&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--addr&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The load address of the PE&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--tag&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--dbghelp&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path of DBG help to use (default use env:PFW_DBGHELP_PATH)&#39;</span><span class="p">)</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">:</span>
+    <span class="n">symbols</span><span class="o">.</span><span class="n">set_dbghelp_path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbghelp</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not dbghelp path given and no environ var &#39;PFW_DBGHELP_PATH&#39; sample may fail&quot;</span><span class="p">)</span>
+
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">symbols</span><span class="o">.</span><span class="n">VirtualSymbolHandler</span><span class="p">()</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="n">mod</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> symbols found:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)))</span>
+<span class="k">for</span> <span class="n">sym</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sym</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python64  debug\symbols\symsearch.py &quot;CreateFile*&quot; c:\windows\system32\kernelbase.dll
+Namespace(addr=0, dbghelp=None, file=&#39;c:\\windows\\system32\\kernelbase.dll&#39;, pattern=&#39;CreateFile*&#39;, tag=0)
+16 symbols found:
+ * &lt;SymbolInfoA name=&quot;CreateFileInternal&quot; start=0x180024250 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMappingFromApp&quot; start=0x1800809d0 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMoniker&quot; start=0x180087e40 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFile2&quot; start=0x180074550 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileA&quot; start=0x1800240d0 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMappingNumaW&quot; start=0x18002ca40 tag=SymTagFunction&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMapping2&quot; start=0x1800fb6d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileInternal&quot; start=0x180024250 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMappingW&quot; start=0x18002cd00 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileDowngrade_Win7&quot; start=0x180082ff0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileDowngrade_Vista&quot; start=0x18007eba0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMappingFromApp&quot; start=0x1800809d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFile2&quot; start=0x180074550 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileW&quot; start=0x1800241d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileA&quot; start=0x1800240d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;CreateFileMappingNumaW&quot; start=0x18002ca40 tag=SymTagPublicSymbol&gt;
+
+
+$ python64 debug\symbols\symsearch.py &quot;NtCreate*&quot; c:\windows\system32\ntdll.dll --addr 0x42000000
+Namespace(addr=1107296256, dbghelp=None, file=&#39;c:\\windows\\system32\\ntdll.dll&#39;, pattern=&#39;NtCreate*&#39;, tag=0)
+47 symbols found:
+ * &lt;SymbolInfoA name=&quot;NtCreateProcessEx&quot; start=0x4209ca00 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateIRTimer&quot; start=0x4209d530 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateRegistryTransaction&quot; start=0x4209d750 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateTimer&quot; start=0x4209d810 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateKeyedEvent&quot; start=0x4209d5d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateFile&quot; start=0x4209cb00 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateSymbolicLinkObject&quot; start=0x4209d7d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreatePrivateNamespace&quot; start=0x4209d6d0 tag=SymTagPublicSymbol&gt;
+ * &lt;SymbolInfoA name=&quot;NtCreateKey&quot; start=0x4209c400 tag=SymTagPublicSymbol&gt;
+ ...
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="wmi">
-<span id="wmi-samples"></span><h2>18.12. WMI<a class="headerlink" href="#wmi" title="Permalink to this headline">¶</a></h2>
+<span id="wmi-samples"></span><h2>18.15. WMI<a class="headerlink" href="#wmi" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="wmi-requests">
-<h3>18.12.1. WMI requests<a class="headerlink" href="#wmi-requests" title="Permalink to this headline">¶</a></h3>
+<h3>18.15.1. WMI requests<a class="headerlink" href="#wmi-requests" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -2268,7 +2830,7 @@ Listing &lt;AntiVirusProduct&gt;:
 </div>
 </div>
 <div class="section" id="wmi-create-process">
-<h3>18.12.2. WMI Create Process<a class="headerlink" href="#wmi-create-process" title="Permalink to this headline">¶</a></h3>
+<h3>18.15.2. WMI Create Process<a class="headerlink" href="#wmi-create-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">windows</span>
 
@@ -2325,9 +2887,9 @@ Killing the process
 </div>
 </div>
 <div class="section" id="windows-com">
-<span id="sample-com"></span><h2>18.13. <a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a><a class="headerlink" href="#windows-com" title="Permalink to this headline">¶</a></h2>
+<span id="sample-com"></span><h2>18.16. <a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a><a class="headerlink" href="#windows-com" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="inetfwpolicy2">
-<span id="sample-com-firewall"></span><h3>18.13.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
+<span id="sample-com-firewall"></span><h3>18.16.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -2335,7 +2897,7 @@ Killing the process
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">interfaces</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="n">interfaces</span>
 
 <span class="c1"># This code is a simple version of the firewall code in windows.winoject.network</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialisation of COM&quot;</span><span class="p">)</span>
@@ -2382,10 +2944,10 @@ Killing the process
 </div>
 </div>
 <div class="section" id="icallinterceptor">
-<span id="sample-com-icallinterceptor"></span><h3>18.13.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code><a class="headerlink" href="#icallinterceptor" title="Permalink to this headline">¶</a></h3>
+<span id="sample-com-icallinterceptor"></span><h3>18.16.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code><a class="headerlink" href="#icallinterceptor" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
 
 <span class="c1"># POC of ICallInterceptor</span>
 <span class="c1"># Based on works by Pavel Yosifovich</span>
@@ -2483,16 +3045,16 @@ After call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, 107934504)
 </div>
 </div>
 <div class="section" id="windows-crypto">
-<h2>18.14. <a class="reference internal" href="crypto.html#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
+<h2>18.17. <a class="reference internal" href="crypto.html#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="encryption-demo">
-<span id="sample-crypto-encryption"></span><h3>18.14.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-encryption"></span><h3>18.17.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
 <p>This sample is a working POC able to generate key-pair, encrypt and decrypt file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">getpass</span>
 
 <span class="kn">import</span> <span class="nn">windows.crypto</span> <span class="k">as</span> <span class="nn">crypto</span>
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">import</span> <span class="nn">windows.crypto.generation</span> <span class="k">as</span> <span class="nn">gencrypt</span>
 
@@ -2692,7 +3254,7 @@ Result = &lt;my secret message&gt;
 </div>
 </div>
 <div class="section" id="certificate-demo">
-<span id="sample-crypto-certificate"></span><h3>18.14.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-certificate"></span><h3>18.17.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">windows.crypto</span>
@@ -2824,13 +3386,13 @@ File embdeds 2 certificate(s):
 </div>
 </div>
 <div class="section" id="windows-alpc">
-<h2>18.15. <a class="reference internal" href="alpc.html#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><a class="headerlink" href="#windows-alpc" title="Permalink to this headline">¶</a></h2>
+<h2>18.18. <a class="reference internal" href="alpc.html#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><a class="headerlink" href="#windows-alpc" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="simple-alpc-communication">
-<span id="sample-alpc"></span><h3>18.15.1. simple alpc communication<a class="headerlink" href="#simple-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<span id="sample-alpc"></span><h3>18.18.1. simple alpc communication<a class="headerlink" href="#simple-alpc-communication" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
 
 <span class="kn">import</span> <span class="nn">windows.alpc</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
 
 <span class="n">PORT_NAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\PythonForWindowsPORT&quot;</span>
 
@@ -2896,12 +3458,12 @@ BYE
 </div>
 </div>
 <div class="section" id="advanced-alpc-communication">
-<span id="sample-advanced-alpc"></span><h3>18.15.2. advanced alpc communication<a class="headerlink" href="#advanced-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<span id="sample-advanced-alpc"></span><h3>18.18.2. advanced alpc communication<a class="headerlink" href="#advanced-alpc-communication" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 
 <span class="kn">import</span> <span class="nn">windows.alpc</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
@@ -3144,15 +3706,15 @@ BYE
 </div>
 </div>
 <div class="section" id="windows-rpc">
-<h2>18.16. <a class="reference internal" href="rpc.html#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><a class="headerlink" href="#windows-rpc" title="Permalink to this headline">¶</a></h2>
+<h2>18.19. <a class="reference internal" href="rpc.html#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><a class="headerlink" href="#windows-rpc" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="manual-uac">
-<span id="sample-rpc-uac"></span><h3>18.16.1. Manual UAC<a class="headerlink" href="#manual-uac" title="Permalink to this headline">¶</a></h3>
+<span id="sample-rpc-uac"></span><h3>18.19.1. Manual UAC<a class="headerlink" href="#manual-uac" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">windows.rpc</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
-<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 
 <span class="c1"># NDR Descriptions</span>
 <span class="k">class</span> <span class="nc">NDRPoint</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
@@ -3255,9 +3817,9 @@ BYE
 </div>
 </div>
 <div class="section" id="manual-lsarenumerateprivileges">
-<span id="sample-rpc-lsass"></span><h3>18.16.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code><a class="headerlink" href="#manual-lsarenumerateprivileges" title="Permalink to this headline">¶</a></h3>
+<span id="sample-rpc-lsass"></span><h3>18.19.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code><a class="headerlink" href="#manual-lsarenumerateprivileges" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.rpc</span>
-<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 
 
 <span class="k">class</span> <span class="nc">PLSAPR_OBJECT_ATTRIBUTES</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
@@ -3403,9 +3965,9 @@ BYE
 </div>
 </div>
 <div class="section" id="windows-pipe">
-<span id="sample-pipe"></span><h2>18.17. <a class="reference internal" href="pipe.html#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><a class="headerlink" href="#windows-pipe" title="Permalink to this headline">¶</a></h2>
+<span id="sample-pipe"></span><h2>18.20. <a class="reference internal" href="pipe.html#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><a class="headerlink" href="#windows-pipe" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="communication-with-an-injected-process">
-<h3>18.17.1. Communication with an injected process<a class="headerlink" href="#communication-with-an-injected-process" title="Permalink to this headline">¶</a></h3>
+<h3>18.20.1. Communication with an injected process<a class="headerlink" href="#communication-with-an-injected-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
 
@@ -3454,9 +4016,9 @@ BYE
 </div>
 </div>
 <div class="section" id="windows-security">
-<span id="sample-security"></span><h2>18.18. <a class="reference internal" href="security.html#module-windows.security" title="windows.security"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.security</span></code></a><a class="headerlink" href="#windows-security" title="Permalink to this headline">¶</a></h2>
+<span id="sample-security"></span><h2>18.21. <a class="reference internal" href="security.html#module-windows.security" title="windows.security"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.security</span></code></a><a class="headerlink" href="#windows-security" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="security-descriptor">
-<h3>18.18.1. Security Descriptor<a class="headerlink" href="#security-descriptor" title="Permalink to this headline">¶</a></h3>
+<h3>18.21.1. Security Descriptor<a class="headerlink" href="#security-descriptor" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.security</span>
 
 <span class="n">SDDL</span> <span class="o">=</span> <span class="s2">&quot;O:BAG:AND:(A;OI;RPWPCCDCLCSWRCWDWOGA;;;S-1-0-0)(D;CIIO;RPWPCCDCLCSWRCWDWOGA;;;S-1-0-0)&quot;</span>
@@ -3511,7 +4073,7 @@ BYE
 </div>
 </div>
 <div class="section" id="query-sacl">
-<span id="sample-security-sacl"></span><h3>18.18.2. Query SACL<a class="headerlink" href="#query-sacl" title="Permalink to this headline">¶</a></h3>
+<span id="sample-security-sacl"></span><h3>18.21.2. Query SACL<a class="headerlink" href="#query-sacl" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">windows.security</span>
 
@@ -3579,6 +4141,178 @@ BYE
 </div>
 </div>
 </div>
+<div class="section" id="etw-event-tracing-for-windows">
+<span id="sample-etw"></span><h2>18.22. ETW (Event Tracing for Windows)<a class="headerlink" href="#etw-event-tracing-for-windows" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="trace-processing">
+<h3>18.22.1. Trace processing<a class="headerlink" href="#trace-processing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="n">makeg</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span>
+
+<span class="c1"># This sample record the ETW event of provider CBB61B6D-A2CF-471A-9A58-A4CD5C08FFBA</span>
+<span class="c1"># related to the UAC (service AppInfo)</span>
+<span class="c1"># The ETW session is called MY_UAC_MONITOR</span>
+
+<span class="c1"># Is then trigger the UAC and display the retrieved event afterward</span>
+
+<span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0:#x}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">EventHeader</span><span class="o">.</span><span class="n">TimeStamp</span><span class="p">,</span> <span class="n">event</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    guid: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">guid</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    id: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    opcode: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">opcode</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    level: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">level</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    data: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">user_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="n">session_name</span> <span class="o">=</span> <span class="s2">&quot;MY_UAC_MONITOR&quot;</span>
+<span class="n">logfile_name</span> <span class="o">=</span> <span class="s2">&quot;uac.trace&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recording UAC event in file &lt;</span><span class="si">{0}</span><span class="s2">&gt; using session named &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">logfile_name</span><span class="p">,</span> <span class="n">session_name</span><span class="p">))</span>
+
+<span class="n">my_trace</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">etw</span><span class="o">.</span><span class="n">open_trace</span><span class="p">(</span><span class="n">session_name</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="n">logfile_name</span><span class="p">)</span>
+<span class="n">my_trace</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">soft</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Stop previous trace with this name if exists</span>
+<span class="n">my_trace</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">my_trace</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;CBB61B6D-A2CF-471A-9A58-A4CD5C08FFBA&quot;</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">)</span>
+
+<span class="c1"># Trigger UAC</span>
+<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ShellExecuteA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;runas&quot;</span><span class="p">,</span> <span class="s2">&quot;mmc.exe&quot;</span><span class="p">,</span> <span class="s2">&quot;BAD_MMC_FILENAME&quot;</span><span class="p">,</span> <span class="kc">None</span> <span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="n">my_trace</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="n">my_trace</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">show</span><span class="p">)</span> <span class="c1">#: Process the events registered in the trace (and logfile)</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">etw</span>\<span class="n">uac_trace</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Recording</span> <span class="n">UAC</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">file</span> <span class="o">&lt;</span><span class="n">uac</span><span class="o">.</span><span class="n">trace</span><span class="o">&gt;</span> <span class="n">using</span> <span class="n">session</span> <span class="n">named</span> <span class="o">&lt;</span><span class="n">MY_UAC_MONITOR</span><span class="o">&gt;</span>
+<span class="mh">0x1d65bb1febaceea</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;68FDD900-4A3E-11D1-84F4-0000F80464E3&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="mi">68</span><span class="n">FDD900</span><span class="o">-</span><span class="mi">4</span><span class="n">A3E</span><span class="o">-</span><span class="mi">11</span><span class="n">D1</span><span class="o">-</span><span class="mi">84</span><span class="n">F4</span><span class="o">-</span><span class="mi">0000</span><span class="n">F80464E3</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\x01\n\x01\x05\xbb</span><span class="s1">G</span><span class="se">\x04</span><span class="s1">-D</span><span class="se">\xd5\xff\xb1</span><span class="s1">[</span><span class="se">\xd6\x01</span><span class="s1">Zb</span><span class="se">\x02\t\x01\x04\xf0\x0c\t\x06\xc4\xff\xff\xff</span><span class="s1">@tzres.dll,-302</span><span class="se">\n\x05\x03</span><span class="s1">@tzres.dll,-301</span><span class="se">\x03\x05\x02\xc4\xff\xff\xff\xc0\x92\x1c\xd2</span><span class="s1">D[</span><span class="se">\xd6\x01\x80\x96\x98\xea\xce\xba\xfe\xb1</span><span class="s1">[</span><span class="se">\xd6\x01\x01</span><span class="s1">MY_UAC_MONITORC:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">hakril</span><span class="se">\\</span><span class="s1">Documents</span><span class="se">\\</span><span class="s1">projets</span><span class="se">\\</span><span class="s1">PythonForWindows</span><span class="se">\\</span><span class="s1">samples</span><span class="se">\\</span><span class="s1">uac.trace&#39;</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="mh">0x1d65bb1fec4c011</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;DEB74A23-5444-3F3B-924B-0E653973F55A&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">11</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="n">DEB74A23</span><span class="o">-</span><span class="mi">5444</span><span class="o">-</span><span class="mi">3</span><span class="n">F3B</span><span class="o">-</span><span class="mi">924</span><span class="n">B</span><span class="o">-</span><span class="mf">0E653973</span><span class="n">F55A</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">11</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\x9e\x06\x04\x19\x14\x04\x08\x04\xff\xff\xff\xff</span><span class="s1">WinSta0</span><span class="se">\\</span><span class="s1">DefaultC:</span><span class="se">\\</span><span class="s1">Windows</span><span class="se">\\</span><span class="s1">System32</span><span class="se">\\</span><span class="s1">mmc.exe&quot;C:</span><span class="se">\\</span><span class="s1">Windows</span><span class="se">\\</span><span class="s1">System32</span><span class="se">\\</span><span class="s1">mmc.exe&quot; BAD_MMC_FILENAMEC:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">hakril</span><span class="se">\\</span><span class="s1">Documents</span><span class="se">\\</span><span class="s1">projets</span><span class="se">\\</span><span class="s1">PythonForWindows</span><span class="se">\\</span><span class="s1">samples&#39;</span>
+<span class="mh">0x1d65bb1fec4e48b</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;C0B508D3-5459-339F-A213-889C238CA5B1&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">10</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="n">C0B508D3</span><span class="o">-</span><span class="mi">5459</span><span class="o">-</span><span class="mi">339</span><span class="n">F</span><span class="o">-</span><span class="n">A213</span><span class="o">-</span><span class="mi">889</span><span class="n">C238CA5B1</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe&quot;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe&quot; BAD_MMC_FILENAME` &#39;</span>
+<span class="mh">0x1d65bb1fec7c8eb</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;C0B508D3-5459-339F-A213-889C238CA5B1&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">13</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="n">C0B508D3</span><span class="o">-</span><span class="mi">5459</span><span class="o">-</span><span class="mi">339</span><span class="n">F</span><span class="o">-</span><span class="n">A213</span><span class="o">-</span><span class="mi">889</span><span class="n">C238CA5B1</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">13</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe&#39;</span>
+<span class="mh">0x1d65bb1fec7c8f0</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;C0B508D3-5459-339F-A213-889C238CA5B1&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">14</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="n">C0B508D3</span><span class="o">-</span><span class="mi">5459</span><span class="o">-</span><span class="mi">339</span><span class="n">F</span><span class="o">-</span><span class="n">A213</span><span class="o">-</span><span class="mi">889</span><span class="n">C238CA5B1</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">14</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;&quot;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe&quot; BAD_MMC_FILENAME&#39;</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="mh">0x1d65bb1feca018d</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;172FF31C-2D80-31A6-FCA8-EB000D380666&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">11</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="mi">172</span><span class="n">FF31C</span><span class="o">-</span><span class="mi">2</span><span class="n">D80</span><span class="o">-</span><span class="mi">31</span><span class="n">A6</span><span class="o">-</span><span class="n">FCA8</span><span class="o">-</span><span class="n">EB000D380666</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">11</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe&#39;</span>
+<span class="mh">0x1d65bb1feca030d</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;172FF31C-2D80-31A6-FCA8-EB000D380666&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">25</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="mi">172</span><span class="n">FF31C</span><span class="o">-</span><span class="mi">2</span><span class="n">D80</span><span class="o">-</span><span class="mi">31</span><span class="n">A6</span><span class="o">-</span><span class="n">FCA8</span><span class="o">-</span><span class="n">EB000D380666</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">25</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">WINDOWS</span><span class="se">\\</span><span class="s1">SysWOW64</span><span class="se">\\</span><span class="s1">mmc.exe</span><span class="se">\x08\x02</span><span class="s1">TRUEFALSE</span><span class="se">\x10</span><span class="s1">&#39;</span>
+<span class="mh">0x1d65bb1fecfcdc0</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventRecord</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;172FF31C-2D80-31A6-FCA8-EB000D380666&quot;</span> <span class="nb">id</span><span class="o">=</span><span class="mi">27</span><span class="o">&gt;</span>
+    <span class="n">guid</span><span class="p">:</span> <span class="mi">172</span><span class="n">FF31C</span><span class="o">-</span><span class="mi">2</span><span class="n">D80</span><span class="o">-</span><span class="mi">31</span><span class="n">A6</span><span class="o">-</span><span class="n">FCA8</span><span class="o">-</span><span class="n">EB000D380666</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">27</span>
+    <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">level</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\x05</span><span class="s1">TRUETRUE&#39;</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enumeration">
+<h3>18.22.2. Enumeration<a class="headerlink" href="#enumeration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
+
+<span class="n">etwmgr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">etw</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ETW Manager is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">etwmgr</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing some ETW sessions:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sess</span> <span class="ow">in</span> <span class="n">etwmgr</span><span class="o">.</span><span class="n">sessions</span><span class="p">[:</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * name: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * guid: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">guid</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * id: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * logfile: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">logfile</span><span class="p">))</span>
+
+<span class="n">target_id</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">id</span>
+<span class="n">NB_MATCH</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for providers for: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">provider</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">etw</span><span class="o">.</span><span class="n">providers</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">NB_MATCH</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">provider</span><span class="o">.</span><span class="n">instances</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">NB_MATCH</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">LoggerId</span> <span class="o">==</span> <span class="n">target_id</span> <span class="ow">and</span> <span class="n">instance</span><span class="o">.</span><span class="n">Pid</span><span class="p">:</span>
+                <span class="n">proc</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="n">instance</span><span class="o">.</span><span class="n">Pid</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a provider/session for target:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * Provider: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">provider</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * Instance: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * Process: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc</span><span class="p">))</span>
+                <span class="n">NB_MATCH</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">NB_MATCH</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">break</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">etw</span>\<span class="n">etw_enumeration</span><span class="o">.</span><span class="n">py</span>
+<span class="n">ETW</span> <span class="n">Manager</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">event_trace</span><span class="o">.</span><span class="n">EtwManager</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x03AFBF70</span><span class="o">&gt;</span>
+
+<span class="n">Listing</span> <span class="n">some</span> <span class="n">ETW</span> <span class="n">sessions</span><span class="p">:</span>
+  <span class="o">*</span> <span class="o">&lt;</span><span class="n">EventTraceProperties</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;AppModel&quot;</span> <span class="n">guid</span><span class="o">=</span><span class="n">A922A8BE</span><span class="o">-</span><span class="mi">2450</span><span class="o">-</span><span class="mf">438E-9520</span><span class="o">-</span><span class="n">FBCDFB46B0BD</span><span class="o">&gt;</span>
+     <span class="o">*</span> <span class="n">name</span><span class="p">:</span> <span class="n">AppModel</span>
+     <span class="o">*</span> <span class="n">guid</span><span class="p">:</span> <span class="n">A922A8BE</span><span class="o">-</span><span class="mi">2450</span><span class="o">-</span><span class="mf">438E-9520</span><span class="o">-</span><span class="n">FBCDFB46B0BD</span>
+     <span class="o">*</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">4</span>
+     <span class="o">*</span> <span class="n">logfile</span><span class="p">:</span> 
+  <span class="o">*</span> <span class="o">&lt;</span><span class="n">EventTraceProperties</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LwtNetLog&quot;</span> <span class="n">guid</span><span class="o">=</span><span class="mi">603</span><span class="n">BA31E</span><span class="o">-</span><span class="n">EC5A</span><span class="o">-</span><span class="mi">4</span><span class="n">CDE</span><span class="o">-</span><span class="n">BE87</span><span class="o">-</span><span class="n">ED0A16C3B170</span><span class="o">&gt;</span>
+     <span class="o">*</span> <span class="n">name</span><span class="p">:</span> <span class="n">LwtNetLog</span>
+     <span class="o">*</span> <span class="n">guid</span><span class="p">:</span> <span class="mi">603</span><span class="n">BA31E</span><span class="o">-</span><span class="n">EC5A</span><span class="o">-</span><span class="mi">4</span><span class="n">CDE</span><span class="o">-</span><span class="n">BE87</span><span class="o">-</span><span class="n">ED0A16C3B170</span>
+     <span class="o">*</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">14</span>
+     <span class="o">*</span> <span class="n">logfile</span><span class="p">:</span> <span class="n">C</span><span class="p">:</span>\<span class="n">WINDOWS</span>\<span class="n">System32</span>\<span class="n">LogFiles</span>\<span class="n">WMI</span>\<span class="n">LwtNetLog</span><span class="o">.</span><span class="n">etl</span>
+
+<span class="n">Looking</span> <span class="k">for</span> <span class="n">providers</span> <span class="k">for</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">EventTraceProperties</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;LwtNetLog&quot;</span> <span class="n">guid</span><span class="o">=</span><span class="mi">603</span><span class="n">BA31E</span><span class="o">-</span><span class="n">EC5A</span><span class="o">-</span><span class="mi">4</span><span class="n">CDE</span><span class="o">-</span><span class="n">BE87</span><span class="o">-</span><span class="n">ED0A16C3B170</span><span class="o">&gt;</span>
+<span class="n">Found</span> <span class="n">a</span> <span class="n">provider</span><span class="o">/</span><span class="n">session</span> <span class="k">for</span> <span class="n">target</span><span class="p">:</span>
+  <span class="o">*</span> <span class="n">Provider</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProvider</span> <span class="k">for</span> <span class="s2">&quot;43D1A55C-76D6-4F7E-995C-64C711E5CAFE&quot;</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Instance</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProviderInstanceInfo</span> <span class="n">Pid</span><span class="o">=</span><span class="mi">5256</span> <span class="n">EnableCount</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Process</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;RuntimeBroker.exe&quot;</span> <span class="n">pid</span> <span class="mi">5256</span> <span class="n">at</span> <span class="mh">0x54c39d0</span><span class="o">&gt;</span>
+<span class="n">Found</span> <span class="n">a</span> <span class="n">provider</span><span class="o">/</span><span class="n">session</span> <span class="k">for</span> <span class="n">target</span><span class="p">:</span>
+  <span class="o">*</span> <span class="n">Provider</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProvider</span> <span class="k">for</span> <span class="s2">&quot;43D1A55C-76D6-4F7E-995C-64C711E5CAFE&quot;</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Instance</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProviderInstanceInfo</span> <span class="n">Pid</span><span class="o">=</span><span class="mi">10768</span> <span class="n">EnableCount</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Process</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;chrome.exe&quot;</span> <span class="n">pid</span> <span class="mi">10768</span> <span class="n">at</span> <span class="mh">0x54c3930</span><span class="o">&gt;</span>
+<span class="n">Found</span> <span class="n">a</span> <span class="n">provider</span><span class="o">/</span><span class="n">session</span> <span class="k">for</span> <span class="n">target</span><span class="p">:</span>
+  <span class="o">*</span> <span class="n">Provider</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProvider</span> <span class="k">for</span> <span class="s2">&quot;43D1A55C-76D6-4F7E-995C-64C711E5CAFE&quot;</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Instance</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TraceProviderInstanceInfo</span> <span class="n">Pid</span><span class="o">=</span><span class="mi">10236</span> <span class="n">EnableCount</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">Process</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;YourPhone.exe&quot;</span> <span class="n">pid</span> <span class="mi">10236</span> <span class="n">at</span> <span class="mh">0x54c37d0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -3587,7 +4321,7 @@ BYE
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">18. Samples of code</a><ul>
 <li><a class="reference internal" href="#processes">18.1. Processes</a><ul>
@@ -3600,69 +4334,86 @@ BYE
 </li>
 <li><a class="reference internal" href="#token">18.2. Token</a></li>
 <li><a class="reference internal" href="#windows-system">18.3. <code class="docutils literal notranslate"><span class="pre">windows.system</span></code></a></li>
-<li><a class="reference internal" href="#network-socket-exploration">18.4. <code class="docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration</a></li>
-<li><a class="reference internal" href="#registry">18.5. <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
-<li><a class="reference internal" href="#scheduled-tasks">18.6. Scheduled tasks</a></li>
-<li><a class="reference internal" href="#event-log">18.7. Event Log</a></li>
-<li><a class="reference internal" href="#object-manager">18.8. Object manager</a><ul>
-<li><a class="reference internal" href="#find-objects">18.8.1. find objects</a></li>
+<li><a class="reference internal" href="#services">18.4. Services</a></li>
+<li><a class="reference internal" href="#network-socket-exploration">18.5. <code class="docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration</a></li>
+<li><a class="reference internal" href="#registry">18.6. <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li><a class="reference internal" href="#scheduled-tasks">18.7. Scheduled tasks</a></li>
+<li><a class="reference internal" href="#event-log">18.8. Event Log</a></li>
+<li><a class="reference internal" href="#object-manager">18.9. Object manager</a><ul>
+<li><a class="reference internal" href="#find-objects">18.9.1. find objects</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-wintrust">18.9. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
-<li><a class="reference internal" href="#vectoredexception">18.10. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a><ul>
-<li><a class="reference internal" href="#in-local-process">18.10.1. In local process</a></li>
-<li><a class="reference internal" href="#in-remote-process">18.10.2. In remote process</a></li>
+<li><a class="reference internal" href="#device-manager">18.10. Device manager</a><ul>
+<li><a class="reference internal" href="#enumerate-devices">18.10.1. Enumerate devices</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debugging">18.11. Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">18.11.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a><ul>
-<li><a class="reference internal" href="#on-setup">18.11.1.1. on_setup</a></li>
-<li><a class="reference internal" href="#single-stepping">18.11.1.2. Single stepping</a></li>
-<li><a class="reference internal" href="#windows-debug-functioncallbp">18.11.1.3. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a></li>
-<li><a class="reference internal" href="#windows-debug-functionbp">18.11.1.4. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
-<li><a class="reference internal" href="#debugger-attach">18.11.1.5. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
-<li><a class="reference internal" href="#native-code-tester">18.11.1.6. Native code tester</a></li>
+<li><a class="reference internal" href="#windows-wintrust">18.11. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
+<li><a class="reference internal" href="#vectoredexception">18.12. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a><ul>
+<li><a class="reference internal" href="#in-local-process">18.12.1. In local process</a></li>
+<li><a class="reference internal" href="#in-remote-process">18.12.2. In remote process</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#localdebugger">18.11.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><ul>
-<li><a class="reference internal" href="#in-current-process">18.11.2.1. In current process</a></li>
-<li><a class="reference internal" href="#id1">18.11.2.2. In remote process</a></li>
+<li><a class="reference internal" href="#debugging">18.13. Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">18.13.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a><ul>
+<li><a class="reference internal" href="#on-setup">18.13.1.1. on_setup</a></li>
+<li><a class="reference internal" href="#single-stepping">18.13.1.2. Single stepping</a></li>
+<li><a class="reference internal" href="#windows-debug-functioncallbp">18.13.1.3. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a></li>
+<li><a class="reference internal" href="#windows-debug-functionbp">18.13.1.4. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#debugger-attach">18.13.1.5. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
+<li><a class="reference internal" href="#native-code-tester">18.13.1.6. Native code tester</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#symboldebugger">18.13.2. <code class="docutils literal notranslate"><span class="pre">SymbolDebugger</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">18.13.3. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><ul>
+<li><a class="reference internal" href="#in-current-process">18.13.3.1. In current process</a></li>
+<li><a class="reference internal" href="#id1">18.13.3.2. In remote process</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wmi">18.12. WMI</a><ul>
-<li><a class="reference internal" href="#wmi-requests">18.12.1. WMI requests</a></li>
-<li><a class="reference internal" href="#wmi-create-process">18.12.2. WMI Create Process</a></li>
+<li><a class="reference internal" href="#symbols">18.14. Symbols</a><ul>
+<li><a class="reference internal" href="#virtualsymbolhandler">18.14.1. VirtualSymbolHandler</a></li>
+<li><a class="reference internal" href="#processsymbolhandler">18.14.2. ProcessSymbolHandler</a></li>
+<li><a class="reference internal" href="#symbol-search">18.14.3. Symbol search</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-com">18.13. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a><ul>
-<li><a class="reference internal" href="#inetfwpolicy2">18.13.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
-<li><a class="reference internal" href="#icallinterceptor">18.13.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code></a></li>
+<li><a class="reference internal" href="#wmi">18.15. WMI</a><ul>
+<li><a class="reference internal" href="#wmi-requests">18.15.1. WMI requests</a></li>
+<li><a class="reference internal" href="#wmi-create-process">18.15.2. WMI Create Process</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-crypto">18.14. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><ul>
-<li><a class="reference internal" href="#encryption-demo">18.14.1. Encryption demo</a></li>
-<li><a class="reference internal" href="#certificate-demo">18.14.2. Certificate demo</a></li>
+<li><a class="reference internal" href="#windows-com">18.16. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a><ul>
+<li><a class="reference internal" href="#inetfwpolicy2">18.16.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#icallinterceptor">18.16.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-alpc">18.15. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><ul>
-<li><a class="reference internal" href="#simple-alpc-communication">18.15.1. simple alpc communication</a></li>
-<li><a class="reference internal" href="#advanced-alpc-communication">18.15.2. advanced alpc communication</a></li>
+<li><a class="reference internal" href="#windows-crypto">18.17. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><ul>
+<li><a class="reference internal" href="#encryption-demo">18.17.1. Encryption demo</a></li>
+<li><a class="reference internal" href="#certificate-demo">18.17.2. Certificate demo</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-rpc">18.16. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><ul>
-<li><a class="reference internal" href="#manual-uac">18.16.1. Manual UAC</a></li>
-<li><a class="reference internal" href="#manual-lsarenumerateprivileges">18.16.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code></a></li>
+<li><a class="reference internal" href="#windows-alpc">18.18. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><ul>
+<li><a class="reference internal" href="#simple-alpc-communication">18.18.1. simple alpc communication</a></li>
+<li><a class="reference internal" href="#advanced-alpc-communication">18.18.2. advanced alpc communication</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-pipe">18.17. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><ul>
-<li><a class="reference internal" href="#communication-with-an-injected-process">18.17.1. Communication with an injected process</a></li>
+<li><a class="reference internal" href="#windows-rpc">18.19. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><ul>
+<li><a class="reference internal" href="#manual-uac">18.19.1. Manual UAC</a></li>
+<li><a class="reference internal" href="#manual-lsarenumerateprivileges">18.19.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-security">18.18. <code class="docutils literal notranslate"><span class="pre">windows.security</span></code></a><ul>
-<li><a class="reference internal" href="#security-descriptor">18.18.1. Security Descriptor</a></li>
-<li><a class="reference internal" href="#query-sacl">18.18.2. Query SACL</a></li>
+<li><a class="reference internal" href="#windows-pipe">18.20. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><ul>
+<li><a class="reference internal" href="#communication-with-an-injected-process">18.20.1. Communication with an injected process</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows-security">18.21. <code class="docutils literal notranslate"><span class="pre">windows.security</span></code></a><ul>
+<li><a class="reference internal" href="#security-descriptor">18.21.1. Security Descriptor</a></li>
+<li><a class="reference internal" href="#query-sacl">18.21.2. Query SACL</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#etw-event-tracing-for-windows">18.22. ETW (Event Tracing for Windows)</a><ul>
+<li><a class="reference internal" href="#trace-processing">18.22.1. Trace processing</a></li>
+<li><a class="reference internal" href="#enumeration">18.22.2. Enumeration</a></li>
 </ul>
 </li>
 </ul>
@@ -3707,12 +4458,12 @@ BYE
         <li class="right" >
           <a href="internals.html" title="17. Internals"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

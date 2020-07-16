@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>1. The windows module &#8212; PythonForWindows 0.5 documentation</title>
+    <title>1. The windows module &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. The windows objects" href="winobject.html" />
@@ -34,7 +37,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -106,6 +109,48 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.device_manager">
+<code class="descname">device_manager</code><a class="headerlink" href="#windows.winobject.system.System.device_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to query the device&amp;driver configured on the computer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="device_manager.html#windows.winobject.device_manager.DeviceManager" title="windows.winobject.device_manager.DeviceManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceManager</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.etw">
+<code class="descname">etw</code><a class="headerlink" href="#windows.winobject.system.System.etw" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to interact with  ETW (Event Tracing for Windows)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="etw.html#windows.winobject.event_trace.EtwManager" title="windows.winobject.event_trace.EtwManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">EtwManager</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.event_log">
+<code class="descname">event_log</code><a class="headerlink" href="#windows.winobject.system.System.event_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to open Event channel/publisher and evtx file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="evtlog.html#windows.winobject.event_log.EvtlogManager" title="windows.winobject.event_log.EvtlogManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtlogManager</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -217,12 +262,12 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 <dl class="attribute">
 <dt id="windows.winobject.system.System.services">
 <code class="descname">services</code><a class="headerlink" href="#windows.winobject.system.System.services" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of services</p>
+<dd><p>An object to query, list and explore services</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<code class="xref py py-class docutils literal notranslate"><span class="pre">ServiceA</span></code>] – A list of Service</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="service.html#windows.winobject.service.ServiceManager" title="windows.winobject.service.ServiceManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServiceManager</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -330,7 +375,7 @@ It also offers some submodules aimed to help the interfacing with <code class="d
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> module</a><ul>
 <li><a class="reference internal" href="#the-system-object">1.1. The <code class="docutils literal notranslate"><span class="pre">system</span></code> object</a></li>
@@ -382,12 +427,12 @@ It also offers some submodules aimed to help the interfacing with <code class="d
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

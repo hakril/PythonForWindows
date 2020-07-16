@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -93,10 +96,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items_generator</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items_generator</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span> <span class="c1"># Allow subclasses to only overwrite &#39;get_item&#39; to rewrite both behavior</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span> <span class="c1"># Allow subclasses to only overwrite &#39;get_item&#39; to rewrite both behavior</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
 <span class="c1"># Need to-do the doc=xx tricks to have the documentation in the &#39;AbstractAction&#39; subclasses</span>
@@ -206,26 +209,68 @@
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Trigger</span></div>
 
 
-<span class="k">class</span> <span class="nc">TaskRegistrationInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegistrationInfo</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskRegistrationInfo"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskRegistrationInfo">[docs]</a><span class="k">class</span> <span class="nc">TaskRegistrationInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegistrationInfo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provides the administrative information that can be used to describe the task.</span>
+
+<span class="sd">    This information includes details such as a description of the task,</span>
+<span class="sd">    the author of the task, the date the task is registered,</span>
+<span class="sd">    and the security descriptor of the task.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">author</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Author&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The author of the task&quot;&quot;&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Description&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The description of the task&quot;&quot;&quot;</span>
     <span class="n">date</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Date&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The registration date of the task&quot;&quot;&quot;</span>
     <span class="n">source</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Source&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Where the task originated from.</span>
+
+<span class="sd">    For example, a task may originate from a component, service, application, or user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">documentation</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Documentation&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Any additional documentation for the task&quot;&quot;&quot;</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_URI&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;the URI of the task.&quot;&quot;&quot;</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Version&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The version number of the task.&quot;&quot;&quot;</span>
 
     <span class="c1"># Return WindowsError: [Error -2147467263] Not implemented</span>
-    <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_XmlText&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="c1"># security_descriptor = generate_simple_getter(&quot;get_SecurityDescriptor&quot;, gdef.BSTR)</span>
+    <span class="c1"># xml = generate_simple_getter(&quot;get_XmlText&quot;, gdef.BSTR)</span>
 
-<span class="k">class</span> <span class="nc">TaskPrincipal</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IPrincipal</span><span class="p">):</span>
+    <span class="n">sddl</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_SecurityDescriptor&quot;</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sddl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sddl</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sddl</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">sddl</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TaskPrincipal"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskPrincipal">[docs]</a><span class="k">class</span> <span class="nc">TaskPrincipal</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IPrincipal</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provides the security credentials for a principal.</span>
+<span class="sd">    These security credentials define the security context for the tasks that are associated with the principal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_DisplayName&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The name of the principal&quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;the identifier of the principal.&quot;&quot;&quot;</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_UserId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;the user identifier that is required to run the task&quot;&quot;&quot;</span>
     <span class="n">group_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_GroupId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;the user group that is required to run the task&quot;&quot;&quot;</span>
     <span class="n">run_level</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RunLevel&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_RUNLEVEL_TYPE</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;the privilege level that is required to run the tasks</span>
+
+<span class="sd">    :type: :class:`~windows.generated_def.winstructs.TASK_RUNLEVEL_TYPE`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logon_type</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_LogonType&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_LOGON_TYPE</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot; logon method that is required to run the task</span>
+
+<span class="sd">    :type: :class:`~windows.generated_def.winstructs.TASK_LOGON_TYPE`</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="TaskDefinition"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskDefinition">[docs]</a><span class="k">class</span> <span class="nc">TaskDefinition</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskDefinition</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The definition of a task&quot;&quot;&quot;</span>
@@ -241,7 +286,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">registration_info</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RegistrationInfo&quot;</span><span class="p">,</span> <span class="n">TaskRegistrationInfo</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The registration information of the task</span>
+
+<span class="sd">    :type: :class:`TaskRegistrationInfo`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">principal</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Principal&quot;</span><span class="p">,</span> <span class="n">TaskPrincipal</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The principal that provides the security credentials for the task.</span>
+<span class="sd">    These security credentials define the security context for the tasks that are associated with the principal.</span>
+
+<span class="sd">    :type: :class:`TaskPrincipal`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_XmlText&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The XML representig the task definition</span>
 
@@ -292,7 +348,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetSecurityDescriptor</span><span class="p">(</span><span class="n">secinfo</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; at </span><span class="si">{2:#x}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
 
 
@@ -420,7 +476,7 @@
 
 
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; at </span><span class="si">{2:#x}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
 
 
@@ -497,13 +553,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

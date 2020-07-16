@@ -1,0 +1,748 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2.14. Device Manager &#8212; PythonForWindows 0.6 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.15. Task scheduler" href="task_scheduler.html" />
+    <link rel="prev" title="2.13. Object Manager – Kernel objects" href="object_manager.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="task_scheduler.html" title="2.15. Task scheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="object_manager.html" title="2.13. Object Manager – Kernel objects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.device_manager">
+<span id="device-manager"></span><h1>2.14. Device Manager<a class="headerlink" href="#module-windows.winobject.device_manager" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#windows.winobject.device_manager.DeviceManager" title="windows.winobject.device_manager.DeviceManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceManager</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.device_manager" title="windows.winobject.system.System.device_manager"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.device_manager</span></code></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample at <a class="reference internal" href="sample.html#sample-device-manager"><span class="std std-ref">Device manager</span></a></p>
+</div>
+<div class="section" id="devicemanager">
+<h2>2.14.1. DeviceManager<a class="headerlink" href="#devicemanager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DeviceManager">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DeviceManager</code><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DeviceManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DeviceManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the device manager</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceManager.classes">
+<code class="descname">classes</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceManager.classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of installed device classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.device_manager.DeviceClass" title="windows.winobject.device_manager.DeviceClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceClass</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.device_manager.DeviceClass" title="windows.winobject.device_manager.DeviceClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceClass</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deviceclass">
+<h2>2.14.2. DeviceClass<a class="headerlink" href="#deviceclass" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DeviceClass">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DeviceClass</code><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DeviceClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DeviceClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Device class, which is mainly a <code class="xref py py-class docutils literal notranslate"><span class="pre">GUID</span></code> with additional attributes</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceClass.devices">
+<code class="descname">devices</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceClass.devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of devices of the current class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.device_manager.DeviceInformationSet" title="windows.winobject.device_manager.DeviceInformationSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceInformationSet</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceClass.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceClass.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the device class</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deviceinformationset">
+<h2>2.14.3. DeviceInformationSet<a class="headerlink" href="#deviceinformationset" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DeviceInformationSet">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DeviceInformationSet</code><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DeviceInformationSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DeviceInformationSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A device instances, can be itered to retrieve the underliyings <a class="reference internal" href="#windows.winobject.device_manager.DeviceInstance" title="windows.winobject.device_manager.DeviceInstance"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceInstance</span></code></a></p>
+<dl class="method">
+<dt id="windows.winobject.device_manager.DeviceInformationSet.enum_device_interface">
+<code class="descname">enum_device_interface</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DeviceInformationSet.enum_device_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DeviceInformationSet.enum_device_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not Implemented Yet</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInformationSet.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInformationSet.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deviceinstance">
+<h2>2.14.4. DeviceInstance<a class="headerlink" href="#deviceinstance" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DeviceInstance">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DeviceInstance</code><span class="sig-paren">(</span><em>information_set=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DeviceInstance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of a Device.</p>
+<p>The properties are from the page <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_address">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_address</a></p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.address">
+<code class="descname">address</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.address" title="Permalink to this definition">¶</a></dt>
+<dd><p>The device’s address.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.allocated_configuration">
+<code class="descname">allocated_configuration</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.allocated_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>The allocated configuration of the device.
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists">https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.device_manager.LogicalConfiguration" title="windows.winobject.device_manager.LogicalConfiguration"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogicalConfiguration</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.boot_configuration">
+<code class="descname">boot_configuration</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.boot_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>The boot configuration of the device.
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists">https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.device_manager.LogicalConfiguration" title="windows.winobject.device_manager.LogicalConfiguration"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogicalConfiguration</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.bus_number">
+<code class="descname">bus_number</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.bus_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>The device’s bus number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.bus_type">
+<code class="descname">bus_type</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.bus_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function retrieves the GUID for the device’s bus type.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.capabilites">
+<code class="descname">capabilites</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.capabilites" title="Permalink to this definition">¶</a></dt>
+<dd><p>The device capabilites
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_capabilities">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_capabilities</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.description">
+<code class="descname">description</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the device</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.device_object_name">
+<code class="descname">device_object_name</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.device_object_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function retrieves a string that contains the name that is associated with the device’s PDO.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.driver">
+<code class="descname">driver</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>The driver of the device
+<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_driver">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_driver</a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.enumerator_name">
+<code class="descname">enumerator_name</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.enumerator_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The enumerator name of the devices
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_enumerator_name">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_enumerator_name</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.hardware_id">
+<code class="descname">hardware_id</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.hardware_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of hardware IDs for the device.
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_hardwareid">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_hardwareid</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.location_information">
+<code class="descname">location_information</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.location_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hardware location of a device.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.location_paths">
+<code class="descname">location_paths</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.location_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of strings that represents the location of the device in the device tree.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.lower_filters">
+<code class="descname">lower_filters</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.lower_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of string that contains the names of a device’s lower filter drivers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.manufacturer">
+<code class="descname">manufacturer</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the device manufacturer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the device</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.raw_security_descriptor">
+<code class="descname">raw_security_descriptor</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.raw_security_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw (binary) security descriptor of the device</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.security_descriptor">
+<code class="descname">security_descriptor</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.security_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The security descriptor of the device.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="security.html#windows.security.SecurityDescriptor" title="windows.security.SecurityDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">SecurityDescriptor</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.service_name">
+<code class="descname">service_name</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.service_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the service for the device
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_service">https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_service</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of device
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types">https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.ui_number">
+<code class="descname">ui_number</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.ui_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a DWORD value set to the value of the UINumber member of the device’s</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DeviceInstance.upper_filters">
+<code class="descname">upper_filters</code><a class="headerlink" href="#windows.winobject.device_manager.DeviceInstance.upper_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of string that contains the names of a device’s upper filter drivers.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="logicalconfiguration">
+<h2>2.14.5. LogicalConfiguration<a class="headerlink" href="#logicalconfiguration" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.LogicalConfiguration">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">LogicalConfiguration</code><a class="reference internal" href="_modules/windows/winobject/device_manager.html#LogicalConfiguration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.LogicalConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logical Configuration of a Device instance</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.LogicalConfiguration.resources">
+<code class="descname">resources</code><a class="headerlink" href="#windows.winobject.device_manager.LogicalConfiguration.resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of resources in the current logical configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.device_manager.ResourceDescriptor" title="windows.winobject.device_manager.ResourceDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceDescriptor</span></code></a>] – A list of [<a class="reference internal" href="#windows.winobject.device_manager.ResourceDescriptor" title="windows.winobject.device_manager.ResourceDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceDescriptor</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.LogicalConfiguration.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.LogicalConfiguration.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="resourcedescriptor">
+<h2>2.14.6. ResourceDescriptor<a class="headerlink" href="#resourcedescriptor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.device_manager.ResourceDescriptor">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">ResourceDescriptor</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#ResourceDescriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.ResourceDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe a resource allocated or reserved by a device instance.
+This class is a base class, all resources returned by <a class="reference internal" href="#windows.winobject.device_manager.LogicalConfiguration" title="windows.winobject.device_manager.LogicalConfiguration"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogicalConfiguration</span></code></a> should be one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#windows.winobject.device_manager.ResourceNoType" title="windows.winobject.device_manager.ResourceNoType"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceNoType</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.MemoryResource" title="windows.winobject.device_manager.MemoryResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.IoResource" title="windows.winobject.device_manager.IoResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">IoResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.DmaResource" title="windows.winobject.device_manager.DmaResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">DmaResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.IrqResource" title="windows.winobject.device_manager.IrqResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">IrqResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.BusNumberResource" title="windows.winobject.device_manager.BusNumberResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">BusNumberResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.MemLargeResource" title="windows.winobject.device_manager.MemLargeResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemLargeResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.ClassSpecificResource" title="windows.winobject.device_manager.ClassSpecificResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassSpecificResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.DevicePrivateResource" title="windows.winobject.device_manager.DevicePrivateResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">DevicePrivateResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.MfCardConfigResource" title="windows.winobject.device_manager.MfCardConfigResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">MfCardConfigResource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.device_manager.PcCardConfigResource" title="windows.winobject.device_manager.PcCardConfigResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">PcCardConfigResource</span></code></a></li>
+</ul>
+</div></blockquote>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ResourceDescriptor.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.ResourceDescriptor.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ResourceDescriptor.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.ResourceDescriptor.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="concrete-resourcedescriptor">
+<h3>2.14.6.1. Concrete ResourceDescriptor<a class="headerlink" href="#concrete-resourcedescriptor" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="resourcenotype">
+<h4>2.14.6.1.1. ResourceNoType<a class="headerlink" href="#resourcenotype" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.ResourceNoType">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">ResourceNoType</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#ResourceNoType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.ResourceNoType" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.winobject.device_manager.ResourceNoType.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.ResourceNoType.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ResourceNoType.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.ResourceNoType.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="memoryresource">
+<h4>2.14.6.1.2. MemoryResource<a class="headerlink" href="#memoryresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.MemoryResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">MemoryResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#MemoryResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.MemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type MEM_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemoryResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.MemoryResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.Mem_Resource_s" title="windows.generated_def.winstructs.Mem_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.Mem_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemoryResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.MemoryResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemoryResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.MemoryResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ioresource">
+<h4>2.14.6.1.3. IoResource<a class="headerlink" href="#ioresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.IoResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">IoResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#IoResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.IoResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type IO_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IoResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.IoResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.IO_Resource_s" title="windows.generated_def.winstructs.IO_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.IO_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IoResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.IoResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IoResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.IoResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dmaresource">
+<h4>2.14.6.1.4. DmaResource<a class="headerlink" href="#dmaresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DmaResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DmaResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DmaResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DmaResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type DMA_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DmaResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.DmaResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.DMA_Resource_s" title="windows.generated_def.winstructs.DMA_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.DMA_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DmaResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.DmaResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DmaResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.DmaResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="irqresource">
+<h4>2.14.6.1.5. IrqResource<a class="headerlink" href="#irqresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.IrqResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">IrqResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#IrqResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.IrqResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type IRQ_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IrqResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.IrqResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.IRQ_Resource_32_s" title="windows.generated_def.winstructs.IRQ_Resource_32_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.IRQ_Resource_32_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IrqResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.IrqResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.IrqResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.IrqResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="busnumberresource">
+<h4>2.14.6.1.6. BusNumberResource<a class="headerlink" href="#busnumberresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.BusNumberResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">BusNumberResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#BusNumberResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.BusNumberResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type BUSNUMBER_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.BusNumberResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.BusNumberResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BusNumber_Resource_s" title="windows.generated_def.winstructs.BusNumber_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.BusNumber_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.BusNumberResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.BusNumberResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.BusNumberResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.BusNumberResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="memlargeresource">
+<h4>2.14.6.1.7. MemLargeResource<a class="headerlink" href="#memlargeresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.MemLargeResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">MemLargeResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#MemLargeResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.MemLargeResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type MEM_LARGE_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemLargeResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.MemLargeResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.Mem_Large_Resource_s" title="windows.generated_def.winstructs.Mem_Large_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.Mem_Large_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemLargeResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.MemLargeResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MemLargeResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.MemLargeResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="classspecificresource">
+<h4>2.14.6.1.8. ClassSpecificResource<a class="headerlink" href="#classspecificresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.ClassSpecificResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">ClassSpecificResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#ClassSpecificResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.ClassSpecificResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type CS_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ClassSpecificResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.ClassSpecificResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CS_Resource_s" title="windows.generated_def.winstructs.CS_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.CS_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ClassSpecificResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.ClassSpecificResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.ClassSpecificResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.ClassSpecificResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deviceprivateresource">
+<h4>2.14.6.1.9. DevicePrivateResource<a class="headerlink" href="#deviceprivateresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.DevicePrivateResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">DevicePrivateResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#DevicePrivateResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.DevicePrivateResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A device private resource
+(<a class="reference external" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/install/devprivate-resource">https://docs.microsoft.com/en-us/windows-hardware/drivers/install/devprivate-resource</a>)</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DevicePrivateResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.DevicePrivateResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.DevicePrivateResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.DevicePrivateResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="mfcardconfigresource">
+<h4>2.14.6.1.10. MfCardConfigResource<a class="headerlink" href="#mfcardconfigresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.MfCardConfigResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">MfCardConfigResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#MfCardConfigResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.MfCardConfigResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type MFCARD_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MfCardConfigResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.MfCardConfigResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.MfCard_Resource_s" title="windows.generated_def.winstructs.MfCard_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.MfCard_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MfCardConfigResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.MfCardConfigResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.MfCardConfigResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.MfCardConfigResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pccardconfigresource">
+<h4>2.14.6.1.11. PcCardConfigResource<a class="headerlink" href="#pccardconfigresource" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="windows.winobject.device_manager.PcCardConfigResource">
+<em class="property">class </em><code class="descclassname">windows.winobject.device_manager.</code><code class="descname">PcCardConfigResource</code><span class="sig-paren">(</span><em>handle</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/device_manager.html#PcCardConfigResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.device_manager.PcCardConfigResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A resource of type PCCARD_RESOURCE</p>
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.PcCardConfigResource.DATA_TYPE">
+<code class="descname">DATA_TYPE</code><a class="headerlink" href="#windows.winobject.device_manager.PcCardConfigResource.DATA_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PcCard_Resource_s" title="windows.generated_def.winstructs.PcCard_Resource_s"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.PcCard_Resource_s</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.PcCardConfigResource.rawdata">
+<code class="descname">rawdata</code><a class="headerlink" href="#windows.winobject.device_manager.PcCardConfigResource.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw data describing the resource</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.device_manager.PcCardConfigResource.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.device_manager.PcCardConfigResource.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.14. Device Manager</a><ul>
+<li><a class="reference internal" href="#devicemanager">2.14.1. DeviceManager</a></li>
+<li><a class="reference internal" href="#deviceclass">2.14.2. DeviceClass</a></li>
+<li><a class="reference internal" href="#deviceinformationset">2.14.3. DeviceInformationSet</a></li>
+<li><a class="reference internal" href="#deviceinstance">2.14.4. DeviceInstance</a></li>
+<li><a class="reference internal" href="#logicalconfiguration">2.14.5. LogicalConfiguration</a></li>
+<li><a class="reference internal" href="#resourcedescriptor">2.14.6. ResourceDescriptor</a><ul>
+<li><a class="reference internal" href="#concrete-resourcedescriptor">2.14.6.1. Concrete ResourceDescriptor</a><ul>
+<li><a class="reference internal" href="#resourcenotype">2.14.6.1.1. ResourceNoType</a></li>
+<li><a class="reference internal" href="#memoryresource">2.14.6.1.2. MemoryResource</a></li>
+<li><a class="reference internal" href="#ioresource">2.14.6.1.3. IoResource</a></li>
+<li><a class="reference internal" href="#dmaresource">2.14.6.1.4. DmaResource</a></li>
+<li><a class="reference internal" href="#irqresource">2.14.6.1.5. IrqResource</a></li>
+<li><a class="reference internal" href="#busnumberresource">2.14.6.1.6. BusNumberResource</a></li>
+<li><a class="reference internal" href="#memlargeresource">2.14.6.1.7. MemLargeResource</a></li>
+<li><a class="reference internal" href="#classspecificresource">2.14.6.1.8. ClassSpecificResource</a></li>
+<li><a class="reference internal" href="#deviceprivateresource">2.14.6.1.9. DevicePrivateResource</a></li>
+<li><a class="reference internal" href="#mfcardconfigresource">2.14.6.1.10. MfCardConfigResource</a></li>
+<li><a class="reference internal" href="#pccardconfigresource">2.14.6.1.11. PcCardConfigResource</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="object_manager.html"
+                        title="previous chapter">2.13. Object Manager – Kernel objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="task_scheduler.html"
+                        title="next chapter">2.15. Task scheduler</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/device_manager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="task_scheduler.html" title="2.15. Task scheduler"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="object_manager.html" title="2.13. Object Manager – Kernel objects"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

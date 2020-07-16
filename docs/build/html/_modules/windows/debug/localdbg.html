@@ -6,14 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.debug.localdbg &#8212; PythonForWindows 0.5 documentation</title>
+    <title>windows.debug.localdbg &#8212; PythonForWindows 0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -37,20 +40,20 @@
           <div class="body" role="main">
             
   <h1>Source code for windows.debug.localdbg</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.winobject.exception</span> <span class="k">as</span> <span class="nn">winexception</span>
 
-<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.breakpoints</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="kn">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="kn">import</span> <span class="n">windef</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.breakpoints</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">FakeDebuggerCurrentThread</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pseudo thread representing the current thread at exception time&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbg</span> <span class="o">=</span> <span class="n">dbg</span>
 
     <span class="nd">@property</span>
@@ -75,7 +78,7 @@
 <span class="sd">        * Hardware-Exec BP (DrX)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reput_breakpoint</span> <span class="o">=</span> <span class="p">{}</span>
@@ -85,7 +88,7 @@
         <span class="n">winproxy</span><span class="o">.</span><span class="n">AddVectoredExceptionHandler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_vectored</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_hxbp_callback_vectored</span> <span class="o">=</span>  <span class="n">winexception</span><span class="o">.</span><span class="n">VectoredException</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup_hxbp_callback</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hxbp_info</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\xcc\xc3</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">PVOID</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc\xc3</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">PVOID</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">veh_depth</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exceptions_stack</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
@@ -167,7 +170,7 @@
             <span class="n">bp</span><span class="p">,</span> <span class="n">single_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reput_breakpoint</span><span class="p">[</span><span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">bp</span><span class="o">.</span><span class="n">_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">_addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">_addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
-                <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">_addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">_addr</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reput_breakpoint</span><span class="p">[</span><span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">single_step</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
@@ -223,7 +226,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
     <span class="k">def</span> <span class="nf">add_bp_hxbp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -243,16 +246,18 @@
     <span class="k">def</span> <span class="nf">setup_hxbp_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">NewCurrentException</span><span class="p">(</span><span class="n">exc</span><span class="p">):</span>
             <span class="n">exp_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_code</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">exp_code</span> <span class="o">!=</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_BREAKPOINT</span><span class="p">:</span>
+                 <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span>
             <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span>
             <span class="n">exp_addr</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">pc</span>
             <span class="n">hxbp_used</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_hxbp_in_context</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">exp_addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\x90</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">exp_addr</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x90</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># Raising in the VEH is a bad idea..</span>
             <span class="c1"># So better give the information to triggerer..</span>
             <span class="k">if</span> <span class="n">hxbp_used</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">Eax</span> <span class="o">=</span> <span class="n">exp_addr</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">func_result</span> <span class="o">=</span> <span class="n">exp_addr</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">Eax</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">func_result</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_EXECUTION</span>
 
     <span class="k">def</span> <span class="nf">remove_hxbp_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
@@ -261,7 +266,7 @@
             <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span>
             <span class="n">exp_addr</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">pc</span>
             <span class="n">hxbp_used</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_hxbp_in_context</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">exp_addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\x90</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">exp_addr</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x90</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># Raising in the VEH is a bad idea..</span>
             <span class="c1"># So better give the information to triggerer..</span>
             <span class="k">if</span> <span class="n">hxbp_used</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -306,7 +311,7 @@
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not setup HXBP&quot;</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">setup_hxbp_other_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
@@ -329,7 +334,7 @@
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not remove HXBP&quot;</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">remove_hxbp_other_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
@@ -372,13 +377,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+        &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

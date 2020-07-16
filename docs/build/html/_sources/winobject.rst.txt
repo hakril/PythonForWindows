@@ -20,5 +20,7 @@ This sections describes them by group of relation.
     handle.rst
     system_module.rst
     object_manager.rst
+    device_manager.rst
     task_scheduler.rst
     evtlog.rst
+    etw.rst
