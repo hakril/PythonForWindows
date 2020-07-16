@@ -1,0 +1,87 @@
+typedef enum _POLICY_INFORMATION_CLASS {
+  PolicyAuditLogInformation = 1,
+  PolicyAuditEventsInformation,
+  PolicyPrimaryDomainInformation,
+  PolicyPdAccountInformation,
+  PolicyAccountDomainInformation,
+  PolicyLsaServerRoleInformation,
+  PolicyReplicaSourceInformation,
+  PolicyDefaultQuotaInformation,
+  PolicyModificationInformation,
+  PolicyAuditFullSetInformation,
+  PolicyAuditFullQueryInformation,
+  PolicyDnsDomainInformation,
+  PolicyDnsDomainInformationInt,
+  PolicyLocalAccountDomainInformation,
+  PolicyMachineAccountInformation,
+  PolicyLastEntry
+} POLICY_INFORMATION_CLASS, *PPOLICY_INFORMATION_CLASS;
+
+// Same as an OBJECT_ATTRIBUTES..
+typedef struct _LSA_OBJECT_ATTRIBUTES {
+  ULONG               Length;
+  HANDLE              RootDirectory;
+  PLSA_UNICODE_STRING ObjectName;
+  ULONG               Attributes;
+  PVOID               SecurityDescriptor;
+  PVOID               SecurityQualityOfService;
+} LSA_OBJECT_ATTRIBUTES, *PLSA_OBJECT_ATTRIBUTES;
+
+
+typedef struct _POLICY_PRIMARY_DOMAIN_INFO {
+  LSA_UNICODE_STRING Name;
+  PSID               Sid;
+} POLICY_PRIMARY_DOMAIN_INFO, *PPOLICY_PRIMARY_DOMAIN_INFO;
+
+typedef enum _POLICY_LSA_SERVER_ROLE {
+  PolicyServerRoleBackup,
+  PolicyServerRolePrimary
+} POLICY_LSA_SERVER_ROLE, *PPOLICY_LSA_SERVER_ROLE;
+
+typedef struct _POLICY_LSA_SERVER_ROLE_INFO {
+  POLICY_LSA_SERVER_ROLE LsaServerRole;
+} POLICY_LSA_SERVER_ROLE_INFO, *PPOLICY_LSA_SERVER_ROLE_INFO;
+
+
+typedef struct _POLICY_ACCOUNT_DOMAIN_INFO {
+  LSA_UNICODE_STRING DomainName;
+  PSID               DomainSid;
+} POLICY_ACCOUNT_DOMAIN_INFO, *PPOLICY_ACCOUNT_DOMAIN_INFO;
+
+
+typedef struct _POLICY_PRIMARY_DOMAIN_INFO {
+  LSA_UNICODE_STRING Name;
+  PSID               Sid;
+} POLICY_PRIMARY_DOMAIN_INFO, *PPOLICY_PRIMARY_DOMAIN_INFO;
+
+
+typedef struct _LSA_TRANSLATED_SID {
+  SID_NAME_USE Use;
+  ULONG        RelativeId;
+  LONG         DomainIndex;
+} LSA_TRANSLATED_SID, *PLSA_TRANSLATED_SID;
+
+typedef struct _LSA_TRANSLATED_SID2 {
+  SID_NAME_USE Use;
+  PSID         Sid;
+  LONG         DomainIndex;
+  ULONG        Flags;
+} LSA_TRANSLATED_SID2, *PLSA_TRANSLATED_SID2;
+
+
+typedef struct _LSA_TRANSLATED_NAME {
+  SID_NAME_USE       Use;
+  LSA_UNICODE_STRING Name;
+  LONG               DomainIndex;
+} LSA_TRANSLATED_NAME, *PLSA_TRANSLATED_NAME;
+
+
+typedef struct _LSA_TRUST_INFORMATION {
+  LSA_UNICODE_STRING Name;
+  PSID               Sid;
+} LSA_TRUST_INFORMATION, *PLSA_TRUST_INFORMATION;
+
+typedef struct _LSA_REFERENCED_DOMAIN_LIST {
+  ULONG                  Entries;
+  PLSA_TRUST_INFORMATION Domains;
+} LSA_REFERENCED_DOMAIN_LIST, *PLSA_REFERENCED_DOMAIN_LIST;

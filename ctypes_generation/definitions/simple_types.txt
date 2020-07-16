@@ -33,6 +33,8 @@ PSTR = LPSTR
 PCSTR = LPSTR
 
 va_list = c_char_p
+LPCH = c_char_p
+LPWCH = c_wchar
 BSTR = c_wchar_p
 OLECHAR = c_wchar
 POLECHAR = c_wchar_p
@@ -131,6 +133,8 @@ HBRUSH = HANDLE
 HCRYPTPROV_OR_NCRYPT_KEY_HANDLE = PULONG
 EVT_HANDLE = HANDLE
 EVT_OBJECT_ARRAY_PROPERTY_HANDLE = HANDLE
+LSA_HANDLE = HANDLE
+PLSA_HANDLE = POINTER(LSA_HANDLE)
 // Define type for setup disk space list
 HDSKSPC = HANDLE
 // Define type for reference to device information set

@@ -1,0 +1,55 @@
+NTSTATUS LsaOpenPolicy(
+  PLSA_UNICODE_STRING    SystemName,
+  PLSA_OBJECT_ATTRIBUTES ObjectAttributes,
+  ACCESS_MASK            DesiredAccess,
+  PLSA_HANDLE            PolicyHandle
+);
+
+NTSTATUS LsaQueryInformationPolicy(
+  LSA_HANDLE               PolicyHandle,
+  POLICY_INFORMATION_CLASS InformationClass,
+  PVOID                    *Buffer
+);
+
+NTSTATUS LsaClose(
+  LSA_HANDLE ObjectHandle
+);
+
+ULONG LsaNtStatusToWinError(
+  NTSTATUS Status
+);
+
+NTSTATUS LsaLookupNames(
+  LSA_HANDLE                  PolicyHandle,
+  ULONG                       Count,
+  PLSA_UNICODE_STRING         Names,
+  PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+  PLSA_TRANSLATED_SID         *Sids
+);
+
+NTSTATUS LsaLookupNames2(
+  LSA_HANDLE                  PolicyHandle,
+  ULONG                       Flags,
+  ULONG                       Count,
+  PLSA_UNICODE_STRING         Names,
+  PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+  PLSA_TRANSLATED_SID2        *Sids
+);
+
+
+NTSTATUS LsaLookupSids(
+  LSA_HANDLE                  PolicyHandle,
+  ULONG                       Count,
+  PSID                        *Sids,
+  PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+  PLSA_TRANSLATED_NAME        *Names
+);
+
+NTSTATUS LsaLookupSids2(
+  LSA_HANDLE                  PolicyHandle,
+  ULONG                       LookupOptions,
+  ULONG                       Count,
+  PSID                        *Sids,
+  PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+  PLSA_TRANSLATED_NAME        *Names
+);

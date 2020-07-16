@@ -279,3 +279,101 @@ typedef struct _PRIVILEGE_SET {
   DWORD               Control;
   LUID_AND_ATTRIBUTES Privilege[ANYSIZE_ARRAY];
 } PRIVILEGE_SET, *PPRIVILEGE_SET;
+
+
+typedef struct _OBJECTS_AND_NAME_A {
+  DWORD          ObjectsPresent;
+  SE_OBJECT_TYPE ObjectType;
+  LPSTR          ObjectTypeName;
+  LPSTR          InheritedObjectTypeName;
+  LPSTR          ptstrName;
+} OBJECTS_AND_NAME_A, *POBJECTS_AND_NAME_A;
+
+
+typedef enum _MULTIPLE_TRUSTEE_OPERATION {
+  NO_MULTIPLE_TRUSTEE,
+  TRUSTEE_IS_IMPERSONATE
+} MULTIPLE_TRUSTEE_OPERATION;
+
+typedef enum _TRUSTEE_FORM {
+  TRUSTEE_IS_SID,
+  TRUSTEE_IS_NAME,
+  TRUSTEE_BAD_FORM,
+  TRUSTEE_IS_OBJECTS_AND_SID,
+  TRUSTEE_IS_OBJECTS_AND_NAME
+} TRUSTEE_FORM;
+
+
+typedef enum _TRUSTEE_TYPE {
+  TRUSTEE_IS_UNKNOWN,
+  TRUSTEE_IS_USER,
+  TRUSTEE_IS_GROUP,
+  TRUSTEE_IS_DOMAIN,
+  TRUSTEE_IS_ALIAS,
+  TRUSTEE_IS_WELL_KNOWN_GROUP,
+  TRUSTEE_IS_DELETED,
+  TRUSTEE_IS_INVALID,
+  TRUSTEE_IS_COMPUTER
+} TRUSTEE_TYPE;
+
+
+typedef struct _OBJECTS_AND_SID {
+  DWORD ObjectsPresent;
+  GUID  ObjectTypeGuid;
+  GUID  InheritedObjectTypeGuid;
+  PSID   pSid;
+} OBJECTS_AND_SID, *POBJECTS_AND_SID;
+
+typedef struct _TRUSTEE_A {
+  struct _TRUSTEE_A          *pMultipleTrustee;
+  MULTIPLE_TRUSTEE_OPERATION MultipleTrusteeOperation;
+  TRUSTEE_FORM               TrusteeForm;
+  TRUSTEE_TYPE               TrusteeType;
+  union {
+    LPSTR              ptstrName;
+    PSID                pSid;
+    OBJECTS_AND_SID    *pObjectsAndSid;
+    OBJECTS_AND_NAME_A *pObjectsAndName;
+  };
+  LPCH                       ptstrName;
+} TRUSTEE_A, *PTRUSTEE_A, TRUSTEEA, *PTRUSTEEA;
+
+
+typedef struct _OBJECTS_AND_NAME_W {
+  DWORD          ObjectsPresent;
+  SE_OBJECT_TYPE ObjectType;
+  LPWSTR         ObjectTypeName;
+  LPWSTR         InheritedObjectTypeName;
+  LPWSTR         ptstrName;
+} OBJECTS_AND_NAME_W, *POBJECTS_AND_NAME_W;
+
+typedef struct _TRUSTEE_W {
+  struct _TRUSTEE_W          *pMultipleTrustee;
+  MULTIPLE_TRUSTEE_OPERATION MultipleTrusteeOperation;
+  TRUSTEE_FORM               TrusteeForm;
+  TRUSTEE_TYPE               TrusteeType;
+  union {
+    LPWSTR             ptstrName;
+    PSID                pSid;
+    OBJECTS_AND_SID    *pObjectsAndSid;
+    OBJECTS_AND_NAME_W *pObjectsAndName;
+  };
+  LPWCH                      ptstrName;
+} TRUSTEE_W, *PTRUSTEE_W, TRUSTEEW, *PTRUSTEEW;
+
+typedef enum _ACCESS_MODE {
+  NOT_USED_ACCESS,
+  GRANT_ACCESS,
+  SET_ACCESS,
+  DENY_ACCESS,
+  REVOKE_ACCESS,
+  SET_AUDIT_SUCCESS,
+  SET_AUDIT_FAILURE
+} ACCESS_MODE;
+
+typedef struct _EXPLICIT_ACCESS_W {
+  DWORD       grfAccessPermissions;
+  ACCESS_MODE grfAccessMode;
+  DWORD       grfInheritance;
+  TRUSTEE_W   Trustee;
+} EXPLICIT_ACCESS_W, *PEXPLICIT_ACCESS_W, EXPLICIT_ACCESSW, *PEXPLICIT_ACCESSW;

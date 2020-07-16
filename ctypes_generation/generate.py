@@ -360,7 +360,7 @@ class DefineDocGenerator(NoTemplatedGenerator):
         self.emitline(".. currentmodule:: windows.generated_def")
         self.emitline("")
         self.emitline(self.DOCNAME)
-        self.emitline("------")
+        self.emitline("-" * len(self.DOCNAME))
 
     def generate_for_file(self, file):
         for define in file.data:

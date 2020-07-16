@@ -235,3 +235,76 @@ DWORD GetStringConditionFromBinary(
   DWORD               Reserved1,
   LPWSTR              *StringAceCondition
 );
+
+
+BOOL AddAccessAllowedAce(
+  PACL  pAcl,
+  DWORD dwAceRevision,
+  DWORD AccessMask,
+  PSID  pSid
+);
+
+BOOL SetSecurityDescriptorDacl(
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  BOOL                 bDaclPresent,
+  PACL                 pDacl,
+  BOOL                 bDaclDefaulted
+);
+
+
+BOOL InitializeAcl(
+  PACL  pAcl,
+  DWORD nAclLength,
+  DWORD dwAclRevision
+);
+
+
+BOOL InitializeSecurityDescriptor(
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  DWORD                dwRevision
+);
+
+
+BOOL SetAclInformation(
+  PACL                  pAcl,
+  LPVOID                pAclInformation,
+  DWORD                 nAclInformationLength,
+  ACL_INFORMATION_CLASS dwAclInformationClass
+);
+
+BOOL AddAccessAllowedAceEx(
+  PACL  pAcl,
+  DWORD dwAceRevision,
+  DWORD AceFlags,
+  DWORD AccessMask,
+  PSID  pSid
+);
+
+
+BOOL AddAccessDeniedAce(
+  PACL  pAcl,
+  DWORD dwAceRevision,
+  DWORD AccessMask,
+  PSID  pSid
+);
+
+BOOL AddAccessDeniedAceEx(
+  PACL  pAcl,
+  DWORD dwAceRevision,
+  DWORD AceFlags,
+  DWORD AccessMask,
+  PSID  pSid
+);
+
+
+DWORD BuildSecurityDescriptorW(
+  PTRUSTEE_W           pOwner,
+  PTRUSTEE_W           pGroup,
+  ULONG                cCountOfAccessEntries,
+  PEXPLICIT_ACCESS_W   pListOfAccessEntries,
+  ULONG                cCountOfAuditEntries,
+  PEXPLICIT_ACCESS_W   pListOfAuditEntries,
+  PSECURITY_DESCRIPTOR pOldSD,
+  PULONG               pSizeNewSD,
+  PSECURITY_DESCRIPTOR *pNewSD
+);
