@@ -7,6 +7,7 @@ import struct
 import pickle
 import logging
 import binascii
+import traceback
 
 from io import BytesIO
 from collections import namedtuple
@@ -73,21 +74,21 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
             self.any_keywords |= keyword
 
         logging.debug("events KeywordsAny : 0x%x" % self.any_keywords)
-       
+
 
         # Create a custom realtime ETW trace for printing out events
         self.etw_trace = windows.system.etw.open_trace(self.etw_trace_name)
 
 
     def start_trace(self):
-
+        self.etw_trace.stop(soft=True)
         self.etw_trace.start()
 
         # We can't configure etw trace if it's not started previously
         self.etw_trace.enable_ex(
-            self.publisher_guid.to_string(), 
-            flags=0, 
-            level=0xff, 
+            self.publisher_guid.to_string(),
+            flags=0,
+            level=0xff,
             any_keyword=self.any_keywords
         )
 
@@ -113,7 +114,7 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
 
                 # Deserialize event.user_data based on the event_metadata xml template
                 message_data = event.user_data
-                message_params = self.parse_user_data(event_metadata.template, message_data)
+                message_params = self.parse_user_data(event_metadata, message_data)
                 logging.debug("message params : %s" %  message_params)
 
 
@@ -125,13 +126,27 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
                         raise
                     return
 
+                # import pdb;pdb.set_trace()
+                xx = tuple(event_log.ImprovedEVT_VARIANT.from_value(x.value) for x in message_params)
+                # xx = tuple(event_log.ImprovedEVT_VARIANT.from_value(x.value) for x in message_params)
+                res = ctypes.c_buffer(0x1000)
+                res_size = gdef.DWORD()
+                yolo_ptr = (gdef.EVT_VARIANT * len(xx))(*xx)
+                # import pdb;pdb.set_trace()
+                windows.winproxy.EvtFormatMessage(self.publisher.metadata, None, event_metadata.message_id, len(message_params), yolo_ptr, gdef.EvtFormatMessageId, 0x1000, ctypes.cast(res, gdef.LPCWSTR), res_size)
+                str = res[:res_size.value * 2].decode("utf-16-le")
+                print("=== MINE ===")
+                print(str)
+
+                print("=== REAL ===")
                 # "sprintf" the message using the event format message as well as the deserialized elements
                 event_message = self.format_event_log_message(template_message, message_params)
-                
                 print(event_message)
+                import pdb;pdb.set_trace()
 
         except Exception as unke:
             print("Unhandled exception in Evtlogger.process_event : %s" % unke)
+            traceback.print_tb(sys.exc_info()[2])
             sys.exit(0)  # Exiting on unknown error, since this is the only way to have some control
         finally:
             pass
@@ -181,10 +196,10 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
         elif in_type == "win:Binary":
             if not length:
                 raise ValueError(" param_in_type (%s) cannot be used with a null length value" % in_type)
-            
-            # TODO : we should return the raw bytes buffer, since get_param_str_format is too crude 
+
+            # TODO : we should return the raw bytes buffer, since get_param_str_format is too crude
             #        to properly display win:SocketAddress parameters
-            value = binascii.hexlify(stream.read(length)) 
+            value = binascii.hexlify(stream.read(length))
 
         elif in_type == "win:GUID":
             guid_data = struct.unpack("IHHBBBBBBBB", stream.read(16))
@@ -214,66 +229,51 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
 
         return PYTHON_FORMAT_DICT[param_out_type]
 
-    def parse_user_data(self, template, data):
-        """ 
+    def parse_user_data(self, event_metadata, data):
+        """
         Deserialize event.user_data based on the associated publisher's template.
         Return a list of ParsedElement(Name:string, Value:py_object, Type:py_type).
         """
-            
-        # xml.dom.minidom.parseString raise an error on parseString() if the xml template is empty
-        if not len(template):
+        stream = BytesIO(data)
+        event_items = event_metadata.event_data
+        params = []
+        if not event_items:
             return []
 
-        stream = BytesIO(data)
-        xmltemplate = xml.dom.minidom.parseString(template)
-        
-        params = []
         context = {} # saving parsed items for "count" elements
-
-        # xmltemplate.getElementsByTagName("data") return data node within <struct> decl, so we can't use it
-        direct_data_nodes = filter(lambda n: n.nodeType == 1 and n.tagName == "data", xmltemplate.childNodes[0].childNodes)
-
-        for (i,param_data) in enumerate(direct_data_nodes):
-
-            param_name = param_data.attributes["name"].value
-            param_in_type = param_data.attributes["inType"].value
-            param_out_type = param_data.attributes["outType"].value
-
+        for (i, param_data) in enumerate(event_items):
             # Some param are repeating, and "count" refers to the variable holding the number of repetitions
-            param_count = param_data.attributes.get("count", None)
-            if param_count != None:
-                param_count = context[param_count.value] # must be already set
-
-            # Some param (win:Binary) have a length attribute
-            param_length = param_data.attributes.get("length", None)
-            if param_length != None:
-                param_length = context[param_length.value] # must be already set
-            
-
-            # Parse element
-            if param_count != None:
-
-                # ignoring element with value count of 0
+            param_in_type = param_data["inType"]
+            param_out_type = param_data["outType"]
+            param_name = param_data["name"]
+            param_count = param_data.get("count", None)
+            if param_count:
+                param_count = context[param_count] # must be already set
                 if param_count == 0:
                     continue
 
-                value = [ self.parse_element(param_in_type, stream, param_length) for c in range(param_count) ]
+            # Some param (win:Binary) have a length attribute
+            param_length = param_data.get("length", None)
+            if param_length:
+                param_length = context[param_length] # must be already set
+
+            # Parse element
+            if param_count:
+                value = [self.parse_element(param_in_type, stream, param_length) for c in range(param_count)]
             else:
                 value = self.parse_element(param_in_type, stream, param_length)
 
-            # Get python string formating 
+            context[param_name] = value
             format_type = self.get_param_str_format(param_out_type)
 
-            context[param_name] = value
-
-            logging.debug(ParsedElement(i, param_name,value, format_type))
-            params.append(ParsedElement(i, param_name,value, format_type))
+            logging.debug(ParsedElement(i, param_name, value, format_type))
+            params.append(ParsedElement(i, param_name, value, format_type)) # Yield ?
 
         return params
 
     def lookup_event_metadata(self, publisher, event_id):
         matching_events_metadata = list(filter(lambda event_meta: event_meta.id == event_id, publisher.metadata.events_metadata))
-        
+
         if not len(matching_events_metadata):
             return None
 
@@ -283,28 +283,28 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
         return matching_events_metadata[0]
 
     def format_event_log_message(self, template, event_args):
-        
+
         py_template = ""
         last_span = (0,0)
-        
+
         # Convert message template to python string formating
         # e.g. : "ParseError: HResult: %1, Error: %2." into "ParseError: HResult: {arg0:x}, Error: {arg1:d}."
         pattern = re.compile(r"%(\d)")
         for match in re.finditer(pattern, template):
-        
+
             arg_id = int(match.groups()[0]) - 1 # event's template message index params from 1 to N, wtf
             span = match.span()
             str_format = ""
-        
+
             str_format = "{a%d:%s}" % (arg_id, event_args[arg_id].format)
-        
+
             py_template += template[last_span[1]:span[0]] + str_format
             last_span = span
-        
+
         py_template += template[last_span[1]:]
-        
+
         logging.debug(py_template)
-        
+
         # string formating using Python .format()
         events_kwargs =  {"a%d" % (x.index) : x.value for x in event_args}
         logging.debug(events_kwargs)
@@ -335,7 +335,7 @@ def format_channel_metadata(publisher_metadata, channel_metadata, args):
         "    flags: {channel.flags:d}",
         "    message: {channel_message:s}",
     ]).format(
-        channel=channel_metadata, 
+        channel=channel_metadata,
         channel_message=get_message(publisher_metadata, channel_metadata.message_id, args.gm)
     )
 
@@ -345,9 +345,9 @@ def format_level_metadata(publisher_metadata, level_metadata, args):
         "  level:",
         "    name: {level.name:s}",
         "    value: {level.value:d}",
-        "    message: {level_message:s}", 
+        "    message: {level_message:s}",
     ]).format(
-        level=level_metadata, 
+        level=level_metadata,
         level_message=get_message(publisher_metadata, level_metadata.message_id, args.gm)
     )
 
@@ -359,9 +359,9 @@ def format_opcode_metadata(publisher_metadata, opcode_metadata, args):
         "    value: {opcode.value:d}",
         #"      task: {opcode.task:d}",          # TODO
         #"      opcode: {opcode.task_value:d}",  # TODO
-        "    message: {opcode_message:s}", 
+        "    message: {opcode_message:s}",
     ]).format(
-        opcode=opcode_metadata, 
+        opcode=opcode_metadata,
         opcode_message=get_message(publisher_metadata, opcode_metadata.message_id, args.gm)
     )
 
@@ -371,10 +371,10 @@ def format_task_metadata(publisher_metadata, task_metadata, args):
         "  task:",
         "    name: {task.name:s}",
         "    value: {task.value:d}",
-        "    eventGUID: {task.event_guid:s}",   
-        "    message: {task_message:s}",        
+        "    eventGUID: {task.event_guid:s}",
+        "    message: {task_message:s}",
     ]).format(
-        task=task_metadata, 
+        task=task_metadata,
         task_message=get_message(publisher_metadata, task_metadata.message_id, args.gm)
     )
 
@@ -384,9 +384,9 @@ def format_keyword_metadata(publisher_metadata, keyword_metadata, args):
         "  keyword:",
         "    name: {keyword.name:s}",
         "    mask: {keyword.value:x}",
-        "    message: {keyword_message:s}",  
+        "    message: {keyword_message:s}",
     ]).format(
-        keyword=keyword_metadata, 
+        keyword=keyword_metadata,
         keyword_message=get_message(publisher_metadata, keyword_metadata.message_id, args.gm)
     )
 
@@ -401,21 +401,21 @@ def format_event_metadata(publisher_metadata, event_metadata, args):
         "    level: {event.level:d}",
         "    task: {event.task:d}",
         "    keywords: 0x{event.keyword:016x}",
-        "    message: {event_message:s}" 
+        "    message: {event_message:s}"
     ]).format(
-        event=event_metadata, 
+        event=event_metadata,
         event_message=get_message(publisher_metadata, event_metadata.message_id, args.gm)
     )
 
 def enum_publishers(args):
     """ enum-publishers verb implementation """
     manager = event_log.EvtlogManager()
-    for publisher in sorted(list(manager.publishers), key=lambda pub:pub.name.lower()):    
-        print(publisher.name)        
+    for publisher in sorted(list(manager.publishers), key=lambda pub:pub.name.lower()):
+        print(publisher.name)
 
 def get_publisher(args):
     """ get-publisher verb implementation """
-    
+
     manager = event_log.EvtlogManager()
     publisher = manager.open_publisher(args.publisher_name)
 
@@ -492,7 +492,7 @@ def get_publisher(args):
 
     publisher_infos += "\n"
     print(publisher_infos)
-    
+
 
 def main(args):
 
@@ -519,7 +519,7 @@ if __name__ == '__main__':
 
     # we can't express shorthands easily like ep for enum-publishers since only Python3's argparse surpport parser "aliases"
     enum_publishers_parser = action_parsers.add_parser("enum-publishers", help="enum-publishers verb")
-    
+
     get_publisher_parser = action_parsers.add_parser("get-publisher", help="get-publisher verb")
     get_publisher_parser.add_argument("publisher_name", type=str, help="registered publisher name")
     get_publisher_parser.add_argument("--ge", action="store_true", help="get event metadata")

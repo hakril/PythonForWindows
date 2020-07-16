@@ -6,6 +6,7 @@ from .pfwtest import *
 from tests.test_rpc import UACParameters
 
 # Memo: Padding byte is 'P' in ndr.py
+#   - UPTR value will be 0x01010101 * field_pos
 
 # 20 Bytes structures alignes on 4 butees
 DoubleDwordStructure = ndr.make_structure([ndr.NdrLong] * 5)
@@ -26,6 +27,30 @@ InternalAlignementStructure = ndr.make_structure([ndr.NdrShort, ndr.NdrByte, ndr
      #short 	sfield4;
      #byte 	bfield5;
 # }InternalAlignementStructure;
+
+class ComplexAlignementStructure(ndr.NdrStructure):
+    MEMBERS = [
+        ndr.NdrByte,
+        ndr.NdrUniquePTR(ndr.NdrByte),
+        ndr.NdrUniquePTR(ndr.NdrLong),
+        ndr.NdrByte,
+        ndr.NdrUniquePTR(ndr.NdrHyper),
+        ndr.NdrUniquePTR(ndr.NdrByte)
+    ]
+
+# Struct with Pointer & Pointed alignement
+# Pack format ah follow (U for unique PTR bytes):
+target = "APPP\x01\x02\x03\x04\x05\x06\x07\x08\x44PPP\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10BPPPCCCCPPPPEEEEEEEEF" + "X" * 100
+#    BPPPUUUUUUUUBPPPUUUUUUUUBPPPLLLLPPPPHHHHHHHHB
+# IDL Code:
+#   struct tstndr {
+#       byte x;
+#       [unique] byte* a;
+#       [unique] long* b;
+#       byte y;
+#       [unique] hyper* c;
+#       [unique] byte* d;
+#   };
 
 
 # NdrObject, Values, result
@@ -69,8 +94,24 @@ NDR_PACK_TEST_CASE = [
         (0x0101, [0x4141, 0x42, 0x43434343, 0x44, 0x4545, 0x46], 0x4747),
         # Verified with an actual RPC server
         b"\x01\x01PPAABPCCCCDPEEFPGG"),
+    # Complex struct alignement
+    # A struct with both primitive field & pointer to primitiv field of various size
+    (ComplexAlignementStructure,
+        [0x41, 0x42, 0x43434343, 0x44, 0x4545454545454545, 0x46],
+        b"APPP\x02\x02\x02\x02\x03\x03\x03\x03\x44PPP\x05\x05\x05\x05\x06\x06\x06\x06BPPPCCCCEEEEEEEEF"),
+
+    # Complex struct alignement with nesting (due to uniqueptr at the start)
+    # The last hyper is not aligned/pad like previous test due to the leading UniquPTR
+    # This is the proof that NDR packing cannot be in "context-free" sub function and must share a state
+    # This test fails for now (0.6) and I don't know if I will implem the full NDR logic someday
+    (ndr.NdrUniquePTR(ComplexAlignementStructure),
+        [0x41, 0x42, 0x43434343, 0x44, 0x4545454545454545, 0x46],
+        b"\x01\x01\x01\x01APPP\x02\x02\x02\x02\x03\x03\x03\x03\x44PPP\x05\x05\x05\x05\x06\x06\x06\x06BPPPCCCCPPPPEEEEEEEEF")
 
 ]
+
+
+
 
 @pytest.mark.parametrize("ndrobj, values, result", NDR_PACK_TEST_CASE)
 def test_ndr_packing(ndrobj, values, result):

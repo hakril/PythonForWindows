@@ -4,6 +4,7 @@ import ctypes
 import os
 
 import windows
+import windows.debug
 import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
@@ -24,7 +25,9 @@ else:
 
 yolo = generate_pop_and_exit_fixtures([pop_proc_32, pop_proc_64], ids=["proc32dbg", "proc64dbg"], dwCreationFlags=gdef.CREATE_SUSPENDED)
 
+DEFAULT_DEBUGGER_TIMEOUT = 10
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_init_breakpoint_callback(proc32_64_debug):
     """Checking that the initial breakpoint call `on_exception`"""
     class MyDbg(windows.debug.Debugger):
@@ -41,6 +44,8 @@ def get_debug_process_ndll(proc):
     ntdll_addr = proc.query_memory(proc_pc).AllocationBase
     return windows.pe_parse.GetPEFile(ntdll_addr, target=proc)
 
+
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_simple_standard_breakpoint(proc32_64_debug):
     """Check that a standard Breakpoint method `trigger` is called with the correct informations"""
     class TSTBP(windows.debug.Breakpoint):
@@ -55,6 +60,7 @@ def test_simple_standard_breakpoint(proc32_64_debug):
     d.add_bp(TSTBP(LdrLoadDll))
     d.loop()
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_simple_hwx_breakpoint(proc32_64_debug):
     """Test that simple HXBP are trigger"""
 
@@ -71,7 +77,7 @@ def test_simple_hwx_breakpoint(proc32_64_debug):
     d.loop()
 
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_multiple_hwx_breakpoint(proc32_64_debug):
     """Checking that multiple succesives HXBP are properly triggered"""
     class TSTBP(windows.debug.HXBreakpoint):
@@ -103,6 +109,7 @@ def test_multiple_hwx_breakpoint(proc32_64_debug):
     assert TSTBP.COUNTER == 4
 
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_four_hwx_breakpoint_fail(proc32_64_debug):
     """Check that setting 4HXBP in the same thread fails"""
     # print("test_four_hwx_breakpoint_fail {0}".format(proc32_64_debug))
@@ -129,6 +136,7 @@ def test_four_hwx_breakpoint_fail(proc32_64_debug):
     assert "DRx" in e.value.args[0]
 
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_hwx_breakpoint_are_on_all_thread(proc32_64_debug):
     """Checking that HXBP without target are set on all threads"""
     class MyDbg(windows.debug.Debugger):
@@ -163,6 +171,7 @@ def test_hwx_breakpoint_are_on_all_thread(proc32_64_debug):
     assert TSTBP.COUNTER == 2
 
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @pytest.mark.parametrize("bptype", [windows.debug.Breakpoint, windows.debug.HXBreakpoint])
 def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
     """Check breakpoint address resolution for format dll!api"""
@@ -184,6 +193,7 @@ def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
 
 from . import dbg_injection
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_hardware_breakpoint_name_addr(proc32_64_debug):
     """Check that name addr in HXBP are trigger in all threads"""
     class TSTBP(windows.debug.HXBreakpoint):
@@ -208,7 +218,7 @@ def test_hardware_breakpoint_name_addr(proc32_64_debug):
     # Code that will load wintrust !
     d.loop()
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_single_step(proc32_64_debug):
     """Check that BP/dbg can trigger single step and that instruction follows"""
     NB_SINGLE_STEP = 3
@@ -240,6 +250,7 @@ def test_single_step(proc32_64_debug):
     for i in range(NB_SINGLE_STEP):
         assert MyDbg.DATA[i] == addr + 1 + i
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @pytest.mark.parametrize("bptype", [windows.debug.Breakpoint, windows.debug.HXBreakpoint])
 def test_single_step_from_bp(proc32_64_debug, bptype):
     """Check that HXBPBP/dbg can trigger single step"""
@@ -276,7 +287,7 @@ def test_single_step_from_bp(proc32_64_debug, bptype):
 
 # MEMBP
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_memory_breakpoint_write(proc32_64_debug):
     """Check MemoryBP WRITE"""
     class TSTBP(windows.debug.MemoryBreakpoint):
@@ -323,7 +334,7 @@ def test_memory_breakpoint_write(proc32_64_debug):
     # Used to verif we actually called the Breakpoints for the good addresses
     assert TSTBP.COUNTER == 2
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_memory_breakpoint_exec(proc32_64_debug):
     """Check MemoryBP EXEC"""
     NB_NOP_IN_PAGE = 3
@@ -354,6 +365,7 @@ def test_memory_breakpoint_exec(proc32_64_debug):
 # breakpoint remove
 import threading
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
@@ -382,6 +394,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     assert data >= set([u"FILENAME1", u"FILENAME2"])
     assert u"FILENAME3" not in data
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_remove(proc32_64_debug, bptype):
@@ -442,6 +455,7 @@ def get_generate_write_at_for_proc(target):
             return res.get_code()
     return generate_write_at
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_mem_breakpoint_remove(proc32_64_debug):
     data = []
     generate_read_at = get_generate_read_at_for_proc(proc32_64_debug)
@@ -469,7 +483,7 @@ def test_mem_breakpoint_remove(proc32_64_debug):
     d.loop()
     assert data == [data_addr, data_addr + 4]
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_mem_breakpoint_self_remove(proc32_64_debug):
     data = []
     generate_read_at = get_generate_read_at_for_proc(proc32_64_debug)
@@ -499,7 +513,7 @@ def test_mem_breakpoint_self_remove(proc32_64_debug):
     assert data == [data_addr, data_addr + 4]
 
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_read_write_bp_same_page(proc32_64_debug):
     data = []
     generate_read_at = get_generate_read_at_for_proc(proc32_64_debug)
@@ -536,7 +550,7 @@ def test_read_write_bp_same_page(proc32_64_debug):
 
     assert data == expected_result
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_exe_in_module_list(proc32_64_debug):
     class MyDbg(windows.debug.Debugger):
         def on_exception(self, exception):
@@ -550,7 +564,7 @@ def test_exe_in_module_list(proc32_64_debug):
     d = MyDbg(proc32_64_debug)
     d.loop()
 
-
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_bp_exe_by_name(proc32_64_debug):
     class TSTBP(windows.debug.Breakpoint):
         COUNTER = 0
@@ -574,6 +588,7 @@ def test_bp_exe_by_name(proc32_64_debug):
     assert TSTBP.COUNTER == 1
 
 
+@pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_keyboardinterrupt_when_bp_event(proc32_64_debug, monkeypatch):
     class ShouldNotTrigger(windows.debug.Breakpoint):
         COUNTER = 0
