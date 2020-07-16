@@ -66,7 +66,8 @@ def check_signature(filename):
     win_trust_data.pPolicyCallbackData = None
     win_trust_data.pSIPClientData = None
     win_trust_data.dwUIChoice = WTD_UI_NONE
-    win_trust_data.fdwRevocationChecks = WTD_REVOKE_NONE
+    # win_trust_data.fdwRevocationChecks = WTD_REVOKE_NONE
+    win_trust_data.fdwRevocationChecks = WTD_REVOKE_WHOLECHAIN
     win_trust_data.dwUnionChoice = WTD_CHOICE_FILE
     win_trust_data.dwStateAction = WTD_STATEACTION_VERIFY
     win_trust_data.hWVTStateData = None
@@ -110,6 +111,28 @@ def get_file_hash(filename):
     buffer = (BYTE * size.value)()
     try:
         x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
+    except WindowsError as e:
+        if e.winerror == 1006:
+            # CryptCATAdminCalcHashFromFileHandle: [Error 1006]
+            # The volume for a file has been externally altered so that the opened file is no longer valid.
+            # (returned for empty file)
+            return None
+        raise
+    return buffer
+
+def get_file_hash2(filename): #POC: name/API will change/disapear
+    f = open(filename, "rb")
+    handle = windows.utils.get_handle_from_file(f)
+
+    cathand = HANDLE()
+    h = winproxy.CryptCATAdminAcquireContext2(cathand, None, "SHA256", None, 0)
+    print(cathand)
+
+    size = DWORD(0)
+    x = winproxy.CryptCATAdminCalcHashFromFileHandle2(cathand, handle, ctypes.byref(size), None, 0)
+    buffer = (BYTE * size.value)()
+    try:
+        x = winproxy.CryptCATAdminCalcHashFromFileHandle2(cathand, handle, ctypes.byref(size), buffer, 0)
     except WindowsError as e:
         if e.winerror == 1006:
             # CryptCATAdminCalcHashFromFileHandle: [Error 1006]

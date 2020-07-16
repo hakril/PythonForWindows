@@ -266,6 +266,11 @@ class NdrGuid(object):
         rawguid = stream.partial_unpack("16s")[0]
         return gdef.IID.from_buffer_copy(rawguid)
 
+    @classmethod
+    def get_alignment(self):
+        return 1
+
+
 class NdrContextHandle(object):
     @classmethod
     def pack(cls, data):
@@ -277,6 +282,11 @@ class NdrContextHandle(object):
     def unpack(self, stream):
         attributes, rawguid = stream.partial_unpack("<I16s")
         return gdef.IID.from_buffer_copy(rawguid)
+
+    @classmethod
+    def get_alignment(self):
+        return 4
+
 
 
 class NdrStructure(object):
@@ -298,15 +308,19 @@ class NdrStructure(object):
         res_size = 0
         pointed = []
         outstream = NdrWriteStream()
+        pointed_to_pack = []
+        # pointedoutstream = NdrWriteStream()
         for i, (member, memberdata) in enumerate(zip(cls.MEMBERS, data)):
             if hasattr(member, "pack_in_struct"):
                 x, y = member.pack_in_struct(memberdata, i)
-                outstream.align(member.get_alignment())
+                assert len(x) == 4, "Pointer should be size 4"
+                # Write the pointer
+                outstream.align(4)
                 outstream.write(x)
-                # res.append(x)
-                # res_size += len(x)
                 if y is not None:
-                    pointed.append(y)
+                    # Store the info to the pointed to pack
+                    pointed_to_pack.append((member.subcls.get_alignment(), y))
+                    # pointedoutstream.write(y)
             elif hasattr(member, "pack_conformant"):
                 size, data = member.pack_conformant(memberdata)
                 outstream.align(member.get_alignment())
@@ -318,7 +332,11 @@ class NdrStructure(object):
                 packed_member = member.pack(memberdata)
                 outstream.align(member.get_alignment())
                 outstream.write(packed_member)
-        return dword_pad(b"".join(conformant_size)) + outstream.get_data() + dword_pad(b"".join(pointed))
+        # Pack the pointed to the stream
+        for alignement, pointed_data in pointed_to_pack:
+            outstream.align(alignement)
+            outstream.write(pointed_data)
+        return dword_pad(b"".join(conformant_size)) + outstream.get_data()
 
     @classmethod
     def unpack(cls, stream):
