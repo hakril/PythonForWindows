@@ -215,6 +215,11 @@ class EvtEvent(EvtHandle):
         return self.system_values()[gdef.EvtSystemProviderName]
 
     @property
+    def computer(self):
+        """The computer that generated the event"""
+        return self.system_values()[gdef.EvtSystemComputer]
+
+    @property
     def id(self):
         """The ID of the Event"""
         return self.value("Event/System/EventID")
@@ -250,6 +255,16 @@ class EvtEvent(EvtHandle):
         return self.value("Event/System/Execution/@ThreadID")
 
     @property
+    def error_payload(self):
+        raw = self.value("Event/ProcessingErrorData/EventPayload")
+        return bytearray(raw) if raw is not None else None
+
+    @property
+    def user(self):
+        """The User ID associated with the Event"""
+        return self.system_values()[gdef.EvtSystemUserID]
+
+    @property
     def metadata(self):
         """The medata for the current Event
 
@@ -275,6 +290,45 @@ class EvtEvent(EvtHandle):
         # Juste use the render_xml ?
         event_data_name = (i["name"] for i in self.metadata.event_data if i["type"] == "data")
         return {k:v for k,v in zip(event_data_name, self.event_values())}
+
+    def xml_data(self):
+        xmlevt = xml.dom.minidom.parseString(self.render_xml())
+        res = {}
+
+        eventdata = xmlevt.getElementsByTagName("EventData")
+        if eventdata:
+            # <Data Name='FIELD_NAME'>FIELD_VALUE</Data>
+            for i, datanode in enumerate(xmlevt.getElementsByTagName("Data")):
+                name = datanode.getAttribute("Name")
+                if not name:
+                    # Some Data in old EVTX have no name (Windows Powershell)
+                    # Do the best we can by using the position of the event
+                    name = str(i)
+
+                if datanode.hasChildNodes():
+                    value = datanode.firstChild.nodeValue
+                else:
+                    value = ""
+                if not (name not in res):
+                    import pdb;pdb.set_trace()
+                res[name] = value
+        userdata = xmlevt.getElementsByTagName("UserData")
+        if userdata:
+            # <UserData>
+            #     <EventXML xmlns="Event_NS">
+            #         <FIELD_NAME>FIELD_VALUE</FIELD_NAME>
+            #     </EventXML>
+            # </UserData>
+            for datanode in userdata[0].firstChild.childNodes:
+                name = datanode.tagName
+                if datanode.hasChildNodes():
+                    value = datanode.firstChild.nodeValue
+                else:
+                    value = ""
+                assert name not in res
+                res[name] = value
+        return res
+
 
     @property
     def date(self):

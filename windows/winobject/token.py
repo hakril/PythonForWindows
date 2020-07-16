@@ -5,6 +5,7 @@ import windows
 from windows import utils
 from windows import winproxy
 import windows.generated_def as gdef
+# import windows.security # at the end of this file (loop import)
 
 bltn_type = type
 
@@ -308,7 +309,6 @@ class Token(utils.AutoHandle):
 
         :type: :class:`windows.security.Acl`
         """
-        import window.security # Beuk move token.py & in a security/ directory ?
         return self.get_token_infomations(gdef.TokenDefaultDacl, windows.security.PAcl)[0]
 
     # def source(self): (tok.TokenSource) ??
@@ -618,3 +618,6 @@ class Token(utils.AutoHandle):
         if toktype == gdef.TokenPrimary:
             return "<{0} TokenId={1:#x} Type={2}>".format(type(self).__name__, tid_int, flag_repr(toktype))
         return "<{0} TokenId={1:#x} Type={2} ImpersonationLevel={3}>".format(type(self).__name__, tid_int, flag_repr(toktype), flag_repr(self.impersonation_level))
+
+
+import windows.security

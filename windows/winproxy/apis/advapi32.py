@@ -2,7 +2,7 @@ import ctypes
 import windows.generated_def as gdef
 
 from ..apiproxy import ApiProxy, NeededParameter
-from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle, no_error_check
+from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle, no_error_check, result_is_ntstatus
 
 class Advapi32Proxy(ApiProxy):
     APIDLL = "advapi32"
@@ -589,3 +589,40 @@ def TraceEvent(SessionHandle, EventTrace):
 @Advapi32Proxy(error_check=result_is_handle)
 def GetTraceLoggerHandle(Buffer):
     return GetTraceLoggerHandle.ctypes_function(Buffer)
+
+
+# Lsa APIs
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaOpenPolicy(SystemName=None, ObjectAttributes=None, DesiredAccess=NeededParameter, PolicyHandle=NeededParameter):
+    if ObjectAttributes is None:
+        ObjectAttributes = gdef.LSA_OBJECT_ATTRIBUTES()
+    return LsaOpenPolicy.ctypes_function(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaQueryInformationPolicy(PolicyHandle, InformationClass, Buffer):
+    return LsaQueryInformationPolicy.ctypes_function(PolicyHandle, InformationClass, Buffer)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaClose(ObjectHandle):
+    return LsaClose.ctypes_function(ObjectHandle)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaNtStatusToWinError(Status):
+    return LsaNtStatusToWinError.ctypes_function(Status)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaLookupNames(PolicyHandle, Count, Names, ReferencedDomains, Sids):
+    return LsaLookupNames.ctypes_function(PolicyHandle, Count, Names, ReferencedDomains, Sids)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaLookupNames2(PolicyHandle, Flags, Count, Names, ReferencedDomains, Sids):
+    return LsaLookupNames2.ctypes_function(PolicyHandle, Flags, Count, Names, ReferencedDomains, Sids)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaLookupSids(PolicyHandle, Count, Sids, ReferencedDomains, Names):
+    return LsaLookupSids.ctypes_function(PolicyHandle, Count, Sids, ReferencedDomains, Names)
+
+@Advapi32Proxy(error_check=result_is_ntstatus)
+def LsaLookupSids2(PolicyHandle, LookupOptions, Count, Sids, ReferencedDomains, Names):
+    return LsaLookupSids2.ctypes_function(PolicyHandle, LookupOptions, Count, Sids, ReferencedDomains, Names)
+

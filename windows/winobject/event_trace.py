@@ -51,6 +51,8 @@ class EventRecord(gdef.EVENT_RECORD):
 
     @property
     def context(self):
+        if self.UserContext is None:
+            return None
         return ctypes.py_object.from_address(self.UserContext).value
 
     @property
@@ -74,12 +76,17 @@ class EventRecord(gdef.EVENT_RECORD):
 PEventRecord = ctypes.POINTER(EventRecord)
 
 class EventTraceProperties(gdef.EVENT_TRACE_PROPERTIES):
+    """Represent an Event Trace session that may exist or now. (https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-event_trace_properties)
+
+    This class is widly used by :class:`EtwTrace`
+    """
     # Test: ascii / Use Wchar ?
     FULL_SIZE = ctypes.sizeof(gdef.EVENT_TRACE_PROPERTIES) + MAX_SESSION_NAME_LEN_W + MAX_LOGFILE_PATH_LEN_W
 
     # def alloc(cls, size) ?
     @classmethod
     def create(cls):
+        """Initialize a new :class:`EventTraceProperties`"""
         buff = windows.utils.BUFFER(cls)(size=cls.FULL_SIZE)
         # ctypes.memset(buff, "\x00", cls.FULL_SIZE)
         self = buff[0]
@@ -92,14 +99,13 @@ class EventTraceProperties(gdef.EVENT_TRACE_PROPERTIES):
         assert self.LogFileNameOffset
         return windows.current_process.read_string(ctypes.addressof(self) + self.LogFileNameOffset)
 
-
     def set_logfilename(self, filename):
         assert self.LogFileNameOffset
         if not filename.endswith("\x00"):
             filename += "\x00"
         return windows.current_process.write_memory(ctypes.addressof(self) + self.LogFileNameOffset, filename)
 
-    logfile = property(get_logfilename, set_logfilename)
+    logfile = property(get_logfilename, set_logfilename) #: The logfile associated with the session
 
     def get_logger_name(self):
         assert self.LoggerNameOffset
@@ -112,16 +118,22 @@ class EventTraceProperties(gdef.EVENT_TRACE_PROPERTIES):
             filename += "\x00"
         return windows.current_process.write_memory(ctypes.addressof(self) + self.LoggerNameOffset, filename)
 
-    name = property(get_logger_name, set_logfilename)
+    name = property(get_logger_name, set_logfilename) #: The name of the session
 
     @property
     def guid(self):
+        """The GUID of the Event Trace session (see ``Wnode.Guid``)"""
         return self.Wnode.Guid
 
     @property
     def id(self):
-        """LoggerId"""
+        """The LoggerId if the session (see ``Wnode.HistoricalContext``)"""
         return self.Wnode.HistoricalContext
+
+
+    def __repr__(self):
+        return """<{0} name="{1}" guid={2}>""".format(type(self).__name__, self.name, self.guid)
+
 
     # GUID setter ?
 
@@ -154,15 +166,17 @@ class CtxProcess(object):
 
 
 class EtwTrace(object):
+    """Represent an ETW Trace for tracing/processing events"""
     def __init__(self, name, logfile=None, guid=None):
-        self.name = windows.pycompat.raw_encode(name)
-        self.logfile = logfile
+        self.name = windows.pycompat.raw_encode(name) #: The name of the trace
+        self.logfile = logfile #: The logging file of the trace (``None`` means real time trace)
         if guid and isinstance(guid, basestring):
             guid = gdef.GUID.from_string(guid)
-        self.guid = guid
+        self.guid = guid #: The guid of the trace
         self.handle = 0
 
     def exists(self):
+        """Return ``True`` if the trace already exist (based on its name)"""
         prop = EventTraceProperties.create()
         try:
             windows.winproxy.ControlTraceA(self.handle, self.name, prop, gdef.EVENT_TRACE_CONTROL_QUERY)
@@ -173,6 +187,7 @@ class EtwTrace(object):
         return True
 
     def start(self, flags=0):
+        """Start the tracing"""
         prop = EventTraceProperties.create()
         prop.NumberOfBuffers = 42
         prop.EnableFlags = flags
@@ -189,6 +204,11 @@ class EtwTrace(object):
         self.handle = handle
 
     def stop(self, soft=False): # Change name
+        """stop the tracing.
+
+        ``soft`` will allow to stop a non-existing trace that do not exists/run.
+        This allow for simpler script that stop/start some EtwTrace.
+        """
         prop = EventTraceProperties.create()
         try:
             windows.winproxy.ControlTraceA(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_STOP)
@@ -199,16 +219,19 @@ class EtwTrace(object):
         return True
 
     def flush(self):
+        """Flush the trace"""
         prop = EventTraceProperties.create()
         windows.winproxy.ControlTraceA(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_FLUSH)
 
 
     def enable(self, guid, flags=0xff, level=0xff):
+        """Enable the specified event trace provider."""
         if isinstance(guid, basestring):
             guid = gdef.GUID.from_string(guid)
         return windows.winproxy.EnableTrace(1, flags, level, guid, self.handle) # EnableTraceEx ?
 
     def enable_ex(self, guid, flags=0xff, level=0xff, any_keyword = 0xffffffff, all_keyword=0x00):
+        """Enable the specified event trace provider."""
         if isinstance(guid, basestring):
             guid = gdef.GUID.from_string(guid)
 
@@ -223,6 +246,17 @@ class EtwTrace(object):
 
 
     def process(self, callback, begin=None, end=None, context=None):
+        """Process the event retrieved by the trace.
+        This function will call ``callback`` with any :class:`EventRecord` in the trace.
+        ``begin/end`` allow to filter and only process events in a given timeframe.
+
+        .. warning::
+
+            If the trace if ``REALTIME`` (no logfile) this function will hang/process new event until the trace is stopped.
+
+            Using ``logman -ets stop TRACE_NAME`` for exemple.
+
+        """
         if end == "now":
             end = gdef.FILETIME()
             windows.winproxy.GetSystemTimeAsFileTime(end)
@@ -272,11 +306,19 @@ class EtwTrace(object):
         return """<{0} name={1!r} logfile={2!r}>""".format(type(self).__name__, self.name, self.logfile)
 
 class TraceProvider(object):
+    """Represent a ETW provider, which is just a GUID.
+    Corresponding name for a provider may be available trhought WMI.
+    """
     def __init__(self, guid):
         self.guid = guid
 
     @property
     def infos(self):
+        """The :class:`TraceGuidInfo` associated with the provider.
+        Main use is to retrieve the instances of the provider (directly available with ``instances``)
+
+        :type: :class:`TraceGuidInfo`
+        """
         size = gdef.DWORD()
         info_buffer = ctypes.c_buffer(0x1000)
         try:
@@ -293,6 +335,10 @@ class TraceProvider(object):
     # Our trace providers should be able to directly returns its instances
     @property
     def instances(self):
+        """The instances of the provider.
+
+        :type: [:class:`TraceProviderInstanceInfo`] -- A list of :class:`TraceProviderInstanceInfo`
+        """
         return self.infos.instances
 
     def __repr__(self):
@@ -300,6 +346,10 @@ class TraceProvider(object):
 
 
 class TraceGuidInfo(gdef.TRACE_GUID_INFO):
+    """Defines the header to the list of sessions that enabled the provider
+    (see https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-trace_guid_info)
+    """
+
     @classmethod
     def from_raw_buffer(cls, buffer):
         self = cls.from_buffer(buffer)
@@ -317,6 +367,10 @@ class TraceGuidInfo(gdef.TRACE_GUID_INFO):
 
     @property
     def instances(self):
+        """The instances of the provider.
+
+        :type: [:class:`TraceProviderInstanceInfo`] -- A list of :class:`TraceProviderInstanceInfo`
+        """
         return [x for x in self._instance_generator()]
 
     def __repr__(self):
@@ -324,6 +378,9 @@ class TraceGuidInfo(gdef.TRACE_GUID_INFO):
 
 
 class TraceProviderInstanceInfo(gdef.TRACE_PROVIDER_INSTANCE_INFO):
+    """Defines an instance of the provider
+    (see https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-trace_provider_instance_info)
+    """
     @classmethod
     def from_raw_buffer(cls, buffer, offset):
         self = cls.from_buffer(buffer, offset)
@@ -340,6 +397,10 @@ class TraceProviderInstanceInfo(gdef.TRACE_PROVIDER_INSTANCE_INFO):
 
     @property
     def sessions(self):
+        """The sessions for the instance
+
+        :type: [:class:`~windows.generated_def.winstructs.TRACE_ENABLE_INFO`] -- A list of session
+        """
         return [x for x in self._instance_generator()]
 
     def __repr__(self):
@@ -347,8 +408,14 @@ class TraceProviderInstanceInfo(gdef.TRACE_PROVIDER_INSTANCE_INFO):
 
 
 class EtwManager(object):
+    """An object to query ETW session/providers and open new trace"""
+
     @property
     def sessions(self):
+        """The list of currently active ETW session.
+
+        :type: [:class:`EventTraceProperties`] -- A list of :class:`EventTraceProperties`
+        """
         # Create a tuple of MAX_ETW_SESSIONS EventTraceProperties ptr
         t = [EventTraceProperties.create() for _ in range(MAX_ETW_SESSIONS)]
         # Put this in a ctypes array
@@ -362,12 +429,20 @@ class EtwManager(object):
 
     @property
     def providers(self):
+        """The list of currently existing ETW providers.
+
+        :type: [:class:`TraceProvider`] -- A list of ETW providers
+        """
         buffer = windows.utils.BUFFER(gdef.GUID, 0x1000)()
         size = gdef.DWORD()
         windows.winproxy.EnumerateTraceGuidsEx(gdef.TraceGuidQueryList, None, 0, buffer, buffer.real_size, size)
-        return [TraceProvider(g) for g in buffer[:size.value / ctypes.sizeof(gdef.GUID)]]
+        return [TraceProvider(g) for g in buffer[:size.value // ctypes.sizeof(gdef.GUID)]]
 
 
     # Temp name / API ?
     def open_trace(self, name=None, logfile=None, guid=None):
+        """Open a new ETW Trace
+
+        :return: :class:`EtwTrace`
+        """
         return EtwTrace(name, logfile, guid)

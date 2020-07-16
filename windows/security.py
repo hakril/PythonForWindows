@@ -890,6 +890,17 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
                 flags |= gdef.SACL_SECURITY_INFORMATION
         winproxy.SetNamedSecurityInfoW(filename, gdef.SE_FILE_OBJECT, flags, self.owner, self.group, self.dacl, self.sacl)
 
+    def to_handle(self, handle, flags=0):
+        if not flags:
+            if self.owner:
+                flags |= gdef.OWNER_SECURITY_INFORMATION
+            if self.group:
+                flags |= gdef.GROUP_SECURITY_INFORMATION
+            if self.dacl:
+                flags |= gdef.DACL_SECURITY_INFORMATION
+            if self.sacl:
+                flags |= gdef.SACL_SECURITY_INFORMATION
+        self._apply_to_handle_and_type(handle, gdef.SE_FILE_OBJECT, flags)
 
     @classmethod
     def from_service(cls, filename, query_sacl=False, flags=SERVICE_SECURITY_INFORMATION):
@@ -978,11 +989,11 @@ def explain_mask(mask, sdtype):
 def explain_simple_ace(ace, sdtype):
     yield u"Type:"
     yield u"  " + str(ace.Header.AceType)
-    yield u"Flags:"
-    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"Flags: {0:#x}".format(ace.Header.AceFlags)
+    yield u"   {0}".format(ace.Header.flags)
     yield u"SID:"
     yield u"  " + explain_sid(ace.sid)
-    yield u"Mask:"
+    yield u"Mask: {0:#x}".format(ace.Mask)
     mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
     yield u"  " + str(list(mapper[x] for x in ace.mask))
 

@@ -107,10 +107,18 @@ class System(object):
 
     @utils.fixedpropety
     def event_log(self):
+        """An object to open Event channel/publisher and evtx file
+
+        :type: :class:`~windows.winobject.event_log.EvtlogManager`
+        """
         return event_log.EvtlogManager()
 
     @utils.fixedpropety
     def etw(self):
+        """An object to interact with  ETW (Event Tracing for Windows)
+
+        :type: :class:`~windows.winobject.event_trace.EtwManager`
+        """
         return event_trace.EtwManager()
 
 
