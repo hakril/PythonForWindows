@@ -1,0 +1,28 @@
+(cmd) python etw\etw_enumeration.py
+ETW Manager is: <windows.winobject.event_trace.EtwManager object at 0x03AFBF70>
+
+Listing some ETW sessions:
+  * <EventTraceProperties name="AppModel" guid=A922A8BE-2450-438E-9520-FBCDFB46B0BD>
+     * name: AppModel
+     * guid: A922A8BE-2450-438E-9520-FBCDFB46B0BD
+     * id: 4
+     * logfile: 
+  * <EventTraceProperties name="LwtNetLog" guid=603BA31E-EC5A-4CDE-BE87-ED0A16C3B170>
+     * name: LwtNetLog
+     * guid: 603BA31E-EC5A-4CDE-BE87-ED0A16C3B170
+     * id: 14
+     * logfile: C:\WINDOWS\System32\LogFiles\WMI\LwtNetLog.etl
+
+Looking for providers for: <EventTraceProperties name="LwtNetLog" guid=603BA31E-EC5A-4CDE-BE87-ED0A16C3B170>
+Found a provider/session for target:
+  * Provider: <TraceProvider for "43D1A55C-76D6-4F7E-995C-64C711E5CAFE">
+  * Instance: <TraceProviderInstanceInfo Pid=5256 EnableCount=1>
+  * Process: <WinProcess "RuntimeBroker.exe" pid 5256 at 0x54c39d0>
+Found a provider/session for target:
+  * Provider: <TraceProvider for "43D1A55C-76D6-4F7E-995C-64C711E5CAFE">
+  * Instance: <TraceProviderInstanceInfo Pid=10768 EnableCount=1>
+  * Process: <WinProcess "chrome.exe" pid 10768 at 0x54c3930>
+Found a provider/session for target:
+  * Provider: <TraceProvider for "43D1A55C-76D6-4F7E-995C-64C711E5CAFE">
+  * Instance: <TraceProviderInstanceInfo Pid=10236 EnableCount=1>
+  * Process: <WinProcess "YourPhone.exe" pid 10236 at 0x54c37d0>

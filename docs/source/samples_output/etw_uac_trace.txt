@@ -1,0 +1,53 @@
+(cmd) python etw\uac_trace.py
+Recording UAC event in file <uac.trace> using session named <MY_UAC_MONITOR>
+0x1d65bb1febaceea: <EventRecord provider="68FDD900-4A3E-11D1-84F4-0000F80464E3" id=0>
+    guid: 68FDD900-4A3E-11D1-84F4-0000F80464E3
+    id: 0
+    opcode: 0
+    level: 0
+    data: '\x01\n\x01\x05\xbbG\x04-D\xd5\xff\xb1[\xd6\x01Zb\x02\t\x01\x04\xf0\x0c\t\x06\xc4\xff\xff\xff@tzres.dll,-302\n\x05\x03@tzres.dll,-301\x03\x05\x02\xc4\xff\xff\xff\xc0\x92\x1c\xd2D[\xd6\x01\x80\x96\x98\xea\xce\xba\xfe\xb1[\xd6\x01\x01MY_UAC_MONITORC:\\Users\\hakril\\Documents\\projets\\PythonForWindows\\samples\\uac.trace'
+[...]
+0x1d65bb1fec4c011: <EventRecord provider="DEB74A23-5444-3F3B-924B-0E653973F55A" id=11>
+    guid: DEB74A23-5444-3F3B-924B-0E653973F55A
+    id: 11
+    opcode: 0
+    level: 0
+    data: '\x9e\x06\x04\x19\x14\x04\x08\x04\xff\xff\xff\xffWinSta0\\DefaultC:\\Windows\\System32\\mmc.exe"C:\\Windows\\System32\\mmc.exe" BAD_MMC_FILENAMEC:\\Users\\hakril\\Documents\\projets\\PythonForWindows\\samples'
+0x1d65bb1fec4e48b: <EventRecord provider="C0B508D3-5459-339F-A213-889C238CA5B1" id=10>
+    guid: C0B508D3-5459-339F-A213-889C238CA5B1
+    id: 10
+    opcode: 0
+    level: 0
+    data: 'C:\\WINDOWS\\SysWOW64\\mmc.exe"C:\\WINDOWS\\SysWOW64\\mmc.exe" BAD_MMC_FILENAME` '
+0x1d65bb1fec7c8eb: <EventRecord provider="C0B508D3-5459-339F-A213-889C238CA5B1" id=13>
+    guid: C0B508D3-5459-339F-A213-889C238CA5B1
+    id: 13
+    opcode: 0
+    level: 0
+    data: 'C:\\WINDOWS\\SysWOW64\\mmc.exe'
+0x1d65bb1fec7c8f0: <EventRecord provider="C0B508D3-5459-339F-A213-889C238CA5B1" id=14>
+    guid: C0B508D3-5459-339F-A213-889C238CA5B1
+    id: 14
+    opcode: 0
+    level: 0
+    data: '"C:\\WINDOWS\\SysWOW64\\mmc.exe" BAD_MMC_FILENAME'
+[...]
+0x1d65bb1feca018d: <EventRecord provider="172FF31C-2D80-31A6-FCA8-EB000D380666" id=11>
+    guid: 172FF31C-2D80-31A6-FCA8-EB000D380666
+    id: 11
+    opcode: 0
+    level: 0
+    data: 'C:\\WINDOWS\\SysWOW64\\mmc.exe'
+0x1d65bb1feca030d: <EventRecord provider="172FF31C-2D80-31A6-FCA8-EB000D380666" id=25>
+    guid: 172FF31C-2D80-31A6-FCA8-EB000D380666
+    id: 25
+    opcode: 0
+    level: 0
+    data: 'C:\\WINDOWS\\SysWOW64\\mmc.exe\x08\x02TRUEFALSE\x10'
+0x1d65bb1fecfcdc0: <EventRecord provider="172FF31C-2D80-31A6-FCA8-EB000D380666" id=27>
+    guid: 172FF31C-2D80-31A6-FCA8-EB000D380666
+    id: 27
+    opcode: 0
+    level: 0
+    data: '\x05TRUETRUE'
+[...]

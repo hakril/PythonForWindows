@@ -23,3 +23,4 @@ This sections describes them by group of relation.
     device_manager.rst
     task_scheduler.rst
     evtlog.rst
+    etw.rst

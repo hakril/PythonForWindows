@@ -1119,6 +1119,879 @@ _BG_FILE_RANGE
 
         :class:`UINT64`
 
+IO_Des_s
+''''''''
+.. class:: PIO_DES
+
+    Pointer to :class:`IO_Des_s`
+
+.. class:: IO_DES
+
+    Alias for :class:`IO_Des_s`
+
+.. class:: IO_Des_s
+
+    .. attribute:: IOD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOD_Alloc_Base
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOD_Alloc_End
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOD_DesFlags
+
+        :class:`DWORD`
+
+IO_Range_s
+''''''''''
+.. class:: IO_RANGE
+
+    Alias for :class:`IO_Range_s`
+
+.. class:: PIO_RANGE
+
+    Pointer to :class:`IO_Range_s`
+
+.. class:: IO_Range_s
+
+    .. attribute:: IOR_Align
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOR_nPorts
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOR_Min
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOR_Max
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOR_RangeFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOR_Alias
+
+        :class:`DWORDLONG`
+
+Mem_Des_s
+'''''''''
+.. class:: MEM_DES
+
+    Alias for :class:`Mem_Des_s`
+
+.. class:: PMEM_DES
+
+    Pointer to :class:`Mem_Des_s`
+
+.. class:: Mem_Des_s
+
+    .. attribute:: MD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: MD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: MD_Alloc_Base
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MD_Alloc_End
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MD_Reserved
+
+        :class:`DWORD`
+
+Mem_Range_s
+'''''''''''
+.. class:: MEM_RANGE
+
+    Alias for :class:`Mem_Range_s`
+
+.. class:: PMEM_RANGE
+
+    Pointer to :class:`Mem_Range_s`
+
+.. class:: Mem_Range_s
+
+    .. attribute:: MR_Align
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MR_nBytes
+
+        :class:`ULONG`
+
+
+    .. attribute:: MR_Min
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MR_Max
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MR_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MR_Reserved
+
+        :class:`DWORD`
+
+DMA_Des_s
+'''''''''
+.. class:: PDMA_DES
+
+    Pointer to :class:`DMA_Des_s`
+
+.. class:: DMA_DES
+
+    Alias for :class:`DMA_Des_s`
+
+.. class:: DMA_Des_s
+
+    .. attribute:: DD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Alloc_Chan
+
+        :class:`ULONG`
+
+DMA_Range_s
+'''''''''''
+.. class:: DMA_RANGE
+
+    Alias for :class:`DMA_Range_s`
+
+.. class:: PDMA_RANGE
+
+    Pointer to :class:`DMA_Range_s`
+
+.. class:: DMA_Range_s
+
+    .. attribute:: DR_Min
+
+        :class:`ULONG`
+
+
+    .. attribute:: DR_Max
+
+        :class:`ULONG`
+
+
+    .. attribute:: DR_Flags
+
+        :class:`ULONG`
+
+IRQ_Des_64_s
+''''''''''''
+.. class:: IRQ_DES_64
+
+    Alias for :class:`IRQ_Des_64_s`
+
+.. class:: PIRQ_DES_64
+
+    Pointer to :class:`IRQ_Des_64_s`
+
+.. class:: IRQ_Des_64_s
+
+    .. attribute:: IRQD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Alloc_Num
+
+        :class:`ULONG`
+
+
+    .. attribute:: IRQD_Affinity
+
+        :class:`ULONG64`
+
+IRQ_Des_32_s
+''''''''''''
+.. class:: PIRQ_DES_32
+
+    Pointer to :class:`IRQ_Des_32_s`
+
+.. class:: IRQ_DES_32
+
+    Alias for :class:`IRQ_Des_32_s`
+
+.. class:: IRQ_Des_32_s
+
+    .. attribute:: IRQD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: IRQD_Alloc_Num
+
+        :class:`ULONG`
+
+
+    .. attribute:: IRQD_Affinity
+
+        :class:`ULONG32`
+
+IRQ_Range_s
+'''''''''''
+.. class:: IRQ_RANGE
+
+    Alias for :class:`IRQ_Range_s`
+
+.. class:: PIRQ_RANGE
+
+    Pointer to :class:`IRQ_Range_s`
+
+.. class:: IRQ_Range_s
+
+    .. attribute:: IRQR_Min
+
+        :class:`ULONG`
+
+
+    .. attribute:: IRQR_Max
+
+        :class:`ULONG`
+
+
+    .. attribute:: IRQR_Flags
+
+        :class:`ULONG`
+
+BusNumber_Des_s
+'''''''''''''''
+.. class:: BUSNUMBER_DES
+
+    Alias for :class:`BusNumber_Des_s`
+
+.. class:: PBUSNUMBER_DES
+
+    Pointer to :class:`BusNumber_Des_s`
+
+.. class:: BusNumber_Des_s
+
+    .. attribute:: BUSD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: BUSD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: BUSD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: BUSD_Alloc_Base
+
+        :class:`ULONG`
+
+
+    .. attribute:: BUSD_Alloc_End
+
+        :class:`ULONG`
+
+BusNumber_Range_s
+'''''''''''''''''
+.. class:: PBUSNUMBER_RANGE
+
+    Pointer to :class:`BusNumber_Range_s`
+
+.. class:: BUSNUMBER_RANGE
+
+    Alias for :class:`BusNumber_Range_s`
+
+.. class:: BusNumber_Range_s
+
+    .. attribute:: BUSR_Min
+
+        :class:`ULONG`
+
+
+    .. attribute:: BUSR_Max
+
+        :class:`ULONG`
+
+
+    .. attribute:: BUSR_nBusNumbers
+
+        :class:`ULONG`
+
+
+    .. attribute:: BUSR_Flags
+
+        :class:`ULONG`
+
+BusNumber_Resource_s
+''''''''''''''''''''
+.. class:: BUSNUMBER_RESOURCE
+
+    Alias for :class:`BusNumber_Resource_s`
+
+.. class:: PBUSNUMBER_RESOURCE
+
+    Pointer to :class:`BusNumber_Resource_s`
+
+.. class:: BusNumber_Resource_s
+
+    .. attribute:: BusNumber_Header
+
+        :class:`BUSNUMBER_DES`
+
+
+    .. attribute:: BusNumber_Data
+
+        :class:`BUSNUMBER_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x03B7EF50>]``
+
+CS_Des_s
+''''''''
+.. class:: PCS_DES
+
+    Pointer to :class:`CS_Des_s`
+
+.. class:: CS_DES
+
+    Alias for :class:`CS_Des_s`
+
+.. class:: CS_Des_s
+
+    .. attribute:: CSD_SignatureLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: CSD_LegacyDataOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: CSD_LegacyDataSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: CSD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: CSD_ClassGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: CSD_Signature
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x037C0190>]``
+
+CS_Resource_s
+'''''''''''''
+.. class:: PCS_RESOURCE
+
+    Pointer to :class:`CS_Resource_s`
+
+.. class:: CS_RESOURCE
+
+    Alias for :class:`CS_Resource_s`
+
+.. class:: CS_Resource_s
+
+    .. attribute:: CS_Header
+
+        :class:`CS_DES`
+
+DMA_Des_s
+'''''''''
+.. class:: PDMA_DES
+
+    Pointer to :class:`DMA_Des_s`
+
+.. class:: DMA_DES
+
+    Alias for :class:`DMA_Des_s`
+
+.. class:: DMA_Des_s
+
+    .. attribute:: DD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: DD_Alloc_Chan
+
+        :class:`ULONG`
+
+DMA_Resource_s
+''''''''''''''
+.. class:: PDMA_RESOURCE
+
+    Pointer to :class:`DMA_Resource_s`
+
+.. class:: DMA_RESOURCE
+
+    Alias for :class:`DMA_Resource_s`
+
+.. class:: DMA_Resource_s
+
+    .. attribute:: DMA_Header
+
+        :class:`DMA_DES`
+
+
+    .. attribute:: DMA_Data
+
+        :class:`DMA_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C05B0>]``
+
+IO_Des_s
+''''''''
+.. class:: PIO_DES
+
+    Pointer to :class:`IO_Des_s`
+
+.. class:: IO_DES
+
+    Alias for :class:`IO_Des_s`
+
+.. class:: IO_Des_s
+
+    .. attribute:: IOD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: IOD_Alloc_Base
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOD_Alloc_End
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: IOD_DesFlags
+
+        :class:`DWORD`
+
+IO_Resource_s
+'''''''''''''
+.. class:: IO_RESOURCE
+
+    Alias for :class:`IO_Resource_s`
+
+.. class:: PIO_RESOURCE
+
+    Pointer to :class:`IO_Resource_s`
+
+.. class:: IO_Resource_s
+
+    .. attribute:: IO_Header
+
+        :class:`IO_DES`
+
+
+    .. attribute:: IO_Data
+
+        :class:`IO_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C08F0>]``
+
+IRQ_Resource_32_s
+'''''''''''''''''
+.. class:: PIRQ_RESOURCE_32
+
+    Pointer to :class:`IRQ_Resource_32_s`
+
+.. class:: IRQ_RESOURCE_32
+
+    Alias for :class:`IRQ_Resource_32_s`
+
+.. class:: IRQ_Resource_32_s
+
+    .. attribute:: IRQ_Header
+
+        :class:`IRQ_DES_32`
+
+
+    .. attribute:: IRQ_Data
+
+        :class:`IRQ_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C0A30>]``
+
+IRQ_Resource_64_s
+'''''''''''''''''
+.. class:: IRQ_RESOURCE_64
+
+    Alias for :class:`IRQ_Resource_64_s`
+
+.. class:: PIRQ_RESOURCE_64
+
+    Pointer to :class:`IRQ_Resource_64_s`
+
+.. class:: IRQ_Resource_64_s
+
+    .. attribute:: IRQ_Header
+
+        :class:`IRQ_DES_64`
+
+
+    .. attribute:: IRQ_Data
+
+        :class:`IRQ_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C0B50>]``
+
+Mem_Resource_s
+''''''''''''''
+.. class:: MEM_RESOURCE
+
+    Alias for :class:`Mem_Resource_s`
+
+.. class:: PMEM_RESOURCE
+
+    Pointer to :class:`Mem_Resource_s`
+
+.. class:: Mem_Resource_s
+
+    .. attribute:: MEM_Header
+
+        :class:`MEM_DES`
+
+
+    .. attribute:: MEM_Data
+
+        :class:`MEM_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C0C70>]``
+
+MfCard_Des_s
+''''''''''''
+.. class:: MFCARD_DES
+
+    Alias for :class:`MfCard_Des_s`
+
+.. class:: PMFCARD_DES
+
+    Pointer to :class:`MfCard_Des_s`
+
+.. class:: MfCard_Des_s
+
+    .. attribute:: PMF_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: PMF_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: PMF_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: PMF_ConfigOptions
+
+        :class:`BYTE`
+
+
+    .. attribute:: PMF_IoResourceIndex
+
+        :class:`BYTE`
+
+
+    .. attribute:: PMF_Reserved
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x037C0EB0>]``
+
+
+    .. attribute:: PMF_ConfigRegisterBase
+
+        :class:`DWORD`
+
+MfCard_Resource_s
+'''''''''''''''''
+.. class:: PMFCARD_RESOURCE
+
+    Pointer to :class:`MfCard_Resource_s`
+
+.. class:: MFCARD_RESOURCE
+
+    Alias for :class:`MfCard_Resource_s`
+
+.. class:: MfCard_Resource_s
+
+    .. attribute:: MfCard_Header
+
+        :class:`MFCARD_DES`
+
+PcCard_Des_s
+''''''''''''
+.. class:: PCCARD_DES
+
+    Alias for :class:`PcCard_Des_s`
+
+.. class:: PPCCARD_DES
+
+    Pointer to :class:`PcCard_Des_s`
+
+.. class:: PcCard_Des_s
+
+    .. attribute:: PCD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: PCD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: PCD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: PCD_ConfigIndex
+
+        :class:`BYTE`
+
+
+    .. attribute:: PCD_Reserved
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x037C41D0>]``
+
+
+    .. attribute:: PCD_MemoryCardBase1
+
+        :class:`DWORD`
+
+
+    .. attribute:: PCD_MemoryCardBase2
+
+        :class:`DWORD`
+
+
+    .. attribute:: PCD_MemoryCardBase
+
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x037C42B0>]``
+
+
+    .. attribute:: PCD_MemoryFlags
+
+        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x037C4310>]``
+
+
+    .. attribute:: PCD_IoFlags
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x037C4390>]``
+
+PcCard_Resource_s
+'''''''''''''''''
+.. class:: PPCCARD_RESOURCE
+
+    Pointer to :class:`PcCard_Resource_s`
+
+.. class:: PCCARD_RESOURCE
+
+    Alias for :class:`PcCard_Resource_s`
+
+.. class:: PcCard_Resource_s
+
+    .. attribute:: PcCard_Header
+
+        :class:`PCCARD_DES`
+
+Mem_Large_Range_s
+'''''''''''''''''
+.. class:: PMEM_LARGE_RANGE
+
+    Pointer to :class:`Mem_Large_Range_s`
+
+.. class:: MEM_LARGE_RANGE
+
+    Alias for :class:`Mem_Large_Range_s`
+
+.. class:: Mem_Large_Range_s
+
+    .. attribute:: MLR_Align
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MLR_nBytes
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: MLR_Min
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MLR_Max
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MLR_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MLR_Reserved
+
+        :class:`DWORD`
+
+Mem_Large_Des_s
+'''''''''''''''
+.. class:: PMEM_LARGE_DES
+
+    Pointer to :class:`Mem_Large_Des_s`
+
+.. class:: MEM_LARGE_DES
+
+    Alias for :class:`Mem_Large_Des_s`
+
+.. class:: Mem_Large_Des_s
+
+    .. attribute:: MLD_Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: MLD_Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: MLD_Alloc_Base
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MLD_Alloc_End
+
+        :class:`DWORDLONG`
+
+
+    .. attribute:: MLD_Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MLD_Reserved
+
+        :class:`DWORD`
+
+Mem_Large_Resource_s
+''''''''''''''''''''
+.. class:: MEM_LARGE_RESOURCE
+
+    Alias for :class:`Mem_Large_Resource_s`
+
+.. class:: PMEM_LARGE_RESOURCE
+
+    Pointer to :class:`Mem_Large_Resource_s`
+
+.. class:: Mem_Large_Resource_s
+
+    .. attribute:: MEM_LARGE_Header
+
+        :class:`MEM_LARGE_DES`
+
+
+    .. attribute:: MEM_LARGE_Data
+
+        :class:`MEM_LARGE_RANGE` ``[<winstruct.ComplexArrayExpression object at 0x037C4990>]``
+
 tagMULTI_QI
 '''''''''''
 .. class:: MULTI_QI
@@ -1434,7 +2307,7 @@ tagSAFEARRAY
 
     .. attribute:: rgsabound
 
-        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x03C19AD0>]``
+        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x037CCD30>]``
 
 __tagBRECORD
 ''''''''''''
@@ -1894,7 +2767,7 @@ tagARRAYDESC
 
     .. attribute:: rgbounds
 
-        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x03C2B130>]``
+        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x038F5390>]``
 
 tagELEMDESC
 '''''''''''
@@ -6775,7 +7648,7 @@ _FILE_NAME_INFORMATION
 
     .. attribute:: FileName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D47E70>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0393A0F0>]``
 
 _FILE_NETWORK_OPEN_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -6997,7 +7870,7 @@ _FILE_STREAM_INFORMATION
 
     .. attribute:: StreamName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51630>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0393A890>]``
 
 _FILE_DISPOSITION_INFORMATION
 '''''''''''''''''''''''''''''
@@ -7049,7 +7922,7 @@ _FILE_FULL_EA_INFORMATION
 
     .. attribute:: EaName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D518D0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0393AB30>]``
 
 _FILE_GET_EA_INFORMATION
 ''''''''''''''''''''''''
@@ -7075,7 +7948,7 @@ _FILE_GET_EA_INFORMATION
 
     .. attribute:: EaName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51A10>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0393AC70>]``
 
 tagVS_FIXEDFILEINFO
 '''''''''''''''''''
@@ -7178,7 +8051,7 @@ _FILE_LINK_INFORMATION
 
     .. attribute:: FileName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51FD0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03940250>]``
 
 _WIN32_FIND_DATAA
 '''''''''''''''''
@@ -7238,12 +8111,12 @@ _WIN32_FIND_DATAA
 
     .. attribute:: cFileName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57310>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03940570>]``
 
 
     .. attribute:: cAlternateFileName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57390>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x039405F0>]``
 
 
     .. attribute:: dwFileType
@@ -7318,12 +8191,12 @@ _WIN32_FIND_DATAW
 
     .. attribute:: cFileName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57790>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x039409F0>]``
 
 
     .. attribute:: cAlternateFileName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57810>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03940A70>]``
 
 
     .. attribute:: dwFileType
@@ -7397,7 +8270,252 @@ _GUID
 
     .. attribute:: Data4
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03D57AF0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03940D50>]``
+
+_LSA_OBJECT_ATTRIBUTES
+''''''''''''''''''''''
+.. class:: PLSA_OBJECT_ATTRIBUTES
+
+    Pointer to :class:`_LSA_OBJECT_ATTRIBUTES`
+
+.. class:: LSA_OBJECT_ATTRIBUTES
+
+    Alias for :class:`_LSA_OBJECT_ATTRIBUTES`
+
+.. class:: _LSA_OBJECT_ATTRIBUTES
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: RootDirectory
+
+        :class:`HANDLE`
+
+
+    .. attribute:: ObjectName
+
+        :class:`PLSA_UNICODE_STRING`
+
+
+    .. attribute:: Attributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: SecurityDescriptor
+
+        :class:`PVOID`
+
+
+    .. attribute:: SecurityQualityOfService
+
+        :class:`PVOID`
+
+_POLICY_PRIMARY_DOMAIN_INFO
+'''''''''''''''''''''''''''
+.. class:: PPOLICY_PRIMARY_DOMAIN_INFO
+
+    Pointer to :class:`_POLICY_PRIMARY_DOMAIN_INFO`
+
+.. class:: POLICY_PRIMARY_DOMAIN_INFO
+
+    Alias for :class:`_POLICY_PRIMARY_DOMAIN_INFO`
+
+.. class:: _POLICY_PRIMARY_DOMAIN_INFO
+
+    .. attribute:: Name
+
+        :class:`LSA_UNICODE_STRING`
+
+
+    .. attribute:: Sid
+
+        :class:`PSID`
+
+_POLICY_LSA_SERVER_ROLE_INFO
+''''''''''''''''''''''''''''
+.. class:: POLICY_LSA_SERVER_ROLE_INFO
+
+    Alias for :class:`_POLICY_LSA_SERVER_ROLE_INFO`
+
+.. class:: PPOLICY_LSA_SERVER_ROLE_INFO
+
+    Pointer to :class:`_POLICY_LSA_SERVER_ROLE_INFO`
+
+.. class:: _POLICY_LSA_SERVER_ROLE_INFO
+
+    .. attribute:: LsaServerRole
+
+        :class:`POLICY_LSA_SERVER_ROLE`
+
+_POLICY_ACCOUNT_DOMAIN_INFO
+'''''''''''''''''''''''''''
+.. class:: POLICY_ACCOUNT_DOMAIN_INFO
+
+    Alias for :class:`_POLICY_ACCOUNT_DOMAIN_INFO`
+
+.. class:: PPOLICY_ACCOUNT_DOMAIN_INFO
+
+    Pointer to :class:`_POLICY_ACCOUNT_DOMAIN_INFO`
+
+.. class:: _POLICY_ACCOUNT_DOMAIN_INFO
+
+    .. attribute:: DomainName
+
+        :class:`LSA_UNICODE_STRING`
+
+
+    .. attribute:: DomainSid
+
+        :class:`PSID`
+
+_POLICY_PRIMARY_DOMAIN_INFO
+'''''''''''''''''''''''''''
+.. class:: PPOLICY_PRIMARY_DOMAIN_INFO
+
+    Pointer to :class:`_POLICY_PRIMARY_DOMAIN_INFO`
+
+.. class:: POLICY_PRIMARY_DOMAIN_INFO
+
+    Alias for :class:`_POLICY_PRIMARY_DOMAIN_INFO`
+
+.. class:: _POLICY_PRIMARY_DOMAIN_INFO
+
+    .. attribute:: Name
+
+        :class:`LSA_UNICODE_STRING`
+
+
+    .. attribute:: Sid
+
+        :class:`PSID`
+
+_LSA_TRANSLATED_SID
+'''''''''''''''''''
+.. class:: LSA_TRANSLATED_SID
+
+    Alias for :class:`_LSA_TRANSLATED_SID`
+
+.. class:: PLSA_TRANSLATED_SID
+
+    Pointer to :class:`_LSA_TRANSLATED_SID`
+
+.. class:: _LSA_TRANSLATED_SID
+
+    .. attribute:: Use
+
+        :class:`SID_NAME_USE`
+
+
+    .. attribute:: RelativeId
+
+        :class:`ULONG`
+
+
+    .. attribute:: DomainIndex
+
+        :class:`LONG`
+
+_LSA_TRANSLATED_SID2
+''''''''''''''''''''
+.. class:: PLSA_TRANSLATED_SID2
+
+    Pointer to :class:`_LSA_TRANSLATED_SID2`
+
+.. class:: LSA_TRANSLATED_SID2
+
+    Alias for :class:`_LSA_TRANSLATED_SID2`
+
+.. class:: _LSA_TRANSLATED_SID2
+
+    .. attribute:: Use
+
+        :class:`SID_NAME_USE`
+
+
+    .. attribute:: Sid
+
+        :class:`PSID`
+
+
+    .. attribute:: DomainIndex
+
+        :class:`LONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+_LSA_TRANSLATED_NAME
+''''''''''''''''''''
+.. class:: LSA_TRANSLATED_NAME
+
+    Alias for :class:`_LSA_TRANSLATED_NAME`
+
+.. class:: PLSA_TRANSLATED_NAME
+
+    Pointer to :class:`_LSA_TRANSLATED_NAME`
+
+.. class:: _LSA_TRANSLATED_NAME
+
+    .. attribute:: Use
+
+        :class:`SID_NAME_USE`
+
+
+    .. attribute:: Name
+
+        :class:`LSA_UNICODE_STRING`
+
+
+    .. attribute:: DomainIndex
+
+        :class:`LONG`
+
+_LSA_TRUST_INFORMATION
+''''''''''''''''''''''
+.. class:: LSA_TRUST_INFORMATION
+
+    Alias for :class:`_LSA_TRUST_INFORMATION`
+
+.. class:: PLSA_TRUST_INFORMATION
+
+    Pointer to :class:`_LSA_TRUST_INFORMATION`
+
+.. class:: _LSA_TRUST_INFORMATION
+
+    .. attribute:: Name
+
+        :class:`LSA_UNICODE_STRING`
+
+
+    .. attribute:: Sid
+
+        :class:`PSID`
+
+_LSA_REFERENCED_DOMAIN_LIST
+'''''''''''''''''''''''''''
+.. class:: LSA_REFERENCED_DOMAIN_LIST
+
+    Alias for :class:`_LSA_REFERENCED_DOMAIN_LIST`
+
+.. class:: PLSA_REFERENCED_DOMAIN_LIST
+
+    Pointer to :class:`_LSA_REFERENCED_DOMAIN_LIST`
+
+.. class:: _LSA_REFERENCED_DOMAIN_LIST
+
+    .. attribute:: Entries
+
+        :class:`ULONG`
+
+
+    .. attribute:: Domains
+
+        :class:`PLSA_TRUST_INFORMATION`
 
 _PROCESS_MITIGATION_DEP_POLICY
 ''''''''''''''''''''''''''''''
@@ -7562,7 +8680,7 @@ IP6_ADDRESS
 
     .. attribute:: IP6Qword
 
-        :class:`ULONGLONG` ``[<winstruct.ComplexArrayExpression object at 0x03D5A710>]``
+        :class:`ULONGLONG` ``[<winstruct.ComplexArrayExpression object at 0x0394A410>]``
 
 _MIB_IPADDRROW_XP
 '''''''''''''''''
@@ -7633,7 +8751,7 @@ _MIB_IPADDRTABLE
 
     .. attribute:: table
 
-        :class:`MIB_IPADDRROW` ``[<winstruct.ComplexArrayExpression object at 0x03CC6210>]``
+        :class:`MIB_IPADDRROW` ``[<winstruct.ComplexArrayExpression object at 0x0394FEF0>]``
 
 _MIB_IFROW
 ''''''''''
@@ -7649,7 +8767,7 @@ _MIB_IFROW
 
     .. attribute:: wszName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CC6310>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0394FFF0>]``
 
 
     .. attribute:: dwIndex
@@ -7679,7 +8797,7 @@ _MIB_IFROW
 
     .. attribute:: bPhysAddr
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CC6550>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0395B250>]``
 
 
     .. attribute:: dwAdminStatus
@@ -7764,7 +8882,7 @@ _MIB_IFROW
 
     .. attribute:: bDescr
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CC6A70>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0395B770>]``
 
 _MIB_IFTABLE
 ''''''''''''
@@ -7785,7 +8903,7 @@ _MIB_IFTABLE
 
     .. attribute:: table
 
-        :class:`MIB_IFROW` ``[<winstruct.ComplexArrayExpression object at 0x03CC6BD0>]``
+        :class:`MIB_IFROW` ``[<winstruct.ComplexArrayExpression object at 0x0395B8D0>]``
 
 _MIB_TCPROW_OWNER_PID
 '''''''''''''''''''''
@@ -7847,7 +8965,7 @@ _MIB_TCPTABLE_OWNER_PID
 
     .. attribute:: table
 
-        :class:`MIB_TCPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CC6F30>]``
+        :class:`MIB_TCPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x0395BC30>]``
 
 _MIB_UDPROW_OWNER_PID
 '''''''''''''''''''''
@@ -7894,7 +9012,7 @@ _MIB_UDPTABLE_OWNER_PID
 
     .. attribute:: table
 
-        :class:`MIB_UDPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB1B0>]``
+        :class:`MIB_UDPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x0395BE90>]``
 
 _MIB_UDP6ROW_OWNER_PID
 ''''''''''''''''''''''
@@ -7910,7 +9028,7 @@ _MIB_UDP6ROW_OWNER_PID
 
     .. attribute:: ucLocalAddr
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB290>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0395BF70>]``
 
 
     .. attribute:: dwLocalScopeId
@@ -7946,7 +9064,7 @@ _MIB_UDP6TABLE_OWNER_PID
 
     .. attribute:: table
 
-        :class:`MIB_UDP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB470>]``
+        :class:`MIB_UDP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03960170>]``
 
 _MIB_TCP6ROW_OWNER_PID
 ''''''''''''''''''''''
@@ -7962,7 +9080,7 @@ _MIB_TCP6ROW_OWNER_PID
 
     .. attribute:: ucLocalAddr
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB550>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03960250>]``
 
 
     .. attribute:: dwLocalScopeId
@@ -7977,7 +9095,7 @@ _MIB_TCP6ROW_OWNER_PID
 
     .. attribute:: ucRemoteAddr
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB650>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03960350>]``
 
 
     .. attribute:: dwRemoteScopeId
@@ -8018,7 +9136,7 @@ _MIB_TCP6TABLE_OWNER_PID
 
     .. attribute:: table
 
-        :class:`MIB_TCP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB870>]``
+        :class:`MIB_TCP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03960570>]``
 
 _MIB_TCPROW
 '''''''''''
@@ -8075,7 +9193,7 @@ _IP_ADAPTER_INDEX_MAP
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCBBD0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x039608D0>]``
 
 _IP_INTERFACE_INFO
 ''''''''''''''''''
@@ -8096,7 +9214,7 @@ _IP_INTERFACE_INFO
 
     .. attribute:: Adapter
 
-        :class:`IP_ADAPTER_INDEX_MAP` ``[<winstruct.ComplexArrayExpression object at 0x03CCBCF0>]``
+        :class:`IP_ADAPTER_INDEX_MAP` ``[<winstruct.ComplexArrayExpression object at 0x039609F0>]``
 
 _DNS_CACHE_ENTRY
 ''''''''''''''''
@@ -8387,7 +9505,7 @@ DNS_TXT_DATAW
 
     .. attribute:: pStringArray
 
-        :class:`PWSTR` ``[<winstruct.ComplexArrayExpression object at 0x03CD0B10>]``
+        :class:`PWSTR` ``[<winstruct.ComplexArrayExpression object at 0x03964810>]``
 
 DNS_TXT_DATAA
 '''''''''''''
@@ -8408,7 +9526,7 @@ DNS_TXT_DATAA
 
     .. attribute:: pStringArray
 
-        :class:`PSTR` ``[<winstruct.ComplexArrayExpression object at 0x03CD0BF0>]``
+        :class:`PSTR` ``[<winstruct.ComplexArrayExpression object at 0x039648F0>]``
 
 DNS_NULL_DATA
 '''''''''''''
@@ -8429,7 +9547,7 @@ DNS_NULL_DATA
 
     .. attribute:: Data
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD0D30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03964A30>]``
 
 DNS_WKS_DATA
 ''''''''''''
@@ -8455,7 +9573,7 @@ DNS_WKS_DATA
 
     .. attribute:: BitMask
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD0EB0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03964BB0>]``
 
 DNS_AAAA_DATA
 '''''''''''''
@@ -8540,7 +9658,7 @@ DNS_SIG_DATAW
 
     .. attribute:: Signature
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD52B0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03964F90>]``
 
 DNS_SIG_DATAA
 '''''''''''''
@@ -8609,7 +9727,7 @@ DNS_SIG_DATAA
 
     .. attribute:: Signature
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5630>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396A330>]``
 
 DNS_KEY_DATA
 ''''''''''''
@@ -8658,7 +9776,7 @@ DNS_KEY_DATA
 
     .. attribute:: Key
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD58F0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396A5F0>]``
 
 DNS_DHCID_DATA
 ''''''''''''''
@@ -8679,7 +9797,7 @@ DNS_DHCID_DATA
 
     .. attribute:: DHCID
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5A30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396A730>]``
 
 DNS_NSEC_DATAW
 ''''''''''''''
@@ -8710,7 +9828,7 @@ DNS_NSEC_DATAW
 
     .. attribute:: TypeBitMaps
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5BB0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396A8B0>]``
 
 DNS_NSEC_DATAA
 ''''''''''''''
@@ -8741,7 +9859,7 @@ DNS_NSEC_DATAA
 
     .. attribute:: TypeBitMaps
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5D50>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396AA50>]``
 
 DNS_NSEC3_DATA
 ''''''''''''''
@@ -8787,7 +9905,7 @@ DNS_NSEC3_DATA
 
     .. attribute:: chData
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9070>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396AD50>]``
 
 DNS_NSEC3PARAM_DATA
 '''''''''''''''''''
@@ -8823,12 +9941,12 @@ DNS_NSEC3PARAM_DATA
 
     .. attribute:: bPad
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD92B0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396AF90>]``
 
 
     .. attribute:: pbSalt
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9330>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396D030>]``
 
 DNS_DS_DATA
 '''''''''''
@@ -8869,7 +9987,7 @@ DNS_DS_DATA
 
     .. attribute:: Digest
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9590>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396D290>]``
 
 DNS_OPT_DATA
 ''''''''''''
@@ -8895,7 +10013,7 @@ DNS_OPT_DATA
 
     .. attribute:: Data
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9730>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0396D430>]``
 
 DNS_LOC_DATA
 ''''''''''''
@@ -8967,7 +10085,7 @@ DNS_NXT_DATAW
 
     .. attribute:: wTypes
 
-        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x03CD9B90>]``
+        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x0396D890>]``
 
 DNS_NXT_DATAA
 '''''''''''''
@@ -8993,7 +10111,7 @@ DNS_NXT_DATAA
 
     .. attribute:: wTypes
 
-        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x03CD9D10>]``
+        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x0396DA10>]``
 
 DNS_SRV_DATAW
 '''''''''''''
@@ -9168,7 +10286,7 @@ DNS_ATMA_DATA
 
     .. attribute:: Address
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CDD6D0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03B873D0>]``
 
 DNS_TKEY_DATAW
 ''''''''''''''
@@ -9488,7 +10606,7 @@ DNS_WINS_DATA
 
     .. attribute:: WinsServers
 
-        :class:`IP4_ADDRESS` ``[<winstruct.ComplexArrayExpression object at 0x03CE2810>]``
+        :class:`IP4_ADDRESS` ``[<winstruct.ComplexArrayExpression object at 0x03B8B510>]``
 
 DNS_WINSR_DATAW
 '''''''''''''''
@@ -9586,12 +10704,12 @@ DNS_TLSA_DATA
 
     .. attribute:: bPad
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2CB0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03B8B9B0>]``
 
 
     .. attribute:: bCertificateAssociationData
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2CF0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03B8B9F0>]``
 
 DNS_UNKNOWN_DATA
 ''''''''''''''''
@@ -9612,7 +10730,7 @@ DNS_UNKNOWN_DATA
 
     .. attribute:: bData
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2E30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03B8BB30>]``
 
 _DnsRecordFlags
 '''''''''''''''
@@ -9777,7 +10895,7 @@ _KEY_VALUE_BASIC_INFORMATION
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0A30>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03B9A730>]``
 
 _KEY_VALUE_FULL_INFORMATION
 '''''''''''''''''''''''''''
@@ -9818,7 +10936,7 @@ _KEY_VALUE_FULL_INFORMATION
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0CD0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03B9A9D0>]``
 
 _KEY_VALUE_PARTIAL_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -9849,7 +10967,7 @@ _KEY_VALUE_PARTIAL_INFORMATION
 
     .. attribute:: Data
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0EB0>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03B9ABB0>]``
 
 _ACL
 ''''
@@ -10597,27 +11715,27 @@ _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION
 
     .. attribute:: pInt64
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFB950>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BA46D0>]``
 
 
     .. attribute:: pUint64
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFB9D0>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BA4750>]``
 
 
     .. attribute:: ppString
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBA50>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BA47D0>]``
 
 
     .. attribute:: pFqbn
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBAD0>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BA4850>]``
 
 
     .. attribute:: pOctetString
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBB30>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BA48B0>]``
 
 _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
 '''''''''''''''''''''''''''''''''''''
@@ -10721,7 +11839,7 @@ _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
 
     .. attribute:: OctetString
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CFE0B0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03BA4E10>]``
 
 _CLAIM_SECURITY_ATTRIBUTE_V1_UNION
 ''''''''''''''''''''''''''''''''''
@@ -10940,7 +12058,247 @@ _PRIVILEGE_SET
 
     .. attribute:: Privilege
 
-        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x03CFEC10>]``
+        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x03BA8990>]``
+
+_OBJECTS_AND_NAME_A
+'''''''''''''''''''
+.. class:: OBJECTS_AND_NAME_A
+
+    Alias for :class:`_OBJECTS_AND_NAME_A`
+
+.. class:: POBJECTS_AND_NAME_A
+
+    Pointer to :class:`_OBJECTS_AND_NAME_A`
+
+.. class:: _OBJECTS_AND_NAME_A
+
+    .. attribute:: ObjectsPresent
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`SE_OBJECT_TYPE`
+
+
+    .. attribute:: ObjectTypeName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: InheritedObjectTypeName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: ptstrName
+
+        :class:`LPSTR`
+
+_OBJECTS_AND_SID
+''''''''''''''''
+.. class:: POBJECTS_AND_SID
+
+    Pointer to :class:`_OBJECTS_AND_SID`
+
+.. class:: OBJECTS_AND_SID
+
+    Alias for :class:`_OBJECTS_AND_SID`
+
+.. class:: _OBJECTS_AND_SID
+
+    .. attribute:: ObjectsPresent
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectTypeGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectTypeGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: pSid
+
+        :class:`PSID`
+
+_TRUSTEE_A
+''''''''''
+.. class:: PTRUSTEEA
+
+    Pointer to :class:`_TRUSTEE_A`
+
+.. class:: TRUSTEEA
+
+    Alias for :class:`_TRUSTEE_A`
+
+.. class:: TRUSTEE_A
+
+    Alias for :class:`_TRUSTEE_A`
+
+.. class:: PTRUSTEE_A
+
+    Pointer to :class:`_TRUSTEE_A`
+
+.. class:: _TRUSTEE_A
+
+    .. attribute:: pMultipleTrustee
+
+        :class:`_TRUSTEE_A`
+
+
+    .. attribute:: MultipleTrusteeOperation
+
+        :class:`MULTIPLE_TRUSTEE_OPERATION`
+
+
+    .. attribute:: TrusteeForm
+
+        :class:`TRUSTEE_FORM`
+
+
+    .. attribute:: TrusteeType
+
+        :class:`TRUSTEE_TYPE`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__TRUSTEE_A_SUB_UNION_1`
+
+
+    .. attribute:: ptstrName
+
+        :class:`LPCH`
+
+_OBJECTS_AND_NAME_W
+'''''''''''''''''''
+.. class:: OBJECTS_AND_NAME_W
+
+    Alias for :class:`_OBJECTS_AND_NAME_W`
+
+.. class:: POBJECTS_AND_NAME_W
+
+    Pointer to :class:`_OBJECTS_AND_NAME_W`
+
+.. class:: _OBJECTS_AND_NAME_W
+
+    .. attribute:: ObjectsPresent
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`SE_OBJECT_TYPE`
+
+
+    .. attribute:: ObjectTypeName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: InheritedObjectTypeName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: ptstrName
+
+        :class:`LPWSTR`
+
+_TRUSTEE_W
+''''''''''
+.. class:: PTRUSTEE_W
+
+    Pointer to :class:`_TRUSTEE_W`
+
+.. class:: TRUSTEE_W
+
+    Alias for :class:`_TRUSTEE_W`
+
+.. class:: PTRUSTEEW
+
+    Pointer to :class:`_TRUSTEE_W`
+
+.. class:: TRUSTEEW
+
+    Alias for :class:`_TRUSTEE_W`
+
+.. class:: _TRUSTEE_W
+
+    .. attribute:: pMultipleTrustee
+
+        :class:`_TRUSTEE_W`
+
+
+    .. attribute:: MultipleTrusteeOperation
+
+        :class:`MULTIPLE_TRUSTEE_OPERATION`
+
+
+    .. attribute:: TrusteeForm
+
+        :class:`TRUSTEE_FORM`
+
+
+    .. attribute:: TrusteeType
+
+        :class:`TRUSTEE_TYPE`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__TRUSTEE_W_SUB_UNION_1`
+
+
+    .. attribute:: ptstrName
+
+        :class:`LPWCH`
+
+_EXPLICIT_ACCESS_W
+''''''''''''''''''
+.. class:: EXPLICIT_ACCESSW
+
+    Alias for :class:`_EXPLICIT_ACCESS_W`
+
+.. class:: PEXPLICIT_ACCESSW
+
+    Pointer to :class:`_EXPLICIT_ACCESS_W`
+
+.. class:: PEXPLICIT_ACCESS_W
+
+    Pointer to :class:`_EXPLICIT_ACCESS_W`
+
+.. class:: EXPLICIT_ACCESS_W
+
+    Alias for :class:`_EXPLICIT_ACCESS_W`
+
+.. class:: _EXPLICIT_ACCESS_W
+
+    .. attribute:: grfAccessPermissions
+
+        :class:`DWORD`
+
+
+    .. attribute:: grfAccessMode
+
+        :class:`ACCESS_MODE`
+
+
+    .. attribute:: grfInheritance
+
+        :class:`DWORD`
+
+
+    .. attribute:: Trustee
+
+        :class:`TRUSTEE_W`
 
 _SERVICE_STATUS
 '''''''''''''''
@@ -11260,6 +12618,68 @@ _QUERY_SERVICE_CONFIGW
 
         :class:`LPWSTR`
 
+_SP_DEVICE_INTERFACE_DATA
+'''''''''''''''''''''''''
+.. class:: PSP_DEVICE_INTERFACE_DATA
+
+    Pointer to :class:`_SP_DEVICE_INTERFACE_DATA`
+
+.. class:: SP_DEVICE_INTERFACE_DATA
+
+    Alias for :class:`_SP_DEVICE_INTERFACE_DATA`
+
+.. class:: _SP_DEVICE_INTERFACE_DATA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: InterfaceClassGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG_PTR`
+
+_SP_DEVINFO_DATA
+''''''''''''''''
+.. class:: PSP_DEVINFO_DATA
+
+    Pointer to :class:`_SP_DEVINFO_DATA`
+
+.. class:: SP_DEVINFO_DATA
+
+    Alias for :class:`_SP_DEVINFO_DATA`
+
+.. class:: _SP_DEVINFO_DATA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: ClassGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: DevInst
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG_PTR`
+
 _SHITEMID
 '''''''''
 .. class:: SHITEMID
@@ -11275,7 +12695,7 @@ _SHITEMID
 
     .. attribute:: abID
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04002BF0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03BB2B10>]``
 
 _ITEMIDLIST
 '''''''''''
@@ -11346,22 +12766,22 @@ _IMAGEHLP_MODULE64
 
     .. attribute:: ModuleName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040097F0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB8710>]``
 
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009870>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB8790>]``
 
 
     .. attribute:: LoadedImageName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040098D0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB87F0>]``
 
 
     .. attribute:: LoadedPdbName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009930>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB8850>]``
 
 
     .. attribute:: CVSig
@@ -11371,7 +12791,7 @@ _IMAGEHLP_MODULE64
 
     .. attribute:: CVData
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009A10>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB8930>]``
 
 
     .. attribute:: PdbSig
@@ -11472,22 +12892,22 @@ _IMAGEHLP_MODULEW64
 
     .. attribute:: ModuleName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D0B0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BB8FB0>]``
 
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D130>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BBD050>]``
 
 
     .. attribute:: LoadedImageName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D190>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BBD0B0>]``
 
 
     .. attribute:: LoadedPdbName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D1F0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BBD110>]``
 
 
     .. attribute:: CVSig
@@ -11497,7 +12917,7 @@ _IMAGEHLP_MODULEW64
 
     .. attribute:: CVData
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D2F0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BBD210>]``
 
 
     .. attribute:: PdbSig
@@ -11583,7 +13003,7 @@ _SYMBOL_INFO
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0400D890>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03BBD7B0>]``
 
 
     .. attribute:: Index
@@ -11643,7 +13063,7 @@ _SYMBOL_INFO
 
     .. attribute:: Name
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400DD30>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BBDC50>]``
 
 _SYMBOL_INFOW
 '''''''''''''
@@ -11669,7 +13089,7 @@ _SYMBOL_INFOW
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0400DE90>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03BBDDB0>]``
 
 
     .. attribute:: Index
@@ -11729,7 +13149,7 @@ _SYMBOL_INFOW
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011350>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1270>]``
 
 SYMSRV_INDEX_INFOW
 ''''''''''''''''''
@@ -11750,7 +13170,7 @@ SYMSRV_INDEX_INFOW
 
     .. attribute:: file
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011450>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1370>]``
 
 
     .. attribute:: stripped
@@ -11770,12 +13190,12 @@ SYMSRV_INDEX_INFOW
 
     .. attribute:: dbgfile
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011610>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1530>]``
 
 
     .. attribute:: pdbfile
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040116B0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC15D0>]``
 
 
     .. attribute:: guid
@@ -11811,7 +13231,7 @@ SYMSRV_INDEX_INFO
 
     .. attribute:: file
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040118B0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC17D0>]``
 
 
     .. attribute:: stripped
@@ -11831,12 +13251,12 @@ SYMSRV_INDEX_INFO
 
     .. attribute:: dbgfile
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011A70>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1990>]``
 
 
     .. attribute:: pdbfile
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011B10>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1A30>]``
 
 
     .. attribute:: guid
@@ -11892,7 +13312,7 @@ _IMAGEHLP_SYMBOL
 
     .. attribute:: Name
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011E70>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1D90>]``
 
 _IMAGEHLP_SYMBOL64
 ''''''''''''''''''
@@ -11933,7 +13353,7 @@ _IMAGEHLP_SYMBOL64
 
     .. attribute:: Name
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040150F0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC1FF0>]``
 
 _IMAGEHLP_SYMBOLW64
 '''''''''''''''''''
@@ -11974,7 +13394,7 @@ _IMAGEHLP_SYMBOLW64
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04015350>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC7270>]``
 
 _IMAGEHLP_STACK_FRAME
 '''''''''''''''''''''
@@ -12020,12 +13440,12 @@ _IMAGEHLP_STACK_FRAME
 
     .. attribute:: Params
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040155D0>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03BC74F0>]``
 
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x04015630>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03BC7550>]``
 
 
     .. attribute:: Virtual
@@ -12164,7 +13584,7 @@ _IMAGEHLP_DEFERRED_SYMBOL_LOAD
 
     .. attribute:: FileName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04015ED0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BC7DF0>]``
 
 
     .. attribute:: Reparse
@@ -12210,7 +13630,7 @@ _IMAGEHLP_DEFERRED_SYMBOL_LOAD64
 
     .. attribute:: FileName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0401A1D0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BCD0F0>]``
 
 
     .. attribute:: Reparse
@@ -12261,7 +13681,7 @@ _IMAGEHLP_DEFERRED_SYMBOL_LOADW64
 
     .. attribute:: FileName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0401A510>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BCD430>]``
 
 
     .. attribute:: Reparse
@@ -12461,7 +13881,7 @@ _KDHELP
 
     .. attribute:: Reserved
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401AFF0>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BCDF10>]``
 
 _KDHELP64
 '''''''''
@@ -12557,7 +13977,7 @@ _KDHELP64
 
     .. attribute:: Reserved0
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401E590>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03BD04B0>]``
 
 _tagSTACKFRAME
 ''''''''''''''
@@ -12598,7 +14018,7 @@ _tagSTACKFRAME
 
     .. attribute:: Params
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401E870>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BD0790>]``
 
 
     .. attribute:: Far
@@ -12613,7 +14033,7 @@ _tagSTACKFRAME
 
     .. attribute:: Reserved
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401E970>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BD0890>]``
 
 
     .. attribute:: KdHelp
@@ -12669,7 +14089,7 @@ _tagSTACKFRAME64
 
     .. attribute:: Params
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401ED50>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03BD0C70>]``
 
 
     .. attribute:: Far
@@ -12684,7 +14104,7 @@ _tagSTACKFRAME64
 
     .. attribute:: Reserved
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401EE50>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03BD0D70>]``
 
 
     .. attribute:: KdHelp
@@ -12735,7 +14155,7 @@ _tagSTACKFRAME_EX
 
     .. attribute:: Params
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x040211D0>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03BD40F0>]``
 
 
     .. attribute:: Far
@@ -12750,7 +14170,7 @@ _tagSTACKFRAME_EX
 
     .. attribute:: Reserved
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x040212D0>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03BD41F0>]``
 
 
     .. attribute:: KdHelp
@@ -12790,7 +14210,7 @@ _TIME_ZONE_INFORMATION
 
     .. attribute:: StandardName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04021630>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BD4550>]``
 
 
     .. attribute:: StandardDate
@@ -12805,7 +14225,7 @@ _TIME_ZONE_INFORMATION
 
     .. attribute:: DaylightName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04021710>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BD4630>]``
 
 
     .. attribute:: DaylightDate
@@ -12836,7 +14256,7 @@ _TOKEN_PRIVILEGES
 
     .. attribute:: Privileges
 
-        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x040219D0>]``
+        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x03BD48F0>]``
 
 _TOKEN_ELEVATION
 ''''''''''''''''
@@ -12942,7 +14362,7 @@ _TOKEN_GROUPS
 
     .. attribute:: Groups
 
-        :class:`SID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x04021E30>]``
+        :class:`SID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x03BD4D50>]``
 
 _TOKEN_OWNER
 ''''''''''''
@@ -12990,7 +14410,7 @@ _TOKEN_SOURCE
 
     .. attribute:: SourceName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04028050>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03BD4F50>]``
 
 
     .. attribute:: SourceIdentifier
@@ -13130,7 +14550,7 @@ _SID_AND_ATTRIBUTES_HASH
 
     .. attribute:: Hash
 
-        :class:`SID_HASH_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04028690>]``
+        :class:`SID_HASH_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x03BDB5B0>]``
 
 _TOKEN_APPCONTAINER_INFORMATION
 '''''''''''''''''''''''''''''''
@@ -13489,7 +14909,7 @@ _PROVIDER_ENUMERATION_INFO
 
     .. attribute:: TraceProviderInfoArray
 
-        :class:`TRACE_PROVIDER_INFO` ``[<winstruct.ComplexArrayExpression object at 0x0402D6D0>]``
+        :class:`TRACE_PROVIDER_INFO` ``[<winstruct.ComplexArrayExpression object at 0x03BE05F0>]``
 
 tagRGBTRIPLE
 ''''''''''''
@@ -13779,7 +15199,7 @@ tagBITMAPINFO
 
     .. attribute:: bmiColors
 
-        :class:`RGBQUAD` ``[<winstruct.ComplexArrayExpression object at 0x04031850>]``
+        :class:`RGBQUAD` ``[<winstruct.ComplexArrayExpression object at 0x03BE3770>]``
 
 tagBITMAPCOREINFO
 '''''''''''''''''
@@ -13804,7 +15224,7 @@ tagBITMAPCOREINFO
 
     .. attribute:: bmciColors
 
-        :class:`RGBTRIPLE` ``[<winstruct.ComplexArrayExpression object at 0x040319B0>]``
+        :class:`RGBTRIPLE` ``[<winstruct.ComplexArrayExpression object at 0x03BE38D0>]``
 
 tagWNDCLASSEXA
 ''''''''''''''
@@ -13995,12 +15415,12 @@ _PEB_LDR_DATA
 
     .. attribute:: Reserved1
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04035670>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03BE7590>]``
 
 
     .. attribute:: Reserved2
 
-        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040356F0>]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x03BE7610>]``
 
 
     .. attribute:: InMemoryOrderModuleList
@@ -14242,7 +15662,7 @@ _RTL_USER_PROCESS_PARAMETERS
 
     .. attribute:: CurrentDirectores
 
-        :class:`RTL_DRIVE_LETTER_CURDIR` ``[<winstruct.ComplexArrayExpression object at 0x0404F430>]``
+        :class:`RTL_DRIVE_LETTER_CURDIR` ``[<winstruct.ComplexArrayExpression object at 0x03BFF350>]``
 
 _ANON_PEB_SYSTEM_DEPENDENT_02
 '''''''''''''''''''''''''''''
@@ -14356,7 +15776,7 @@ _PEB
 
     .. attribute:: Reserved1
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0404FA70>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03BFF990>]``
 
 
     .. attribute:: BeingDebugged
@@ -14366,7 +15786,7 @@ _PEB
 
     .. attribute:: Reserved2
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0404FB30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03BFFA50>]``
 
 
     .. attribute:: Mutant
@@ -14451,7 +15871,7 @@ _PEB
 
     .. attribute:: TlsBitmapBits
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0404FFD0>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03BFFEF0>]``
 
 
     .. attribute:: ReadOnlySharedMemoryBase
@@ -14601,12 +16021,12 @@ _PEB
 
     .. attribute:: GdiHandleBuffer
 
-        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040537F0>]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x03C05710>]``
 
 
     .. attribute:: GdiHandleBuffer2
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04053850>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C05770>]``
 
 
     .. attribute:: PostProcessInitRoutine
@@ -14621,7 +16041,7 @@ _PEB
 
     .. attribute:: TlsExpansionBitmapBits
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x04053930>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03C05850>]``
 
 
     .. attribute:: SessionId
@@ -14909,7 +16329,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved1
 
-        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040642F0>]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x03C16210>]``
 
 
     .. attribute:: InMemoryOrderLinks
@@ -14919,7 +16339,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved2
 
-        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040643B0>]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x03C162D0>]``
 
 
     .. attribute:: DllBase
@@ -14949,7 +16369,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved5
 
-        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040645D0>]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x03C164F0>]``
 
 
     .. attribute:: CheckSum
@@ -15042,7 +16462,7 @@ _IMAGE_SECTION_HEADER
 
     .. attribute:: Name
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04064A30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C16950>]``
 
 
     .. attribute:: VirtualSize
@@ -15248,7 +16668,7 @@ _IMAGE_OPTIONAL_HEADER64
 
     .. attribute:: DataDirectory
 
-        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x04068570>]``
+        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x03C1B490>]``
 
 _IMAGE_OPTIONAL_HEADER
 ''''''''''''''''''''''
@@ -15414,7 +16834,7 @@ _IMAGE_OPTIONAL_HEADER
 
     .. attribute:: DataDirectory
 
-        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x04068E90>]``
+        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x03C1BDB0>]``
 
 _IMAGE_NT_HEADERS64
 '''''''''''''''''''
@@ -15523,7 +16943,7 @@ _IMAGE_IMPORT_BY_NAME
 
     .. attribute:: Name
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0406E3B0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C202D0>]``
 
 _IMAGE_EXPORT_DIRECTORY
 '''''''''''''''''''''''
@@ -15868,7 +17288,7 @@ _PSAPI_WORKING_SET_INFORMATION
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK` ``[<winstruct.ComplexArrayExpression object at 0x040714F0>]``
+        :class:`PSAPI_WORKING_SET_BLOCK` ``[<winstruct.ComplexArrayExpression object at 0x03C24410>]``
 
 _PSAPI_WORKING_SET_INFORMATION32
 ''''''''''''''''''''''''''''''''
@@ -15889,7 +17309,7 @@ _PSAPI_WORKING_SET_INFORMATION32
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK32` ``[<winstruct.ComplexArrayExpression object at 0x040715B0>]``
+        :class:`PSAPI_WORKING_SET_BLOCK32` ``[<winstruct.ComplexArrayExpression object at 0x03C244D0>]``
 
 _PSAPI_WORKING_SET_INFORMATION64
 ''''''''''''''''''''''''''''''''
@@ -15910,7 +17330,7 @@ _PSAPI_WORKING_SET_INFORMATION64
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK64` ``[<winstruct.ComplexArrayExpression object at 0x04071670>]``
+        :class:`PSAPI_WORKING_SET_BLOCK64` ``[<winstruct.ComplexArrayExpression object at 0x03C24590>]``
 
 _PSAPI_WORKING_SET_EX_BLOCK
 '''''''''''''''''''''''''''
@@ -16347,7 +17767,7 @@ _FLOATING_SAVE_AREA
 
     .. attribute:: RegisterArea
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04077D10>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C2AC30>]``
 
 
     .. attribute:: Cr0NpxState
@@ -16492,7 +17912,7 @@ _CONTEXT32
 
     .. attribute:: ExtendedRegisters
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407C510>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C2E430>]``
 
 _WOW64_FLOATING_SAVE_AREA
 '''''''''''''''''''''''''
@@ -16539,7 +17959,7 @@ _WOW64_FLOATING_SAVE_AREA
 
     .. attribute:: RegisterArea
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407C870>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C2E790>]``
 
 
     .. attribute:: Cr0NpxState
@@ -16680,7 +18100,7 @@ _WOW64_CONTEXT
 
     .. attribute:: ExtendedRegisters
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407F050>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C2EF50>]``
 
 _M128A
 ''''''
@@ -16782,17 +18202,17 @@ _XSAVE_FORMAT_64
 
     .. attribute:: FloatRegisters
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407F6D0>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C325F0>]``
 
 
     .. attribute:: XmmRegisters
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407F750>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C32670>]``
 
 
     .. attribute:: Reserved4
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407F7D0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C326F0>]``
 
 _XSAVE_FORMAT_32
 ''''''''''''''''
@@ -16873,22 +18293,22 @@ _XSAVE_FORMAT_32
 
     .. attribute:: FloatRegisters
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FCF0>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C32C10>]``
 
 
     .. attribute:: XmmRegisters
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FD50>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C32C70>]``
 
 
     .. attribute:: Reserved4
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407FDF0>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C32D10>]``
 
 
     .. attribute:: StackControl
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0407FE30>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03C32D50>]``
 
 
     .. attribute:: Cr0NpxState
@@ -16905,12 +18325,12 @@ _TMP_DUMMYSTRUCTNAME
 
     .. attribute:: Header
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FF70>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C32E90>]``
 
 
     .. attribute:: Legacy
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FFF0>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C32F10>]``
 
 
     .. attribute:: Xmm0
@@ -17222,7 +18642,7 @@ _CONTEXT64
 
     .. attribute:: VectorRegister
 
-        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0408A2B0>]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x03C3A1D0>]``
 
 
     .. attribute:: VectorControl
@@ -17317,7 +18737,7 @@ tagPROCESSENTRY32W
 
     .. attribute:: szExeFile
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408A830>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3A750>]``
 
 tagPROCESSENTRY32
 '''''''''''''''''
@@ -17382,7 +18802,7 @@ tagPROCESSENTRY32
 
     .. attribute:: szExeFile
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408ABF0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3AB10>]``
 
 tagTHREADENTRY32
 ''''''''''''''''
@@ -17519,7 +18939,7 @@ _OSVERSIONINFOA
 
     .. attribute:: szCSDVersion
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E330>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3D250>]``
 
 _OSVERSIONINFOW
 '''''''''''''''
@@ -17572,7 +18992,7 @@ _OSVERSIONINFOW
 
     .. attribute:: szCSDVersion
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E530>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3D450>]``
 
 _OSVERSIONINFOEXA
 '''''''''''''''''
@@ -17617,7 +19037,7 @@ _OSVERSIONINFOEXA
 
     .. attribute:: szCSDVersion
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E750>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3D670>]``
 
 
     .. attribute:: wServicePackMajor
@@ -17695,7 +19115,7 @@ _OSVERSIONINFOEXW
 
     .. attribute:: szCSDVersion
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408EAD0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C3D9F0>]``
 
 
     .. attribute:: wServicePackMajor
@@ -17792,7 +19212,7 @@ _EXCEPTION_RECORD
 
     .. attribute:: ExceptionInformation
 
-        :class:`ULONG_PTR` ``[<winstruct.ComplexArrayExpression object at 0x04093070>]``
+        :class:`ULONG_PTR` ``[<winstruct.ComplexArrayExpression object at 0x03C3DF70>]``
 
 _EXCEPTION_RECORD32
 '''''''''''''''''''
@@ -17833,7 +19253,7 @@ _EXCEPTION_RECORD32
 
     .. attribute:: ExceptionInformation
 
-        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x04093250>]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03C43170>]``
 
 _EXCEPTION_RECORD64
 '''''''''''''''''''
@@ -17879,7 +19299,7 @@ _EXCEPTION_RECORD64
 
     .. attribute:: ExceptionInformation
 
-        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x04093470>]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x03C43390>]``
 
 _EXCEPTION_POINTERS64
 '''''''''''''''''''''
@@ -17973,7 +19393,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_AMD64
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093890>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C437B0>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_IA64
 ''''''''''''''''''''''''''''''''''''
@@ -18009,7 +19429,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_IA64
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093AB0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C439D0>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_X86
 '''''''''''''''''''''''''''''''''''
@@ -18040,7 +19460,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_X86
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093C70>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C43B90>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_ARM
 '''''''''''''''''''''''''''''''''''
@@ -18149,7 +19569,7 @@ _SYSTEM_MODULE32
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x04097190>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C4A0B0>]``
 
 
     .. attribute:: Base
@@ -18189,7 +19609,7 @@ _SYSTEM_MODULE32
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040974B0>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C4A3D0>]``
 
 _SYSTEM_MODULE64
 ''''''''''''''''
@@ -18205,7 +19625,7 @@ _SYSTEM_MODULE64
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x04097550>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C4A470>]``
 
 
     .. attribute:: Base
@@ -18245,7 +19665,7 @@ _SYSTEM_MODULE64
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04097870>]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C4A790>]``
 
 _SYSTEM_MODULE_INFORMATION32
 ''''''''''''''''''''''''''''
@@ -18266,7 +19686,7 @@ _SYSTEM_MODULE_INFORMATION32
 
     .. attribute:: Modules
 
-        :class:`SYSTEM_MODULE32` ``[<winstruct.ComplexArrayExpression object at 0x04097950>]``
+        :class:`SYSTEM_MODULE32` ``[<winstruct.ComplexArrayExpression object at 0x03C4A870>]``
 
 _SYSTEM_MODULE_INFORMATION64
 ''''''''''''''''''''''''''''
@@ -18287,7 +19707,7 @@ _SYSTEM_MODULE_INFORMATION64
 
     .. attribute:: Modules
 
-        :class:`SYSTEM_MODULE64` ``[<winstruct.ComplexArrayExpression object at 0x04097A30>]``
+        :class:`SYSTEM_MODULE64` ``[<winstruct.ComplexArrayExpression object at 0x03C4A950>]``
 
 _DEBUG_BREAKPOINT_PARAMETERS
 ''''''''''''''''''''''''''''
@@ -18445,12 +19865,12 @@ _DEBUG_STACK_FRAME
 
     .. attribute:: Params
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0409C370>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03C4D290>]``
 
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0409C3D0>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03C4D2F0>]``
 
 
     .. attribute:: Virtual
@@ -18920,7 +20340,7 @@ _SID_IDENTIFIER_AUTHORITY
 
     .. attribute:: Value
 
-        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x040A1D30>]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03C52C50>]``
 
 _STRING
 '''''''
@@ -19081,7 +20501,7 @@ CATALOG_INFO_
 
     .. attribute:: wszCatalogFile
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040A54F0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C56410>]``
 
 _SYSTEM_HANDLE
 ''''''''''''''
@@ -19176,7 +20596,7 @@ _SYSTEM_HANDLE_INFORMATION
 
     .. attribute:: Handles
 
-        :class:`SYSTEM_HANDLE` ``[<winstruct.ComplexArrayExpression object at 0x040A5A70>]``
+        :class:`SYSTEM_HANDLE` ``[<winstruct.ComplexArrayExpression object at 0x03C56990>]``
 
 _SYSTEM_HANDLE_INFORMATION64
 ''''''''''''''''''''''''''''
@@ -19197,7 +20617,7 @@ _SYSTEM_HANDLE_INFORMATION64
 
     .. attribute:: Handles
 
-        :class:`SYSTEM_HANDLE64` ``[<winstruct.ComplexArrayExpression object at 0x040A5B70>]``
+        :class:`SYSTEM_HANDLE64` ``[<winstruct.ComplexArrayExpression object at 0x03C56A90>]``
 
 __PUBLIC_OBJECT_TYPE_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -19218,7 +20638,7 @@ __PUBLIC_OBJECT_TYPE_INFORMATION
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040A5C90>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C56BB0>]``
 
 _PUBLIC_OBJECT_BASIC_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -19254,7 +20674,7 @@ _PUBLIC_OBJECT_BASIC_INFORMATION
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040A5E70>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C56D90>]``
 
 _OBJECT_TYPES_INFORMATION
 '''''''''''''''''''''''''
@@ -19415,47 +20835,47 @@ _DEBUG_VALUE_TMP_UNION
 
     .. attribute:: F80Bytes
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB5F0>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C5C510>]``
 
 
     .. attribute:: F82Bytes
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB670>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C5C590>]``
 
 
     .. attribute:: F128Bytes
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB6F0>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C5C610>]``
 
 
     .. attribute:: VI8
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB770>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C5C690>]``
 
 
     .. attribute:: VI16
 
-        :class:`USHORT` ``[<winstruct.ComplexArrayExpression object at 0x040AB7D0>]``
+        :class:`USHORT` ``[<winstruct.ComplexArrayExpression object at 0x03C5C6F0>]``
 
 
     .. attribute:: VI32
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040AB850>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C5C770>]``
 
 
     .. attribute:: VI64
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040AB8D0>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03C5C7F0>]``
 
 
     .. attribute:: VF32
 
-        :class:`FLOAT` ``[<winstruct.ComplexArrayExpression object at 0x040AB950>]``
+        :class:`FLOAT` ``[<winstruct.ComplexArrayExpression object at 0x03C5C870>]``
 
 
     .. attribute:: VF64
 
-        :class:`DOUBLE` ``[<winstruct.ComplexArrayExpression object at 0x040AB9D0>]``
+        :class:`DOUBLE` ``[<winstruct.ComplexArrayExpression object at 0x03C5C8F0>]``
 
 
     .. attribute:: I64Parts32
@@ -19470,7 +20890,7 @@ _DEBUG_VALUE_TMP_UNION
 
     .. attribute:: RawBytes
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040ABAD0>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C5C9F0>]``
 
 _DEBUG_VALUE
 ''''''''''''
@@ -19679,7 +21099,7 @@ _DEBUG_MODULE_PARAMETERS
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040AF6D0>]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x03C605F0>]``
 
 _DEBUG_MODULE_AND_ID
 ''''''''''''''''''''
@@ -19833,12 +21253,12 @@ _RTL_UNLOAD_EVENT_TRACE
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AFFD0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C60EF0>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2070>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C60F70>]``
 
 _RTL_UNLOAD_EVENT_TRACE32
 '''''''''''''''''''''''''
@@ -19879,12 +21299,12 @@ _RTL_UNLOAD_EVENT_TRACE32
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B22F0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64210>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2370>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C64290>]``
 
 _RTL_UNLOAD_EVENT_TRACE64
 '''''''''''''''''''''''''
@@ -19925,12 +21345,12 @@ _RTL_UNLOAD_EVENT_TRACE64
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B25F0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64510>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2670>]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x03C64590>]``
 
 _FILE_FS_ATTRIBUTE_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -19961,7 +21381,7 @@ _FILE_FS_ATTRIBUTE_INFORMATION
 
     .. attribute:: FileSystemName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B27B0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C646D0>]``
 
 _FILE_FS_LABEL_INFORMATION
 ''''''''''''''''''''''''''
@@ -19982,7 +21402,7 @@ _FILE_FS_LABEL_INFORMATION
 
     .. attribute:: VolumeLabel
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B28B0>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C647D0>]``
 
 _FILE_FS_SIZE_INFORMATION
 '''''''''''''''''''''''''
@@ -20127,12 +21547,12 @@ _FILE_FS_OBJECTID_INFORMATION
 
     .. attribute:: ObjectId
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2DB0>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64CD0>]``
 
 
     .. attribute:: ExtendedInfo
 
-        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2E10>]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64D30>]``
 
 _FILE_FS_DRIVER_PATH_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -20158,7 +21578,7 @@ _FILE_FS_DRIVER_PATH_INFORMATION
 
     .. attribute:: DriverName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2F30>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64E50>]``
 
 _FILE_FS_DRIVER_PATH_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -20184,7 +21604,7 @@ _FILE_FS_DRIVER_PATH_INFORMATION
 
     .. attribute:: DriverName
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B8090>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C64F90>]``
 
 _FILE_FS_VOLUME_INFORMATION
 '''''''''''''''''''''''''''
@@ -20220,7 +21640,7 @@ _FILE_FS_VOLUME_INFORMATION
 
     .. attribute:: VolumeLabel
 
-        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B8230>]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03C6A150>]``
 
 _FILE_FS_SECTOR_SIZE_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -20600,7 +22020,7 @@ _API_SET_NAMESPACE_ARRAY
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04044470>]``
+        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x03BEA390>]``
 
 _API_SET_VALUE_ENTRY_V2
 '''''''''''''''''''''''
@@ -20652,7 +22072,7 @@ _API_SET_VALUE_ARRAY_V2
 
     .. attribute:: Array
 
-        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x04044730>]``
+        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x03BEA650>]``
 
 _API_SET_NAMESPACE_ENTRY_V2
 '''''''''''''''''''''''''''
@@ -20704,7 +22124,7 @@ _API_SET_NAMESPACE_ARRAY_V2
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x040449F0>]``
+        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x03BEA910>]``
 
 _API_SET_VALUE_ARRAY_V4
 '''''''''''''''''''''''
@@ -20730,7 +22150,7 @@ _API_SET_VALUE_ARRAY_V4
 
     .. attribute:: Array
 
-        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x04044B50>]``
+        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x03BEAA70>]``
 
 _API_SET_NAMESPACE_ARRAY_V4
 '''''''''''''''''''''''''''
@@ -20766,7 +22186,7 @@ _API_SET_NAMESPACE_ARRAY_V4
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04044D70>]``
+        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x03BEAC90>]``
 
 _API_SET_NAMESPACE_ENTRY_V4
 '''''''''''''''''''''''''''
@@ -21062,6 +22482,10 @@ Simple types
 
 .. autoclass:: va_list
 
+.. autoclass:: LPCH
+
+.. autoclass:: LPWCH
+
 .. autoclass:: BSTR
 
 .. autoclass:: OLECHAR
@@ -21101,6 +22525,8 @@ Simple types
 .. class:: PDWORD64
 
     Pointer to :class:`DWORD64`
+
+.. autoclass:: DWORDLONG
 
 .. autoclass:: SCODE
 
@@ -21212,6 +22638,10 @@ Simple types
 
 .. autoclass:: UINT64
 
+.. autoclass:: ULONG32
+
+.. autoclass:: LONG32
+
 .. class:: PHANDLE
 
     Pointer to :class:`HANDLE`
@@ -21241,6 +22671,16 @@ Simple types
 .. autoclass:: EVT_HANDLE
 
 .. autoclass:: EVT_OBJECT_ARRAY_PROPERTY_HANDLE
+
+.. autoclass:: LSA_HANDLE
+
+.. class:: PLSA_HANDLE
+
+    Pointer to :class:`LSA_HANDLE`
+
+.. autoclass:: HDSKSPC
+
+.. autoclass:: HDEVINFO
 
 .. autoclass:: IP4_ADDRESS
 
@@ -21273,6 +22713,58 @@ Simple types
     Pointer to :class:`SID_HASH_ENTRY`
 
 .. autoclass:: PSID
+
+.. autoclass:: CONFIGRET
+
+.. autoclass:: DEVNODE
+
+.. autoclass:: DEVINST
+
+.. class:: PDEVNODE
+
+    Pointer to :class:`DEVNODE`
+
+.. class:: PDEVINST
+
+    Pointer to :class:`DEVINST`
+
+.. autoclass:: PRIORITY
+
+.. class:: PPRIORITY
+
+    Pointer to :class:`PRIORITY`
+
+.. autoclass:: RES_DES
+
+.. class:: PRES_DES
+
+    Pointer to :class:`RES_DES`
+
+.. autoclass:: HMACHINE
+
+.. class:: PHMACHINE
+
+    Pointer to :class:`HMACHINE`
+
+.. autoclass:: LOG_CONF
+
+.. class:: PLOG_CONF
+
+    Pointer to :class:`LOG_CONF`
+
+.. autoclass:: RESOURCEID
+
+.. class:: PRESOURCEID
+
+    Pointer to :class:`RESOURCEID`
+
+.. autoclass:: DEVNODEID_A
+
+.. autoclass:: DEVINSTID_A
+
+.. autoclass:: DEVNODEID_W
+
+.. autoclass:: DEVINSTID_W
 
 .. autoclass:: RPCOLEDATAREP
 
@@ -22946,6 +24438,88 @@ _IO_PRIORITY_HINT
 
     .. attribute:: MaxIoPriorityTypes(5)
 
+_POLICY_INFORMATION_CLASS
+'''''''''''''''''''''''''
+.. class:: POLICY_INFORMATION_CLASS
+
+    Alias for :class:`_POLICY_INFORMATION_CLASS`
+
+
+.. class:: PPOLICY_INFORMATION_CLASS
+
+    Pointer to :class:`_POLICY_INFORMATION_CLASS`
+
+
+.. class:: _POLICY_INFORMATION_CLASS
+
+
+    .. attribute:: PolicyAuditLogInformation(1)
+
+
+    .. attribute:: PolicyAuditEventsInformation(2)
+
+
+    .. attribute:: PolicyPrimaryDomainInformation(3)
+
+
+    .. attribute:: PolicyPdAccountInformation(4)
+
+
+    .. attribute:: PolicyAccountDomainInformation(5)
+
+
+    .. attribute:: PolicyLsaServerRoleInformation(6)
+
+
+    .. attribute:: PolicyReplicaSourceInformation(7)
+
+
+    .. attribute:: PolicyDefaultQuotaInformation(8)
+
+
+    .. attribute:: PolicyModificationInformation(9)
+
+
+    .. attribute:: PolicyAuditFullSetInformation(10)
+
+
+    .. attribute:: PolicyAuditFullQueryInformation(11)
+
+
+    .. attribute:: PolicyDnsDomainInformation(12)
+
+
+    .. attribute:: PolicyDnsDomainInformationInt(13)
+
+
+    .. attribute:: PolicyLocalAccountDomainInformation(14)
+
+
+    .. attribute:: PolicyMachineAccountInformation(15)
+
+
+    .. attribute:: PolicyLastEntry(16)
+
+_POLICY_LSA_SERVER_ROLE
+'''''''''''''''''''''''
+.. class:: POLICY_LSA_SERVER_ROLE
+
+    Alias for :class:`_POLICY_LSA_SERVER_ROLE`
+
+
+.. class:: PPOLICY_LSA_SERVER_ROLE
+
+    Pointer to :class:`_POLICY_LSA_SERVER_ROLE`
+
+
+.. class:: _POLICY_LSA_SERVER_ROLE
+
+
+    .. attribute:: PolicyServerRoleBackup(0)
+
+
+    .. attribute:: PolicyServerRolePrimary(1)
+
 NDR_FORMAT_CHARACTER
 ''''''''''''''''''''
 .. class:: NDR_FORMAT_CHARACTER
@@ -23556,6 +25130,111 @@ _ACL_INFORMATION_CLASS
 
 
     .. attribute:: AclSizeInformation(2)
+
+_MULTIPLE_TRUSTEE_OPERATION
+'''''''''''''''''''''''''''
+.. class:: MULTIPLE_TRUSTEE_OPERATION
+
+    Alias for :class:`_MULTIPLE_TRUSTEE_OPERATION`
+
+
+.. class:: _MULTIPLE_TRUSTEE_OPERATION
+
+
+    .. attribute:: NO_MULTIPLE_TRUSTEE(0)
+
+
+    .. attribute:: TRUSTEE_IS_IMPERSONATE(1)
+
+_TRUSTEE_FORM
+'''''''''''''
+.. class:: TRUSTEE_FORM
+
+    Alias for :class:`_TRUSTEE_FORM`
+
+
+.. class:: _TRUSTEE_FORM
+
+
+    .. attribute:: TRUSTEE_IS_SID(0)
+
+
+    .. attribute:: TRUSTEE_IS_NAME(1)
+
+
+    .. attribute:: TRUSTEE_BAD_FORM(2)
+
+
+    .. attribute:: TRUSTEE_IS_OBJECTS_AND_SID(3)
+
+
+    .. attribute:: TRUSTEE_IS_OBJECTS_AND_NAME(4)
+
+_TRUSTEE_TYPE
+'''''''''''''
+.. class:: TRUSTEE_TYPE
+
+    Alias for :class:`_TRUSTEE_TYPE`
+
+
+.. class:: _TRUSTEE_TYPE
+
+
+    .. attribute:: TRUSTEE_IS_UNKNOWN(0)
+
+
+    .. attribute:: TRUSTEE_IS_USER(1)
+
+
+    .. attribute:: TRUSTEE_IS_GROUP(2)
+
+
+    .. attribute:: TRUSTEE_IS_DOMAIN(3)
+
+
+    .. attribute:: TRUSTEE_IS_ALIAS(4)
+
+
+    .. attribute:: TRUSTEE_IS_WELL_KNOWN_GROUP(5)
+
+
+    .. attribute:: TRUSTEE_IS_DELETED(6)
+
+
+    .. attribute:: TRUSTEE_IS_INVALID(7)
+
+
+    .. attribute:: TRUSTEE_IS_COMPUTER(8)
+
+_ACCESS_MODE
+''''''''''''
+.. class:: ACCESS_MODE
+
+    Alias for :class:`_ACCESS_MODE`
+
+
+.. class:: _ACCESS_MODE
+
+
+    .. attribute:: NOT_USED_ACCESS(0)
+
+
+    .. attribute:: GRANT_ACCESS(1)
+
+
+    .. attribute:: SET_ACCESS(2)
+
+
+    .. attribute:: DENY_ACCESS(3)
+
+
+    .. attribute:: REVOKE_ACCESS(4)
+
+
+    .. attribute:: SET_AUDIT_SUCCESS(5)
+
+
+    .. attribute:: SET_AUDIT_FAILURE(6)
 
 _SC_STATUS_TYPE
 '''''''''''''''

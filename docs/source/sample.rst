@@ -669,3 +669,27 @@ Query SACL
 Output
 
 .. literalinclude:: samples_output\security_query_sacl.txt
+
+
+.. _sample_etw:
+
+ETW (Event Tracing for Windows)
+"""""""""""""""""""""""""""""""
+
+Trace processing
+''''''''''''''''
+
+.. literalinclude:: ..\..\samples\etw\uac_trace.py
+
+Output
+
+.. literalinclude:: samples_output\etw_uac_trace.txt
+
+Enumeration
+'''''''''''
+
+.. literalinclude:: ..\..\samples\etw\etw_enumeration.py
+
+Output
+
+.. literalinclude:: samples_output\etw_etw_enumeration.txt

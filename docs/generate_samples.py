@@ -93,6 +93,8 @@ generate_output_result(r"service\service_demo.py", "service_service_demo.txt")
 
 generate_output_result(r"device_manager\device_manager.py", "device_manager_device_manager.txt")
 
+generate_output_result(r"etw\etw_enumeration.py", "etw_etw_enumeration.txt")
+generate_output_result(r"etw\uac_trace.py", "etw_uac_trace.txt")
 
 # Require ADMIN / NotAdmin run
 # generate_output_result(r"security\query_sacl.py", "security_query_sacl.txt")

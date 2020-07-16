@@ -10,6 +10,9 @@ I have tried to offer some abstraction without completly hidding the some underl
 
 The current API may need some works to provide simpler/highter level API in the future.
 
+The :class:`EvtlogManager` instance is accessible via :py:attr:`windows.system.event_log
+<windows.winobject.system.System.event_log>`
+
 For now, the best thing to do is look at the sample:
 
 .. note::
