@@ -301,6 +301,21 @@ class RemoteStructurePointer32(Remote_c_void_p32):
 
     @property
     def contents(self):
+        # What if we have a non-struct pointer
+        # Like a Ptr(DWORD) we would like to get the underlying value
+        realtype = self.real_pointer_type._sub_ctypes_
+        # if _SimpleCData in realtype.__bases__:
+            # A ctypes original value.
+            # Returnthe real pointed value
+            # Kind of a tricks for now compared to the real ctypes behavior
+            # import pdb;pdb.set_trace()
+            # if not self.value:
+                # return None
+            # targetptr = self.target.read_ptr(self.value)
+            # if not targetptr:
+                # return None
+            # ss = self.target.read_memory(targetptr, ctypes.sizeof(realtype))
+            # return realtype.from_buffer(bytearray(ss)).value
         remote_pointed_type = transform_type_to_remote32bits(self.real_pointer_type._sub_ctypes_)
         return remote_pointed_type(self.raw_value, self.target)
 

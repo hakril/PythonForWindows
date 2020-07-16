@@ -29,12 +29,45 @@ def init():
     except WindowsError as e:
         t = e.winerror
     if t:
-        return t
+        return t & 0xffffffff
     return initsecurity()
 
 def initsecurity(): # Should take some parameters..
     return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
 
+
+class Dispatch(interfaces.IDispatch):
+    def TypeInfoCount(self):
+        count = gdef.UINT()
+        self.GetTypeInfoCount(count)
+        return count
+
+    def type_info(self, idx):
+        type_info = TypeInfo()
+        self.GetTypeInfo(idx, 0, type_info)
+        return type_info
+
+class TypeInfo(interfaces.ITypeInfo):
+    def func(self, idx):
+        res = gdef.LPFUNCDESC()
+        self.GetFuncDesc(idx, res)
+        return res
+
+    def attr(self):
+        res = gdef.LPTYPEATTR()
+        self.GetTypeAttr(res)
+        return res
+
+    def names(self, memid):
+        size = gdef.UINT()
+        x = (gdef.BSTR * 10)(*tuple(gdef.BSTR() for i in range(10)))
+        self.GetNames(memid, x, 10, size)
+        return x[:size.value]
+
+    def docu(self, id):
+        res = gdef.BSTR()
+        self.GetDocumentation(id, res, None, None, None)
+        return res
 
 def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
     """A simple wrapper around ``CoCreateInstance <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx>``"""
@@ -196,6 +229,12 @@ class Variant(VARIANT):
         attr = self.QUICK_CHECK_TYPE[rawvt]
         if attr is None:
             return None
+        if attr == "punkVal":
+            # Quick hack for COM interface type
+            # Do something clean with CHECK_TYPE ?
+            x = gdef.IUnknown(self.punkVal)
+            x.AddRef()
+            return x
         return getattr(self, attr)
 
     def guess_type_and_set_value(self, value):
