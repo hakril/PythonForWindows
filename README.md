@@ -22,7 +22,14 @@ I am always glad to have feedbacks from people using this project.
 
 ## Installation
 
-You can install PythonForWindows using the ``setup.py`` script:
+
+PythonForWindows is available on [Pypi](https://pypi.org/project/PythonForWindows/) an this can be installed with
+
+``
+python -m pip install PythonForWindows
+``
+
+You can also install PythonForWindows by cloning it and using the ``setup.py`` script:
 
 ``
 python setup.py install

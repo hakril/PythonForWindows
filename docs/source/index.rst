@@ -27,16 +27,21 @@ Examples are available on the `github page <https://github.com/hakril/pythonforw
 Installation
 ''''''''''''
 
+Installing from Pypi
+^^^^^^^^^^^^^^^^^^^^
+
+PythonForWindows is available on `Pypi <https://pypi.org/project/PythonForWindows/>`_ an this can be installed with::
+
+
+    python -m pip install PythonForWindows
+
 Installing using setup.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can install PythonForWindows using the ``setup.py`` at the root of the project::
+
+You can also install PythonForWindows by cloning it and using the ``setup.py`` at the root of the project::
 
     python setup.py install
-
-.. warning::
-
-    PythonForWindows is not available on Pypi for now and thus cannot be directly installed using ``pip``.
 
 
 Python3
