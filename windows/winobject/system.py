@@ -472,29 +472,20 @@ class System(object):
 
     @utils.fixedpropety
     def build_number(self):
-        # Best effort. use get_file_version if registry code fails
-        try:
-            # Does not works on Win7..
-            # Missing CurrentMajorVersionNumber/CurrentMinorVersionNumber/UBR
-            # We have CurrentVersion instead
-            # Use this code and get_file_version as a backup ?
-            curver_key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
-            try:
-                major = curver_key["CurrentMajorVersionNumber"].value
-                minor = curver_key["CurrentMinorVersionNumber"].value
-            except WindowsError as e:
-                version = curver_key["CurrentVersion"].value
-                # May raise ValueError if no "."
-                major, minor = version.split(".")
-            build = curver_key["CurrentBuildNumber"].value
-            # Update Build Revision
-            try:
-                ubr = curver_key["UBR"].value
-            except WindowsError as e:
-                ubr = 0 # Not present on Win7
-            return "{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
-        except (WindowsError, ValueError):
-            return self.get_file_version("ntdll")
+        # Will only work on Windows 10 ?
+        build = self.kuser_shared_data.NtBuildNumber
+        if build: # 0 before windows 10
+            return build
+
+        key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+        return int(key["CurrentBuildNumber"].value)
+
+    @utils.fixedpropety
+    def kuser_shared_data(self):
+        # For now we only returns a "common-group" KUSER which only contains the
+        # 0x300 first bytes.
+        # These are the part that do not move much between XP & Win10
+        return gdef.PFW_MINIMAL_KUSER_SHARED_DATA.from_address(gdef.MM_SHARED_USER_DATA_VA)
 
 
     @staticmethod
@@ -505,9 +496,9 @@ class System(object):
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPPROCESS, 0)
         winproxy.Process32FirstW(snap, process_entry)
         res = []
-        res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        res.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         while winproxy.Process32NextW(snap, process_entry):
-            res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+            res.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         winproxy.CloseHandle(snap)
         return res
 
