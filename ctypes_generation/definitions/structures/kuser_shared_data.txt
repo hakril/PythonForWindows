@@ -1,0 +1,270 @@
+/* From: https://www.codemachine.com/downloads/win10.1703/winnt.h*/
+
+
+typedef struct _XSTATE_FEATURE {
+    DWORD Offset;
+    DWORD Size;
+} XSTATE_FEATURE, *PXSTATE_FEATURE;
+
+typedef struct _XSTATE_CONFIGURATION {
+    // Mask of all enabled features
+    DWORD64 EnabledFeatures;
+
+    // Mask of volatile enabled features
+    DWORD64 EnabledVolatileFeatures;
+
+    // Total size of the save area for user states
+    DWORD Size;
+
+    // Control Flags
+    union {
+        DWORD ControlFlags;
+        struct
+        {
+            DWORD OptimizedSave : 1;
+            DWORD CompactionEnabled : 1;
+        };
+    };
+
+    // List of features
+    XSTATE_FEATURE Features[MAXIMUM_XSTATE_FEATURES];
+
+    // Mask of all supervisor features
+    DWORD64 EnabledSupervisorFeatures;
+
+    // Mask of features that require start address to be 64 byte aligned
+    DWORD64 AlignedFeatures;
+
+    // Total size of the save area for user and supervisor states
+    DWORD AllFeatureSize;
+
+    // List which holds size of each user and supervisor state supported by CPU
+    DWORD AllFeatures[MAXIMUM_XSTATE_FEATURES];
+
+} XSTATE_CONFIGURATION, *PXSTATE_CONFIGURATION;
+
+
+/* From ntexapi.h */
+
+typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE {
+    StandardDesign,                 // None == 0 == standard design
+    NEC98x86,                       // NEC PC98xx series on X86
+    EndAlternatives                 // past end of known alternatives
+} ALTERNATIVE_ARCHITECTURE_TYPE;
+
+/* ntkeapi.h */
+typedef struct _KSYSTEM_TIME {
+    ULONG LowPart;
+    LONG High1Time;
+    LONG High2Time;
+} KSYSTEM_TIME, *PKSYSTEM_TIME;
+
+
+/*
+    An extract from https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-kuser_shared_data.
+    With only the fields up to <0x02f8 unsigned __int64 TestRetInstruction>
+    These are the fields that have not moved (but may have been renamed) since XP.
+*/
+
+
+typedef struct _PFW_MINIMAL_KUSER_SHARED_DATA {
+  ULONG                         TickCountLowDeprecated;
+  ULONG                         TickCountMultiplier;
+  KSYSTEM_TIME                  InterruptTime;
+  KSYSTEM_TIME                  SystemTime;
+  KSYSTEM_TIME                  TimeZoneBias;
+  USHORT                        ImageNumberLow;
+  USHORT                        ImageNumberHigh;
+  WCHAR                         NtSystemRoot[260];
+  ULONG                         MaxStackTraceDepth;
+  ULONG                         CryptoExponent;
+  ULONG                         TimeZoneId;
+  ULONG                         LargePageMinimum;
+  ULONG                         AitSamplingValue;
+  ULONG                         AppCompatFlag;
+  ULONGLONG                     RNGSeedVersion;
+  ULONG                         GlobalValidationRunlevel;
+  LONG                          TimeZoneBiasStamp;
+  ULONG                         NtBuildNumber;
+  NT_PRODUCT_TYPE               NtProductType;
+  BOOLEAN                       ProductTypeIsValid;
+  BOOLEAN                       Reserved0[1];
+  USHORT                        NativeProcessorArchitecture;
+  ULONG                         NtMajorVersion;
+  ULONG                         NtMinorVersion;
+  BOOLEAN                       ProcessorFeatures[PROCESSOR_FEATURE_MAX];
+  ULONG                         Reserved1;
+  ULONG                         Reserved3;
+  ULONG                         TimeSlip;
+  ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+  ULONG                         BootId;
+  LARGE_INTEGER                 SystemExpirationDate;
+  ULONG                         SuiteMask;
+  BOOLEAN                       KdDebuggerEnabled;
+  union {
+    BYTE MitigationPolicies; /* Modified UCHAR to BYTE for ctype compat */
+    struct {
+      BYTE NXSupportPolicy : 2;
+      BYTE SEHValidationPolicy : 2;
+      BYTE CurDirDevicesSkippedForDlls : 2;
+      BYTE Reserved : 2;
+    };
+  };
+  USHORT                        CyclesPerYield;
+  ULONG                         ActiveConsoleId;
+  ULONG                         DismountCount;
+  ULONG                         ComPlusPackage;
+  ULONG                         LastSystemRITEventTickCount;
+  ULONG                         NumberOfPhysicalPages;
+  BOOLEAN                       SafeBootMode;
+  UCHAR                         VirtualizationFlags;
+  UCHAR                         Reserved12[2];
+  union {
+    ULONG SharedDataFlags;
+    struct {
+      ULONG DbgErrorPortPresent : 1;
+      ULONG DbgElevationEnabled : 1;
+      ULONG DbgVirtEnabled : 1;
+      ULONG DbgInstallerDetectEnabled : 1;
+      ULONG DbgLkgEnabled : 1;
+      ULONG DbgDynProcessorEnabled : 1;
+      ULONG DbgConsoleBrokerEnabled : 1;
+      ULONG DbgSecureBootEnabled : 1;
+      ULONG DbgMultiSessionSku : 1;
+      ULONG DbgMultiUsersInSessionSku : 1;
+      ULONG DbgStateSeparationEnabled : 1;
+      ULONG SpareBits : 21;
+    };
+  };
+  ULONG                         DataFlagsPad[1];
+  ULONGLONG                     TestRetInstruction;
+} PFW_MINIMAL_KUSER_SHARED_DATA;
+
+
+/* From: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-kuser_shared_data */
+typedef struct _KUSER_SHARED_DATA {
+  ULONG                         TickCountLowDeprecated;
+  ULONG                         TickCountMultiplier;
+  KSYSTEM_TIME                  InterruptTime;
+  KSYSTEM_TIME                  SystemTime;
+  KSYSTEM_TIME                  TimeZoneBias;
+  USHORT                        ImageNumberLow;
+  USHORT                        ImageNumberHigh;
+  WCHAR                         NtSystemRoot[260];
+  ULONG                         MaxStackTraceDepth;
+  ULONG                         CryptoExponent;
+  ULONG                         TimeZoneId;
+  ULONG                         LargePageMinimum;
+  ULONG                         AitSamplingValue;
+  ULONG                         AppCompatFlag;
+  ULONGLONG                     RNGSeedVersion;
+  ULONG                         GlobalValidationRunlevel;
+  LONG                          TimeZoneBiasStamp;
+  ULONG                         NtBuildNumber;
+  NT_PRODUCT_TYPE               NtProductType;
+  BOOLEAN                       ProductTypeIsValid;
+  BOOLEAN                       Reserved0[1];
+  USHORT                        NativeProcessorArchitecture;
+  ULONG                         NtMajorVersion;
+  ULONG                         NtMinorVersion;
+  BOOLEAN                       ProcessorFeatures[PROCESSOR_FEATURE_MAX];
+  ULONG                         Reserved1;
+  ULONG                         Reserved3;
+  ULONG                         TimeSlip;
+  ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+  ULONG                         BootId;
+  LARGE_INTEGER                 SystemExpirationDate;
+  ULONG                         SuiteMask;
+  BOOLEAN                       KdDebuggerEnabled;
+  union {
+    BYTE MitigationPolicies; /* Modified UCHAR to BYTE for ctype compat */
+    struct {
+      BYTE NXSupportPolicy : 2;
+      BYTE SEHValidationPolicy : 2;
+      BYTE CurDirDevicesSkippedForDlls : 2;
+      BYTE Reserved : 2;
+    };
+  };
+  USHORT                        CyclesPerYield;
+  ULONG                         ActiveConsoleId;
+  ULONG                         DismountCount;
+  ULONG                         ComPlusPackage;
+  ULONG                         LastSystemRITEventTickCount;
+  ULONG                         NumberOfPhysicalPages;
+  BOOLEAN                       SafeBootMode;
+  UCHAR                         VirtualizationFlags;
+  UCHAR                         Reserved12[2];
+  union {
+    ULONG SharedDataFlags;
+    struct {
+      ULONG DbgErrorPortPresent : 1;
+      ULONG DbgElevationEnabled : 1;
+      ULONG DbgVirtEnabled : 1;
+      ULONG DbgInstallerDetectEnabled : 1;
+      ULONG DbgLkgEnabled : 1;
+      ULONG DbgDynProcessorEnabled : 1;
+      ULONG DbgConsoleBrokerEnabled : 1;
+      ULONG DbgSecureBootEnabled : 1;
+      ULONG DbgMultiSessionSku : 1;
+      ULONG DbgMultiUsersInSessionSku : 1;
+      ULONG DbgStateSeparationEnabled : 1;
+      ULONG SpareBits : 21;
+    };
+  };
+  ULONG                         DataFlagsPad[1];
+  ULONGLONG                     TestRetInstruction;
+  LONGLONG                      QpcFrequency;
+  ULONG                         SystemCall;
+  union {
+    ULONG AllFlags;
+    struct {
+      ULONG Win32Process : 1;
+      ULONG Sgx2Enclave : 1;
+      ULONG VbsBasicEnclave : 1;
+      ULONG SpareBits : 29;
+    };
+  } UserCetAvailableEnvironments;
+  ULONGLONG                     SystemCallPad[2];
+  union {
+    KSYSTEM_TIME TickCount;
+    ULONG64      TickCountQuad;
+    struct {
+      ULONG ReservedTickCountOverlay[3];
+      ULONG TickCountPad[1];
+    };
+  };
+  ULONG                         Cookie;
+  ULONG                         CookiePad[1];
+  LONGLONG                      ConsoleSessionForegroundProcessId;
+  ULONGLONG                     TimeUpdateLock;
+  ULONGLONG                     BaselineSystemTimeQpc;
+  ULONGLONG                     BaselineInterruptTimeQpc;
+  ULONGLONG                     QpcSystemTimeIncrement;
+  ULONGLONG                     QpcInterruptTimeIncrement;
+  UCHAR                         QpcSystemTimeIncrementShift;
+  UCHAR                         QpcInterruptTimeIncrementShift;
+  USHORT                        UnparkedProcessorCount;
+  ULONG                         EnclaveFeatureMask[4];
+  ULONG                         TelemetryCoverageRound;
+  USHORT                        UserModeGlobalLogger[16];
+  ULONG                         ImageFileExecutionOptions;
+  ULONG                         LangGenerationCount;
+  ULONGLONG                     Reserved4;
+  ULONGLONG                     InterruptTimeBias;
+  ULONGLONG                     QpcBias;
+  ULONG                         ActiveProcessorCount;
+  UCHAR                         ActiveGroupCount;
+  UCHAR                         Reserved9;
+  union {
+    USHORT QpcData;
+    struct {
+      UCHAR QpcBypassEnabled;
+      UCHAR QpcShift;
+    };
+  };
+  LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
+  LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
+  XSTATE_CONFIGURATION          XState;
+  KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
+  ULONG                         Spare;
+} KUSER_SHARED_DATA, *PKUSER_SHARED_DATA;

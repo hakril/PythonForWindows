@@ -189,6 +189,13 @@ def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, Sys
         SystemInformationLength = ctypes.sizeof(SystemInformation)
     return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
+
+@NtdllProxy(error_check=ntquerysysteminformation_error_check)
+def NtQuerySystemInformationEx(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength):
+    if SystemInformation is not None and SystemInformationLength == 0:
+        SystemInformationLength = ctypes.sizeof(SystemInformation)
+    return NtQuerySystemInformationEx.ctypes_function(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength)
+
 # path
 
 @NtdllProxy(error_check=fail_on_zero)

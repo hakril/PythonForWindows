@@ -669,3 +669,6 @@
 #define TXFS_MINIVERSION_COMMITTED_VIEW                  (0x0000)
 #define TXFS_MINIVERSION_DIRTY_VIEW                      (0xFFFF)
 #define TXFS_MINIVERSION_DEFAULT_VIEW                    (0xFFFE)
+
+
+#define PROCESSOR_FEATURE_MAX 64
