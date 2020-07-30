@@ -9,7 +9,7 @@ from windows.pycompat import int_types
 import windows.generated_def as gdef
 from windows.generated_def import *
 from windows import security
-from windows.pycompat import basestring
+from windows.pycompat import basestring, urepr_encode
 
 """
 ``type`` might be one of:
@@ -40,6 +40,42 @@ from windows.pycompat import basestring
 
 class ServiceManager(utils.AutoHandle):
     """An object to query, list and explore services"""
+    def __init__(self):
+        self.enum_flags = None #: Lazy computed at first enum
+
+        # Old SERVICE_TYPE_ALL before 14942
+        self.old_enum_flags = (gdef.SERVICE_WIN32 |
+            gdef.SERVICE_ADAPTER |
+            gdef.SERVICE_DRIVER |
+            gdef.SERVICE_INTERACTIVE_PROCESS)
+
+        self.enum_flags = self.old_enum_flags | (gdef.SERVICE_USER_SERVICE | gdef.SERVICE_USERSERVICE_INSTANCE)
+        print("Old Enum flags: {0:#x}".format(self.old_enum_flags))
+        print("Enum flags: {0:#x}".format(self.enum_flags))
+
+    def _get_enum_service_type_flags(self):
+        if self.enum_flags is not None:
+            return self.enum_flags
+        if windows.system.version[0] < 10:
+            # Old value of SERVICE_TYPE_ALL
+            flags = (gdef.SERVICE_WIN32 |
+                gdef.SERVICE_ADAPTER |
+                gdef.SERVICE_DRIVER |
+                gdef.SERVICE_INTERACTIVE_PROCESS)
+        else:
+            flags = (SERVICE_WIN32 |
+                SERVICE_ADAPTER |
+                SERVICE_DRIVER |
+                SERVICE_INTERACTIVE_PROCESS |
+                SERVICE_USER_SERVICE |
+                SERVICE_USERSERVICE_INSTANCE)
+            if windows.system.build_number >= 14393:
+                # This flag was introduced in 14393  (Thank ProcessHacker & google)
+                flags |= gdef.SERVICE_PKG_SERVICE
+        self.enum_flags = flags
+        return flags
+
+
     def _get_handle(self):
         return windows.winproxy.OpenSCManagerW(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
 
@@ -78,24 +114,31 @@ class ServiceManager(utils.AutoHandle):
         windows.winproxy.GetServiceDisplayNameW(self.handle, name, result, size_needed)
         return result.value
 
-    def _enumerate_services_generator(self):
+    def _enumerate_services_generator(self, flags=None):
         """The generator code behind __iter__.
         Allow to iter over the services on the system
         """
         size_needed = gdef.DWORD()
         nb_services =  gdef.DWORD()
         counter =  gdef.DWORD()
+
+        if flags is None:
+            flags = self._get_enum_service_type_flags()
+
         try:
-            windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
-        except WindowsError:
-            pass
+            windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, flags, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+        except WindowsError as e:
+            if e.winerror == gdef.ERROR_INVALID_PARAMETER:
+                raise # Invalid enum flags: better raise that risk infinite loop
 
         while True:
             size = size_needed.value
             buffer = (BYTE * size)()
             try:
-                windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+                windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, flags, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
             except WindowsError as e:
+                if e.winerror == gdef.ERROR_INVALID_PARAMETER:
+                    raise # Invalid enum flags: better raise that risk infinite loop
                 continue
             break
         services_array = (gdef.ENUM_SERVICE_STATUS_PROCESSW * nb_services.value).from_buffer(buffer)
@@ -112,6 +155,24 @@ class ServiceManager(utils.AutoHandle):
 
     def enumerate_services(self):
         return list(self._enumerate_services_generator())
+
+    def create(self, name, description, access, type, start, path):
+        newservice_handle = windows.winproxy.CreateServiceW(
+            self.handle, # hSCManager
+            name, # lpServiceName
+            description, # lpDisplayName
+            access, # dwDesiredAccess
+            type, # dwServiceType
+            start, # dwStartType
+            gdef.SERVICE_ERROR_NORMAL, # dwErrorControl
+            path, # lpBinaryPathName
+            None, # lpLoadOrderGroup
+            None, # lpdwTagId
+            None, # lpDependencies
+            None, # lpServiceStartName
+            None) # lpPassword
+
+        return Service(handle=newservice_handle, name=name, description=description)
 
 
 class Service(gdef.SC_HANDLE):
@@ -185,7 +246,7 @@ class Service(gdef.SC_HANDLE):
         return status
 
     def __repr__(self):
-        return """<{0} "{1}" {2!r}>""".format(type(self).__name__, self.name, self.status.state)
+        return urepr_encode(u"""<{0} "{1}" {2!r}>""".format(type(self).__name__, self.name, self.status.state))
 
     def __del__(self):
         return windows.winproxy.CloseServiceHandle(self)
