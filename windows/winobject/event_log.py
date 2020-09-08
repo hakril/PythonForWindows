@@ -11,6 +11,7 @@ from windows.pycompat import int_types, basestring
 
 # Helpers
 
+
 @contextmanager
 def ClosingEvtHandle(handle):
     try:
@@ -183,17 +184,20 @@ class EvtEvent(EvtHandle):
         # Each value wil return 1 node :)
         ctx = windows.winproxy.EvtCreateRenderContext(nbelt, pwstr_rarray, gdef.EvtRenderContextValues)
         result = self.render(ctx, gdef.EvtRenderEventValues)
+        windows.winproxy.EvtClose(ctx)
         return [r.value for r in result]
 
     def system_values(self): # POC: use this for all @property based on system data ?
         ctx = windows.winproxy.EvtCreateRenderContext(0, None, gdef.EvtRenderContextSystem)
         result = self.render(ctx, gdef.EvtRenderEventValues)
+        windows.winproxy.EvtClose(ctx)
         return [r.value for r in result]
 
     def event_values(self):
         """The values of the event in a list"""
         ctx = windows.winproxy.EvtCreateRenderContext(0, None, gdef.EvtRenderContextUser)
         result = self.render(ctx, gdef.EvtRenderEventValues)
+        windows.winproxy.EvtClose(ctx)
         return [r.value for r in result]
 
     def get_raw_values(self, values, flags=gdef.EvtRenderContextValues):
@@ -205,6 +209,7 @@ class EvtEvent(EvtHandle):
         # Each value will return 1 node :)
         ctx = windows.winproxy.EvtCreateRenderContext(nbelt, pwstr_rarray, gdef.EvtRenderContextValues)
         result = self.render(ctx, gdef.EvtRenderEventValues)
+        windows.winproxy.EvtClose(ctx)
         return list(result)
 
 

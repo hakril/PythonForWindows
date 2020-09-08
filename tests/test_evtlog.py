@@ -99,6 +99,18 @@ def test_evthandle_close():
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     assert memory_usage_in_mo <= 0.5
 
+def test_evtrender_evthandle_close():
+    start_usage = windows.current_process.memory_info.PrivateUsage
+    chan = windows.system.event_log["System"]
+    query = chan.query()
+    evt = next(query)
+    for i in range(0x10000):
+        x = evt.opcode
+    post_usage = windows.current_process.memory_info.PrivateUsage
+    memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
+    # Use ~20MO if render are leaking
+    assert memory_usage_in_mo <= 0.5
+
 tscheduler = windows.system.task_scheduler
 troot = tscheduler.root
 
