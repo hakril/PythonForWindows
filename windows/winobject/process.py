@@ -103,13 +103,13 @@ class Process(utils.AutoHandle):
             xtype = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(xtype))()
-            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(xtype))
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.limited_handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(xtype))
             # Map a remote64bits(PROCESS_BASIC_INFORMATION) at the address of 'data'
             x = xtype(ctypes.addressof(data), windows.current_process)
         else:
             information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            winproxy.NtQueryInformationProcess(self.limited_handle, information_type, x)
         return x.InheritedFromUniqueProcessId
 
     @property
@@ -981,7 +981,7 @@ class WinProcess(Process):
         :type: :class:`str`
 		"""
         buffer = ctypes.c_buffer(0x1024)
-        rsize = winproxy.GetProcessImageFileNameA(self.limited_handle, buffer)
+        rsize = winproxy.GetProcessImageFileNameA(self.limited_handle, buffer) # Use a syscall and not some remote process reading
         # GetProcessImageFileNameA returns the fullpath
         return buffer[:rsize].decode().split("\\")[-1]
 
