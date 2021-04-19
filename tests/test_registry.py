@@ -235,6 +235,67 @@ def test_registry_unicode_subkeys_enumerate():
     assert name1 in subkey_names
     assert name2 in subkey_names
 
+original_RegEnumValueW = windows.winproxy.RegEnumValueW
 
+def fake_RegEnumValueW_fill_but_raise(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
+    print("fake_RegEnumValueW")
+    result = original_RegEnumValueW(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData)
+    raise windows.winproxy.WinproxyError("fake_RegEnumValueW", gdef.ERROR_MORE_DATA)
+    return result
 
+def test_registry_win_bug_RegEnumValueW_1(monkeypatch):
+    # import pdb; pdb.set_trace()
+    # Found a bug on some computers where RegEnumValueW would fill the data but also ERROR_MORE_DATA
+    basekeytest["VALUE_1"] = "LOOOL"
+    basekeytest["VALUE_2"] = 42
+    basekeytest["XXX" * 0x100] = 42
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+    monkeypatch.setattr(windows.winproxy, "RegEnumValueW", fake_RegEnumValueW_fill_but_raise)
+    # Bug make it hang here..
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+    print("LOL")
 
+def fake_RegEnumValueW_always_raise(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
+    print("fake_RegEnumValueW_always_raise")
+    raise windows.winproxy.WinproxyError("fake_RegEnumValueW", gdef.ERROR_MORE_DATA)
+
+def test_registry_win_bug_RegEnumValueW_2(monkeypatch):
+    # Found a bug on some computers where RegEnumValueW would fill the data but also ERROR_MORE_DATA
+    # This case here should never happen, but better an exception that an infinite loop
+    basekeytest["VALUE_1"] = "LOOOL"
+    basekeytest["VALUE_2"] = 42
+    basekeytest["XXX" * 0x100] = 42
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+    monkeypatch.setattr(windows.winproxy, "RegEnumValueW", fake_RegEnumValueW_always_raise)
+    # Bug make it hang here..
+    with pytest.raises(ValueError):
+        # A bug that do not allow is to extract the values will raises to be explicit..
+        assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+
+original_basekeytest_get_key_size = basekeytest.get_key_size_info
+
+def bad_get_key_valuesize():
+    namesize, valuesize = original_basekeytest_get_key_size()
+    return namesize, valuesize - 3
+
+def bad_get_key_namesize():
+    namesize, valuesize = original_basekeytest_get_key_size()
+    return namesize - 3, valuesize
+
+def test_registry_win_bug_get_key_size_info_valuesize_too_small(monkeypatch):
+    basekeytest["VALUE_1"] = "LOOOL"
+    basekeytest["VALUE_2"] = 42
+    basekeytest["XXX" * 0x100] = 42
+
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+    monkeypatch.setattr(basekeytest, "get_key_size_info", bad_get_key_valuesize)
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+
+def test_registry_win_bug_get_key_size_info_namesize_too_small(monkeypatch):
+    basekeytest["VALUE_1"] = "LOOOL"
+    basekeytest["VALUE_2"] = 42
+    basekeytest["XXX" * 0x100] = 42
+
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}
+    monkeypatch.setattr(basekeytest, "get_key_size_info", bad_get_key_namesize)
+    assert set(x.name for x in basekeytest.values) == {"VALUE_1", "VALUE_2", "XXX" * 0x100}

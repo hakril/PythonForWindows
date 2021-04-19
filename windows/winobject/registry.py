@@ -158,7 +158,7 @@ class PyHKey(object):
 
     def _open_key(self, handle, name, sam):
         result = WinRegistryKey()
-        winproxy.RegOpenKeyExW(handle, name, 0, sam, result)
+        winproxy.RegOpenKeyExW(handle, name, 0, sam, result) # TODO: options REG_OPTION_OPEN_LINK
         dbgprint(u"Opening registry key <{0}> (handle={1:#x})".format(name, result.value), "REGISTRY")
         return result
 
@@ -241,21 +241,36 @@ class PyHKey(object):
                 databuffer = windows.utils.BUFFER(gdef.BYTE, nbelt=datasize.value)()
                 # A value can have been added in-between.
                 # So recheck the size given by get_key_size_info :)
-                while True:
+                # But check 10 times max as RegEnumValueW may bug (seen) and always return  ERROR_MORE_DATA even with enought size
+                for _ in range(10):
                     try:
                         winproxy.RegEnumValueW(self.phkey, i, keyname, namesize, None, value_type, databuffer, datasize)
                         break
                     except WindowsError as e:
                         if e.winerror != gdef.ERROR_MORE_DATA:
                             raise
+                        # I found some strange Windows where even with a big enought buffer:
+                        # - the data was filled
+                        # - ERROR_MORE_DATA was returned
+                        ## To prevent such bug to trigger and infinite loop, two things
+                        # - If the retuned namesize <= the passed keysize and keyname is not empty -> return the data`
+                        # - Max 10 test to prevent Infinite loop
+                        if ((namesize.value <= max_name_size)  and (datasize.value <= max_data_size) and
+                            (keyname[:namesize.value].count("\x00") < namesize.value)): # Not just 0 Zero ?
+                            break
+
                         # Update the sizes / buffers & try again :)
                         max_name_size, max_data_size = self.get_key_size_info()
-                        max_name_size += 1
-                        max_data_size += 2
+                        max_name_size = max(max_name_size + 1, namesize.value + 1) # namesize.value may be > to max_name_size apparently (guessed)
+                        max_data_size = max(max_data_size + 2, datasize.value + 2) # datasize.value may be > to max_data_size apparently (seen)
                         namesize = gdef.DWORD(max_name_size)
                         keyname = ctypes.create_unicode_buffer(namesize.value)
                         datasize = gdef.DWORD(max_data_size)
                         databuffer = windows.utils.BUFFER(gdef.BYTE, nbelt=datasize.value)()
+                else:
+                    # Probably a windows bug that prevent us from retrieving the data
+                    # Raise something (thus preventing getting the other values..) ? ignore it ?
+                    raise ValueError("Could not extract registry key values, problably a Windows/hook bug")
                 vobj = decode_registry_buffer(value_type.value, databuffer, datasize.value)
                 res.append(KeyValue(keyname.value, vobj, value_type.value))
         return res
