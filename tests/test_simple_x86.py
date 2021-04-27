@@ -183,6 +183,8 @@ def test_assembler():
     CheckInstr(Cmp, immediat_accepted=0xffffffff)('EAX', -1)
     CheckInstr(Cmp)('EAX', 0xffffffff)
 
+
+
     CheckInstr(And)('ECX', 'EBX')
     CheckInstr(And)('EAX', 0x11223344)
     CheckInstr(And)('EAX', mem('[EAX + 1]'))
@@ -218,6 +220,9 @@ def test_assembler():
     CheckInstr(x86.Test)('EAX', 'EAX')
     CheckInstr(x86.Test, expected_result="test edi, ecx")('ECX', 'EDI')
     CheckInstr(x86.Test)(mem('[ECX + 0x100]'), 'ECX')
+    CheckInstr(x86.Test)('EAX', 0x11223344)
+    CheckInstr(x86.Test, immediat_accepted=-1)('EAX', 0xffffffff)
+    CheckInstr(x86.Test)('ECX', 0x42)
 
 
     assert x86.Test(mem('[ECX + 0x100]'), 'ECX').get_code() == x86.Test('ECX', mem('[ECX + 0x100]')).get_code()

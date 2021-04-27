@@ -210,6 +210,10 @@ def test_assembler():
     CheckInstr(x64.Test)('RCX', 'RCX')
 
     CheckInstr(x64.Test)(mem('[RDI + 0x100]'), 'RCX')
+    CheckInstr(x64.Test)('EAX', 0x11223344)
+    CheckInstr(x64.Test, immediat_accepted=-1)('RAX', 0xffffffff)
+    CheckInstr(x64.Test)('ECX', 0x42)
+    CheckInstr(x64.Test)('RCX', 0x42)
 
     assert x64.Test(mem('[RDI + 0x100]'), 'RCX').get_code() == x64.Test('RCX', mem('[RDI + 0x100]')).get_code()
 

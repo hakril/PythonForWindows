@@ -1021,7 +1021,7 @@ class Cmp(Instruction):
 class Test(Instruction):
     default_32_bits = True
     refuse_reverse = True
-    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), AnyImm32()),
+    encoding = [(RawBits.from_int(8, 0xf7), Slash(0), AnyImm32()),
                 (RawBits.from_int(8, 0x85), ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False))]
 
 

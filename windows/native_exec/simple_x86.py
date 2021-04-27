@@ -799,7 +799,7 @@ class Cmp(Instruction):
 
 
 class Test(Instruction):
-    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), Imm32()),
+    encoding = [(RawBits.from_int(8, 0xf7), Slash(0), Imm32()),
                 (RawBits.from_int(8, 0x85), ModRM([ModRM_REG__REG, ModRM_REG__MEM], has_direction_bit=False))]
 
 
