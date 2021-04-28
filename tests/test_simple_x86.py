@@ -119,6 +119,13 @@ def test_assembler():
     CheckInstr(Mov)('CR3', 'EAX')
     CheckInstr(Mov)('CR0', 'EDX')
     CheckInstr(Mov)('CR7', 'EDI')
+    # Registers
+    CheckInstr(Pushal)()
+    CheckInstr(Pushad)()
+    CheckInstr(Pushfd)()
+    CheckInstr(Popal)()
+    CheckInstr(Popad)()
+    CheckInstr(Popfd)()
 
     CheckInstr(Mov)('EAX', 'ESP')
     CheckInstr(Mov)('ECX', mem('[EAX]'))
