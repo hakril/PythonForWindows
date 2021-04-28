@@ -453,6 +453,9 @@ class EvtChannel(object):
             List all events with an EventID of 2006:
                 ``Event/System[EventID=2006]``
 
+            List all event with a given EventID while searching for a specific field value (Sysmon for the test here)
+                ``Event/System[EventID=3] and Event/EventData/Data[@Name='DestinationIp'] and Event/EventData[Data='10.0.0.2']``
+
         :rtype: :class:`EvtQuery`
         """
         if ids and filter:
