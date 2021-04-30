@@ -137,6 +137,9 @@ def test_assembler():
     CheckInstr(Add)('RAX', mem('[0x7fffffff]'))
     CheckInstr(Add)('RAX', -1)
 
+    # Registers
+    CheckInstr(Pushfd, expected_result="pushfq ")()
+    CheckInstr(Popfd, expected_result="popfq ")()
 
     CheckInstr(Sub)('RCX', 'RSP')
     CheckInstr(Sub)('RCX', mem('[RSP]'))
