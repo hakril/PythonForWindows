@@ -795,22 +795,16 @@ class Pushfd(Instruction):
     encoding = [(RawBits.from_int(8, 0x9c),)]
 
 
-class Pushal(Instruction):
+class Pushad(Instruction):
     encoding = [(RawBits.from_int(8, 0x60),)]
-
-
-Pushad = Pushal
 
 
 class Popfd(Instruction):
     encoding = [(RawBits.from_int(8, 0x9d),)]
 
 
-class Popal(Instruction):
+class Popad(Instruction):
     encoding = [(RawBits.from_int(8, 0x61),)]
-
-
-Popad = Popal
 
 
 class Lea(Instruction):
