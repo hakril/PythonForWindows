@@ -1014,11 +1014,11 @@ class Mov(Instruction):
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
 
 
-class Pushfd(Instruction):
+class Pushfq(Instruction):
     encoding = [(RawBits.from_int(8, 0x9c),)]
 
 
-class Popfd(Instruction):
+class Popfq(Instruction):
     encoding = [(RawBits.from_int(8, 0x9d),)]
 
 
