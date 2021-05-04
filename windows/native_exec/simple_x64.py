@@ -978,6 +978,9 @@ class Jz(JmpType):
                 (RawBits.from_int(16, 0x0f84), JmpImm32(6))]
 
 
+Je = Jz
+
+
 class Jnz(JmpType):
     encoding = [(RawBits.from_int(8, 0x75), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f85), JmpImm32(6))]
@@ -1009,6 +1012,14 @@ class Mov(Instruction):
                 (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
                 (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
+
+
+class Pushfq(Instruction):
+    encoding = [(RawBits.from_int(8, 0x9c),)]
+
+
+class Popfq(Instruction):
+    encoding = [(RawBits.from_int(8, 0x9d),)]
 
 
 class Cmp(Instruction):
