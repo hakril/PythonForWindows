@@ -514,6 +514,54 @@ def get_shared_mapping(name=None, handle=INVALID_HANDLE_VALUE, size=0x1000):
     addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
     return addr
 
+def create_shared_memory(name, size):
+    """
+        Create a RW memory region which can be shared between process.
+
+        Internally this use ``CreateFileMappingW`` for creating a mapping and
+        then map the memory using the ``MapViewOfFile``.
+
+        This is made for using in combination with :func:`open_shared_memory`
+        and can be closed using :func:`close_shared_memory`.
+
+        :return: a tuple (address, handle) with the address being the address
+            mapped in this process and the handle the one of the file mapping.
+    """
+    fileMap = windows.winproxy.CreateFileMappingW(0xFFFFFFFFFFFFFFFF, None, 0x8000004, 0, size, name)
+    addr = windows.winproxy.MapViewOfFile(fileMap, gdef.FILE_MAP_ALL_ACCESS, 0, 0, 0)
+    return addr, fileMap
+
+def open_shared_memory(name):
+    """
+        Open a RW memory region which is shared between process.
+
+        Internally this use ``OpenFileMappingW`` for creating a mapping and
+        then map the memory using the ``MapViewOfFile``.
+
+        This is made for using in combination with :func:`create_shared_memory`
+        and can be closed using :func:`close_shared_memory`.
+
+        :return: a tuple (address, handle) with the address being the address
+            mapped in this process and the handle the one of the file mapping.
+    """
+    fileMap = windows.winproxy.OpenFileMappingW(gdef.FILE_MAP_ALL_ACCESS, False, name)
+    addr = windows.winproxy.MapViewOfFile(fileMap, gdef.FILE_MAP_ALL_ACCESS, 0, 0, 0)
+    return addr, fileMap
+
+
+def close_shared_memory(address, handle):
+    """
+        Close a shared memory such as created by :func:`create_shared_memory`
+        or by :func:`open_shared_memory`.
+
+        :param address: The address where the shared memory is mapped
+        :param handle: The handle of the shared memory
+    """
+    windows.winproxy.UnmapViewOfFile(address)
+    windows.winproxy.CloseHandle(handle)
+
+
+
 
 def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, security=None, creation=gdef.OPEN_EXISTING, flags=gdef.FILE_ATTRIBUTE_NORMAL):
     return windows.winproxy.CreateFileA(name, access, share, security, creation, flags, 0)
