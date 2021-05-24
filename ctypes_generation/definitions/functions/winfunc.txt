@@ -823,21 +823,6 @@ NTSTATUS RtlGetCompressionWorkSpaceSize(
 );
 
 
-HANDLE WINAPI OpenEventA(
-    __in DWORD dwDesiredAccess,
-    __in BOOL bInheritHandle,
-    __in LPCSTR lpName
-);
-
-
-HANDLE WINAPI OpenEventW(
-    __in DWORD dwDesiredAccess,
-    __in BOOL bInheritHandle,
-    __in LPCWSTR lpName
-);
-
-
-
 INT WINAPI lstrcmpA(
     __in LPCSTR lpString1,
     __in LPCSTR lpString2
