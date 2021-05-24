@@ -6,6 +6,7 @@ from windows import winproxy
 import windows.generated_def as gdef
 
 from windows.crypto import DEFAULT_ENCODING
+from windows.pycompat import urepr_encode
 
 import windows.crypto.cryptmsg
 
@@ -98,7 +99,7 @@ class CryptObject(object):
         return list(self._signers_and_certs_generator())
 
     def __repr__(self):
-        return '<{0} "{1}" content_type={2!r}>'.format(type(self).__name__, self.filename, self.content_type)
+        return urepr_encode(u'<{0} "{1}" content_type={2!r}>'.format(type(self).__name__, self.filename, self.content_type))
 
 
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx
@@ -239,9 +240,9 @@ class Certificate(gdef.CERT_CONTEXT):
         if nametype == gdef.CERT_NAME_RDN_TYPE:
             param_type = gdef.DWORD(param_type)
             param_type = gdef.LPDWORD(param_type)
-        size = winproxy.CertGetNameStringA(self, nametype, flags, param_type, None, 0)
-        namebuff = ctypes.c_buffer(size)
-        size = winproxy.CertGetNameStringA(self, nametype, flags, param_type, namebuff, size)
+        size = winproxy.CertGetNameStringW(self, nametype, flags, param_type, None, 0)
+        namebuff = ctypes.create_unicode_buffer(size)
+        size = winproxy.CertGetNameStringW(self, nametype, flags, param_type, namebuff, size)
         return namebuff[:-1]
 
 
@@ -483,9 +484,7 @@ class Certificate(gdef.CERT_CONTEXT):
         return windows.winproxy.CertCompareCertificate(DEFAULT_ENCODING, self.pCertInfo, other.pCertInfo)
 
     def __repr__(self):
-        return '<{0} "{1}" serial="{2}">'.format(type(self).__name__, self.name, self.serial)
-
-
+        return urepr_encode(u'<{0} "{1}" serial="{2}">'.format(type(self).__name__, self.name, self.serial))
 
 
 

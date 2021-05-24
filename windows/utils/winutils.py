@@ -87,7 +87,7 @@ def create_console():
 
 
 def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
-    """A convenient wrapper arround :func:`windows.winproxy.CreateProcessA`"""
+    """A convenient wrapper arround :func:`windows.winproxy.CreateProcessW`"""
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
     if show_windows:

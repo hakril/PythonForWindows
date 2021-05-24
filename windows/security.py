@@ -816,8 +816,8 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
             See `ConvertStringSecurityDescriptorToSecurityDescriptorA <https://docs.microsoft.com/en-us/windows/desktop/api/sddl/nf-sddl-convertstringsecuritydescriptortosecuritydescriptora>`_
         """
         self = cls()
-        winproxy.ConvertStringSecurityDescriptorToSecurityDescriptorA(
-            sddl.encode("ascii"),
+        winproxy.ConvertStringSecurityDescriptorToSecurityDescriptorW(
+            sddl,
             gdef.SDDL_REVISION_1,
             self,
             None)
@@ -942,8 +942,8 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
         :type: :class:`str`
         """
-        result_cstr = gdef.LPSTR()
-        winproxy.ConvertSecurityDescriptorToStringSecurityDescriptorA(
+        result_cstr = gdef.LPWSTR()
+        winproxy.ConvertSecurityDescriptorToStringSecurityDescriptorW(
             self,
             gdef.SDDL_REVISION_1,
             security_information,
@@ -951,7 +951,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
             None)
         result = result_cstr.value # Retrieve a python-str copy
         winproxy.LocalFree(result_cstr)
-        return result.decode()
+        return result
 
     __str__ = to_string
 

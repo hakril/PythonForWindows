@@ -143,13 +143,12 @@ class RPCClient(object):
         return buffer(req)[:] + params
 
     def _forge_call_request_in_view(self, interface_nb, method_offset, params, ipid=None):
-        # import pdb;pdb.set_trace()
         # Version crade qui clean rien pour POC. GROS DOUTES :D
-        raw_request = self._forge_call_request(interface_nb, method_offset, "")
+        raw_request = self._forge_call_request(interface_nb, method_offset, b"")
         p = windows.alpc.AlpcMessage(0x2000)
         section = self.alpc_client.create_port_section(0x40000, 0, len(params))
         view = self.alpc_client.map_section(section[0], len(params))
-        p.port_message.data = raw_request + windows.rpc.ndr.NdrLong.pack(len(params) + 0x200) + "\x00" * 40
+        p.port_message.data = raw_request + windows.rpc.ndr.NdrLong.pack(len(params) + 0x200) + b"\x00" * 40
         p.attributes.ValidAttributes |= gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE
         p.view_attribute.Flags = 0x40000
         p.view_attribute.ViewBase = view.ViewBase

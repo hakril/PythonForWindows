@@ -43,16 +43,6 @@ class ServiceManager(utils.AutoHandle):
     def __init__(self):
         self.enum_flags = None #: Lazy computed at first enum
 
-        # Old SERVICE_TYPE_ALL before 14942
-        self.old_enum_flags = (gdef.SERVICE_WIN32 |
-            gdef.SERVICE_ADAPTER |
-            gdef.SERVICE_DRIVER |
-            gdef.SERVICE_INTERACTIVE_PROCESS)
-
-        self.enum_flags = self.old_enum_flags | (gdef.SERVICE_USER_SERVICE | gdef.SERVICE_USERSERVICE_INSTANCE)
-        print("Old Enum flags: {0:#x}".format(self.old_enum_flags))
-        print("Enum flags: {0:#x}".format(self.enum_flags))
-
     def _get_enum_service_type_flags(self):
         if self.enum_flags is not None:
             return self.enum_flags

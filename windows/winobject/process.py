@@ -672,7 +672,7 @@ class CurrentProcess(Process):
 
     def write_memory(self, addr, data):
         """Write data at addr"""
-        data = raw_encode(data)
+        data = bytes(raw_encode(data))
         # buffertype = (c_char * len(data)).from_address(addr)
         # buffertype[:len(data)] = data
         ctypes.memmove(addr, data, len(data))
