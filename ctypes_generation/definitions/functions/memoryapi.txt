@@ -1,0 +1,18 @@
+
+HANDLE OpenFileMappingW(
+  DWORD   dwDesiredAccess,
+  BOOL    bInheritHandle,
+  LPCWSTR lpName
+);
+
+HANDLE OpenFileMappingA(
+  DWORD  dwDesiredAccess,
+  BOOL   bInheritHandle,
+  LPCSTR lpName
+);
+
+BOOL UnmapViewOfFile(
+  LPCVOID lpBaseAddress
+);
+
+

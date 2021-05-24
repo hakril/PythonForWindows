@@ -498,11 +498,21 @@ def CreateFileMappingA(hFile, lpFileMappingAttributes=None, flProtect=gdef.PAGE_
 def CreateFileMappingW(hFile, lpFileMappingAttributes=None, flProtect=gdef.PAGE_READWRITE, dwMaximumSizeHigh=0, dwMaximumSizeLow=0, lpName=NeededParameter):
     return CreateFileMappingW.ctypes_function(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
 
+@Kernel32Proxy()
+def OpenFileMappingW(dwDesiredAccess, bInheritHandle, lpName):
+    return OpenFileMappingW.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
+
+@Kernel32Proxy()
+def OpenFileMappingA(dwDesiredAccess, bInheritHandle, lpName):
+    return OpenFileMappingA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
 @Kernel32Proxy()
 def MapViewOfFile(hFileMappingObject, dwDesiredAccess=gdef.FILE_MAP_ALL_ACCESS, dwFileOffsetHigh=0, dwFileOffsetLow=0, dwNumberOfBytesToMap=NeededParameter):
     return MapViewOfFile.ctypes_function(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap)
 
+@Kernel32Proxy()
+def UnmapViewOfFile(lpBaseAddress):
+    return UnmapViewOfFile.ctypes_function(lpBaseAddress)
 
 @Kernel32Proxy()
 def FindFirstFileA(lpFileName, lpFindFileData):
@@ -581,7 +591,23 @@ def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
 
 @Kernel32Proxy()
 def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
-    return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
+    return OpenEventW.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
+
+@Kernel32Proxy()
+def CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpName):
+    return CreateEventA.ctypes_function(lpEventAttributes, bManualReset, bInitialState, lpName)
+
+@Kernel32Proxy()
+def CreateEventW(lpEventAttributes, bManualReset, bInitialState, lpName):
+    return CreateEventW.ctypes_function(lpEventAttributes, bManualReset, bInitialState, lpName)
+
+@Kernel32Proxy()
+def CreateEventExA(lpEventAttributes, lpName, dwFlags, dwDesiredAccess):
+    return CreateEventExA.ctypes_function(lpEventAttributes, lpName, dwFlags, dwDesiredAccess)
+
+@Kernel32Proxy()
+def CreateEventExW(lpEventAttributes, lpName, dwFlags, dwDesiredAccess):
+    return CreateEventExW.ctypes_function(lpEventAttributes, lpName, dwFlags, dwDesiredAccess)
 
 
 ## Path

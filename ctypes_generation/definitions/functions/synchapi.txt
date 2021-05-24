@@ -1,0 +1,40 @@
+HANDLE CreateEventA(
+  LPSECURITY_ATTRIBUTES lpEventAttributes,
+  BOOL                  bManualReset,
+  BOOL                  bInitialState,
+  LPCSTR                lpName
+);
+
+HANDLE CreateEventW(
+  LPSECURITY_ATTRIBUTES lpEventAttributes,
+  BOOL                  bManualReset,
+  BOOL                  bInitialState,
+  LPCWSTR               lpName
+);
+
+HANDLE CreateEventExA(
+  LPSECURITY_ATTRIBUTES lpEventAttributes,
+  LPCSTR                lpName,
+  DWORD                 dwFlags,
+  DWORD                 dwDesiredAccess
+);
+
+HANDLE CreateEventExW(
+  LPSECURITY_ATTRIBUTES lpEventAttributes,
+  LPCWSTR               lpName,
+  DWORD                 dwFlags,
+  DWORD                 dwDesiredAccess
+);
+
+HANDLE WINAPI OpenEventA(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in LPCSTR lpName
+);
+
+HANDLE WINAPI OpenEventW(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in LPCWSTR lpName
+);
+
