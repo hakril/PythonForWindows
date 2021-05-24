@@ -36,8 +36,7 @@ c += x64.Ret()
 RemoteManualLoadLibray += GetProcAddress64
 
 
-calc= windows.test.pop_proc_64(dwCreationFlags=CREATE_SUSPENDED)
-
+calc = windows.test.pop_proc_64(dwCreationFlags=CREATE_SUSPENDED)
 addr = calc.virtual_alloc(0x1000)
 addr2 = addr + len(dll)
 addr3 = addr2 + len(api)

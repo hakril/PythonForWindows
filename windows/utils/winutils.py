@@ -447,7 +447,8 @@ def query_volume_information(file_or_handle, volume_info_class):
         if volume_info_class == gdef.FileFsAttributeInformation:
             file_name_length = pinfo[0].FileSystemNameLength
         elif volume_info_class == gdef.FileFsVolumeInformation:
-            file_name_length = pinfo[0].VolumeLabelLength + 0x8 # I have seen cases where the VolumeLabelLength is not even enough..
+            # Well VolumeLabelLength is clearly broken (after testing..) so we are adding some bytes to it..
+            file_name_length = pinfo[0].VolumeLabelLength + 0x100 # I have seen cases where the VolumeLabelLength is not even enough..
         else:
             raise
         full_size = ctypes.sizeof(info) + file_name_length # We add a little too much size for the sake of simplicity
@@ -524,13 +525,27 @@ def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, secu
 #    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)
 #    return addr
 
-def decompress_buffer(comptype, buffer, uncompress_size=None):
+def decompress_buffer(buffer, comptype=gdef.COMPRESSION_FORMAT_LZNT1, uncompress_size=None):
     if uncompress_size is None:
         uncompress_size = len(buffer) * 10
     result_size = DWORD()
     uncompressed = ctypes.c_buffer(uncompress_size)
     windows.winproxy.RtlDecompressBuffer(comptype, uncompressed, uncompress_size, buffer, len(buffer), result_size)
     return uncompressed[:result_size.value]
+
+def compress_buffer(buffer, comptype=gdef.COMPRESSION_FORMAT_LZNT1):
+    uncompress_size = len(buffer)
+    CompressedBufferSize = uncompress_size + 0x1000
+    CompressedBuffer = ctypes.c_buffer(CompressedBufferSize)
+    chunk = 4096
+    final_size = gdef.DWORD()
+    work_space_size = gdef.ULONG()
+    ignore_data = gdef.ULONG()
+
+    windows.winproxy.RtlGetCompressionWorkSpaceSize(comptype, work_space_size, ignore_data)
+    work_space = ctypes.c_buffer(work_space_size.value)
+    windows.winproxy.RtlCompressBuffer(comptype, buffer, uncompress_size, CompressedBuffer, CompressedBufferSize, chunk, final_size, work_space)
+    return CompressedBuffer[:final_size.value]
 
 
 # sid.py + real SID type ?
