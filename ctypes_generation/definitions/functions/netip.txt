@@ -1,0 +1,5 @@
+ULONG GetIpNetTable(
+  PMIB_IPNETTABLE IpNetTable,
+  PULONG          SizePointer,
+  BOOL            Order
+);

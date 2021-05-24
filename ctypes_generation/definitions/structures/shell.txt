@@ -30,3 +30,14 @@ enum PACKAGE_EXECUTION_STATE
     PES_SUSPENDED	= 3,
     PES_TERMINATED	= 4
 } 	PACKAGE_EXECUTION_STATE;
+
+typedef struct _SHFILEOPSTRUCTA {
+  HWND         hwnd;
+  UINT         wFunc;
+  PCSTR      pFrom;
+  PCSTR      pTo;
+  FILEOP_FLAGS fFlags;
+  BOOL         fAnyOperationsAborted;
+  LPVOID       hNameMappings;
+  PCSTR        lpszProgressTitle;
+} SHFILEOPSTRUCTA, *LPSHFILEOPSTRUCTA;

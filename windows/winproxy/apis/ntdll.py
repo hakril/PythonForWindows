@@ -318,6 +318,10 @@ def RtlDecompressBufferEx(CompressionFormat, UncompressedBuffer, UncompressedBuf
 def RtlGetCompressionWorkSpaceSize(CompressionFormatAndEngine, CompressBufferWorkSpaceSize, CompressFragmentWorkSpaceSize):
     return RtlGetCompressionWorkSpaceSize.ctypes_function(CompressionFormatAndEngine, CompressBufferWorkSpaceSize, CompressFragmentWorkSpaceSize)
 
+@NtdllProxy()
+def RtlCompressBuffer(CompressionFormatAndEngine, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, UncompressedChunkSize=4096, FinalCompressedSize=NeededParameter, WorkSpace=NeededParameter):
+    return RtlCompressBuffer.ctypes_function(CompressionFormatAndEngine, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, UncompressedChunkSize, FinalCompressedSize, WorkSpace)
+
 
 # Section
 
@@ -384,7 +388,6 @@ def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
 
 
 # Firmware
-
 @NtdllProxy()
 def NtEnumerateSystemEnvironmentValuesEx(InformationClass, Buffer, BufferLength):
     return NtEnumerateSystemEnvironmentValuesEx.ctypes_function(InformationClass, Buffer, BufferLength)

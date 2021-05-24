@@ -254,3 +254,32 @@ LSTATUS RegDeleteTreeW(
   HKEY    hKey,
   LPCWSTR lpSubKey
 );
+
+
+LSTATUS RegSaveKeyA(
+  HKEY                        hKey,
+  LPCSTR                      lpFile,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes
+);
+
+LSTATUS RegSaveKeyW(
+  HKEY                        hKey,
+  LPCWSTR                     lpFile,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes
+);
+
+
+LSTATUS RegSaveKeyExA(
+  HKEY                        hKey,
+  LPCSTR                      lpFile,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  DWORD                       Flags
+);
+
+
+LSTATUS RegSaveKeyExW(
+  HKEY                        hKey,
+  LPCWSTR                     lpFile,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  DWORD                       Flags
+);

@@ -27,3 +27,7 @@ BOOL SHGetPathFromIDListW(
   PCIDLIST_ABSOLUTE pidl,
   LPWSTR             pszPath
 );
+
+INT SHFileOperationA(
+  LPSHFILEOPSTRUCTA lpFileOp
+);

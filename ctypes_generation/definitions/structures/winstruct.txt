@@ -882,6 +882,17 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
     DWORD   AddressOfNameOrdinals;
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
 
+typedef struct _IMAGE_DEBUG_DIRECTORY {
+    DWORD   Characteristics;
+    DWORD   TimeDateStamp;
+    WORD    MajorVersion;
+    WORD    MinorVersion;
+    DWORD   Type;
+    DWORD   SizeOfData;
+    DWORD   AddressOfRawData;
+    DWORD   PointerToRawData;
+} IMAGE_DEBUG_DIRECTORY, *PIMAGE_DEBUG_DIRECTORY;
+
 typedef struct _IMAGE_BASE_RELOCATION {
     DWORD   VirtualAddress;
     DWORD   SizeOfBlock;

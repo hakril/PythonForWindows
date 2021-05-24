@@ -360,6 +360,21 @@ def RegEnumValueA(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType
 def RegEnumValueW(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
     return RegEnumValueW.ctypes_function(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData)
 
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSaveKeyA(hKey, lpFile, lpSecurityAttributes):
+    return RegSaveKeyA.ctypes_function(hKey, lpFile, lpSecurityAttributes)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSaveKeyW(hKey, lpFile, lpSecurityAttributes):
+    return RegSaveKeyW.ctypes_function(hKey, lpFile, lpSecurityAttributes)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSaveKeyExA(hKey, lpFile, lpSecurityAttributes, Flags):
+    return RegSaveKeyExA.ctypes_function(hKey, lpFile, lpSecurityAttributes, Flags)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSaveKeyExW(hKey, lpFile, lpSecurityAttributes, Flags):
+    return RegSaveKeyExW.ctypes_function(hKey, lpFile, lpSecurityAttributes, Flags)
 
 # Service
 

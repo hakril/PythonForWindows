@@ -9,3 +9,38 @@
 #define HKEY_CURRENT_CONFIG                 (0x80000005)
 #define HKEY_DYN_DATA                       (0x80000006)
 #define HKEY_CURRENT_USER_LOCAL_SETTINGS    (0x80000007)
+
+/* From: public/sdk/inc/ntregapi.h */
+
+#define REG_OPTION_RESERVED         (0x00000000L)   // Parameter is reserved
+
+#define REG_OPTION_NON_VOLATILE     (0x00000000L)   // Key is preserved
+                                                    // when system is rebooted
+
+#define REG_OPTION_VOLATILE         (0x00000001L)   // Key is not preserved
+                                                    // when system is rebooted
+
+#define REG_OPTION_CREATE_LINK      (0x00000002L)   // Created key is a
+                                                    // symbolic link
+
+#define REG_OPTION_BACKUP_RESTORE   (0x00000004L)   // open for backup or restore
+                                                    // special access rules
+                                                    // privilege required
+
+#define REG_OPTION_OPEN_LINK        (0x00000008L)   // Open symbolic link
+
+#define REG_LEGAL_OPTION            \
+                (REG_OPTION_RESERVED            |\
+                 REG_OPTION_NON_VOLATILE        |\
+                 REG_OPTION_VOLATILE            |\
+                 REG_OPTION_CREATE_LINK         |\
+                 REG_OPTION_BACKUP_RESTORE      |\
+                 REG_OPTION_OPEN_LINK)
+
+
+//
+// hive format to be used by Reg(Nt)SaveKeyEx
+//
+#define REG_STANDARD_FORMAT     1
+#define REG_LATEST_FORMAT       2
+#define REG_NO_COMPRESSION      4

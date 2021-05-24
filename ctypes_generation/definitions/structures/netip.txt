@@ -1,0 +1,14 @@
+typedef struct _MIB_IPNETROW_LH {
+  IF_INDEX dwIndex;
+  DWORD    dwPhysAddrLen;
+  UCHAR    bPhysAddr[8];
+  DWORD    dwAddr;
+  union {
+    DWORD          dwType;
+  };
+} MIB_IPNETROW, *PMIB_IPNETROW;
+
+typedef struct _MIB_IPNETTABLE {
+  DWORD        dwNumEntries;
+  MIB_IPNETROW table[ANY_SIZE];
+} MIB_IPNETTABLE, *PMIB_IPNETTABLE;

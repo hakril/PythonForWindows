@@ -795,6 +795,17 @@ NTSTATUS RtlDecompressBuffer(
     PULONG FinalUncompressedSize
 );
 
+NTSTATUS RtlCompressBuffer(
+  USHORT CompressionFormatAndEngine,
+  PUCHAR UncompressedBuffer,
+  ULONG  UncompressedBufferSize,
+  PUCHAR CompressedBuffer,
+  ULONG  CompressedBufferSize,
+  ULONG  UncompressedChunkSize,
+  PULONG FinalCompressedSize,
+  PVOID  WorkSpace
+);
+
 NTSTATUS RtlDecompressBufferEx(
    USHORT CompressionFormat,
    PUCHAR UncompressedBuffer,

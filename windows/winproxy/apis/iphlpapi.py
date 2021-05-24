@@ -32,3 +32,8 @@ def GetIfTable(pIfTable, pdwSize, bOrder=False):
 @IphlpapiProxy()
 def GetIpAddrTable(pIpAddrTable, pdwSize, bOrder=False):
     return GetIpAddrTable.ctypes_function(pIpAddrTable, pdwSize, bOrder)
+
+
+@IphlpapiProxy()
+def GetIpNetTable(IpNetTable, SizePointer, Order):
+   return GetIpNetTable.ctypes_function(IpNetTable, SizePointer, Order)
