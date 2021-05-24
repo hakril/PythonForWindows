@@ -6,7 +6,7 @@ import time
 PIPE_NAME = "PFW_Test_Pipe"
 
 rcode_test_ipc_pipe = """
-import windows
+import windows; import windows.pipe
 windows.pipe.send_object("{pipe}", {{'Hello': 2}})
 """
 
@@ -20,7 +20,7 @@ def test_ipc_pipe(proc32_64):
 
 
 rcode_test_echo_pipe = """
-import windows
+import windows; import windows.pipe
 
 with windows.pipe.create("{pipe}") as np:
     np.wait_connection()

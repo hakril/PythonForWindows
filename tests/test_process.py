@@ -8,6 +8,7 @@ import textwrap
 import shutil
 
 import windows
+import windows.pipe
 import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
@@ -169,7 +170,7 @@ class TestProcessWithCheckGarbage(object):
 
     def test_execute_python_good_version(self, proc32_64):
         PIPE_NAME = "PFW_TEST_Pipe"
-        rcode = r"""import sys; import windows; windows.pipe.send_object("{pipe}", list(sys.version_info))"""
+        rcode = r"""import sys; import windows; import windows.pipe; windows.pipe.send_object("{pipe}", list(sys.version_info))"""
 
         with windows.pipe.create(PIPE_NAME) as np:
             proc32_64.execute_python(rcode.format(pipe=PIPE_NAME))

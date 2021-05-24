@@ -1,4 +1,5 @@
 import windows
+import windows.pipe
 
 def test_handle_process_id():
     handle_with_process = [h for h in windows.system.handles if h.dwProcessId]
@@ -20,7 +21,7 @@ TEST_FILE_FOR_HANDLE = r"C:\Windows\explorer.exe"
 
 def test_remote_handle_type_and_name(proc32_64):
     # tmpfile
-    proc32_64.execute_python("import windows")
+    proc32_64.execute_python("import windows; import windows.pipe")
     # A filename that a normal process should not have a handle on (to be sur)
     proc32_64.execute_python(r"""f = open(r"{filename}")""".format(filename=TEST_FILE_FOR_HANDLE))
     proc32_64.execute_python(r"""h = windows.utils.get_handle_from_file(f)""")
