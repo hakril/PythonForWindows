@@ -261,6 +261,40 @@ def test_x86_instr_multiply():
     res += x86.Ret()
     assert res.get_code() == b"\x90\x90\x90\x90\x90\xc3"
 
+import threading
+threads_error = []
+
+def test_x86_multithread_target():
+    try:
+
+        assert x86.Mov("ECX", "SS").get_code() == b"\x8c\xd1"
+        assert x86.Mov("SS", "ECX").get_code() == b"\x8e\xd1"
+        assert x86.Ret().get_code() == b"\xc3"
+
+        res = x86.MultipleInstr()
+        res += x86.Mov("ECX", "SS")
+        res += x86.Mov("SS", "ECX")
+        res += x86.Ret()
+        assert res.get_code() == b"\x8c\xd1\x8e\xd1\xc3"
+    except Exception as e:
+        threads_error.append(e)
+        raise
+    return True
+
+def test_x86_multithread():
+    all_threads = []
+    for tnb in range(10):
+        t = threading.Thread(target=test_x86_multithread_target)
+        all_threads.append(t)
+
+    # import pdb; pdb.set_trace()
+    for t in all_threads:
+        t.start()
+    for t in all_threads:
+        t.join()
+    assert not threads_error, "syswow call inconsistent with MultiThreading inconsistent"
+
+
 if capstone is None:
     test_assembler = pytest.mark.skip("Capstone not installed")(test_assembler)
 

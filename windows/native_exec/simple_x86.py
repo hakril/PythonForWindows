@@ -28,6 +28,12 @@ class BitArray(object):
         if size > len(self.array):
             self.array = ([0] * (size - len(self.array))) + self.array
 
+    def copy(self):
+        new = type(self)(0, "")
+        new.size = self.size
+        new.array = list(self.array)
+        return new
+
     def dump(self):
         res = []
         for i in range(self.size // 8):
@@ -283,7 +289,7 @@ RegisterEax = lambda: FixedRegister('EAX')
 
 class RawBits(BitArray):
     def accept_arg(self, args, instr_state):
-        return (0, self)
+        return (0, self.copy())
 
 
 # Immediat value logic
@@ -404,8 +410,6 @@ class SegmentSelectorAbsoluteAddr(object):
 
 
 
-
-
 class ModRM(object):
     def __init__(self, sub_modrm, accept_reverse=True, has_direction_bit=True):
         self.accept_reverse = accept_reverse
@@ -437,7 +441,6 @@ class ModRM_REG__REG(object):
     @classmethod
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_reg(arg2)
-
 
     def __init__(self, arg1, arg2, reversed, instr_state):
         self.mod = BitArray(2, "11")
@@ -601,6 +604,7 @@ class Instruction(object):
     encoding = []
 
     def __init__(self, *initial_args):
+        # print(self, initial_args)
         for type_encoding in self.encoding:
             args = list(initial_args)
             prefix = []
@@ -620,6 +624,7 @@ class Instruction(object):
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
 
     def get_code(self):
+        # print(self.value)
         prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
         return prefix_opcode + bytes(self.value.dump())
 
