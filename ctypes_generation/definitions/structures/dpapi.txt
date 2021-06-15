@@ -1,0 +1,6 @@
+typedef struct _CRYPTPROTECT_PROMPTSTRUCT {
+  DWORD   cbSize;
+  DWORD   dwPromptFlags;
+  HWND    hwndApp;
+  LPCWSTR szPrompt;
+} CRYPTPROTECT_PROMPTSTRUCT, *PCRYPTPROTECT_PROMPTSTRUCT;

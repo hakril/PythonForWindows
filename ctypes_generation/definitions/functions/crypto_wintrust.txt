@@ -258,6 +258,98 @@ BOOL WINAPI CryptReleaseContext(
   _In_ DWORD      dwFlags
 );
 
+
+BOOL CryptCreateHash(
+  HCRYPTPROV hProv,
+  ALG_ID     Algid,
+  HCRYPTKEY  hKey,
+  DWORD      dwFlags,
+  HCRYPTHASH *phHash
+);
+
+BOOL CryptHashData(
+  HCRYPTHASH hHash,
+  BYTE *pbData,
+  DWORD      dwDataLen,
+  DWORD      dwFlags
+);
+
+BOOL CryptGetHashParam(
+  HCRYPTHASH hHash,
+  DWORD      dwParam,
+  BYTE       *pbData,
+  DWORD      *pdwDataLen,
+  DWORD      dwFlags
+);
+
+BOOL CryptVerifySignatureA(
+  HCRYPTHASH hHash,
+  BYTE *pbSignature,
+  DWORD      dwSigLen,
+  HCRYPTKEY  hPubKey,
+  LPCSTR     szDescription,
+  DWORD      dwFlags
+);
+
+BOOL CryptVerifySignatureW(
+  HCRYPTHASH hHash,
+  BYTE *pbSignature,
+  DWORD      dwSigLen,
+  HCRYPTKEY  hPubKey,
+  LPCWSTR    szDescription,
+  DWORD      dwFlags
+);
+
+BOOL CryptSignHashA(
+  HCRYPTHASH hHash,
+  DWORD      dwKeySpec,
+  LPCSTR     szDescription,
+  DWORD      dwFlags,
+  BYTE       *pbSignature,
+  DWORD      *pdwSigLen
+);
+
+
+BOOL CryptSignHashW(
+  HCRYPTHASH hHash,
+  DWORD      dwKeySpec,
+  LPCWSTR    szDescription,
+  DWORD      dwFlags,
+  BYTE       *pbSignature,
+  DWORD      *pdwSigLen
+);
+
+BOOL CryptDestroyHash(
+  HCRYPTHASH hHash
+);
+
+BOOL CryptEncrypt(
+  HCRYPTKEY  hKey,
+  HCRYPTHASH hHash,
+  BOOL       Final,
+  DWORD      dwFlags,
+  BYTE       *pbData,
+  DWORD      *pdwDataLen,
+  DWORD      dwBufLen
+);
+
+BOOL CryptDecrypt(
+  HCRYPTKEY  hKey,
+  HCRYPTHASH hHash,
+  BOOL       Final,
+  DWORD      dwFlags,
+  BYTE       *pbData,
+  DWORD      *pdwDataLen
+);
+
+BOOL CryptDeriveKey(
+  HCRYPTPROV hProv,
+  ALG_ID     Algid,
+  HCRYPTHASH hBaseData,
+  DWORD      dwFlags,
+  HCRYPTKEY  *phKey
+);
+
 BOOL WINAPI CryptExportKey(
   _In_    HCRYPTKEY hKey,
   _In_    HCRYPTKEY hExpKey,
@@ -267,6 +359,14 @@ BOOL WINAPI CryptExportKey(
   _Inout_ DWORD     *pdwDataLen
 );
 
+BOOL CryptImportKey(
+  HCRYPTPROV hProv,
+  BYTE *pbData,
+  DWORD      dwDataLen,
+  HCRYPTKEY  hPubKey,
+  DWORD      dwFlags,
+  HCRYPTKEY  *phKey
+);
 
 BOOL WINAPI CertGetCertificateContextProperty(
   _In_    PCCERT_CONTEXT pCertContext,

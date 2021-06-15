@@ -712,3 +712,22 @@ typedef struct _SPC_INDIRECT_DATA_CONTENT
     CRYPT_HASH_BLOB             Digest;
 
 } SPC_INDIRECT_DATA_CONTENT, *PSPC_INDIRECT_DATA_CONTENT;
+
+typedef struct _PUBLICKEYSTRUC {
+  BYTE   bType;
+  BYTE   bVersion;
+  WORD   reserved;
+  ALG_ID aiKeyAlg;
+} BLOBHEADER, PUBLICKEYSTRUC;
+
+// The structure is described at https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/jj650836(v=vs.85)
+// But PLAINTEXTKEYBLOB is a define '#define PLAINTEXTKEYBLOB        0x8' in WinCrypt.h
+// So I guess this struct is reaaly defined no-where
+// So the sample for importing a plain key
+// https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--importing-a-plaintext-key
+// The BLOB is in a BYTE DesKeyBlob[] & not a real struct :')
+typedef struct _STRUCT_PLAINTEXTKEYBLOB {
+  BLOBHEADER hdr;
+  DWORD      dwKeySize;
+  BYTE       rgbKeyData[0];
+} STRUCT_PLAINTEXTKEYBLOB, *PSTRUCT_PLAINTEXTKEYBLOB;

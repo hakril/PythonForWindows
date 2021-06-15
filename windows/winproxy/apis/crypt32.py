@@ -133,6 +133,9 @@ def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEn
 def CryptDecryptMessage(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert):
     return CryptDecryptMessage.ctypes_function(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert)
 
+
+
+
 # Sign / Verify
 
 @Crypt32Proxy()
@@ -217,3 +220,22 @@ def CryptEnumOIDFunction(dwEncodingType, pszFuncName, pszOID, dwFlags, pvArg, pf
 def CryptGetOIDFunctionValue(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData):
     return Cry
     ptGetOIDFunctionValue.ctypes_function(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData)
+
+
+# DPAPI
+
+@Crypt32Proxy()
+def CryptProtectData(pDataIn, szDataDescr=None, pOptionalEntropy=None, pvReserved=None, pPromptStruct=None, dwFlags=0, pDataOut=NeededParameter):
+    return CryptProtectData.ctypes_function(pDataIn, szDataDescr, pOptionalEntropy, pvReserved, pPromptStruct, dwFlags, pDataOut)
+
+@Crypt32Proxy()
+def CryptUnprotectData(pDataIn, ppszDataDescr=None, pOptionalEntropy=None, pvReserved=None, pPromptStruct=None, dwFlags=0, pDataOut=NeededParameter):
+    return CryptUnprotectData.ctypes_function(pDataIn, ppszDataDescr, pOptionalEntropy, pvReserved, pPromptStruct, dwFlags, pDataOut)
+
+@Crypt32Proxy()
+def CryptProtectMemory(pDataIn, cbDataIn, dwFlags):
+    return CryptProtectMemory.ctypes_function(pDataIn, cbDataIn, dwFlags)
+
+@Crypt32Proxy()
+def CryptUnprotectMemory(pDataIn, cbDataIn, dwFlags):
+    return CryptUnprotectMemory.ctypes_function(pDataIn, cbDataIn, dwFlags)

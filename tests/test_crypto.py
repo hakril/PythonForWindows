@@ -238,3 +238,21 @@ def test_cryptmsg_from_data():
     assert cryptmsg.get_recipient_data(0).SerialNumber.data[::-1] == rawtarget
 
 
+# Dpapi
+
+def test_dpapi_protect_unprotect():
+    message_to_protect = b"Testing DPAPI message \xff\x01 but also \x02\xfe\xee"
+    protected = windows.crypto.protect(message_to_protect)
+    assert message_to_protect not in protected
+    assert windows.crypto.unprotect(protected) == message_to_protect
+
+def test_dpapi_protect_unprotect_with_entropy():
+    message_to_protect = b"Testing DPAPI message \xff\x01 but also \x02\xfe\xee with entropy <3"
+    protect_entropy = b"This is a password ? \x01\xff\x99"
+    protected = windows.crypto.protect(message_to_protect, entropy=protect_entropy)
+    assert message_to_protect not in protected
+    with pytest.raises(WindowsError) as ar:
+        windows.crypto.unprotect(protected)
+    with pytest.raises(WindowsError) as ar:
+        windows.crypto.unprotect(protected, entropy=b"Not the good password")
+    assert windows.crypto.unprotect(protected, entropy=protect_entropy) == message_to_protect

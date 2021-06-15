@@ -1,5 +1,6 @@
 import ctypes
 import windows.generated_def as gdef
+import windows.pycompat
 
 from ..apiproxy import ApiProxy, NeededParameter
 from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle, no_error_check, result_is_ntstatus
@@ -494,6 +495,10 @@ def CryptDestroyKey(hKey):
 def CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen):
     return CryptExportKey.ctypes_function(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen)
 
+@Advapi32Proxy()
+def CryptImportKey(hProv, pbData, dwDataLen, hPubKey, dwFlags, phKey):
+    return CryptImportKey.ctypes_function(hProv, pbData, dwDataLen, hPubKey, dwFlags, phKey)
+
 ## crypt context
 
 @Advapi32Proxy()
@@ -509,6 +514,62 @@ def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
 @Advapi32Proxy()
 def CryptReleaseContext(hProv, dwFlags):
     return CryptReleaseContext.ctypes_function(hProv, dwFlags)
+
+## Encrypt / Decrypt
+
+@Advapi32Proxy()
+def CryptEncrypt(hKey, hHash, Final, dwFlags, pbData, pdwDataLen, dwBufLen):
+    return CryptEncrypt.ctypes_function(hKey, hHash, Final, dwFlags, pbData, pdwDataLen, dwBufLen)
+
+@Advapi32Proxy()
+def CryptDecrypt(hKey, hHash, Final, dwFlags, pbData, pdwDataLen):
+    return CryptDecrypt.ctypes_function(hKey, hHash, Final, dwFlags, pbData, pdwDataLen)
+
+## Crypt Key
+
+@Advapi32Proxy()
+def CryptDeriveKey(hProv, Algid, hBaseData, dwFlags, phKey):
+    return CryptDeriveKey.ctypes_function(hProv, Algid, hBaseData, dwFlags, phKey)
+
+## Crypt hash
+
+@Advapi32Proxy()
+def CryptCreateHash(hProv, Algid, hKey=None, dwFlags=0, phHash=NeededParameter):
+    return CryptCreateHash.ctypes_function(hProv, Algid, hKey, dwFlags, phHash)
+
+@Advapi32Proxy()
+def CryptHashData(hHash, pbData, dwDataLen=None, dwFlags=0):
+    if isinstance(pbData, windows.pycompat.anybuff):
+        pbData = (gdef.BYTE * len(pbData))(*bytearray(pbData))
+    if dwDataLen is None:
+        dwDataLen = len(pbData)
+    return CryptHashData.ctypes_function(hHash, pbData, dwDataLen, dwFlags)
+
+@Advapi32Proxy()
+def CryptGetHashParam(hHash, dwParam, pbData, pdwDataLen=None, dwFlags=0):
+    if pdwDataLen is None:
+        pdwDataLen = ctypes.sizeof(pbData)
+    return CryptGetHashParam.ctypes_function(hHash, dwParam, pbData, pdwDataLen, dwFlags)
+
+@Advapi32Proxy()
+def CryptVerifySignatureA(hHash, pbSignature, dwSigLen, hPubKey, szDescription, dwFlags):
+    return CryptVerifySignatureA.ctypes_function(hHash, pbSignature, dwSigLen, hPubKey, szDescription, dwFlags)
+
+@Advapi32Proxy()
+def CryptVerifySignatureW(hHash, pbSignature, dwSigLen, hPubKey, szDescription, dwFlags):
+    return CryptVerifySignatureW.ctypes_function(hHash, pbSignature, dwSigLen, hPubKey, szDescription, dwFlags)
+
+@Advapi32Proxy()
+def CryptSignHashA(hHash, dwKeySpec, szDescription, dwFlags, pbSignature, pdwSigLen):
+    return CryptSignHashA.ctypes_function(hHash, dwKeySpec, szDescription, dwFlags, pbSignature, pdwSigLen)
+
+@Advapi32Proxy()
+def CryptSignHashW(hHash, dwKeySpec, szDescription, dwFlags, pbSignature, pdwSigLen):
+    return CryptSignHashW.ctypes_function(hHash, dwKeySpec, szDescription, dwFlags, pbSignature, pdwSigLen)
+
+@Advapi32Proxy()
+def CryptDestroyHash(hHash):
+    return CryptDestroyHash.ctypes_function(hHash)
 
 
 ## Event Tracing

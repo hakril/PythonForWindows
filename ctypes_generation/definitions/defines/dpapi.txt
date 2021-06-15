@@ -1,0 +1,94 @@
+//
+// CryptProtect PromptStruct dwPromtFlags
+//
+//
+// prompt on unprotect
+#define CRYPTPROTECT_PROMPT_ON_UNPROTECT     0x1  // 1<<0
+//
+// prompt on protect
+#define CRYPTPROTECT_PROMPT_ON_PROTECT       0x2  // 1<<1
+#define CRYPTPROTECT_PROMPT_RESERVED         0x04 // reserved, do not use.
+
+//
+// default to strong variant UI protection (user supplied password currently).
+#define CRYPTPROTECT_PROMPT_STRONG           0x08 // 1<<3
+
+//
+// require strong variant UI protection (user supplied password currently).
+#define CRYPTPROTECT_PROMPT_REQUIRE_STRONG   0x10 // 1<<4
+
+//
+// CryptProtectData and CryptUnprotectData dwFlags
+//
+// for remote-access situations where ui is not an option
+// if UI was specified on protect or unprotect operation, the call
+// will fail and GetLastError() will indicate ERROR_PASSWORD_RESTRICTION
+#define CRYPTPROTECT_UI_FORBIDDEN        0x1
+
+//
+// per machine protected data -- any user on machine where CryptProtectData
+// took place may CryptUnprotectData
+#define CRYPTPROTECT_LOCAL_MACHINE       0x4
+
+//
+// force credential synchronize during CryptProtectData()
+// Synchronize is only operation that occurs during this operation
+#define CRYPTPROTECT_CRED_SYNC           0x8
+
+//
+// Generate an Audit on protect and unprotect operations
+//
+#define CRYPTPROTECT_AUDIT              0x10
+
+//
+// Protect data with a non-recoverable key
+//
+#define CRYPTPROTECT_NO_RECOVERY        0x20
+
+
+//
+// Verify the protection of a protected blob
+//
+#define CRYPTPROTECT_VERIFY_PROTECTION  0x40
+
+//
+// Regenerate the local machine protection
+//
+#define CRYPTPROTECT_CRED_REGENERATE    0x80
+
+// flags reserved for system use
+#define CRYPTPROTECT_FIRST_RESERVED_FLAGVAL    0x0FFFFFFF
+#define CRYPTPROTECT_LAST_RESERVED_FLAGVAL     0xFFFFFFFF
+
+
+//
+// The buffer length passed into CryptProtectMemory and CryptUnprotectMemory
+// must be a multiple of this length (or zero).
+//
+
+#define CRYPTPROTECTMEMORY_BLOCK_SIZE           16
+
+
+//
+// CryptProtectMemory/CryptUnprotectMemory dwFlags
+//
+
+//
+// Encrypt/Decrypt within current process context.
+//
+
+#define CRYPTPROTECTMEMORY_SAME_PROCESS         0x00
+
+//
+// Encrypt/Decrypt across process boundaries.
+// eg: encrypted buffer passed across LPC to another process which calls CryptUnprotectMemory.
+//
+
+#define CRYPTPROTECTMEMORY_CROSS_PROCESS        0x01
+
+//
+// Encrypt/Decrypt across callers with same LogonId.
+// eg: encrypted buffer passed across LPC to another process which calls CryptUnprotectMemory whilst impersonating.
+//
+
+#define CRYPTPROTECTMEMORY_SAME_LOGON           0x02

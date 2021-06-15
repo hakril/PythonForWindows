@@ -5,4 +5,5 @@ DEFAULT_ENCODING = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING
 from windows.crypto.certificate import *
 from windows.crypto.encrypt_decrypt import *
 from windows.crypto.sign_verify  import *
+from windows.crypto.dpapi  import *
 from windows.crypto.cryptmsg import CryptMessage

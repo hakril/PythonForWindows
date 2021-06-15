@@ -1,0 +1,31 @@
+BOOL CryptProtectData(
+  DATA_BLOB                 *pDataIn,
+  LPCWSTR                   szDataDescr,
+  DATA_BLOB                 *pOptionalEntropy,
+  PVOID                     pvReserved,
+  CRYPTPROTECT_PROMPTSTRUCT *pPromptStruct,
+  DWORD                     dwFlags,
+  DATA_BLOB                 *pDataOut
+);
+
+BOOL CryptUnprotectData(
+  DATA_BLOB                 *pDataIn,
+  LPWSTR                    *ppszDataDescr,
+  DATA_BLOB                 *pOptionalEntropy,
+  PVOID                     pvReserved,
+  CRYPTPROTECT_PROMPTSTRUCT *pPromptStruct,
+  DWORD                     dwFlags,
+  DATA_BLOB                 *pDataOut
+);
+
+BOOL CryptProtectMemory(
+  LPVOID pDataIn,
+  DWORD  cbDataIn,
+  DWORD  dwFlags
+);
+
+BOOL CryptUnprotectMemory(
+  LPVOID pDataIn,
+  DWORD  cbDataIn,
+  DWORD  dwFlags
+);
