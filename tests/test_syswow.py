@@ -69,3 +69,47 @@ class TestSyswowRemoteProcess(object):
         assert RETURN_VALUE == proc32.read_qword(addr)
 
 
+import threading
+import windows.test
+
+threads_error = {}
+
+def loop_query_ppid(proc, target_ppid):
+    assert proc.bitness == 64
+
+    try:
+        for i in range(10):
+            del proc._ppid # Force requery via syswow API
+            assert proc.ppid == target_ppid
+            for i in [x for x in proc.memory_state() if x.Protect == gdef.PAGE_EXECUTE_READ][:10]:
+                assert proc.read_memory(i.BaseAddress, 0x1000)
+            # assert False, "LOL"
+    except Exception as e:
+        # import traceback; traceback.print(
+        threads_error[windows.current_thread.tid] = e
+        raise
+    return True
+
+@process_syswow_only
+def test_syswow_call_multithread():
+    all_threads = []
+    all_procs = []
+
+    # Create multiple thread that will trigger concurrent call to NtQueryInformationProcess_32_to_64
+    # Old version of PFW did not handled that thus generating invalid result / crash
+    for tnb in range(10):
+        new_proc = windows.test.pop_proc_64()
+        new_proc_pid = new_proc.ppid
+        all_procs.append(new_proc)
+        t = threading.Thread(target=loop_query_ppid, args=(new_proc, new_proc_pid))
+        all_threads.append(t)
+
+    # import pdb; pdb.set_trace()
+    for t in all_threads:
+        t.start()
+    for t in all_threads:
+        t.join()
+    for p in all_procs:
+        p.exit()
+
+    assert not threads_error, "syswow call inconsistent with MultiThreading inconsistent"

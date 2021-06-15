@@ -3,6 +3,7 @@ import ctypes
 from ctypes import byref
 import codecs
 import functools
+import threading
 
 import windows
 import windows.native_exec.simple_x86 as x86
@@ -17,6 +18,15 @@ from .pycompat import int_types
 CS_32bits = 0x23
 CS_64bits = 0x33
 
+# Allow to keep per-thread state of asm stub
+class ThreadState(threading.local):
+    def __init__(self): # Called once per thread
+        self.allocator =  windows.native_exec.native_function.CustomAllocator()
+        self.raw_call_per_function = {}
+        self.current_original_args = None
+
+thread_state = ThreadState()
+
 
 def generate_64bits_execution_stub_from_syswow(x64shellcode):
     """shellcode must NOT end by a ret"""
@@ -30,7 +40,7 @@ def generate_64bits_execution_stub_from_syswow(x64shellcode):
     transition64 += x64.Shr("RDX", 32)
     transition64 += x64.Retf32()  # 32 bits return addr
     transition64 += x64.Label(":TOEXEC")
-    x64shellcodeaddr = windows.current_process.allocator.write_code(transition64.get_code() + x64shellcode)
+    x64shellcodeaddr = thread_state.allocator.write_code(transition64.get_code() + x64shellcode)
 
     transition =     x86.MultipleInstr()
     transition +=    x86.Call(CS_64bits, x64shellcodeaddr)
@@ -42,7 +52,7 @@ def generate_64bits_execution_stub_from_syswow(x64shellcode):
     transition +=    x86.Mov("SS", "ECX")
     transition +=    x86.Ret()
 
-    stubaddr = windows.current_process.allocator.write_code(transition.get_code())
+    stubaddr = thread_state.allocator.write_code(transition.get_code())
     exec_stub = ctypes.CFUNCTYPE(ULONG64)(stubaddr)
     return exec_stub
 
@@ -53,8 +63,8 @@ def generate_syswow64_call(target, errcheck=None):
     nb_args = len(target.prototype._argtypes_)
     target_addr = get_syswow_ntdll_exports()[target.__name__]
     argument_buffer_len = (nb_args * 8)
-    argument_buffer = windows.current_process.allocator.reserve_size(argument_buffer_len)
-    alignement_information = windows.current_process.allocator.reserve_size(8)
+    argument_buffer = thread_state.allocator.reserve_size(argument_buffer_len)
+    alignement_information = thread_state.allocator.reserve_size(8)
 
     nb_args_on_stack = max(nb_args - 4, 0)
 
@@ -140,7 +150,8 @@ def try_generate_stub_target(shellcode, argument_buffer, target, errcheck=None):
         buffer = struct.pack("<" + "Q" * len(writable_args), *writable_args)
         ctypes.memmove(argument_buffer, buffer, len(buffer))
         # Copy origincal args in function, for errcheck if needed
-        native_caller.current_original_args = args # TODO: THIS IS NOT THREAD SAFE
+        thread_state.current_original_args = args
+
         return native_caller()
     wrapper.__name__ = "{0}<syswow64>".format(target.__name__,)
     wrapper.__doc__ = "This is a wrapper to {0} in 64b mode, it accept <{1}> args".format(target.__name__, expected_arguments_number)
@@ -201,23 +212,20 @@ class Syswow64ApiProxy(object):
     """Create a python wrapper around a function"""
     def __init__(self, winproxy_function, errcheck=None):
         self.winproxy_function = winproxy_function
-        self.raw_call = None
         self.errcheck = errcheck
         if winproxy_function is not None:
             self.params_name = [param[1] for param in winproxy_function.params]
-
-
-
 
     def __call__(self, python_proxy):
         if not windows.winproxy.is_implemented(self.winproxy_function):
             return None
 
         def force_resolution():
-            if self.raw_call:
+            if self.winproxy_function in thread_state.raw_call_per_function:
                 return True
             try:
-                self.raw_call = generate_syswow64_call(self.winproxy_function, errcheck=self.errcheck)
+                stub = generate_syswow64_call(self.winproxy_function, errcheck=self.errcheck)
+                thread_state.raw_call_per_function[self.winproxy_function] = stub
             except KeyError:
                 raise windows.winproxy.ExportNotFound(self.winproxy_function.__name__, "SysWow[ntdll64]")
 
@@ -232,15 +240,17 @@ class Syswow64ApiProxy(object):
                 if param_value is NeededParameter:
                     raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.winproxy_function.__name__, param_name))
 
-            if self.raw_call is None:
+            if self.winproxy_function not in thread_state.raw_call_per_function:
                 force_resolution()
-            return self.raw_call(*args)
+            return thread_state.raw_call_per_function[self.winproxy_function](*args)
+
+
         setattr(python_proxy, "ctypes_function", perform_call)
         setattr(python_proxy, "force_resolution", force_resolution)
         return python_proxy
 
 def ntquerysysteminformation_syswow64_error_check(result, func, args):
-    args = func.current_original_args
+    args = thread_state.current_original_args
     if result == 0:
         return args
     # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
