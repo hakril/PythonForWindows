@@ -186,17 +186,18 @@ class EtwTrace(object):
             raise # Other error -> reraise
         return True
 
-    def start(self, flags=0):
+    def start(self, flags=0, mode=0):
         """Start the tracing"""
         prop = EventTraceProperties.create()
         prop.NumberOfBuffers = 42
         prop.EnableFlags = flags
+        prop.LogFileMode = mode
         if self.guid:
             prop.Wnode.Guid = self.guid
         if self.logfile:
             prop.logfile = self.logfile
         if self.name: # Base REAL_TIME on option ? name presence ? logfile presence ?
-            prop.LogFileMode = gdef.EVENT_TRACE_REAL_TIME_MODE
+            prop.LogFileMode |= gdef.EVENT_TRACE_REAL_TIME_MODE
         handle = gdef.TRACEHANDLE()
         windows.winproxy.StartTraceA(handle, self.name, prop)
         if not self.guid:

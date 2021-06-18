@@ -45,6 +45,40 @@
 #define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // Auto-switch log file
 #define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // Pre-allocate mode
 
+#define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // Auto-switch log file
+#define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // Pre-allocate mode
+
+//
+// Logger Mode flags on Vista and above
+//
+
+#define EVENT_TRACE_NONSTOPPABLE_MODE       0x00000040  // Session cannot be stopped (Autologger only)
+#define EVENT_TRACE_SECURE_MODE             0x00000080  // Secure session
+#define EVENT_TRACE_USE_KBYTES_FOR_SIZE     0x00002000  // Use KBytes as file size unit
+#define EVENT_TRACE_PRIVATE_IN_PROC         0x00020000  // In process private logger
+
+#define EVENT_TRACE_MODE_RESERVED           0x00100000  // Reserved bit, used to signal Heap/Critsec tracing
+
+//
+// Logger Mode flags on Win7 and above
+//
+
+#define EVENT_TRACE_NO_PER_PROCESSOR_BUFFERING 0x10000000  // Use this for low frequency sessions.
+
+//
+// Logger Mode flags on Win8 and above
+//
+
+#define EVENT_TRACE_SYSTEM_LOGGER_MODE      0x02000000  // Receive events from SystemTraceProvider
+#define EVENT_TRACE_ADDTO_TRIAGE_DUMP       0x80000000  // Add ETW buffers to triage dumps
+#define EVENT_TRACE_STOP_ON_HYBRID_SHUTDOWN 0x00400000  // Stop on hybrid shutdown
+#define EVENT_TRACE_PERSIST_ON_HYBRID_SHUTDOWN 0x00800000 // Persist on hybrid shutdown
+
+//
+// Logger Mode flags on Blue and above
+//
+
+#define EVENT_TRACE_INDEPENDENT_SESSION_MODE  0x08000000  // Independent logger session
 
 //
 // ControlTrace Codes
