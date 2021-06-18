@@ -465,6 +465,37 @@ LPVOID WINAPI LockResource(
   _In_  HGLOBAL hResData
 );
 
+BOOL FreeResource(
+  HGLOBAL hResData
+);
+
+BOOL EnumResourceTypesA(
+  HMODULE          hModule,
+  ENUMRESTYPEPROCA lpEnumFunc,
+  LONG_PTR         lParam
+);
+
+
+BOOL EnumResourceTypesW(
+  HMODULE          hModule,
+  ENUMRESTYPEPROCW lpEnumFunc,
+  LONG_PTR         lParam
+);
+
+BOOL EnumResourceNamesA(
+  HMODULE          hModule,
+  LPCSTR           lpType,
+  ENUMRESNAMEPROCA lpEnumFunc,
+  LONG_PTR         lParam
+);
+
+BOOL EnumResourceNamesW(
+  HMODULE          hModule,
+  LPCWSTR          lpType,
+  ENUMRESNAMEPROCW lpEnumFunc,
+  LONG_PTR         lParam
+);
+
 BOOL WINAPI GetVersionExA(
     __inout LPOSVERSIONINFOA lpVersionInformation
 );

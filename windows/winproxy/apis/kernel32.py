@@ -820,3 +820,48 @@ def GetSystemTimeAsFileTime(lpSystemTimeAsFileTime):
 @Kernel32Proxy(error_check=fail_on_zero)
 def HeapAlloc(hHeap, dwFlags, dwBytes):
     return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
+
+
+#####
+
+# Resources
+
+@Kernel32Proxy()
+def FindResourceA(hModule, lpName, lpType):
+    return FindResourceA.ctypes_function(hModule, lpName, lpType)
+
+@Kernel32Proxy()
+def FindResourceW(hModule, lpName, lpType):
+    return FindResourceW.ctypes_function(hModule, lpName, lpType)
+
+@Kernel32Proxy()
+def SizeofResource(hModule, hResInfo):
+    return SizeofResource.ctypes_function(hModule, hResInfo)
+
+@Kernel32Proxy()
+def LoadResource(hModule, hResInfo):
+    return LoadResource.ctypes_function(hModule, hResInfo)
+
+@Kernel32Proxy()
+def LockResource(hResData):
+    return LockResource.ctypes_function(hResData)
+
+@Kernel32Proxy()
+def FreeResource(hResData):
+    return FreeResource.ctypes_function(hResData)
+
+@Kernel32Proxy()
+def EnumResourceTypesA(hModule, lpEnumFunc, lParam):
+    return EnumResourceTypesA.ctypes_function(hModule, lpEnumFunc, lParam)
+
+@Kernel32Proxy()
+def EnumResourceTypesW(hModule, lpEnumFunc, lParam):
+    return EnumResourceTypesW.ctypes_function(hModule, lpEnumFunc, lParam)
+
+@Kernel32Proxy()
+def EnumResourceNamesA(hModule, lpType, lpEnumFunc, lParam):
+    return EnumResourceNamesA.ctypes_function(hModule, lpType, lpEnumFunc, lParam)
+
+@Kernel32Proxy()
+def EnumResourceNamesW(hModule, lpType, lpEnumFunc, lParam):
+    return EnumResourceNamesW.ctypes_function(hModule, lpType, lpEnumFunc, lParam)
