@@ -14,6 +14,7 @@ import func_parser
 import def_parser
 import com_parser
 
+from winstruct import BitFieldValue, ComplexArrayExpression
 from simpleparser import ParsingError
 
 pjoin = os.path.join
@@ -182,7 +183,7 @@ class ParsedFileGraph(object):
         self.build_depandance_database()
 
     def build_dependancy_graph(self):
-        todo = set(self.nodes)
+        todo = sorted(set(self.nodes), key=lambda x: x.filename) # Sorting help determinism
         if not todo:
             return []
         start = self.find_starting_node()
@@ -573,7 +574,19 @@ class StructureDocGenerator(NoTemplatedGenerator):
             # Emit struct Definition
             self.emitline(".. class:: {0}".format(struct.name))
             for ftype, fname, nb in struct.fields:
-                array_str = " ``[{nb}]``".format(nb=nb) if nb > 1 else ""
+                if isinstance(nb, int):
+                    array_str = " ``[{nb}]``".format(nb=nb) if nb > 1 else ""
+                elif isinstance(nb, BitFieldValue):
+                    array_str = " ``(BitField of size {nb}``".format(nb=int(nb))
+                elif isinstance(nb, ComplexArrayExpression):
+                    values = nb.values
+                    if len(values) == 1 and values[0] == "1":
+                            array_str = ""
+                    else:
+                        array_str = " ``[{nb}]``".format(nb=" ".join(nb.values))
+                else:
+                    raise TypeError("Unknown type for array expression: {0}".format(nb))
+
                 self.emitline("")
                 self.emitline("    .. attribute:: {fname}".format(fname=fname))
                 self.emitline("")
