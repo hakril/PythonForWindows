@@ -191,6 +191,10 @@ class SymbolType(object):
         return gdef.BasicType.mapper[self._get_type_info(gdef.TI_GET_BASETYPE)]
 
     @property
+    def parent(self):
+        return self.new_typeid(self._get_type_info(gdef.TI_GET_CLASSPARENTID))
+
+    @property
     def datakind(self):
         return gdef.DataKind.mapper[self._get_type_info(gdef.TI_GET_DATAKIND)]
 
@@ -205,6 +209,10 @@ class SymbolType(object):
     @property
     def nb_children(self):
         return self._get_type_info(gdef.TI_GET_CHILDRENCOUNT)
+
+    @property
+    def value(self):
+        return self._get_type_info(gdef.TI_GET_VALUE)
 
     @property
     def children(self):
@@ -228,7 +236,10 @@ class SymbolType(object):
 
     def __repr__(self):
         if self.tag == gdef.SymTagBaseType:
-            return '<{0} <basetype> {1}>'.format(type(self).__name__, self.basetype)
+            return '<{0} <basetype> {1!r}>'.format(type(self).__name__, self.basetype)
+        elif self.tag == gdef.SymTagPointerType:
+            target_type = self.type.name
+            return '<{0} PTR TO "{1}" tag={2}>'.format(type(self).__name__, target_type, self.tag)
         return '<{0} name="{1}" tag={2}>'.format(type(self).__name__, self.name, self.tag)
 
 
@@ -729,4 +740,5 @@ TST_TYPE_RES_TYPE = {
     gdef.TI_GET_ADDRESS: gdef.ULONG64,
     gdef.TI_GTIEX_REQS_VALID: gdef.ULONG64,
     gdef.TI_GET_SYMTAG: gdef.SymTagEnum,
+    gdef.TI_GET_VALUE: windows.com.Variant,
 }
