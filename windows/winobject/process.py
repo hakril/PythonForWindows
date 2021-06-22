@@ -730,7 +730,13 @@ class CurrentProcess(Process):
             raise ValueError("Not a syswow process")
         return windows.syswow64.get_current_process_syswow_peb()
 
-    # TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?
+    # TODO: use ctypes.string_at / ctypes.wstring_at for read_string / read_wstring ?
+
+    def read_string(self, addr):
+        return ctypes.string_at(addr) # Raises WindowsError on fail
+
+    def read_wstring(self, addr):
+        return ctypes.wstring_at(addr) # Raises WindowsError on fail
 
 class WinThread(Thread):
     """Represent a thread """

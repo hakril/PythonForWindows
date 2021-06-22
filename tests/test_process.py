@@ -105,12 +105,14 @@ class TestProcessWithCheckGarbage(object):
         string_to_write = test_string + "\x00"
         with proc32_64.allocated_memory(0x1000) as addr:
             waddr = addr + 0x1000 - len(string_to_write)
-            proc32_64.write_memory(addr, string_to_write)
-            assert proc32_64.read_string(addr) ==  test_string
+            proc32_64.write_memory(waddr, string_to_write)
+            with pytest.raises(windows.winproxy.WinproxyError):
+                proc32_64.read_memory(waddr, 0x20) # Check that Reading dumbly fails
+            assert proc32_64.read_string(waddr) ==  test_string
 
 
     def test_wread_string(self, proc32_64):
-        test_string = "TEST_STRING"
+        test_string = u"TEST_STRING"
         string_to_write = test_string + "\x00"
         with proc32_64.allocated_memory(0x1000) as addr:
             # Just check based on previous 'encoding' method
@@ -118,12 +120,37 @@ class TestProcessWithCheckGarbage(object):
             assert proc32_64.read_wstring(addr) ==  test_string
 
     def test_read_wstring_end_page(self, proc32_64):
-        test_string = "TEST_STRING"
-        string_to_write = test_string + "\x00"
+        test_string = u"TEST_STRING"
+        string_to_write = (test_string + "\x00").encode("utf-16-le")
         with proc32_64.allocated_memory(0x1000) as addr:
             waddr = addr + 0x1000 - len(string_to_write)
-            proc32_64.write_memory(addr, "\x00".join(string_to_write))
-            assert proc32_64.read_wstring(addr) ==  test_string
+            proc32_64.write_memory(waddr, string_to_write)
+            with pytest.raises(windows.winproxy.WinproxyError):
+                proc32_64.read_memory(waddr, 0x20) # Check that Reading dumbly fails
+            assert proc32_64.read_wstring(waddr) ==  test_string
+
+
+    def test_read_string_end_page_current_process(self):
+        current_proc = windows.current_process
+        test_string = "TEST_STRING"
+        string_to_write = test_string + "\x00"
+        with current_proc.allocated_memory(0x1000) as addr:
+            waddr = addr + 0x1000 - len(string_to_write)
+            current_proc.write_memory(waddr, string_to_write)
+            with pytest.raises(WindowsError):
+                current_proc.read_memory(waddr, 0x20) # Check that Reading dumbly fails
+            assert current_proc.read_string(waddr) ==  test_string
+
+    def test_read_wstring_end_page_current_process(self):
+        current_proc = windows.current_process
+        test_string = u"TEST_STRING"
+        string_to_write = (test_string + "\x00").encode("utf-16-le")
+        with current_proc.allocated_memory(0x1000) as addr:
+            waddr = addr + 0x1000 - len(string_to_write)
+            current_proc.write_memory(waddr, string_to_write)
+            with pytest.raises(WindowsError):
+                current_proc.read_memory(waddr, 0x20) # Check that Reading dumbly fails
+            assert current_proc.read_wstring(waddr) ==  test_string
 
     def test_query_memory(self, proc32_64):
         addr = proc32_64.virtual_alloc(0x2000, prot=gdef.PAGE_EXECUTE_READWRITE)
