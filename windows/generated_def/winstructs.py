@@ -9331,6 +9331,84 @@ PEXPLICIT_ACCESSW = POINTER(_EXPLICIT_ACCESS_W)
 PEXPLICIT_ACCESS_W = POINTER(_EXPLICIT_ACCESS_W)
 EXPLICIT_ACCESS_W = _EXPLICIT_ACCESS_W
 
+class _SYSTEM_PROCESS_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("NumberOfThreads", ULONG),
+        ("Reserved1", BYTE * (24)),
+        ("CreateTime", LARGE_INTEGER),
+        ("UserTime", LARGE_INTEGER),
+        ("KernelTime", LARGE_INTEGER),
+        ("ImageName", UNICODE_STRING),
+        ("BasePriority", LONG),
+        ("UniqueProcessId", HANDLE),
+        ("InheritedFromUniqueProcessId", PVOID),
+        ("HandleCount", ULONG),
+        ("Reserved4", BYTE * (4)),
+        ("Reserved5", PVOID * (1)),
+        ("PeakVirtualSize", PVOID),
+        ("VirtualSize", PVOID),
+        ("PageFaultCount", PVOID),
+        ("PeakWorkingSetSize", PVOID),
+        ("WorkingSetSize", PVOID),
+        ("QuotaPeakPagedPoolUsage", PVOID),
+        ("QuotaPagedPoolUsage", PVOID),
+        ("QuotaPeakNonPagedPoolUsage", PVOID),
+        ("QuotaNonPagedPoolUsage", PVOID),
+        ("PagefileUsage", PVOID),
+        ("PeakPagefileUsage", SIZE_T),
+        ("PrivatePageCount", SIZE_T),
+        ("Reserved6", LARGE_INTEGER * (6)),
+    ]
+SYSTEM_PROCESS_INFORMATION = _SYSTEM_PROCESS_INFORMATION
+PSYSTEM_PROCESS_INFORMATION = POINTER(_SYSTEM_PROCESS_INFORMATION)
+
+class _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION(Structure):
+    _fields_ = [
+        ("IdleTime", LARGE_INTEGER),
+        ("KernelTime", LARGE_INTEGER),
+        ("UserTime", LARGE_INTEGER),
+        ("Reserved1", LARGE_INTEGER * (2)),
+        ("Reserved2", ULONG),
+    ]
+SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = POINTER(_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION)
+
+class _SYSTEM_REGISTRY_QUOTA_INFORMATION(Structure):
+    _fields_ = [
+        ("RegistryQuotaAllowed", ULONG),
+        ("RegistryQuotaUsed", ULONG),
+        ("Reserved1", PVOID),
+    ]
+SYSTEM_REGISTRY_QUOTA_INFORMATION = _SYSTEM_REGISTRY_QUOTA_INFORMATION
+PSYSTEM_REGISTRY_QUOTA_INFORMATION = POINTER(_SYSTEM_REGISTRY_QUOTA_INFORMATION)
+
+class _SYSTEM_BASIC_INFORMATION(Structure):
+    _fields_ = [
+        ("Reserved1", BYTE * (24)),
+        ("Reserved2", PVOID * (4)),
+        ("NumberOfProcessors", CHAR),
+    ]
+PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
+SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
+
+class _SYSTEM_PROCESS_INFORMATION_ORIG(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("Reserved1", BYTE * (52)),
+        ("Reserved2", PVOID * (3)),
+        ("UniqueProcessId", HANDLE),
+        ("Reserved3", PVOID),
+        ("HandleCount", ULONG),
+        ("Reserved4", BYTE * (4)),
+        ("Reserved5", PVOID * (11)),
+        ("PeakPagefileUsage", SIZE_T),
+        ("PrivatePageCount", SIZE_T),
+        ("Reserved6", LARGE_INTEGER * (6)),
+    ]
+SYSTEM_PROCESS_INFORMATION_ORIG = _SYSTEM_PROCESS_INFORMATION_ORIG
+PSYSTEM_PROCESS_INFORMATION_ORIG = POINTER(_SYSTEM_PROCESS_INFORMATION_ORIG)
+
 class _TIME_ZONE_INFORMATION(Structure):
     _fields_ = [
         ("Bias", LONG),

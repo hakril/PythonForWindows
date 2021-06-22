@@ -1,0 +1,71 @@
+/* Based on
+winternl.h
+&
+https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ex/sysinfo/process.htm
+*/
+
+typedef struct _SYSTEM_PROCESS_INFORMATION {
+    ULONG NextEntryOffset;
+    ULONG NumberOfThreads;
+    BYTE Reserved1[24];
+    LARGE_INTEGER CreateTime;
+    LARGE_INTEGER UserTime;
+    LARGE_INTEGER KernelTime;
+    UNICODE_STRING ImageName;
+    LONG BasePriority;
+    HANDLE UniqueProcessId;
+    PVOID InheritedFromUniqueProcessId;
+    ULONG HandleCount;
+    BYTE Reserved4[4];
+    PVOID Reserved5[1];
+    PVOID PeakVirtualSize;
+    PVOID VirtualSize;
+    PVOID PageFaultCount;
+    PVOID PeakWorkingSetSize;
+    PVOID WorkingSetSize;
+    PVOID QuotaPeakPagedPoolUsage;
+    PVOID QuotaPagedPoolUsage;
+    PVOID QuotaPeakNonPagedPoolUsage;
+    PVOID QuotaNonPagedPoolUsage;
+    PVOID PagefileUsage;
+    SIZE_T PeakPagefileUsage;
+    SIZE_T PrivatePageCount;
+    LARGE_INTEGER Reserved6[6];
+} SYSTEM_PROCESS_INFORMATION, *PSYSTEM_PROCESS_INFORMATION;
+
+
+typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION {
+    LARGE_INTEGER IdleTime;
+    LARGE_INTEGER KernelTime;
+    LARGE_INTEGER UserTime;
+    LARGE_INTEGER Reserved1[2];
+    ULONG Reserved2;
+} SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION, *PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION;
+
+
+typedef struct _SYSTEM_REGISTRY_QUOTA_INFORMATION {
+    ULONG RegistryQuotaAllowed;
+    ULONG RegistryQuotaUsed;
+    PVOID Reserved1;
+} SYSTEM_REGISTRY_QUOTA_INFORMATION, *PSYSTEM_REGISTRY_QUOTA_INFORMATION;
+
+typedef struct _SYSTEM_BASIC_INFORMATION {
+    BYTE Reserved1[24];
+    PVOID Reserved2[4];
+    CHAR NumberOfProcessors;
+} SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
+
+
+typedef struct _SYSTEM_PROCESS_INFORMATION_ORIG {
+    ULONG NextEntryOffset;
+    BYTE Reserved1[52];
+    PVOID Reserved2[3];
+    HANDLE UniqueProcessId;
+    PVOID Reserved3;
+    ULONG HandleCount;
+    BYTE Reserved4[4];
+    PVOID Reserved5[11];
+    SIZE_T PeakPagefileUsage;
+    SIZE_T PrivatePageCount;
+    LARGE_INTEGER Reserved6[6];
+} SYSTEM_PROCESS_INFORMATION_ORIG, *PSYSTEM_PROCESS_INFORMATION_ORIG;

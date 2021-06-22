@@ -12,9 +12,13 @@ def assert_struct_offset(struct, field, offset):
 if windows.current_process.bitness == 32:
     PEB32 = windows.generated_def.PEB
     PEB64 = rctypes.transform_type_to_remote64bits(windows.generated_def.PEB)
+    SYSTEM_PROCESS_INFORMATION32 = windows.generated_def.SYSTEM_PROCESS_INFORMATION
+    SYSTEM_PROCESS_INFORMATION64 = rctypes.transform_type_to_remote64bits(windows.generated_def.SYSTEM_PROCESS_INFORMATION)
 else:
     PEB32 = rctypes.transform_type_to_remote32bits(windows.generated_def.PEB)
     PEB64 = windows.generated_def.PEB
+    SYSTEM_PROCESS_INFORMATION32 = rctypes.transform_type_to_remote32bits(windows.generated_def.SYSTEM_PROCESS_INFORMATION)
+    SYSTEM_PROCESS_INFORMATION64 = windows.generated_def.SYSTEM_PROCESS_INFORMATION
 
 def test_peb32_fields():
     assert_peb_offset = lambda field, offset: assert_struct_offset(PEB32, field, offset)
@@ -48,6 +52,50 @@ def test_peb64_fields():
     assert_peb_offset("SessionId", 0x2c0)
     assert_peb_offset("CSDVersion", 0x02E8)
     assert_peb_offset("MinimumStackCommit", 0x0318)
+
+def test_system_process_information32_fields():
+    assert_spi_offset = lambda field, offset: assert_struct_offset(SYSTEM_PROCESS_INFORMATION32, field, offset)
+    # Mainly based on https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ex/sysinfo/process.htm
+    # And some symbol files :)
+    assert_spi_offset("NextEntryOffset", 0)
+    assert_spi_offset('NumberOfThreads', 4)
+    assert_spi_offset('CreateTime', 0x20)
+    assert_spi_offset('UserTime', 0x28)
+    assert_spi_offset('KernelTime', 0x30)
+    assert_spi_offset('ImageName', 0x38)
+    assert_spi_offset('BasePriority', 0x40)
+    assert_spi_offset('UniqueProcessId', 0x44)
+    assert_spi_offset('InheritedFromUniqueProcessId', 0x48)
+    assert_spi_offset('PeakVirtualSize', 0x58)
+    assert_spi_offset('VirtualSize', 0x5C)
+    assert_spi_offset('PageFaultCount', 0x60)
+    assert_spi_offset('PeakWorkingSetSize', 0x64)
+    assert_spi_offset('WorkingSetSize', 0x68)
+    assert_spi_offset('PagefileUsage', 0x7C)
+    assert_spi_offset('PeakPagefileUsage', 0x80)
+
+
+def test_system_process_information64_fields():
+    assert_spi_offset = lambda field, offset: assert_struct_offset(SYSTEM_PROCESS_INFORMATION64, field, offset)
+    # Mainly based on https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ex/sysinfo/process.htm
+    # And some symbol files :)
+    assert_spi_offset("NextEntryOffset", 0)
+    assert_spi_offset('NumberOfThreads', 4)
+    assert_spi_offset('CreateTime', 0x20)
+    assert_spi_offset('UserTime', 0x28)
+    assert_spi_offset('KernelTime', 0x30)
+    assert_spi_offset('ImageName', 0x38)
+    assert_spi_offset('BasePriority', 0x48)
+    assert_spi_offset('UniqueProcessId', 0x50)
+    assert_spi_offset('InheritedFromUniqueProcessId', 0x58)
+    assert_spi_offset('PeakVirtualSize', 0x70)
+    assert_spi_offset('VirtualSize', 0x78)
+    assert_spi_offset('PageFaultCount', 0x80)
+    assert_spi_offset('PeakWorkingSetSize', 0x88)
+    assert_spi_offset('WorkingSetSize', 0x90)
+    assert_spi_offset('PagefileUsage', 0xB8)
+    assert_spi_offset('PeakPagefileUsage', 0xC0)
+
 
 def test_cs_custom_define():
     assert windows.generated_def.CS_USER_32B == 0x23
