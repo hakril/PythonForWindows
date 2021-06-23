@@ -9392,23 +9392,6 @@ class _SYSTEM_BASIC_INFORMATION(Structure):
 PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
 SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
 
-class _SYSTEM_PROCESS_INFORMATION_ORIG(Structure):
-    _fields_ = [
-        ("NextEntryOffset", ULONG),
-        ("Reserved1", BYTE * (52)),
-        ("Reserved2", PVOID * (3)),
-        ("UniqueProcessId", HANDLE),
-        ("Reserved3", PVOID),
-        ("HandleCount", ULONG),
-        ("Reserved4", BYTE * (4)),
-        ("Reserved5", PVOID * (11)),
-        ("PeakPagefileUsage", SIZE_T),
-        ("PrivatePageCount", SIZE_T),
-        ("Reserved6", LARGE_INTEGER * (6)),
-    ]
-SYSTEM_PROCESS_INFORMATION_ORIG = _SYSTEM_PROCESS_INFORMATION_ORIG
-PSYSTEM_PROCESS_INFORMATION_ORIG = POINTER(_SYSTEM_PROCESS_INFORMATION_ORIG)
-
 class _TIME_ZONE_INFORMATION(Structure):
     _fields_ = [
         ("Bias", LONG),

@@ -14383,6 +14383,235 @@ _tagSTACKFRAME_EX
 
         :class:`DWORD`
 
+_SYSTEM_PROCESS_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: SYSTEM_PROCESS_INFORMATION
+
+    Alias for :class:`_SYSTEM_PROCESS_INFORMATION`
+
+.. class:: PSYSTEM_PROCESS_INFORMATION
+
+    Pointer to :class:`_SYSTEM_PROCESS_INFORMATION`
+
+.. class:: _SYSTEM_PROCESS_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NumberOfThreads
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE` ``[24]``
+
+
+    .. attribute:: CreateTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: UserTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: KernelTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ImageName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: BasePriority
+
+        :class:`LONG`
+
+
+    .. attribute:: UniqueProcessId
+
+        :class:`HANDLE`
+
+
+    .. attribute:: InheritedFromUniqueProcessId
+
+        :class:`PVOID`
+
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved4
+
+        :class:`BYTE` ``[4]``
+
+
+    .. attribute:: Reserved5
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakVirtualSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: VirtualSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: PageFaultCount
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakWorkingSetSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: WorkingSetSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPeakPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPeakNonPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaNonPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: PagefileUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakPagefileUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PrivatePageCount
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: Reserved6
+
+        :class:`LARGE_INTEGER` ``[6]``
+
+_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+'''''''''''''''''''''''''''''''''''''''''
+.. class:: SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    Alias for :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
+
+.. class:: PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    Pointer to :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
+
+.. class:: _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    .. attribute:: IdleTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: KernelTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: UserTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: Reserved1
+
+        :class:`LARGE_INTEGER` ``[2]``
+
+
+    .. attribute:: Reserved2
+
+        :class:`ULONG`
+
+_SYSTEM_REGISTRY_QUOTA_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: SYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    Alias for :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
+
+.. class:: PSYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    Pointer to :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
+
+.. class:: _SYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    .. attribute:: RegistryQuotaAllowed
+
+        :class:`ULONG`
+
+
+    .. attribute:: RegistryQuotaUsed
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved1
+
+        :class:`PVOID`
+
+_SYSTEM_BASIC_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PSYSTEM_BASIC_INFORMATION
+
+    Pointer to :class:`_SYSTEM_BASIC_INFORMATION`
+
+.. class:: SYSTEM_BASIC_INFORMATION
+
+    Alias for :class:`_SYSTEM_BASIC_INFORMATION`
+
+.. class:: _SYSTEM_BASIC_INFORMATION
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE` ``[24]``
+
+
+    .. attribute:: Reserved2
+
+        :class:`PVOID` ``[4]``
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`CHAR`
+
 _TIME_ZONE_INFORMATION
 ''''''''''''''''''''''
 .. class:: LPTIME_ZONE_INFORMATION

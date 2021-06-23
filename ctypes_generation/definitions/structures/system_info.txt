@@ -54,18 +54,3 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
     PVOID Reserved2[4];
     CHAR NumberOfProcessors;
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
-
-
-typedef struct _SYSTEM_PROCESS_INFORMATION_ORIG {
-    ULONG NextEntryOffset;
-    BYTE Reserved1[52];
-    PVOID Reserved2[3];
-    HANDLE UniqueProcessId;
-    PVOID Reserved3;
-    ULONG HandleCount;
-    BYTE Reserved4[4];
-    PVOID Reserved5[11];
-    SIZE_T PeakPagefileUsage;
-    SIZE_T PrivatePageCount;
-    LARGE_INTEGER Reserved6[6];
-} SYSTEM_PROCESS_INFORMATION_ORIG, *PSYSTEM_PROCESS_INFORMATION_ORIG;
