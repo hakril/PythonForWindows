@@ -297,7 +297,7 @@ class CtypesGenerator(object):
         pass
 
     def emit_import_dependancies(self):
-        for name in self.imported_name:
+        for name in sorted(self.imported_name):
             self.emitline("from .{0} import *".format(name))
 
     def copy_template(self):
