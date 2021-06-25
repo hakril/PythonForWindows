@@ -212,12 +212,16 @@ class TaskPrincipal(gdef.IPrincipal):
     """
 
     name = generate_simple_getter("get_DisplayName", gdef.BSTR)
+    name = add_simple_setter(name, "put_DisplayName", gdef.BSTR)
     """The name of the principal"""
     id = generate_simple_getter("get_Id", gdef.BSTR)
+    id = add_simple_setter(id, "put_Id", gdef.BSTR)
     """the identifier of the principal."""
     user_id = generate_simple_getter("get_UserId", gdef.BSTR)
+    user_id = add_simple_setter(user_id, "put_UserId", gdef.BSTR)
     """the user identifier that is required to run the task"""
     group_id = generate_simple_getter("get_GroupId", gdef.BSTR)
+    group_id = add_simple_setter(group_id, "put_GroupId", gdef.BSTR)
     """the user group that is required to run the task"""
     run_level = generate_simple_getter("get_RunLevel", gdef.TASK_RUNLEVEL_TYPE)
     """the privilege level that is required to run the tasks
