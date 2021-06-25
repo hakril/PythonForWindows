@@ -1069,6 +1069,25 @@ BOOL WINAPI LookupAccountSidW(
   _Out_     PSID_NAME_USE peUse
 );
 
+BOOL LookupAccountNameA(
+  LPCSTR        lpSystemName,
+  LPCSTR        lpAccountName,
+  PSID          Sid,
+  LPDWORD       cbSid,
+  LPSTR         ReferencedDomainName,
+  LPDWORD       cchReferencedDomainName,
+  PSID_NAME_USE peUse
+);
+
+BOOL LookupAccountNameW(
+  LPCWSTR       lpSystemName,
+  LPCWSTR       lpAccountName,
+  PSID          Sid,
+  LPDWORD       cbSid,
+  LPWSTR        ReferencedDomainName,
+  LPDWORD       cchReferencedDomainName,
+  PSID_NAME_USE peUse
+);
 
 DWORD WINAPI GetInterfaceInfo(
   _Out_   PIP_INTERFACE_INFO pIfTable,

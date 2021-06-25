@@ -117,6 +117,16 @@ def LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainNa
 def LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
     return LookupAccountSidW.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
 
+
+@Advapi32Proxy()
+def LookupAccountNameA(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
+    return LookupAccountNameA.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
+
+@Advapi32Proxy()
+def LookupAccountNameW(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
+   return LookupAccountNameW.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
+
+
 @Advapi32Proxy()
 def CreateWellKnownSid(WellKnownSidType, DomainSid=None, pSid=None, cbSid=NeededParameter):
     return CreateWellKnownSid.ctypes_function(WellKnownSidType, DomainSid, pSid, cbSid)
@@ -573,7 +583,6 @@ def CryptDestroyHash(hHash):
 
 
 ## Event Tracing
-
 @Advapi32Proxy(error_check=succeed_on_zero)
 def EnumerateTraceGuidsEx(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength):
     if isinstance(InBuffer, gdef.GUID):
