@@ -5,6 +5,7 @@ import re
 import glob
 import textwrap
 import StringIO
+import pprint
 
 import shutil
 
@@ -638,7 +639,7 @@ class MetaFileGenerator(NoTemplatedGenerator):
     def generate(self):
 
         for name, modname, exports in self.modules:
-            self.emitline("{0} = {1}".format(name, exports))
+            self.emitline("{0} = {1}".format(name, pprint.pformat(exports)))
 
         self.emitline(META_WALKER)
 
