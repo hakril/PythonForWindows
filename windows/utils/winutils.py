@@ -91,16 +91,23 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
     if show_windows:
-        StartupInfo = STARTUPINFOA()
+        StartupInfo = STARTUPINFOW()
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
         StartupInfo.dwFlags = 0
         lpStartupInfo = ctypes.byref(StartupInfo)
     lpCommandLine = None
+    if isinstance(path, bytes):
+        path = path.decode()
     if args:
-        lpCommandLine = (b" ".join([a for a in args]))
-    windows.winproxy.CreateProcessA(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
-    dbgprint("CreateProcessA new process handle {:#x}".format(proc_info.hProcess), "HANDLE")
-    dbgprint("CreateProcessA new thread handle {:#x}".format(proc_info.hThread), "HANDLE")
+        unicode_args = []
+        for arg in args:
+            if isinstance(arg, bytes):
+                arg = arg.decode()
+            unicode_args.append(arg)
+        lpCommandLine = (" ".join(unicode_args))
+    windows.winproxy.CreateProcessW(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    dbgprint("CreateProcessW new process handle {:#x}".format(proc_info.hProcess), "HANDLE")
+    dbgprint("CreateProcessW new thread handle {:#x}".format(proc_info.hThread), "HANDLE")
     dbgprint("Automatic close of thread handle {:#x}".format(proc_info.hThread), "HANDLE")
     windows.winproxy.CloseHandle(proc_info.hThread)  # Give access to a WinThread in addition of the WinProcess ?
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)

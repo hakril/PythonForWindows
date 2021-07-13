@@ -81,6 +81,20 @@ class TestProcessWithCheckGarbage(object):
     def test_process_ppid(self, proc32_64):
         assert proc32_64.ppid ==  windows.current_process.pid
 
+    def test_create_process_unicode(self):
+        p = windows.utils.create_process(u"c:\\windows\\system32\\notepad.exe", [u"--", u"yolo.txt"])
+        try:
+            assert p.name == "notepad.exe"
+        finally:
+            p.exit()
+
+    def test_create_process_bytes(self):
+        p = windows.utils.create_process(b"c:\\windows\\system32\\notepad.exe", [b"--", b"yolo.txt"])
+        try:
+            assert p.name == "notepad.exe"
+        finally:
+            p.exit()
+
     # Test process read/write
 
     def test_read_memory(self, proc32_64):
@@ -106,12 +120,12 @@ class TestProcessWithCheckGarbage(object):
         with proc32_64.allocated_memory(0x1000) as addr:
             waddr = addr + 0x1000 - len(string_to_write)
             proc32_64.write_memory(waddr, string_to_write)
-            with pytest.raises(windows.winproxy.WinproxyError):
+            with pytest.raises(WindowsError):
                 proc32_64.read_memory(waddr, 0x20) # Check that Reading dumbly fails
             assert proc32_64.read_string(waddr) ==  test_string
 
 
-    def test_wread_string(self, proc32_64):
+    def test_read_wstring(self, proc32_64):
         test_string = u"TEST_STRING"
         string_to_write = test_string + "\x00"
         with proc32_64.allocated_memory(0x1000) as addr:
@@ -125,15 +139,14 @@ class TestProcessWithCheckGarbage(object):
         with proc32_64.allocated_memory(0x1000) as addr:
             waddr = addr + 0x1000 - len(string_to_write)
             proc32_64.write_memory(waddr, string_to_write)
-            with pytest.raises(windows.winproxy.WinproxyError):
+            with pytest.raises(WindowsError):
                 proc32_64.read_memory(waddr, 0x20) # Check that Reading dumbly fails
             assert proc32_64.read_wstring(waddr) ==  test_string
 
-
     def test_read_string_end_page_current_process(self):
         current_proc = windows.current_process
-        test_string = "TEST_STRING"
-        string_to_write = test_string + "\x00"
+        test_string = b"TEST_STRING"
+        string_to_write = test_string + b"\x00"
         with current_proc.allocated_memory(0x1000) as addr:
             waddr = addr + 0x1000 - len(string_to_write)
             current_proc.write_memory(waddr, string_to_write)
@@ -482,3 +495,5 @@ class TestProcessWithCheckGarbage(object):
         proc32_64.security_descriptor = SSDL_GR_EVERYONE
         # Via SD obj
         proc32_64.security_descriptor = SD_GR_EVERYONE
+
+

@@ -348,13 +348,13 @@ class Process(utils.AutoHandle):
         for i in itertools.count():
             try:
                 x = self.read_memory(addr + readden, read_size)
-            except winproxy.WinproxyError as e:
+            except WindowsError as e:
                 if read_size == 2:
                     raise
                 # handle read_wstring at end of page
                 # Of read failed: read only the half of size
                 # read_size must remain a multiple of 2
-                read_size = read_size / 2
+                read_size = read_size // 2
                 continue
             readden += read_size
             if b"\x00" in x:
@@ -372,13 +372,13 @@ class Process(utils.AutoHandle):
         while True:
             try:
                 x = self.read_memory(addr + readden, read_size)
-            except winproxy.WinproxyError as e:
+            except WindowsError as e:
                 if read_size == 2:
                     raise
                 # handle read_wstring at end of page
                 # Of read failed: read only the half of size
                 # read_size must remain a multiple of 2
-                read_size = int(read_size / 2)
+                read_size = read_size // 2
                 continue
             readden += read_size
             # Bytearray will work on py2 & py3
@@ -387,10 +387,10 @@ class Process(utils.AutoHandle):
             utf16_chars = [bytearray(c) for c in zip(*[iter(x)] * 2)]
             if b"\x00\x00" in utf16_chars:
                 # Translate bytearray to str/bytes for both py2 & py3
-                res.extend(bytes(x) for x in utf16_chars[:utf16_chars.index(b"\x00\x00")])
+                res.extend(x[:utf16_chars.index(b"\x00\x00") * 2])
                 break
             res.extend(x)
-        return b"".join(res).decode('utf16')
+        return bytearray(res).decode("utf-16")
 
     def write_byte(self, addr, byte):
         """write a byte at ``addr``"""
