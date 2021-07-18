@@ -199,15 +199,8 @@ def check_debug():
 
        https://msdn.microsoft.com/en-us/library/windows/hardware/ff556253(v=vs.85).aspx#_______noumex______
     """
-    hkresult = HKEY()
-    cbsize = DWORD(1024)
-    bufferres = (c_char * cbsize.value)()
-
-    winproxy.RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Control", 0, KEY_READ, byref(hkresult))
-    winproxy.RegGetValueA(hkresult, None, "SystemStartOptions", RRF_RT_REG_SZ, None, byref(bufferres), byref(cbsize))
-    winproxy.RegCloseKey(hkresult)
-
-    control = bufferres[:]
+    options = windows.system.registry(r'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control')['SystemStartOptions']
+    control = options.value
     if "DEBUG" not in control:
         # print "[-] Enable debug boot!"
         # print "> bcdedit /debug on"
