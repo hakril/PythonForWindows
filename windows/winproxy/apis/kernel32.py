@@ -813,6 +813,22 @@ def GetSystemTimeAsFileTime(lpSystemTimeAsFileTime):
    return GetSystemTimeAsFileTime.ctypes_function(lpSystemTimeAsFileTime)
 
 
+@Kernel32Proxy(error_check=fail_on_zero)
+def GetSystemTimes(lpIdleTime, lpKernelTime, lpUserTime):
+    return GetSystemTimes.ctypes_function(lpIdleTime, lpKernelTime, lpUserTime)
+
+@Kernel32Proxy(error_check=None)
+def GetLocalTime(lpSystemTime):
+    return GetLocalTime.ctypes_function(lpSystemTime)
+
+@Kernel32Proxy(error_check=None)
+def GetTickCount():
+    return GetTickCount.ctypes_function()
+
+@Kernel32Proxy(error_check=None)
+def GetTickCount64():
+    return GetTickCount64.ctypes_function()
+
 #####
 
 # Heap

@@ -13,7 +13,22 @@ PVOID GetSystemTime(
   LPSYSTEMTIME lpSystemTime
 );
 
+BOOL GetSystemTimes(
+  PFILETIME lpIdleTime,
+  PFILETIME lpKernelTime,
+  PFILETIME lpUserTime
+);
+
 // void
 PVOID GetSystemTimeAsFileTime(
   LPFILETIME lpSystemTimeAsFileTime
 );
+
+// void
+PVOID GetLocalTime(
+  LPSYSTEMTIME lpSystemTime
+);
+
+DWORD GetTickCount();
+
+ULONGLONG GetTickCount64();

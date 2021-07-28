@@ -2390,10 +2390,30 @@ SystemTimeToFileTimeParams = ((1, 'lpSystemTime'), (1, 'lpFileTime'))
 GetSystemTimePrototype = WINFUNCTYPE(PVOID, LPSYSTEMTIME)
 GetSystemTimeParams = ((1, 'lpSystemTime'),)
 
+#def GetSystemTimes(lpIdleTime, lpKernelTime, lpUserTime):
+#    return GetSystemTimes.ctypes_function(lpIdleTime, lpKernelTime, lpUserTime)
+GetSystemTimesPrototype = WINFUNCTYPE(BOOL, PFILETIME, PFILETIME, PFILETIME)
+GetSystemTimesParams = ((1, 'lpIdleTime'), (1, 'lpKernelTime'), (1, 'lpUserTime'))
+
 #def GetSystemTimeAsFileTime(lpSystemTimeAsFileTime):
 #    return GetSystemTimeAsFileTime.ctypes_function(lpSystemTimeAsFileTime)
 GetSystemTimeAsFileTimePrototype = WINFUNCTYPE(PVOID, LPFILETIME)
 GetSystemTimeAsFileTimeParams = ((1, 'lpSystemTimeAsFileTime'),)
+
+#def GetLocalTime(lpSystemTime):
+#    return GetLocalTime.ctypes_function(lpSystemTime)
+GetLocalTimePrototype = WINFUNCTYPE(PVOID, LPSYSTEMTIME)
+GetLocalTimeParams = ((1, 'lpSystemTime'),)
+
+#def GetTickCount():
+#    return GetTickCount.ctypes_function()
+GetTickCountPrototype = WINFUNCTYPE(DWORD)
+GetTickCountParams = ()
+
+#def GetTickCount64():
+#    return GetTickCount64.ctypes_function()
+GetTickCount64Prototype = WINFUNCTYPE(ULONGLONG)
+GetTickCount64Params = ()
 
 #def TdhEnumerateProviders(pBuffer, pBufferSize):
 #    return TdhEnumerateProviders.ctypes_function(pBuffer, pBufferSize)
