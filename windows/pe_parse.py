@@ -80,6 +80,14 @@ class THUNK_DATA(ctypes.Union):
         ("AddressOfData", PVOID)
     ]
 
+# Special case for .NET PE32 rewrite as 64b
+# We may have a PE in a 64b process with a 32b IAT
+class THUNK_DATA_32(ctypes.Union):
+    _fields_ = [
+        ("Ordinal", DWORD),
+        ("AddressOfData", DWORD)
+    ]
+
 class IMPORT_BY_NAME(ctypes.Structure):
     _fields_ = [
         ("Hint", WORD),
@@ -182,7 +190,6 @@ class IATEntry(ctypes.Structure):
     def on_destroy(self, *args):
         # We cannot know if the hook was enabled here..
         print("DESTROY: {0} -> ".format(args, self.enabled))
-        # import pdb;pdb.set_trace()
         # print(args[0]())
 
     def remove_hook(self):
@@ -200,11 +207,16 @@ class IATEntry(ctypes.Structure):
 
 
 class IMAGE_IMPORT_DESCRIPTOR(IMAGE_IMPORT_DESCRIPTOR): # TODO: use explicite name winstructs.IMAGE_IMPORT_DESCRIPTOR
-    def get_INT(self):
+    def get_INT(self, pe):
+        THUNK_DATA_TYPE = THUNK_DATA
         if not self.OriginalFirstThunk:
             return None
+        # We may have 32bits PE mapped in 32bits process (thanks to .NET PE)
+        if self.target is None and pe.bitness != windows.current_process.bitness:
+            assert windows.current_process.bitness == 64 and pe.bitness == 32, "Mapped 64b PE in current process 32b not handled"
+            THUNK_DATA_TYPE = THUNK_DATA_32
         int_addr = self.OriginalFirstThunk + self.baseaddr
-        int_entry = self.transformers.create_structure_at(THUNK_DATA, int_addr)
+        int_entry = self.transformers.create_structure_at(THUNK_DATA_TYPE, int_addr)
         res = []
         while int_entry.Ordinal:
             if int_entry.Ordinal & self.IMAGE_ORDINAL_FLAG:
@@ -212,23 +224,24 @@ class IMAGE_IMPORT_DESCRIPTOR(IMAGE_IMPORT_DESCRIPTOR): # TODO: use explicite na
             else:
                 import_by_name = self.transformers.create_structure_at(IMPORT_BY_NAME, self.baseaddr + int_entry.AddressOfData)
                 name_address = self.baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset
-                if self.target is None:
-                    name = get_string(self.target, name_address)
-                else:
-                    name = get_string(self.target, name_address)
+                name = get_string(self.target, name_address)
                 res.append((import_by_name.Hint, name))
             int_addr += ctypes.sizeof(type(int_entry))
-            int_entry = self.transformers.create_structure_at(THUNK_DATA, int_addr)
+            int_entry = self.transformers.create_structure_at(THUNK_DATA_TYPE, int_addr)
         return res
 
-    def get_IAT(self):
+    def get_IAT(self, pe):
+        THUNK_DATA_TYPE = THUNK_DATA
+        if self.target is None and pe.bitness != windows.current_process.bitness:
+            assert windows.current_process.bitness == 64 and pe.bitness == 32, "Mapped 64b PE in current process 32b not handled"
+            THUNK_DATA_TYPE = THUNK_DATA_32
         iat_addr = self.FirstThunk + self.baseaddr
-        iat_entry = self.transformers.create_structure_at(THUNK_DATA, iat_addr)
+        iat_entry = self.transformers.create_structure_at(THUNK_DATA_TYPE, iat_addr)
         res = []
         while iat_entry.Ordinal:
             res.append(IATEntry.create(iat_addr, -1, "??", self.target, self.transformers))
             iat_addr += ctypes.sizeof(type(iat_entry))
-            iat_entry = self.transformers.create_structure_at(THUNK_DATA, iat_addr)
+            iat_entry = self.transformers.create_structure_at(THUNK_DATA_TYPE, iat_addr)
         return res
 
     @classmethod
@@ -314,21 +327,37 @@ class PEFile(object):
             return self.transformers.create_structure_at(IMAGE_NT_HEADERS32, self.baseaddr + offset)
         return self.transformers.create_structure_at(IMAGE_NT_HEADERS64, self.baseaddr + offset)
 
+
+    STANDARD_OPTIONAL_HEADER_TYPE_PER_MAGIC = {
+        IMAGE_NT_OPTIONAL_HDR32_MAGIC: IMAGE_OPTIONAL_HEADER32,
+        IMAGE_NT_OPTIONAL_HDR64_MAGIC: IMAGE_OPTIONAL_HEADER64,
+    }
+
+    STANDARD_OPTIONAL_HEADER_SIZE_PER_MAGIC = (
+        (IMAGE_NT_OPTIONAL_HDR32_MAGIC, ctypes.sizeof(IMAGE_OPTIONAL_HEADER32)),
+        (IMAGE_NT_OPTIONAL_HDR64_MAGIC, ctypes.sizeof(IMAGE_OPTIONAL_HEADER64)),
+    )
+
     def get_OptionalHeader(self):
-        return self.get_NT_HEADER().OptionalHeader
+        # We can have a 32bits PE with a 64 bits OptionalHeader
+        # Ex  : PE32 .NET that allow to be loaded in 64b process
+        # See: https://github.com/dotnet/runtime/blob/8bbe33819464216becffb7cf8b7ea8dd3bab5836/src/coreclr/src/vm/peimagelayout.cpp#L599
+        # In this case the OptionalHeader is transformed in 64bits & OptionalHeader.Magic is changed accordingly
+        # So we cannot just rely on get_NT_HEADER() to give us the correct OptionalHeader type. some re-check are required
+        default_opth = self.get_NT_HEADER().OptionalHeader
+        # Cannot juste compare types with type(default_opth) as it may be a remoteType
+        current_opth_infos = (default_opth.Magic, ctypes.sizeof(default_opth))
+        if current_opth_infos in self.STANDARD_OPTIONAL_HEADER_SIZE_PER_MAGIC:
+            # The default OptionalHeader structure match what we expect based on the magic (most of the cases)
+            return default_opth
+        # Mismatch -> PE32 remapped as 64b (with OptionalHeader rewrite)
+        # Remap the correct OptionalHeader
+        opt_header_real_type = self.STANDARD_OPTIONAL_HEADER_TYPE_PER_MAGIC[default_opth.Magic]
+        opt_header_addr = default_opth._base_addr if self.target else ctypes.addressof(default_opth)
+        return self.transformers.create_structure_at(opt_header_real_type, opt_header_addr)
 
     def get_DataDirectory(self):
-        # This won't work if we load a PE32 in a 64bit process
-        # PE32 .NET...
-        # return self.get_OptionalHeader().DataDirectory
-        DataDirectory_type = IMAGE_DATA_DIRECTORY * IMAGE_NUMBEROF_DIRECTORY_ENTRIES
-        SizeOfOptionalHeader = self.get_NT_HEADER().FileHeader.SizeOfOptionalHeader
-        if self.target is None:
-            opt_header_addr = ctypes.addressof(self.get_NT_HEADER().OptionalHeader)
-        else:
-            opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr
-        DataDirectory_addr = opt_header_addr + SizeOfOptionalHeader - ctypes.sizeof(DataDirectory_type)
-        return self.transformers.create_structure_at(DataDirectory_type, DataDirectory_addr)
+        return self.get_OptionalHeader().DataDirectory
 
 
     def get_IMPORT_DESCRIPTORS(self):
@@ -380,7 +409,6 @@ class PEFile(object):
         export_end = export_start + export_datadir.Size
         if exp_dir is None:
             return res
-        # import pdb;pdb.set_trace()
         raw_exports = exp_dir.get_exports()
         for id, rva_addr, rva_name in raw_exports:
             if export_start <= rva_addr < export_end:
@@ -413,8 +441,8 @@ class PEFile(object):
             :type: {:class:`str` : [:class:`IATEntry`]}"""
         res = {}
         for import_descriptor in self.get_IMPORT_DESCRIPTORS():
-            INT = import_descriptor.get_INT()
-            IAT = import_descriptor.get_IAT()
+            INT = import_descriptor.get_INT(self)
+            IAT = import_descriptor.get_IAT(self)
             if INT is not None:
                 for iat_entry, (ord, name) in zip(IAT, INT):
                     # str(name.decode()) -> python2 and python3 compatible for str result
