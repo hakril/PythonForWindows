@@ -147,6 +147,74 @@ Another example from a project::
         '\x81~\x08\x0c\x00\x00\x00u&\x8bN\x10\x8bQ\x04\x8bA\x08\x8b\t\x81\xf9\x01\x00\x00\x00u\x03\xee\xeb\r\x81\xf9\x02\x00\x00\x00u\x04f\xef\xeb\x01\xef1\xc0\xc3\xc7\xc0\r\x00\x00\xc0\xc3'
 
 
+Available Instructions in X86 assembler
+'''''''''''''''''''''''''''''''''''''''
+
+.. note::
+    Not all encodings may be implemented for each of the instructions.
+
+    ``Byte`` and ``Raw`` are not x86 instruction and allow to insert arbitrary data to the generated code.
+
+Listing:
+
+    * Add
+    * And
+    * Byte
+    * Cmp
+    * CmpsB
+    * CmpsD
+    * CmpsW
+    * Cpuid
+    * Dec
+    * In
+    * Inc
+    * Int
+    * Int3
+    * Iret
+    * Lea
+    * Mov
+    * Movsb
+    * Movsd
+    * Nop
+    * Not
+    * Or
+    * Out
+    * Pop
+    * Popad
+    * Popfd
+    * Push
+    * Pushad
+    * Pushfd
+    * Raw
+    * Ret
+    * Retf
+    * Rol
+    * Ror
+    * ScasB
+    * ScasD
+    * ScasW
+    * Shl
+    * Shr
+    * StosB
+    * StosD
+    * StosW
+    * Sub
+    * Test
+    * Xchg
+    * Xor
+
+.. note::
+
+    ``Raw``: Output raw data from an hexadecimal string
+
+        >>> windows.native_exec.simple_x64.Raw("90C332FCFF").get_code()
+        '\x90\xc32\xfc\xff'
+
+    ``Byte``: Output a raw byte
+
+        >>> windows.native_exec.simple_x86.Byte(0x42).get_code()
+        'B'
+
 :mod:`windows.native_exec.simple_x64` -- X64 Assembler
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -178,6 +246,63 @@ Demo::
     '\x8b\x00'
     >>> x64.Mov("EAX", x64.mem("[EAX]")).get_code()
     'g\x8b\x00'
+
+
+Available Instructions in X64 assembler
+'''''''''''''''''''''''''''''''''''''''
+
+.. note::
+    Not all encodings may be implemented for each of the instructions.
+
+    ``Raw`` is not an x64 instruction and allow to insert arbitrary data to the generated code.
+
+Listing:
+    * Add
+    * And
+    * Cmp
+    * CmpsB
+    * CmpsD
+    * CmpsQ
+    * CmpsW
+    * Cpuid
+    * Dec
+    * In
+    * Inc
+    * Int
+    * Int3
+    * Lea
+    * Mov
+    * Nop
+    * Not
+    * Or
+    * Out
+    * Pop
+    * Popfq
+    * Push
+    * Pushfq
+    * Raw
+    * Ret
+    * Retf
+    * Retf32
+    * ScasB
+    * ScasD
+    * ScasQ
+    * ScasW
+    * Shl
+    * Shr
+    * Sub
+    * Test
+    * Xchg
+    * Xor
+
+
+.. note::
+
+    ``Raw``: Output raw data from an hexadecimal string
+
+        >>> windows.native_exec.simple_x64.Raw("90C332FCFF").get_code()
+        '\x90\xc32\xfc\xff'
+
 
 
 

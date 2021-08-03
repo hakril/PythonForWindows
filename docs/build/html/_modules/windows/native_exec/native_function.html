@@ -47,57 +47,10 @@
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.winproxy</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">simple_x86</span> <span class="k">as</span> <span class="n">x86</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">simple_x64</span> <span class="k">as</span> <span class="n">x64</span>
-
-
-<span class="k">class</span> <span class="nc">PyObj</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;ob_refcnt&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s2">&quot;ob_type&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)]</span>  <span class="c1"># must be cast</span>
-
-
-<span class="k">class</span> <span class="nc">PyMmap</span><span class="p">(</span><span class="n">PyObj</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;ob_addr&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;ob_size&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)]</span>
-
-
-<span class="c1"># Specific mmap class for code injection</span>
-<span class="k">class</span> <span class="nc">MyMap</span><span class="p">(</span><span class="n">mmap</span><span class="o">.</span><span class="n">mmap</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A mmap that is never unmapped and that contains the page address &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">):</span>
-        <span class="c1"># Get the page address by &#39;introspection&#39; of the C struct</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">PyMmap</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">ob_addr</span>
-        <span class="c1"># Prevent garbage collection (so unmaping) of the page</span>
-        <span class="n">m</span><span class="o">.</span><span class="n">ob_refcnt</span> <span class="o">+=</span> <span class="mi">1</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_map</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Dispatch to the good mmap implem depending on the current system &quot;&quot;&quot;</span>
-        <span class="n">systems</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;windows&#39;</span><span class="p">:</span> <span class="n">Win32MyMap</span><span class="p">,</span>
-                   <span class="s1">&#39;linux&#39;</span><span class="p">:</span> <span class="n">UnixMyMap</span><span class="p">}</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">systems</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow system </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">systems</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">get_map</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">Win32MyMap</span><span class="p">(</span><span class="n">MyMap</span><span class="p">):</span>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_map</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="n">addr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="mh">0x1000</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">)</span>
-        <span class="n">new_map</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-        <span class="n">new_map</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
-        <span class="k">if</span> <span class="n">new_map</span><span class="o">.</span><span class="n">addr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">new_map</span>
-
-
-<span class="k">class</span> <span class="nc">UnixMyMap</span><span class="p">(</span><span class="n">MyMap</span><span class="p">):</span>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_map</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="n">prot</span> <span class="o">=</span> <span class="n">mmap</span><span class="o">.</span><span class="n">PROT_EXEC</span> <span class="o">|</span> <span class="n">mmap</span><span class="o">.</span><span class="n">PROT_WRITE</span> <span class="o">|</span> <span class="n">mmap</span><span class="o">.</span><span class="n">PROT_READ</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">CustomAllocator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -117,7 +70,10 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">int_size</span><span class="p">[</span><span class="n">bits</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MyMap</span><span class="o">.</span><span class="n">get_map</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="mh">0x1000</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">)</span>
+        <span class="n">mymap</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="n">mymap</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mymap</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cur_offset</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cur_page_size</span> <span class="o">=</span> <span class="n">size</span>
 
@@ -140,6 +96,20 @@
         <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">addr</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_offset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cur_offset</span> <span class="o">+=</span> <span class="n">size</span>
         <span class="k">return</span> <span class="n">addr</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">maps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur_offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur_page_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Path is None -&gt; Python shutdown</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">mymap</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualFree</span><span class="p">(</span><span class="n">mymap</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">dwFreeType</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MEM_RELEASE</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="n">allocator</span> <span class="o">=</span> <span class="n">CustomAllocator</span><span class="p">()</span>
 

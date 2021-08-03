@@ -228,17 +228,18 @@
             <span class="k">raise</span> <span class="c1"># Other error -&gt; reraise</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="EtwTrace.start"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="EtwTrace.start"><a class="viewcode-back" href="../../../etw.html#windows.winobject.event_trace.EtwTrace.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Start the tracing&quot;&quot;&quot;</span>
         <span class="n">prop</span> <span class="o">=</span> <span class="n">EventTraceProperties</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="n">prop</span><span class="o">.</span><span class="n">NumberOfBuffers</span> <span class="o">=</span> <span class="mi">42</span>
         <span class="n">prop</span><span class="o">.</span><span class="n">EnableFlags</span> <span class="o">=</span> <span class="n">flags</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">LogFileMode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">:</span>
             <span class="n">prop</span><span class="o">.</span><span class="n">Wnode</span><span class="o">.</span><span class="n">Guid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">:</span>
             <span class="n">prop</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># Base REAL_TIME on option ? name presence ? logfile presence ?</span>
-            <span class="n">prop</span><span class="o">.</span><span class="n">LogFileMode</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_REAL_TIME_MODE</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">LogFileMode</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_TRACE_REAL_TIME_MODE</span>
         <span class="n">handle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TRACEHANDLE</span><span class="p">()</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartTraceA</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guid</span><span class="p">:</span>

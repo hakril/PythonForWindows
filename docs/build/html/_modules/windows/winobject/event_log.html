@@ -53,6 +53,7 @@
 
 <span class="c1"># Helpers</span>
 
+
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">ClosingEvtHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
@@ -225,17 +226,20 @@
         <span class="c1"># Each value wil return 1 node :)</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="n">nbelt</span><span class="p">,</span> <span class="n">pwstr_rarray</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">system_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># POC: use this for all @property based on system data ?</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextSystem</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
 
 <div class="viewcode-block" id="EvtEvent.event_values"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent.event_values">[docs]</a>    <span class="k">def</span> <span class="nf">event_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The values of the event in a list&quot;&quot;&quot;</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextUser</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">get_raw_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">):</span>
@@ -247,6 +251,7 @@
         <span class="c1"># Each value will return 1 node :)</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="n">nbelt</span><span class="p">,</span> <span class="n">pwstr_rarray</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
 
@@ -489,6 +494,9 @@
 
 <span class="sd">            List all events with an EventID of 2006:</span>
 <span class="sd">                ``Event/System[EventID=2006]``</span>
+
+<span class="sd">            List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</span>
+<span class="sd">                ``Event/System[EventID=3] and Event/EventData/Data[@Name=&#39;DestinationIp&#39;] and Event/EventData[Data=&#39;10.0.0.2&#39;]``</span>
 
 <span class="sd">        :rtype: :class:`EvtQuery`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
