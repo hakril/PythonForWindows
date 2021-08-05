@@ -265,3 +265,11 @@ SC_HANDLE CreateServiceW(
 BOOL DeleteService(
   SC_HANDLE hService
 );
+
+BOOL StartServiceCtrlDispatcherA(
+  SERVICE_TABLE_ENTRYA *lpServiceStartTable
+);
+
+BOOL StartServiceCtrlDispatcherW(
+  SERVICE_TABLE_ENTRYW *lpServiceStartTable
+);

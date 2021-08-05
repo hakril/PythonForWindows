@@ -19,4 +19,5 @@ from .user32 import *
 from .version import *
 from .virtdisk import *
 from .wevtapi import *
+from .wininet import *
 from .wintrust import *

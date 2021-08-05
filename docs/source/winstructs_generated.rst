@@ -8360,6 +8360,128 @@ _GUID
 
         :class:`BYTE` ``[8]``
 
+_INTERNET_BUFFERSA
+''''''''''''''''''
+.. class:: INTERNET_BUFFERSA
+
+    Alias for :class:`_INTERNET_BUFFERSA`
+
+.. class:: LPINTERNET_BUFFERSA
+
+    Pointer to :class:`_INTERNET_BUFFERSA`
+
+.. class:: _INTERNET_BUFFERSA
+
+    .. attribute:: dwStructSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: Next
+
+        :class:`_INTERNET_BUFFERSA`
+
+
+    .. attribute:: lpcszHeader
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: dwHeadersLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwHeadersTotal
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpvBuffer
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwBufferLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwBufferTotal
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOffsetLow
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOffsetHigh
+
+        :class:`DWORD`
+
+_INTERNET_BUFFERSW
+''''''''''''''''''
+.. class:: LPINTERNET_BUFFERSW
+
+    Pointer to :class:`_INTERNET_BUFFERSW`
+
+.. class:: INTERNET_BUFFERSW
+
+    Alias for :class:`_INTERNET_BUFFERSW`
+
+.. class:: _INTERNET_BUFFERSW
+
+    .. attribute:: dwStructSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: Next
+
+        :class:`_INTERNET_BUFFERSW`
+
+
+    .. attribute:: lpcszHeader
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: dwHeadersLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwHeadersTotal
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpvBuffer
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwBufferLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwBufferTotal
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOffsetLow
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOffsetHigh
+
+        :class:`DWORD`
+
 _LSA_OBJECT_ATTRIBUTES
 ''''''''''''''''''''''
 .. class:: PLSA_OBJECT_ATTRIBUTES
@@ -12762,6 +12884,48 @@ _QUERY_SERVICE_CONFIGW
     .. attribute:: lpDisplayName
 
         :class:`LPWSTR`
+
+_SERVICE_TABLE_ENTRYA
+'''''''''''''''''''''
+.. class:: LPSERVICE_TABLE_ENTRYA
+
+    Pointer to :class:`_SERVICE_TABLE_ENTRYA`
+
+.. class:: SERVICE_TABLE_ENTRYA
+
+    Alias for :class:`_SERVICE_TABLE_ENTRYA`
+
+.. class:: _SERVICE_TABLE_ENTRYA
+
+    .. attribute:: lpServiceName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpServiceProc
+
+        :class:`LPSERVICE_MAIN_FUNCTIONA`
+
+_SERVICE_TABLE_ENTRYW
+'''''''''''''''''''''
+.. class:: SERVICE_TABLE_ENTRYW
+
+    Alias for :class:`_SERVICE_TABLE_ENTRYW`
+
+.. class:: LPSERVICE_TABLE_ENTRYW
+
+    Pointer to :class:`_SERVICE_TABLE_ENTRYW`
+
+.. class:: _SERVICE_TABLE_ENTRYW
+
+    .. attribute:: lpServiceName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpServiceProc
+
+        :class:`LPSERVICE_MAIN_FUNCTIONW`
 
 _SP_DEVICE_INTERFACE_DATA
 '''''''''''''''''''''''''
@@ -22951,6 +23115,8 @@ Simple types
 
 .. autoclass:: KPRIORITY
 
+.. autoclass:: INTERNET_PORT
+
 .. autoclass:: CHAR
 
 .. class:: PCHAR
@@ -23181,6 +23347,8 @@ Simple types
 
 .. autoclass:: HDEVINFO
 
+.. autoclass:: HINTERNET
+
 .. autoclass:: IP4_ADDRESS
 
 .. autoclass:: PSECURITY_DESCRIPTOR
@@ -23334,6 +23502,10 @@ Simple types
 .. autoclass:: ENUMRESTYPEPROCA
 
 .. autoclass:: ENUMRESTYPEPROCW
+
+.. autoclass:: LPSERVICE_MAIN_FUNCTIONA
+
+.. autoclass:: LPSERVICE_MAIN_FUNCTIONW
 
 .. autoclass:: LPCONTEXT
 

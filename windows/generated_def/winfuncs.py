@@ -1055,6 +1055,111 @@ FindCloseParams = ((1, 'hFindFile'),)
 HeapAllocPrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, SIZE_T)
 HeapAllocParams = ((1, 'hHeap'), (1, 'dwFlags'), (1, 'dwBytes'))
 
+#def InternetCheckConnectionA(lpszUrl, dwFlags, dwReserved):
+#    return InternetCheckConnectionA.ctypes_function(lpszUrl, dwFlags, dwReserved)
+InternetCheckConnectionAPrototype = WINFUNCTYPE(BOOL, LPCSTR, DWORD, DWORD)
+InternetCheckConnectionAParams = ((1, 'lpszUrl'), (1, 'dwFlags'), (1, 'dwReserved'))
+
+#def InternetCheckConnectionW(lpszUrl, dwFlags, dwReserved):
+#    return InternetCheckConnectionW.ctypes_function(lpszUrl, dwFlags, dwReserved)
+InternetCheckConnectionWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, DWORD, DWORD)
+InternetCheckConnectionWParams = ((1, 'lpszUrl'), (1, 'dwFlags'), (1, 'dwReserved'))
+
+#def InternetOpenA(lpszAgent, dwAccessType, lpszProxy, lpszProxyBypass, dwFlags):
+#    return InternetOpenA.ctypes_function(lpszAgent, dwAccessType, lpszProxy, lpszProxyBypass, dwFlags)
+InternetOpenAPrototype = WINFUNCTYPE(HINTERNET, LPCSTR, DWORD, LPCSTR, LPCSTR, DWORD)
+InternetOpenAParams = ((1, 'lpszAgent'), (1, 'dwAccessType'), (1, 'lpszProxy'), (1, 'lpszProxyBypass'), (1, 'dwFlags'))
+
+#def InternetOpenW(lpszAgent, dwAccessType, lpszProxy, lpszProxyBypass, dwFlags):
+#    return InternetOpenW.ctypes_function(lpszAgent, dwAccessType, lpszProxy, lpszProxyBypass, dwFlags)
+InternetOpenWPrototype = WINFUNCTYPE(HINTERNET, LPCWSTR, DWORD, LPCWSTR, LPCWSTR, DWORD)
+InternetOpenWParams = ((1, 'lpszAgent'), (1, 'dwAccessType'), (1, 'lpszProxy'), (1, 'lpszProxyBypass'), (1, 'dwFlags'))
+
+#def InternetOpenUrlA(hInternet, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext):
+#    return InternetOpenUrlA.ctypes_function(hInternet, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext)
+InternetOpenUrlAPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCSTR, LPCSTR, DWORD, DWORD, DWORD_PTR)
+InternetOpenUrlAParams = ((1, 'hInternet'), (1, 'lpszUrl'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def InternetOpenUrlW(hInternet, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext):
+#    return InternetOpenUrlW.ctypes_function(hInternet, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext)
+InternetOpenUrlWPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCWSTR, LPCWSTR, DWORD, DWORD, DWORD_PTR)
+InternetOpenUrlWParams = ((1, 'hInternet'), (1, 'lpszUrl'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def InternetConnectA(hInternet, lpszServerName, nServerPort, lpszUserName, lpszPassword, dwService, dwFlags, dwContext):
+#    return InternetConnectA.ctypes_function(hInternet, lpszServerName, nServerPort, lpszUserName, lpszPassword, dwService, dwFlags, dwContext)
+InternetConnectAPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCSTR, INTERNET_PORT, LPCSTR, LPCSTR, DWORD, DWORD, DWORD_PTR)
+InternetConnectAParams = ((1, 'hInternet'), (1, 'lpszServerName'), (1, 'nServerPort'), (1, 'lpszUserName'), (1, 'lpszPassword'), (1, 'dwService'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def InternetConnectW(hInternet, lpszServerName, nServerPort, lpszUserName, lpszPassword, dwService, dwFlags, dwContext):
+#    return InternetConnectW.ctypes_function(hInternet, lpszServerName, nServerPort, lpszUserName, lpszPassword, dwService, dwFlags, dwContext)
+InternetConnectWPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCWSTR, INTERNET_PORT, LPCWSTR, LPCWSTR, DWORD, DWORD, DWORD_PTR)
+InternetConnectWParams = ((1, 'hInternet'), (1, 'lpszServerName'), (1, 'nServerPort'), (1, 'lpszUserName'), (1, 'lpszPassword'), (1, 'dwService'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def HttpOpenRequestA(hConnect, lpszVerb, lpszObjectName, lpszVersion, lpszReferrer, lplpszAcceptTypes, dwFlags, dwContext):
+#    return HttpOpenRequestA.ctypes_function(hConnect, lpszVerb, lpszObjectName, lpszVersion, lpszReferrer, lplpszAcceptTypes, dwFlags, dwContext)
+HttpOpenRequestAPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCSTR, LPCSTR, LPCSTR, LPCSTR, POINTER(LPCSTR), DWORD, DWORD_PTR)
+HttpOpenRequestAParams = ((1, 'hConnect'), (1, 'lpszVerb'), (1, 'lpszObjectName'), (1, 'lpszVersion'), (1, 'lpszReferrer'), (1, 'lplpszAcceptTypes'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def HttpOpenRequestW(hConnect, lpszVerb, lpszObjectName, lpszVersion, lpszReferrer, lplpszAcceptTypes, dwFlags, dwContext):
+#    return HttpOpenRequestW.ctypes_function(hConnect, lpszVerb, lpszObjectName, lpszVersion, lpszReferrer, lplpszAcceptTypes, dwFlags, dwContext)
+HttpOpenRequestWPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, POINTER(LPCWSTR), DWORD, DWORD_PTR)
+HttpOpenRequestWParams = ((1, 'hConnect'), (1, 'lpszVerb'), (1, 'lpszObjectName'), (1, 'lpszVersion'), (1, 'lpszReferrer'), (1, 'lplpszAcceptTypes'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def InternetSetOptionA(hInternet, dwOption, lpBuffer, dwBufferLength):
+#    return InternetSetOptionA.ctypes_function(hInternet, dwOption, lpBuffer, dwBufferLength)
+InternetSetOptionAPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPVOID, DWORD)
+InternetSetOptionAParams = ((1, 'hInternet'), (1, 'dwOption'), (1, 'lpBuffer'), (1, 'dwBufferLength'))
+
+#def InternetSetOptionW(hInternet, dwOption, lpBuffer, dwBufferLength):
+#    return InternetSetOptionW.ctypes_function(hInternet, dwOption, lpBuffer, dwBufferLength)
+InternetSetOptionWPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPVOID, DWORD)
+InternetSetOptionWParams = ((1, 'hInternet'), (1, 'dwOption'), (1, 'lpBuffer'), (1, 'dwBufferLength'))
+
+#def HttpSendRequestA(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
+#    return HttpSendRequestA.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
+HttpSendRequestAPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCSTR, DWORD, LPVOID, DWORD)
+HttpSendRequestAParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
+
+#def HttpSendRequestW(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
+#    return HttpSendRequestW.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
+HttpSendRequestWPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD)
+HttpSendRequestWParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
+
+#def InternetReadFile(hFile, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead):
+#    return InternetReadFile.ctypes_function(hFile, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead)
+InternetReadFilePrototype = WINFUNCTYPE(BOOL, HINTERNET, LPVOID, DWORD, LPDWORD)
+InternetReadFileParams = ((1, 'hFile'), (1, 'lpBuffer'), (1, 'dwNumberOfBytesToRead'), (1, 'lpdwNumberOfBytesRead'))
+
+#def InternetReadFileExA(hFile, lpBuffersOut, dwFlags, dwContext):
+#    return InternetReadFileExA.ctypes_function(hFile, lpBuffersOut, dwFlags, dwContext)
+InternetReadFileExAPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPINTERNET_BUFFERSA, DWORD, DWORD_PTR)
+InternetReadFileExAParams = ((1, 'hFile'), (1, 'lpBuffersOut'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def InternetReadFileExW(hFile, lpBuffersOut, dwFlags, dwContext):
+#    return InternetReadFileExW.ctypes_function(hFile, lpBuffersOut, dwFlags, dwContext)
+InternetReadFileExWPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPINTERNET_BUFFERSW, DWORD, DWORD_PTR)
+InternetReadFileExWParams = ((1, 'hFile'), (1, 'lpBuffersOut'), (1, 'dwFlags'), (1, 'dwContext'))
+
+#def HttpQueryInfoA(hRequest, dwInfoLevel, lpBuffer, lpdwBufferLength, lpdwIndex):
+#    return HttpQueryInfoA.ctypes_function(hRequest, dwInfoLevel, lpBuffer, lpdwBufferLength, lpdwIndex)
+HttpQueryInfoAPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPVOID, LPDWORD, LPDWORD)
+HttpQueryInfoAParams = ((1, 'hRequest'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'lpdwBufferLength'), (1, 'lpdwIndex'))
+
+#def HttpQueryInfoW(hRequest, dwInfoLevel, lpBuffer, lpdwBufferLength, lpdwIndex):
+#    return HttpQueryInfoW.ctypes_function(hRequest, dwInfoLevel, lpBuffer, lpdwBufferLength, lpdwIndex)
+HttpQueryInfoWPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPVOID, LPDWORD, LPDWORD)
+HttpQueryInfoWParams = ((1, 'hRequest'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'lpdwBufferLength'), (1, 'lpdwIndex'))
+
+#def HttpSendRequestA(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
+#    return HttpSendRequestA.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
+HttpSendRequestAPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCSTR, DWORD, LPVOID, DWORD)
+HttpSendRequestAParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
+
+#def HttpSendRequestW(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
+#    return HttpSendRequestW.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
+HttpSendRequestWPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD)
+HttpSendRequestWParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
+
 #def LsaOpenPolicy(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle):
 #    return LsaOpenPolicy.ctypes_function(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle)
 LsaOpenPolicyPrototype = WINFUNCTYPE(NTSTATUS, PLSA_UNICODE_STRING, PLSA_OBJECT_ATTRIBUTES, ACCESS_MASK, PLSA_HANDLE)
@@ -1769,6 +1874,16 @@ CreateServiceWParams = ((1, 'hSCManager'), (1, 'lpServiceName'), (1, 'lpDisplayN
 #    return DeleteService.ctypes_function(hService)
 DeleteServicePrototype = WINFUNCTYPE(BOOL, SC_HANDLE)
 DeleteServiceParams = ((1, 'hService'),)
+
+#def StartServiceCtrlDispatcherA(lpServiceStartTable):
+#    return StartServiceCtrlDispatcherA.ctypes_function(lpServiceStartTable)
+StartServiceCtrlDispatcherAPrototype = WINFUNCTYPE(BOOL, POINTER(SERVICE_TABLE_ENTRYA))
+StartServiceCtrlDispatcherAParams = ((1, 'lpServiceStartTable'),)
+
+#def StartServiceCtrlDispatcherW(lpServiceStartTable):
+#    return StartServiceCtrlDispatcherW.ctypes_function(lpServiceStartTable)
+StartServiceCtrlDispatcherWPrototype = WINFUNCTYPE(BOOL, POINTER(SERVICE_TABLE_ENTRYW))
+StartServiceCtrlDispatcherWParams = ((1, 'lpServiceStartTable'),)
 
 #def SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize, RequiredSize):
 #    return SetupDiClassNameFromGuidA.ctypes_function(ClassGuid, ClassName, ClassNameSize, RequiredSize)

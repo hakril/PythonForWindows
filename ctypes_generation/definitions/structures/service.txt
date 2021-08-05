@@ -83,3 +83,15 @@ typedef struct _QUERY_SERVICE_CONFIGW {
   LPWSTR lpServiceStartName;
   LPWSTR lpDisplayName;
 } QUERY_SERVICE_CONFIGW, *LPQUERY_SERVICE_CONFIGW;
+
+
+typedef struct _SERVICE_TABLE_ENTRYA {
+  LPSTR                    lpServiceName;
+  LPSERVICE_MAIN_FUNCTIONA lpServiceProc;
+} SERVICE_TABLE_ENTRYA, *LPSERVICE_TABLE_ENTRYA;
+
+
+typedef struct _SERVICE_TABLE_ENTRYW {
+  LPWSTR                   lpServiceName;
+  LPSERVICE_MAIN_FUNCTIONW lpServiceProc;
+} SERVICE_TABLE_ENTRYW, *LPSERVICE_TABLE_ENTRYW;

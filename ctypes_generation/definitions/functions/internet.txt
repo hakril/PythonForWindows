@@ -1,0 +1,175 @@
+BOOL InternetCheckConnectionA(
+  LPCSTR lpszUrl,
+  DWORD  dwFlags,
+  DWORD  dwReserved
+);
+
+BOOL InternetCheckConnectionW(
+  LPCWSTR lpszUrl,
+  DWORD   dwFlags,
+  DWORD   dwReserved
+);
+
+
+HINTERNET InternetOpenA(
+  LPCSTR lpszAgent,
+  DWORD  dwAccessType,
+  LPCSTR lpszProxy,
+  LPCSTR lpszProxyBypass,
+  DWORD  dwFlags
+);
+
+HINTERNET InternetOpenW(
+  LPCWSTR lpszAgent,
+  DWORD   dwAccessType,
+  LPCWSTR lpszProxy,
+  LPCWSTR lpszProxyBypass,
+  DWORD   dwFlags
+);
+
+HINTERNET InternetOpenUrlA(
+  HINTERNET hInternet,
+  LPCSTR    lpszUrl,
+  LPCSTR    lpszHeaders,
+  DWORD     dwHeadersLength,
+  DWORD     dwFlags,
+  DWORD_PTR dwContext
+);
+
+HINTERNET InternetOpenUrlW(
+  HINTERNET hInternet,
+  LPCWSTR   lpszUrl,
+  LPCWSTR   lpszHeaders,
+  DWORD     dwHeadersLength,
+  DWORD     dwFlags,
+  DWORD_PTR dwContext
+);
+
+HINTERNET InternetConnectA(
+  HINTERNET     hInternet,
+  LPCSTR        lpszServerName,
+  INTERNET_PORT nServerPort,
+  LPCSTR        lpszUserName,
+  LPCSTR        lpszPassword,
+  DWORD         dwService,
+  DWORD         dwFlags,
+  DWORD_PTR     dwContext
+);
+
+
+HINTERNET InternetConnectW(
+  HINTERNET     hInternet,
+  LPCWSTR       lpszServerName,
+  INTERNET_PORT nServerPort,
+  LPCWSTR       lpszUserName,
+  LPCWSTR       lpszPassword,
+  DWORD         dwService,
+  DWORD         dwFlags,
+  DWORD_PTR     dwContext
+);
+
+HINTERNET HttpOpenRequestA(
+  HINTERNET hConnect,
+  LPCSTR    lpszVerb,
+  LPCSTR    lpszObjectName,
+  LPCSTR    lpszVersion,
+  LPCSTR    lpszReferrer,
+  LPCSTR    *lplpszAcceptTypes,
+  DWORD     dwFlags,
+  DWORD_PTR dwContext
+);
+
+HINTERNET HttpOpenRequestW(
+  HINTERNET hConnect,
+  LPCWSTR   lpszVerb,
+  LPCWSTR   lpszObjectName,
+  LPCWSTR   lpszVersion,
+  LPCWSTR   lpszReferrer,
+  LPCWSTR   *lplpszAcceptTypes,
+  DWORD     dwFlags,
+  DWORD_PTR dwContext
+);
+
+BOOL InternetSetOptionA(
+  HINTERNET hInternet,
+  DWORD     dwOption,
+  LPVOID    lpBuffer,
+  DWORD     dwBufferLength
+);
+
+BOOL InternetSetOptionW(
+  HINTERNET hInternet,
+  DWORD     dwOption,
+  LPVOID    lpBuffer,
+  DWORD     dwBufferLength
+);
+
+BOOL HttpSendRequestA(
+  HINTERNET hRequest,
+  LPCSTR    lpszHeaders,
+  DWORD     dwHeadersLength,
+  LPVOID    lpOptional,
+  DWORD     dwOptionalLength
+);
+
+BOOL HttpSendRequestW(
+  HINTERNET hRequest,
+  LPCWSTR   lpszHeaders,
+  DWORD     dwHeadersLength,
+  LPVOID    lpOptional,
+  DWORD     dwOptionalLength
+);
+
+BOOL InternetReadFile(
+  HINTERNET hFile,
+  LPVOID    lpBuffer,
+  DWORD     dwNumberOfBytesToRead,
+  LPDWORD   lpdwNumberOfBytesRead
+);
+
+
+BOOL InternetReadFileExA(
+  HINTERNET           hFile,
+  LPINTERNET_BUFFERSA lpBuffersOut,
+  DWORD               dwFlags,
+  DWORD_PTR           dwContext
+);
+
+BOOL InternetReadFileExW(
+  HINTERNET           hFile,
+  LPINTERNET_BUFFERSW lpBuffersOut,
+  DWORD               dwFlags,
+  DWORD_PTR           dwContext
+);
+
+BOOL HttpQueryInfoA(
+  HINTERNET hRequest,
+  DWORD     dwInfoLevel,
+  LPVOID    lpBuffer,
+  LPDWORD   lpdwBufferLength,
+  LPDWORD   lpdwIndex
+);
+
+BOOL HttpQueryInfoW(
+  HINTERNET hRequest,
+  DWORD     dwInfoLevel,
+  LPVOID    lpBuffer,
+  LPDWORD   lpdwBufferLength,
+  LPDWORD   lpdwIndex
+);
+
+BOOL HttpSendRequestA(
+  HINTERNET hRequest,
+  LPCSTR    lpszHeaders,
+  DWORD     dwHeadersLength,
+  LPVOID    lpOptional,
+  DWORD     dwOptionalLength
+);
+
+BOOL HttpSendRequestW(
+  HINTERNET hRequest,
+  LPCWSTR   lpszHeaders,
+  DWORD     dwHeadersLength,
+  LPVOID    lpOptional,
+  DWORD     dwOptionalLength
+);
