@@ -199,6 +199,8 @@
 <dd><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></dd>
 <dt>List all events with an EventID of 2006:</dt>
 <dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></dd>
+<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></dd>
 </dl>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -586,6 +588,8 @@
 <dd><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></dd>
 <dt>List all events with an EventID of 2006:</dt>
 <dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></dd>
+<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></dd>
 </dl>
 </div>
 <table class="docutils field-list" frame="void" rules="none">

@@ -145,13 +145,13 @@
             <span class="n">xtype</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">transform_type_to_remote64bits</span><span class="p">(</span><span class="n">PROCESS_BASIC_INFORMATION</span><span class="p">)</span>
             <span class="c1"># Fuck-it &lt;3</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xtype</span><span class="p">))()</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationProcess_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ProcessInformation</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">ProcessInformationLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xtype</span><span class="p">))</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationProcess_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">ProcessInformation</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">ProcessInformationLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xtype</span><span class="p">))</span>
             <span class="c1"># Map a remote64bits(PROCESS_BASIC_INFORMATION) at the address of &#39;data&#39;</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">xtype</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">information_type</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">PROCESS_BASIC_INFORMATION</span><span class="p">()</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">information_type</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">information_type</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">InheritedFromUniqueProcessId</span>
 
     <span class="nd">@property</span>
@@ -390,13 +390,13 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">readden</span><span class="p">,</span> <span class="n">read_size</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">read_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="k">raise</span>
                 <span class="c1"># handle read_wstring at end of page</span>
                 <span class="c1"># Of read failed: read only the half of size</span>
                 <span class="c1"># read_size must remain a multiple of 2</span>
-                <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">//</span> <span class="mi">2</span>
                 <span class="k">continue</span>
             <span class="n">readden</span> <span class="o">+=</span> <span class="n">read_size</span>
             <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
@@ -414,13 +414,13 @@
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">readden</span><span class="p">,</span> <span class="n">read_size</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">read_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="k">raise</span>
                 <span class="c1"># handle read_wstring at end of page</span>
                 <span class="c1"># Of read failed: read only the half of size</span>
                 <span class="c1"># read_size must remain a multiple of 2</span>
-                <span class="n">read_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">//</span> <span class="mi">2</span>
                 <span class="k">continue</span>
             <span class="n">readden</span> <span class="o">+=</span> <span class="n">read_size</span>
             <span class="c1"># Bytearray will work on py2 &amp; py3</span>
@@ -429,10 +429,10 @@
             <span class="n">utf16_chars</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span>
             <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">:</span>
                 <span class="c1"># Translate bytearray to str/bytes for both py2 &amp; py3</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">[:</span><span class="n">utf16_chars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)])</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">utf16_chars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
                 <span class="k">break</span>
             <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf16&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">write_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">byte</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;write a byte at ``addr``&quot;&quot;&quot;</span>
@@ -770,9 +770,15 @@
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">get_current_process_syswow_peb</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">get_current_process_syswow_peb</span><span class="p">()</span>
 
-    <span class="c1"># TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?</span>
+    <span class="c1"># TODO: use ctypes.string_at / ctypes.wstring_at for read_string / read_wstring ?</span>
+
+<div class="viewcode-block" id="CurrentProcess.read_string"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.read_string">[docs]</a>    <span class="k">def</span> <span class="nf">read_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">string_at</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span> <span class="c1"># Raises WindowsError on fail</span></div>
+
+<div class="viewcode-block" id="CurrentProcess.read_wstring"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.read_wstring">[docs]</a>    <span class="k">def</span> <span class="nf">read_wstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">wstring_at</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span> <span class="c1"># Raises WindowsError on fail</span></div></div>
 
 <div class="viewcode-block" id="WinThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread">[docs]</a><span class="k">class</span> <span class="nc">WinThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent a thread &quot;&quot;&quot;</span>
@@ -1023,7 +1029,7 @@
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1024</span><span class="p">)</span>
-        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessImageFileNameA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessImageFileNameA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span> <span class="c1"># Use a syscall and not some remote process reading</span>
         <span class="c1"># GetProcessImageFileNameA returns the fullpath</span>
         <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 

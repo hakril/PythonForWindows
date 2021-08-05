@@ -122,6 +122,14 @@
         <span class="p">(</span><span class="s2">&quot;AddressOfData&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">)</span>
     <span class="p">]</span>
 
+<span class="c1"># Special case for .NET PE32 rewrite as 64b</span>
+<span class="c1"># We may have a PE in a 64b process with a 32b IAT</span>
+<span class="k">class</span> <span class="nc">THUNK_DATA_32</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Union</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;Ordinal&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;AddressOfData&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">)</span>
+    <span class="p">]</span>
+
 <span class="k">class</span> <span class="nc">IMPORT_BY_NAME</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;Hint&quot;</span><span class="p">,</span> <span class="n">WORD</span><span class="p">),</span>
@@ -224,7 +232,6 @@
     <span class="k">def</span> <span class="nf">on_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="c1"># We cannot know if the hook was enabled here..</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DESTROY: </span><span class="si">{0}</span><span class="s2"> -&gt; &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">))</span>
-        <span class="c1"># import pdb;pdb.set_trace()</span>
         <span class="c1"># print(args[0]())</span>
 
 <div class="viewcode-block" id="IATEntry.remove_hook"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.remove_hook">[docs]</a>    <span class="k">def</span> <span class="nf">remove_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -242,11 +249,16 @@
 
 
 <span class="k">class</span> <span class="nc">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">(</span><span class="n">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">):</span> <span class="c1"># TODO: use explicite name winstructs.IMAGE_IMPORT_DESCRIPTOR</span>
-    <span class="k">def</span> <span class="nf">get_INT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_INT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pe</span><span class="p">):</span>
+        <span class="n">THUNK_DATA_TYPE</span> <span class="o">=</span> <span class="n">THUNK_DATA</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">OriginalFirstThunk</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># We may have 32bits PE mapped in 32bits process (thanks to .NET PE)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pe</span><span class="o">.</span><span class="n">bitness</span> <span class="o">!=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="n">pe</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;Mapped 64b PE in current process 32b not handled&quot;</span>
+            <span class="n">THUNK_DATA_TYPE</span> <span class="o">=</span> <span class="n">THUNK_DATA_32</span>
         <span class="n">int_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">OriginalFirstThunk</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span>
-        <span class="n">int_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA</span><span class="p">,</span> <span class="n">int_addr</span><span class="p">)</span>
+        <span class="n">int_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA_TYPE</span><span class="p">,</span> <span class="n">int_addr</span><span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">while</span> <span class="n">int_entry</span><span class="o">.</span><span class="n">Ordinal</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">int_entry</span><span class="o">.</span><span class="n">Ordinal</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMAGE_ORDINAL_FLAG</span><span class="p">:</span>
@@ -254,23 +266,24 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">import_by_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">IMPORT_BY_NAME</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">int_entry</span><span class="o">.</span><span class="n">AddressOfData</span><span class="p">)</span>
                 <span class="n">name_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">int_entry</span><span class="o">.</span><span class="n">AddressOfData</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">import_by_name</span><span class="p">)</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">offset</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">import_by_name</span><span class="o">.</span><span class="n">Hint</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
             <span class="n">int_addr</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">int_entry</span><span class="p">))</span>
-            <span class="n">int_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA</span><span class="p">,</span> <span class="n">int_addr</span><span class="p">)</span>
+            <span class="n">int_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA_TYPE</span><span class="p">,</span> <span class="n">int_addr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
-    <span class="k">def</span> <span class="nf">get_IAT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_IAT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pe</span><span class="p">):</span>
+        <span class="n">THUNK_DATA_TYPE</span> <span class="o">=</span> <span class="n">THUNK_DATA</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pe</span><span class="o">.</span><span class="n">bitness</span> <span class="o">!=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="n">pe</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;Mapped 64b PE in current process 32b not handled&quot;</span>
+            <span class="n">THUNK_DATA_TYPE</span> <span class="o">=</span> <span class="n">THUNK_DATA_32</span>
         <span class="n">iat_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FirstThunk</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span>
-        <span class="n">iat_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA</span><span class="p">,</span> <span class="n">iat_addr</span><span class="p">)</span>
+        <span class="n">iat_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA_TYPE</span><span class="p">,</span> <span class="n">iat_addr</span><span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">while</span> <span class="n">iat_entry</span><span class="o">.</span><span class="n">Ordinal</span><span class="p">:</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IATEntry</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">iat_addr</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;??&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="p">))</span>
             <span class="n">iat_addr</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">iat_entry</span><span class="p">))</span>
-            <span class="n">iat_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA</span><span class="p">,</span> <span class="n">iat_addr</span><span class="p">)</span>
+            <span class="n">iat_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA_TYPE</span><span class="p">,</span> <span class="n">iat_addr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="nd">@classmethod</span>
@@ -356,21 +369,37 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">IMAGE_NT_HEADERS32</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">IMAGE_NT_HEADERS64</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
 
+
+    <span class="n">STANDARD_OPTIONAL_HEADER_TYPE_PER_MAGIC</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">IMAGE_NT_OPTIONAL_HDR32_MAGIC</span><span class="p">:</span> <span class="n">IMAGE_OPTIONAL_HEADER32</span><span class="p">,</span>
+        <span class="n">IMAGE_NT_OPTIONAL_HDR64_MAGIC</span><span class="p">:</span> <span class="n">IMAGE_OPTIONAL_HEADER64</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">STANDARD_OPTIONAL_HEADER_SIZE_PER_MAGIC</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">IMAGE_NT_OPTIONAL_HDR32_MAGIC</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">IMAGE_OPTIONAL_HEADER32</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">IMAGE_NT_OPTIONAL_HDR64_MAGIC</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">IMAGE_OPTIONAL_HEADER64</span><span class="p">)),</span>
+    <span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">get_OptionalHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">OptionalHeader</span>
+        <span class="c1"># We can have a 32bits PE with a 64 bits OptionalHeader</span>
+        <span class="c1"># Ex  : PE32 .NET that allow to be loaded in 64b process</span>
+        <span class="c1"># See: https://github.com/dotnet/runtime/blob/8bbe33819464216becffb7cf8b7ea8dd3bab5836/src/coreclr/src/vm/peimagelayout.cpp#L599</span>
+        <span class="c1"># In this case the OptionalHeader is transformed in 64bits &amp; OptionalHeader.Magic is changed accordingly</span>
+        <span class="c1"># So we cannot just rely on get_NT_HEADER() to give us the correct OptionalHeader type. some re-check are required</span>
+        <span class="n">default_opth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">OptionalHeader</span>
+        <span class="c1"># Cannot juste compare types with type(default_opth) as it may be a remoteType</span>
+        <span class="n">current_opth_infos</span> <span class="o">=</span> <span class="p">(</span><span class="n">default_opth</span><span class="o">.</span><span class="n">Magic</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">default_opth</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">current_opth_infos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">STANDARD_OPTIONAL_HEADER_SIZE_PER_MAGIC</span><span class="p">:</span>
+            <span class="c1"># The default OptionalHeader structure match what we expect based on the magic (most of the cases)</span>
+            <span class="k">return</span> <span class="n">default_opth</span>
+        <span class="c1"># Mismatch -&gt; PE32 remapped as 64b (with OptionalHeader rewrite)</span>
+        <span class="c1"># Remap the correct OptionalHeader</span>
+        <span class="n">opt_header_real_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STANDARD_OPTIONAL_HEADER_TYPE_PER_MAGIC</span><span class="p">[</span><span class="n">default_opth</span><span class="o">.</span><span class="n">Magic</span><span class="p">]</span>
+        <span class="n">opt_header_addr</span> <span class="o">=</span> <span class="n">default_opth</span><span class="o">.</span><span class="n">_base_addr</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="k">else</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">default_opth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">opt_header_real_type</span><span class="p">,</span> <span class="n">opt_header_addr</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_DataDirectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># This won&#39;t work if we load a PE32 in a 64bit process</span>
-        <span class="c1"># PE32 .NET...</span>
-        <span class="c1"># return self.get_OptionalHeader().DataDirectory</span>
-        <span class="n">DataDirectory_type</span> <span class="o">=</span> <span class="n">IMAGE_DATA_DIRECTORY</span> <span class="o">*</span> <span class="n">IMAGE_NUMBEROF_DIRECTORY_ENTRIES</span>
-        <span class="n">SizeOfOptionalHeader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">FileHeader</span><span class="o">.</span><span class="n">SizeOfOptionalHeader</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">opt_header_addr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">OptionalHeader</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">opt_header_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">OptionalHeader</span><span class="o">.</span><span class="n">_base_addr</span>
-        <span class="n">DataDirectory_addr</span> <span class="o">=</span> <span class="n">opt_header_addr</span> <span class="o">+</span> <span class="n">SizeOfOptionalHeader</span> <span class="o">-</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">DataDirectory_type</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">DataDirectory_type</span><span class="p">,</span> <span class="n">DataDirectory_addr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_OptionalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">DataDirectory</span>
 
 
     <span class="k">def</span> <span class="nf">get_IMPORT_DESCRIPTORS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -422,7 +451,6 @@
         <span class="n">export_end</span> <span class="o">=</span> <span class="n">export_start</span> <span class="o">+</span> <span class="n">export_datadir</span><span class="o">.</span><span class="n">Size</span>
         <span class="k">if</span> <span class="n">exp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">res</span>
-        <span class="c1"># import pdb;pdb.set_trace()</span>
         <span class="n">raw_exports</span> <span class="o">=</span> <span class="n">exp_dir</span><span class="o">.</span><span class="n">get_exports</span><span class="p">()</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rva_addr</span><span class="p">,</span> <span class="n">rva_name</span> <span class="ow">in</span> <span class="n">raw_exports</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">export_start</span> <span class="o">&lt;=</span> <span class="n">rva_addr</span> <span class="o">&lt;</span> <span class="n">export_end</span><span class="p">:</span>
@@ -455,8 +483,8 @@
 <span class="sd">            :type: {:class:`str` : [:class:`IATEntry`]}&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">import_descriptor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_IMPORT_DESCRIPTORS</span><span class="p">():</span>
-            <span class="n">INT</span> <span class="o">=</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">get_INT</span><span class="p">()</span>
-            <span class="n">IAT</span> <span class="o">=</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">get_IAT</span><span class="p">()</span>
+            <span class="n">INT</span> <span class="o">=</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">get_INT</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">IAT</span> <span class="o">=</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">get_IAT</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">INT</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">iat_entry</span><span class="p">,</span> <span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">IAT</span><span class="p">,</span> <span class="n">INT</span><span class="p">):</span>
                     <span class="c1"># str(name.decode()) -&gt; python2 and python3 compatible for str result</span>

@@ -233,6 +233,10 @@
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BasicType</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_BASETYPE</span><span class="p">)]</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_typeid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_CLASSPARENTID</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">datakind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DataKind</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_DATAKIND</span><span class="p">)]</span>
 
@@ -247,6 +251,10 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nb_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_CHILDRENCOUNT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_VALUE</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -270,7 +278,10 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagBaseType</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &lt;basetype&gt; </span><span class="si">{1}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basetype</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &lt;basetype&gt; </span><span class="si">{1!r}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basetype</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagPointerType</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> PTR TO &quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> name=&quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
 
 
@@ -771,6 +782,7 @@
     <span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_ADDRESS</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG64</span><span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">TI_GTIEX_REQS_VALID</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG64</span><span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_SYMTAG</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagEnum</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_VALUE</span><span class="p">:</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 

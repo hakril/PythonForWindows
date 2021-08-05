@@ -381,6 +381,77 @@ including jump and label via the <code class="xref py py-class docutils literal 
 <span class="s1">&#39;</span><span class="se">\x81</span><span class="s1">~</span><span class="se">\x08\x0c\x00\x00\x00</span><span class="s1">u&amp;</span><span class="se">\x8b</span><span class="s1">N</span><span class="se">\x10\x8b</span><span class="s1">Q</span><span class="se">\x04\x8b</span><span class="s1">A</span><span class="se">\x08\x8b\t\x81\xf9\x01\x00\x00\x00</span><span class="s1">u</span><span class="se">\x03\xee\xeb\r\x81\xf9\x02\x00\x00\x00</span><span class="s1">u</span><span class="se">\x04</span><span class="s1">f</span><span class="se">\xef\xeb\x01\xef</span><span class="s1">1</span><span class="se">\xc0\xc3\xc7\xc0\r\x00\x00\xc0\xc3</span><span class="s1">&#39;</span>
 </pre></div>
 </div>
+<div class="section" id="available-instructions-in-x86-assembler">
+<h3>3.2.1. Available Instructions in X86 assembler<a class="headerlink" href="#available-instructions-in-x86-assembler" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Not all encodings may be implemented for each of the instructions.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">Byte</span></code> and <code class="docutils literal notranslate"><span class="pre">Raw</span></code> are not x86 instruction and allow to insert arbitrary data to the generated code.</p>
+</div>
+<p>Listing:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Add</li>
+<li>And</li>
+<li>Byte</li>
+<li>Cmp</li>
+<li>CmpsB</li>
+<li>CmpsD</li>
+<li>CmpsW</li>
+<li>Cpuid</li>
+<li>Dec</li>
+<li>In</li>
+<li>Inc</li>
+<li>Int</li>
+<li>Int3</li>
+<li>Iret</li>
+<li>Lea</li>
+<li>Mov</li>
+<li>Movsb</li>
+<li>Movsd</li>
+<li>Nop</li>
+<li>Not</li>
+<li>Or</li>
+<li>Out</li>
+<li>Pop</li>
+<li>Popad</li>
+<li>Popfd</li>
+<li>Push</li>
+<li>Pushad</li>
+<li>Pushfd</li>
+<li>Raw</li>
+<li>Ret</li>
+<li>Retf</li>
+<li>Rol</li>
+<li>Ror</li>
+<li>ScasB</li>
+<li>ScasD</li>
+<li>ScasW</li>
+<li>Shl</li>
+<li>Shr</li>
+<li>StosB</li>
+<li>StosD</li>
+<li>StosW</li>
+<li>Sub</li>
+<li>Test</li>
+<li>Xchg</li>
+<li>Xor</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">Raw</span></code>: Output raw data from an hexadecimal string</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">simple_x64</span><span class="o">.</span><span class="n">Raw</span><span class="p">(</span><span class="s2">&quot;90C332FCFF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x90\xc32\xfc\xff&#39;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Byte</span></code>: Output a raw byte</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">simple_x86</span><span class="o">.</span><span class="n">Byte</span><span class="p">(</span><span class="mh">0x42</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;B&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="module-windows.native_exec.simple_x64">
 <span id="windows-native-exec-simple-x64-x64-assembler"></span><h2>3.3. <a class="reference internal" href="#module-windows.native_exec.simple_x64" title="windows.native_exec.simple_x64"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.native_exec.simple_x64</span></code></a> – X64 Assembler<a class="headerlink" href="#module-windows.native_exec.simple_x64" title="Permalink to this headline">¶</a></h2>
@@ -412,6 +483,65 @@ including jump and label via the <code class="xref py py-class docutils literal 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">x64</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[EAX]&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
 <span class="go">&#39;g\x8b\x00&#39;</span>
 </pre></div>
+</div>
+<div class="section" id="available-instructions-in-x64-assembler">
+<h3>3.3.1. Available Instructions in X64 assembler<a class="headerlink" href="#available-instructions-in-x64-assembler" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Not all encodings may be implemented for each of the instructions.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">Raw</span></code> is not an x64 instruction and allow to insert arbitrary data to the generated code.</p>
+</div>
+<dl class="docutils">
+<dt>Listing:</dt>
+<dd><ul class="first last simple">
+<li>Add</li>
+<li>And</li>
+<li>Cmp</li>
+<li>CmpsB</li>
+<li>CmpsD</li>
+<li>CmpsQ</li>
+<li>CmpsW</li>
+<li>Cpuid</li>
+<li>Dec</li>
+<li>In</li>
+<li>Inc</li>
+<li>Int</li>
+<li>Int3</li>
+<li>Lea</li>
+<li>Mov</li>
+<li>Nop</li>
+<li>Not</li>
+<li>Or</li>
+<li>Out</li>
+<li>Pop</li>
+<li>Popfq</li>
+<li>Push</li>
+<li>Pushfq</li>
+<li>Raw</li>
+<li>Ret</li>
+<li>Retf</li>
+<li>Retf32</li>
+<li>ScasB</li>
+<li>ScasD</li>
+<li>ScasQ</li>
+<li>ScasW</li>
+<li>Shl</li>
+<li>Shr</li>
+<li>Sub</li>
+<li>Test</li>
+<li>Xchg</li>
+<li>Xor</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">Raw</span></code>: Output raw data from an hexadecimal string</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">simple_x64</span><span class="o">.</span><span class="n">Raw</span><span class="p">(</span><span class="s2">&quot;90C332FCFF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x90\xc32\xfc\xff&#39;</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="module-windows.native_exec.nativeutils">
@@ -500,8 +630,14 @@ the end of your <code class="xref py py-class docutils literal notranslate"><spa
   <ul>
 <li><a class="reference internal" href="#">3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a><ul>
 <li><a class="reference internal" href="#module-windows.native_exec.cpuid">3.1. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.cpuid</span></code> – Interface to native CPUID</a></li>
-<li><a class="reference internal" href="#module-windows.native_exec.simple_x86">3.2. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.simple_x86</span></code> – X86 Assembler</a></li>
-<li><a class="reference internal" href="#module-windows.native_exec.simple_x64">3.3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.simple_x64</span></code> – X64 Assembler</a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x86">3.2. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.simple_x86</span></code> – X86 Assembler</a><ul>
+<li><a class="reference internal" href="#available-instructions-in-x86-assembler">3.2.1. Available Instructions in X86 assembler</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x64">3.3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.simple_x64</span></code> – X64 Assembler</a><ul>
+<li><a class="reference internal" href="#available-instructions-in-x64-assembler">3.3.1. Available Instructions in X64 assembler</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-windows.native_exec.nativeutils">3.4. <code class="docutils literal notranslate"><span class="pre">windows.native_exec.nativeutils</span></code> – Native utility functions</a></li>
 </ul>
 </li>
