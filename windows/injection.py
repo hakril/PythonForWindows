@@ -347,11 +347,12 @@ def find_python_dll_to_inject(target_bitness):
         else:
             # We need to check that the wow64 system32\pythonXX.dll exists
             systempath = "syswow64"
-        if not os.path.exists(os.path.join(os.environ["windir"], systempath, pydll_name)):
-            raise IOError("Could not find Python DLL to inject")
-        # In any way (32b ou 64b) the target process will load system32\pydll
-        # If the target is 32b the wow64 layer will translate it
-        return os.path.join(os.environ["windir"], "system32", pydll_name)
+        if os.path.exists(os.path.join(os.environ["windir"], systempath, pydll_name)):
+            # In any way (32b ou 64b) the target process will load system32\pydll
+            # If the target is 32b the wow64 layer will translate it
+            return os.path.join(os.environ["windir"], "system32", pydll_name)
+        # If not found this way -> may mean we have a install only for a user, give registry a try
+
     # Python 3 dll must be located using the registry
     for base_key in "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER":
         # Open the registry in 64b view regardless of current process bitness
@@ -362,19 +363,23 @@ def find_python_dll_to_inject(target_bitness):
         # This code do not handle -test version
         winver_base = sys.winver[:3] # major-minor
         if target_bitness == 64:
-            pyinstallkey = regbase("SOFTWARE\Python\PythonCore")(winver_base)
+            pyinstallkeys = [regbase(r"SOFTWARE\Python\PythonCore")(winver_base)]
         else:
-            pyinstallkey = regbase("SOFTWARE\WOW6432Node\Python\PythonCore")(winver_base + "-32")
-        try:
-            pyinstallpath = pyinstallkey("InstallPath")[""].value
-            final_path = os.path.join(pyinstallpath, pydll_name)
-            assert os.path.exists(final_path), "Could not find <{0}> pydll referenced from registry".format(final_path)
-            return final_path
-        except WindowsError as e:
-            if e.winerror != gdef.ERROR_FILE_NOT_FOUND:
-                raise
-            # Not found
-            continue
+            pyinstallkeys = [regbase(r"SOFTWARE\Python\PythonCore")(winver_base + "-32"),
+                                regbase(r"SOFTWARE\WOW6432Node\Python\PythonCore")(winver_base + "-32")]
+        for pyinstallkey in pyinstallkeys:
+            if not pyinstallkey.exists:
+                continue
+            try:
+                pyinstallpath = pyinstallkey("InstallPath")[""].value
+                final_path = os.path.join(pyinstallpath, pydll_name)
+                assert os.path.exists(final_path), "Could not find <{0}> pydll referenced from registry".format(final_path)
+                return final_path
+            except WindowsError as e:
+                if e.winerror != gdef.ERROR_FILE_NOT_FOUND:
+                    raise
+                # Not found
+                continue
     # Could not find a valid installation
     raise ValueError("Could not find a path for python-dll <{0}>({1}bits)".format(sys.winver, target_bitness))
 
@@ -384,6 +389,13 @@ def execute_python_code(process, code):
     # Cache the value ?
     py_dll_name = get_dll_name_from_python_version()
     pydll_path = find_python_dll_to_inject(process.bitness)
+    if sys.version_info.major == 3:
+        # FOr py3, we may have a per-user install.
+        # Meaning that the vcruntime140.dll will not be in the injected process path
+        # Find it & load-it as well, it should be in the same directory as pythonxx.dll
+        vc_runtime_dll = os.path.join(os.path.dirname(pydll_path), "vcruntime140.dll")
+        load_dll_in_remote_process(process, vc_runtime_dll)
+        # Try to inject the vcrunt
     load_dll_in_remote_process(process, pydll_path)
     shellcode, pythoncode = inject_python_command(process, code, py_dll_name)
     t = process.create_thread(shellcode, pythoncode)
@@ -424,5 +436,3 @@ def safe_execute_python(process, code):
         raise ValueError("Unknown exit code {0}".format(hex(t.exit_code)))
     data = retrieve_last_exception_data(process)
     raise RemotePythonError(data)
-
-
