@@ -870,17 +870,17 @@ typedef enum _SECTION_INHERIT {
 typedef struct _CLIENT_ID{
    HANDLE UniqueProcess;
    HANDLE UniqueThread;
-} CLIENT_ID;
+} CLIENT_ID, *PCLIENT_ID;
 
 typedef struct _CLIENT_ID64{
    ULONG64 UniqueProcess;
    ULONG64 UniqueThread;
-} CLIENT_ID64;
+} CLIENT_ID64, *PCLIENT_ID64;
 
 typedef struct _CLIENT_ID32{
    ULONG UniqueProcess;
    ULONG UniqueThread;
-} CLIENT_ID32;
+} CLIENT_ID32, *PCLIENT_ID32;
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];

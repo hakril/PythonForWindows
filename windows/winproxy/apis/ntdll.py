@@ -9,6 +9,12 @@ class NtdllProxy(ApiProxy):
     default_error_check = staticmethod(result_is_ntstatus)
 
 
+# Process
+
+@NtdllProxy()
+def NtOpenProcess(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId):
+    return NtOpenProcess.ctypes_function(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId)
+
 # Memory
 
 @NtdllProxy()
@@ -128,6 +134,10 @@ def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes
 @NtdllProxy()
 def NtSetContextThread(hThread, lpContext):
     return NtSetContextThread.ctypes_function(hThread, lpContext)
+
+@NtdllProxy()
+def NtDelayExecution(Alertable, DelayInterval):
+    return NtDelayExecution.ctypes_function(Alertable, DelayInterval)
 
 
 # Memory

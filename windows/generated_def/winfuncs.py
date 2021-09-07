@@ -2490,6 +2490,16 @@ NtMapViewOfSectionParams = ((1, 'SectionHandle'), (1, 'ProcessHandle'), (1, 'Bas
 NtUnmapViewOfSectionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PVOID)
 NtUnmapViewOfSectionParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'))
 
+#def NtOpenProcess(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId):
+#    return NtOpenProcess.ctypes_function(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId)
+NtOpenProcessPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, PCLIENT_ID)
+NtOpenProcessParams = ((1, 'ProcessHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'), (1, 'ClientId'))
+
+#def NtDelayExecution(Alertable, DelayInterval):
+#    return NtDelayExecution.ctypes_function(Alertable, DelayInterval)
+NtDelayExecutionPrototype = WINFUNCTYPE(NTSTATUS, BOOLEAN, PLARGE_INTEGER)
+NtDelayExecutionParams = ((1, 'Alertable'), (1, 'DelayInterval'))
+
 #def FileTimeToSystemTime(lpFileTime, lpSystemTime):
 #    return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
 FileTimeToSystemTimePrototype = WINFUNCTYPE(BOOL, POINTER(FILETIME), LPSYSTEMTIME)

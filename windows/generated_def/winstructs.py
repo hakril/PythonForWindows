@@ -4496,6 +4496,7 @@ class _CLIENT_ID(Structure):
         ("UniqueProcess", HANDLE),
         ("UniqueThread", HANDLE),
     ]
+PCLIENT_ID = POINTER(_CLIENT_ID)
 CLIENT_ID = _CLIENT_ID
 
 class _CLIENT_ID64(Structure):
@@ -4503,6 +4504,7 @@ class _CLIENT_ID64(Structure):
         ("UniqueProcess", ULONG64),
         ("UniqueThread", ULONG64),
     ]
+PCLIENT_ID64 = POINTER(_CLIENT_ID64)
 CLIENT_ID64 = _CLIENT_ID64
 
 class _CLIENT_ID32(Structure):
@@ -4511,6 +4513,7 @@ class _CLIENT_ID32(Structure):
         ("UniqueThread", ULONG),
     ]
 CLIENT_ID32 = _CLIENT_ID32
+PCLIENT_ID32 = POINTER(_CLIENT_ID32)
 
 class _LDR_DATA_TABLE_ENTRY(Structure):
     _fields_ = [
