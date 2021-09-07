@@ -72,7 +72,7 @@ class CustomAllocator(object):
 allocator = CustomAllocator()
 
 
-def create_function(code, types):
+def create_function(code, types, calling_convention=ctypes.CFUNCTYPE):
     """Create a python function that call raw machine code
 
    :param str code: Raw machine code that will be called
@@ -80,7 +80,7 @@ def create_function(code, types):
    :return: the created function
    :rtype: function
      """
-    func_type = ctypes.CFUNCTYPE(*types)
+    func_type = calling_convention(*types)
     addr = allocator.write_code(code)
     res = func_type(addr)
     res.code_addr = addr
