@@ -67,6 +67,9 @@ NDR_PACK_TEST_CASE = [
     (ndr.make_parameters([ndr.NdrByte, ndr.NdrHyper, ndr.NdrByte, ndr.NdrLong, ndr.NdrHyper]),
         (0x01, 0x4141414141414141, 0x42, 0x43434343, 0x4444444444444444 ),
         b"\x01PPPPPPPAAAAAAAABPPPCCCCDDDDDDDD"),
+    # Test NdrContextHandle / NdrGuid (see https://github.com/hakril/PythonForWindows/issues/30)
+    (ndr.NdrContextHandle, gdef.GUID.from_string("11223344-1122-3344-5566-424344454647"), b'\x00\x00\x00\x00D3"\x11"\x11D3UfBCDEFG'),
+    (ndr.NdrGuid, gdef.GUID.from_string("11223344-1122-3344-5566-424344454647"), b'D3"\x11"\x11D3UfBCDEFG'),
     # Complexe structure (with 4B alignement of 20B structure)
     (ndr.make_parameters([ndr.NdrShort, DoubleDwordStructure]),
         (0x0101, [0x41414141, 0x42424242, 0x43434343, 0x44444444, 0x45454545]),

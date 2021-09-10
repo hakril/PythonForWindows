@@ -3,6 +3,11 @@ import windows.generated_def as gdef
 
 import struct
 
+try:
+    unichr # Py2/Py3 compat
+except NameError:
+    unichr = chr
+
 # http://pubs.opengroup.org/onlinepubs/9629399/chap14.htm#tagcjh_19_03_07
 
 ## Array
@@ -259,7 +264,7 @@ class NdrGuid(object):
     def pack(cls, data):
         if not isinstance(data, gdef.IID):
             data = gdef.IID.from_string(data)
-        return str(bytearray(data))
+        return bytes(bytearray(data))
 
     @classmethod
     def unpack(self, stream):
@@ -276,7 +281,7 @@ class NdrContextHandle(object):
     def pack(cls, data):
         if not isinstance(data, gdef.IID):
             data = gdef.IID.from_string(data)
-        return struct.pack("<I", 0) + str(bytearray(data))
+        return bytes(struct.pack("<I", 0) + bytearray(data))
 
     @classmethod
     def unpack(self, stream):
@@ -498,6 +503,7 @@ class NdrConformantVaryingArrays(object):
     def get_alignment(self):
         # TODO: test on array of Hyper
         return max(4, self.MEMBER_TYPE.get_alignment())
+
 
 class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
     MEMBER_TYPE = NdrShort
