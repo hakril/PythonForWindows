@@ -15,6 +15,10 @@ class NtdllProxy(ApiProxy):
 def NtOpenProcess(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId):
     return NtOpenProcess.ctypes_function(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId)
 
+@NtdllProxy()
+def NtTerminateProcess(ProcessHandle, ExitStatus):
+    return NtTerminateProcess.ctypes_function(ProcessHandle, ExitStatus)
+
 # Memory
 
 @NtdllProxy()

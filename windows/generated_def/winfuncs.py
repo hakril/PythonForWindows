@@ -2500,6 +2500,11 @@ NtOpenProcessParams = ((1, 'ProcessHandle'), (1, 'DesiredAccess'), (1, 'ObjectAt
 NtDelayExecutionPrototype = WINFUNCTYPE(NTSTATUS, BOOLEAN, PLARGE_INTEGER)
 NtDelayExecutionParams = ((1, 'Alertable'), (1, 'DelayInterval'))
 
+#def NtTerminateProcess(ProcessHandle, ExitStatus):
+#    return NtTerminateProcess.ctypes_function(ProcessHandle, ExitStatus)
+NtTerminateProcessPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, NTSTATUS)
+NtTerminateProcessParams = ((1, 'ProcessHandle'), (1, 'ExitStatus'))
+
 #def FileTimeToSystemTime(lpFileTime, lpSystemTime):
 #    return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
 FileTimeToSystemTimePrototype = WINFUNCTYPE(BOOL, POINTER(FILETIME), LPSYSTEMTIME)
