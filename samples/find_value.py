@@ -89,5 +89,4 @@ except ValueError:
     search_name(target)
 else:
     print("== Searching value <{0:#x}> ==".format(itarget))
-    print ""
     search_value(itarget)
