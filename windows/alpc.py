@@ -17,10 +17,12 @@ import windows.pycompat
 # 0x1a: 0x4000000: ALPC_MESSAGE_DIRECT_ATTRIBUTE(0x4000000) size=0x8
 # 0x19: 0x2000000: ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE(0x2000000) size=0x8
 
+DEFAULT_MESSAGE_SIZE = 0x1000
+
 class AlpcMessage(object):
     """Represent a full ALPC Message: a :class:`AlpcMessagePort` and a :class:`MessageAttribute`"""
     # PORT_MESSAGE + MessageAttribute
-    def __init__(self, msg_or_size=0x1000, attributes=None):
+    def __init__(self, msg_or_size=DEFAULT_MESSAGE_SIZE, attributes=None):
         # Init the PORT_MESSAGE
         if isinstance(msg_or_size, windows.pycompat.int_types):
             self.port_message_buffer_size = msg_or_size
@@ -160,6 +162,7 @@ class AlpcMessagePort(gdef.PORT_MESSAGE):
 
     def write_data(self, data):
         if len(data) > self.max_datasize:
+            import pdb; pdb.set_trace()
             raise ValueError("Cannot write data of len <{0}> (raw_buffer size == <{1}>)".format(len(data), self.buffer_size))
         self.raw_buffer[self.header_size: self.header_size + len(data)] = data
         self.set_datalen(len(data))
@@ -304,13 +307,11 @@ class AlpcTransportBase(object):
         """
         if isinstance(alpc_message, windows.pycompat.anybuff):
             raw_alpc_message = alpc_message
-            if len(alpc_message) > 0x1000:
-                import pdb;pdb.set_trace()
             alpc_message = AlpcMessage(max(0x1000, len(alpc_message) + 0x200))
             alpc_message.port_message.data = raw_alpc_message
 
         if receive_msg is None:
-            receive_msg = AlpcMessage(0x1000)
+            receive_msg = AlpcMessage(DEFAULT_MESSAGE_SIZE)
         receive_size = gdef.SIZE_T(receive_msg.port_message_buffer_size)
         winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, alpc_message.port_message, alpc_message.attributes, receive_msg.port_message, receive_size, receive_msg.attributes, timeout)
         return receive_msg
@@ -324,7 +325,7 @@ class AlpcTransportBase(object):
         """
         if isinstance(alpc_message, windows.pycompat.anybuff):
             raw_alpc_message = alpc_message
-            alpc_message = AlpcMessage(max(0x1000, len(alpc_message)))
+            alpc_message = AlpcMessage(max(0x1000, len(alpc_message) + 0x200))
             alpc_message.port_message.data = raw_alpc_message
         winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, alpc_message.port_message, alpc_message.attributes, None, None, None, None)
 
@@ -336,7 +337,7 @@ class AlpcTransportBase(object):
             :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`
         """
         if receive_msg is None:
-            receive_msg = AlpcMessage(0x1000)
+            receive_msg = AlpcMessage(DEFAULT_MESSAGE_SIZE)
         receive_size = gdef.SIZE_T(receive_msg.port_message_buffer_size)
         winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, None, None, receive_msg.port_message, receive_size, receive_msg.attributes, None)
         return receive_msg
@@ -349,7 +350,6 @@ class AlpcTransportBase(object):
 
 class AlpcClient(AlpcTransportBase):
     "An ALPC client able to connect to a port and send/receive messages"
-    DEFAULT_MAX_MESSAGE_LENGTH = 0x9000
 
     def __init__(self, port_name=None):
         """Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given"""
@@ -382,7 +382,7 @@ class AlpcClient(AlpcTransportBase):
         if port_attr is None:
             port_attr = gdef.ALPC_PORT_ATTRIBUTES()
             port_attr.Flags = port_attr_flags # Flag qui fonctionne pour l'UAC
-            port_attr.MaxMessageLength = self.DEFAULT_MAX_MESSAGE_LENGTH
+            port_attr.MaxMessageLength = DEFAULT_MESSAGE_SIZE
             port_attr.MemoryBandwidth = 0
             port_attr.MaxPoolUsage = 0xffffffff
             port_attr.MaxSectionSize = 0xffffffff
@@ -445,7 +445,6 @@ class AlpcClient(AlpcTransportBase):
 
 class AlpcServer(AlpcTransportBase):
     """An ALPC server able to create a port, accept connections and send/receive messages"""
-    DEFAULT_MAX_MESSAGE_LENGTH = 0x1000
 
     def __init__(self, port_name=None):
         self.port_name = None
@@ -474,7 +473,7 @@ class AlpcServer(AlpcTransportBase):
         port_name = self._alpc_port_to_unicode_string(raw_name)
 
         if msglen is None:
-            msglen = self.DEFAULT_MAX_MESSAGE_LENGTH
+            msglen = DEFAULT_MESSAGE_SIZE
         if obj_attr is None:
             obj_attr = gdef.OBJECT_ATTRIBUTES()
             obj_attr.Length = ctypes.sizeof(obj_attr)
@@ -517,7 +516,7 @@ class AlpcServer(AlpcTransportBase):
             port_attr.Flags = 0x80000
             # port_attr.Flags = 0x80000 + 0x2000000
             # port_attr.Flags =  0x2000000
-            port_attr.MaxMessageLength = self.DEFAULT_MAX_MESSAGE_LENGTH
+            port_attr.MaxMessageLength = DEFAULT_MESSAGE_SIZE
             port_attr.MemoryBandwidth = 0
             port_attr.MaxPoolUsage = 0xffffffff
             port_attr.MaxSectionSize = 0xffffffff
