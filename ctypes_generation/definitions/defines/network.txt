@@ -8,6 +8,8 @@
 #define DNS_ATMA_MAX_ADDR_LENGTH        ATM_ADDR_SIZE
 
 
+#define DNS_ADDR_MAX_SOCKADDR_LENGTH         (32)
+
 #define DNS_TYPE_ZERO       0x0000
 
 //  RFC 1034/1035

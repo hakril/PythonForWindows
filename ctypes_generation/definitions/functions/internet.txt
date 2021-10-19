@@ -173,3 +173,81 @@ BOOL HttpSendRequestW(
   LPVOID    lpOptional,
   DWORD     dwOptionalLength
 );
+
+
+/// WinHTTP
+
+HINTERNET WinHttpOpen(
+  LPCWSTR pszAgentW,
+  DWORD   dwAccessType,
+  LPCWSTR pszProxyW,
+  LPCWSTR pszProxyBypassW,
+  DWORD   dwFlags
+);
+
+BOOL WinHttpCloseHandle(
+  HINTERNET hInternet
+);
+
+
+HINTERNET WinHttpConnect(
+  HINTERNET     hSession,
+  LPCWSTR       pswzServerName,
+  INTERNET_PORT nServerPort,
+  DWORD         dwReserved
+);
+
+
+BOOL WinHttpQueryDataAvailable(
+  HINTERNET hRequest,
+  LPDWORD   lpdwNumberOfBytesAvailable
+);
+
+BOOL WinHttpReadData(
+  HINTERNET hRequest,
+  LPVOID    lpBuffer,
+  DWORD     dwNumberOfBytesToRead,
+  LPDWORD   lpdwNumberOfBytesRead
+);
+
+HINTERNET WinHttpOpenRequest(
+  HINTERNET hConnect,
+  LPCWSTR   pwszVerb,
+  LPCWSTR   pwszObjectName,
+  LPCWSTR   pwszVersion,
+  LPCWSTR   pwszReferrer,
+  LPCWSTR   *ppwszAcceptTypes,
+  DWORD     dwFlags
+);
+
+
+BOOL WinHttpSendRequest(
+  HINTERNET hRequest,
+  LPCWSTR   lpszHeaders,
+  DWORD     dwHeadersLength,
+  LPVOID    lpOptional,
+  DWORD     dwOptionalLength,
+  DWORD     dwTotalLength,
+  DWORD_PTR dwContext
+);
+
+BOOL WinHttpReceiveResponse(
+  HINTERNET hRequest,
+  LPVOID    lpReserved
+);
+
+BOOL WinHttpAddRequestHeaders(
+  HINTERNET hRequest,
+  LPCWSTR   lpszHeaders,
+  DWORD     dwHeadersLength,
+  DWORD     dwModifiers
+);
+
+BOOL WinHttpQueryHeaders(
+  HINTERNET hRequest,
+  DWORD     dwInfoLevel,
+  LPCWSTR   pwszName,
+  LPVOID    lpBuffer,
+  LPDWORD   lpdwBufferLength,
+  LPDWORD   lpdwIndex
+);

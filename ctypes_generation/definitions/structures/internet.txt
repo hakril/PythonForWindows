@@ -23,3 +23,4 @@ typedef struct _INTERNET_BUFFERSW {
   DWORD                     dwOffsetLow;
   DWORD                     dwOffsetHigh;
 } INTERNET_BUFFERSW, *LPINTERNET_BUFFERSW;
+

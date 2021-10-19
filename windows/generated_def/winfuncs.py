@@ -1050,6 +1050,41 @@ FindNextFileWParams = ((1, 'hFindFile'), (1, 'lpFindFileData'))
 FindClosePrototype = WINFUNCTYPE(BOOL, HANDLE)
 FindCloseParams = ((1, 'hFindFile'),)
 
+#def FindFirstChangeNotificationA(lpPathName, bWatchSubtree, dwNotifyFilter):
+#    return FindFirstChangeNotificationA.ctypes_function(lpPathName, bWatchSubtree, dwNotifyFilter)
+FindFirstChangeNotificationAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, BOOL, DWORD)
+FindFirstChangeNotificationAParams = ((1, 'lpPathName'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'))
+
+#def FindFirstChangeNotificationW(lpPathName, bWatchSubtree, dwNotifyFilter):
+#    return FindFirstChangeNotificationW.ctypes_function(lpPathName, bWatchSubtree, dwNotifyFilter)
+FindFirstChangeNotificationWPrototype = WINFUNCTYPE(HANDLE, LPCWSTR, BOOL, DWORD)
+FindFirstChangeNotificationWParams = ((1, 'lpPathName'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'))
+
+#def FindNextChangeNotification(hChangeHandle):
+#    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+FindNextChangeNotificationPrototype = WINFUNCTYPE(BOOL, HANDLE)
+FindNextChangeNotificationParams = ((1, 'hChangeHandle'),)
+
+#def FindCloseChangeNotification(hChangeHandle):
+#    return FindCloseChangeNotification.ctypes_function(hChangeHandle)
+FindCloseChangeNotificationPrototype = WINFUNCTYPE(BOOL, HANDLE)
+FindCloseChangeNotificationParams = ((1, 'hChangeHandle'),)
+
+#def FindNextChangeNotification(hChangeHandle):
+#    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+FindNextChangeNotificationPrototype = WINFUNCTYPE(BOOL, HANDLE)
+FindNextChangeNotificationParams = ((1, 'hChangeHandle'),)
+
+#def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine):
+#    return ReadDirectoryChangesW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine)
+ReadDirectoryChangesWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, BOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE)
+ReadDirectoryChangesWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferLength'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'), (1, 'lpCompletionRoutine'))
+
+#def ReadDirectoryChangesExW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass):
+#    return ReadDirectoryChangesExW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass)
+ReadDirectoryChangesExWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, BOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE, READ_DIRECTORY_NOTIFY_INFORMATION_CLASS)
+ReadDirectoryChangesExWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferLength'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'), (1, 'lpCompletionRoutine'), (1, 'ReadDirectoryNotifyInformationClass'))
+
 #def HeapAlloc(hHeap, dwFlags, dwBytes):
 #    return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
 HeapAllocPrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, SIZE_T)
@@ -1160,6 +1195,56 @@ HttpSendRequestAParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLen
 HttpSendRequestWPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD)
 HttpSendRequestWParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
 
+#def WinHttpOpen(pszAgentW, dwAccessType, pszProxyW, pszProxyBypassW, dwFlags):
+#    return WinHttpOpen.ctypes_function(pszAgentW, dwAccessType, pszProxyW, pszProxyBypassW, dwFlags)
+WinHttpOpenPrototype = WINFUNCTYPE(HINTERNET, LPCWSTR, DWORD, LPCWSTR, LPCWSTR, DWORD)
+WinHttpOpenParams = ((1, 'pszAgentW'), (1, 'dwAccessType'), (1, 'pszProxyW'), (1, 'pszProxyBypassW'), (1, 'dwFlags'))
+
+#def WinHttpCloseHandle(hInternet):
+#    return WinHttpCloseHandle.ctypes_function(hInternet)
+WinHttpCloseHandlePrototype = WINFUNCTYPE(BOOL, HINTERNET)
+WinHttpCloseHandleParams = ((1, 'hInternet'),)
+
+#def WinHttpConnect(hSession, pswzServerName, nServerPort, dwReserved):
+#    return WinHttpConnect.ctypes_function(hSession, pswzServerName, nServerPort, dwReserved)
+WinHttpConnectPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCWSTR, INTERNET_PORT, DWORD)
+WinHttpConnectParams = ((1, 'hSession'), (1, 'pswzServerName'), (1, 'nServerPort'), (1, 'dwReserved'))
+
+#def WinHttpQueryDataAvailable(hRequest, lpdwNumberOfBytesAvailable):
+#    return WinHttpQueryDataAvailable.ctypes_function(hRequest, lpdwNumberOfBytesAvailable)
+WinHttpQueryDataAvailablePrototype = WINFUNCTYPE(BOOL, HINTERNET, LPDWORD)
+WinHttpQueryDataAvailableParams = ((1, 'hRequest'), (1, 'lpdwNumberOfBytesAvailable'))
+
+#def WinHttpReadData(hRequest, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead):
+#    return WinHttpReadData.ctypes_function(hRequest, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead)
+WinHttpReadDataPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPVOID, DWORD, LPDWORD)
+WinHttpReadDataParams = ((1, 'hRequest'), (1, 'lpBuffer'), (1, 'dwNumberOfBytesToRead'), (1, 'lpdwNumberOfBytesRead'))
+
+#def WinHttpOpenRequest(hConnect, pwszVerb, pwszObjectName, pwszVersion, pwszReferrer, ppwszAcceptTypes, dwFlags):
+#    return WinHttpOpenRequest.ctypes_function(hConnect, pwszVerb, pwszObjectName, pwszVersion, pwszReferrer, ppwszAcceptTypes, dwFlags)
+WinHttpOpenRequestPrototype = WINFUNCTYPE(HINTERNET, HINTERNET, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, POINTER(LPCWSTR), DWORD)
+WinHttpOpenRequestParams = ((1, 'hConnect'), (1, 'pwszVerb'), (1, 'pwszObjectName'), (1, 'pwszVersion'), (1, 'pwszReferrer'), (1, 'ppwszAcceptTypes'), (1, 'dwFlags'))
+
+#def WinHttpSendRequest(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength, dwTotalLength, dwContext):
+#    return WinHttpSendRequest.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength, dwTotalLength, dwContext)
+WinHttpSendRequestPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD, DWORD, DWORD_PTR)
+WinHttpSendRequestParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'), (1, 'dwTotalLength'), (1, 'dwContext'))
+
+#def WinHttpReceiveResponse(hRequest, lpReserved):
+#    return WinHttpReceiveResponse.ctypes_function(hRequest, lpReserved)
+WinHttpReceiveResponsePrototype = WINFUNCTYPE(BOOL, HINTERNET, LPVOID)
+WinHttpReceiveResponseParams = ((1, 'hRequest'), (1, 'lpReserved'))
+
+#def WinHttpAddRequestHeaders(hRequest, lpszHeaders, dwHeadersLength, dwModifiers):
+#    return WinHttpAddRequestHeaders.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, dwModifiers)
+WinHttpAddRequestHeadersPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, DWORD)
+WinHttpAddRequestHeadersParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'dwModifiers'))
+
+#def WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName, lpBuffer, lpdwBufferLength, lpdwIndex):
+#    return WinHttpQueryHeaders.ctypes_function(hRequest, dwInfoLevel, pwszName, lpBuffer, lpdwBufferLength, lpdwIndex)
+WinHttpQueryHeadersPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPCWSTR, LPVOID, LPDWORD, LPDWORD)
+WinHttpQueryHeadersParams = ((1, 'hRequest'), (1, 'dwInfoLevel'), (1, 'pwszName'), (1, 'lpBuffer'), (1, 'lpdwBufferLength'), (1, 'lpdwIndex'))
+
 #def LsaOpenPolicy(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle):
 #    return LsaOpenPolicy.ctypes_function(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle)
 LsaOpenPolicyPrototype = WINFUNCTYPE(NTSTATUS, PLSA_UNICODE_STRING, PLSA_OBJECT_ATTRIBUTES, ACCESS_MASK, PLSA_HANDLE)
@@ -1254,6 +1339,11 @@ DnsQuery_AParams = ((1, 'pszName'), (1, 'wType'), (1, 'Options'), (1, 'pExtra'),
 #    return DnsQuery_W.ctypes_function(pszName, wType, Options, pExtra, ppQueryResults, pReserved)
 DnsQuery_WPrototype = WINFUNCTYPE(DNS_STATUS, PCWSTR, WORD, DWORD, PVOID, POINTER(PDNS_RECORDW), POINTER(PVOID))
 DnsQuery_WParams = ((1, 'pszName'), (1, 'wType'), (1, 'Options'), (1, 'pExtra'), (1, 'ppQueryResults'), (1, 'pReserved'))
+
+#def DnsQueryEx(pQueryRequest, pQueryResults, pCancelHandle):
+#    return DnsQueryEx.ctypes_function(pQueryRequest, pQueryResults, pCancelHandle)
+DnsQueryExPrototype = WINFUNCTYPE(DNS_STATUS, PDNS_QUERY_REQUEST, PDNS_QUERY_RESULT, PDNS_QUERY_CANCEL)
+DnsQueryExParams = ((1, 'pQueryRequest'), (1, 'pQueryResults'), (1, 'pCancelHandle'))
 
 #def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
 #    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)

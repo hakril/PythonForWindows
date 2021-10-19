@@ -819,3 +819,55 @@ typedef struct _DnsRecordW {
     PBYTE               pDataPtr;
   } Data;
 } DNS_RECORDW, *PDNS_RECORDW;
+
+
+typedef struct _DnsAddr
+{
+    CHAR        MaxSa[ DNS_ADDR_MAX_SOCKADDR_LENGTH ];
+    DWORD       DnsAddrUserDword[ 8 ];
+}
+DNS_ADDR, *PDNS_ADDR;
+
+typedef struct _DnsAddrArray
+{
+    DWORD           MaxCount;
+    DWORD           AddrCount;
+    DWORD           Tag;
+    WORD            Family;
+    WORD            WordReserved;
+    DWORD           Flags;
+    DWORD           MatchFlag;
+    DWORD           Reserved1;
+    DWORD           Reserved2;
+    DNS_ADDR        AddrArray[ANY_SIZE];
+}
+DNS_ADDR_ARRAY, *PDNS_ADDR_ARRAY;
+
+
+typedef struct _DNS_QUERY_REQUEST
+{
+    ULONG           Version;
+    PCWSTR          QueryName;
+    WORD            QueryType;
+    ULONG64         QueryOptions;
+    PDNS_ADDR_ARRAY pDnsServerList;
+    ULONG           InterfaceIndex;
+    PDNS_QUERY_COMPLETION_ROUTINE   pQueryCompletionCallback;
+    PVOID           pQueryContext;
+} DNS_QUERY_REQUEST, *PDNS_QUERY_REQUEST;
+
+typedef struct _DNS_QUERY_CANCEL
+{
+    CHAR            Reserved[32];
+} DNS_QUERY_CANCEL, *PDNS_QUERY_CANCEL;
+
+
+typedef struct _DNS_QUERY_RESULT
+{
+    ULONG           Version;
+    DNS_STATUS      QueryStatus;
+    ULONG64         QueryOptions;
+    // Might BE A or W record (don't know how to distinguish for now)
+    PVOID           pQueryRecords; // PDNS_RECORD pQueryRecords;
+    PVOID           Reserved;
+} DNS_QUERY_RESULT, *PDNS_QUERY_RESULT;

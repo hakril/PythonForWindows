@@ -461,7 +461,7 @@ def CreateFileA(lpFileName, dwDesiredAccess=gdef.GENERIC_READ, dwShareMode=0, lp
 
 @Kernel32Proxy(error_check=result_is_handle)
 def CreateFileW(lpFileName, dwDesiredAccess=gdef.GENERIC_READ, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=gdef.OPEN_EXISTING, dwFlagsAndAttributes=gdef.FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
-    return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
+    return CreateFileW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
 @Kernel32Proxy(error_check=result_is_handle)
 def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
@@ -537,6 +537,36 @@ def FindNextFileW(hFindFile, lpFindFileData):
 @Kernel32Proxy()
 def FindClose(hFindFile):
     return FindClose.ctypes_function(hFindFile)
+
+@Kernel32Proxy()
+def FindFirstChangeNotificationA(lpPathName, bWatchSubtree, dwNotifyFilter):
+    return FindFirstChangeNotificationA.ctypes_function(lpPathName, bWatchSubtree, dwNotifyFilter)
+
+@Kernel32Proxy()
+def FindFirstChangeNotificationW(lpPathName, bWatchSubtree, dwNotifyFilter):
+    return FindFirstChangeNotificationW.ctypes_function(lpPathName, bWatchSubtree, dwNotifyFilter)
+
+@Kernel32Proxy()
+def FindNextChangeNotification(hChangeHandle):
+    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+
+@Kernel32Proxy()
+def FindCloseChangeNotification(hChangeHandle):
+    return FindCloseChange
+    Notification.ctypes_function(hChangeHandle)
+
+@Kernel32Proxy()
+def FindNextChangeNotification(hChangeHandle):
+    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+
+@Kernel32Proxy()
+def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine):
+    return ReadDirectoryChangesW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine)
+
+@Kernel32Proxy()
+def ReadDirectoryChangesExW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass):
+    return ReadDirectoryChangesExW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass)
+
 
 
 ## Tlhelp (snapshoot)

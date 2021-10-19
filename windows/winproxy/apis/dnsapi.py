@@ -23,6 +23,10 @@ def DnsQuery_A(pszName, wType, Options, pExtra, ppQueryResults, pReserved):
 def DnsQuery_W(pszName, wType, Options, pExtra, ppQueryResults, pReserved):
     return DnsQuery_W.ctypes_function(pszName, wType, Options, pExtra, ppQueryResults, pReserved)
 
+@DNSapiProxy(error_check=result_is_error_code)
+def DnsQueryEx(pQueryRequest, pQueryResults, pCancelHandle):
+    return DnsQueryEx.ctypes_function(pQueryRequest, pQueryResults, pCancelHandle)
+
 @DNSapiProxy(error_check=no_error_check)
 def DnsFree(pData, FreeType):
     return DnsFree.ctypes_function(pData, FreeType)

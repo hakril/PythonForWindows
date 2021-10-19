@@ -286,6 +286,8 @@ ENUMRESTYPEPROCA = PVOID#Resources
 ENUMRESTYPEPROCW = PVOID#Resources
 LPSERVICE_MAIN_FUNCTIONA = PVOID
 LPSERVICE_MAIN_FUNCTIONW = PVOID
+LPOVERLAPPED_COMPLETION_ROUTINE = PVOID
+PDNS_QUERY_COMPLETION_ROUTINE = PVOID
 LPCONTEXT = PVOID
 HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
@@ -2334,6 +2336,62 @@ _DnsRecordW._fields_ = [
     ("dwReserved", DWORD),
     ("Data", _ANON__DNSRECORDW_SUB_UNION_2),
 ]
+
+class _DnsAddr(Structure):
+    _fields_ = [
+        ("MaxSa", CHAR * (DNS_ADDR_MAX_SOCKADDR_LENGTH)),
+        ("DnsAddrUserDword", DWORD * (8)),
+    ]
+PDNS_ADDR = POINTER(_DnsAddr)
+DNS_ADDR = _DnsAddr
+
+class _DnsAddrArray(Structure):
+    _fields_ = [
+        ("MaxCount", DWORD),
+        ("AddrCount", DWORD),
+        ("Tag", DWORD),
+        ("Family", WORD),
+        ("WordReserved", WORD),
+        ("Flags", DWORD),
+        ("MatchFlag", DWORD),
+        ("Reserved1", DWORD),
+        ("Reserved2", DWORD),
+        ("AddrArray", DNS_ADDR * (ANY_SIZE)),
+    ]
+PDNS_ADDR_ARRAY = POINTER(_DnsAddrArray)
+DNS_ADDR_ARRAY = _DnsAddrArray
+
+class _DNS_QUERY_REQUEST(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("QueryName", PCWSTR),
+        ("QueryType", WORD),
+        ("QueryOptions", ULONG64),
+        ("pDnsServerList", PDNS_ADDR_ARRAY),
+        ("InterfaceIndex", ULONG),
+        ("pQueryCompletionCallback", PDNS_QUERY_COMPLETION_ROUTINE),
+        ("pQueryContext", PVOID),
+    ]
+PDNS_QUERY_REQUEST = POINTER(_DNS_QUERY_REQUEST)
+DNS_QUERY_REQUEST = _DNS_QUERY_REQUEST
+
+class _DNS_QUERY_CANCEL(Structure):
+    _fields_ = [
+        ("Reserved", CHAR * (32)),
+    ]
+PDNS_QUERY_CANCEL = POINTER(_DNS_QUERY_CANCEL)
+DNS_QUERY_CANCEL = _DNS_QUERY_CANCEL
+
+class _DNS_QUERY_RESULT(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("QueryStatus", DNS_STATUS),
+        ("QueryOptions", ULONG64),
+        ("pQueryRecords", PVOID),
+        ("Reserved", PVOID),
+    ]
+DNS_QUERY_RESULT = _DNS_QUERY_RESULT
+PDNS_QUERY_RESULT = POINTER(_DNS_QUERY_RESULT)
 
 KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
 KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
@@ -8535,6 +8593,15 @@ class _IO_PRIORITY_HINT(EnumType):
 IO_PRIORITY_HINT = _IO_PRIORITY_HINT
 
 
+ReadDirectoryNotifyInformation = EnumValue("_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS", "ReadDirectoryNotifyInformation", 0x0)
+ReadDirectoryNotifyExtendedInformation = EnumValue("_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS", "ReadDirectoryNotifyExtendedInformation", 0x1)
+class _READ_DIRECTORY_NOTIFY_INFORMATION_CLASS(EnumType):
+    values = [ReadDirectoryNotifyInformation, ReadDirectoryNotifyExtendedInformation]
+    mapper = FlagMapper(*values)
+PREAD_DIRECTORY_NOTIFY_INFORMATION_CLASS = POINTER(_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS)
+READ_DIRECTORY_NOTIFY_INFORMATION_CLASS = _READ_DIRECTORY_NOTIFY_INFORMATION_CLASS
+
+
 class _FILE_INTERNAL_INFORMATION(Structure):
     _fields_ = [
         ("IndexNumber", LARGE_INTEGER),
@@ -8769,6 +8836,36 @@ class _WIN32_FIND_DATAW(Structure):
 PWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
 WIN32_FIND_DATAW = _WIN32_FIND_DATAW
 LPWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
+
+class _FILE_NOTIFY_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", DWORD),
+        ("Action", DWORD),
+        ("FileNameLength", DWORD),
+        ("FileName", WCHAR * (1)),
+    ]
+FILE_NOTIFY_INFORMATION = _FILE_NOTIFY_INFORMATION
+PFILE_NOTIFY_INFORMATION = POINTER(_FILE_NOTIFY_INFORMATION)
+
+class _FILE_NOTIFY_EXTENDED_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", DWORD),
+        ("Action", DWORD),
+        ("CreationTime", LARGE_INTEGER),
+        ("LastModificationTime", LARGE_INTEGER),
+        ("LastChangeTime", LARGE_INTEGER),
+        ("LastAccessTime", LARGE_INTEGER),
+        ("AllocatedLength", LARGE_INTEGER),
+        ("FileSize", LARGE_INTEGER),
+        ("FileAttributes", DWORD),
+        ("ReparsePointTag", DWORD),
+        ("FileId", LARGE_INTEGER),
+        ("ParentFileId", LARGE_INTEGER),
+        ("FileNameLength", DWORD),
+        ("FileName", WCHAR * (1)),
+    ]
+PFILE_NOTIFY_EXTENDED_INFORMATION = POINTER(_FILE_NOTIFY_EXTENDED_INFORMATION)
+FILE_NOTIFY_EXTENDED_INFORMATION = _FILE_NOTIFY_EXTENDED_INFORMATION
 
 PolicyAuditLogInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditLogInformation", 0x1)
 PolicyAuditEventsInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditEventsInformation", 0x2)

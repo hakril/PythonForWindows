@@ -24,3 +24,50 @@ BOOL FindNextFileW(
 BOOL FindClose(
   HANDLE hFindFile
 );
+
+HANDLE FindFirstChangeNotificationA(
+  LPCSTR lpPathName,
+  BOOL   bWatchSubtree,
+  DWORD  dwNotifyFilter
+);
+
+HANDLE FindFirstChangeNotificationW(
+  LPCWSTR lpPathName,
+  BOOL    bWatchSubtree,
+  DWORD   dwNotifyFilter
+);
+
+BOOL FindNextChangeNotification(
+  HANDLE hChangeHandle
+);
+
+BOOL FindCloseChangeNotification(
+  HANDLE hChangeHandle
+);
+
+BOOL FindNextChangeNotification(
+  HANDLE hChangeHandle
+);
+
+BOOL ReadDirectoryChangesW(
+  HANDLE                          hDirectory,
+  LPVOID                          lpBuffer,
+  DWORD                           nBufferLength,
+  BOOL                            bWatchSubtree,
+  DWORD                           dwNotifyFilter,
+  LPDWORD                         lpBytesReturned,
+  LPOVERLAPPED                    lpOverlapped,
+  LPOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
+);
+
+BOOL ReadDirectoryChangesExW(
+  HANDLE                                  hDirectory,
+  LPVOID                                  lpBuffer,
+  DWORD                                   nBufferLength,
+  BOOL                                    bWatchSubtree,
+  DWORD                                   dwNotifyFilter,
+  LPDWORD                                 lpBytesReturned,
+  LPOVERLAPPED                            lpOverlapped,
+  LPOVERLAPPED_COMPLETION_ROUTINE         lpCompletionRoutine,
+  READ_DIRECTORY_NOTIFY_INFORMATION_CLASS ReadDirectoryNotifyInformationClass
+);
