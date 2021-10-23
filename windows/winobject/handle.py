@@ -9,6 +9,9 @@ import windows.generated_def as gdef
 current_process_pid = os.getpid()
 
 class BaseSystemHandle(object):
+    # Big bypass to prevent missing reference at programm exit..
+    _close_function = ctypes.WinDLL("kernel32").CloseHandle
+
     """A handle of the system"""
     @windows.utils.fixedpropety
     def process(self):
@@ -114,7 +117,7 @@ class BaseSystemHandle(object):
         if self.dwProcessId == current_process_pid:
             return
         if hasattr(self, "_local_handle"):
-            return winproxy.CloseHandle(self._local_handle)
+            return self._close_function(self._local_handle)
 
 class Handle(gdef.SYSTEM_HANDLE, BaseSystemHandle):
     pass
