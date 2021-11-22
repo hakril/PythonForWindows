@@ -164,7 +164,7 @@ class AlpcMessagePort(gdef.PORT_MESSAGE):
         if len(data) > self.max_datasize:
             import pdb; pdb.set_trace()
             raise ValueError("Cannot write data of len <{0}> (raw_buffer size == <{1}>)".format(len(data), self.buffer_size))
-        self.raw_buffer[self.header_size: self.header_size + len(data)] = data
+        self.raw_buffer[self.header_size: self.header_size + len(data)] = str.encode(data)
         self.set_datalen(len(data))
 
     data = property(read_data, write_data)
