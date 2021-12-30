@@ -66,18 +66,19 @@ class EvtHandle(gdef.EVT_HANDLE):
 # Class high-level API
 class EvtQuery(EvtHandle):
     """Represent an Event-log query"""
-    TIMEOUT = 0x1000
+    DEFAULT_TIMEOUT = 0x1000
 
-    def __init__(self, handle=0, channel=None):
+    def __init__(self, handle=0, channel=None, timeout=None):
         super(EvtQuery, self).__init__(handle)
         self.channel = channel
+        self.timeout = timeout if timeout is not None else self.DEFAULT_TIMEOUT
 
     def __next__(self):
         """Return the next :class:`EvtEvent` matching the query"""
         try:
             event = EvtEvent(channel=self.channel)
             ret = gdef.DWORD()
-            windows.winproxy.EvtNext(self, 1, event, self.TIMEOUT, 0, ret)
+            windows.winproxy.EvtNext(self, 1, event, self.timeout, 0, ret)
         except WindowsError as e:
             if e.winerror == gdef.ERROR_NO_MORE_ITEMS:
                 raise StopIteration
@@ -437,7 +438,7 @@ class EvtChannel(object):
         self.event_metadata_by_id = {}
         self.classic_event_metadata_by_id = {} # For classic only
 
-    def query(self, filter=None, ids=None):
+    def query(self, filter=None, ids=None, timeout=None):
         """Query the event with the ``ids`` or perform a query with the raw query ``filter``
 
         Both parameters are mutually exclusive.
@@ -466,7 +467,7 @@ class EvtChannel(object):
             ids_filter = " or ".join("EventID={0}".format(id) for id in ids)
             filter = "Event/System[{0}]".format(ids_filter)
         query_handle = winproxy.EvtQuery(None, self.name, filter, self.DEFAULT_QUERY_FLAGS)
-        return EvtQuery(query_handle, self)
+        return EvtQuery(query_handle, self, timeout=timeout)
 
     @property
     def events(self):
