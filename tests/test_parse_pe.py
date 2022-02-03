@@ -86,15 +86,12 @@ def test_pe_parsing_dotnet_32_process_64(proc64):
 def test_pe_parsing_dotnet_32_current_process_64(proc64):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     # So we injecte python code in a the remote proc64 to test the parsing from itself
-
     PIPE_NAME = "PFW_TEST_Pipe"
-    rcode = r"""import sys; import windows; import windows.pipe; windows.pipe.send_object("{pipe}", )"""
-
     mod = proc64.load_library(r"C:\Windows\System32\stordiag.exe")
     assert proc64.peb.modules[-1].name == "stordiag.exe"
     proc64.execute_python("import sys; import windows; import windows.pipe")
+    proc64.execute_python("""pemod = [x for x in windows.current_process.peb.modules if x.name == 'stordiag.exe'][0].pe""")
     with windows.pipe.create(PIPE_NAME) as np:
-        proc64.execute_python("""pemod = [x for x in windows.current_process.peb.modules if x.name == 'stordiag.exe'][0].pe""")
         rcode = """windows.pipe.send_object("{pipe}", (list(pemod.imports), [sec.name for sec in pemod.sections]))"""
         proc64.execute_python(rcode.format(pipe=PIPE_NAME))
         imported_dlls, sections_names = np.recv()
