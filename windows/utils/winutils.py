@@ -268,6 +268,17 @@ def datetime_from_comdate(comtime):
         return COMDATE_EPOCH + datetime.timedelta(final_delta)
     return COMDATE_EPOCH + datetime.timedelta(comtime)
 
+def datetime_from_systemtime(systime):
+    return datetime.datetime(
+            year=systime.wYear,
+            month=systime.wMonth,
+            day=systime.wDay,
+            hour=systime.wHour,
+            minute=systime.wMinute,
+            second=systime.wSecond,
+            microsecond=systime.wMilliseconds * 1000,
+    )
+
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
         sys.stdout.write(prompt)
