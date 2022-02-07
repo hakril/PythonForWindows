@@ -423,13 +423,13 @@ class System(object):
     @staticmethod
     def enumerate_processes():
         dbgprint("Enumerating processes with CreateToolhelp32Snapshot", "SLOW")
-        process_entry = gdef.PROCESSENTRY32()
+        process_entry = gdef.PROCESSENTRY32W()
         process_entry.dwSize = ctypes.sizeof(process_entry)
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPPROCESS, 0)
-        winproxy.Process32First(snap, process_entry)
+        winproxy.Process32FirstW(snap, process_entry)
         res = []
         res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
-        while winproxy.Process32Next(snap, process_entry):
+        while winproxy.Process32NextW(snap, process_entry):
             res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
         winproxy.CloseHandle(snap)
         return res
@@ -467,12 +467,12 @@ class System(object):
         # One snap for both enum to be prevent race
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPTHREAD | gdef.TH32CS_SNAPPROCESS, 0)
 
-        process_entry = gdef.PROCESSENTRY32()
+        process_entry = gdef.PROCESSENTRY32W()
         process_entry.dwSize = ctypes.sizeof(process_entry)
-        winproxy.Process32First(snap, process_entry)
+        winproxy.Process32FirstW(snap, process_entry)
         processes = []
         processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
-        while winproxy.Process32Next(snap, process_entry):
+        while winproxy.Process32NextW(snap, process_entry):
             processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
 
         # Forge a dict pid -> process

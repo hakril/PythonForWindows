@@ -973,8 +973,8 @@ class WinProcess(Process):
 
     @classmethod
     def _from_PROCESSENTRY32(cls, entry):
-        #print("_from_PROCESSENTRY32")
-        name = entry.szExeFile.decode()
+        # Temporary encoded name
+        name = entry.szExeFile.encode(errors="backslashreplace")
         pid = entry.th32ProcessID
         ppid = entry.th32ParentProcessID
         return cls(pid=pid, name=name, ppid=ppid)
