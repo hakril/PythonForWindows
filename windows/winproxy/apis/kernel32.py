@@ -597,6 +597,15 @@ def Process32First(hSnapshot, lpte):
 def Process32Next(hSnapshot, lpte):
     return Process32Next.ctypes_function(hSnapshot, lpte)
 
+@Kernel32Proxy()
+def Process32FirstW(hSnapshot, lppe):
+    return Process32FirstW.ctypes_function(hSnapshot, lppe)
+
+@Kernel32Proxy(error_check=no_error_check)
+def Process32NextW(hSnapshot, lppe):
+    return Process32NextW.ctypes_function(hSnapshot, lppe)
+
+
 ## VEH
 
 @Kernel32Proxy()

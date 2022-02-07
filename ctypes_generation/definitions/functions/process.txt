@@ -1,0 +1,66 @@
+
+HANDLE WINAPI CreateToolhelp32Snapshot(
+  _In_  DWORD dwFlags,
+  _In_  DWORD th32ProcessID
+);
+
+BOOL WINAPI Thread32First(
+  _In_     HANDLE hSnapshot,
+  _Inout_  LPTHREADENTRY32 lpte
+);
+
+BOOL WINAPI Thread32Next(
+  _In_   HANDLE hSnapshot,
+  _Out_  LPTHREADENTRY32 lpte
+);
+
+BOOL WINAPI Process32First(
+  _In_     HANDLE hSnapshot,
+  _Inout_  LPPROCESSENTRY32 lppe
+);
+
+BOOL WINAPI Process32Next(
+  _In_   HANDLE hSnapshot,
+  _Out_  LPPROCESSENTRY32 lppe
+);
+
+BOOL Process32FirstW(
+    HANDLE hSnapshot,
+    LPPROCESSENTRY32W lppe
+);
+
+BOOL Process32NextW(
+    HANDLE hSnapshot,
+    LPPROCESSENTRY32W lppe
+);
+
+
+FARPROC WINAPI GetProcAddress(
+  _In_  HMODULE hModule,
+  _In_  LPCSTR lpProcName
+);
+
+
+HMODULE WINAPI LoadLibraryA(
+    __in LPCSTR lpFileName
+);
+
+HMODULE WINAPI LoadLibraryW(
+    __in LPCWSTR lpFileName
+);
+
+HMODULE LoadLibraryExA(
+  LPCSTR lpLibFileName,
+  HANDLE hFile,
+  DWORD  dwFlags
+);
+
+HMODULE LoadLibraryExW(
+  LPCWSTR lpLibFileName,
+  HANDLE  hFile,
+  DWORD   dwFlags
+);
+
+BOOL FreeLibrary(
+  HMODULE hLibModule
+);

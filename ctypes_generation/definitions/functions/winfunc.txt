@@ -9,30 +9,6 @@ BOOL WINAPI TerminateProcess(
 
 DWORD WINAPI GetLastError();
 
-HANDLE WINAPI GetCurrentProcess();
-
-HANDLE WINAPI CreateFileA(
-    __in     LPCSTR lpFileName,
-    __in     DWORD dwDesiredAccess,
-    __in     DWORD dwShareMode,
-    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    __in     DWORD dwCreationDisposition,
-    __in     DWORD dwFlagsAndAttributes,
-    __in_opt HANDLE hTemplateFile
-    );
-
-HANDLE WINAPI CreateFileW(
-    __in     LPCWSTR lpFileName,
-    __in     DWORD dwDesiredAccess,
-    __in     DWORD dwShareMode,
-    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    __in     DWORD dwCreationDisposition,
-    __in     DWORD dwFlagsAndAttributes,
-    __in_opt HANDLE hTemplateFile
-    );
-
-
-
 /*
 Flags is directly dereferenced if non-null on windows 10
 Let's assert it's a PVOID for now on
@@ -282,8 +258,6 @@ NTSTATUS WINAPI NtWow64ReadVirtualMemory64(
 );
 
 
-
-
 BOOL WINAPI WriteProcessMemory(
   _In_   HANDLE     hProcess,
   _In_   LPVOID     lpBaseAddress,
@@ -303,71 +277,31 @@ NTSTATUS WINAPI NtWow64WriteVirtualMemory64(
 
 
 
+HANDLE WINAPI GetCurrentProcess();
 
-HANDLE WINAPI CreateToolhelp32Snapshot(
-  _In_  DWORD dwFlags,
-  _In_  DWORD th32ProcessID
-);
+HANDLE WINAPI CreateFileA(
+    __in     LPCSTR lpFileName,
+    __in     DWORD dwDesiredAccess,
+    __in     DWORD dwShareMode,
+    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    __in     DWORD dwCreationDisposition,
+    __in     DWORD dwFlagsAndAttributes,
+    __in_opt HANDLE hTemplateFile
+    );
 
-BOOL WINAPI Thread32First(
-  _In_     HANDLE hSnapshot,
-  _Inout_  LPTHREADENTRY32 lpte
-);
-
-BOOL WINAPI Thread32Next(
-  _In_   HANDLE hSnapshot,
-  _Out_  LPTHREADENTRY32 lpte
-);
-
-BOOL WINAPI Process32First(
-  _In_     HANDLE hSnapshot,
-  _Inout_  LPPROCESSENTRY32 lppe
-);
-
-BOOL WINAPI Process32Next(
-  _In_   HANDLE hSnapshot,
-  _Out_  LPPROCESSENTRY32 lppe
-);
-
-BOOL Process32FirstW(
-    HANDLE hSnapshot,
-    LPPROCESSENTRY32W lppe
-);
-
-BOOL Process32NextW(
-    HANDLE hSnapshot,
-    LPPROCESSENTRY32W lppe
-);
-
-FARPROC WINAPI GetProcAddress(
-  _In_  HMODULE hModule,
-  _In_  LPCSTR lpProcName
-);
+HANDLE WINAPI CreateFileW(
+    __in     LPCWSTR lpFileName,
+    __in     DWORD dwDesiredAccess,
+    __in     DWORD dwShareMode,
+    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    __in     DWORD dwCreationDisposition,
+    __in     DWORD dwFlagsAndAttributes,
+    __in_opt HANDLE hTemplateFile
+    );
 
 
-HMODULE WINAPI LoadLibraryA(
-    __in LPCSTR lpFileName
-);
 
-HMODULE WINAPI LoadLibraryW(
-    __in LPCWSTR lpFileName
-);
 
-HMODULE LoadLibraryExA(
-  LPCSTR lpLibFileName,
-  HANDLE hFile,
-  DWORD  dwFlags
-);
-
-HMODULE LoadLibraryExW(
-  LPCWSTR lpLibFileName,
-  HANDLE  hFile,
-  DWORD   dwFlags
-);
-
-BOOL FreeLibrary(
-  HMODULE hLibModule
-);
 
 BOOL WINAPI OpenProcessToken(
   _In_   HANDLE ProcessHandle,
@@ -589,18 +523,6 @@ DWORD WINAPI WaitForSingleObject(
 DWORD WINAPI GetThreadId(
  _In_ HANDLE Thread
  );
-
-HMODULE WINAPI LoadLibraryExA(
-  _In_       LPCSTR lpFileName,
-  _Reserved_ HANDLE  hFile,
-  _In_       DWORD   dwFlags
-);
-
-HMODULE WINAPI LoadLibraryExW(
-  _In_       LPCWSTR lpFileName,
-  _Reserved_ HANDLE  hFile,
-  _In_       DWORD   dwFlags
-);
 
 
 
