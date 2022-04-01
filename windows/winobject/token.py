@@ -613,7 +613,10 @@ class Token(utils.AutoHandle):
 
     def __repr__(self):
         flag_repr = gdef.Flag.__repr__
-        tid_int = int(self.TokenStatistics.TokenId)
+        try:
+            tid_int = int(self.TokenStatistics.TokenId) # May raise -> which is bad as __repr__ may be called on __del__...
+        except WindowsError as e:
+            return object.__repr__(self)
         toktype = self.type
         if toktype == gdef.TokenPrimary:
             return "<{0} TokenId={1:#x} Type={2}>".format(type(self).__name__, tid_int, flag_repr(toktype))
