@@ -28,7 +28,7 @@ require_admin = pytest.mark.skipif(not is_admin, reason="Test must be launched a
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
 
-test_binary_name = "notepad.exe"
+test_binary_name = "winver.exe"
 DEFAULT_CREATION_FLAGS = gdef.CREATE_NEW_CONSOLE
 
 
