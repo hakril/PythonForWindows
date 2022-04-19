@@ -53,16 +53,24 @@ class WinFuncParser(Parser):
     default_calling_convention = "WINFUNCTYPE"
 
     def assert_argument_io_info(self):
-        io_info = self.assert_token_type(NameToken)
-        if io_info.value not in self.known_io_info_type:
-            if io_info.value not in self.known_io_info_with_param:
-                raise ParsingError("Was expection IO_INFO got {0} instead".format(io_info))
-            # Ignore IO infos params.
-            self.assert_token_type(OpenParenthesisToken)
-            while type(self.peek()) is not CloseParenthesisToken:
-                self.next_token()
-            self.assert_token_type(CloseParenthesisToken)
-        return io_info
+        if type(self.peek()) == NameToken:
+            # Old IO infos format based on known_io_info_type & co
+            io_info = self.assert_token_type(NameToken)
+            if io_info.value not in self.known_io_info_type:
+                if io_info.value not in self.known_io_info_with_param:
+                    raise ParsingError("Was expection IO_INFO got {0} instead".format(io_info))
+                # Ignore IO infos params.
+                self.assert_token_type(OpenParenthesisToken)
+                while type(self.peek()) is not CloseParenthesisToken:
+                    self.next_token()
+                self.assert_token_type(CloseParenthesisToken)
+        else:
+            # New format: [xxx, yyy, xxx]
+            self.assert_token_type(OpenSquareBracketToken)
+            while type(self.peek()) is not CloseSquareBracketToken:
+                self.next_token() # Assert Name/Comma & co ?
+            self.assert_token_type(CloseSquareBracketToken)
+        return None
 
     def parse_func_arg(self, has_winapi):
         type_ptr = False
