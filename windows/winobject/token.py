@@ -115,12 +115,12 @@ class TokenPrivileges(gdef.TOKEN_PRIVILEGES):
     def _lookup_name(self, luid):
         size = gdef.DWORD(0x100)
         buff = ctypes.c_buffer(size.value)
-        winproxy.LookupPrivilegeNameA(None, luid, buff, size)
+        winproxy.LookupPrivilegeNameW(None, luid, buff, size)
         return buff[:size.value]
 
     def _lookup_value(self, name):
         luid = gdef.LUID()
-        winproxy.LookupPrivilegeValueA(None, name, ctypes.byref(luid))
+        winproxy.LookupPrivilegeValueW(None, name, ctypes.byref(luid))
         return luid
 
 

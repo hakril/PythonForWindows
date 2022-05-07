@@ -820,7 +820,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         if query_sacl:
             flags |= gdef.SACL_SECURITY_INFORMATION
 
-        winproxy.GetNamedSecurityInfoA(
+        winproxy.GetNamedSecurityInfoW(
             objname,
             objtype,
             flags,
