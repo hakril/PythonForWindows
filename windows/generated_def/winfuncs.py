@@ -1440,6 +1440,71 @@ SetNamedPipeHandleStateParams = ((1, 'hNamedPipe'), (1, 'lpMode'), (1, 'lpMaxCol
 PeekNamedPipePrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, LPDWORD, LPDWORD, LPDWORD)
 PeekNamedPipeParams = ((1, 'hNamedPipe'), (1, 'lpBuffer'), (1, 'nBufferSize'), (1, 'lpBytesRead'), (1, 'lpTotalBytesAvail'), (1, 'lpBytesLeftThisMessage'))
 
+#def CreateToolhelp32Snapshot(dwFlags, th32ProcessID):
+#    return CreateToolhelp32Snapshot.ctypes_function(dwFlags, th32ProcessID)
+CreateToolhelp32SnapshotPrototype = WINFUNCTYPE(HANDLE, DWORD, DWORD)
+CreateToolhelp32SnapshotParams = ((1, 'dwFlags'), (1, 'th32ProcessID'))
+
+#def Thread32First(hSnapshot, lpte):
+#    return Thread32First.ctypes_function(hSnapshot, lpte)
+Thread32FirstPrototype = WINFUNCTYPE(BOOL, HANDLE, LPTHREADENTRY32)
+Thread32FirstParams = ((1, 'hSnapshot'), (1, 'lpte'))
+
+#def Thread32Next(hSnapshot, lpte):
+#    return Thread32Next.ctypes_function(hSnapshot, lpte)
+Thread32NextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPTHREADENTRY32)
+Thread32NextParams = ((1, 'hSnapshot'), (1, 'lpte'))
+
+#def Process32First(hSnapshot, lppe):
+#    return Process32First.ctypes_function(hSnapshot, lppe)
+Process32FirstPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32)
+Process32FirstParams = ((1, 'hSnapshot'), (1, 'lppe'))
+
+#def Process32Next(hSnapshot, lppe):
+#    return Process32Next.ctypes_function(hSnapshot, lppe)
+Process32NextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32)
+Process32NextParams = ((1, 'hSnapshot'), (1, 'lppe'))
+
+#def Process32FirstW(hSnapshot, lppe):
+#    return Process32FirstW.ctypes_function(hSnapshot, lppe)
+Process32FirstWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32W)
+Process32FirstWParams = ((1, 'hSnapshot'), (1, 'lppe'))
+
+#def Process32NextW(hSnapshot, lppe):
+#    return Process32NextW.ctypes_function(hSnapshot, lppe)
+Process32NextWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32W)
+Process32NextWParams = ((1, 'hSnapshot'), (1, 'lppe'))
+
+#def GetProcAddress(hModule, lpProcName):
+#    return GetProcAddress.ctypes_function(hModule, lpProcName)
+GetProcAddressPrototype = WINFUNCTYPE(FARPROC, HMODULE, LPCSTR)
+GetProcAddressParams = ((1, 'hModule'), (1, 'lpProcName'))
+
+#def LoadLibraryA(lpFileName):
+#    return LoadLibraryA.ctypes_function(lpFileName)
+LoadLibraryAPrototype = WINFUNCTYPE(HMODULE, LPCSTR)
+LoadLibraryAParams = ((1, 'lpFileName'),)
+
+#def LoadLibraryW(lpFileName):
+#    return LoadLibraryW.ctypes_function(lpFileName)
+LoadLibraryWPrototype = WINFUNCTYPE(HMODULE, LPCWSTR)
+LoadLibraryWParams = ((1, 'lpFileName'),)
+
+#def LoadLibraryExA(lpLibFileName, hFile, dwFlags):
+#    return LoadLibraryExA.ctypes_function(lpLibFileName, hFile, dwFlags)
+LoadLibraryExAPrototype = WINFUNCTYPE(HMODULE, LPCSTR, HANDLE, DWORD)
+LoadLibraryExAParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
+
+#def LoadLibraryExW(lpLibFileName, hFile, dwFlags):
+#    return LoadLibraryExW.ctypes_function(lpLibFileName, hFile, dwFlags)
+LoadLibraryExWPrototype = WINFUNCTYPE(HMODULE, LPCWSTR, HANDLE, DWORD)
+LoadLibraryExWParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
+
+#def FreeLibrary(hLibModule):
+#    return FreeLibrary.ctypes_function(hLibModule)
+FreeLibraryPrototype = WINFUNCTYPE(BOOL, HMODULE)
+FreeLibraryParams = ((1, 'hLibModule'),)
+
 #def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
 #    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 RegQueryValueExAPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCSTR, LPDWORD, LPDWORD, LPBYTE, LPDWORD)
@@ -1650,6 +1715,11 @@ GetSecurityDescriptorLengthParams = ((1, 'pSecurityDescriptor'),)
 GetSecurityDescriptorOwnerPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, POINTER(PSID), LPBOOL)
 GetSecurityDescriptorOwnerParams = ((1, 'pSecurityDescriptor'), (1, 'pOwner'), (1, 'lpbOwnerDefaulted'))
 
+#def SetSecurityDescriptorOwner(pSecurityDescriptor, pOwner, bOwnerDefaulted):
+#    return SetSecurityDescriptorOwner.ctypes_function(pSecurityDescriptor, pOwner, bOwnerDefaulted)
+SetSecurityDescriptorOwnerPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, PSID, BOOL)
+SetSecurityDescriptorOwnerParams = ((1, 'pSecurityDescriptor'), (1, 'pOwner'), (1, 'bOwnerDefaulted'))
+
 #def GetSecurityDescriptorRMControl(SecurityDescriptor, RMControl):
 #    return GetSecurityDescriptorRMControl.ctypes_function(SecurityDescriptor, RMControl)
 GetSecurityDescriptorRMControlPrototype = WINFUNCTYPE(DWORD, PSECURITY_DESCRIPTOR, PUCHAR)
@@ -1799,6 +1869,21 @@ AddAccessDeniedAceExParams = ((1, 'pAcl'), (1, 'dwAceRevision'), (1, 'AceFlags')
 #    return BuildSecurityDescriptorW.ctypes_function(pOwner, pGroup, cCountOfAccessEntries, pListOfAccessEntries, cCountOfAuditEntries, pListOfAuditEntries, pOldSD, pSizeNewSD, pNewSD)
 BuildSecurityDescriptorWPrototype = WINFUNCTYPE(DWORD, PTRUSTEE_W, PTRUSTEE_W, ULONG, PEXPLICIT_ACCESS_W, ULONG, PEXPLICIT_ACCESS_W, PSECURITY_DESCRIPTOR, PULONG, POINTER(PSECURITY_DESCRIPTOR))
 BuildSecurityDescriptorWParams = ((1, 'pOwner'), (1, 'pGroup'), (1, 'cCountOfAccessEntries'), (1, 'pListOfAccessEntries'), (1, 'cCountOfAuditEntries'), (1, 'pListOfAuditEntries'), (1, 'pOldSD'), (1, 'pSizeNewSD'), (1, 'pNewSD'))
+
+#def MakeAbsoluteSD(pSelfRelativeSecurityDescriptor, pAbsoluteSecurityDescriptor, lpdwAbsoluteSecurityDescriptorSize, pDacl, lpdwDaclSize, pSacl, lpdwSaclSize, pOwner, lpdwOwnerSize, pPrimaryGroup, lpdwPrimaryGroupSize):
+#    return MakeAbsoluteSD.ctypes_function(pSelfRelativeSecurityDescriptor, pAbsoluteSecurityDescriptor, lpdwAbsoluteSecurityDescriptorSize, pDacl, lpdwDaclSize, pSacl, lpdwSaclSize, pOwner, lpdwOwnerSize, pPrimaryGroup, lpdwPrimaryGroupSize)
+MakeAbsoluteSDPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, PSECURITY_DESCRIPTOR, LPDWORD, PACL, LPDWORD, PACL, LPDWORD, PSID, LPDWORD, PSID, LPDWORD)
+MakeAbsoluteSDParams = ((1, 'pSelfRelativeSecurityDescriptor'), (1, 'pAbsoluteSecurityDescriptor'), (1, 'lpdwAbsoluteSecurityDescriptorSize'), (1, 'pDacl'), (1, 'lpdwDaclSize'), (1, 'pSacl'), (1, 'lpdwSaclSize'), (1, 'pOwner'), (1, 'lpdwOwnerSize'), (1, 'pPrimaryGroup'), (1, 'lpdwPrimaryGroupSize'))
+
+#def MakeSelfRelativeSD(pAbsoluteSecurityDescriptor, pSelfRelativeSecurityDescriptor, lpdwBufferLength):
+#    return MakeSelfRelativeSD.ctypes_function(pAbsoluteSecurityDescriptor, pSelfRelativeSecurityDescriptor, lpdwBufferLength)
+MakeSelfRelativeSDPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, PSECURITY_DESCRIPTOR, LPDWORD)
+MakeSelfRelativeSDParams = ((1, 'pAbsoluteSecurityDescriptor'), (1, 'pSelfRelativeSecurityDescriptor'), (1, 'lpdwBufferLength'))
+
+#def InitializeSecurityDescriptor(pSecurityDescriptor, dwRevision):
+#    return InitializeSecurityDescriptor.ctypes_function(pSecurityDescriptor, dwRevision)
+InitializeSecurityDescriptorPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, DWORD)
+InitializeSecurityDescriptorParams = ((1, 'pSecurityDescriptor'), (1, 'dwRevision'))
 
 #def OpenSCManagerA(lpMachineName, lpDatabaseName, dwDesiredAccess):
 #    return OpenSCManagerA.ctypes_function(lpMachineName, lpDatabaseName, dwDesiredAccess)
@@ -2840,21 +2925,6 @@ TerminateProcessParams = ((1, 'hProcess'), (1, 'uExitCode'))
 GetLastErrorPrototype = WINFUNCTYPE(DWORD)
 GetLastErrorParams = ()
 
-#def GetCurrentProcess():
-#    return GetCurrentProcess.ctypes_function()
-GetCurrentProcessPrototype = WINFUNCTYPE(HANDLE)
-GetCurrentProcessParams = ()
-
-#def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile):
-#    return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
-CreateFileAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE)
-CreateFileAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'))
-
-#def CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile):
-#    return CreateFileW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
-CreateFileWPrototype = WINFUNCTYPE(HANDLE, LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE)
-CreateFileWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'))
-
 #def LdrLoadDll(PathToFile, Flags, ModuleFileName, ModuleHandle):
 #    return LdrLoadDll.ctypes_function(PathToFile, Flags, ModuleFileName, ModuleHandle)
 LdrLoadDllPrototype = WINFUNCTYPE(NTSTATUS, LPCWSTR, PVOID, PUNICODE_STRING, PHANDLE)
@@ -3020,70 +3090,20 @@ WriteProcessMemoryParams = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer
 NtWow64WriteVirtualMemory64Prototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG64, LPVOID, ULONG64, PULONG64)
 NtWow64WriteVirtualMemory64Params = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesWritten'))
 
-#def CreateToolhelp32Snapshot(dwFlags, th32ProcessID):
-#    return CreateToolhelp32Snapshot.ctypes_function(dwFlags, th32ProcessID)
-CreateToolhelp32SnapshotPrototype = WINFUNCTYPE(HANDLE, DWORD, DWORD)
-CreateToolhelp32SnapshotParams = ((1, 'dwFlags'), (1, 'th32ProcessID'))
+#def GetCurrentProcess():
+#    return GetCurrentProcess.ctypes_function()
+GetCurrentProcessPrototype = WINFUNCTYPE(HANDLE)
+GetCurrentProcessParams = ()
 
-#def Thread32First(hSnapshot, lpte):
-#    return Thread32First.ctypes_function(hSnapshot, lpte)
-Thread32FirstPrototype = WINFUNCTYPE(BOOL, HANDLE, LPTHREADENTRY32)
-Thread32FirstParams = ((1, 'hSnapshot'), (1, 'lpte'))
+#def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile):
+#    return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
+CreateFileAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE)
+CreateFileAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'))
 
-#def Thread32Next(hSnapshot, lpte):
-#    return Thread32Next.ctypes_function(hSnapshot, lpte)
-Thread32NextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPTHREADENTRY32)
-Thread32NextParams = ((1, 'hSnapshot'), (1, 'lpte'))
-
-#def Process32First(hSnapshot, lppe):
-#    return Process32First.ctypes_function(hSnapshot, lppe)
-Process32FirstPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32)
-Process32FirstParams = ((1, 'hSnapshot'), (1, 'lppe'))
-
-#def Process32Next(hSnapshot, lppe):
-#    return Process32Next.ctypes_function(hSnapshot, lppe)
-Process32NextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32)
-Process32NextParams = ((1, 'hSnapshot'), (1, 'lppe'))
-
-#def Process32FirstW(hSnapshot, lppe):
-#    return Process32FirstW.ctypes_function(hSnapshot, lppe)
-Process32FirstWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32W)
-Process32FirstWParams = ((1, 'hSnapshot'), (1, 'lppe'))
-
-#def Process32NextW(hSnapshot, lppe):
-#    return Process32NextW.ctypes_function(hSnapshot, lppe)
-Process32NextWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPPROCESSENTRY32W)
-Process32NextWParams = ((1, 'hSnapshot'), (1, 'lppe'))
-
-#def GetProcAddress(hModule, lpProcName):
-#    return GetProcAddress.ctypes_function(hModule, lpProcName)
-GetProcAddressPrototype = WINFUNCTYPE(FARPROC, HMODULE, LPCSTR)
-GetProcAddressParams = ((1, 'hModule'), (1, 'lpProcName'))
-
-#def LoadLibraryA(lpFileName):
-#    return LoadLibraryA.ctypes_function(lpFileName)
-LoadLibraryAPrototype = WINFUNCTYPE(HMODULE, LPCSTR)
-LoadLibraryAParams = ((1, 'lpFileName'),)
-
-#def LoadLibraryW(lpFileName):
-#    return LoadLibraryW.ctypes_function(lpFileName)
-LoadLibraryWPrototype = WINFUNCTYPE(HMODULE, LPCWSTR)
-LoadLibraryWParams = ((1, 'lpFileName'),)
-
-#def LoadLibraryExA(lpLibFileName, hFile, dwFlags):
-#    return LoadLibraryExA.ctypes_function(lpLibFileName, hFile, dwFlags)
-LoadLibraryExAPrototype = WINFUNCTYPE(HMODULE, LPCSTR, HANDLE, DWORD)
-LoadLibraryExAParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
-
-#def LoadLibraryExW(lpLibFileName, hFile, dwFlags):
-#    return LoadLibraryExW.ctypes_function(lpLibFileName, hFile, dwFlags)
-LoadLibraryExWPrototype = WINFUNCTYPE(HMODULE, LPCWSTR, HANDLE, DWORD)
-LoadLibraryExWParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
-
-#def FreeLibrary(hLibModule):
-#    return FreeLibrary.ctypes_function(hLibModule)
-FreeLibraryPrototype = WINFUNCTYPE(BOOL, HMODULE)
-FreeLibraryParams = ((1, 'hLibModule'),)
+#def CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile):
+#    return CreateFileW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
+CreateFileWPrototype = WINFUNCTYPE(HANDLE, LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE)
+CreateFileWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'))
 
 #def OpenProcessToken(ProcessHandle, DesiredAccess, TokenHandle):
 #    return OpenProcessToken.ctypes_function(ProcessHandle, DesiredAccess, TokenHandle)
@@ -3294,16 +3314,6 @@ WaitForSingleObjectParams = ((1, 'hHandle'), (1, 'dwMilliseconds'))
 #    return GetThreadId.ctypes_function(Thread)
 GetThreadIdPrototype = WINFUNCTYPE(DWORD, HANDLE)
 GetThreadIdParams = ((1, 'Thread'),)
-
-#def LoadLibraryExA(lpFileName, hFile, dwFlags):
-#    return LoadLibraryExA.ctypes_function(lpFileName, hFile, dwFlags)
-LoadLibraryExAPrototype = WINFUNCTYPE(HMODULE, LPCSTR, HANDLE, DWORD)
-LoadLibraryExAParams = ((1, 'lpFileName'), (1, 'hFile'), (1, 'dwFlags'))
-
-#def LoadLibraryExW(lpFileName, hFile, dwFlags):
-#    return LoadLibraryExW.ctypes_function(lpFileName, hFile, dwFlags)
-LoadLibraryExWPrototype = WINFUNCTYPE(HMODULE, LPCWSTR, HANDLE, DWORD)
-LoadLibraryExWParams = ((1, 'lpFileName'), (1, 'hFile'), (1, 'dwFlags'))
 
 #def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped):
 #    return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)

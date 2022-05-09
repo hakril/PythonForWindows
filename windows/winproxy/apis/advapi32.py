@@ -197,6 +197,10 @@ def SetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, psidOwner, psid
 
 
 @Advapi32Proxy()
+def InitializeSecurityDescriptor(pSecurityDescriptor, dwRevision):
+   return InitializeSecurityDescriptor.ctypes_function(pSecurityDescriptor, dwRevision)
+
+@Advapi32Proxy()
 def IsValidSecurityDescriptor(pSecurityDescriptor):
    return IsValidSecurityDescriptor.ctypes_function(pSecurityDescriptor)
 
@@ -233,12 +237,24 @@ def GetSecurityDescriptorOwner(pSecurityDescriptor, pOwner, lpbOwnerDefaulted):
    return GetSecurityDescriptorOwner.ctypes_function(pSecurityDescriptor, pOwner, lpbOwnerDefaulted)
 
 @Advapi32Proxy()
+def SetSecurityDescriptorOwner(pSecurityDescriptor, pOwner, bOwnerDefaulted):
+   return SetSecurityDescriptorOwner.ctypes_function(pSecurityDescriptor, pOwner, bOwnerDefaulted)
+
+@Advapi32Proxy()
 def GetSecurityDescriptorGroup(pSecurityDescriptor, pGroup, lpbGroupDefaulted):
    return GetSecurityDescriptorGroup.ctypes_function(pSecurityDescriptor, pGroup, lpbGroupDefaulted)
 
 @Advapi32Proxy()
 def GetSecurityDescriptorSacl(pSecurityDescriptor, lpbSaclPresent, pSacl, lpbSaclDefaulted):
    return GetSecurityDescriptorSacl.ctypes_function(pSecurityDescriptor, lpbSaclPresent, pSacl, lpbSaclDefaulted)
+
+@Advapi32Proxy()
+def MakeAbsoluteSD(pSelfRelativeSecurityDescriptor, pAbsoluteSecurityDescriptor, lpdwAbsoluteSecurityDescriptorSize, pDacl, lpdwDaclSize, pSacl, lpdwSaclSize, pOwner, lpdwOwnerSize, pPrimaryGroup, lpdwPrimaryGroupSize):
+   return MakeAbsoluteSD.ctypes_function(pSelfRelativeSecurityDescriptor, pAbsoluteSecurityDescriptor, lpdwAbsoluteSecurityDescriptorSize, pDacl, lpdwDaclSize, pSacl, lpdwSaclSize, pOwner, lpdwOwnerSize, pPrimaryGroup, lpdwPrimaryGroupSize)
+
+@Advapi32Proxy()
+def MakeSelfRelativeSD(pAbsoluteSecurityDescriptor, pSelfRelativeSecurityDescriptor, lpdwBufferLength):
+   return MakeSelfRelativeSD.ctypes_function(pAbsoluteSecurityDescriptor, pSelfRelativeSecurityDescriptor, lpdwBufferLength)
 
 # ACE - ACL
 

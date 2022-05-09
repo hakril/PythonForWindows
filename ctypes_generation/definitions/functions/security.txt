@@ -71,6 +71,11 @@ BOOL WINAPI GetSecurityDescriptorOwner(
     _Out_ LPBOOL lpbOwnerDefaulted
     );
 
+BOOL WINAPI SetSecurityDescriptorOwner(
+  [in, out]      PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  [in, optional] PSID                 pOwner,
+  [in]           BOOL                 bOwnerDefaulted
+);
 
 DWORD WINAPI GetSecurityDescriptorRMControl(
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor,
@@ -307,4 +312,30 @@ DWORD BuildSecurityDescriptorW(
   PSECURITY_DESCRIPTOR pOldSD,
   PULONG               pSizeNewSD,
   PSECURITY_DESCRIPTOR *pNewSD
+);
+
+
+BOOL WINAPI MakeAbsoluteSD(
+  [in]            PSECURITY_DESCRIPTOR pSelfRelativeSecurityDescriptor,
+  [out, optional] PSECURITY_DESCRIPTOR pAbsoluteSecurityDescriptor,
+  [in, out]       LPDWORD              lpdwAbsoluteSecurityDescriptorSize,
+  [out, optional] PACL                 pDacl,
+  [in, out]       LPDWORD              lpdwDaclSize,
+  [out, optional] PACL                 pSacl,
+  [in, out]       LPDWORD              lpdwSaclSize,
+  [out, optional] PSID                 pOwner,
+  [in, out]       LPDWORD              lpdwOwnerSize,
+  [out, optional] PSID                 pPrimaryGroup,
+  [in, out]       LPDWORD              lpdwPrimaryGroupSize
+);
+
+BOOL WINAPI MakeSelfRelativeSD(
+  [in]            PSECURITY_DESCRIPTOR pAbsoluteSecurityDescriptor,
+  [out, optional] PSECURITY_DESCRIPTOR pSelfRelativeSecurityDescriptor,
+  [in, out]       LPDWORD              lpdwBufferLength
+);
+
+BOOL WINAPI InitializeSecurityDescriptor(
+  [out] PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  [in]  DWORD                dwRevision
 );

@@ -715,6 +715,12 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     _close_function = winproxy.LocalFree
 
+    @classmethod
+    def create(cls):
+        buff = windows.utils.BUFFER(gdef.SECURITY_DESCRIPTOR, 1)()
+        winproxy.InitializeSecurityDescriptor(buff, gdef.SECURITY_DESCRIPTOR_REVISION)
+        return buff.cast(windows.security.SecurityDescriptor)
+
     @property
     def control(self):
         """The security descriptor control
@@ -737,8 +743,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         winproxy.GetSecurityDescriptorControl(self, control, lpdwRevision)
         return lpdwRevision.value
 
-    @property
-    def owner(self):
+    def get_owner(self):
         """The owner of the security descriptor
 
         :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``
@@ -748,6 +753,11 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         winproxy.GetSecurityDescriptorOwner(self, owner, lpbOwnerDefaulted)
         # Return None of owner is NULL
         return owner or None
+
+    def set_owner(self, new_owner):
+        winproxy.SetSecurityDescriptorOwner(self, new_owner, bOwnerDefaulted=False)
+
+    owner = property(get_owner, set_owner)
 
     @property
     def group(self):
@@ -943,11 +953,66 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     __str__ = to_string
 
+    def isrelative(self):
+        """[WIP] api may change"""
+        return bool(self.control & gdef.SE_SELF_RELATIVE)
 
-    # TST
+    def make_absolute(self):
+        """[WIP] api may change"""
+        # Assert relative ?
+        abs_descriptor_size = gdef.DWORD(0)
+        dacl_size =  gdef.DWORD(0)
+        sacl_size =  gdef.DWORD(0)
+        owner_size =  gdef.DWORD(0)
+        prim_groupe_size =  gdef.DWORD(0)
 
-    # def relative(self):
-        # return bool(self.control & gdef.SE_SELF_RELATIVE)
+        try:
+            windows.winproxy.MakeAbsoluteSD(self, None, abs_descriptor_size,
+                    None,
+                    dacl_size,
+                    None,
+                    sacl_size,
+                    None,
+                    owner_size,
+                    None,
+                    prim_groupe_size)
+        except WindowsError as e:
+            if e.winerror != gdef.ERROR_INSUFFICIENT_BUFFER:
+                raise
+
+        abs_sd = windows.utils.BUFFER(gdef.BYTE, abs_descriptor_size.value)().cast(SecurityDescriptor)
+        # dacl = ctypes.create_string_buffer(dacl_size.value)
+        dacl = windows.utils.BUFFER(gdef.BYTE, dacl_size.value)()
+        sacl = windows.utils.BUFFER(gdef.BYTE, sacl_size.value)()
+        owner = ctypes.create_string_buffer(owner_size.value)
+        prim_groupe = ctypes.create_string_buffer(prim_groupe_size.value)
+
+        windows.winproxy.MakeAbsoluteSD(self, abs_sd, abs_descriptor_size,
+                dacl.cast(gdef.PACL),
+                dacl_size,
+                sacl.cast(gdef.PACL),
+                sacl_size,
+                owner,
+                owner_size,
+                prim_groupe,
+                prim_groupe_size)
+
+        abs_sd._save = [dacl, sacl, owner, prim_groupe]
+        return abs_sd
+
+    def make_relative(self):
+        """[WIP] api may change"""
+        srsd_size =  gdef.DWORD(0)
+        try:
+            windows.winproxy.MakeSelfRelativeSD(self, None, srsd_size)
+        except WindowsError as e:
+            if e.winerror != gdef.ERROR_INSUFFICIENT_BUFFER:
+                raise
+
+        srsd = windows.utils.BUFFER(gdef.BYTE, srsd_size.value)().cast(SecurityDescriptor)
+        windows.winproxy.MakeSelfRelativeSD(self, srsd, srsd_size)
+        return srsd
+
 
     # If we want auto-free we need to handle relf-relative SD
     # We need to keep-track of sub-object of the SD
@@ -957,6 +1022,11 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         # if self._needs_free and sys.path is not None:
             # print("FREE SELF")
             # self._close_function(self)
+
+    def __repr__(self):
+        if (self.isrelative()):
+            return "<{0} (self relative format) at {1:#x}>".format(type(self).__name__, id(self))
+        return "<{0} (absolute format) at {1:#x}>".format(type(self).__name__, id(self))
 
     def explain(self, type=None):
         if type is  None:
