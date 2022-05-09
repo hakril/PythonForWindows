@@ -403,6 +403,22 @@ def RegSaveKeyExA(hKey, lpFile, lpSecurityAttributes, Flags):
 def RegSaveKeyExW(hKey, lpFile, lpSecurityAttributes, Flags):
     return RegSaveKeyExW.ctypes_function(hKey, lpFile, lpSecurityAttributes, Flags)
 
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegLoadKeyA(hKey, lpSubKey, lpFile):
+    return RegLoadKeyA.ctypes_function(hKey, lpSubKey, lpFile)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegLoadKeyW(hKey, lpSubKey, lpFile):
+    return RegLoadKeyW.ctypes_function(hKey, lpSubKey, lpFile)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegUnLoadKeyA(hKey, lpSubKey):
+    return RegUnLoadKeyA.ctypes_function(hKey, lpSubKey)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegUnLoadKeyW(hKey, lpSubKey):
+    return RegUnLoadKeyW.ctypes_function(hKey, lpSubKey)
+
 # Service
 
 @Advapi32Proxy()

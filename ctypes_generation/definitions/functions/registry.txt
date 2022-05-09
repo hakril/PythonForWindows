@@ -283,3 +283,27 @@ LSTATUS RegSaveKeyExW(
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
   DWORD                       Flags
 );
+
+
+LSTATUS RegLoadKeyA(
+  [in]           HKEY   hKey,
+  [in, optional] LPCSTR lpSubKey,
+  [in]           LPCSTR lpFile
+);
+
+
+LSTATUS RegLoadKeyW(
+  [in]           HKEY    hKey,
+  [in, optional] LPCWSTR lpSubKey,
+  [in]           LPCWSTR lpFile
+);
+
+LSTATUS RegUnLoadKeyA(
+  [in]           HKEY   hKey,
+  [in, optional] LPCSTR lpSubKey
+);
+
+LSTATUS RegUnLoadKeyW(
+  [in]           HKEY    hKey,
+  [in, optional] LPCWSTR lpSubKey
+);

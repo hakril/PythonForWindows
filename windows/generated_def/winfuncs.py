@@ -1665,6 +1665,26 @@ RegSaveKeyExAParams = ((1, 'hKey'), (1, 'lpFile'), (1, 'lpSecurityAttributes'), 
 RegSaveKeyExWPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCWSTR, LPSECURITY_ATTRIBUTES, DWORD)
 RegSaveKeyExWParams = ((1, 'hKey'), (1, 'lpFile'), (1, 'lpSecurityAttributes'), (1, 'Flags'))
 
+#def RegLoadKeyA(hKey, lpSubKey, lpFile):
+#    return RegLoadKeyA.ctypes_function(hKey, lpSubKey, lpFile)
+RegLoadKeyAPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCSTR, LPCSTR)
+RegLoadKeyAParams = ((1, 'hKey'), (1, 'lpSubKey'), (1, 'lpFile'))
+
+#def RegLoadKeyW(hKey, lpSubKey, lpFile):
+#    return RegLoadKeyW.ctypes_function(hKey, lpSubKey, lpFile)
+RegLoadKeyWPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCWSTR, LPCWSTR)
+RegLoadKeyWParams = ((1, 'hKey'), (1, 'lpSubKey'), (1, 'lpFile'))
+
+#def RegUnLoadKeyA(hKey, lpSubKey):
+#    return RegUnLoadKeyA.ctypes_function(hKey, lpSubKey)
+RegUnLoadKeyAPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCSTR)
+RegUnLoadKeyAParams = ((1, 'hKey'), (1, 'lpSubKey'))
+
+#def RegUnLoadKeyW(hKey, lpSubKey):
+#    return RegUnLoadKeyW.ctypes_function(hKey, lpSubKey)
+RegUnLoadKeyWPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCWSTR)
+RegUnLoadKeyWParams = ((1, 'hKey'), (1, 'lpSubKey'))
+
 #def IsValidSecurityDescriptor(pSecurityDescriptor):
 #    return IsValidSecurityDescriptor.ctypes_function(pSecurityDescriptor)
 IsValidSecurityDescriptorPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR)
