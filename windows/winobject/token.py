@@ -114,7 +114,7 @@ class TokenPrivileges(gdef.TOKEN_PRIVILEGES):
 
     def _lookup_name(self, luid):
         size = gdef.DWORD(0x100)
-        buff = ctypes.c_buffer(size.value)
+        buff = ctypes.create_unicode_buffer(size.value)
         winproxy.LookupPrivilegeNameW(None, luid, buff, size)
         return buff[:size.value]
 

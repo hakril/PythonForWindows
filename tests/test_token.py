@@ -82,6 +82,15 @@ def test_adjust_privilege(newtok):
     assert newtok.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
 
 
+def test_token_privilege_dict(newtok):
+    PRIVILEGE_NAME = b"SeShutdownPrivilege"
+    privdict = newtok.privileges
+    # These API use Token._lookup_name() that are not tested by other means
+    assert privdict.keys()
+    assert privdict.items()
+    assert PRIVILEGE_NAME in privdict.keys() # Implement contains ?
+
+
 def test_token_groups(curtok):
     groups = curtok.groups
     groups_size = groups.GroupCount
