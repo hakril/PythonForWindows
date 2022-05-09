@@ -74,7 +74,12 @@ class WinFuncParser(Parser):
 
     def parse_func_arg(self, has_winapi):
         type_ptr = False
-        if has_winapi:
+        next_token = self.peek()
+        # Try to guess if IO type info are present
+        # New MSDN format that [in, out] info without any WINAPI indicator
+        if (has_winapi or
+            type(next_token) == OpenSquareBracketToken or
+            type(next_token) == NameToken and (next_token.value in self.known_io_info_type + self.known_io_info_with_param)):
             self.assert_argument_io_info()
         arg_type = self.assert_token_type(NameToken)
         if arg_type.value.upper() == "CONST":
