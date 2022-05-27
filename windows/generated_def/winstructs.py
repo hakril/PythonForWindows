@@ -9485,6 +9485,21 @@ PEXPLICIT_ACCESSW = POINTER(_EXPLICIT_ACCESS_W)
 PEXPLICIT_ACCESS_W = POINTER(_EXPLICIT_ACCESS_W)
 EXPLICIT_ACCESS_W = _EXPLICIT_ACCESS_W
 
+ComputerNameNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameNetBIOS", 0x0)
+ComputerNameDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsHostname", 0x1)
+ComputerNameDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsDomain", 0x2)
+ComputerNameDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsFullyQualified", 0x3)
+ComputerNamePhysicalNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalNetBIOS", 0x4)
+ComputerNamePhysicalDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsHostname", 0x5)
+ComputerNamePhysicalDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsDomain", 0x6)
+ComputerNamePhysicalDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsFullyQualified", 0x7)
+ComputerNameMax = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameMax", 0x8)
+class _COMPUTER_NAME_FORMAT(EnumType):
+    values = [ComputerNameNetBIOS, ComputerNameDnsHostname, ComputerNameDnsDomain, ComputerNameDnsFullyQualified, ComputerNamePhysicalNetBIOS, ComputerNamePhysicalDnsHostname, ComputerNamePhysicalDnsDomain, ComputerNamePhysicalDnsFullyQualified, ComputerNameMax]
+    mapper = FlagMapper(*values)
+COMPUTER_NAME_FORMAT = _COMPUTER_NAME_FORMAT
+
+
 class _SYSTEM_PROCESS_INFORMATION(Structure):
     _fields_ = [
         ("NextEntryOffset", ULONG),

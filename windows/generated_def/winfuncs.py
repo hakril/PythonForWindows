@@ -2700,6 +2700,16 @@ NtDelayExecutionParams = ((1, 'Alertable'), (1, 'DelayInterval'))
 NtTerminateProcessPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, NTSTATUS)
 NtTerminateProcessParams = ((1, 'ProcessHandle'), (1, 'ExitStatus'))
 
+#def GetComputerNameExA(NameType, lpBuffer, nSize):
+#    return GetComputerNameExA.ctypes_function(NameType, lpBuffer, nSize)
+GetComputerNameExAPrototype = WINFUNCTYPE(BOOL, COMPUTER_NAME_FORMAT, LPSTR, LPDWORD)
+GetComputerNameExAParams = ((1, 'NameType'), (1, 'lpBuffer'), (1, 'nSize'))
+
+#def GetComputerNameExW(NameType, lpBuffer, nSize):
+#    return GetComputerNameExW.ctypes_function(NameType, lpBuffer, nSize)
+GetComputerNameExWPrototype = WINFUNCTYPE(BOOL, COMPUTER_NAME_FORMAT, LPWSTR, LPDWORD)
+GetComputerNameExWParams = ((1, 'NameType'), (1, 'lpBuffer'), (1, 'nSize'))
+
 #def FileTimeToSystemTime(lpFileTime, lpSystemTime):
 #    return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
 FileTimeToSystemTimePrototype = WINFUNCTYPE(BOOL, POINTER(FILETIME), LPSYSTEMTIME)
