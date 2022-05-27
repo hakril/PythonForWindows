@@ -174,6 +174,23 @@ class System(object):
             winproxy.GetComputerNameA(buf, ctypes.byref(size))
         return buf[:size.value]
 
+    def _computer_name_ex(self, nametype):
+        size = gdef.DWORD(0)
+        try:
+            winproxy.GetComputerNameExW(nametype, None, ctypes.byref(size))
+        except WindowsError as e:
+            if e.winerror != gdef.ERROR_MORE_DATA:
+                raise
+
+        buf = ctypes.create_unicode_buffer(size.value)
+        winproxy.GetComputerNameExW(nametype, buf, ctypes.byref(size))
+        return buf[:size.value]
+
+    @utils.fixedproperty
+    def domain(self):
+        # [WIP] name of the domain joined by the computer, None is no domain joined
+        return self._computer_name_ex(gdef.ComputerNameDnsDomain) or None
+
     @utils.fixedpropety
     def version(self):
         """The version of the system

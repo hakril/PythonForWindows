@@ -335,6 +335,8 @@ def GetVersionExA(lpVersionInformation):
 def GetVersionExW(lpVersionInformation):
     return GetVersionExW.ctypes_function(lpVersionInformation)
 
+
+
 ## Hardware
 
 @Kernel32Proxy()
@@ -374,6 +376,14 @@ def GetComputerNameW(lpBuffer, lpnSize):
     return GetComputerNameW.ctypes_function(lpBuffer, lpnSize)
 
 @Kernel32Proxy()
+def GetComputerNameExA(NameType, lpBuffer, nSize):
+    return GetComputerNameExA.ctypes_function(NameType, lpBuffer, nSize)
+
+@Kernel32Proxy()
+def GetComputerNameExW(NameType, lpBuffer, nSize):
+    return GetComputerNameExW.ctypes_function(NameType, lpBuffer, nSize)
+
+@Kernel32Proxy()
 def GetWindowsDirectoryA(lpBuffer, uSize=None):
     if uSize is None:
         uSize = gdef.DWORD(len(lpBuffer))
@@ -388,6 +398,9 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 @Kernel32Proxy()
 def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
    return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
+
+
+
 
 ## Other
 

@@ -1,0 +1,62 @@
+BOOL GetComputerNameExA(
+  [in]      COMPUTER_NAME_FORMAT NameType,
+  [out]     LPSTR                lpBuffer,
+  [in, out] LPDWORD              nSize
+);
+
+BOOL GetComputerNameExW(
+  [in]      COMPUTER_NAME_FORMAT NameType,
+  [out]     LPWSTR               lpBuffer,
+  [in, out] LPDWORD              nSize
+);
+
+
+BOOL WINAPI GetComputerNameA(
+  _Out_   LPCSTR  lpBuffer,
+  _Inout_ LPDWORD lpnSize
+);
+
+BOOL WINAPI GetComputerNameW(
+  _Out_   LPWSTR  lpBuffer,
+  _Inout_ LPDWORD lpnSize
+);
+
+BOOL WINAPI LookupAccountSidA(
+  _In_opt_  LPCSTR        lpSystemName,
+  _In_      PSID          lpSid,
+  _Out_opt_ LPCSTR        lpName,
+  _Inout_   LPDWORD       cchName,
+  _Out_opt_ LPCSTR        lpReferencedDomainName,
+  _Inout_   LPDWORD       cchReferencedDomainName,
+  _Out_     PSID_NAME_USE peUse
+);
+
+BOOL WINAPI LookupAccountSidW(
+  _In_opt_  LPWSTR       lpSystemName,
+  _In_      PSID          lpSid,
+  _Out_opt_ LPWSTR        lpName,
+  _Inout_   LPDWORD       cchName,
+  _Out_opt_ LPWSTR        lpReferencedDomainName,
+  _Inout_   LPDWORD       cchReferencedDomainName,
+  _Out_     PSID_NAME_USE peUse
+);
+
+BOOL LookupAccountNameA(
+  LPCSTR        lpSystemName,
+  LPCSTR        lpAccountName,
+  PSID          Sid,
+  LPDWORD       cbSid,
+  LPSTR         ReferencedDomainName,
+  LPDWORD       cchReferencedDomainName,
+  PSID_NAME_USE peUse
+);
+
+BOOL LookupAccountNameW(
+  LPCWSTR       lpSystemName,
+  LPCWSTR       lpAccountName,
+  PSID          Sid,
+  LPDWORD       cbSid,
+  LPWSTR        ReferencedDomainName,
+  LPDWORD       cchReferencedDomainName,
+  PSID_NAME_USE peUse
+);

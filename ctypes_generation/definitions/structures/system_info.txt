@@ -54,3 +54,16 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
     PVOID Reserved2[4];
     CHAR NumberOfProcessors;
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
+
+
+typedef enum _COMPUTER_NAME_FORMAT {
+  ComputerNameNetBIOS,
+  ComputerNameDnsHostname,
+  ComputerNameDnsDomain,
+  ComputerNameDnsFullyQualified,
+  ComputerNamePhysicalNetBIOS,
+  ComputerNamePhysicalDnsHostname,
+  ComputerNamePhysicalDnsDomain,
+  ComputerNamePhysicalDnsFullyQualified,
+  ComputerNameMax
+} COMPUTER_NAME_FORMAT;
