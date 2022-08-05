@@ -44,7 +44,7 @@ jobs:
 
       # Testing
       - name: Testing
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml tests/
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -k "not debugger" -v tests/
 
       - name: Publish PyTest Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
