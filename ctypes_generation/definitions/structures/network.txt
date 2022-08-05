@@ -871,3 +871,50 @@ typedef struct _DNS_QUERY_RESULT
     PVOID           pQueryRecords; // PDNS_RECORD pQueryRecords;
     PVOID           Reserved;
 } DNS_QUERY_RESULT, *PDNS_QUERY_RESULT;
+
+
+typedef struct {
+    CHAR String[4 * 4];
+} IP_ADDRESS_STRING, *PIP_ADDRESS_STRING, IP_MASK_STRING, *PIP_MASK_STRING;
+
+typedef struct _IP_ADDR_STRING {
+    struct _IP_ADDR_STRING* Next;
+    IP_ADDRESS_STRING IpAddress;
+    IP_MASK_STRING IpMask;
+    DWORD Context;
+} IP_ADDR_STRING, *PIP_ADDR_STRING;
+
+typedef struct _IP_ADAPTER_INFO {
+  struct _IP_ADAPTER_INFO *Next;
+  DWORD                   ComboIndex;
+  CHAR                    AdapterName[MAX_ADAPTER_NAME_LENGTH + 4];
+  CHAR                    Description[MAX_ADAPTER_DESCRIPTION_LENGTH + 4];
+  UINT                    AddressLength;
+  BYTE                    Address[MAX_ADAPTER_ADDRESS_LENGTH];
+  DWORD                   Index;
+  UINT                    Type;
+  UINT                    DhcpEnabled;
+  PIP_ADDR_STRING         CurrentIpAddress;
+  IP_ADDR_STRING          IpAddressList;
+  IP_ADDR_STRING          GatewayList;
+  IP_ADDR_STRING          DhcpServer;
+  BOOL                    HaveWins;
+  IP_ADDR_STRING          PrimaryWinsServer;
+  IP_ADDR_STRING          SecondaryWinsServer;
+  ULONGLONG                  LeaseObtained; // time_t ?
+  ULONGLONG                  LeaseExpires; // time_t ?
+} IP_ADAPTER_INFO, *PIP_ADAPTER_INFO;
+
+
+// #if (NTDDI_VERSION >= NTDDI_WIN2KSP1)
+// typedef  IP_PER_ADAPTER_INFO_W2KSP1 IP_PER_ADAPTER_INFO;
+// typedef  IP_PER_ADAPTER_INFO_W2KSP1 *PIP_PER_ADAPTER_INFO;
+// #endif
+
+typedef struct _IP_PER_ADAPTER_INFO_W2KSP1 {
+  UINT            AutoconfigEnabled;
+  UINT            AutoconfigActive;
+  PIP_ADDR_STRING CurrentDnsServer;
+  IP_ADDR_STRING  DnsServerList;
+} IP_PER_ADAPTER_INFO_W2KSP1, *PIP_PER_ADAPTER_INFO_W2KSP1, IP_PER_ADAPTER_INFO, *PIP_PER_ADAPTER_INFO;
+

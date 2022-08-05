@@ -960,6 +960,7 @@ class tagSAFEARRAY(Structure):
         ("rgsabound", SAFEARRAYBOUND * (1)),
     ]
 SAFEARRAY = tagSAFEARRAY
+LPSAFEARRAY = POINTER(tagSAFEARRAY)
 
 class __tagBRECORD(Structure):
     _fields_ = [
@@ -2392,6 +2393,62 @@ class _DNS_QUERY_RESULT(Structure):
     ]
 DNS_QUERY_RESULT = _DNS_QUERY_RESULT
 PDNS_QUERY_RESULT = POINTER(_DNS_QUERY_RESULT)
+
+class IP_ADDRESS_STRING(Structure):
+    _fields_ = [
+        ("String", CHAR * (4 * 4)),
+    ]
+IP_MASK_STRING = IP_ADDRESS_STRING
+PIP_MASK_STRING = POINTER(IP_ADDRESS_STRING)
+PIP_ADDRESS_STRING = POINTER(IP_ADDRESS_STRING)
+
+# Self referencing struct tricks
+class _IP_ADDR_STRING(Structure): pass
+PIP_ADDR_STRING = POINTER(_IP_ADDR_STRING)
+IP_ADDR_STRING = _IP_ADDR_STRING
+_IP_ADDR_STRING._fields_ = [
+    ("Next", POINTER(_IP_ADDR_STRING)),
+    ("IpAddress", IP_ADDRESS_STRING),
+    ("IpMask", IP_MASK_STRING),
+    ("Context", DWORD),
+]
+
+# Self referencing struct tricks
+class _IP_ADAPTER_INFO(Structure): pass
+IP_ADAPTER_INFO = _IP_ADAPTER_INFO
+PIP_ADAPTER_INFO = POINTER(_IP_ADAPTER_INFO)
+_IP_ADAPTER_INFO._fields_ = [
+    ("Next", POINTER(_IP_ADAPTER_INFO)),
+    ("ComboIndex", DWORD),
+    ("AdapterName", CHAR * (MAX_ADAPTER_NAME_LENGTH + 4)),
+    ("Description", CHAR * (MAX_ADAPTER_DESCRIPTION_LENGTH + 4)),
+    ("AddressLength", UINT),
+    ("Address", BYTE * (MAX_ADAPTER_ADDRESS_LENGTH)),
+    ("Index", DWORD),
+    ("Type", UINT),
+    ("DhcpEnabled", UINT),
+    ("CurrentIpAddress", PIP_ADDR_STRING),
+    ("IpAddressList", IP_ADDR_STRING),
+    ("GatewayList", IP_ADDR_STRING),
+    ("DhcpServer", IP_ADDR_STRING),
+    ("HaveWins", BOOL),
+    ("PrimaryWinsServer", IP_ADDR_STRING),
+    ("SecondaryWinsServer", IP_ADDR_STRING),
+    ("LeaseObtained", ULONGLONG),
+    ("LeaseExpires", ULONGLONG),
+]
+
+class _IP_PER_ADAPTER_INFO_W2KSP1(Structure):
+    _fields_ = [
+        ("AutoconfigEnabled", UINT),
+        ("AutoconfigActive", UINT),
+        ("CurrentDnsServer", PIP_ADDR_STRING),
+        ("DnsServerList", IP_ADDR_STRING),
+    ]
+PIP_PER_ADAPTER_INFO = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
+IP_PER_ADAPTER_INFO = _IP_PER_ADAPTER_INFO_W2KSP1
+PIP_PER_ADAPTER_INFO_W2KSP1 = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
+IP_PER_ADAPTER_INFO_W2KSP1 = _IP_PER_ADAPTER_INFO_W2KSP1
 
 KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
 KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
@@ -8867,6 +8924,37 @@ class _FILE_NOTIFY_EXTENDED_INFORMATION(Structure):
 PFILE_NOTIFY_EXTENDED_INFORMATION = POINTER(_FILE_NOTIFY_EXTENDED_INFORMATION)
 FILE_NOTIFY_EXTENDED_INFORMATION = _FILE_NOTIFY_EXTENDED_INFORMATION
 
+class _ANON__FILE_RENAME_INFORMATION_SUB_UNION_1(Union):
+    _fields_ = [
+        ("ReplaceIfExists", BOOLEAN),
+        ("Flags", ULONG),
+    ]
+
+class _FILE_RENAME_INFORMATION(Structure):
+    _anonymous_ = ("__ANON_DUMMYUNIONNAME_FILE_RENAME_INFORMATION",)
+    _fields_ = [
+        ("__ANON_DUMMYUNIONNAME_FILE_RENAME_INFORMATION", _ANON__FILE_RENAME_INFORMATION_SUB_UNION_1),
+        ("RootDirectory", HANDLE),
+        ("FileNameLength", ULONG),
+        ("FileName", WCHAR * (1)),
+    ]
+FILE_RENAME_INFORMATION = _FILE_RENAME_INFORMATION
+PFILE_RENAME_INFORMATION = POINTER(_FILE_RENAME_INFORMATION)
+
+INITIAL_FILE_RENAME_INFORMATION = _FILE_RENAME_INFORMATION
+
+class _FILE_RENAME_INFORMATION(INITIAL_FILE_RENAME_INFORMATION):
+    @property
+    def filename(self):
+        filename_addr = ctypes.addressof(self) + type(self).FileName.offset
+        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
+            raw_data = self._target.read_memory(filename_addr, self.FileNameLength)
+            return raw_data.decode("utf16")
+        size = int(self.FileNameLength / 2)
+        return (ctypes.c_wchar * size).from_address(filename_addr)[:]
+
+FILE_RENAME_INFORMATION = _FILE_RENAME_INFORMATION
+PFILE_RENAME_INFORMATION = POINTER(_FILE_RENAME_INFORMATION)
 PolicyAuditLogInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditLogInformation", 0x1)
 PolicyAuditEventsInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditEventsInformation", 0x2)
 PolicyPrimaryDomainInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyPrimaryDomainInformation", 0x3)

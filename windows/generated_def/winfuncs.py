@@ -330,6 +330,86 @@ CLSIDFromProgIDParams = ((1, 'lpszProgID'), (1, 'lpclsid'))
 CoTaskMemFreePrototype = WINFUNCTYPE(PVOID, LPVOID)
 CoTaskMemFreeParams = ((1, 'pv'),)
 
+#def SafeArrayCreate(vt, cDims, rgsabound):
+#    return SafeArrayCreate.ctypes_function(vt, cDims, rgsabound)
+SafeArrayCreatePrototype = WINFUNCTYPE(LPSAFEARRAY, VARTYPE, UINT, POINTER(SAFEARRAYBOUND))
+SafeArrayCreateParams = ((1, 'vt'), (1, 'cDims'), (1, 'rgsabound'))
+
+#def SafeArrayCreateVector(vt, lLbound, cElements):
+#    return SafeArrayCreateVector.ctypes_function(vt, lLbound, cElements)
+SafeArrayCreateVectorPrototype = WINFUNCTYPE(LPSAFEARRAY, VARTYPE, LONG, ULONG)
+SafeArrayCreateVectorParams = ((1, 'vt'), (1, 'lLbound'), (1, 'cElements'))
+
+#def SafeArrayDestroy(psa):
+#    return SafeArrayDestroy.ctypes_function(psa)
+SafeArrayDestroyPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY))
+SafeArrayDestroyParams = ((1, 'psa'),)
+
+#def SafeArrayDestroyData(psa):
+#    return SafeArrayDestroyData.ctypes_function(psa)
+SafeArrayDestroyDataPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY))
+SafeArrayDestroyDataParams = ((1, 'psa'),)
+
+#def SafeArrayGetElement(psa, rgIndices, pv):
+#    return SafeArrayGetElement.ctypes_function(psa, rgIndices, pv)
+SafeArrayGetElementPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(LONG), PVOID)
+SafeArrayGetElementParams = ((1, 'psa'), (1, 'rgIndices'), (1, 'pv'))
+
+#def SafeArrayGetElemsize(psa):
+#    return SafeArrayGetElemsize.ctypes_function(psa)
+SafeArrayGetElemsizePrototype = WINFUNCTYPE(UINT, POINTER(SAFEARRAY))
+SafeArrayGetElemsizeParams = ((1, 'psa'),)
+
+#def SafeArrayGetLBound(psa, nDim, plLbound):
+#    return SafeArrayGetLBound.ctypes_function(psa, nDim, plLbound)
+SafeArrayGetLBoundPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), UINT, POINTER(LONG))
+SafeArrayGetLBoundParams = ((1, 'psa'), (1, 'nDim'), (1, 'plLbound'))
+
+#def SafeArrayGetUBound(psa, nDim, plUbound):
+#    return SafeArrayGetUBound.ctypes_function(psa, nDim, plUbound)
+SafeArrayGetUBoundPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), UINT, POINTER(LONG))
+SafeArrayGetUBoundParams = ((1, 'psa'), (1, 'nDim'), (1, 'plUbound'))
+
+#def SafeArrayGetDim(psa):
+#    return SafeArrayGetDim.ctypes_function(psa)
+SafeArrayGetDimPrototype = WINFUNCTYPE(UINT, POINTER(SAFEARRAY))
+SafeArrayGetDimParams = ((1, 'psa'),)
+
+#def SafeArrayPutElement(psa, rgIndices, pv):
+#    return SafeArrayPutElement.ctypes_function(psa, rgIndices, pv)
+SafeArrayPutElementPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(LONG), PVOID)
+SafeArrayPutElementParams = ((1, 'psa'), (1, 'rgIndices'), (1, 'pv'))
+
+#def SafeArrayGetVartype(psa, pvt):
+#    return SafeArrayGetVartype.ctypes_function(psa, pvt)
+SafeArrayGetVartypePrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(VARTYPE))
+SafeArrayGetVartypeParams = ((1, 'psa'), (1, 'pvt'))
+
+#def SysFreeString(bstrString):
+#    return SysFreeString.ctypes_function(bstrString)
+SysFreeStringPrototype = WINFUNCTYPE(VOID, BSTR)
+SysFreeStringParams = ((1, 'bstrString'),)
+
+#def SafeArrayCopy(psa, ppsaOut):
+#    return SafeArrayCopy.ctypes_function(psa, ppsaOut)
+SafeArrayCopyPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(LPSAFEARRAY))
+SafeArrayCopyParams = ((1, 'psa'), (1, 'ppsaOut'))
+
+#def SafeArrayCopyData(psaSource, psaTarget):
+#    return SafeArrayCopyData.ctypes_function(psaSource, psaTarget)
+SafeArrayCopyDataPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(SAFEARRAY))
+SafeArrayCopyDataParams = ((1, 'psaSource'), (1, 'psaTarget'))
+
+#def SysAllocString(psz):
+#    return SysAllocString.ctypes_function(psz)
+SysAllocStringPrototype = WINFUNCTYPE(PVOID, POINTER(OLECHAR))
+SysAllocStringParams = ((1, 'psz'),)
+
+#def SysFreeString(bstrString):
+#    return SysFreeString.ctypes_function(bstrString)
+SysFreeStringPrototype = WINFUNCTYPE(VOID, BSTR)
+SysFreeStringParams = ((1, 'bstrString'),)
+
 #def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
 #    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
 CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
@@ -1344,6 +1424,16 @@ DnsQuery_WParams = ((1, 'pszName'), (1, 'wType'), (1, 'Options'), (1, 'pExtra'),
 #    return DnsQueryEx.ctypes_function(pQueryRequest, pQueryResults, pCancelHandle)
 DnsQueryExPrototype = WINFUNCTYPE(DNS_STATUS, PDNS_QUERY_REQUEST, PDNS_QUERY_RESULT, PDNS_QUERY_CANCEL)
 DnsQueryExParams = ((1, 'pQueryRequest'), (1, 'pQueryResults'), (1, 'pCancelHandle'))
+
+#def GetAdaptersInfo(AdapterInfo, SizePointer):
+#    return GetAdaptersInfo.ctypes_function(AdapterInfo, SizePointer)
+GetAdaptersInfoPrototype = WINFUNCTYPE(ULONG, PIP_ADAPTER_INFO, PULONG)
+GetAdaptersInfoParams = ((1, 'AdapterInfo'), (1, 'SizePointer'))
+
+#def GetPerAdapterInfo(IfIndex, pPerAdapterInfo, pOutBufLen):
+#    return GetPerAdapterInfo.ctypes_function(IfIndex, pPerAdapterInfo, pOutBufLen)
+GetPerAdapterInfoPrototype = WINFUNCTYPE(DWORD, ULONG, PIP_PER_ADAPTER_INFO, PULONG)
+GetPerAdapterInfoParams = ((1, 'IfIndex'), (1, 'pPerAdapterInfo'), (1, 'pOutBufLen'))
 
 #def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
 #    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
@@ -2710,6 +2800,36 @@ GetComputerNameExAParams = ((1, 'NameType'), (1, 'lpBuffer'), (1, 'nSize'))
 GetComputerNameExWPrototype = WINFUNCTYPE(BOOL, COMPUTER_NAME_FORMAT, LPWSTR, LPDWORD)
 GetComputerNameExWParams = ((1, 'NameType'), (1, 'lpBuffer'), (1, 'nSize'))
 
+#def GetComputerNameA(lpBuffer, lpnSize):
+#    return GetComputerNameA.ctypes_function(lpBuffer, lpnSize)
+GetComputerNameAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPDWORD)
+GetComputerNameAParams = ((1, 'lpBuffer'), (1, 'lpnSize'))
+
+#def GetComputerNameW(lpBuffer, lpnSize):
+#    return GetComputerNameW.ctypes_function(lpBuffer, lpnSize)
+GetComputerNameWPrototype = WINFUNCTYPE(BOOL, LPWSTR, LPDWORD)
+GetComputerNameWParams = ((1, 'lpBuffer'), (1, 'lpnSize'))
+
+#def LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
+#    return LookupAccountSidA.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+LookupAccountSidAPrototype = WINFUNCTYPE(BOOL, LPCSTR, PSID, LPCSTR, LPDWORD, LPCSTR, LPDWORD, PSID_NAME_USE)
+LookupAccountSidAParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1, 'cchName'), (1, 'lpReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
+
+#def LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
+#    return LookupAccountSidW.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+LookupAccountSidWPrototype = WINFUNCTYPE(BOOL, LPWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
+LookupAccountSidWParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1, 'cchName'), (1, 'lpReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
+
+#def LookupAccountNameA(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
+#    return LookupAccountNameA.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
+LookupAccountNameAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPCSTR, PSID, LPDWORD, LPSTR, LPDWORD, PSID_NAME_USE)
+LookupAccountNameAParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
+
+#def LookupAccountNameW(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
+#    return LookupAccountNameW.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
+LookupAccountNameWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR, PSID, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
+LookupAccountNameWParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
+
 #def FileTimeToSystemTime(lpFileTime, lpSystemTime):
 #    return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
 FileTimeToSystemTimePrototype = WINFUNCTYPE(BOOL, POINTER(FILETIME), LPSYSTEMTIME)
@@ -3694,36 +3814,6 @@ GetProcessImageFileNameWParams = ((1, 'hProcess'), (1, 'lpImageFileName'), (1, '
 #    return GetSystemMetrics.ctypes_function(nIndex)
 GetSystemMetricsPrototype = WINFUNCTYPE(INT, INT)
 GetSystemMetricsParams = ((1, 'nIndex'),)
-
-#def GetComputerNameA(lpBuffer, lpnSize):
-#    return GetComputerNameA.ctypes_function(lpBuffer, lpnSize)
-GetComputerNameAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPDWORD)
-GetComputerNameAParams = ((1, 'lpBuffer'), (1, 'lpnSize'))
-
-#def GetComputerNameW(lpBuffer, lpnSize):
-#    return GetComputerNameW.ctypes_function(lpBuffer, lpnSize)
-GetComputerNameWPrototype = WINFUNCTYPE(BOOL, LPWSTR, LPDWORD)
-GetComputerNameWParams = ((1, 'lpBuffer'), (1, 'lpnSize'))
-
-#def LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
-#    return LookupAccountSidA.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
-LookupAccountSidAPrototype = WINFUNCTYPE(BOOL, LPCSTR, PSID, LPCSTR, LPDWORD, LPCSTR, LPDWORD, PSID_NAME_USE)
-LookupAccountSidAParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1, 'cchName'), (1, 'lpReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
-
-#def LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
-#    return LookupAccountSidW.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
-LookupAccountSidWPrototype = WINFUNCTYPE(BOOL, LPWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
-LookupAccountSidWParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1, 'cchName'), (1, 'lpReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
-
-#def LookupAccountNameA(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
-#    return LookupAccountNameA.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
-LookupAccountNameAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPCSTR, PSID, LPDWORD, LPSTR, LPDWORD, PSID_NAME_USE)
-LookupAccountNameAParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
-
-#def LookupAccountNameW(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse):
-#    return LookupAccountNameW.ctypes_function(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
-LookupAccountNameWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR, PSID, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
-LookupAccountNameWParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
 
 #def GetInterfaceInfo(pIfTable, dwOutBufLen):
 #    return GetInterfaceInfo.ctypes_function(pIfTable, dwOutBufLen)

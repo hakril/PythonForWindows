@@ -1,0 +1,33 @@
+typedef struct IWbemObjectTextSrcVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IWbemObjectTextSrc * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IWbemObjectTextSrc * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IWbemObjectTextSrc * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetText )(
+            IWbemObjectTextSrc * This,
+            /* [in] */ long lFlags,
+            /* [in] */ IWbemClassObject *pObj,
+            /* [in] */ ULONG uObjTextFormat,
+            /* [in] */ IWbemContext *pCtx,
+            /* [out] */ BSTR *strText);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateFromText )(
+            IWbemObjectTextSrc * This,
+            /* [in] */ long lFlags,
+            /* [in] */ BSTR strText,
+            /* [in] */ ULONG uObjTextFormat,
+            /* [in] */ IWbemContext *pCtx,
+            /* [out] */ IWbemClassObject **pNewObj);
+
+        END_INTERFACE
+    } IWbemObjectTextSrcVtbl;

@@ -2278,6 +2278,10 @@ tagSAFEARRAY
 
     Alias for :class:`tagSAFEARRAY`
 
+.. class:: LPSAFEARRAY
+
+    Pointer to :class:`tagSAFEARRAY`
+
 .. class:: tagSAFEARRAY
 
     .. attribute:: cDims
@@ -8301,6 +8305,149 @@ _WIN32_FIND_DATAW
 
         :class:`WORD`
 
+_FILE_NOTIFY_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_NOTIFY_INFORMATION
+
+    Alias for :class:`_FILE_NOTIFY_INFORMATION`
+
+.. class:: PFILE_NOTIFY_INFORMATION
+
+    Pointer to :class:`_FILE_NOTIFY_INFORMATION`
+
+.. class:: _FILE_NOTIFY_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: Action
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileNameLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR`
+
+_FILE_NOTIFY_EXTENDED_INFORMATION
+'''''''''''''''''''''''''''''''''
+.. class:: PFILE_NOTIFY_EXTENDED_INFORMATION
+
+    Pointer to :class:`_FILE_NOTIFY_EXTENDED_INFORMATION`
+
+.. class:: FILE_NOTIFY_EXTENDED_INFORMATION
+
+    Alias for :class:`_FILE_NOTIFY_EXTENDED_INFORMATION`
+
+.. class:: _FILE_NOTIFY_EXTENDED_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: Action
+
+        :class:`DWORD`
+
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastModificationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: AllocatedLength
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReparsePointTag
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileId
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ParentFileId
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileNameLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR`
+
+_FILE_RENAME_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_RENAME_INFORMATION
+
+    Alias for :class:`_FILE_RENAME_INFORMATION`
+
+.. class:: PFILE_RENAME_INFORMATION
+
+    Pointer to :class:`_FILE_RENAME_INFORMATION`
+
+.. class:: _FILE_RENAME_INFORMATION
+
+    .. attribute:: __ANON_DUMMYUNIONNAME_FILE_RENAME_INFORMATION
+
+        :class:`_ANON__FILE_RENAME_INFORMATION_SUB_UNION_1`
+
+
+    .. attribute:: RootDirectory
+
+        :class:`HANDLE`
+
+
+    .. attribute:: FileNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -11132,6 +11279,386 @@ _DnsRecordW
     .. attribute:: Data
 
         :class:`_ANON__DNSRECORDW_SUB_UNION_2`
+
+_DnsAddr
+''''''''
+.. class:: PDNS_ADDR
+
+    Pointer to :class:`_DnsAddr`
+
+.. class:: DNS_ADDR
+
+    Alias for :class:`_DnsAddr`
+
+.. class:: _DnsAddr
+
+    .. attribute:: MaxSa
+
+        :class:`CHAR` ``[DNS_ADDR_MAX_SOCKADDR_LENGTH]``
+
+
+    .. attribute:: DnsAddrUserDword
+
+        :class:`DWORD` ``[8]``
+
+_DnsAddrArray
+'''''''''''''
+.. class:: PDNS_ADDR_ARRAY
+
+    Pointer to :class:`_DnsAddrArray`
+
+.. class:: DNS_ADDR_ARRAY
+
+    Alias for :class:`_DnsAddrArray`
+
+.. class:: _DnsAddrArray
+
+    .. attribute:: MaxCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: AddrCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Tag
+
+        :class:`DWORD`
+
+
+    .. attribute:: Family
+
+        :class:`WORD`
+
+
+    .. attribute:: WordReserved
+
+        :class:`WORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MatchFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved1
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved2
+
+        :class:`DWORD`
+
+
+    .. attribute:: AddrArray
+
+        :class:`DNS_ADDR` ``[ANY_SIZE]``
+
+_DNS_QUERY_REQUEST
+''''''''''''''''''
+.. class:: PDNS_QUERY_REQUEST
+
+    Pointer to :class:`_DNS_QUERY_REQUEST`
+
+.. class:: DNS_QUERY_REQUEST
+
+    Alias for :class:`_DNS_QUERY_REQUEST`
+
+.. class:: _DNS_QUERY_REQUEST
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: QueryName
+
+        :class:`PCWSTR`
+
+
+    .. attribute:: QueryType
+
+        :class:`WORD`
+
+
+    .. attribute:: QueryOptions
+
+        :class:`ULONG64`
+
+
+    .. attribute:: pDnsServerList
+
+        :class:`PDNS_ADDR_ARRAY`
+
+
+    .. attribute:: InterfaceIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: pQueryCompletionCallback
+
+        :class:`PDNS_QUERY_COMPLETION_ROUTINE`
+
+
+    .. attribute:: pQueryContext
+
+        :class:`PVOID`
+
+_DNS_QUERY_CANCEL
+'''''''''''''''''
+.. class:: PDNS_QUERY_CANCEL
+
+    Pointer to :class:`_DNS_QUERY_CANCEL`
+
+.. class:: DNS_QUERY_CANCEL
+
+    Alias for :class:`_DNS_QUERY_CANCEL`
+
+.. class:: _DNS_QUERY_CANCEL
+
+    .. attribute:: Reserved
+
+        :class:`CHAR` ``[32]``
+
+_DNS_QUERY_RESULT
+'''''''''''''''''
+.. class:: DNS_QUERY_RESULT
+
+    Alias for :class:`_DNS_QUERY_RESULT`
+
+.. class:: PDNS_QUERY_RESULT
+
+    Pointer to :class:`_DNS_QUERY_RESULT`
+
+.. class:: _DNS_QUERY_RESULT
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: QueryStatus
+
+        :class:`DNS_STATUS`
+
+
+    .. attribute:: QueryOptions
+
+        :class:`ULONG64`
+
+
+    .. attribute:: pQueryRecords
+
+        :class:`PVOID`
+
+
+    .. attribute:: Reserved
+
+        :class:`PVOID`
+
+IP_ADDRESS_STRING
+'''''''''''''''''
+.. class:: IP_MASK_STRING
+
+    Alias for :class:`IP_ADDRESS_STRING`
+
+.. class:: PIP_MASK_STRING
+
+    Pointer to :class:`IP_ADDRESS_STRING`
+
+.. class:: PIP_ADDRESS_STRING
+
+    Pointer to :class:`IP_ADDRESS_STRING`
+
+.. class:: IP_ADDRESS_STRING
+
+    Alias for :class:`IP_ADDRESS_STRING`
+
+.. class:: IP_ADDRESS_STRING
+
+    .. attribute:: String
+
+        :class:`CHAR` ``[4 * 4]``
+
+_IP_ADDR_STRING
+'''''''''''''''
+.. class:: PIP_ADDR_STRING
+
+    Pointer to :class:`_IP_ADDR_STRING`
+
+.. class:: IP_ADDR_STRING
+
+    Alias for :class:`_IP_ADDR_STRING`
+
+.. class:: _IP_ADDR_STRING
+
+    .. attribute:: Next
+
+        :class:`_IP_ADDR_STRING`
+
+
+    .. attribute:: IpAddress
+
+        :class:`IP_ADDRESS_STRING`
+
+
+    .. attribute:: IpMask
+
+        :class:`IP_MASK_STRING`
+
+
+    .. attribute:: Context
+
+        :class:`DWORD`
+
+_IP_ADAPTER_INFO
+''''''''''''''''
+.. class:: IP_ADAPTER_INFO
+
+    Alias for :class:`_IP_ADAPTER_INFO`
+
+.. class:: PIP_ADAPTER_INFO
+
+    Pointer to :class:`_IP_ADAPTER_INFO`
+
+.. class:: _IP_ADAPTER_INFO
+
+    .. attribute:: Next
+
+        :class:`_IP_ADAPTER_INFO`
+
+
+    .. attribute:: ComboIndex
+
+        :class:`DWORD`
+
+
+    .. attribute:: AdapterName
+
+        :class:`CHAR` ``[MAX_ADAPTER_NAME_LENGTH + 4]``
+
+
+    .. attribute:: Description
+
+        :class:`CHAR` ``[MAX_ADAPTER_DESCRIPTION_LENGTH + 4]``
+
+
+    .. attribute:: AddressLength
+
+        :class:`UINT`
+
+
+    .. attribute:: Address
+
+        :class:`BYTE` ``[MAX_ADAPTER_ADDRESS_LENGTH]``
+
+
+    .. attribute:: Index
+
+        :class:`DWORD`
+
+
+    .. attribute:: Type
+
+        :class:`UINT`
+
+
+    .. attribute:: DhcpEnabled
+
+        :class:`UINT`
+
+
+    .. attribute:: CurrentIpAddress
+
+        :class:`PIP_ADDR_STRING`
+
+
+    .. attribute:: IpAddressList
+
+        :class:`IP_ADDR_STRING`
+
+
+    .. attribute:: GatewayList
+
+        :class:`IP_ADDR_STRING`
+
+
+    .. attribute:: DhcpServer
+
+        :class:`IP_ADDR_STRING`
+
+
+    .. attribute:: HaveWins
+
+        :class:`BOOL`
+
+
+    .. attribute:: PrimaryWinsServer
+
+        :class:`IP_ADDR_STRING`
+
+
+    .. attribute:: SecondaryWinsServer
+
+        :class:`IP_ADDR_STRING`
+
+
+    .. attribute:: LeaseObtained
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: LeaseExpires
+
+        :class:`ULONGLONG`
+
+_IP_PER_ADAPTER_INFO_W2KSP1
+'''''''''''''''''''''''''''
+.. class:: PIP_PER_ADAPTER_INFO
+
+    Pointer to :class:`_IP_PER_ADAPTER_INFO_W2KSP1`
+
+.. class:: IP_PER_ADAPTER_INFO
+
+    Alias for :class:`_IP_PER_ADAPTER_INFO_W2KSP1`
+
+.. class:: PIP_PER_ADAPTER_INFO_W2KSP1
+
+    Pointer to :class:`_IP_PER_ADAPTER_INFO_W2KSP1`
+
+.. class:: IP_PER_ADAPTER_INFO_W2KSP1
+
+    Alias for :class:`_IP_PER_ADAPTER_INFO_W2KSP1`
+
+.. class:: _IP_PER_ADAPTER_INFO_W2KSP1
+
+    .. attribute:: AutoconfigEnabled
+
+        :class:`UINT`
+
+
+    .. attribute:: AutoconfigActive
+
+        :class:`UINT`
+
+
+    .. attribute:: CurrentDnsServer
+
+        :class:`PIP_ADDR_STRING`
+
+
+    .. attribute:: DnsServerList
+
+        :class:`IP_ADDR_STRING`
 
 _KEY_VALUE_BASIC_INFORMATION
 ''''''''''''''''''''''''''''
@@ -16876,6 +17403,10 @@ _SYSTEM_PROCESS_ID_INFORMATION
 
 _CLIENT_ID
 ''''''''''
+.. class:: PCLIENT_ID
+
+    Pointer to :class:`_CLIENT_ID`
+
 .. class:: CLIENT_ID
 
     Alias for :class:`_CLIENT_ID`
@@ -16893,6 +17424,10 @@ _CLIENT_ID
 
 _CLIENT_ID64
 ''''''''''''
+.. class:: PCLIENT_ID64
+
+    Pointer to :class:`_CLIENT_ID64`
+
 .. class:: CLIENT_ID64
 
     Alias for :class:`_CLIENT_ID64`
@@ -16913,6 +17448,10 @@ _CLIENT_ID32
 .. class:: CLIENT_ID32
 
     Alias for :class:`_CLIENT_ID32`
+
+.. class:: PCLIENT_ID32
+
+    Pointer to :class:`_CLIENT_ID32`
 
 .. class:: _CLIENT_ID32
 
@@ -23507,6 +24046,10 @@ Simple types
 
 .. autoclass:: LPSERVICE_MAIN_FUNCTIONW
 
+.. autoclass:: LPOVERLAPPED_COMPLETION_ROUTINE
+
+.. autoclass:: PDNS_QUERY_COMPLETION_ROUTINE
+
 .. autoclass:: LPCONTEXT
 
 .. autoclass:: HCERTSTORE
@@ -25117,6 +25660,26 @@ _IO_PRIORITY_HINT
 
     .. attribute:: MaxIoPriorityTypes(5)
 
+_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS
+''''''''''''''''''''''''''''''''''''''''
+.. class:: PREAD_DIRECTORY_NOTIFY_INFORMATION_CLASS
+
+    Pointer to :class:`_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS`
+
+
+.. class:: READ_DIRECTORY_NOTIFY_INFORMATION_CLASS
+
+    Alias for :class:`_READ_DIRECTORY_NOTIFY_INFORMATION_CLASS`
+
+
+.. class:: _READ_DIRECTORY_NOTIFY_INFORMATION_CLASS
+
+
+    .. attribute:: ReadDirectoryNotifyInformation(0)
+
+
+    .. attribute:: ReadDirectoryNotifyExtendedInformation(1)
+
 _POLICY_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: POLICY_INFORMATION_CLASS
@@ -26406,6 +26969,42 @@ ADDRESS_MODE
 
 
     .. attribute:: AddrModeFlat(3)
+
+_COMPUTER_NAME_FORMAT
+'''''''''''''''''''''
+.. class:: COMPUTER_NAME_FORMAT
+
+    Alias for :class:`_COMPUTER_NAME_FORMAT`
+
+
+.. class:: _COMPUTER_NAME_FORMAT
+
+
+    .. attribute:: ComputerNameNetBIOS(0)
+
+
+    .. attribute:: ComputerNameDnsHostname(1)
+
+
+    .. attribute:: ComputerNameDnsDomain(2)
+
+
+    .. attribute:: ComputerNameDnsFullyQualified(3)
+
+
+    .. attribute:: ComputerNamePhysicalNetBIOS(4)
+
+
+    .. attribute:: ComputerNamePhysicalDnsHostname(5)
+
+
+    .. attribute:: ComputerNamePhysicalDnsDomain(6)
+
+
+    .. attribute:: ComputerNamePhysicalDnsFullyQualified(7)
+
+
+    .. attribute:: ComputerNameMax(8)
 
 _TASK_ACTION_TYPE
 '''''''''''''''''

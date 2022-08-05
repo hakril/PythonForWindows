@@ -57,3 +57,86 @@ HRESULT WINAPI CLSIDFromProgID(
 PVOID  CoTaskMemFree(
   LPVOID pv
 );
+
+
+LPSAFEARRAY SafeArrayCreate(
+  [in] VARTYPE        vt,
+  [in] UINT           cDims,
+  [in] SAFEARRAYBOUND *rgsabound
+);
+
+LPSAFEARRAY SafeArrayCreateVector(
+  [in] VARTYPE vt,
+  [in] LONG    lLbound,
+  [in] ULONG   cElements
+);
+
+
+HRESULT SafeArrayDestroy(
+  [in] SAFEARRAY *psa
+);
+
+
+HRESULT SafeArrayDestroyData(
+  [in] SAFEARRAY *psa
+);
+
+HRESULT SafeArrayGetElement(
+  [in]  SAFEARRAY *psa,
+  [in]  LONG      *rgIndices,
+  [out] VOID      *pv
+);
+
+UINT SafeArrayGetElemsize(
+  [in] SAFEARRAY *psa
+);
+
+HRESULT SafeArrayGetLBound(
+  [in]  SAFEARRAY *psa,
+  [in]  UINT      nDim,
+  [out] LONG      *plLbound
+);
+
+HRESULT SafeArrayGetUBound(
+  [in]  SAFEARRAY *psa,
+  [in]  UINT      nDim,
+  [out] LONG      *plUbound
+);
+
+UINT SafeArrayGetDim(
+  [in] SAFEARRAY *psa
+);
+
+HRESULT SafeArrayPutElement(
+  [in] SAFEARRAY *psa,
+  [in] LONG      *rgIndices,
+  [in] VOID      *pv
+);
+
+HRESULT SafeArrayGetVartype(
+  [in]  SAFEARRAY *psa,
+  [out] VARTYPE   *pvt
+);
+
+VOID SysFreeString(
+  [in, optional] BSTR bstrString
+);
+
+HRESULT SafeArrayCopy(
+  [in]  SAFEARRAY   *psa,
+  [out] LPSAFEARRAY *ppsaOut
+);
+
+HRESULT SafeArrayCopyData(
+  [in] SAFEARRAY *psaSource,
+  [in] SAFEARRAY *psaTarget
+);
+
+
+PVOID SysAllocString(
+  [in, optional] OLECHAR *psz
+);
+
+VOID SysFreeString(
+  [in, optional] BSTR bstrString
+);

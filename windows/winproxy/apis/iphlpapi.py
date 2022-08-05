@@ -37,3 +37,11 @@ def GetIpAddrTable(pIpAddrTable, pdwSize, bOrder=False):
 @IphlpapiProxy()
 def GetIpNetTable(IpNetTable, SizePointer, Order):
    return GetIpNetTable.ctypes_function(IpNetTable, SizePointer, Order)
+
+@IphlpapiProxy()
+def GetAdaptersInfo(AdapterInfo, SizePointer):
+    return GetAdaptersInfo.ctypes_function(AdapterInfo, SizePointer)
+
+@IphlpapiProxy()
+def GetPerAdapterInfo(IfIndex, pPerAdapterInfo, pOutBufLen):
+    return GetPerAdapterInfo.ctypes_function(IfIndex, pPerAdapterInfo, pOutBufLen)

@@ -276,6 +276,9 @@ class IWbemLocator(COMInterface):
 class IWbemObjectSink(COMInterface):
     IID = generate_IID(0x7C857801, 0x7381, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemObjectSink", strid="7C857801-7381-11CF-884D-00AA004B2E24")
 
+class IWbemObjectTextSrc(COMInterface):
+    IID = generate_IID(0xBFBF883A, 0xCAD7, 0x11D3, 0xA1, 0x1B, 0x00, 0x10, 0x5A, 0x1F, 0x51, 0x5A, name="IWbemObjectTextSrc", strid="BFBF883A-CAD7-11D3-A11B-00105A1F515A")
+
 class IWbemQualifierSet(COMInterface):
     IID = generate_IID(0xDC12A680, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemQualifierSet", strid="DC12A680-737F-11CF-884D-00AA004B2E24")
 
@@ -2659,6 +2662,19 @@ IWbemObjectSink._functions_ = {
         "Indicate": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "Indicate"),
         # SetStatus -> lFlags:LONG, hResult:HRESULT, strParam:BSTR, pObjParam:*IWbemClassObject
         "SetStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject)(4, "SetStatus"),
+    }
+
+IWbemObjectTextSrc._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetText -> lFlags:LONG, pObj:*IWbemClassObject, uObjTextFormat:ULONG, pCtx:*IWbemContext, strText:*BSTR
+        "GetText": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject, ULONG, IWbemContext, POINTER(BSTR))(3, "GetText"),
+        # CreateFromText -> lFlags:LONG, strText:BSTR, uObjTextFormat:ULONG, pCtx:*IWbemContext, pNewObj:**IWbemClassObject
+        "CreateFromText": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, ULONG, IWbemContext, POINTER(IWbemClassObject))(4, "CreateFromText"),
     }
 
 IWbemQualifierSet._functions_ = {

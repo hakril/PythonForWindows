@@ -176,3 +176,16 @@
 #define DNS_QUERY_DNSSEC_CHECKING_DISABLED  0x02000000
 #define DNS_QUERY_RESERVED                  0xf0000000
 
+
+/** IPTypes.h **/
+// Definitions and structures used by getnetworkparams and getadaptersinfo apis
+
+#define MAX_ADAPTER_DESCRIPTION_LENGTH  128 // arb.
+#define MAX_ADAPTER_NAME_LENGTH         256 // arb.
+#define MAX_ADAPTER_ADDRESS_LENGTH      8   // arb.
+#define DEFAULT_MINIMUM_ENTITIES        32  // arb.
+#define MAX_HOSTNAME_LEN                128 // arb.
+#define MAX_DOMAIN_NAME_LEN             128 // arb.
+#define MAX_SCOPE_ID_LEN                256 // arb.
+#define MAX_DHCPV6_DUID_LENGTH          130 // RFC 3315.
+#define MAX_DNS_SUFFIX_STRING_LENGTH    256

@@ -99,7 +99,7 @@ typedef struct tagSAFEARRAY
   ULONG cLocks;
   PVOID pvData;
   SAFEARRAYBOUND rgsabound[ 1 ];
-}   SAFEARRAY;
+}  SAFEARRAY, *LPSAFEARRAY;
 
 typedef struct __tagBRECORD {
     PVOID pvRecord;
