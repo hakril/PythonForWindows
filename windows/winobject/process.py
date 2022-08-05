@@ -865,13 +865,15 @@ class WinThread(Thread):
         winproxy.NtQueryInformationThread(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
         return res.value
 
-    @property
-    def teb_base(self):
-        """The address of the thread's TEB
+    def _get_principal_teb_addr(self):
+        # Returns the 64bits TEB on a 64bits computer (syswow process or not)
+        # Returns the 32bits TEB on a 32bits computer
 
-            :type: :class:`int`
-		"""
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+        # If we are wow64 process its means we either
+        # - Want the TEB of a 64b process
+        # - Want the TEB64 of a Wowprocess
+        # It's the same code for both
+        if windows.current_process.is_wow_64:
             restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
             ressize = (ctypes.sizeof(restype))
             # Manual aligned allocation :DDDD
@@ -886,6 +888,33 @@ class WinThread(Thread):
         res = THREAD_BASIC_INFORMATION()
         windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         return res.TebBaseAddress
+
+    @property
+    def teb_base(self):
+        """The address of the thread's TEB. If the owner is a SysWow64 process, return the TEB32.
+
+            :type: :class:`int`
+		"""
+        main_teb_addr = self._get_principal_teb_addr()
+        if not self.owner.is_wow_64:
+            return main_teb_addr
+        # import pdb; pdb.set_trace()
+        # TEB32 is pointed at the begining of the TEB64
+        return self.owner.read_dword(main_teb_addr)
+
+
+
+    @property
+    def teb_syswow_base(self):
+        """The address of the thread's TEB64 for a SysWow64 process
+
+        :type: :class:`int`
+		"""
+        if not self.owner.is_wow_64:
+            raise ValueError("Not a syswow process")
+        # just return the main TEB
+        return self._get_principal_teb_addr()
+
 
     def exit(self, code=0):
         """Exit the thread"""
@@ -1114,6 +1143,9 @@ class WinProcess(Process):
         :rtype: :rtype: :class:`WinThread` or :class:`DeadThread` : The thread executing the python code
         """
         return injection.execute_python_code(self, pycode)
+
+
+
 
     @utils.fixedpropety
     def peb_addr(self):

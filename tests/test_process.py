@@ -82,16 +82,16 @@ class TestProcessWithCheckGarbage(object):
         assert proc32_64.ppid ==  windows.current_process.pid
 
     def test_create_process_unicode(self):
-        p = windows.utils.create_process(u"c:\\windows\\system32\\notepad.exe", [u"--", u"yolo.txt"])
+        p = windows.utils.create_process(u"c:\\windows\\system32\\winver.exe", [u"--", u"yolo.txt"])
         try:
-            assert p.name == "notepad.exe"
+            assert p.name == "winver.exe"
         finally:
             p.exit()
 
     def test_create_process_bytes(self):
-        p = windows.utils.create_process(b"c:\\windows\\system32\\notepad.exe", [b"--", b"yolo.txt"])
+        p = windows.utils.create_process(b"c:\\windows\\system32\\winver.exe", [b"--", b"yolo.txt"])
         try:
-            assert p.name == "notepad.exe"
+            assert p.name == "winver.exe"
         finally:
             p.exit()
 
@@ -468,6 +468,14 @@ class TestProcessWithCheckGarbage(object):
         t = proc32_64.threads[0]
         assert t.teb_base != 0
 
+    @windows_64bit_only
+    def test_thread_teb_syswow_base(self, proc32):
+        t = proc32.threads[0]
+        assert t.teb_base != 0
+        assert t.teb_syswow_base != 0
+        assert t.teb_base == t.teb_syswow_base + 0x2000
+
+
 
     def test_thread_owner_from_tid(self, proc32_64):
         thread = proc32_64.threads[0]
@@ -496,4 +504,23 @@ class TestProcessWithCheckGarbage(object):
         # Via SD obj
         proc32_64.security_descriptor = SD_GR_EVERYONE
 
+    def test_process_name_with_unicode_name(self, tmpdir):
+        # Cmd.exe can be started from anywhere with any name
+        # This is not the case of notepad.exe
+        source_programme = r"c:\windows\system32\cmd.exe"
+        UNICODE_PATH_NAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b.exe'
+        target_programe = tmpdir.join(UNICODE_PATH_NAME)
+        if sys.version_info.major == 2:
+            target_programe = unicode(target_programe)
+        else:
+            target_programe = str(target_programe)
+        shutil.copy(source_programme, target_programe)
+        p = windows.utils.create_process(target_programe, dwCreationFlags=gdef.CREATE_NEW_CONSOLE)
+        try:
+            assert windows.system.processes
+            print(windows.system.processes) # Check for encoding error in __repr__ of WinProcess
+        finally:
+            p.exit()
+            p.wait()
+            os.unlink(target_programe)
 
