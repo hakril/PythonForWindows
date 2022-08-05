@@ -35,8 +35,8 @@ jobs:
       # Install PythonForWindows for both bitness
       - name: Installing PythonForWindows for both bitness
         run: |
-            py -${{ matrix.python-version}}-32 setup.py
-            py -${{ matrix.python-version}}-64 setup.py
+            py -${{ matrix.python-version}}-32 setup.py install
+            py -${{ matrix.python-version}}-64 setup.py install
 
       - name: Installing pytest
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest
