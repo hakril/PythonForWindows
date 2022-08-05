@@ -1,0 +1,32 @@
+name: Pytest
+
+on: [push, workflow_dispatch]
+  # Allows you to run this workflow manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [2.7, 3.6]
+        python-architecture : [x86 , x64]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }} (${{ matrix.python-architecture}})
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version}}
+          architecture: ${{ matrix.python-architecture}}
+      # You can test your matrix by printing the current Python version
+      - name: Installing pytest
+        run: pip install pytest
+
+      - name: Testing
+        run: python -m pytest -k test_process --junitxml=junit/test-results.xml tests/
+
+      - name: Publish PyTest Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
+        with:
+         files: junit/test-results.xml
