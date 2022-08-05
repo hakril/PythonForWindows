@@ -9,21 +9,35 @@ jobs:
     strategy:
       matrix:
         python-version: [2.7, 3.6]
-        python-architecture : [x86 , x64]
+        python-architecture: [x86, x64]
+        include:
+            # Translate architecture to bitness for py.exe commandline
+            - python-bitness-to-test: 32
+              python-architecture: x86
+            - python-bitness-to-test: 64
+              python-architecture: x64
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }} (${{ matrix.python-architecture}})
+      # Pfw testing need both 32b & 64b of tested python version for cross-bitness python injection tests
+      ## Install the 32bits version
+      - name: Set up Python ${{ matrix.python-version }} x86
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version}}
-          architecture: ${{ matrix.python-architecture}}
-      # You can test your matrix by printing the current Python version
+          architecture: x86
+      ## Install the 64bits version
+      - name: Set up Python ${{ matrix.python-version }} x64
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version}}
+          architecture: x64
       - name: Installing pytest
-        run: pip install pytest
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest
 
+      # Testing
       - name: Testing
-        run: python -m pytest -k test_process --junitxml=junit/test-results.xml tests/
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest -k test_process --junitxml=junit/test-results.xml tests/
 
       - name: Publish PyTest Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
