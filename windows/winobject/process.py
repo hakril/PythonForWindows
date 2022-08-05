@@ -877,7 +877,7 @@ class WinThread(Thread):
             restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
             ressize = (ctypes.sizeof(restype))
             # Manual aligned allocation :DDDD
-            nb_qword = (ressize + 8) / ctypes.sizeof(ULONGLONG)
+            nb_qword = int((ressize + 8) / ctypes.sizeof(ULONGLONG))
             buffer = (nb_qword * ULONGLONG)()
             struct_address = ctypes.addressof(buffer)
             if (struct_address & 0xf) not in [0, 8]:
@@ -898,8 +898,8 @@ class WinThread(Thread):
         main_teb_addr = self._get_principal_teb_addr()
         if not self.owner.is_wow_64:
             return main_teb_addr
-        # import pdb; pdb.set_trace()
         # TEB32 is pointed at the begining of the TEB64
+        # TebBase->NtTib.ExceptionList = (PVOID)Teb32Base;
         return self.owner.read_dword(main_teb_addr)
 
 
