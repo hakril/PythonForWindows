@@ -1,0 +1,122 @@
+typedef struct WSAData64 {
+        WORD                    wVersion;
+        WORD                    wHighVersion;
+        USHORT                  iMaxSockets;
+        USHORT                  iMaxUdpDg;
+        CHAR *                  lpVendorInfo;
+        CHAR                    szDescription[WSADESCRIPTION_LEN+1];
+        CHAR                    szSystemStatus[WSASYS_STATUS_LEN+1];
+} WSADATA64, *LPWSADATA64;
+
+typedef struct WSAData32 {
+        WORD                    wVersion;
+        WORD                    wHighVersion;
+        CHAR                    szDescription[WSADESCRIPTION_LEN+1];
+        CHAR                    szSystemStatus[WSASYS_STATUS_LEN+1];
+        USHORT                  iMaxSockets;
+        USHORT                  iMaxUdpDg;
+        CHAR *                  lpVendorInfo;
+} WSADATA32, *LPWSADATA32;
+
+struct in_addr {
+  union {
+    struct {
+      UCHAR s_b1;
+      UCHAR s_b2;
+      UCHAR s_b3;
+      UCHAR s_b4;
+    } S_un_b;
+    struct {
+      USHORT s_w1;
+      USHORT s_w2;
+    } S_un_w;
+    ULONG S_addr;
+  } S_un;
+};
+
+struct sockaddr {
+        USHORT  sa_family;
+        CHAR    sa_data[14];
+};
+
+struct sockaddr_in {
+        SHORT   sin_family;
+        USHORT  sin_port;
+        struct  in_addr sin_addr;
+        CHAR    sin_zero[8];
+};
+
+
+typedef struct addrinfoW {
+  INT              ai_flags;
+  INT              ai_family;
+  INT              ai_socktype;
+  INT              ai_protocol;
+  SIZE_T           ai_addrlen;
+  PWSTR            ai_canonname;
+  struct sockaddr  *ai_addr;
+  struct addrinfoW *ai_next;
+} ADDRINFOW, *PADDRINFOW;
+
+typedef struct _WSAPROTOCOLCHAIN {
+  INT   ChainLen;
+  DWORD ChainEntries[MAX_PROTOCOL_CHAIN];
+} WSAPROTOCOLCHAIN, *LPWSAPROTOCOLCHAIN;
+
+typedef struct _WSAPROTOCOL_INFOA {
+  DWORD            dwServiceFlags1;
+  DWORD            dwServiceFlags2;
+  DWORD            dwServiceFlags3;
+  DWORD            dwServiceFlags4;
+  DWORD            dwProviderFlags;
+  GUID             ProviderId;
+  DWORD            dwCatalogEntryId;
+  WSAPROTOCOLCHAIN ProtocolChain;
+  INT              iVersion;
+  INT              iAddressFamily;
+  INT              iMaxSockAddr;
+  INT              iMinSockAddr;
+  INT              iSocketType;
+  INT              iProtocol;
+  INT              iProtocolMaxOffset;
+  INT              iNetworkByteOrder;
+  INT              iSecurityScheme;
+  DWORD            dwMessageSize;
+  DWORD            dwProviderReserved;
+  CHAR             szProtocol[WSAPROTOCOL_LEN + 1];
+} WSAPROTOCOL_INFOA, *LPWSAPROTOCOL_INFOA;
+
+typedef struct _WSAPROTOCOL_INFOW {
+  DWORD            dwServiceFlags1;
+  DWORD            dwServiceFlags2;
+  DWORD            dwServiceFlags3;
+  DWORD            dwServiceFlags4;
+  DWORD            dwProviderFlags;
+  GUID             ProviderId;
+  DWORD            dwCatalogEntryId;
+  WSAPROTOCOLCHAIN ProtocolChain;
+  INT              iVersion;
+  INT              iAddressFamily;
+  INT              iMaxSockAddr;
+  INT              iMinSockAddr;
+  INT              iSocketType;
+  INT              iProtocol;
+  INT              iProtocolMaxOffset;
+  INT              iNetworkByteOrder;
+  INT              iSecurityScheme;
+  DWORD            dwMessageSize;
+  DWORD            dwProviderReserved;
+  WCHAR            szProtocol[WSAPROTOCOL_LEN + 1];
+} WSAPROTOCOL_INFOW, *LPWSAPROTOCOL_INFOW;
+
+
+typedef struct addrinfo {
+  INT             ai_flags;
+  INT             ai_family;
+  INT             ai_socktype;
+  INT             ai_protocol;
+  SIZE_T          ai_addrlen;
+  CHAR            *ai_canonname;
+  struct sockaddr *ai_addr;
+  struct addrinfo *ai_next;
+} ADDRINFOA, *PADDRINFOA;

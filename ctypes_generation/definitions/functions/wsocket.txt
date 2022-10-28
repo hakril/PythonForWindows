@@ -1,0 +1,81 @@
+INT WSAStartup(
+  [in]  WORD      wVersionRequested,
+  [out] LPWSADATA lpWSAData // structure depends on 32 / 64 bits..
+);
+
+
+INT WSACleanup();
+INT WSAGetLastError();
+
+
+INT getaddrinfo(
+  [in, optional] PCSTR           pNodeName,
+  [in, optional] PCSTR           pServiceName,
+  [in, optional] ADDRINFOA *pHints,
+  [out]          PADDRINFOA      *ppResult
+);
+
+
+INT GetAddrInfoW(
+  [in, optional] PCWSTR          pNodeName,
+  [in, optional] PCWSTR          pServiceName,
+  [in, optional] ADDRINFOW *pHints,
+  [out]          PADDRINFOW      *ppResult
+);
+
+
+SOCKET WSASocketA(
+  [in] INT                 af,
+  [in] INT                 type,
+  [in] INT                 protocol,
+  [in] LPWSAPROTOCOL_INFOA lpProtocolInfo,
+  [in] GROUP               g,
+  [in] DWORD               dwFlags
+);
+
+
+SOCKET WSASocketW(
+  [in] INT                 af,
+  [in] INT                 type,
+  [in] INT                 protocol,
+  [in] LPWSAPROTOCOL_INFOW lpProtocolInfo,
+  [in] GROUP               g,
+  [in] DWORD               dwFlags
+);
+
+
+SOCKET socket(
+  [in] INT af,
+  [in] INT type,
+  [in] INT protocol
+);
+
+INT connect(
+  [in] SOCKET         s,
+  [in] sockaddr       *name,
+  [in] INT            namelen
+);
+
+
+INT send(
+  [in] SOCKET     s,
+  [in] CHAR *buf,
+  [in] INT        len,
+  [in] INT        flags
+);
+
+INT recv(
+  [in]  SOCKET s,
+  [out] CHAR   *buf,
+  [in]  INT    len,
+  [in]  INT    flags
+);
+
+INT shutdown(
+  [in] SOCKET s,
+  [in] INT    how
+);
+
+INT closesocket(
+  [in] SOCKET s
+);

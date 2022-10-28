@@ -1,0 +1,93 @@
+#define WSADESCRIPTION_LEN      256
+#define WSASYS_STATUS_LEN       128
+#define WSAPROTOCOL_LEN  255
+#define MAX_PROTOCOL_CHAIN 7
+#define BASE_PROTOCOL      1
+#define LAYERED_PROTOCOL   0
+
+
+// INVALID_SOCKET  (SOCKET)(~0) // will change in 32 & 64 bits..
+#define INVALID_SOCKET32   (0xffffffff)
+#define INVALID_SOCKET64   (0xffffffffffffffff)
+
+#define SOCKET_ERROR            (-1)
+
+
+/*
+ * Constants and structures defined by the internet system,
+ * Per RFC 790, September 1981, taken from the BSD file netinet/in.h.
+ */
+
+
+/*
+ * Types
+ */
+#define SOCK_STREAM     1               /* stream socket */
+#define SOCK_DGRAM      2               /* datagram socket */
+#define SOCK_RAW        3               /* raw-protocol interface */
+#define SOCK_RDM        4               /* reliably-delivered message */
+#define SOCK_SEQPACKET  5               /* sequenced packet stream */
+
+/*
+ * Protocols
+ */
+#define IPPROTO_IP              0               /* dummy for IP */
+#define IPPROTO_ICMP            1               /* control message protocol */
+#define IPPROTO_IGMP            2               /* group management protocol */
+#define IPPROTO_GGP             3               /* gateway^2 (deprecated) */
+#define IPPROTO_TCP             6               /* tcp */
+#define IPPROTO_PUP             12              /* pup */
+#define IPPROTO_UDP             17              /* user datagram protocol */
+#define IPPROTO_IDP             22              /* xns idp */
+#define IPPROTO_ND              77              /* UNOFFICIAL net disk proto */
+
+#define IPPROTO_RAW             255             /* raw IP packet */
+#define IPPROTO_MAX             256
+
+
+/*
+ * Port/socket numbers: network standard functions
+ */
+#define IPPORT_ECHO             7
+#define IPPORT_DISCARD          9
+#define IPPORT_SYSTAT           11
+#define IPPORT_DAYTIME          13
+#define IPPORT_NETSTAT          15
+#define IPPORT_FTP              21
+#define IPPORT_TELNET           23
+#define IPPORT_SMTP             25
+#define IPPORT_TIMESERVER       37
+#define IPPORT_NAMESERVER       42
+#define IPPORT_WHOIS            43
+#define IPPORT_MTP              57
+
+
+/*
+ * Address families.
+ */
+#define AF_UNSPEC       0               /* unspecified */
+#define AF_UNIX         1               /* local to host (pipes, portals) */
+#define AF_INET         2               /* internetwork: UDP, TCP, etc. */
+#define AF_IMPLINK      3               /* arpanet imp addresses */
+#define AF_PUP          4               /* pup protocols: e.g. BSP */
+#define AF_CHAOS        5               /* mit CHAOS protocols */
+#define AF_IPX          6               /* IPX and SPX */
+#define AF_NS           6               /* XEROX NS protocols */
+#define AF_ISO          7               /* ISO protocols */
+#define AF_OSI          AF_ISO          /* OSI is ISO */
+#define AF_ECMA         8               /* european computer manufacturers */
+#define AF_DATAKIT      9               /* datakit protocols */
+#define AF_CCITT        10              /* CCITT protocols, X.25 etc */
+#define AF_SNA          11              /* IBM SNA */
+#define AF_DECnet       12              /* DECnet */
+#define AF_DLI          13              /* Direct data link interface */
+#define AF_LAT          14              /* LAT */
+#define AF_HYLINK       15              /* NSC Hyperchannel */
+#define AF_APPLETALK    16              /* AppleTalk */
+#define AF_NETBIOS      17              /* NetBios-style addresses */
+#define AF_VOICEVIEW    18              /* VoiceView */
+#define AF_FIREFOX      19              /* FireFox */
+#define AF_UNKNOWN1     20              /* Somebody is using this! */
+#define AF_BAN          21              /* Banyan */
+
+#define AF_MAX          22

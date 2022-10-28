@@ -23596,6 +23596,487 @@ _BG_JOB_TIMES
 
         :class:`FILETIME`
 
+WSAData64
+'''''''''
+.. class:: WSADATA64
+
+    Alias for :class:`WSAData64`
+
+.. class:: LPWSADATA64
+
+    Pointer to :class:`WSAData64`
+
+.. class:: WSAData64
+
+    .. attribute:: wVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: wHighVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: iMaxSockets
+
+        :class:`USHORT`
+
+
+    .. attribute:: iMaxUdpDg
+
+        :class:`USHORT`
+
+
+    .. attribute:: lpVendorInfo
+
+        :class:`CHAR`
+
+
+    .. attribute:: szDescription
+
+        :class:`CHAR` ``[WSADESCRIPTION_LEN + 1]``
+
+
+    .. attribute:: szSystemStatus
+
+        :class:`CHAR` ``[WSASYS_STATUS_LEN + 1]``
+
+WSAData32
+'''''''''
+.. class:: LPWSADATA32
+
+    Pointer to :class:`WSAData32`
+
+.. class:: WSADATA32
+
+    Alias for :class:`WSAData32`
+
+.. class:: WSAData32
+
+    .. attribute:: wVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: wHighVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: szDescription
+
+        :class:`CHAR` ``[WSADESCRIPTION_LEN + 1]``
+
+
+    .. attribute:: szSystemStatus
+
+        :class:`CHAR` ``[WSASYS_STATUS_LEN + 1]``
+
+
+    .. attribute:: iMaxSockets
+
+        :class:`USHORT`
+
+
+    .. attribute:: iMaxUdpDg
+
+        :class:`USHORT`
+
+
+    .. attribute:: lpVendorInfo
+
+        :class:`CHAR`
+
+in_addr
+'''''''
+.. class:: in_addr
+
+    .. attribute:: S_un
+
+        :class:`_ANON_IN_ADDR_SUB_UNION_1`
+
+sockaddr
+''''''''
+.. class:: sockaddr
+
+    .. attribute:: sa_family
+
+        :class:`USHORT`
+
+
+    .. attribute:: sa_data
+
+        :class:`CHAR` ``[14]``
+
+sockaddr_in
+'''''''''''
+.. class:: sockaddr_in
+
+    .. attribute:: sin_family
+
+        :class:`SHORT`
+
+
+    .. attribute:: sin_port
+
+        :class:`USHORT`
+
+
+    .. attribute:: sin_addr
+
+        :class:`in_addr`
+
+
+    .. attribute:: sin_zero
+
+        :class:`CHAR` ``[8]``
+
+addrinfoW
+'''''''''
+.. class:: ADDRINFOW
+
+    Alias for :class:`addrinfoW`
+
+.. class:: PADDRINFOW
+
+    Pointer to :class:`addrinfoW`
+
+.. class:: addrinfoW
+
+    .. attribute:: ai_flags
+
+        :class:`INT`
+
+
+    .. attribute:: ai_family
+
+        :class:`INT`
+
+
+    .. attribute:: ai_socktype
+
+        :class:`INT`
+
+
+    .. attribute:: ai_protocol
+
+        :class:`INT`
+
+
+    .. attribute:: ai_addrlen
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: ai_canonname
+
+        :class:`PWSTR`
+
+
+    .. attribute:: ai_addr
+
+        :class:`sockaddr`
+
+
+    .. attribute:: ai_next
+
+        :class:`addrinfoW`
+
+_WSAPROTOCOLCHAIN
+'''''''''''''''''
+.. class:: LPWSAPROTOCOLCHAIN
+
+    Pointer to :class:`_WSAPROTOCOLCHAIN`
+
+.. class:: WSAPROTOCOLCHAIN
+
+    Alias for :class:`_WSAPROTOCOLCHAIN`
+
+.. class:: _WSAPROTOCOLCHAIN
+
+    .. attribute:: ChainLen
+
+        :class:`INT`
+
+
+    .. attribute:: ChainEntries
+
+        :class:`DWORD` ``[MAX_PROTOCOL_CHAIN]``
+
+_WSAPROTOCOL_INFOA
+''''''''''''''''''
+.. class:: WSAPROTOCOL_INFOA
+
+    Alias for :class:`_WSAPROTOCOL_INFOA`
+
+.. class:: LPWSAPROTOCOL_INFOA
+
+    Pointer to :class:`_WSAPROTOCOL_INFOA`
+
+.. class:: _WSAPROTOCOL_INFOA
+
+    .. attribute:: dwServiceFlags1
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags2
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags3
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags4
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProviderId
+
+        :class:`GUID`
+
+
+    .. attribute:: dwCatalogEntryId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProtocolChain
+
+        :class:`WSAPROTOCOLCHAIN`
+
+
+    .. attribute:: iVersion
+
+        :class:`INT`
+
+
+    .. attribute:: iAddressFamily
+
+        :class:`INT`
+
+
+    .. attribute:: iMaxSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iMinSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iSocketType
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocol
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocolMaxOffset
+
+        :class:`INT`
+
+
+    .. attribute:: iNetworkByteOrder
+
+        :class:`INT`
+
+
+    .. attribute:: iSecurityScheme
+
+        :class:`INT`
+
+
+    .. attribute:: dwMessageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: szProtocol
+
+        :class:`CHAR` ``[WSAPROTOCOL_LEN + 1]``
+
+_WSAPROTOCOL_INFOW
+''''''''''''''''''
+.. class:: LPWSAPROTOCOL_INFOW
+
+    Pointer to :class:`_WSAPROTOCOL_INFOW`
+
+.. class:: WSAPROTOCOL_INFOW
+
+    Alias for :class:`_WSAPROTOCOL_INFOW`
+
+.. class:: _WSAPROTOCOL_INFOW
+
+    .. attribute:: dwServiceFlags1
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags2
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags3
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags4
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProviderId
+
+        :class:`GUID`
+
+
+    .. attribute:: dwCatalogEntryId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProtocolChain
+
+        :class:`WSAPROTOCOLCHAIN`
+
+
+    .. attribute:: iVersion
+
+        :class:`INT`
+
+
+    .. attribute:: iAddressFamily
+
+        :class:`INT`
+
+
+    .. attribute:: iMaxSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iMinSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iSocketType
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocol
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocolMaxOffset
+
+        :class:`INT`
+
+
+    .. attribute:: iNetworkByteOrder
+
+        :class:`INT`
+
+
+    .. attribute:: iSecurityScheme
+
+        :class:`INT`
+
+
+    .. attribute:: dwMessageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: szProtocol
+
+        :class:`WCHAR` ``[WSAPROTOCOL_LEN + 1]``
+
+addrinfo
+''''''''
+.. class:: PADDRINFOA
+
+    Pointer to :class:`addrinfo`
+
+.. class:: ADDRINFOA
+
+    Alias for :class:`addrinfo`
+
+.. class:: addrinfo
+
+    .. attribute:: ai_flags
+
+        :class:`INT`
+
+
+    .. attribute:: ai_family
+
+        :class:`INT`
+
+
+    .. attribute:: ai_socktype
+
+        :class:`INT`
+
+
+    .. attribute:: ai_protocol
+
+        :class:`INT`
+
+
+    .. attribute:: ai_addrlen
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: ai_canonname
+
+        :class:`CHAR`
+
+
+    .. attribute:: ai_addr
+
+        :class:`sockaddr`
+
+
+    .. attribute:: ai_next
+
+        :class:`addrinfo`
+
 Simple types
 ''''''''''''
 .. autoclass:: VOID
@@ -23978,6 +24459,10 @@ Simple types
 
 .. autoclass:: SFGAOF
 
+.. autoclass:: GROUP
+
+.. autoclass:: SOCKET
+
 .. autoclass:: WNDPROC
 
 .. autoclass:: LPPROC_THREAD_ATTRIBUTE_LIST
@@ -24059,6 +24544,8 @@ Simple types
 .. autoclass:: PALPC_PORT_ATTRIBUTES
 
 .. autoclass:: PPORT_MESSAGE
+
+.. autoclass:: LPWSADATA
 
 WinEnums
 --------

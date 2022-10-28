@@ -3685,6 +3685,11 @@ RtlDecompressBufferExParams = ((1, 'CompressionFormat'), (1, 'UncompressedBuffer
 RtlGetCompressionWorkSpaceSizePrototype = WINFUNCTYPE(NTSTATUS, USHORT, PULONG, PULONG)
 RtlGetCompressionWorkSpaceSizeParams = ((1, 'CompressionFormatAndEngine'), (1, 'CompressBufferWorkSpaceSize'), (1, 'CompressFragmentWorkSpaceSize'))
 
+#def RtlMoveMemory(Destination, Source, Length):
+#    return RtlMoveMemory.ctypes_function(Destination, Source, Length)
+RtlMoveMemoryPrototype = WINFUNCTYPE(VOID, PVOID, PVOID, SIZE_T)
+RtlMoveMemoryParams = ((1, 'Destination'), (1, 'Source'), (1, 'Length'))
+
 #def lstrcmpA(lpString1, lpString2):
 #    return lstrcmpA.ctypes_function(lpString1, lpString2)
 lstrcmpAPrototype = WINFUNCTYPE(INT, LPCSTR, LPCSTR)
@@ -4004,4 +4009,69 @@ GetFirmwareEnvironmentVariableExWParams = ((1, 'lpName'), (1, 'lpGuid'), (1, 'pB
 #    return IsDebuggerPresent.ctypes_function()
 IsDebuggerPresentPrototype = WINFUNCTYPE(BOOL)
 IsDebuggerPresentParams = ()
+
+#def WSAStartup(wVersionRequested, lpWSAData):
+#    return WSAStartup.ctypes_function(wVersionRequested, lpWSAData)
+WSAStartupPrototype = WINFUNCTYPE(INT, WORD, LPWSADATA)
+WSAStartupParams = ((1, 'wVersionRequested'), (1, 'lpWSAData'))
+
+#def WSACleanup():
+#    return WSACleanup.ctypes_function()
+WSACleanupPrototype = WINFUNCTYPE(INT)
+WSACleanupParams = ()
+
+#def WSAGetLastError():
+#    return WSAGetLastError.ctypes_function()
+WSAGetLastErrorPrototype = WINFUNCTYPE(INT)
+WSAGetLastErrorParams = ()
+
+#def getaddrinfo(pNodeName, pServiceName, pHints, ppResult):
+#    return getaddrinfo.ctypes_function(pNodeName, pServiceName, pHints, ppResult)
+getaddrinfoPrototype = WINFUNCTYPE(INT, PCSTR, PCSTR, POINTER(ADDRINFOA), POINTER(PADDRINFOA))
+getaddrinfoParams = ((1, 'pNodeName'), (1, 'pServiceName'), (1, 'pHints'), (1, 'ppResult'))
+
+#def GetAddrInfoW(pNodeName, pServiceName, pHints, ppResult):
+#    return GetAddrInfoW.ctypes_function(pNodeName, pServiceName, pHints, ppResult)
+GetAddrInfoWPrototype = WINFUNCTYPE(INT, PCWSTR, PCWSTR, POINTER(ADDRINFOW), POINTER(PADDRINFOW))
+GetAddrInfoWParams = ((1, 'pNodeName'), (1, 'pServiceName'), (1, 'pHints'), (1, 'ppResult'))
+
+#def WSASocketA(af, type, protocol, lpProtocolInfo, g, dwFlags):
+#    return WSASocketA.ctypes_function(af, type, protocol, lpProtocolInfo, g, dwFlags)
+WSASocketAPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT, LPWSAPROTOCOL_INFOA, GROUP, DWORD)
+WSASocketAParams = ((1, 'af'), (1, 'type'), (1, 'protocol'), (1, 'lpProtocolInfo'), (1, 'g'), (1, 'dwFlags'))
+
+#def WSASocketW(af, type, protocol, lpProtocolInfo, g, dwFlags):
+#    return WSASocketW.ctypes_function(af, type, protocol, lpProtocolInfo, g, dwFlags)
+WSASocketWPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT, LPWSAPROTOCOL_INFOW, GROUP, DWORD)
+WSASocketWParams = ((1, 'af'), (1, 'type'), (1, 'protocol'), (1, 'lpProtocolInfo'), (1, 'g'), (1, 'dwFlags'))
+
+#def socket(af, type, protocol):
+#    return socket.ctypes_function(af, type, protocol)
+socketPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT)
+socketParams = ((1, 'af'), (1, 'type'), (1, 'protocol'))
+
+#def connect(s, name, namelen):
+#    return connect.ctypes_function(s, name, namelen)
+connectPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(sockaddr), INT)
+connectParams = ((1, 's'), (1, 'name'), (1, 'namelen'))
+
+#def send(s, buf, len, flags):
+#    return send.ctypes_function(s, buf, len, flags)
+sendPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(CHAR), INT, INT)
+sendParams = ((1, 's'), (1, 'buf'), (1, 'len'), (1, 'flags'))
+
+#def recv(s, buf, len, flags):
+#    return recv.ctypes_function(s, buf, len, flags)
+recvPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(CHAR), INT, INT)
+recvParams = ((1, 's'), (1, 'buf'), (1, 'len'), (1, 'flags'))
+
+#def shutdown(s, how):
+#    return shutdown.ctypes_function(s, how)
+shutdownPrototype = WINFUNCTYPE(INT, SOCKET, INT)
+shutdownParams = ((1, 's'), (1, 'how'))
+
+#def closesocket(s):
+#    return closesocket.ctypes_function(s)
+closesocketPrototype = WINFUNCTYPE(INT, SOCKET)
+closesocketParams = ((1, 's'),)
 

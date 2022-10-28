@@ -252,6 +252,8 @@ DEVINSTID_W = LPWSTR
 RPCOLEDATAREP = ULONG
 HREFTYPE = DWORD
 SFGAOF = ULONG
+GROUP = UINT
+SOCKET = HANDLE
 WNDPROC = PVOID
 LPPROC_THREAD_ATTRIBUTE_LIST = PVOID
 PPS_POST_PROCESS_INIT_ROUTINE = PVOID
@@ -293,6 +295,7 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 PPORT_MESSAGE = PVOID
+LPWSADATA = PVOID
 FC_ZERO = EnumValue("NDR_FORMAT_CHARACTER", "FC_ZERO", 0x0)
 FC_BYTE = EnumValue("NDR_FORMAT_CHARACTER", "FC_BYTE", 0x1)
 FC_CHAR = EnumValue("NDR_FORMAT_CHARACTER", "FC_CHAR", 0x2)
@@ -10961,4 +10964,166 @@ class WMIDPREQUESTCODE(EnumType):
     values = [WMI_GET_ALL_DATA, WMI_GET_SINGLE_INSTANCE, WMI_SET_SINGLE_INSTANCE, WMI_SET_SINGLE_ITEM, WMI_ENABLE_EVENTS, WMI_DISABLE_EVENTS, WMI_ENABLE_COLLECTION, WMI_DISABLE_COLLECTION, WMI_REGINFO, WMI_EXECUTE_METHOD]
     mapper = FlagMapper(*values)
 
+
+class WSAData64(Structure):
+    _fields_ = [
+        ("wVersion", WORD),
+        ("wHighVersion", WORD),
+        ("iMaxSockets", USHORT),
+        ("iMaxUdpDg", USHORT),
+        ("lpVendorInfo", POINTER(CHAR)),
+        ("szDescription", CHAR * (WSADESCRIPTION_LEN + 1)),
+        ("szSystemStatus", CHAR * (WSASYS_STATUS_LEN + 1)),
+    ]
+WSADATA64 = WSAData64
+LPWSADATA64 = POINTER(WSAData64)
+
+class WSAData32(Structure):
+    _fields_ = [
+        ("wVersion", WORD),
+        ("wHighVersion", WORD),
+        ("szDescription", CHAR * (WSADESCRIPTION_LEN + 1)),
+        ("szSystemStatus", CHAR * (WSASYS_STATUS_LEN + 1)),
+        ("iMaxSockets", USHORT),
+        ("iMaxUdpDg", USHORT),
+        ("lpVendorInfo", POINTER(CHAR)),
+    ]
+LPWSADATA32 = POINTER(WSAData32)
+WSADATA32 = WSAData32
+
+class _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("s_b1", UCHAR),
+        ("s_b2", UCHAR),
+        ("s_b3", UCHAR),
+        ("s_b4", UCHAR),
+    ]
+
+
+class _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
+    _fields_ = [
+        ("s_w1", USHORT),
+        ("s_w2", USHORT),
+    ]
+
+class _ANON_IN_ADDR_SUB_UNION_1(Union):
+    _anonymous_ = ("S_un_b","S_un_w")
+    _fields_ = [
+        ("S_un_b", _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("S_un_w", _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_2),
+        ("S_addr", ULONG),
+    ]
+
+class in_addr(Structure):
+    _anonymous_ = ("S_un",)
+    _fields_ = [
+        ("S_un", _ANON_IN_ADDR_SUB_UNION_1),
+    ]
+
+
+class sockaddr(Structure):
+    _fields_ = [
+        ("sa_family", USHORT),
+        ("sa_data", CHAR * (14)),
+    ]
+
+
+class sockaddr_in(Structure):
+    _fields_ = [
+        ("sin_family", SHORT),
+        ("sin_port", USHORT),
+        ("sin_addr", in_addr),
+        ("sin_zero", CHAR * (8)),
+    ]
+
+
+# Self referencing struct tricks
+class addrinfoW(Structure): pass
+ADDRINFOW = addrinfoW
+PADDRINFOW = POINTER(addrinfoW)
+addrinfoW._fields_ = [
+    ("ai_flags", INT),
+    ("ai_family", INT),
+    ("ai_socktype", INT),
+    ("ai_protocol", INT),
+    ("ai_addrlen", SIZE_T),
+    ("ai_canonname", PWSTR),
+    ("ai_addr", POINTER(sockaddr)),
+    ("ai_next", POINTER(addrinfoW)),
+]
+
+class _WSAPROTOCOLCHAIN(Structure):
+    _fields_ = [
+        ("ChainLen", INT),
+        ("ChainEntries", DWORD * (MAX_PROTOCOL_CHAIN)),
+    ]
+LPWSAPROTOCOLCHAIN = POINTER(_WSAPROTOCOLCHAIN)
+WSAPROTOCOLCHAIN = _WSAPROTOCOLCHAIN
+
+class _WSAPROTOCOL_INFOA(Structure):
+    _fields_ = [
+        ("dwServiceFlags1", DWORD),
+        ("dwServiceFlags2", DWORD),
+        ("dwServiceFlags3", DWORD),
+        ("dwServiceFlags4", DWORD),
+        ("dwProviderFlags", DWORD),
+        ("ProviderId", GUID),
+        ("dwCatalogEntryId", DWORD),
+        ("ProtocolChain", WSAPROTOCOLCHAIN),
+        ("iVersion", INT),
+        ("iAddressFamily", INT),
+        ("iMaxSockAddr", INT),
+        ("iMinSockAddr", INT),
+        ("iSocketType", INT),
+        ("iProtocol", INT),
+        ("iProtocolMaxOffset", INT),
+        ("iNetworkByteOrder", INT),
+        ("iSecurityScheme", INT),
+        ("dwMessageSize", DWORD),
+        ("dwProviderReserved", DWORD),
+        ("szProtocol", CHAR * (WSAPROTOCOL_LEN + 1)),
+    ]
+WSAPROTOCOL_INFOA = _WSAPROTOCOL_INFOA
+LPWSAPROTOCOL_INFOA = POINTER(_WSAPROTOCOL_INFOA)
+
+class _WSAPROTOCOL_INFOW(Structure):
+    _fields_ = [
+        ("dwServiceFlags1", DWORD),
+        ("dwServiceFlags2", DWORD),
+        ("dwServiceFlags3", DWORD),
+        ("dwServiceFlags4", DWORD),
+        ("dwProviderFlags", DWORD),
+        ("ProviderId", GUID),
+        ("dwCatalogEntryId", DWORD),
+        ("ProtocolChain", WSAPROTOCOLCHAIN),
+        ("iVersion", INT),
+        ("iAddressFamily", INT),
+        ("iMaxSockAddr", INT),
+        ("iMinSockAddr", INT),
+        ("iSocketType", INT),
+        ("iProtocol", INT),
+        ("iProtocolMaxOffset", INT),
+        ("iNetworkByteOrder", INT),
+        ("iSecurityScheme", INT),
+        ("dwMessageSize", DWORD),
+        ("dwProviderReserved", DWORD),
+        ("szProtocol", WCHAR * (WSAPROTOCOL_LEN + 1)),
+    ]
+LPWSAPROTOCOL_INFOW = POINTER(_WSAPROTOCOL_INFOW)
+WSAPROTOCOL_INFOW = _WSAPROTOCOL_INFOW
+
+# Self referencing struct tricks
+class addrinfo(Structure): pass
+PADDRINFOA = POINTER(addrinfo)
+ADDRINFOA = addrinfo
+addrinfo._fields_ = [
+    ("ai_flags", INT),
+    ("ai_family", INT),
+    ("ai_socktype", INT),
+    ("ai_protocol", INT),
+    ("ai_addrlen", SIZE_T),
+    ("ai_canonname", POINTER(CHAR)),
+    ("ai_addr", POINTER(sockaddr)),
+    ("ai_next", POINTER(addrinfo)),
+]
 

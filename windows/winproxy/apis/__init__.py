@@ -23,3 +23,4 @@ from .wevtapi import *
 from .winhttp import *
 from .wininet import *
 from .wintrust import *
+from .ws2_32 import *
