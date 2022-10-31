@@ -29,6 +29,7 @@ if bitness() == 32:
     winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_32
 
     # Socket
+    windef.WSADATA = winstructs.WSADATA32
     windef.INVALID_SOCKET = windef.INVALID_SOCKET32
 
 
@@ -53,6 +54,7 @@ else:
     winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_64
 
     # Socket
+    windef.WSADATA = winstructs.WSADATA64
     windef.INVALID_SOCKET = windef.INVALID_SOCKET64
 
 from . import winfuncs

@@ -18,7 +18,9 @@ def check_invalid_socket(func_name, result, func, args):
 
 @Ws2_32Proxy()
 def WSAStartup(wVersionRequested, lpWSAData):
-   return WSAStartup.ctypes_function(wVersionRequested, lpWSAData)
+    if isinstance(lpWSAData, gdef.WSADATA):
+        lpWSAData = ctypes.byref(lpWSAData) #  Not naturally done as lpWSAData is defined as a PVOID due to WSADATA32/WSADATA64 types
+    return WSAStartup.ctypes_function(wVersionRequested, lpWSAData)
 
 
 @Ws2_32Proxy()

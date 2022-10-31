@@ -7,6 +7,7 @@
 
 
 // INVALID_SOCKET  (SOCKET)(~0) // will change in 32 & 64 bits..
+// The final INVALID_SOCKET is setuped in __init__.py of generated def
 #define INVALID_SOCKET32   (0xffffffff)
 #define INVALID_SOCKET64   (0xffffffffffffffff)
 
