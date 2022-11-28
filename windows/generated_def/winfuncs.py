@@ -1380,6 +1380,66 @@ OpenFileMappingAParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lp
 UnmapViewOfFilePrototype = WINFUNCTYPE(BOOL, LPCVOID)
 UnmapViewOfFileParams = ((1, 'lpBaseAddress'),)
 
+#def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetQueryDisplayInformation(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer):
+#    return NetQueryDisplayInformation.ctypes_function(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer)
+NetQueryDisplayInformationPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, DWORD, DWORD, DWORD, LPDWORD, POINTER(PVOID))
+NetQueryDisplayInformationParams = ((1, 'ServerName'), (1, 'Level'), (1, 'Index'), (1, 'EntriesRequested'), (1, 'PreferredMaximumLength'), (1, 'ReturnedEntryCount'), (1, 'SortedBuffer'))
+
+#def NetUserEnum(servername, level, filter, bufptr, prefmaxlen, entriesread, totalentries, resume_handle):
+#    return NetUserEnum.ctypes_function(servername, level, filter, bufptr, prefmaxlen, entriesread, totalentries, resume_handle)
+NetUserEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD)
+NetUserEnumParams = ((1, 'servername'), (1, 'level'), (1, 'filter'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resume_handle'))
+
+#def NetGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resume_handle):
+#    return NetGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resume_handle)
+NetGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resume_handle'))
+
+#def NetGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetGroupGetUsers(servername, groupname, level, bufptr, prefmaxlen, entriesread, totalentries, ResumeHandle):
+#    return NetGroupGetUsers.ctypes_function(servername, groupname, level, bufptr, prefmaxlen, entriesread, totalentries, ResumeHandle)
+NetGroupGetUsersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetGroupGetUsersParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'ResumeHandle'))
+
+#def NetLocalGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetLocalGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetLocalGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetLocalGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetApiBufferFree(Buffer):
+#    return NetApiBufferFree.ctypes_function(Buffer)
+NetApiBufferFreePrototype = WINFUNCTYPE(NET_API_STATUS, LPVOID)
+NetApiBufferFreeParams = ((1, 'Buffer'),)
+
 #def GetIpNetTable(IpNetTable, SizePointer, Order):
 #    return GetIpNetTable.ctypes_function(IpNetTable, SizePointer, Order)
 GetIpNetTablePrototype = WINFUNCTYPE(ULONG, PMIB_IPNETTABLE, PULONG, BOOL)

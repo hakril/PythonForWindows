@@ -73,6 +73,7 @@ LPBYTE = POINTER(BYTE)
 ULONG_PTR = PVOID
 LONG_PTR = PVOID
 DWORD_PTR = ULONG_PTR
+PDWORD_PTR = POINTER(DWORD_PTR)
 KAFFINITY = ULONG_PTR
 KPRIORITY = LONG
 INTERNET_PORT = WORD
@@ -136,6 +137,7 @@ DEVICE_TYPE = DWORD
 PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
 FILEOP_FLAGS = WORD
+NET_API_STATUS = DWORD
 NCRYPT_HANDLE = ULONG_PTR
 NCRYPT_PROV_HANDLE = ULONG_PTR
 NCRYPT_KEY_HANDLE = ULONG_PTR
@@ -9076,6 +9078,299 @@ class _LSA_REFERENCED_DOMAIN_LIST(Structure):
     ]
 LSA_REFERENCED_DOMAIN_LIST = _LSA_REFERENCED_DOMAIN_LIST
 PLSA_REFERENCED_DOMAIN_LIST = POINTER(_LSA_REFERENCED_DOMAIN_LIST)
+
+class _LOCALGROUP_INFO_0(Structure):
+    _fields_ = [
+        ("lgrpi0_name", LPWSTR),
+    ]
+LPLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
+LOCALGROUP_INFO_0 = _LOCALGROUP_INFO_0
+PLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
+
+class _LOCALGROUP_INFO_1(Structure):
+    _fields_ = [
+        ("lgrpi1_name", LPWSTR),
+        ("lgrpi1_comment", LPWSTR),
+    ]
+LPLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
+LOCALGROUP_INFO_1 = _LOCALGROUP_INFO_1
+PLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
+
+class _LOCALGROUP_MEMBERS_INFO_0(Structure):
+    _fields_ = [
+        ("lgrmi0_sid", PSID),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
+LOCALGROUP_MEMBERS_INFO_0 = _LOCALGROUP_MEMBERS_INFO_0
+PLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
+
+class _LOCALGROUP_MEMBERS_INFO_1(Structure):
+    _fields_ = [
+        ("lgrmi1_sid", PSID),
+        ("lgrmi1_sidusage", SID_NAME_USE),
+        ("lgrmi1_name", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
+LOCALGROUP_MEMBERS_INFO_1 = _LOCALGROUP_MEMBERS_INFO_1
+PLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
+
+class _LOCALGROUP_MEMBERS_INFO_2(Structure):
+    _fields_ = [
+        ("lgrmi2_sid", PSID),
+        ("lgrmi2_sidusage", SID_NAME_USE),
+        ("lgrmi2_domainandname", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
+PLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
+LOCALGROUP_MEMBERS_INFO_2 = _LOCALGROUP_MEMBERS_INFO_2
+
+class _LOCALGROUP_MEMBERS_INFO_3(Structure):
+    _fields_ = [
+        ("lgrmi3_domainandname", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
+PLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
+LOCALGROUP_MEMBERS_INFO_3 = _LOCALGROUP_MEMBERS_INFO_3
+
+class _NET_DISPLAY_USER(Structure):
+    _fields_ = [
+        ("usri1_name", LPWSTR),
+        ("usri1_comment", LPWSTR),
+        ("usri1_flags", DWORD),
+        ("usri1_full_name", LPWSTR),
+        ("usri1_user_id", DWORD),
+        ("usri1_next_index", DWORD),
+    ]
+NET_DISPLAY_USER = _NET_DISPLAY_USER
+PNET_DISPLAY_USER = POINTER(_NET_DISPLAY_USER)
+
+class _NET_DISPLAY_MACHINE(Structure):
+    _fields_ = [
+        ("usri2_name", LPWSTR),
+        ("usri2_comment", LPWSTR),
+        ("usri2_flags", DWORD),
+        ("usri2_user_id", DWORD),
+        ("usri2_next_index", DWORD),
+    ]
+PNET_DISPLAY_MACHINE = POINTER(_NET_DISPLAY_MACHINE)
+NET_DISPLAY_MACHINE = _NET_DISPLAY_MACHINE
+
+class _NET_DISPLAY_GROUP(Structure):
+    _fields_ = [
+        ("grpi3_name", LPWSTR),
+        ("grpi3_comment", LPWSTR),
+        ("grpi3_group_id", DWORD),
+        ("grpi3_attributes", DWORD),
+        ("grpi3_next_index", DWORD),
+    ]
+PNET_DISPLAY_GROUP = POINTER(_NET_DISPLAY_GROUP)
+NET_DISPLAY_GROUP = _NET_DISPLAY_GROUP
+
+class _USER_INFO_0(Structure):
+    _fields_ = [
+        ("usri0_name", LPWSTR),
+    ]
+PUSER_INFO_0 = POINTER(_USER_INFO_0)
+LPUSER_INFO_0 = POINTER(_USER_INFO_0)
+USER_INFO_0 = _USER_INFO_0
+
+class _USER_INFO_1(Structure):
+    _fields_ = [
+        ("usri1_name", LPWSTR),
+        ("usri1_password", LPWSTR),
+        ("usri1_password_age", DWORD),
+        ("usri1_priv", DWORD),
+        ("usri1_home_dir", LPWSTR),
+        ("usri1_comment", LPWSTR),
+        ("usri1_flags", DWORD),
+        ("usri1_script_path", LPWSTR),
+    ]
+PUSER_INFO_1 = POINTER(_USER_INFO_1)
+LPUSER_INFO_1 = POINTER(_USER_INFO_1)
+USER_INFO_1 = _USER_INFO_1
+
+class _USER_INFO_2(Structure):
+    _fields_ = [
+        ("usri2_name", LPWSTR),
+        ("usri2_password", LPWSTR),
+        ("usri2_password_age", DWORD),
+        ("usri2_priv", DWORD),
+        ("usri2_home_dir", LPWSTR),
+        ("usri2_comment", LPWSTR),
+        ("usri2_flags", DWORD),
+        ("usri2_script_path", LPWSTR),
+        ("usri2_auth_flags", DWORD),
+        ("usri2_full_name", LPWSTR),
+        ("usri2_usr_comment", LPWSTR),
+        ("usri2_parms", LPWSTR),
+        ("usri2_workstations", LPWSTR),
+        ("usri2_last_logon", DWORD),
+        ("usri2_last_logoff", DWORD),
+        ("usri2_acct_expires", DWORD),
+        ("usri2_max_storage", DWORD),
+        ("usri2_units_per_week", DWORD),
+        ("usri2_logon_hours", PBYTE),
+        ("usri2_bad_pw_count", DWORD),
+        ("usri2_num_logons", DWORD),
+        ("usri2_logon_server", LPWSTR),
+        ("usri2_country_code", DWORD),
+        ("usri2_code_page", DWORD),
+    ]
+PUSER_INFO_2 = POINTER(_USER_INFO_2)
+USER_INFO_2 = _USER_INFO_2
+LPUSER_INFO_2 = POINTER(_USER_INFO_2)
+
+class _USER_INFO_3(Structure):
+    _fields_ = [
+        ("usri3_name", LPWSTR),
+        ("usri3_password", LPWSTR),
+        ("usri3_password_age", DWORD),
+        ("usri3_priv", DWORD),
+        ("usri3_home_dir", LPWSTR),
+        ("usri3_comment", LPWSTR),
+        ("usri3_flags", DWORD),
+        ("usri3_script_path", LPWSTR),
+        ("usri3_auth_flags", DWORD),
+        ("usri3_full_name", LPWSTR),
+        ("usri3_usr_comment", LPWSTR),
+        ("usri3_parms", LPWSTR),
+        ("usri3_workstations", LPWSTR),
+        ("usri3_last_logon", DWORD),
+        ("usri3_last_logoff", DWORD),
+        ("usri3_acct_expires", DWORD),
+        ("usri3_max_storage", DWORD),
+        ("usri3_units_per_week", DWORD),
+        ("usri3_logon_hours", PBYTE),
+        ("usri3_bad_pw_count", DWORD),
+        ("usri3_num_logons", DWORD),
+        ("usri3_logon_server", LPWSTR),
+        ("usri3_country_code", DWORD),
+        ("usri3_code_page", DWORD),
+        ("usri3_user_id", DWORD),
+        ("usri3_primary_group_id", DWORD),
+        ("usri3_profile", LPWSTR),
+        ("usri3_home_dir_drive", LPWSTR),
+        ("usri3_password_expired", DWORD),
+    ]
+PUSER_INFO_3 = POINTER(_USER_INFO_3)
+USER_INFO_3 = _USER_INFO_3
+LPUSER_INFO_3 = POINTER(_USER_INFO_3)
+
+class _USER_INFO_10(Structure):
+    _fields_ = [
+        ("usri10_name", LPWSTR),
+        ("usri10_comment", LPWSTR),
+        ("usri10_usr_comment", LPWSTR),
+        ("usri10_full_name", LPWSTR),
+    ]
+USER_INFO_10 = _USER_INFO_10
+PUSER_INFO_10 = POINTER(_USER_INFO_10)
+LPUSER_INFO_10 = POINTER(_USER_INFO_10)
+
+class _USER_INFO_11(Structure):
+    _fields_ = [
+        ("usri11_name", LPWSTR),
+        ("usri11_comment", LPWSTR),
+        ("usri11_usr_comment", LPWSTR),
+        ("usri11_full_name", LPWSTR),
+        ("usri11_priv", DWORD),
+        ("usri11_auth_flags", DWORD),
+        ("usri11_password_age", DWORD),
+        ("usri11_home_dir", LPWSTR),
+        ("usri11_parms", LPWSTR),
+        ("usri11_last_logon", DWORD),
+        ("usri11_last_logoff", DWORD),
+        ("usri11_bad_pw_count", DWORD),
+        ("usri11_num_logons", DWORD),
+        ("usri11_logon_server", LPWSTR),
+        ("usri11_country_code", DWORD),
+        ("usri11_workstations", LPWSTR),
+        ("usri11_max_storage", DWORD),
+        ("usri11_units_per_week", DWORD),
+        ("usri11_logon_hours", PBYTE),
+        ("usri11_code_page", DWORD),
+    ]
+PUSER_INFO_11 = POINTER(_USER_INFO_11)
+USER_INFO_11 = _USER_INFO_11
+LPUSER_INFO_11 = POINTER(_USER_INFO_11)
+
+class _USER_INFO_20(Structure):
+    _fields_ = [
+        ("usri20_name", LPWSTR),
+        ("usri20_full_name", LPWSTR),
+        ("usri20_comment", LPWSTR),
+        ("usri20_flags", DWORD),
+        ("usri20_user_id", DWORD),
+    ]
+PUSER_INFO_20 = POINTER(_USER_INFO_20)
+USER_INFO_20 = _USER_INFO_20
+LPUSER_INFO_20 = POINTER(_USER_INFO_20)
+
+class _USER_INFO_23(Structure):
+    _fields_ = [
+        ("usri23_name", LPWSTR),
+        ("usri23_full_name", LPWSTR),
+        ("usri23_comment", LPWSTR),
+        ("usri23_flags", DWORD),
+        ("usri23_user_sid", PSID),
+    ]
+USER_INFO_23 = _USER_INFO_23
+PUSER_INFO_23 = POINTER(_USER_INFO_23)
+LPUSER_INFO_23 = POINTER(_USER_INFO_23)
+
+class _GROUP_INFO_0(Structure):
+    _fields_ = [
+        ("grpi0_name", LPWSTR),
+    ]
+PGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
+GROUP_INFO_0 = _GROUP_INFO_0
+LPGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
+
+class _GROUP_INFO_1(Structure):
+    _fields_ = [
+        ("grpi1_name", LPWSTR),
+        ("grpi1_comment", LPWSTR),
+    ]
+GROUP_INFO_1 = _GROUP_INFO_1
+PGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
+LPGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
+
+class _GROUP_INFO_2(Structure):
+    _fields_ = [
+        ("grpi2_name", LPWSTR),
+        ("grpi2_comment", LPWSTR),
+        ("grpi2_group_id", DWORD),
+        ("grpi2_attributes", DWORD),
+    ]
+PGROUP_INFO_2 = POINTER(_GROUP_INFO_2)
+GROUP_INFO_2 = _GROUP_INFO_2
+
+class _GROUP_INFO_3(Structure):
+    _fields_ = [
+        ("grpi3_name", LPWSTR),
+        ("grpi3_comment", LPWSTR),
+        ("grpi3_group_sid", PSID),
+        ("grpi3_attributes", DWORD),
+    ]
+GROUP_INFO_3 = _GROUP_INFO_3
+PGROUP_INFO_3 = POINTER(_GROUP_INFO_3)
+
+class _GROUP_USERS_INFO_0(Structure):
+    _fields_ = [
+        ("grui0_name", LPWSTR),
+    ]
+GROUP_USERS_INFO_0 = _GROUP_USERS_INFO_0
+PGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
+LPGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
+
+class _GROUP_USERS_INFO_1(Structure):
+    _fields_ = [
+        ("grui1_name", LPWSTR),
+        ("grui1_attributes", DWORD),
+    ]
+PGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
+GROUP_USERS_INFO_1 = _GROUP_USERS_INFO_1
+LPGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
 
 AclRevisionInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclRevisionInformation", 0x1)
 AclSizeInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclSizeInformation", 0x2)

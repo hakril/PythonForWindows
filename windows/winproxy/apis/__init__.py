@@ -8,6 +8,7 @@ from .iphlpapi import *
 from .kernel32 import *
 from .ktmw32 import *
 from .ntdll import *
+from .netapi32 import *
 from .ole32 import *
 from .oleaut32 import *
 from .oleacc import *

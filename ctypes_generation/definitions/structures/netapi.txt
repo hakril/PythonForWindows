@@ -1,0 +1,217 @@
+typedef struct _LOCALGROUP_INFO_0 {
+  LPWSTR lgrpi0_name;
+} LOCALGROUP_INFO_0, *PLOCALGROUP_INFO_0, *LPLOCALGROUP_INFO_0;
+
+typedef struct _LOCALGROUP_INFO_1 {
+  LPWSTR lgrpi1_name;
+  LPWSTR lgrpi1_comment;
+} LOCALGROUP_INFO_1, *PLOCALGROUP_INFO_1, *LPLOCALGROUP_INFO_1;
+
+typedef struct _LOCALGROUP_MEMBERS_INFO_0 {
+  PSID lgrmi0_sid;
+} LOCALGROUP_MEMBERS_INFO_0, *PLOCALGROUP_MEMBERS_INFO_0, *LPLOCALGROUP_MEMBERS_INFO_0;
+
+
+typedef struct _LOCALGROUP_MEMBERS_INFO_1 {
+  PSID         lgrmi1_sid;
+  SID_NAME_USE lgrmi1_sidusage;
+  LPWSTR       lgrmi1_name;
+} LOCALGROUP_MEMBERS_INFO_1, *PLOCALGROUP_MEMBERS_INFO_1, *LPLOCALGROUP_MEMBERS_INFO_1;
+
+
+typedef struct _LOCALGROUP_MEMBERS_INFO_2 {
+  PSID         lgrmi2_sid;
+  SID_NAME_USE lgrmi2_sidusage;
+  LPWSTR       lgrmi2_domainandname;
+} LOCALGROUP_MEMBERS_INFO_2, *PLOCALGROUP_MEMBERS_INFO_2, *LPLOCALGROUP_MEMBERS_INFO_2;
+
+
+typedef struct _LOCALGROUP_MEMBERS_INFO_3 {
+  LPWSTR lgrmi3_domainandname;
+} LOCALGROUP_MEMBERS_INFO_3, *PLOCALGROUP_MEMBERS_INFO_3, *LPLOCALGROUP_MEMBERS_INFO_3;
+
+
+typedef struct _NET_DISPLAY_USER {
+  LPWSTR usri1_name;
+  LPWSTR usri1_comment;
+  DWORD  usri1_flags;
+  LPWSTR usri1_full_name;
+  DWORD  usri1_user_id;
+  DWORD  usri1_next_index;
+} NET_DISPLAY_USER, *PNET_DISPLAY_USER;
+
+
+typedef struct _NET_DISPLAY_MACHINE {
+  LPWSTR usri2_name;
+  LPWSTR usri2_comment;
+  DWORD  usri2_flags;
+  DWORD  usri2_user_id;
+  DWORD  usri2_next_index;
+} NET_DISPLAY_MACHINE, *PNET_DISPLAY_MACHINE;
+
+
+typedef struct _NET_DISPLAY_GROUP {
+  LPWSTR grpi3_name;
+  LPWSTR grpi3_comment;
+  DWORD  grpi3_group_id;
+  DWORD  grpi3_attributes;
+  DWORD  grpi3_next_index;
+} NET_DISPLAY_GROUP, *PNET_DISPLAY_GROUP;
+
+
+typedef struct _USER_INFO_0 {
+  LPWSTR usri0_name;
+} USER_INFO_0, *PUSER_INFO_0, *LPUSER_INFO_0;
+
+
+typedef struct _USER_INFO_1 {
+  LPWSTR usri1_name;
+  LPWSTR usri1_password;
+  DWORD  usri1_password_age;
+  DWORD  usri1_priv;
+  LPWSTR usri1_home_dir;
+  LPWSTR usri1_comment;
+  DWORD  usri1_flags;
+  LPWSTR usri1_script_path;
+} USER_INFO_1, *PUSER_INFO_1, *LPUSER_INFO_1;
+
+typedef struct _USER_INFO_2 {
+  LPWSTR usri2_name;
+  LPWSTR usri2_password;
+  DWORD  usri2_password_age;
+  DWORD  usri2_priv;
+  LPWSTR usri2_home_dir;
+  LPWSTR usri2_comment;
+  DWORD  usri2_flags;
+  LPWSTR usri2_script_path;
+  DWORD  usri2_auth_flags;
+  LPWSTR usri2_full_name;
+  LPWSTR usri2_usr_comment;
+  LPWSTR usri2_parms;
+  LPWSTR usri2_workstations;
+  DWORD  usri2_last_logon;
+  DWORD  usri2_last_logoff;
+  DWORD  usri2_acct_expires;
+  DWORD  usri2_max_storage;
+  DWORD  usri2_units_per_week;
+  PBYTE  usri2_logon_hours;
+  DWORD  usri2_bad_pw_count;
+  DWORD  usri2_num_logons;
+  LPWSTR usri2_logon_server;
+  DWORD  usri2_country_code;
+  DWORD  usri2_code_page;
+} USER_INFO_2, *PUSER_INFO_2, *LPUSER_INFO_2;
+
+typedef struct _USER_INFO_3 {
+  LPWSTR usri3_name;
+  LPWSTR usri3_password;
+  DWORD  usri3_password_age;
+  DWORD  usri3_priv;
+  LPWSTR usri3_home_dir;
+  LPWSTR usri3_comment;
+  DWORD  usri3_flags;
+  LPWSTR usri3_script_path;
+  DWORD  usri3_auth_flags;
+  LPWSTR usri3_full_name;
+  LPWSTR usri3_usr_comment;
+  LPWSTR usri3_parms;
+  LPWSTR usri3_workstations;
+  DWORD  usri3_last_logon;
+  DWORD  usri3_last_logoff;
+  DWORD  usri3_acct_expires;
+  DWORD  usri3_max_storage;
+  DWORD  usri3_units_per_week;
+  PBYTE  usri3_logon_hours;
+  DWORD  usri3_bad_pw_count;
+  DWORD  usri3_num_logons;
+  LPWSTR usri3_logon_server;
+  DWORD  usri3_country_code;
+  DWORD  usri3_code_page;
+  DWORD  usri3_user_id;
+  DWORD  usri3_primary_group_id;
+  LPWSTR usri3_profile;
+  LPWSTR usri3_home_dir_drive;
+  DWORD  usri3_password_expired;
+} USER_INFO_3, *PUSER_INFO_3, *LPUSER_INFO_3;
+
+typedef struct _USER_INFO_10 {
+  LPWSTR usri10_name;
+  LPWSTR usri10_comment;
+  LPWSTR usri10_usr_comment;
+  LPWSTR usri10_full_name;
+} USER_INFO_10, *PUSER_INFO_10, *LPUSER_INFO_10;
+
+
+typedef struct _USER_INFO_11 {
+  LPWSTR usri11_name;
+  LPWSTR usri11_comment;
+  LPWSTR usri11_usr_comment;
+  LPWSTR usri11_full_name;
+  DWORD  usri11_priv;
+  DWORD  usri11_auth_flags;
+  DWORD  usri11_password_age;
+  LPWSTR usri11_home_dir;
+  LPWSTR usri11_parms;
+  DWORD  usri11_last_logon;
+  DWORD  usri11_last_logoff;
+  DWORD  usri11_bad_pw_count;
+  DWORD  usri11_num_logons;
+  LPWSTR usri11_logon_server;
+  DWORD  usri11_country_code;
+  LPWSTR usri11_workstations;
+  DWORD  usri11_max_storage;
+  DWORD  usri11_units_per_week;
+  PBYTE  usri11_logon_hours;
+  DWORD  usri11_code_page;
+} USER_INFO_11, *PUSER_INFO_11, *LPUSER_INFO_11;
+
+typedef struct _USER_INFO_20 {
+  LPWSTR usri20_name;
+  LPWSTR usri20_full_name;
+  LPWSTR usri20_comment;
+  DWORD  usri20_flags;
+  DWORD  usri20_user_id;
+} USER_INFO_20, *PUSER_INFO_20, *LPUSER_INFO_20;
+
+typedef struct _USER_INFO_23 {
+  LPWSTR usri23_name;
+  LPWSTR usri23_full_name;
+  LPWSTR usri23_comment;
+  DWORD  usri23_flags;
+  PSID   usri23_user_sid;
+} USER_INFO_23, *PUSER_INFO_23, *LPUSER_INFO_23;
+
+
+typedef struct _GROUP_INFO_0 {
+  LPWSTR grpi0_name;
+} GROUP_INFO_0, *PGROUP_INFO_0, *LPGROUP_INFO_0;
+
+typedef struct _GROUP_INFO_1 {
+  LPWSTR grpi1_name;
+  LPWSTR grpi1_comment;
+} GROUP_INFO_1, *PGROUP_INFO_1, *LPGROUP_INFO_1;
+
+typedef struct _GROUP_INFO_2 {
+  LPWSTR grpi2_name;
+  LPWSTR grpi2_comment;
+  DWORD  grpi2_group_id;
+  DWORD  grpi2_attributes;
+} GROUP_INFO_2, *PGROUP_INFO_2;
+
+typedef struct _GROUP_INFO_3 {
+  LPWSTR grpi3_name;
+  LPWSTR grpi3_comment;
+  PSID   grpi3_group_sid;
+  DWORD  grpi3_attributes;
+} GROUP_INFO_3, *PGROUP_INFO_3;
+
+
+typedef struct _GROUP_USERS_INFO_0 {
+  LPWSTR grui0_name;
+} GROUP_USERS_INFO_0, *PGROUP_USERS_INFO_0, *LPGROUP_USERS_INFO_0;
+
+
+typedef struct _GROUP_USERS_INFO_1 {
+  LPWSTR grui1_name;
+  DWORD  grui1_attributes;
+} GROUP_USERS_INFO_1, *PGROUP_USERS_INFO_1, *LPGROUP_USERS_INFO_1;
