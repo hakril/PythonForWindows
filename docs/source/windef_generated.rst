@@ -3120,4 +3120,10 @@ WinDef
 .. autodata:: AF_FIREFOX
 .. autodata:: AF_UNKNOWN1
 .. autodata:: AF_BAN
+.. autodata:: AF_ATM
+.. autodata:: AF_INET6
+.. autodata:: AF_CLUSTER
+.. autodata:: AF_12844
+.. autodata:: AF_IRDA
+.. autodata:: AF_NETDES
 .. autodata:: AF_MAX

@@ -90,5 +90,11 @@
 #define AF_FIREFOX      19              /* FireFox */
 #define AF_UNKNOWN1     20              /* Somebody is using this! */
 #define AF_BAN          21              /* Banyan */
+#define AF_ATM          22
+#define AF_INET6        23
+#define AF_CLUSTER      24
+#define AF_12844        25
+#define AF_IRDA         26
+#define AF_NETDES       28
 
 #define AF_MAX          22
