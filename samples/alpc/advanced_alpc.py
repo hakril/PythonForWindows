@@ -19,8 +19,8 @@ def full_alpc_server():
     msg = server.recv()
     print("[SERV] == Message received ==")
     if msg.type & 0xfff == LPC_CONNECTION_REQUEST:
-        print(" * ALPC connection request: <{0}>".format(msg.data))
-        msg.data = "Connection message response"
+        print(" * ALPC connection request: <{0}>".format(msg.data.decode()))
+        msg.data = b"Connection message response"
         server.accept_connection(msg, port_context=PORT_CONTEXT)
     else:
         raise ValueError("Expected connection")
@@ -33,7 +33,7 @@ def full_alpc_server():
         # print("[SERV] RECV Message Valid ATTRS = {0:#x}".format(msg.attributes.ValidAttributes))
         # print("[SERV] RECV Message ATTRS = {0:#x}".format(msg.attributes.AllocatedAttributes))
         if msg.type & 0xfff == LPC_REQUEST:
-            print(" * ALPC request: <{0}>".format(msg.data))
+            print(" * ALPC request: <{0}>".format(msg.data.decode()))
             print(" * view_is_valid <{0}>".format(msg.view_is_valid))
             if msg.view_is_valid:
                 print("   * message view attribute:")
@@ -69,20 +69,20 @@ def full_alpc_server():
             # We can reply by to way:
             #    - Send the same message with modified data
             #    - Recreate a Message and copy the MessageId
-            msg.data = "REQUEST '{0}' DONE".format(msg.data)
+            msg.data = "REQUEST '{0}' DONE".format(msg.data.decode()).encode()
             sys.stdout.flush()
             server.send(msg)
         else:
-            print ValueError("Unexpected message type <{0}>".format(msg.type & 0xfff))
+            print(ValueError("Unexpected message type <{0}>".format(msg.type & 0xfff)))
 
 
 def send_message_with_handle(client):
-    print ""
+    print("")
     print("[Client] == Sending a message with a handle ==")
 
     # Craft a file with some data
     f = tempfile.NamedTemporaryFile()
-    f.write("Tempfile data <3")
+    f.write(b"Tempfile data <3")
     f.seek(0)
 
     # New message with a Handle
@@ -92,11 +92,11 @@ def send_message_with_handle(client):
     msg.handle_attribute.Handle = windows.utils.get_handle_from_file(f)
     msg.handle_attribute.ObjectType = 0
     msg.handle_attribute.DesiredAccess = 0
-    msg.data = "some message with a file"
+    msg.data = b"some message with a file"
     client.send_receive(msg)
 
 def send_message_with_view(client):
-    print ""
+    print("")
     print("[Client] == Sending a message with a view ==")
 
     # Create View
@@ -110,8 +110,8 @@ def send_message_with_view(client):
     msg.view_attribute.ViewBase = view.ViewBase
     msg.view_attribute.SectionHandle = view.SectionHandle
     msg.view_attribute.ViewSize = 0x4000
-    msg.data = "some message with a view"
-    windows.current_process.write_memory(view.ViewBase, "The content of the view :)\x00")
+    msg.data = b"some message with a view"
+    windows.current_process.write_memory(view.ViewBase, b"The content of the view :)\x00")
     client.send_receive(msg)
 
 def alpc_client():
@@ -121,20 +121,20 @@ def alpc_client():
     # You can create a non-connected AlpcClient and send a custom
     # 'AlpcMessage' for complexe alpc port connection.
     connect_message = windows.alpc.AlpcMessage()
-    connect_message.data = "Connection request client message"
+    connect_message.data = b"Connection request client message"
     print("[CLIENT] == Connecting to port ==")
     connect_response = client.connect_to_port(PORT_NAME, connect_message)
-    print("[CLIENT] Connected with response: <{0}>".format(connect_response.data))
+    print("[CLIENT] Connected with response: <{0}>".format(connect_response.data.decode()))
 
     # AlpcClient send/recv/send_receive methods accept both string or
     # AlpcMessage for complexe message.
-    print""
+    print("")
     print("[CLIENT] == Sending a message ==")
     msg = windows.alpc.AlpcMessage()
-    msg.data = "Complex Message 1"
-    print(" * Sending Message <{0}>".format(msg.data))
+    msg.data = b"Complex Message 1"
+    print(" * Sending Message <{0}>".format(msg.data.decode()))
     response = client.send_receive(msg)
-    print("[CLIENT] Server response: <{0}>".format(response.data))
+    print("[CLIENT] Server response: <{0}>".format(response.data.decode()))
     print("[CLIENT] RESP Message Valid ATTRS = {0}".format(response.valid_attributes))
 
     send_message_with_handle(client)
