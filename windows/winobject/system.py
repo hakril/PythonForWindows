@@ -29,6 +29,37 @@ from windows.winobject import bits
 
 from windows.dbgprint import dbgprint
 
+
+class UnicodeEnvironment(dict):
+    def __getitem__(self, key):
+        key = key.upper()
+        return super(UnicodeEnvironment, self).__getitem__(key)
+
+    def __delitem__(self, key):
+        key = key.upper()
+        windows.winproxy.SetEnvironmentVariableW(key, None)
+        return super(UnicodeEnvironment, self).__delitem__(key)
+
+    def __contains__(self, key):
+        key = key.upper()
+        return super(UnicodeEnvironment, self).__contains__(key)
+
+    def __setitem__(self, key, value):
+        if value is None:
+            # SetEnvironmentVariableW
+            # If this parameter is NULL, the variable is deleted from the current process's environment.
+            del self[key]
+            return
+        key = key.upper()
+        windows.winproxy.SetEnvironmentVariableW(key, value)
+        return super(UnicodeEnvironment, self).__setitem__(key, value)
+
+    def update(self, *args, **kwargs):
+        for k, v in dict(*args, **kwargs).items():
+            self[k.upper()] = v
+
+    # Setitem -> SetEnvironmement variable
+
 class System(object):
     """The state of the current ``Windows`` system ``Python`` is running on"""
 
@@ -96,6 +127,35 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
+
+    @utils.fixedpropety
+    def environ(self):
+        """A unicode version of os.environ
+        Same as os.environ on py3
+        Custom dict built on GetEnvironmentStringsW() on py2
+
+        :type: :class:`dict` -- {unicode: unicode}
+		"""
+        if windows.pycompat.is_py3:
+            return os.environ # Py3 environ is already unicode
+        # Create a unicode wrapper environment
+        return self._create_unicode_environ_dict()
+
+    def _create_unicode_environ_dict(self):
+        rawdictenv = {}
+        curenv = envptr = windows.winproxy.GetEnvironmentStringsW()
+        while True:
+            envstr = ctypes.c_wchar_p(curenv).value
+            if not envstr:
+                break
+            try:
+                key, value = envstr.split("=", 1)
+            except ValueError as e: # No =
+                pass
+            rawdictenv[key.upper()] = value
+            curenv += (len(envstr) + 1) * 2
+        windows.winproxy.FreeEnvironmentStringsW(envptr)
+        return UnicodeEnvironment(rawdictenv)
 
     @utils.fixedpropety
     def wmi(self):

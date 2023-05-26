@@ -840,6 +840,51 @@ CryptProtectMemoryParams = ((1, 'pDataIn'), (1, 'cbDataIn'), (1, 'dwFlags'))
 CryptUnprotectMemoryPrototype = WINFUNCTYPE(BOOL, LPVOID, DWORD, DWORD)
 CryptUnprotectMemoryParams = ((1, 'pDataIn'), (1, 'cbDataIn'), (1, 'dwFlags'))
 
+#def GetEnvironmentVariableA(lpName, lpBuffer, nSize):
+#    return GetEnvironmentVariableA.ctypes_function(lpName, lpBuffer, nSize)
+GetEnvironmentVariableAPrototype = WINFUNCTYPE(DWORD, LPCSTR, LPSTR, DWORD)
+GetEnvironmentVariableAParams = ((1, 'lpName'), (1, 'lpBuffer'), (1, 'nSize'))
+
+#def GetEnvironmentVariableW(lpName, lpBuffer, nSize):
+#    return GetEnvironmentVariableW.ctypes_function(lpName, lpBuffer, nSize)
+GetEnvironmentVariableWPrototype = WINFUNCTYPE(DWORD, LPCWSTR, LPWSTR, DWORD)
+GetEnvironmentVariableWParams = ((1, 'lpName'), (1, 'lpBuffer'), (1, 'nSize'))
+
+#def SetEnvironmentVariableA(lpName, lpValue):
+#    return SetEnvironmentVariableA.ctypes_function(lpName, lpValue)
+SetEnvironmentVariableAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPCSTR)
+SetEnvironmentVariableAParams = ((1, 'lpName'), (1, 'lpValue'))
+
+#def SetEnvironmentVariableW(lpName, lpValue):
+#    return SetEnvironmentVariableW.ctypes_function(lpName, lpValue)
+SetEnvironmentVariableWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR)
+SetEnvironmentVariableWParams = ((1, 'lpName'), (1, 'lpValue'))
+
+#def GetEnvironmentStringsA():
+#    return GetEnvironmentStringsA.ctypes_function()
+GetEnvironmentStringsAPrototype = WINFUNCTYPE(PVOID)
+GetEnvironmentStringsAParams = ()
+
+#def GetEnvironmentStringsW():
+#    return GetEnvironmentStringsW.ctypes_function()
+GetEnvironmentStringsWPrototype = WINFUNCTYPE(PVOID)
+GetEnvironmentStringsWParams = ()
+
+#def SetEnvironmentStringsW(NewEnvironment):
+#    return SetEnvironmentStringsW.ctypes_function(NewEnvironment)
+SetEnvironmentStringsWPrototype = WINFUNCTYPE(BOOL, LPWCH)
+SetEnvironmentStringsWParams = ((1, 'NewEnvironment'),)
+
+#def FreeEnvironmentStringsA(penv):
+#    return FreeEnvironmentStringsA.ctypes_function(penv)
+FreeEnvironmentStringsAPrototype = WINFUNCTYPE(BOOL, PVOID)
+FreeEnvironmentStringsAParams = ((1, 'penv'),)
+
+#def FreeEnvironmentStringsW(penv):
+#    return FreeEnvironmentStringsW.ctypes_function(penv)
+FreeEnvironmentStringsWPrototype = WINFUNCTYPE(BOOL, PVOID)
+FreeEnvironmentStringsWParams = ((1, 'penv'),)
+
 #def EnumerateTraceGuidsEx(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength):
 #    return EnumerateTraceGuidsEx.ctypes_function(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength)
 EnumerateTraceGuidsExPrototype = WINFUNCTYPE(ULONG, TRACE_QUERY_INFO_CLASS, PVOID, ULONG, PVOID, ULONG, PULONG)
