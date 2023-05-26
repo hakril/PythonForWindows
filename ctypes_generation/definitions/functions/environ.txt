@@ -1,0 +1,38 @@
+DWORD GetEnvironmentVariableA(
+  [in, optional]  LPCSTR lpName,
+  [out, optional] LPSTR  lpBuffer,
+  [in]            DWORD  nSize
+);
+
+DWORD GetEnvironmentVariableW(
+  [in, optional]  LPCWSTR lpName,
+  [out, optional] LPWSTR  lpBuffer,
+  [in]            DWORD   nSize
+);
+
+
+BOOL SetEnvironmentVariableA(
+  [in]           LPCSTR lpName,
+  [in, optional] LPCSTR lpValue
+);
+
+BOOL SetEnvironmentVariableW(
+  [in]           LPCWSTR lpName,
+  [in, optional] LPCWSTR lpValue
+);
+
+PVOID GetEnvironmentStringsA();
+
+PVOID GetEnvironmentStringsW();
+
+BOOL SetEnvironmentStringsW(
+  LPWCH NewEnvironment
+);
+
+BOOL FreeEnvironmentStringsA(
+  PVOID penv
+);
+
+BOOL FreeEnvironmentStringsW(
+  PVOID penv
+);
