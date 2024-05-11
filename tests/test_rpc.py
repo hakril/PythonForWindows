@@ -1,6 +1,7 @@
 import sys
 import pytest
 import os.path
+import time
 
 import windows.rpc as rpc
 from windows.rpc import ndr
@@ -16,8 +17,9 @@ def start_uac_service():
     appinfo_service = windows.system.services[b"AppInfo"]
     if appinfo_service.status.state == gdef.SERVICE_RUNNING:
         return False
-    appinfo_service.start()
-    time.sleep(1)
+    if appinfo_service.status.state != gdef.SERVICE_START_PENDING:
+        appinfo_service.start()
+    time.sleep(1) # Wait if just started or not marked as running yet
     return True
 
 

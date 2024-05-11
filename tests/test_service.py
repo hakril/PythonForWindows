@@ -23,5 +23,9 @@ def test_service_start():
     appinfo = windows.system.services[b"Appinfo"]
     # Just start a random serivce with a string (even if already started)
     # Used to check string compat in py2/py3
-    appinfo.start(b"TEST STRING")
+    try:
+        appinfo.start(b"TEST STRING")
+    except WindowsError as e:
+        if e.winerror != gdef.ERROR_SERVICE_ALREADY_RUNNING:
+            raise
 

@@ -139,10 +139,12 @@ TEST_TASK_EVENTLOG_CHANNEL = "Microsoft-Windows-TaskScheduler/Operational"
 TEST_TASK_EVENTLOG_ID = 106 # Task registered
 
 def test_evtlog_query_seek():
+    chan = windows.system.event_log[TEST_TASK_EVENTLOG_CHANNEL]
+    if not chan.config.enabled:
+        pytest.skip("EvtLog channel <{0}> not enabled".format(TEST_TASK_EVENTLOG_CHANNEL))
     taskpath = generated_evt_log("query_seek")
     import time; time.sleep(5)
-    chan = windows.system.event_log[TEST_TASK_EVENTLOG_CHANNEL]
-    query = chan.query(ids=106)
+    query = chan.query(ids=TEST_TASK_EVENTLOG_ID)
     query.seek(-1)
     events = query.all()
     assert len(events) == 1
