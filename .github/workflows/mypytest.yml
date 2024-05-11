@@ -10,7 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [2.7, 3.6]
+        # python-version: [2.7, 3.6]
+        python-version: [3.6] # Concentrate on working CI for python3 & we will see backport for py2 afterward
         python-architecture: [x86, x64]
         include:
             # Translate architecture to bitness for py.exe commandline
@@ -21,6 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      # - uses: LizardByte/setup-python-action@master # Test this action for manual installation on python2.7
       # Pfw testing need both 32b & 64b of tested python version for cross-bitness python injection tests
       ## Install the 32bits version
       - name: Set up Python ${{ matrix.python-version }} x86
