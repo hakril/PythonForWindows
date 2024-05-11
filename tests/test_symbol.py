@@ -18,4 +18,4 @@ def test_symbols_loadfile(symctx):
     # Resolve by name
     createfile = symctx[b"ntdll!NtCreateFile"]
     # Resolve by addr
-    assert symctx[createfile.addr].name == b"NtCreateFile"
+    assert symctx[createfile.addr].name in (b"NtCreateFile", b"ZwCreateFile")

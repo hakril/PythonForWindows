@@ -44,7 +44,7 @@ def test_token_id(curtok):
     assert ntok.id != curtok.id
     mid = ntok.modified_id
     aid = ntok.authentication_id
-    ntok.enable_privilege(b"SeShutDownPrivilege")
+    ntok.enable_privilege("SeShutDownPrivilege")
     mid2 = ntok.modified_id
     aid2 = ntok.authentication_id
     ntok.integrity -= 1
@@ -53,15 +53,15 @@ def test_token_id(curtok):
 
 
 def test_enable_privilege(newtok):
-    PRIVILEGE_NAME = b"SeShutdownPrivilege"
+    PRIVILEGE_NAME = "SeShutdownPrivilege"
     assert not newtok.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
     newtok.enable_privilege(PRIVILEGE_NAME)
     assert newtok.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
 
 
 def test_adjust_privilege(newtok):
-    PRIVILEGE_NAME = b"SeShutdownPrivilege"
-    PRIVILEGE2_NAME = b"SeTimeZonePrivilege"
+    PRIVILEGE_NAME = "SeShutdownPrivilege"
+    PRIVILEGE2_NAME = "SeTimeZonePrivilege"
     tok_dup = newtok.duplicate()
     assert not tok_dup.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
     assert not tok_dup.privileges[PRIVILEGE2_NAME] & gdef.SE_PRIVILEGE_ENABLED
@@ -83,7 +83,7 @@ def test_adjust_privilege(newtok):
 
 
 def test_token_privilege_dict(newtok):
-    PRIVILEGE_NAME = b"SeShutdownPrivilege"
+    PRIVILEGE_NAME = "SeShutdownPrivilege"
     privdict = newtok.privileges
     # These API use Token._lookup_name() that are not tested by other means
     assert privdict.keys()
