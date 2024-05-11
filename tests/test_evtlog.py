@@ -2,8 +2,9 @@ import pytest
 import uuid
 
 import windows
-import windows.generated_def as gdef
+import gc
 
+import windows.generated_def as gdef
 import windows.winobject.event_log as evtl
 
 
@@ -25,19 +26,21 @@ def test_event_channel(name, publisher_name):
     assert chan.config.publisher.name == publisher_name
     assert not chan.config.classic
 
-@pytest.mark.parametrize("name, eventid", [(CHANNEL_NAME, 2004)])
-def test_event_channel_query(name, eventid):
-    chan = windows.system.event_log[name]
+@pytest.mark.parametrize("channelname", [CHANNEL_NAME])
+def test_event_channel_query(channelname):
+    chan = windows.system.event_log[channelname]
     all_events = chan.events
     assert len(all_events) # Should have some event to test | skip else ?
-    eventquery = chan.query(ids=2004)
+    # Find an eventid that is present in the events
+    target_evtid = all_events[0].id
+    eventquery = chan.query(ids=target_evtid)
     assert isinstance(eventquery, evtl.EvtQuery)
     all_id_events = eventquery.all()
     assert len(all_id_events)
     assert len(all_id_events) <= len(all_events)
-    assert all(evt.id == eventid for evt in all_id_events)
+    assert all(evt.id == target_evtid for evt in all_id_events)
     # Extract event metadata
-    event_data_names = chan.get_event_metadata(eventid).event_data
+    event_data_names = chan.get_event_metadata(target_evtid).event_data
     # Check all event data match event metadata description
     for evt in all_id_events:
         # assert set(evt.data.keys()) == set(event_data_names)
@@ -80,6 +83,8 @@ def test_event_close():
     while count < count_max:
         for i,e  in enumerate(chan.query()):
             count += 1
+    gc.collect()
+
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     memory_usage_in_ko = (post_usage - start_usage) / 1024
@@ -95,6 +100,8 @@ def test_evthandle_close():
         config = chan.config # Config is an EVT_HANDLE
         pubm = config.publisher.metadata
         # windows.winproxy.EvtClose(chan)
+    gc.collect()
+
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     assert memory_usage_in_mo <= 0.5
@@ -106,6 +113,8 @@ def test_evtrender_evthandle_close():
     evt = next(query)
     for i in range(0x10000):
         x = evt.opcode
+    gc.collect()
+
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     # Use ~20MO if render are leaking
@@ -132,7 +141,7 @@ TEST_TASK_EVENTLOG_ID = 106 # Task registered
 
 def test_evtlog_query_seek():
     taskpath = generated_evt_log("query_seek")
-    import time; time.sleep(1)
+    import time; time.sleep(5)
     chan = windows.system.event_log[TEST_TASK_EVENTLOG_CHANNEL]
     query = chan.query(ids=106)
     query.seek(-1)
