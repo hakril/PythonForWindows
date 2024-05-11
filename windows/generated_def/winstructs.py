@@ -5504,11 +5504,25 @@ OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 POSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 
+class _ANON__ANON__OVERLAPPED_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Offset", DWORD),
+        ("OffsetHigh", DWORD),
+    ]
+
+class _ANON__OVERLAPPED_SUB_UNION_1(Union):
+    _anonymous_ = ("_ANON_OVERLAPPED_DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("_ANON_OVERLAPPED_DUMMYSTRUCTNAME", _ANON__ANON__OVERLAPPED_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("Pointer", PVOID),
+    ]
+
 class _OVERLAPPED(Structure):
+    _anonymous_ = ("_ANON_OVERLAPPED_DUMMYUNIONNAME",)
     _fields_ = [
         ("Internal", ULONG_PTR),
         ("InternalHigh", ULONG_PTR),
-        ("Pointer", PVOID),
+        ("_ANON_OVERLAPPED_DUMMYUNIONNAME", _ANON__OVERLAPPED_SUB_UNION_1),
         ("hEvent", HANDLE),
     ]
 LPOVERLAPPED = POINTER(_OVERLAPPED)

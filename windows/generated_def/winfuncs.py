@@ -1210,6 +1210,16 @@ ReadDirectoryChangesWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferL
 ReadDirectoryChangesExWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, BOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE, READ_DIRECTORY_NOTIFY_INFORMATION_CLASS)
 ReadDirectoryChangesExWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferLength'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'), (1, 'lpCompletionRoutine'), (1, 'ReadDirectoryNotifyInformationClass'))
 
+#def LockFile(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh):
+#    return LockFile.ctypes_function(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh)
+LockFilePrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD)
+LockFileParams = ((1, 'hFile'), (1, 'dwFileOffsetLow'), (1, 'dwFileOffsetHigh'), (1, 'nNumberOfBytesToLockLow'), (1, 'nNumberOfBytesToLockHigh'))
+
+#def LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped):
+#    return LockFileEx.ctypes_function(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
+LockFileExPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD, LPOVERLAPPED)
+LockFileExParams = ((1, 'hFile'), (1, 'dwFlags'), (1, 'dwReserved'), (1, 'nNumberOfBytesToLockLow'), (1, 'nNumberOfBytesToLockHigh'), (1, 'lpOverlapped'))
+
 #def HeapAlloc(hHeap, dwFlags, dwBytes):
 #    return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
 HeapAllocPrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, SIZE_T)

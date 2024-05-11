@@ -71,3 +71,20 @@ BOOL ReadDirectoryChangesExW(
   LPOVERLAPPED_COMPLETION_ROUTINE         lpCompletionRoutine,
   READ_DIRECTORY_NOTIFY_INFORMATION_CLASS ReadDirectoryNotifyInformationClass
 );
+
+BOOL LockFile(
+  [in] HANDLE hFile,
+  [in] DWORD  dwFileOffsetLow,
+  [in] DWORD  dwFileOffsetHigh,
+  [in] DWORD  nNumberOfBytesToLockLow,
+  [in] DWORD  nNumberOfBytesToLockHigh
+);
+
+BOOL LockFileEx(
+  [in]      HANDLE       hFile,
+  [in]      DWORD        dwFlags,
+            DWORD        dwReserved,
+  [in]      DWORD        nNumberOfBytesToLockLow,
+  [in]      DWORD        nNumberOfBytesToLockHigh,
+  [in, out] LPOVERLAPPED lpOverlapped
+);

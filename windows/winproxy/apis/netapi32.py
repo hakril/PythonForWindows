@@ -2,11 +2,11 @@ import ctypes
 import windows.generated_def as gdef
 
 from ..apiproxy import ApiProxy, NeededParameter
-from ..error import succeed_on_zero
+from ..error import result_is_error_code
 
 class NetApi32Proxy(ApiProxy):
     APIDLL = "netapi32"
-    default_error_check = staticmethod(succeed_on_zero)
+    default_error_check = staticmethod(result_is_error_code)
 
 
 @NetApi32Proxy()
