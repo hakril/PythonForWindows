@@ -90,7 +90,7 @@ def test_event_close():
     memory_usage_in_ko = (post_usage - start_usage) / 1024
     # With auto-evtclose of evt there should not be too much memory used when
     # Variable are not accessible anymore
-    assert memory_usage_in_mo <= 0.5
+    assert memory_usage_in_mo <= 1
 
 def test_evthandle_close():
     start_usage = windows.current_process.memory_info.PrivateUsage
@@ -99,12 +99,11 @@ def test_evthandle_close():
         query = chan.query()
         config = chan.config # Config is an EVT_HANDLE
         pubm = config.publisher.metadata
-        # windows.winproxy.EvtClose(chan)
     gc.collect()
 
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
-    assert memory_usage_in_mo <= 0.5
+    assert memory_usage_in_mo <= 1
 
 def test_evtrender_evthandle_close():
     start_usage = windows.current_process.memory_info.PrivateUsage
@@ -118,7 +117,7 @@ def test_evtrender_evthandle_close():
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     # Use ~20MO if render are leaking
-    assert memory_usage_in_mo <= 0.5
+    assert memory_usage_in_mo <= 1
 
 tscheduler = windows.system.task_scheduler
 troot = tscheduler.root

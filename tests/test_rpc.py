@@ -12,9 +12,18 @@ from .pfwtest import *
 
 UAC_UIID = "201ef99a-7fa0-444c-9399-19ba84f12a1a"
 
+def start_uac_service():
+    appinfo_service = windows.system.services[b"AppInfo"]
+    if appinfo_service.status.state == gdef.SERVICE_RUNNING:
+        return False
+    appinfo_service.start()
+    time.sleep(1)
+    return True
+
 
 
 def test_rpc_epmapper():
+    start_uac_service()
     endpoints = windows.rpc.find_alpc_endpoints(UAC_UIID)
     assert endpoints
     endpoint = endpoints[0]
@@ -56,6 +65,7 @@ class NdrProcessInformation(ndr.NdrParameters):
 
 
 def test_rpc_uac_call():
+    start_uac_service()
     client = windows.rpc.find_alpc_endpoint_and_connect(UAC_UIID)
     iid = client.bind(UAC_UIID)
 
