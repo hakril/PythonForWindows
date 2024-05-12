@@ -145,13 +145,19 @@ def test_datetime_from_comtime(comtime, date):
     (u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'),
     ])
 def test_long_short_path_str_unicode(prefix):
-    """Test that get_short_path/get_long_path works with str/unicode path and preserve path type"""
+    """Test that get_short_path/get_long_path works with str/unicode path and returns unicode"""
     with tempfile.NamedTemporaryFile(prefix=prefix) as f:
         basename = f.name.lower()
+        print(repr(basename))
+        assert "~" not in basename
         short_name = windows.utils.get_short_path(basename).lower()
+        print(repr(short_name))
+        assert "~" in short_name
         assert isinstance(short_name, unicode)
         assert short_name != basename
         full_name = windows.utils.get_long_path(short_name).lower()
+        assert "~" not in full_name
+        print(repr(full_name))
         assert isinstance(full_name, unicode)
         assert full_name == basename
 
