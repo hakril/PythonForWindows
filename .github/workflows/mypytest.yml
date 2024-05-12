@@ -22,20 +22,31 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      # - uses: LizardByte/setup-python-action@master # Test this action for manual installation on python2.7
       # Pfw testing need both 32b & 64b of tested python version for cross-bitness python injection tests
-      ## Install the 32bits version
-      - name: Set up Python ${{ matrix.python-version }} x86
-        uses: LizardByte/setup-python-action@master
+
+      ## Install the 32bits version of python3 asked
+      - name: Set up Python3 ${{ matrix.python-version }} x86
+        if: ${{ inputs.python-version != '2.7' }}
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version}}
           architecture: x86
-      ## Install the 64bits version
-      - name: Set up Python ${{ matrix.python-version }} x64
-        uses: LizardByte/setup-python-action@master
+      ## Install the 64bits version of python3 asked
+      - name: Set up Python3 ${{ matrix.python-version }} x64
+        if: ${{ inputs.python-version != '2.7' }}
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version}}
           architecture: x64
+
+      # Manually install python2.7 (both version at once)
+      - name: Set up Python2.7 ${{ matrix.python-version }} x86 & x64
+        shell: bash
+        if: ${{ inputs.python-version == '2.7' }}
+        run: |
+            choco install python2 --version=2.7.18 -y --no-progress
+            choco install python2 --version=2.7.18 -y --no-progress -x86
+
       # Install PythonForWindows for both bitness
       - name: Installing PythonForWindows for both bitness
         run: |
@@ -48,12 +59,6 @@ jobs:
       # Testing
       - name: Testing
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -k "not debugger and not known_to_fail" -v tests/
-
-      - name: Install py3 for PytestResult
-        uses: LizardByte/setup-python-action@master
-        with:
-            python-version: 3.6
-            architecture: x64
 
       - name: Publish PyTest Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
