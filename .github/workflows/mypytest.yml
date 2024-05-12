@@ -29,14 +29,12 @@ jobs:
         uses: LizardByte/setup-python-action@master
         with:
           python-version: ${{ matrix.python-version}}
-          python-version: 3.6
           architecture: x86
       ## Install the 64bits version
       - name: Set up Python ${{ matrix.python-version }} x64
         uses: LizardByte/setup-python-action@master
         with:
           python-version: ${{ matrix.python-version}}
-          python-version: 3.6
           architecture: x64
       # Install PythonForWindows for both bitness
       - name: Installing PythonForWindows for both bitness
@@ -55,4 +53,5 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/composite@v1
         if: always()
         with:
+         python-version: 3.6
          files: junit/test-results.xml
