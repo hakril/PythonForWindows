@@ -21,7 +21,7 @@ jobs:
               python-architecture: x64
 
     steps:
-      - uses: uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - uses: LizardByte/setup-python-action@master
       # - uses: LizardByte/setup-python-action@master # Test this action for manual installation on python2.7
       # Pfw testing need both 32b & 64b of tested python version for cross-bitness python injection tests
