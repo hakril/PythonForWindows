@@ -147,19 +147,17 @@ def test_datetime_from_comtime(comtime, date):
 def test_long_short_path_str_unicode(prefix):
     """Test that get_short_path/get_long_path works with str/unicode path and returns unicode"""
     with tempfile.NamedTemporaryFile(prefix=prefix) as f:
+        # Basename may be the short or long path depending on version ? username ? (seen as short in github CI)
         basename = f.name.lower()
-        print(repr(basename))
-        assert "~" not in basename
         short_name = windows.utils.get_short_path(basename).lower()
-        print(repr(short_name))
         assert "~" in short_name
         assert isinstance(short_name, unicode)
-        assert short_name != basename
         full_name = windows.utils.get_long_path(short_name).lower()
         assert "~" not in full_name
-        print(repr(full_name))
         assert isinstance(full_name, unicode)
-        assert full_name == basename
+
+        assert len(full_name) > len(short_name)
+        assert basename in (short_name, full_name)
 
 TEST_CERT = b"""
 MIIBwTCCASqgAwIBAgIQG46Uyws+67ZBOfPJCbFrRjANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQD
