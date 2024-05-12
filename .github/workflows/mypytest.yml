@@ -49,12 +49,14 @@ jobs:
       - name: Testing
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -k "not debugger and not known_to_fail" -v tests/
 
-      - name: Publish PyTest Results
-      - uses: LizardByte/setup-python-action@master
+      - name: Install py3 for PytestResult
+        uses: LizardByte/setup-python-action@master
         with:
             python-version: 3.6
             architecture: x64
-      - uses: EnricoMi/publish-unit-test-result-action/composite@v1
+
+      - name: Publish PyTest Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
         if: always()
         with:
           files: junit/test-results.xml
