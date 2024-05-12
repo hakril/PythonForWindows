@@ -28,13 +28,13 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }} x86
         uses: LizardByte/setup-python-action@master
         with:
-          python-version: ${{ matrix.python-version}}
+          python-version: ${{ matrix.python-version}} 3.6
           architecture: x86
       ## Install the 64bits version
       - name: Set up Python ${{ matrix.python-version }} x64
         uses: LizardByte/setup-python-action@master
         with:
-          python-version: ${{ matrix.python-version}}
+          python-version: ${{ matrix.python-version}} 3.6
           architecture: x64
       # Install PythonForWindows for both bitness
       - name: Installing PythonForWindows for both bitness
