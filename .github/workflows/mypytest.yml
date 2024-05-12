@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # python-version: [2.7, 3.6]
-        python-version: [3.6] # Concentrate on working CI for python3 & we will see backport for py2 afterward
+        python-version: [2.7, 3.6]
+        # python-version: [3.6] # Concentrate on working CI for python3 & we will see backport for py2 afterward
         python-architecture: [x86, x64]
         include:
             # Translate architecture to bitness for py.exe commandline
