@@ -44,8 +44,8 @@ jobs:
         shell: bash
         if: ${{ matrix.python-version == '2.7' }}
         run: |
-            choco install python2 --version=2.7.18 -y --no-progress
-            choco install python2 --version=2.7.18 -y --no-progress -x86
+            choco install python2 --version=2.7.18 -y --no-progress --params '"/InstallDir:C:\tools\python27"'
+            choco install python2 --version=2.7.18 -y --no-progress -x86 --params '"/InstallDir:C:\tools\python2732"' --force
 
       # Install PythonForWindows for both bitness
       - name: Installing PythonForWindows for both bitness
