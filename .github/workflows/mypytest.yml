@@ -26,14 +26,14 @@ jobs:
 
       ## Install the 32bits version of python3 asked
       - name: Set up Python3 ${{ matrix.python-version }} x86
-        if: ${{ inputs.python-version != '2.7' }}
+        if: ${{ matrix.python-version != '2.7' }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version}}
           architecture: x86
       ## Install the 64bits version of python3 asked
       - name: Set up Python3 ${{ matrix.python-version }} x64
-        if: ${{ inputs.python-version != '2.7' }}
+        if: ${{ matrix.python-version != '2.7' }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version}}
@@ -42,7 +42,7 @@ jobs:
       # Manually install python2.7 (both version at once)
       - name: Set up Python2.7 ${{ matrix.python-version }} x86 & x64
         shell: bash
-        if: ${{ inputs.python-version == '2.7' }}
+        if: ${{ matrix.python-version == '2.7' }}
         run: |
             choco install python2 --version=2.7.18 -y --no-progress
             choco install python2 --version=2.7.18 -y --no-progress -x86
