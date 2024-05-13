@@ -14,7 +14,7 @@ from .pfwtest import *
 UAC_UIID = "201ef99a-7fa0-444c-9399-19ba84f12a1a"
 
 def start_uac_service():
-    appinfo_service = windows.system.services[b"AppInfo"]
+    appinfo_service = windows.system.services["AppInfo"]
     if appinfo_service.status.state == gdef.SERVICE_RUNNING:
         return False
     if appinfo_service.status.state != gdef.SERVICE_START_PENDING:
