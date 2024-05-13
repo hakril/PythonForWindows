@@ -360,8 +360,8 @@ def find_python_dll_to_inject(target_bitness):
         # we cannot use sys.winver as we are looking for the OTHER version
         # But from Python <PCbuild/python.props> it looks like format is
         # {Major}.{Minor}{-32}(for 32b build)
-        # This code do not handle -test version
-        winver_base = sys.winver[:3] # major-minor
+        # filter out anything after the -
+        winver_base = sys.winver.split("-")[0] # major-minor
         if target_bitness == 64:
             pyinstallkeys = [regbase(r"SOFTWARE\Python\PythonCore")(winver_base)]
         else:
