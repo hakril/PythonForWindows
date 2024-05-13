@@ -12,19 +12,20 @@ def test_services_process():
 
 
 def test_service_appinfo():
-    appinfo = windows.system.services[b"Appinfo"]
+    appinfo = windows.system.services["Appinfo"]
     assert appinfo.status.type & gdef.SERVICE_WIN32_OWN_PROCESS
     # Check other fields
-    assert appinfo.name == b"Appinfo"
-    assert appinfo.description == b"Application Information"
+    assert appinfo.name == "Appinfo"
+    assert appinfo.description == "Application Information"
+    assert appinfo.security_descriptor
 
 
 def test_service_start():
-    appinfo = windows.system.services[b"Appinfo"]
+    appinfo = windows.system.services["Appinfo"]
     # Just start a random serivce with a string (even if already started)
     # Used to check string compat in py2/py3
     try:
-        appinfo.start(b"TEST STRING")
+        appinfo.start("TEST STRING")
     except WindowsError as e:
         if e.winerror != gdef.ERROR_SERVICE_ALREADY_RUNNING:
             raise

@@ -1542,7 +1542,13 @@ typedef struct _OSVERSIONINFOEXW {
 typedef struct _OVERLAPPED {
   ULONG_PTR Internal;
   ULONG_PTR InternalHigh;
-  PVOID  Pointer;
+  union {
+    struct {
+      DWORD Offset;
+      DWORD OffsetHigh;
+    } _ANON_OVERLAPPED_DUMMYSTRUCTNAME;
+    PVOID Pointer;
+  } _ANON_OVERLAPPED_DUMMYUNIONNAME;
   HANDLE    hEvent;
 } OVERLAPPED, *LPOVERLAPPED;
 

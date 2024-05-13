@@ -41,10 +41,10 @@ from windows.pycompat import basestring
 class ServiceManager(utils.AutoHandle):
     """An object to query, list and explore services"""
     def _get_handle(self):
-        return windows.winproxy.OpenSCManagerA(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
+        return windows.winproxy.OpenSCManagerW(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
 
     def open_service(self, name, access=gdef.MAXIMUM_ALLOWED):
-        return windows.winproxy.OpenServiceA(self.handle, name, access) # Check service exists :)
+        return windows.winproxy.OpenServiceW(self.handle, name, access) # Check service exists :)
 
     def get_service(self, key, access=gdef.MAXIMUM_ALLOWED):
         """Get a service by its name/index or a list of services via a slice
@@ -73,9 +73,9 @@ class ServiceManager(utils.AutoHandle):
         # This API is strange..
         # Why can't we retrieve the display name for a service handle ?
         BUFFER_SIZE = 0x1000
-        result = (CHAR * BUFFER_SIZE)()
+        result = (WCHAR * BUFFER_SIZE)()
         size_needed = gdef.DWORD(BUFFER_SIZE)
-        windows.winproxy.GetServiceDisplayNameA(self.handle, name, result, size_needed)
+        windows.winproxy.GetServiceDisplayNameW(self.handle, name, result, size_needed)
         return result.value
 
     def _enumerate_services_generator(self):
@@ -86,7 +86,7 @@ class ServiceManager(utils.AutoHandle):
         nb_services =  gdef.DWORD()
         counter =  gdef.DWORD()
         try:
-            windows.winproxy.EnumServicesStatusExA(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+            windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
         except WindowsError:
             pass
 
@@ -94,11 +94,11 @@ class ServiceManager(utils.AutoHandle):
             size = size_needed.value
             buffer = (BYTE * size)()
             try:
-                windows.winproxy.EnumServicesStatusExA(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+                windows.winproxy.EnumServicesStatusExW(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
             except WindowsError as e:
                 continue
             break
-        services_array = (gdef.ENUM_SERVICE_STATUS_PROCESSA * nb_services.value).from_buffer(buffer)
+        services_array = (gdef.ENUM_SERVICE_STATUS_PROCESSW * nb_services.value).from_buffer(buffer)
         for service_info in services_array:
             shandle = self.open_service(service_info.lpServiceName)
             yield Service(handle=shandle, name=service_info.lpServiceName, description=service_info.lpDisplayName)
@@ -175,8 +175,8 @@ class Service(gdef.SC_HANDLE):
             if isinstance(args, windows.pycompat.anybuff):
                 args = [args]
             nbelt = len(args)
-            args = (gdef.LPCSTR * (nbelt))(*args)
-        return windows.winproxy.StartServiceA(self, nbelt, args)
+            args = (gdef.LPWSTR * (nbelt))(*args)
+        return windows.winproxy.StartServiceW(self, nbelt, args)
 
     def stop(self):
         """Stop the service"""

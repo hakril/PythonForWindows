@@ -8,6 +8,7 @@ from .iphlpapi import *
 from .kernel32 import *
 from .ktmw32 import *
 from .ntdll import *
+from .netapi32 import *
 from .ole32 import *
 from .oleaut32 import *
 from .oleacc import *
@@ -23,3 +24,4 @@ from .wevtapi import *
 from .winhttp import *
 from .wininet import *
 from .wintrust import *
+from .ws2_32 import *

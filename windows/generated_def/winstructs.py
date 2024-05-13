@@ -73,6 +73,7 @@ LPBYTE = POINTER(BYTE)
 ULONG_PTR = PVOID
 LONG_PTR = PVOID
 DWORD_PTR = ULONG_PTR
+PDWORD_PTR = POINTER(DWORD_PTR)
 KAFFINITY = ULONG_PTR
 KPRIORITY = LONG
 INTERNET_PORT = WORD
@@ -136,6 +137,7 @@ DEVICE_TYPE = DWORD
 PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
 FILEOP_FLAGS = WORD
+NET_API_STATUS = DWORD
 NCRYPT_HANDLE = ULONG_PTR
 NCRYPT_PROV_HANDLE = ULONG_PTR
 NCRYPT_KEY_HANDLE = ULONG_PTR
@@ -252,6 +254,8 @@ DEVINSTID_W = LPWSTR
 RPCOLEDATAREP = ULONG
 HREFTYPE = DWORD
 SFGAOF = ULONG
+GROUP = UINT
+SOCKET = HANDLE
 WNDPROC = PVOID
 LPPROC_THREAD_ATTRIBUTE_LIST = PVOID
 PPS_POST_PROCESS_INIT_ROUTINE = PVOID
@@ -293,6 +297,7 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 PPORT_MESSAGE = PVOID
+LPWSADATA = PVOID
 FC_ZERO = EnumValue("NDR_FORMAT_CHARACTER", "FC_ZERO", 0x0)
 FC_BYTE = EnumValue("NDR_FORMAT_CHARACTER", "FC_BYTE", 0x1)
 FC_CHAR = EnumValue("NDR_FORMAT_CHARACTER", "FC_CHAR", 0x2)
@@ -5499,11 +5504,25 @@ OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 POSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 
+class _ANON__ANON__OVERLAPPED_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Offset", DWORD),
+        ("OffsetHigh", DWORD),
+    ]
+
+class _ANON__OVERLAPPED_SUB_UNION_1(Union):
+    _anonymous_ = ("_ANON_OVERLAPPED_DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("_ANON_OVERLAPPED_DUMMYSTRUCTNAME", _ANON__ANON__OVERLAPPED_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("Pointer", PVOID),
+    ]
+
 class _OVERLAPPED(Structure):
+    _anonymous_ = ("_ANON_OVERLAPPED_DUMMYUNIONNAME",)
     _fields_ = [
         ("Internal", ULONG_PTR),
         ("InternalHigh", ULONG_PTR),
-        ("Pointer", PVOID),
+        ("_ANON_OVERLAPPED_DUMMYUNIONNAME", _ANON__OVERLAPPED_SUB_UNION_1),
         ("hEvent", HANDLE),
     ]
 LPOVERLAPPED = POINTER(_OVERLAPPED)
@@ -9074,6 +9093,299 @@ class _LSA_REFERENCED_DOMAIN_LIST(Structure):
 LSA_REFERENCED_DOMAIN_LIST = _LSA_REFERENCED_DOMAIN_LIST
 PLSA_REFERENCED_DOMAIN_LIST = POINTER(_LSA_REFERENCED_DOMAIN_LIST)
 
+class _LOCALGROUP_INFO_0(Structure):
+    _fields_ = [
+        ("lgrpi0_name", LPWSTR),
+    ]
+LPLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
+LOCALGROUP_INFO_0 = _LOCALGROUP_INFO_0
+PLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
+
+class _LOCALGROUP_INFO_1(Structure):
+    _fields_ = [
+        ("lgrpi1_name", LPWSTR),
+        ("lgrpi1_comment", LPWSTR),
+    ]
+LPLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
+LOCALGROUP_INFO_1 = _LOCALGROUP_INFO_1
+PLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
+
+class _LOCALGROUP_MEMBERS_INFO_0(Structure):
+    _fields_ = [
+        ("lgrmi0_sid", PSID),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
+LOCALGROUP_MEMBERS_INFO_0 = _LOCALGROUP_MEMBERS_INFO_0
+PLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
+
+class _LOCALGROUP_MEMBERS_INFO_1(Structure):
+    _fields_ = [
+        ("lgrmi1_sid", PSID),
+        ("lgrmi1_sidusage", SID_NAME_USE),
+        ("lgrmi1_name", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
+LOCALGROUP_MEMBERS_INFO_1 = _LOCALGROUP_MEMBERS_INFO_1
+PLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
+
+class _LOCALGROUP_MEMBERS_INFO_2(Structure):
+    _fields_ = [
+        ("lgrmi2_sid", PSID),
+        ("lgrmi2_sidusage", SID_NAME_USE),
+        ("lgrmi2_domainandname", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
+PLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
+LOCALGROUP_MEMBERS_INFO_2 = _LOCALGROUP_MEMBERS_INFO_2
+
+class _LOCALGROUP_MEMBERS_INFO_3(Structure):
+    _fields_ = [
+        ("lgrmi3_domainandname", LPWSTR),
+    ]
+LPLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
+PLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
+LOCALGROUP_MEMBERS_INFO_3 = _LOCALGROUP_MEMBERS_INFO_3
+
+class _NET_DISPLAY_USER(Structure):
+    _fields_ = [
+        ("usri1_name", LPWSTR),
+        ("usri1_comment", LPWSTR),
+        ("usri1_flags", DWORD),
+        ("usri1_full_name", LPWSTR),
+        ("usri1_user_id", DWORD),
+        ("usri1_next_index", DWORD),
+    ]
+NET_DISPLAY_USER = _NET_DISPLAY_USER
+PNET_DISPLAY_USER = POINTER(_NET_DISPLAY_USER)
+
+class _NET_DISPLAY_MACHINE(Structure):
+    _fields_ = [
+        ("usri2_name", LPWSTR),
+        ("usri2_comment", LPWSTR),
+        ("usri2_flags", DWORD),
+        ("usri2_user_id", DWORD),
+        ("usri2_next_index", DWORD),
+    ]
+PNET_DISPLAY_MACHINE = POINTER(_NET_DISPLAY_MACHINE)
+NET_DISPLAY_MACHINE = _NET_DISPLAY_MACHINE
+
+class _NET_DISPLAY_GROUP(Structure):
+    _fields_ = [
+        ("grpi3_name", LPWSTR),
+        ("grpi3_comment", LPWSTR),
+        ("grpi3_group_id", DWORD),
+        ("grpi3_attributes", DWORD),
+        ("grpi3_next_index", DWORD),
+    ]
+PNET_DISPLAY_GROUP = POINTER(_NET_DISPLAY_GROUP)
+NET_DISPLAY_GROUP = _NET_DISPLAY_GROUP
+
+class _USER_INFO_0(Structure):
+    _fields_ = [
+        ("usri0_name", LPWSTR),
+    ]
+PUSER_INFO_0 = POINTER(_USER_INFO_0)
+LPUSER_INFO_0 = POINTER(_USER_INFO_0)
+USER_INFO_0 = _USER_INFO_0
+
+class _USER_INFO_1(Structure):
+    _fields_ = [
+        ("usri1_name", LPWSTR),
+        ("usri1_password", LPWSTR),
+        ("usri1_password_age", DWORD),
+        ("usri1_priv", DWORD),
+        ("usri1_home_dir", LPWSTR),
+        ("usri1_comment", LPWSTR),
+        ("usri1_flags", DWORD),
+        ("usri1_script_path", LPWSTR),
+    ]
+PUSER_INFO_1 = POINTER(_USER_INFO_1)
+LPUSER_INFO_1 = POINTER(_USER_INFO_1)
+USER_INFO_1 = _USER_INFO_1
+
+class _USER_INFO_2(Structure):
+    _fields_ = [
+        ("usri2_name", LPWSTR),
+        ("usri2_password", LPWSTR),
+        ("usri2_password_age", DWORD),
+        ("usri2_priv", DWORD),
+        ("usri2_home_dir", LPWSTR),
+        ("usri2_comment", LPWSTR),
+        ("usri2_flags", DWORD),
+        ("usri2_script_path", LPWSTR),
+        ("usri2_auth_flags", DWORD),
+        ("usri2_full_name", LPWSTR),
+        ("usri2_usr_comment", LPWSTR),
+        ("usri2_parms", LPWSTR),
+        ("usri2_workstations", LPWSTR),
+        ("usri2_last_logon", DWORD),
+        ("usri2_last_logoff", DWORD),
+        ("usri2_acct_expires", DWORD),
+        ("usri2_max_storage", DWORD),
+        ("usri2_units_per_week", DWORD),
+        ("usri2_logon_hours", PBYTE),
+        ("usri2_bad_pw_count", DWORD),
+        ("usri2_num_logons", DWORD),
+        ("usri2_logon_server", LPWSTR),
+        ("usri2_country_code", DWORD),
+        ("usri2_code_page", DWORD),
+    ]
+PUSER_INFO_2 = POINTER(_USER_INFO_2)
+USER_INFO_2 = _USER_INFO_2
+LPUSER_INFO_2 = POINTER(_USER_INFO_2)
+
+class _USER_INFO_3(Structure):
+    _fields_ = [
+        ("usri3_name", LPWSTR),
+        ("usri3_password", LPWSTR),
+        ("usri3_password_age", DWORD),
+        ("usri3_priv", DWORD),
+        ("usri3_home_dir", LPWSTR),
+        ("usri3_comment", LPWSTR),
+        ("usri3_flags", DWORD),
+        ("usri3_script_path", LPWSTR),
+        ("usri3_auth_flags", DWORD),
+        ("usri3_full_name", LPWSTR),
+        ("usri3_usr_comment", LPWSTR),
+        ("usri3_parms", LPWSTR),
+        ("usri3_workstations", LPWSTR),
+        ("usri3_last_logon", DWORD),
+        ("usri3_last_logoff", DWORD),
+        ("usri3_acct_expires", DWORD),
+        ("usri3_max_storage", DWORD),
+        ("usri3_units_per_week", DWORD),
+        ("usri3_logon_hours", PBYTE),
+        ("usri3_bad_pw_count", DWORD),
+        ("usri3_num_logons", DWORD),
+        ("usri3_logon_server", LPWSTR),
+        ("usri3_country_code", DWORD),
+        ("usri3_code_page", DWORD),
+        ("usri3_user_id", DWORD),
+        ("usri3_primary_group_id", DWORD),
+        ("usri3_profile", LPWSTR),
+        ("usri3_home_dir_drive", LPWSTR),
+        ("usri3_password_expired", DWORD),
+    ]
+PUSER_INFO_3 = POINTER(_USER_INFO_3)
+USER_INFO_3 = _USER_INFO_3
+LPUSER_INFO_3 = POINTER(_USER_INFO_3)
+
+class _USER_INFO_10(Structure):
+    _fields_ = [
+        ("usri10_name", LPWSTR),
+        ("usri10_comment", LPWSTR),
+        ("usri10_usr_comment", LPWSTR),
+        ("usri10_full_name", LPWSTR),
+    ]
+USER_INFO_10 = _USER_INFO_10
+PUSER_INFO_10 = POINTER(_USER_INFO_10)
+LPUSER_INFO_10 = POINTER(_USER_INFO_10)
+
+class _USER_INFO_11(Structure):
+    _fields_ = [
+        ("usri11_name", LPWSTR),
+        ("usri11_comment", LPWSTR),
+        ("usri11_usr_comment", LPWSTR),
+        ("usri11_full_name", LPWSTR),
+        ("usri11_priv", DWORD),
+        ("usri11_auth_flags", DWORD),
+        ("usri11_password_age", DWORD),
+        ("usri11_home_dir", LPWSTR),
+        ("usri11_parms", LPWSTR),
+        ("usri11_last_logon", DWORD),
+        ("usri11_last_logoff", DWORD),
+        ("usri11_bad_pw_count", DWORD),
+        ("usri11_num_logons", DWORD),
+        ("usri11_logon_server", LPWSTR),
+        ("usri11_country_code", DWORD),
+        ("usri11_workstations", LPWSTR),
+        ("usri11_max_storage", DWORD),
+        ("usri11_units_per_week", DWORD),
+        ("usri11_logon_hours", PBYTE),
+        ("usri11_code_page", DWORD),
+    ]
+PUSER_INFO_11 = POINTER(_USER_INFO_11)
+USER_INFO_11 = _USER_INFO_11
+LPUSER_INFO_11 = POINTER(_USER_INFO_11)
+
+class _USER_INFO_20(Structure):
+    _fields_ = [
+        ("usri20_name", LPWSTR),
+        ("usri20_full_name", LPWSTR),
+        ("usri20_comment", LPWSTR),
+        ("usri20_flags", DWORD),
+        ("usri20_user_id", DWORD),
+    ]
+PUSER_INFO_20 = POINTER(_USER_INFO_20)
+USER_INFO_20 = _USER_INFO_20
+LPUSER_INFO_20 = POINTER(_USER_INFO_20)
+
+class _USER_INFO_23(Structure):
+    _fields_ = [
+        ("usri23_name", LPWSTR),
+        ("usri23_full_name", LPWSTR),
+        ("usri23_comment", LPWSTR),
+        ("usri23_flags", DWORD),
+        ("usri23_user_sid", PSID),
+    ]
+USER_INFO_23 = _USER_INFO_23
+PUSER_INFO_23 = POINTER(_USER_INFO_23)
+LPUSER_INFO_23 = POINTER(_USER_INFO_23)
+
+class _GROUP_INFO_0(Structure):
+    _fields_ = [
+        ("grpi0_name", LPWSTR),
+    ]
+PGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
+GROUP_INFO_0 = _GROUP_INFO_0
+LPGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
+
+class _GROUP_INFO_1(Structure):
+    _fields_ = [
+        ("grpi1_name", LPWSTR),
+        ("grpi1_comment", LPWSTR),
+    ]
+GROUP_INFO_1 = _GROUP_INFO_1
+PGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
+LPGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
+
+class _GROUP_INFO_2(Structure):
+    _fields_ = [
+        ("grpi2_name", LPWSTR),
+        ("grpi2_comment", LPWSTR),
+        ("grpi2_group_id", DWORD),
+        ("grpi2_attributes", DWORD),
+    ]
+PGROUP_INFO_2 = POINTER(_GROUP_INFO_2)
+GROUP_INFO_2 = _GROUP_INFO_2
+
+class _GROUP_INFO_3(Structure):
+    _fields_ = [
+        ("grpi3_name", LPWSTR),
+        ("grpi3_comment", LPWSTR),
+        ("grpi3_group_sid", PSID),
+        ("grpi3_attributes", DWORD),
+    ]
+GROUP_INFO_3 = _GROUP_INFO_3
+PGROUP_INFO_3 = POINTER(_GROUP_INFO_3)
+
+class _GROUP_USERS_INFO_0(Structure):
+    _fields_ = [
+        ("grui0_name", LPWSTR),
+    ]
+GROUP_USERS_INFO_0 = _GROUP_USERS_INFO_0
+PGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
+LPGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
+
+class _GROUP_USERS_INFO_1(Structure):
+    _fields_ = [
+        ("grui1_name", LPWSTR),
+        ("grui1_attributes", DWORD),
+    ]
+PGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
+GROUP_USERS_INFO_1 = _GROUP_USERS_INFO_1
+LPGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
+
 AclRevisionInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclRevisionInformation", 0x1)
 AclSizeInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclSizeInformation", 0x2)
 class _ACL_INFORMATION_CLASS(EnumType):
@@ -10961,4 +11273,166 @@ class WMIDPREQUESTCODE(EnumType):
     values = [WMI_GET_ALL_DATA, WMI_GET_SINGLE_INSTANCE, WMI_SET_SINGLE_INSTANCE, WMI_SET_SINGLE_ITEM, WMI_ENABLE_EVENTS, WMI_DISABLE_EVENTS, WMI_ENABLE_COLLECTION, WMI_DISABLE_COLLECTION, WMI_REGINFO, WMI_EXECUTE_METHOD]
     mapper = FlagMapper(*values)
 
+
+class WSAData64(Structure):
+    _fields_ = [
+        ("wVersion", WORD),
+        ("wHighVersion", WORD),
+        ("iMaxSockets", USHORT),
+        ("iMaxUdpDg", USHORT),
+        ("lpVendorInfo", POINTER(CHAR)),
+        ("szDescription", CHAR * (WSADESCRIPTION_LEN + 1)),
+        ("szSystemStatus", CHAR * (WSASYS_STATUS_LEN + 1)),
+    ]
+WSADATA64 = WSAData64
+LPWSADATA64 = POINTER(WSAData64)
+
+class WSAData32(Structure):
+    _fields_ = [
+        ("wVersion", WORD),
+        ("wHighVersion", WORD),
+        ("szDescription", CHAR * (WSADESCRIPTION_LEN + 1)),
+        ("szSystemStatus", CHAR * (WSASYS_STATUS_LEN + 1)),
+        ("iMaxSockets", USHORT),
+        ("iMaxUdpDg", USHORT),
+        ("lpVendorInfo", POINTER(CHAR)),
+    ]
+LPWSADATA32 = POINTER(WSAData32)
+WSADATA32 = WSAData32
+
+class _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("s_b1", UCHAR),
+        ("s_b2", UCHAR),
+        ("s_b3", UCHAR),
+        ("s_b4", UCHAR),
+    ]
+
+
+class _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
+    _fields_ = [
+        ("s_w1", USHORT),
+        ("s_w2", USHORT),
+    ]
+
+class _ANON_IN_ADDR_SUB_UNION_1(Union):
+    _anonymous_ = ("S_un_b","S_un_w")
+    _fields_ = [
+        ("S_un_b", _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("S_un_w", _ANON__ANON_IN_ADDR_SUB_UNION_1_SUB_STRUCTURE_2),
+        ("S_addr", ULONG),
+    ]
+
+class in_addr(Structure):
+    _anonymous_ = ("S_un",)
+    _fields_ = [
+        ("S_un", _ANON_IN_ADDR_SUB_UNION_1),
+    ]
+
+
+class sockaddr(Structure):
+    _fields_ = [
+        ("sa_family", USHORT),
+        ("sa_data", CHAR * (14)),
+    ]
+
+
+class sockaddr_in(Structure):
+    _fields_ = [
+        ("sin_family", SHORT),
+        ("sin_port", USHORT),
+        ("sin_addr", in_addr),
+        ("sin_zero", CHAR * (8)),
+    ]
+
+
+# Self referencing struct tricks
+class addrinfoW(Structure): pass
+ADDRINFOW = addrinfoW
+PADDRINFOW = POINTER(addrinfoW)
+addrinfoW._fields_ = [
+    ("ai_flags", INT),
+    ("ai_family", INT),
+    ("ai_socktype", INT),
+    ("ai_protocol", INT),
+    ("ai_addrlen", SIZE_T),
+    ("ai_canonname", PWSTR),
+    ("ai_addr", POINTER(sockaddr)),
+    ("ai_next", POINTER(addrinfoW)),
+]
+
+class _WSAPROTOCOLCHAIN(Structure):
+    _fields_ = [
+        ("ChainLen", INT),
+        ("ChainEntries", DWORD * (MAX_PROTOCOL_CHAIN)),
+    ]
+LPWSAPROTOCOLCHAIN = POINTER(_WSAPROTOCOLCHAIN)
+WSAPROTOCOLCHAIN = _WSAPROTOCOLCHAIN
+
+class _WSAPROTOCOL_INFOA(Structure):
+    _fields_ = [
+        ("dwServiceFlags1", DWORD),
+        ("dwServiceFlags2", DWORD),
+        ("dwServiceFlags3", DWORD),
+        ("dwServiceFlags4", DWORD),
+        ("dwProviderFlags", DWORD),
+        ("ProviderId", GUID),
+        ("dwCatalogEntryId", DWORD),
+        ("ProtocolChain", WSAPROTOCOLCHAIN),
+        ("iVersion", INT),
+        ("iAddressFamily", INT),
+        ("iMaxSockAddr", INT),
+        ("iMinSockAddr", INT),
+        ("iSocketType", INT),
+        ("iProtocol", INT),
+        ("iProtocolMaxOffset", INT),
+        ("iNetworkByteOrder", INT),
+        ("iSecurityScheme", INT),
+        ("dwMessageSize", DWORD),
+        ("dwProviderReserved", DWORD),
+        ("szProtocol", CHAR * (WSAPROTOCOL_LEN + 1)),
+    ]
+WSAPROTOCOL_INFOA = _WSAPROTOCOL_INFOA
+LPWSAPROTOCOL_INFOA = POINTER(_WSAPROTOCOL_INFOA)
+
+class _WSAPROTOCOL_INFOW(Structure):
+    _fields_ = [
+        ("dwServiceFlags1", DWORD),
+        ("dwServiceFlags2", DWORD),
+        ("dwServiceFlags3", DWORD),
+        ("dwServiceFlags4", DWORD),
+        ("dwProviderFlags", DWORD),
+        ("ProviderId", GUID),
+        ("dwCatalogEntryId", DWORD),
+        ("ProtocolChain", WSAPROTOCOLCHAIN),
+        ("iVersion", INT),
+        ("iAddressFamily", INT),
+        ("iMaxSockAddr", INT),
+        ("iMinSockAddr", INT),
+        ("iSocketType", INT),
+        ("iProtocol", INT),
+        ("iProtocolMaxOffset", INT),
+        ("iNetworkByteOrder", INT),
+        ("iSecurityScheme", INT),
+        ("dwMessageSize", DWORD),
+        ("dwProviderReserved", DWORD),
+        ("szProtocol", WCHAR * (WSAPROTOCOL_LEN + 1)),
+    ]
+LPWSAPROTOCOL_INFOW = POINTER(_WSAPROTOCOL_INFOW)
+WSAPROTOCOL_INFOW = _WSAPROTOCOL_INFOW
+
+# Self referencing struct tricks
+class addrinfo(Structure): pass
+PADDRINFOA = POINTER(addrinfo)
+ADDRINFOA = addrinfo
+addrinfo._fields_ = [
+    ("ai_flags", INT),
+    ("ai_family", INT),
+    ("ai_socktype", INT),
+    ("ai_protocol", INT),
+    ("ai_addrlen", SIZE_T),
+    ("ai_canonname", POINTER(CHAR)),
+    ("ai_addr", POINTER(sockaddr)),
+    ("ai_next", POINTER(addrinfo)),
+]
 

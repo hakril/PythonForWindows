@@ -840,6 +840,51 @@ CryptProtectMemoryParams = ((1, 'pDataIn'), (1, 'cbDataIn'), (1, 'dwFlags'))
 CryptUnprotectMemoryPrototype = WINFUNCTYPE(BOOL, LPVOID, DWORD, DWORD)
 CryptUnprotectMemoryParams = ((1, 'pDataIn'), (1, 'cbDataIn'), (1, 'dwFlags'))
 
+#def GetEnvironmentVariableA(lpName, lpBuffer, nSize):
+#    return GetEnvironmentVariableA.ctypes_function(lpName, lpBuffer, nSize)
+GetEnvironmentVariableAPrototype = WINFUNCTYPE(DWORD, LPCSTR, LPSTR, DWORD)
+GetEnvironmentVariableAParams = ((1, 'lpName'), (1, 'lpBuffer'), (1, 'nSize'))
+
+#def GetEnvironmentVariableW(lpName, lpBuffer, nSize):
+#    return GetEnvironmentVariableW.ctypes_function(lpName, lpBuffer, nSize)
+GetEnvironmentVariableWPrototype = WINFUNCTYPE(DWORD, LPCWSTR, LPWSTR, DWORD)
+GetEnvironmentVariableWParams = ((1, 'lpName'), (1, 'lpBuffer'), (1, 'nSize'))
+
+#def SetEnvironmentVariableA(lpName, lpValue):
+#    return SetEnvironmentVariableA.ctypes_function(lpName, lpValue)
+SetEnvironmentVariableAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPCSTR)
+SetEnvironmentVariableAParams = ((1, 'lpName'), (1, 'lpValue'))
+
+#def SetEnvironmentVariableW(lpName, lpValue):
+#    return SetEnvironmentVariableW.ctypes_function(lpName, lpValue)
+SetEnvironmentVariableWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR)
+SetEnvironmentVariableWParams = ((1, 'lpName'), (1, 'lpValue'))
+
+#def GetEnvironmentStringsA():
+#    return GetEnvironmentStringsA.ctypes_function()
+GetEnvironmentStringsAPrototype = WINFUNCTYPE(PVOID)
+GetEnvironmentStringsAParams = ()
+
+#def GetEnvironmentStringsW():
+#    return GetEnvironmentStringsW.ctypes_function()
+GetEnvironmentStringsWPrototype = WINFUNCTYPE(PVOID)
+GetEnvironmentStringsWParams = ()
+
+#def SetEnvironmentStringsW(NewEnvironment):
+#    return SetEnvironmentStringsW.ctypes_function(NewEnvironment)
+SetEnvironmentStringsWPrototype = WINFUNCTYPE(BOOL, LPWCH)
+SetEnvironmentStringsWParams = ((1, 'NewEnvironment'),)
+
+#def FreeEnvironmentStringsA(penv):
+#    return FreeEnvironmentStringsA.ctypes_function(penv)
+FreeEnvironmentStringsAPrototype = WINFUNCTYPE(BOOL, PVOID)
+FreeEnvironmentStringsAParams = ((1, 'penv'),)
+
+#def FreeEnvironmentStringsW(penv):
+#    return FreeEnvironmentStringsW.ctypes_function(penv)
+FreeEnvironmentStringsWPrototype = WINFUNCTYPE(BOOL, PVOID)
+FreeEnvironmentStringsWParams = ((1, 'penv'),)
+
 #def EnumerateTraceGuidsEx(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength):
 #    return EnumerateTraceGuidsEx.ctypes_function(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength)
 EnumerateTraceGuidsExPrototype = WINFUNCTYPE(ULONG, TRACE_QUERY_INFO_CLASS, PVOID, ULONG, PVOID, ULONG, PULONG)
@@ -1165,6 +1210,16 @@ ReadDirectoryChangesWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferL
 ReadDirectoryChangesExWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, BOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE, READ_DIRECTORY_NOTIFY_INFORMATION_CLASS)
 ReadDirectoryChangesExWParams = ((1, 'hDirectory'), (1, 'lpBuffer'), (1, 'nBufferLength'), (1, 'bWatchSubtree'), (1, 'dwNotifyFilter'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'), (1, 'lpCompletionRoutine'), (1, 'ReadDirectoryNotifyInformationClass'))
 
+#def LockFile(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh):
+#    return LockFile.ctypes_function(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh)
+LockFilePrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD)
+LockFileParams = ((1, 'hFile'), (1, 'dwFileOffsetLow'), (1, 'dwFileOffsetHigh'), (1, 'nNumberOfBytesToLockLow'), (1, 'nNumberOfBytesToLockHigh'))
+
+#def LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped):
+#    return LockFileEx.ctypes_function(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
+LockFileExPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD, LPOVERLAPPED)
+LockFileExParams = ((1, 'hFile'), (1, 'dwFlags'), (1, 'dwReserved'), (1, 'nNumberOfBytesToLockLow'), (1, 'nNumberOfBytesToLockHigh'), (1, 'lpOverlapped'))
+
 #def HeapAlloc(hHeap, dwFlags, dwBytes):
 #    return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
 HeapAllocPrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, SIZE_T)
@@ -1379,6 +1434,66 @@ OpenFileMappingAParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lp
 #    return UnmapViewOfFile.ctypes_function(lpBaseAddress)
 UnmapViewOfFilePrototype = WINFUNCTYPE(BOOL, LPCVOID)
 UnmapViewOfFileParams = ((1, 'lpBaseAddress'),)
+
+#def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetQueryDisplayInformation(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer):
+#    return NetQueryDisplayInformation.ctypes_function(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer)
+NetQueryDisplayInformationPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, DWORD, DWORD, DWORD, LPDWORD, POINTER(PVOID))
+NetQueryDisplayInformationParams = ((1, 'ServerName'), (1, 'Level'), (1, 'Index'), (1, 'EntriesRequested'), (1, 'PreferredMaximumLength'), (1, 'ReturnedEntryCount'), (1, 'SortedBuffer'))
+
+#def NetUserEnum(servername, level, filter, bufptr, prefmaxlen, entriesread, totalentries, resume_handle):
+#    return NetUserEnum.ctypes_function(servername, level, filter, bufptr, prefmaxlen, entriesread, totalentries, resume_handle)
+NetUserEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD)
+NetUserEnumParams = ((1, 'servername'), (1, 'level'), (1, 'filter'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resume_handle'))
+
+#def NetGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resume_handle):
+#    return NetGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resume_handle)
+NetGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resume_handle'))
+
+#def NetGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetGroupGetUsers(servername, groupname, level, bufptr, prefmaxlen, entriesread, totalentries, ResumeHandle):
+#    return NetGroupGetUsers.ctypes_function(servername, groupname, level, bufptr, prefmaxlen, entriesread, totalentries, ResumeHandle)
+NetGroupGetUsersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetGroupGetUsersParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'ResumeHandle'))
+
+#def NetLocalGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetLocalGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetLocalGroupGetInfo(servername, groupname, level, bufptr):
+#    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
+NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
+NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
+
+#def NetLocalGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
+#    return NetLocalGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
+NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
+NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
+
+#def NetApiBufferFree(Buffer):
+#    return NetApiBufferFree.ctypes_function(Buffer)
+NetApiBufferFreePrototype = WINFUNCTYPE(NET_API_STATUS, LPVOID)
+NetApiBufferFreeParams = ((1, 'Buffer'),)
 
 #def GetIpNetTable(IpNetTable, SizePointer, Order):
 #    return GetIpNetTable.ctypes_function(IpNetTable, SizePointer, Order)
@@ -3685,6 +3800,11 @@ RtlDecompressBufferExParams = ((1, 'CompressionFormat'), (1, 'UncompressedBuffer
 RtlGetCompressionWorkSpaceSizePrototype = WINFUNCTYPE(NTSTATUS, USHORT, PULONG, PULONG)
 RtlGetCompressionWorkSpaceSizeParams = ((1, 'CompressionFormatAndEngine'), (1, 'CompressBufferWorkSpaceSize'), (1, 'CompressFragmentWorkSpaceSize'))
 
+#def RtlMoveMemory(Destination, Source, Length):
+#    return RtlMoveMemory.ctypes_function(Destination, Source, Length)
+RtlMoveMemoryPrototype = WINFUNCTYPE(VOID, PVOID, PVOID, SIZE_T)
+RtlMoveMemoryParams = ((1, 'Destination'), (1, 'Source'), (1, 'Length'))
+
 #def lstrcmpA(lpString1, lpString2):
 #    return lstrcmpA.ctypes_function(lpString1, lpString2)
 lstrcmpAPrototype = WINFUNCTYPE(INT, LPCSTR, LPCSTR)
@@ -4004,4 +4124,69 @@ GetFirmwareEnvironmentVariableExWParams = ((1, 'lpName'), (1, 'lpGuid'), (1, 'pB
 #    return IsDebuggerPresent.ctypes_function()
 IsDebuggerPresentPrototype = WINFUNCTYPE(BOOL)
 IsDebuggerPresentParams = ()
+
+#def WSAStartup(wVersionRequested, lpWSAData):
+#    return WSAStartup.ctypes_function(wVersionRequested, lpWSAData)
+WSAStartupPrototype = WINFUNCTYPE(INT, WORD, LPWSADATA)
+WSAStartupParams = ((1, 'wVersionRequested'), (1, 'lpWSAData'))
+
+#def WSACleanup():
+#    return WSACleanup.ctypes_function()
+WSACleanupPrototype = WINFUNCTYPE(INT)
+WSACleanupParams = ()
+
+#def WSAGetLastError():
+#    return WSAGetLastError.ctypes_function()
+WSAGetLastErrorPrototype = WINFUNCTYPE(INT)
+WSAGetLastErrorParams = ()
+
+#def getaddrinfo(pNodeName, pServiceName, pHints, ppResult):
+#    return getaddrinfo.ctypes_function(pNodeName, pServiceName, pHints, ppResult)
+getaddrinfoPrototype = WINFUNCTYPE(INT, PCSTR, PCSTR, POINTER(ADDRINFOA), POINTER(PADDRINFOA))
+getaddrinfoParams = ((1, 'pNodeName'), (1, 'pServiceName'), (1, 'pHints'), (1, 'ppResult'))
+
+#def GetAddrInfoW(pNodeName, pServiceName, pHints, ppResult):
+#    return GetAddrInfoW.ctypes_function(pNodeName, pServiceName, pHints, ppResult)
+GetAddrInfoWPrototype = WINFUNCTYPE(INT, PCWSTR, PCWSTR, POINTER(ADDRINFOW), POINTER(PADDRINFOW))
+GetAddrInfoWParams = ((1, 'pNodeName'), (1, 'pServiceName'), (1, 'pHints'), (1, 'ppResult'))
+
+#def WSASocketA(af, type, protocol, lpProtocolInfo, g, dwFlags):
+#    return WSASocketA.ctypes_function(af, type, protocol, lpProtocolInfo, g, dwFlags)
+WSASocketAPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT, LPWSAPROTOCOL_INFOA, GROUP, DWORD)
+WSASocketAParams = ((1, 'af'), (1, 'type'), (1, 'protocol'), (1, 'lpProtocolInfo'), (1, 'g'), (1, 'dwFlags'))
+
+#def WSASocketW(af, type, protocol, lpProtocolInfo, g, dwFlags):
+#    return WSASocketW.ctypes_function(af, type, protocol, lpProtocolInfo, g, dwFlags)
+WSASocketWPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT, LPWSAPROTOCOL_INFOW, GROUP, DWORD)
+WSASocketWParams = ((1, 'af'), (1, 'type'), (1, 'protocol'), (1, 'lpProtocolInfo'), (1, 'g'), (1, 'dwFlags'))
+
+#def socket(af, type, protocol):
+#    return socket.ctypes_function(af, type, protocol)
+socketPrototype = WINFUNCTYPE(SOCKET, INT, INT, INT)
+socketParams = ((1, 'af'), (1, 'type'), (1, 'protocol'))
+
+#def connect(s, name, namelen):
+#    return connect.ctypes_function(s, name, namelen)
+connectPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(sockaddr), INT)
+connectParams = ((1, 's'), (1, 'name'), (1, 'namelen'))
+
+#def send(s, buf, len, flags):
+#    return send.ctypes_function(s, buf, len, flags)
+sendPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(CHAR), INT, INT)
+sendParams = ((1, 's'), (1, 'buf'), (1, 'len'), (1, 'flags'))
+
+#def recv(s, buf, len, flags):
+#    return recv.ctypes_function(s, buf, len, flags)
+recvPrototype = WINFUNCTYPE(INT, SOCKET, POINTER(CHAR), INT, INT)
+recvParams = ((1, 's'), (1, 'buf'), (1, 'len'), (1, 'flags'))
+
+#def shutdown(s, how):
+#    return shutdown.ctypes_function(s, how)
+shutdownPrototype = WINFUNCTYPE(INT, SOCKET, INT)
+shutdownParams = ((1, 's'), (1, 'how'))
+
+#def closesocket(s):
+#    return closesocket.ctypes_function(s)
+closesocketPrototype = WINFUNCTYPE(INT, SOCKET)
+closesocketParams = ((1, 's'),)
 

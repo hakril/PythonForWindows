@@ -198,38 +198,6 @@
 #define SPECIFIC_RIGHTS_ALL              (0x0000FFFFL)
 
 
-#define AF_UNSPEC       0
-#define AF_UNIX         1
-#define AF_INET         2
-#define AF_IMPLINK      3
-#define AF_PUP          4
-#define AF_CHAOS        5
-#define AF_NS           6
-#define AF_IPX          AF_NS
-#define AF_ISO          7
-#define AF_OSI          AF_ISO
-#define AF_ECMA         8
-#define AF_DATAKIT      9
-#define AF_CCITT        10
-#define AF_SNA          11
-#define AF_DECnet       12
-#define AF_DLI          13
-#define AF_LAT          14
-#define AF_HYLINK       15
-#define AF_APPLETALK    16
-#define AF_NETBIOS      17
-#define AF_VOICEVIEW    18
-#define AF_FIREFOX      19
-#define AF_UNKNOWN1     20
-#define AF_BAN          21
-#define AF_ATM          22
-#define AF_INET6        23
-#define AF_CLUSTER      24
-#define AF_12844        25
-#define AF_IRDA         26
-#define AF_NETDES       28
-
-
 #define EXCEPTION_NONCONTINUABLE 0x1
 #define EXCEPTION_MAXIMUM_PARAMETERS 15
 

@@ -776,6 +776,12 @@ NTSTATUS RtlGetCompressionWorkSpaceSize(
 );
 
 
+VOID WINAPI RtlMoveMemory(
+  _Out_       PVOID     Destination,
+  _In_        PVOID     Source,
+  _In_        SIZE_T         Length
+);
+
 INT WINAPI lstrcmpA(
     __in LPCSTR lpString1,
     __in LPCSTR lpString2

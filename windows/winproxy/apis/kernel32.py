@@ -580,7 +580,13 @@ def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dw
 def ReadDirectoryChangesExW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass):
     return ReadDirectoryChangesExW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine, ReadDirectoryNotifyInformationClass)
 
+@Kernel32Proxy()
+def LockFile(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh):
+    return LockFile.ctypes_function(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh)
 
+@Kernel32Proxy()
+def LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped):
+    return LockFileEx.ctypes_function(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
 
 ## Tlhelp (snapshoot)
 
@@ -933,3 +939,44 @@ def EnumResourceNamesA(hModule, lpType, lpEnumFunc, lParam):
 @Kernel32Proxy()
 def EnumResourceNamesW(hModule, lpType, lpEnumFunc, lParam):
     return EnumResourceNamesW.ctypes_function(hModule, lpType, lpEnumFunc, lParam)
+
+# Environment
+@Kernel32Proxy()
+def GetEnvironmentVariableA(lpName, lpBuffer, nSize):
+    if nSize is None:
+        nSize = ctypes.sizeof(lpBuffer)
+    return GetEnvironmentVariableA.ctypes_function(lpName, lpBuffer, nSize)
+
+@Kernel32Proxy()
+def GetEnvironmentVariableW(lpName, lpBuffer, nSize):
+    if nSize is None:
+        nSize = ctypes.sizeof(lpBuffer)
+    return GetEnvironmentVariableW.ctypes_function(lpName, lpBuffer, nSize)
+
+@Kernel32Proxy()
+def SetEnvironmentVariableA(lpName, lpValue):
+    return SetEnvironmentVariableA.ctypes_function(lpName, lpValue)
+
+@Kernel32Proxy()
+def SetEnvironmentVariableW(lpName, lpValue):
+    return SetEnvironmentVariableW.ctypes_function(lpName, lpValue)
+
+@Kernel32Proxy()
+def GetEnvironmentStringsA():
+    return GetEnvironmentStringsA.ctypes_function()
+
+@Kernel32Proxy()
+def GetEnvironmentStringsW():
+    return GetEnvironmentStringsW.ctypes_function()
+
+@Kernel32Proxy()
+def SetEnvironmentStringsW(NewEnvironment):
+    return SetEnvironmentStringsW.ctypes_function(NewEnvironment)
+
+@Kernel32Proxy()
+def FreeEnvironmentStringsA(penv):
+    return FreeEnvironmentStringsA.ctypes_function(penv)
+
+@Kernel32Proxy()
+def FreeEnvironmentStringsW(penv):
+    return FreeEnvironmentStringsW.ctypes_function(penv)

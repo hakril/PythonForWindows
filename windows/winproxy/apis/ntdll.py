@@ -400,6 +400,10 @@ def NtQueryKey(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLen
 def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
    return RtlEqualUnicodeString.ctypes_function(String1, String2, CaseInSensitive)
 
+@NtdllProxy(error_check=None)
+def RtlMoveMemory(Destination, Source, Length):
+    return RtlMoveMemory.ctypes_function(Destination, Source, Length)
+
 
 # Firmware
 @NtdllProxy()

@@ -9023,6 +9023,1016 @@ _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
         :class:`_ANON__PROCESS_MITIGATION_IMAGE_LOAD_POLICY_SUB_UNION_1`
 
+_LOCALGROUP_INFO_0
+''''''''''''''''''
+.. class:: LPLOCALGROUP_INFO_0
+
+    Pointer to :class:`_LOCALGROUP_INFO_0`
+
+.. class:: LOCALGROUP_INFO_0
+
+    Alias for :class:`_LOCALGROUP_INFO_0`
+
+.. class:: PLOCALGROUP_INFO_0
+
+    Pointer to :class:`_LOCALGROUP_INFO_0`
+
+.. class:: _LOCALGROUP_INFO_0
+
+    .. attribute:: lgrpi0_name
+
+        :class:`LPWSTR`
+
+_LOCALGROUP_INFO_1
+''''''''''''''''''
+.. class:: LPLOCALGROUP_INFO_1
+
+    Pointer to :class:`_LOCALGROUP_INFO_1`
+
+.. class:: LOCALGROUP_INFO_1
+
+    Alias for :class:`_LOCALGROUP_INFO_1`
+
+.. class:: PLOCALGROUP_INFO_1
+
+    Pointer to :class:`_LOCALGROUP_INFO_1`
+
+.. class:: _LOCALGROUP_INFO_1
+
+    .. attribute:: lgrpi1_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lgrpi1_comment
+
+        :class:`LPWSTR`
+
+_LOCALGROUP_MEMBERS_INFO_0
+''''''''''''''''''''''''''
+.. class:: LPLOCALGROUP_MEMBERS_INFO_0
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_0`
+
+.. class:: LOCALGROUP_MEMBERS_INFO_0
+
+    Alias for :class:`_LOCALGROUP_MEMBERS_INFO_0`
+
+.. class:: PLOCALGROUP_MEMBERS_INFO_0
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_0`
+
+.. class:: _LOCALGROUP_MEMBERS_INFO_0
+
+    .. attribute:: lgrmi0_sid
+
+        :class:`PSID`
+
+_LOCALGROUP_MEMBERS_INFO_1
+''''''''''''''''''''''''''
+.. class:: LPLOCALGROUP_MEMBERS_INFO_1
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_1`
+
+.. class:: LOCALGROUP_MEMBERS_INFO_1
+
+    Alias for :class:`_LOCALGROUP_MEMBERS_INFO_1`
+
+.. class:: PLOCALGROUP_MEMBERS_INFO_1
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_1`
+
+.. class:: _LOCALGROUP_MEMBERS_INFO_1
+
+    .. attribute:: lgrmi1_sid
+
+        :class:`PSID`
+
+
+    .. attribute:: lgrmi1_sidusage
+
+        :class:`SID_NAME_USE`
+
+
+    .. attribute:: lgrmi1_name
+
+        :class:`LPWSTR`
+
+_LOCALGROUP_MEMBERS_INFO_2
+''''''''''''''''''''''''''
+.. class:: LPLOCALGROUP_MEMBERS_INFO_2
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_2`
+
+.. class:: PLOCALGROUP_MEMBERS_INFO_2
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_2`
+
+.. class:: LOCALGROUP_MEMBERS_INFO_2
+
+    Alias for :class:`_LOCALGROUP_MEMBERS_INFO_2`
+
+.. class:: _LOCALGROUP_MEMBERS_INFO_2
+
+    .. attribute:: lgrmi2_sid
+
+        :class:`PSID`
+
+
+    .. attribute:: lgrmi2_sidusage
+
+        :class:`SID_NAME_USE`
+
+
+    .. attribute:: lgrmi2_domainandname
+
+        :class:`LPWSTR`
+
+_LOCALGROUP_MEMBERS_INFO_3
+''''''''''''''''''''''''''
+.. class:: LPLOCALGROUP_MEMBERS_INFO_3
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_3`
+
+.. class:: PLOCALGROUP_MEMBERS_INFO_3
+
+    Pointer to :class:`_LOCALGROUP_MEMBERS_INFO_3`
+
+.. class:: LOCALGROUP_MEMBERS_INFO_3
+
+    Alias for :class:`_LOCALGROUP_MEMBERS_INFO_3`
+
+.. class:: _LOCALGROUP_MEMBERS_INFO_3
+
+    .. attribute:: lgrmi3_domainandname
+
+        :class:`LPWSTR`
+
+_NET_DISPLAY_USER
+'''''''''''''''''
+.. class:: NET_DISPLAY_USER
+
+    Alias for :class:`_NET_DISPLAY_USER`
+
+.. class:: PNET_DISPLAY_USER
+
+    Pointer to :class:`_NET_DISPLAY_USER`
+
+.. class:: _NET_DISPLAY_USER
+
+    .. attribute:: usri1_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri1_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_user_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri1_next_index
+
+        :class:`DWORD`
+
+_NET_DISPLAY_MACHINE
+''''''''''''''''''''
+.. class:: PNET_DISPLAY_MACHINE
+
+    Pointer to :class:`_NET_DISPLAY_MACHINE`
+
+.. class:: NET_DISPLAY_MACHINE
+
+    Alias for :class:`_NET_DISPLAY_MACHINE`
+
+.. class:: _NET_DISPLAY_MACHINE
+
+    .. attribute:: usri2_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_user_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_next_index
+
+        :class:`DWORD`
+
+_NET_DISPLAY_GROUP
+''''''''''''''''''
+.. class:: PNET_DISPLAY_GROUP
+
+    Pointer to :class:`_NET_DISPLAY_GROUP`
+
+.. class:: NET_DISPLAY_GROUP
+
+    Alias for :class:`_NET_DISPLAY_GROUP`
+
+.. class:: _NET_DISPLAY_GROUP
+
+    .. attribute:: grpi3_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi3_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi3_group_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: grpi3_attributes
+
+        :class:`DWORD`
+
+
+    .. attribute:: grpi3_next_index
+
+        :class:`DWORD`
+
+_USER_INFO_0
+''''''''''''
+.. class:: PUSER_INFO_0
+
+    Pointer to :class:`_USER_INFO_0`
+
+.. class:: LPUSER_INFO_0
+
+    Pointer to :class:`_USER_INFO_0`
+
+.. class:: USER_INFO_0
+
+    Alias for :class:`_USER_INFO_0`
+
+.. class:: _USER_INFO_0
+
+    .. attribute:: usri0_name
+
+        :class:`LPWSTR`
+
+_USER_INFO_1
+''''''''''''
+.. class:: PUSER_INFO_1
+
+    Pointer to :class:`_USER_INFO_1`
+
+.. class:: LPUSER_INFO_1
+
+    Pointer to :class:`_USER_INFO_1`
+
+.. class:: USER_INFO_1
+
+    Alias for :class:`_USER_INFO_1`
+
+.. class:: _USER_INFO_1
+
+    .. attribute:: usri1_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_password
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_password_age
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri1_priv
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri1_home_dir
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri1_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri1_script_path
+
+        :class:`LPWSTR`
+
+_USER_INFO_2
+''''''''''''
+.. class:: PUSER_INFO_2
+
+    Pointer to :class:`_USER_INFO_2`
+
+.. class:: USER_INFO_2
+
+    Alias for :class:`_USER_INFO_2`
+
+.. class:: LPUSER_INFO_2
+
+    Pointer to :class:`_USER_INFO_2`
+
+.. class:: _USER_INFO_2
+
+    .. attribute:: usri2_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_password
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_password_age
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_priv
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_home_dir
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_script_path
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_auth_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_usr_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_parms
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_workstations
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_last_logon
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_last_logoff
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_acct_expires
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_max_storage
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_units_per_week
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_logon_hours
+
+        :class:`PBYTE`
+
+
+    .. attribute:: usri2_bad_pw_count
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_num_logons
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_logon_server
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri2_country_code
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri2_code_page
+
+        :class:`DWORD`
+
+_USER_INFO_3
+''''''''''''
+.. class:: PUSER_INFO_3
+
+    Pointer to :class:`_USER_INFO_3`
+
+.. class:: USER_INFO_3
+
+    Alias for :class:`_USER_INFO_3`
+
+.. class:: LPUSER_INFO_3
+
+    Pointer to :class:`_USER_INFO_3`
+
+.. class:: _USER_INFO_3
+
+    .. attribute:: usri3_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_password
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_password_age
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_priv
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_home_dir
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_script_path
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_auth_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_usr_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_parms
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_workstations
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_last_logon
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_last_logoff
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_acct_expires
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_max_storage
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_units_per_week
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_logon_hours
+
+        :class:`PBYTE`
+
+
+    .. attribute:: usri3_bad_pw_count
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_num_logons
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_logon_server
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_country_code
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_code_page
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_user_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_primary_group_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri3_profile
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_home_dir_drive
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri3_password_expired
+
+        :class:`DWORD`
+
+_USER_INFO_10
+'''''''''''''
+.. class:: USER_INFO_10
+
+    Alias for :class:`_USER_INFO_10`
+
+.. class:: PUSER_INFO_10
+
+    Pointer to :class:`_USER_INFO_10`
+
+.. class:: LPUSER_INFO_10
+
+    Pointer to :class:`_USER_INFO_10`
+
+.. class:: _USER_INFO_10
+
+    .. attribute:: usri10_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri10_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri10_usr_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri10_full_name
+
+        :class:`LPWSTR`
+
+_USER_INFO_11
+'''''''''''''
+.. class:: PUSER_INFO_11
+
+    Pointer to :class:`_USER_INFO_11`
+
+.. class:: USER_INFO_11
+
+    Alias for :class:`_USER_INFO_11`
+
+.. class:: LPUSER_INFO_11
+
+    Pointer to :class:`_USER_INFO_11`
+
+.. class:: _USER_INFO_11
+
+    .. attribute:: usri11_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_usr_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_priv
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_auth_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_password_age
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_home_dir
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_parms
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_last_logon
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_last_logoff
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_bad_pw_count
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_num_logons
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_logon_server
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_country_code
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_workstations
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri11_max_storage
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_units_per_week
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri11_logon_hours
+
+        :class:`PBYTE`
+
+
+    .. attribute:: usri11_code_page
+
+        :class:`DWORD`
+
+_USER_INFO_20
+'''''''''''''
+.. class:: PUSER_INFO_20
+
+    Pointer to :class:`_USER_INFO_20`
+
+.. class:: USER_INFO_20
+
+    Alias for :class:`_USER_INFO_20`
+
+.. class:: LPUSER_INFO_20
+
+    Pointer to :class:`_USER_INFO_20`
+
+.. class:: _USER_INFO_20
+
+    .. attribute:: usri20_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri20_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri20_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri20_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri20_user_id
+
+        :class:`DWORD`
+
+_USER_INFO_23
+'''''''''''''
+.. class:: USER_INFO_23
+
+    Alias for :class:`_USER_INFO_23`
+
+.. class:: PUSER_INFO_23
+
+    Pointer to :class:`_USER_INFO_23`
+
+.. class:: LPUSER_INFO_23
+
+    Pointer to :class:`_USER_INFO_23`
+
+.. class:: _USER_INFO_23
+
+    .. attribute:: usri23_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri23_full_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri23_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: usri23_flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: usri23_user_sid
+
+        :class:`PSID`
+
+_GROUP_INFO_0
+'''''''''''''
+.. class:: PGROUP_INFO_0
+
+    Pointer to :class:`_GROUP_INFO_0`
+
+.. class:: GROUP_INFO_0
+
+    Alias for :class:`_GROUP_INFO_0`
+
+.. class:: LPGROUP_INFO_0
+
+    Pointer to :class:`_GROUP_INFO_0`
+
+.. class:: _GROUP_INFO_0
+
+    .. attribute:: grpi0_name
+
+        :class:`LPWSTR`
+
+_GROUP_INFO_1
+'''''''''''''
+.. class:: GROUP_INFO_1
+
+    Alias for :class:`_GROUP_INFO_1`
+
+.. class:: PGROUP_INFO_1
+
+    Pointer to :class:`_GROUP_INFO_1`
+
+.. class:: LPGROUP_INFO_1
+
+    Pointer to :class:`_GROUP_INFO_1`
+
+.. class:: _GROUP_INFO_1
+
+    .. attribute:: grpi1_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi1_comment
+
+        :class:`LPWSTR`
+
+_GROUP_INFO_2
+'''''''''''''
+.. class:: PGROUP_INFO_2
+
+    Pointer to :class:`_GROUP_INFO_2`
+
+.. class:: GROUP_INFO_2
+
+    Alias for :class:`_GROUP_INFO_2`
+
+.. class:: _GROUP_INFO_2
+
+    .. attribute:: grpi2_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi2_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi2_group_id
+
+        :class:`DWORD`
+
+
+    .. attribute:: grpi2_attributes
+
+        :class:`DWORD`
+
+_GROUP_INFO_3
+'''''''''''''
+.. class:: GROUP_INFO_3
+
+    Alias for :class:`_GROUP_INFO_3`
+
+.. class:: PGROUP_INFO_3
+
+    Pointer to :class:`_GROUP_INFO_3`
+
+.. class:: _GROUP_INFO_3
+
+    .. attribute:: grpi3_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi3_comment
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grpi3_group_sid
+
+        :class:`PSID`
+
+
+    .. attribute:: grpi3_attributes
+
+        :class:`DWORD`
+
+_GROUP_USERS_INFO_0
+'''''''''''''''''''
+.. class:: GROUP_USERS_INFO_0
+
+    Alias for :class:`_GROUP_USERS_INFO_0`
+
+.. class:: PGROUP_USERS_INFO_0
+
+    Pointer to :class:`_GROUP_USERS_INFO_0`
+
+.. class:: LPGROUP_USERS_INFO_0
+
+    Pointer to :class:`_GROUP_USERS_INFO_0`
+
+.. class:: _GROUP_USERS_INFO_0
+
+    .. attribute:: grui0_name
+
+        :class:`LPWSTR`
+
+_GROUP_USERS_INFO_1
+'''''''''''''''''''
+.. class:: PGROUP_USERS_INFO_1
+
+    Pointer to :class:`_GROUP_USERS_INFO_1`
+
+.. class:: GROUP_USERS_INFO_1
+
+    Alias for :class:`_GROUP_USERS_INFO_1`
+
+.. class:: LPGROUP_USERS_INFO_1
+
+    Pointer to :class:`_GROUP_USERS_INFO_1`
+
+.. class:: _GROUP_USERS_INFO_1
+
+    .. attribute:: grui1_name
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: grui1_attributes
+
+        :class:`DWORD`
+
 _MIB_IPNETROW_LH
 ''''''''''''''''
 .. class:: PMIB_IPNETROW
@@ -23596,6 +24606,487 @@ _BG_JOB_TIMES
 
         :class:`FILETIME`
 
+WSAData64
+'''''''''
+.. class:: WSADATA64
+
+    Alias for :class:`WSAData64`
+
+.. class:: LPWSADATA64
+
+    Pointer to :class:`WSAData64`
+
+.. class:: WSAData64
+
+    .. attribute:: wVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: wHighVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: iMaxSockets
+
+        :class:`USHORT`
+
+
+    .. attribute:: iMaxUdpDg
+
+        :class:`USHORT`
+
+
+    .. attribute:: lpVendorInfo
+
+        :class:`CHAR`
+
+
+    .. attribute:: szDescription
+
+        :class:`CHAR` ``[WSADESCRIPTION_LEN + 1]``
+
+
+    .. attribute:: szSystemStatus
+
+        :class:`CHAR` ``[WSASYS_STATUS_LEN + 1]``
+
+WSAData32
+'''''''''
+.. class:: LPWSADATA32
+
+    Pointer to :class:`WSAData32`
+
+.. class:: WSADATA32
+
+    Alias for :class:`WSAData32`
+
+.. class:: WSAData32
+
+    .. attribute:: wVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: wHighVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: szDescription
+
+        :class:`CHAR` ``[WSADESCRIPTION_LEN + 1]``
+
+
+    .. attribute:: szSystemStatus
+
+        :class:`CHAR` ``[WSASYS_STATUS_LEN + 1]``
+
+
+    .. attribute:: iMaxSockets
+
+        :class:`USHORT`
+
+
+    .. attribute:: iMaxUdpDg
+
+        :class:`USHORT`
+
+
+    .. attribute:: lpVendorInfo
+
+        :class:`CHAR`
+
+in_addr
+'''''''
+.. class:: in_addr
+
+    .. attribute:: S_un
+
+        :class:`_ANON_IN_ADDR_SUB_UNION_1`
+
+sockaddr
+''''''''
+.. class:: sockaddr
+
+    .. attribute:: sa_family
+
+        :class:`USHORT`
+
+
+    .. attribute:: sa_data
+
+        :class:`CHAR` ``[14]``
+
+sockaddr_in
+'''''''''''
+.. class:: sockaddr_in
+
+    .. attribute:: sin_family
+
+        :class:`SHORT`
+
+
+    .. attribute:: sin_port
+
+        :class:`USHORT`
+
+
+    .. attribute:: sin_addr
+
+        :class:`in_addr`
+
+
+    .. attribute:: sin_zero
+
+        :class:`CHAR` ``[8]``
+
+addrinfoW
+'''''''''
+.. class:: ADDRINFOW
+
+    Alias for :class:`addrinfoW`
+
+.. class:: PADDRINFOW
+
+    Pointer to :class:`addrinfoW`
+
+.. class:: addrinfoW
+
+    .. attribute:: ai_flags
+
+        :class:`INT`
+
+
+    .. attribute:: ai_family
+
+        :class:`INT`
+
+
+    .. attribute:: ai_socktype
+
+        :class:`INT`
+
+
+    .. attribute:: ai_protocol
+
+        :class:`INT`
+
+
+    .. attribute:: ai_addrlen
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: ai_canonname
+
+        :class:`PWSTR`
+
+
+    .. attribute:: ai_addr
+
+        :class:`sockaddr`
+
+
+    .. attribute:: ai_next
+
+        :class:`addrinfoW`
+
+_WSAPROTOCOLCHAIN
+'''''''''''''''''
+.. class:: LPWSAPROTOCOLCHAIN
+
+    Pointer to :class:`_WSAPROTOCOLCHAIN`
+
+.. class:: WSAPROTOCOLCHAIN
+
+    Alias for :class:`_WSAPROTOCOLCHAIN`
+
+.. class:: _WSAPROTOCOLCHAIN
+
+    .. attribute:: ChainLen
+
+        :class:`INT`
+
+
+    .. attribute:: ChainEntries
+
+        :class:`DWORD` ``[MAX_PROTOCOL_CHAIN]``
+
+_WSAPROTOCOL_INFOA
+''''''''''''''''''
+.. class:: WSAPROTOCOL_INFOA
+
+    Alias for :class:`_WSAPROTOCOL_INFOA`
+
+.. class:: LPWSAPROTOCOL_INFOA
+
+    Pointer to :class:`_WSAPROTOCOL_INFOA`
+
+.. class:: _WSAPROTOCOL_INFOA
+
+    .. attribute:: dwServiceFlags1
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags2
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags3
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags4
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProviderId
+
+        :class:`GUID`
+
+
+    .. attribute:: dwCatalogEntryId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProtocolChain
+
+        :class:`WSAPROTOCOLCHAIN`
+
+
+    .. attribute:: iVersion
+
+        :class:`INT`
+
+
+    .. attribute:: iAddressFamily
+
+        :class:`INT`
+
+
+    .. attribute:: iMaxSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iMinSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iSocketType
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocol
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocolMaxOffset
+
+        :class:`INT`
+
+
+    .. attribute:: iNetworkByteOrder
+
+        :class:`INT`
+
+
+    .. attribute:: iSecurityScheme
+
+        :class:`INT`
+
+
+    .. attribute:: dwMessageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: szProtocol
+
+        :class:`CHAR` ``[WSAPROTOCOL_LEN + 1]``
+
+_WSAPROTOCOL_INFOW
+''''''''''''''''''
+.. class:: LPWSAPROTOCOL_INFOW
+
+    Pointer to :class:`_WSAPROTOCOL_INFOW`
+
+.. class:: WSAPROTOCOL_INFOW
+
+    Alias for :class:`_WSAPROTOCOL_INFOW`
+
+.. class:: _WSAPROTOCOL_INFOW
+
+    .. attribute:: dwServiceFlags1
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags2
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags3
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags4
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProviderId
+
+        :class:`GUID`
+
+
+    .. attribute:: dwCatalogEntryId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProtocolChain
+
+        :class:`WSAPROTOCOLCHAIN`
+
+
+    .. attribute:: iVersion
+
+        :class:`INT`
+
+
+    .. attribute:: iAddressFamily
+
+        :class:`INT`
+
+
+    .. attribute:: iMaxSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iMinSockAddr
+
+        :class:`INT`
+
+
+    .. attribute:: iSocketType
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocol
+
+        :class:`INT`
+
+
+    .. attribute:: iProtocolMaxOffset
+
+        :class:`INT`
+
+
+    .. attribute:: iNetworkByteOrder
+
+        :class:`INT`
+
+
+    .. attribute:: iSecurityScheme
+
+        :class:`INT`
+
+
+    .. attribute:: dwMessageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProviderReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: szProtocol
+
+        :class:`WCHAR` ``[WSAPROTOCOL_LEN + 1]``
+
+addrinfo
+''''''''
+.. class:: PADDRINFOA
+
+    Pointer to :class:`addrinfo`
+
+.. class:: ADDRINFOA
+
+    Alias for :class:`addrinfo`
+
+.. class:: addrinfo
+
+    .. attribute:: ai_flags
+
+        :class:`INT`
+
+
+    .. attribute:: ai_family
+
+        :class:`INT`
+
+
+    .. attribute:: ai_socktype
+
+        :class:`INT`
+
+
+    .. attribute:: ai_protocol
+
+        :class:`INT`
+
+
+    .. attribute:: ai_addrlen
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: ai_canonname
+
+        :class:`CHAR`
+
+
+    .. attribute:: ai_addr
+
+        :class:`sockaddr`
+
+
+    .. attribute:: ai_next
+
+        :class:`addrinfo`
+
 Simple types
 ''''''''''''
 .. autoclass:: VOID
@@ -23649,6 +25140,10 @@ Simple types
 .. autoclass:: LONG_PTR
 
 .. autoclass:: DWORD_PTR
+
+.. class:: PDWORD_PTR
+
+    Pointer to :class:`DWORD_PTR`
 
 .. autoclass:: KAFFINITY
 
@@ -23807,6 +25302,8 @@ Simple types
 .. autoclass:: PWINDBG_EXTENSION_APIS64
 
 .. autoclass:: FILEOP_FLAGS
+
+.. autoclass:: NET_API_STATUS
 
 .. autoclass:: NCRYPT_HANDLE
 
@@ -23978,6 +25475,10 @@ Simple types
 
 .. autoclass:: SFGAOF
 
+.. autoclass:: GROUP
+
+.. autoclass:: SOCKET
+
 .. autoclass:: WNDPROC
 
 .. autoclass:: LPPROC_THREAD_ATTRIBUTE_LIST
@@ -24059,6 +25560,8 @@ Simple types
 .. autoclass:: PALPC_PORT_ATTRIBUTES
 
 .. autoclass:: PPORT_MESSAGE
+
+.. autoclass:: LPWSADATA
 
 WinEnums
 --------

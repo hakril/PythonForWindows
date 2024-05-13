@@ -285,6 +285,8 @@ MANDATORY_LABEL_ACE_MASK = gdef.FlagMapper(
     gdef.SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP,
 )
 
+
+
 class AceHeader(gdef.ACE_HEADER):
     """Improved ACE_HEADER"""
     def _to_ace_type(self, ace_type):
@@ -1113,14 +1115,36 @@ def explain_callback_ace(ace, sdtype):
     yield u"Mask:"
     mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
     yield u"  " + str(list(mapper[x] for x in ace.mask))
-    yield "Application data:"
-    yield "  " + repr(ace.application_data.replace("\x00", ""))
+    yield u"Application data:"
+    yield u"  " + repr(ace.application_data.replace(b"\x00", b""))
     try:
         condition = ace.condition
-        yield "Condition:"
-        yield "  " + condition
+        yield u"Condition:"
+        yield u"  " + condition
     except ValueError:
         pass
+
+def explain_resource_attribute(ace, sdtype):
+    yield u"Type:"
+    yield u"  " + str(ace.Header.AceType)
+    yield u"HeaderFlags:"
+    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"SID:"
+    yield u"  " + explain_sid(ace.sid)
+    yield u"Mask:"
+    mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
+    yield u"  " + str(list(mapper[x] for x in ace.mask))
+
+    attribute = ace.attribute
+    yield u"Attribute Name:"
+    yield u"  " + attribute.name
+    yield u"Attribute Type:"
+    yield u"  {0:#x}".format(attribute.ValueType)
+    yield u"Attribute Flags:"
+    yield u"  {0:#x}".format(attribute.Flags)
+    yield u"Values:"
+    for value in attribute.values:
+        yield u"  " + repr(value)
 
 
 ACE_EXPLAINER = {
@@ -1131,6 +1155,7 @@ ACE_EXPLAINER = {
     gdef.ACCESS_ALLOWED_OBJECT_ACE_TYPE: explain_object_related_ace,
     gdef.ACCESS_DENIED_OBJECT_ACE_TYPE: explain_object_related_ace,
     gdef.ACCESS_ALLOWED_CALLBACK_ACE_TYPE: explain_callback_ace,
+    gdef.SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE: explain_resource_attribute,
 }
 
 

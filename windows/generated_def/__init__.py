@@ -1,3 +1,4 @@
+from . import windef
 from . import winstructs
 
 def bitness():
@@ -27,6 +28,11 @@ if bitness() == 32:
     # CFGMGR32
     winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_32
 
+    # Socket
+    windef.WSADATA = winstructs.WSADATA32
+    windef.INVALID_SOCKET = windef.INVALID_SOCKET32
+
+
 else:
     winstructs.CONTEXT = winstructs.CONTEXT64
     winstructs.PCONTEXT = winstructs.PCONTEXT64
@@ -46,6 +52,10 @@ else:
 
     # CFGMGR32
     winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_64
+
+    # Socket
+    windef.WSADATA = winstructs.WSADATA64
+    windef.INVALID_SOCKET = windef.INVALID_SOCKET64
 
 from . import winfuncs
 from . import windef

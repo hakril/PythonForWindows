@@ -1,0 +1,109 @@
+NET_API_STATUS NetLocalGroupGetMembers(
+  [in]      LPCWSTR    servername,
+  [in]      LPCWSTR    localgroupname,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR resumehandle
+);
+
+NET_API_STATUS NetQueryDisplayInformation(
+  [in]  LPCWSTR ServerName,
+  [in]  DWORD   Level,
+  [in]  DWORD   Index,
+  [in]  DWORD   EntriesRequested,
+  [in]  DWORD   PreferredMaximumLength,
+  [out] LPDWORD ReturnedEntryCount,
+  [out] PVOID   *SortedBuffer
+);
+
+NET_API_STATUS NetUserEnum(
+  [in]      LPCWSTR servername,
+  [in]      DWORD   level,
+  [in]      DWORD   filter,
+  [out]     LPBYTE  *bufptr,
+  [in]      DWORD   prefmaxlen,
+  [out]     LPDWORD entriesread,
+  [out]     LPDWORD totalentries,
+  [in, out] PDWORD  resume_handle
+);
+
+NET_API_STATUS NetGroupEnum(
+  [in]      LPCWSTR    servername,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR resume_handle
+);
+
+NET_API_STATUS NetGroupGetInfo(
+  [in]  LPCWSTR servername,
+  [in]  LPCWSTR groupname,
+  [in]  DWORD   level,
+  [out] LPBYTE  *bufptr
+);
+
+NET_API_STATUS NetGroupGetUsers(
+  [in]      LPCWSTR    servername,
+  [in]      LPCWSTR    groupname,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR ResumeHandle
+);
+
+NET_API_STATUS NetLocalGroupEnum(
+  [in]      LPCWSTR    servername,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR resumehandle
+);
+
+NET_API_STATUS NetLocalGroupGetInfo(
+  [in]  LPCWSTR servername,
+  [in]  LPCWSTR groupname,
+  [in]  DWORD   level,
+  [out] LPBYTE  *bufptr
+);
+
+NET_API_STATUS NetLocalGroupGetMembers(
+  [in]      LPCWSTR    servername,
+  [in]      LPCWSTR    localgroupname,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR resumehandle
+);
+
+NET_API_STATUS NetLocalGroupGetInfo(
+  [in]  LPCWSTR servername,
+  [in]  LPCWSTR groupname,
+  [in]  DWORD   level,
+  [out] LPBYTE  *bufptr
+);
+
+NET_API_STATUS NetLocalGroupEnum(
+  [in]      LPCWSTR    servername,
+  [in]      DWORD      level,
+  [out]     LPBYTE     *bufptr,
+  [in]      DWORD      prefmaxlen,
+  [out]     LPDWORD    entriesread,
+  [out]     LPDWORD    totalentries,
+  [in, out] PDWORD_PTR resumehandle
+);
+
+
+NET_API_STATUS NetApiBufferFree(
+  [in] LPVOID Buffer
+);
