@@ -53,7 +53,7 @@ def check_injected_python_installed(request):
         raise ValueError("Could not find the fixture name of the injected python")
     procparam = procparams[0]
     proc = request.getfixturevalue(procparam)
-    if not python_is_installed[proc.bitness]:
+    if not windows.injection.find_python_dll_to_inject(proc.bitness):
         pytest.skip("Python {0}b not installed -> skipping test with python injection into {0}b process".format(proc.bitness))
     return None
 
