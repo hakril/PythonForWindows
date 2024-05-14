@@ -460,8 +460,9 @@ class TestProcessWithCheckGarbage(object):
         mapped_filname = proc32_64.get_mapped_filename(k32.baseaddr)
         assert mapped_filname.endswith("kernel32.dll")
         # Test on non-commit & non file-mapped addresses
-        assert proc32_64.get_mapped_filename(0) == None
-        assert proc32_64.get_mapped_filename(id(object())) == None
+        assert proc32_64.get_mapped_filename(0) is None
+        with proc32_64.allocated_memory(0x1000) as addr:
+            assert proc32_64.get_mapped_filename(addr) is None
 
 
     def test_thread_teb_base(self, proc32_64):
@@ -522,5 +523,6 @@ class TestProcessWithCheckGarbage(object):
         finally:
             p.exit()
             p.wait()
+            time.sleep(0.5) # Fail on Azure CI of no sleep
             os.unlink(target_programe)
 

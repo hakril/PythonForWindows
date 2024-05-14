@@ -1,0 +1,70 @@
+# V0.1
+name: Pytest
+
+on: [push, workflow_dispatch]
+  # Allows you to run this workflow manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [2.7, 3.6, 3.11]
+        # python-version: [3.6] # Concentrate on working CI for python3 & we will see backport for py2 afterward
+        python-architecture: [x86, x64]
+        include:
+            # Translate architecture to bitness for py.exe commandline
+            - python-bitness-to-test: 32
+              python-architecture: x86
+            - python-bitness-to-test: 64
+              python-architecture: x64
+
+    steps:
+      - uses: actions/checkout@v4
+      # Pfw testing need both 32b & 64b of tested python version for cross-bitness python injection tests
+
+      ## Install the 32bits version of python3 asked
+      - name: Set up Python3 ${{ matrix.python-version }} x86
+        if: ${{ matrix.python-version != '2.7' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version}}
+          architecture: x86
+      ## Install the 64bits version of python3 asked
+      - name: Set up Python3 ${{ matrix.python-version }} x64
+        if: ${{ matrix.python-version != '2.7' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version}}
+          architecture: x64
+
+      # Manually install python2.7 (both version at once)
+      - name: Set up Python2.7 ${{ matrix.python-version }} x86 & x64
+        shell: bash
+        if: ${{ matrix.python-version == '2.7' }}
+        run: |
+            choco install python2 --version=2.7.18 -y --no-progress --params '"/InstallDir:C:\tools\python27"'
+            choco install python2 --version=2.7.18 -y --no-progress -x86 --params '"/InstallDir:C:\tools\python2732"' --force
+
+      - name: Listing python versions availables
+        run: py -0
+
+      # Install PythonForWindows for both bitness
+      - name: Installing PythonForWindows for both bitness
+        run: |
+            py -${{ matrix.python-version}}-32 setup.py install
+            py -${{ matrix.python-version}}-64 setup.py install
+
+      - name: Installing pytest
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest
+
+      # Testing
+      - name: Testing
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -k "not debugger and not known_to_fail" -v tests/
+
+      - name: Publish PyTest Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
+        with:
+          files: junit/test-results.xml

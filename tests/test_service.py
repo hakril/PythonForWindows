@@ -21,8 +21,12 @@ def test_service_appinfo():
 
 
 def test_service_start():
-    faxservice = windows.system.services["Fax"]
-    # Just start a random serivce with a string
+    appinfo = windows.system.services["Appinfo"]
+    # Just start a random serivce with a string (even if already started)
     # Used to check string compat in py2/py3
-    faxservice.start("TEST STRING")
+    try:
+        appinfo.start("TEST STRING")
+    except WindowsError as e:
+        if e.winerror != gdef.ERROR_SERVICE_ALREADY_RUNNING:
+            raise
 
