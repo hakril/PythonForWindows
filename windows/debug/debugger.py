@@ -243,6 +243,10 @@ class Debugger(object):
         mod = None
         if dll in modules:
             mod = [modules[dll]]
+        elif target.is_wow_64 and dll == "ntdll" and "ntdll32" in modules:
+            # https://twitter.com/hakril/status/1555473886321549312
+            mod = [modules["ntdll32"]]
+
         if not mod:
             return None
         # TODO: optim exports are the same for whole system (32 vs 64 bits)
@@ -486,7 +490,9 @@ class Debugger(object):
                 target_dll = bp.addr.lower().split("!")[0]
                 # Cannot work AS-IS yet. Implement it ?
                 # if target_dll == "*" or target_dll == dll_name:
-                if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     if bp.apply_to_target(self.current_process):
                         _setup_method(bp, self.current_process)
@@ -497,7 +503,9 @@ class Debugger(object):
         for bp in self._pending_breakpoints_new[self.current_process.pid]:
             if isinstance(bp.addr, basestring):
                 target_dll = bp.addr.split("!")[0]
-                if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     _setup_method(bp, self.current_process)
 
@@ -505,7 +513,9 @@ class Debugger(object):
             for bp in self._pending_breakpoints_new[thread.tid]:
                 if isinstance(bp.addr, basestring):
                     target_dll = bp.addr.split("!")[0]
-                    if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                         _setup_method(bp, self.thread)
 
@@ -853,6 +863,8 @@ class Debugger(object):
             dll_name = dll_name[:-4]
         # Mais c'est debile..
         # Si j'ai ntdll et ntdll64: les deux vont avoir le meme nom..
+        # A changer sur Win11 ou ntdll est remontee en tant que ntdll32.dll
+        #   https://twitter.com/hakril/status/1555473886321549312
         if dll_name.endswith(".dll64"):
             dll_name = dll_name[:-6] +  "64" # Crade..
         #print("Load {0} -> {1}".format(dll, dll_name))
