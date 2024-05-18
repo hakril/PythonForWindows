@@ -377,6 +377,8 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        print("[==================] LOADING PYTHON")
+        proc32_64_debug.execute_python_unsafe("1").wait()
         print("[==================] OPEN SELF_FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
         time.sleep(0.1)
@@ -386,6 +388,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
         print("[==================] OPEN SELF_FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
         time.sleep(0.1)
+        print("[==================] KILLING TARGET")
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -424,6 +427,8 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        print("[==================] LOADING PYTHON")
+        proc32_64_debug.execute_python_unsafe("1").wait()
         print("[==================] OPEN FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
         time.sleep(0.1)
@@ -435,6 +440,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
         print("[==================] OPEN FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
         time.sleep(0.1)
+        print("[==================] KILLING TARGET")
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
