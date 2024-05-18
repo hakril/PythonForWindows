@@ -7,11 +7,11 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         python-version: [2.7, 3.6, 3.11]
-        # python-version: [3.6] # Concentrate on working CI for python3 & we will see backport for py2 afterward
         python-architecture: [x86, x64]
         include:
             # Translate architecture to bitness for py.exe commandline
@@ -61,7 +61,7 @@ jobs:
 
       # Testing
       - name: Testing
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -k "not debugger and not known_to_fail" -v tests/
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -s -k "not known_to_fail" -v tests/
 
       - name: Publish PyTest Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v1

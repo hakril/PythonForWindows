@@ -2,6 +2,7 @@ import pytest
 import textwrap
 import ctypes
 import os
+import time
 
 import windows
 import windows.debug
@@ -133,6 +134,8 @@ def test_four_hwx_breakpoint_fail(proc32_64_debug):
     proc32_64_debug.create_thread(addr, 0)
     with pytest.raises(ValueError) as e:
         d.loop()
+    d.detach()
+    proc32_64_debug.exit()
     assert "DRx" in e.value.args[0]
 
 
@@ -186,7 +189,9 @@ def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
             TSTBP.COUNTER += 1
             d.current_process.exit()
 
+    # import pdb; pdb.set_trace()
     d = windows.debug.Debugger(proc32_64_debug)
+    # Broken in Win11 for now: https://twitter.com/hakril/status/1555473886321549312
     d.add_bp(TSTBP("ntdll!LdrLoadDll"))
     d.loop()
     assert TSTBP.COUNTER == 1
@@ -372,9 +377,19 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
+        time.sleep(1)
+        print("[==================] LOADING PYTHON")
+        proc32_64_debug.execute_python_unsafe("1").wait()
+        print("[==================] OPEN SELF_FILENAME1")
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
+        time.sleep(0.1)
+        print("[==================] OPEN SELF_FILENAME2")
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
+        time.sleep(0.1)
+        print("[==================] OPEN SELF_FILENAME3")
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
+        time.sleep(0.1)
+        print("[==================] KILLING TARGET")
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -384,15 +399,27 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
             data.add(filename)
-            if filename == u"FILENAME2":
+            print("[+++++++++++++++++] Filename: {0}".format(filename))
+            if filename == u"SELF_FILENAME2":
+                print("[+++++++++++++++++] del_bp")
                 dbg.del_bp(self)
 
     d = windows.debug.Debugger(proc32_64_debug)
     d.add_bp(TSTBP("kernelbase!CreateFileW"))
     threading.Thread(target=do_check).start()
     d.loop()
-    assert data >= set([u"FILENAME1", u"FILENAME2"])
-    assert u"FILENAME3" not in data
+    assert data >= set([u"SELF_FILENAME1", u"SELF_FILENAME2"])
+    assert u"SELF_FILENAME3" not in data
+
+class MyMetaDbgDebuger(windows.debug.Debugger):
+    def on_exception(self, exc):
+        print(exc)
+        import pdb;pdb.set_trace()
+        print(exc)
+        x = 2
+        if x == 3:
+            return gdef.DBG_EXCEPTION_NOT_HANDLED
+        return gdef.DBG_CONTINUE
 
 @pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @python_injection
@@ -401,10 +428,21 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        time.sleep(1)
+        print("[==================] LOADING PYTHON")
+        proc32_64_debug.execute_python_unsafe("1").wait()
+        print("[==================] OPEN FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
+        time.sleep(0.1)
+        print("[==================] OPEN FILENAME2")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
+        time.sleep(0.1)
+        print("[==================] RM BP")
         d.del_bp(the_bp)
+        print("[==================] OPEN FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
+        time.sleep(0.1)
+        print("[==================] KILLING TARGET")
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -413,16 +451,20 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
             addr = exc.ExceptionRecord.ExceptionAddress
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
+            print("[+++++++++++++++++] Filename: {0}".format(filename))
             data.add(filename)
 
     d = windows.debug.Debugger(proc32_64_debug)
+    # d = MyMetaDbgDebuger(proc32_64_debug)
     the_bp = TSTBP("kernelbase!CreateFileW")
     # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
+    time.sleep(0.1)
     threading.Thread(target=do_check).start()
     d.loop()
     assert data >= set([u"FILENAME1", u"FILENAME2"])
     assert u"FILENAME3" not in data
+
 
 
 def get_generate_read_at_for_proc(target):

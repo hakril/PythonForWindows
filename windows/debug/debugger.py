@@ -127,9 +127,9 @@ class Debugger(object):
             else:
                 self.del_bp(bp, [target])
 
+        del self._breakpoint_to_reput[target.pid]
         for thread in [t for t in target.threads if t.tid in self.threads]:
             del self._explicit_single_step[thread.tid]
-            del self._breakpoint_to_reput[thread.tid]
             del self.threads[thread.tid]
             ctx = thread.context
             if ctx.EEFlags.TF:  # Remove TRAPFlag before detaching (or it will lead to a crash)
@@ -203,6 +203,10 @@ class Debugger(object):
             yield debug_event
 
     def _finish_debug_event(self, event, action):
+        if self.current_thread:
+            dbgprint("Finishing event for TID <{0}>".format(self.current_thread.tid), "DBG")
+        else:
+            dbgprint("Finishing event", "DBG")
         if action not in [windef.DBG_CONTINUE, windef.DBG_EXCEPTION_NOT_HANDLED]:
             raise ValueError('Unknow action : <0>'.format(action))
         winproxy.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, action)
@@ -243,6 +247,10 @@ class Debugger(object):
         mod = None
         if dll in modules:
             mod = [modules[dll]]
+        elif target.is_wow_64 and dll == "ntdll" and "ntdll32" in modules:
+            # https://twitter.com/hakril/status/1555473886321549312
+            mod = [modules["ntdll32"]]
+
         if not mod:
             return None
         # TODO: optim exports are the same for whole system (32 vs 64 bits)
@@ -284,12 +292,12 @@ class Debugger(object):
             return _setup_method(bp, target)
 
     def _restore_breakpoints(self):
-        for bp in self._breakpoint_to_reput[self.current_thread.tid]:
+        for bp in self._breakpoint_to_reput[self.current_process.pid]:
             if bp.type == HARDWARE_EXEC_BP:
                 raise NotImplementedError("Why is this here ? we use RF flags to pass HXBP")
             restore = getattr(self, "_restore_breakpoint_" + bp.type)
             restore(bp, self.current_process)
-        del self._breakpoint_to_reput[self.current_thread.tid][:]
+        self._breakpoint_to_reput[self.current_process.pid].clear()
         return
 
     def _setup_breakpoint_BP(self, bp, target):
@@ -486,7 +494,9 @@ class Debugger(object):
                 target_dll = bp.addr.lower().split("!")[0]
                 # Cannot work AS-IS yet. Implement it ?
                 # if target_dll == "*" or target_dll == dll_name:
-                if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     if bp.apply_to_target(self.current_process):
                         _setup_method(bp, self.current_process)
@@ -497,7 +507,9 @@ class Debugger(object):
         for bp in self._pending_breakpoints_new[self.current_process.pid]:
             if isinstance(bp.addr, basestring):
                 target_dll = bp.addr.split("!")[0]
-                if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     _setup_method(bp, self.current_process)
 
@@ -505,7 +517,9 @@ class Debugger(object):
             for bp in self._pending_breakpoints_new[thread.tid]:
                 if isinstance(bp.addr, basestring):
                     target_dll = bp.addr.split("!")[0]
-                    if target_dll == dll_name:
+                if (target_dll == dll_name or
+                    # https://twitter.com/hakril/status/1555473886321549312
+                    (self.current_process.is_wow_64 and target_dll == "ntdll" and dll_name == "ntdll32")):
                         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                         _setup_method(bp, self.thread)
 
@@ -518,7 +532,7 @@ class Debugger(object):
         #regs.pc -= 1 # Done in _handle_exception_breakpoint before dispatch
         thread.set_context(regs)
         bp = self.breakpoints[self.current_process.pid][addr]
-        self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
+        self._breakpoint_to_reput[process.pid].add(bp) #Register pending breakpoint for next single step
 
     def _pass_memory_breakpoint(self, bp, page_protect, fault_page):
         cp = self.current_process
@@ -529,7 +543,7 @@ class Debugger(object):
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
         bp._reput_page = (fault_page, page_prot.value)
-        self._breakpoint_to_reput[thread.tid].append(bp)
+        self._breakpoint_to_reput[cp.pid].add(bp)
 
     # debug event handlers
     def _handle_unknown_debug_event(self, debug_event):
@@ -582,7 +596,7 @@ class Debugger(object):
             return self.on_exception(exception)
 
     def _handle_exception_singlestep(self, exception, excp_addr):
-        if self.current_thread.tid in self._breakpoint_to_reput and self._breakpoint_to_reput[self.current_thread.tid]:
+        if self._breakpoint_to_reput.get(self.current_process.pid):
             self._restore_breakpoints()
             if self._explicit_single_step[self.current_thread.tid]:
                 with self.DisabledMemoryBreakpoint():
@@ -696,17 +710,17 @@ class Debugger(object):
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT]:
-            dbgprint("Handle exception as breakpoint", "DBG")
+            dbgprint("Handle exception as breakpoint in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
-            dbgprint("Handle exception as single step", "DBG")
+            dbgprint("Handle exception as single step in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_singlestep(exception, excp_addr)
         elif excp_code == EXCEPTION_ACCESS_VIOLATION:
-            dbgprint("Handle exception as access_violation", "DBG")
+            dbgprint("Handle exception as access_violation in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_access_violation(exception, excp_addr)
         else:
             with self.DisabledMemoryBreakpoint():
-                dbgprint("Handle exception as on_exception", "DBG")
+                dbgprint("Handle exception as on_exception".format(self.current_thread.tid), "DBG")
                 continue_flag = self.on_exception(exception)
             if self._killed_in_action():
                 return continue_flag
@@ -765,10 +779,10 @@ class Debugger(object):
         self.threads[self.current_thread.tid] = self.current_thread
         self._explicit_single_step[self.current_thread.tid] = False
         self._hardware_breakpoint[self.current_thread.tid] = {}
-        self._breakpoint_to_reput[self.current_thread.tid] = []
         self.processes[self.current_process.pid] = self.current_process
         self._watched_pages[self.current_process.pid] = {} #defaultdict(list)
         self.breakpoints[self.current_process.pid] = {}
+        self._breakpoint_to_reput[self.current_process.pid] = set()
         self._memory_save[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._internal_on_create_process(create_process) # Allow hook for symbol-debugger
@@ -791,7 +805,7 @@ class Debugger(object):
         del self.threads[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
         del self._hardware_breakpoint[self.current_thread.tid]
-        del self._breakpoint_to_reput[self.current_thread.tid]
+        del self._breakpoint_to_reput[self.current_process.pid]
         del self.processes[self.current_process.pid]
         del self._watched_pages[self.current_process.pid]
         del self._memory_save[self.current_process.pid]
@@ -818,7 +832,6 @@ class Debugger(object):
         # The new thread is on the thread pool: we can now update the debugger state
         self._update_debugger_state(debug_event)
         self._explicit_single_step[self.current_thread.tid] = False
-        self._breakpoint_to_reput[self.current_thread.tid] = []
         self._hardware_breakpoint[self.current_thread.tid] = {}
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         with self.DisabledMemoryBreakpoint():
@@ -834,7 +847,6 @@ class Debugger(object):
         del self.threads[self.current_thread.tid]
         del self._hardware_breakpoint[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
-        del self._breakpoint_to_reput[self.current_thread.tid]
         return retvalue
 
     def _internal_on_create_process(self, create_process):
@@ -853,6 +865,8 @@ class Debugger(object):
             dll_name = dll_name[:-4]
         # Mais c'est debile..
         # Si j'ai ntdll et ntdll64: les deux vont avoir le meme nom..
+        # A changer sur Win11 ou ntdll est remontee en tant que ntdll32.dll
+        #   https://twitter.com/hakril/status/1555473886321549312
         if dll_name.endswith(".dll64"):
             dll_name = dll_name[:-6] +  "64" # Crade..
         #print("Load {0} -> {1}".format(dll, dll_name))
@@ -915,7 +929,7 @@ class Debugger(object):
         """
         if getattr(bp, "addr", None) is None:
             if addr is None or type is None:
-                raise ValueError("SUCK YOUR NONE")
+                raise ValueError("Breakpoing should have addr attribute or function should receive explicite addr parameter")
             bp = ProxyBreakpoint(bp, addr, type)
         else:
             if addr is not None or type is not None:
