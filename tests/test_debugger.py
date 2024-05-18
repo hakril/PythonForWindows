@@ -377,6 +377,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        time.sleep(1)
         print("[==================] LOADING PYTHON")
         proc32_64_debug.execute_python_unsafe("1").wait()
         print("[==================] OPEN SELF_FILENAME1")
@@ -427,6 +428,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        time.sleep(1)
         print("[==================] LOADING PYTHON")
         proc32_64_debug.execute_python_unsafe("1").wait()
         print("[==================] OPEN FILENAME1")
