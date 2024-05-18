@@ -397,7 +397,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
             data.add(filename)
             print("[+++++++++++++++++] Filename: {0}".format(filename))
             if filename == u"SELF_FILENAME2":
-            print("[+++++++++++++++++] del_bp")
+                print("[+++++++++++++++++] del_bp")
                 dbg.del_bp(self)
 
     d = windows.debug.Debugger(proc32_64_debug)
