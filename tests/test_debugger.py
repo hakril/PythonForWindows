@@ -133,6 +133,8 @@ def test_four_hwx_breakpoint_fail(proc32_64_debug):
     proc32_64_debug.create_thread(addr, 0)
     with pytest.raises(ValueError) as e:
         d.loop()
+    d.detach()
+    proc32_64_debug.exit()
     assert "DRx" in e.value.args[0]
 
 
