@@ -21374,9 +21374,9 @@ _OVERLAPPED
         :class:`ULONG_PTR`
 
 
-    .. attribute:: Pointer
+    .. attribute:: _ANON_OVERLAPPED_DUMMYUNIONNAME
 
-        :class:`PVOID`
+        :class:`_ANON__OVERLAPPED_SUB_UNION_1`
 
 
     .. attribute:: hEvent

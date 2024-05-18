@@ -5947,7 +5947,8 @@ class _OBJECT_ATTRIBUTES(_OBJECT_ATTRIBUTES):
     def __repr__(self):
         if not self.ObjectName:
             return super(_OBJECT_ATTRIBUTES, self).__repr__()
-        return """<{0} ObjectName="{1}">""".format(type(self).__name__, self.ObjectName[0].str)
+        # .contents allow compatibility with remotectypes
+        return """<{0} ObjectName="{1}">""".format(type(self).__name__, self.ObjectName.contents.str)
 POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 OBJECT_ATTRIBUTES = _OBJECT_ATTRIBUTES
 class _TMP_UNION_IO_STATUS_BLOCK(Union):
