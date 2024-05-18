@@ -915,7 +915,6 @@ class Debugger(object):
                 # TODO: FIXME
                 self._finish_debug_event(debug_event, dbg_continue_flag)
             if not self.processes:
-                print("NO MORE PROCESS: BREAKING FROM LOOP")
                 break
 
     def add_bp(self, bp, addr=None, type=None, target=None):
