@@ -203,6 +203,10 @@ class Debugger(object):
             yield debug_event
 
     def _finish_debug_event(self, event, action):
+        if self.current_thread:
+            dbgprint("Finishing event for TID <{0}>".format(self.current_thread.tid), "DBG")
+        else:
+            dbgprint("Finishing event", "DBG")
         if action not in [windef.DBG_CONTINUE, windef.DBG_EXCEPTION_NOT_HANDLED]:
             raise ValueError('Unknow action : <0>'.format(action))
         winproxy.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, action)
@@ -706,17 +710,17 @@ class Debugger(object):
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT]:
-            dbgprint("Handle exception as breakpoint", "DBG")
+            dbgprint("Handle exception as breakpoint in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
-            dbgprint("Handle exception as single step", "DBG")
+            dbgprint("Handle exception as single step in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_singlestep(exception, excp_addr)
         elif excp_code == EXCEPTION_ACCESS_VIOLATION:
-            dbgprint("Handle exception as access_violation", "DBG")
+            dbgprint("Handle exception as access_violation in TID {0}".format(self.current_thread.tid), "DBG")
             return self._handle_exception_access_violation(exception, excp_addr)
         else:
             with self.DisabledMemoryBreakpoint():
-                dbgprint("Handle exception as on_exception", "DBG")
+                dbgprint("Handle exception as on_exception".format(self.current_thread.tid), "DBG")
                 continue_flag = self.on_exception(exception)
             if self._killed_in_action():
                 return continue_flag
