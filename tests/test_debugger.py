@@ -188,7 +188,9 @@ def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
             TSTBP.COUNTER += 1
             d.current_process.exit()
 
+    # import pdb; pdb.set_trace()
     d = windows.debug.Debugger(proc32_64_debug)
+    # Broken in Win11 for now: https://twitter.com/hakril/status/1555473886321549312
     d.add_bp(TSTBP("ntdll!LdrLoadDll"))
     d.loop()
     assert TSTBP.COUNTER == 1
@@ -375,8 +377,11 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
 
     def do_check():
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
+        time.sleep(0.1)
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
+        time.sleep(0.1)
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
+        time.sleep(0.1)
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -415,12 +420,15 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     def do_check():
         print("[==================] OPEN FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
+        time.sleep(0.1)
         print("[==================] OPEN FILENAME2")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
+        time.sleep(0.1)
         print("[==================] RM BP")
         d.del_bp(the_bp)
         print("[==================] OPEN FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
+        time.sleep(0.1)
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -433,6 +441,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
             data.add(filename)
 
     d = windows.debug.Debugger(proc32_64_debug)
+    # d = MyMetaDbgDebuger(proc32_64_debug)
     the_bp = TSTBP("kernelbase!CreateFileW")
     # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
@@ -440,6 +449,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     d.loop()
     assert data >= set([u"FILENAME1", u"FILENAME2"])
     assert u"FILENAME3" not in data
+
 
 
 def get_generate_read_at_for_proc(target):
