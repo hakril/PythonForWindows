@@ -127,9 +127,9 @@ class Debugger(object):
             else:
                 self.del_bp(bp, [target])
 
+        del self._breakpoint_to_reput[target.pid]
         for thread in [t for t in target.threads if t.tid in self.threads]:
             del self._explicit_single_step[thread.tid]
-            del self._breakpoint_to_reput[thread.tid]
             del self.threads[thread.tid]
             ctx = thread.context
             if ctx.EEFlags.TF:  # Remove TRAPFlag before detaching (or it will lead to a crash)
@@ -288,12 +288,12 @@ class Debugger(object):
             return _setup_method(bp, target)
 
     def _restore_breakpoints(self):
-        for bp in self._breakpoint_to_reput[self.current_thread.tid]:
+        for bp in self._breakpoint_to_reput[self.current_process.pid]:
             if bp.type == HARDWARE_EXEC_BP:
                 raise NotImplementedError("Why is this here ? we use RF flags to pass HXBP")
             restore = getattr(self, "_restore_breakpoint_" + bp.type)
             restore(bp, self.current_process)
-        del self._breakpoint_to_reput[self.current_thread.tid][:]
+        del self._breakpoint_to_reput[self.current_process.pid][:]
         return
 
     def _setup_breakpoint_BP(self, bp, target):
@@ -528,7 +528,7 @@ class Debugger(object):
         #regs.pc -= 1 # Done in _handle_exception_breakpoint before dispatch
         thread.set_context(regs)
         bp = self.breakpoints[self.current_process.pid][addr]
-        self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
+        self._breakpoint_to_reput[process.pid].append(bp) #Register pending breakpoint for next single step
 
     def _pass_memory_breakpoint(self, bp, page_protect, fault_page):
         cp = self.current_process
@@ -539,7 +539,7 @@ class Debugger(object):
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
         bp._reput_page = (fault_page, page_prot.value)
-        self._breakpoint_to_reput[thread.tid].append(bp)
+        self._breakpoint_to_reput[cp.pid].append(bp)
 
     # debug event handlers
     def _handle_unknown_debug_event(self, debug_event):
@@ -592,7 +592,7 @@ class Debugger(object):
             return self.on_exception(exception)
 
     def _handle_exception_singlestep(self, exception, excp_addr):
-        if self.current_thread.tid in self._breakpoint_to_reput and self._breakpoint_to_reput[self.current_thread.tid]:
+        if self._breakpoint_to_reput.get(self.current_process.pid):
             self._restore_breakpoints()
             if self._explicit_single_step[self.current_thread.tid]:
                 with self.DisabledMemoryBreakpoint():
@@ -779,6 +779,7 @@ class Debugger(object):
         self.processes[self.current_process.pid] = self.current_process
         self._watched_pages[self.current_process.pid] = {} #defaultdict(list)
         self.breakpoints[self.current_process.pid] = {}
+        self._breakpoint_to_reput[self.current_process.pid] = []
         self._memory_save[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._internal_on_create_process(create_process) # Allow hook for symbol-debugger
@@ -801,7 +802,7 @@ class Debugger(object):
         del self.threads[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
         del self._hardware_breakpoint[self.current_thread.tid]
-        del self._breakpoint_to_reput[self.current_thread.tid]
+        del self._breakpoint_to_reput[self.current_process.pid]
         del self.processes[self.current_process.pid]
         del self._watched_pages[self.current_process.pid]
         del self._memory_save[self.current_process.pid]
@@ -828,7 +829,7 @@ class Debugger(object):
         # The new thread is on the thread pool: we can now update the debugger state
         self._update_debugger_state(debug_event)
         self._explicit_single_step[self.current_thread.tid] = False
-        self._breakpoint_to_reput[self.current_thread.tid] = []
+        # self._breakpoint_to_reput[self.current_thread.tid] = []
         self._hardware_breakpoint[self.current_thread.tid] = {}
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         with self.DisabledMemoryBreakpoint():
@@ -844,7 +845,7 @@ class Debugger(object):
         del self.threads[self.current_thread.tid]
         del self._hardware_breakpoint[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
-        del self._breakpoint_to_reput[self.current_thread.tid]
+        # del self._breakpoint_to_reput[self.current_thread.tid]
         return retvalue
 
     def _internal_on_create_process(self, create_process):
