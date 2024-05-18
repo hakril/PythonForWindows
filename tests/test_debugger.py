@@ -374,9 +374,9 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
+        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
         proc32_64_debug.exit()
 
     class TSTBP(bptype):
@@ -386,15 +386,25 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
             data.add(filename)
-            if filename == u"FILENAME2":
+            if filename == u"SELF_FILENAME2":
                 dbg.del_bp(self)
 
     d = windows.debug.Debugger(proc32_64_debug)
     d.add_bp(TSTBP("kernelbase!CreateFileW"))
     threading.Thread(target=do_check).start()
     d.loop()
-    assert data >= set([u"FILENAME1", u"FILENAME2"])
-    assert u"FILENAME3" not in data
+    assert data >= set([u"SELF_FILENAME1", u"SELF_FILENAME2"])
+    assert u"SELF_FILENAME3" not in data
+
+class MyMetaDbgDebuger(windows.debug.Debugger):
+    def on_exception(self, exc):
+        print(exc)
+        import pdb;pdb.set_trace()
+        print(exc)
+        x = 2
+        if x == 3:
+            return gdef.DBG_EXCEPTION_NOT_HANDLED
+        return gdef.DBG_CONTINUE
 
 @pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 @python_injection
@@ -403,9 +413,13 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        print("[==================] OPEN FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
+        print("[==================] OPEN FILENAME2")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
+        print("[==================] RM BP")
         d.del_bp(the_bp)
+        print("[==================] OPEN FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
         proc32_64_debug.exit()
 
@@ -415,6 +429,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
             addr = exc.ExceptionRecord.ExceptionAddress
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
+            print("[+++++++++++++++++] Filename: {0}".format(filename))
             data.add(filename)
 
     d = windows.debug.Debugger(proc32_64_debug)
