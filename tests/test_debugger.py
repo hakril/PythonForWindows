@@ -377,10 +377,13 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
 
     def do_check():
+        print("[==================] OPEN SELF_FILENAME1")
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
         time.sleep(0.1)
+        print("[==================] OPEN SELF_FILENAME2")
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
         time.sleep(0.1)
+        print("[==================] OPEN SELF_FILENAME3")
         proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
         time.sleep(0.1)
         proc32_64_debug.exit()
@@ -392,7 +395,9 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
             data.add(filename)
+            print("[+++++++++++++++++] Filename: {0}".format(filename))
             if filename == u"SELF_FILENAME2":
+            print("[+++++++++++++++++] del_bp")
                 dbg.del_bp(self)
 
     d = windows.debug.Debugger(proc32_64_debug)
@@ -446,6 +451,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     the_bp = TSTBP("kernelbase!CreateFileW")
     # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
+    time.sleep(0.1)
     threading.Thread(target=do_check).start()
     d.loop()
     assert data >= set([u"FILENAME1", u"FILENAME2"])
