@@ -4,7 +4,7 @@ import logging
 import inspect
 
 options = {'active': False, 'cats': None}
-options = {'active': True, 'cats': ["DBG"]}
+# options = {'active': True, 'cats': ["DBG"]}
 
 
 def get_stack_func_name(lvl):

@@ -2,6 +2,7 @@ import pytest
 import textwrap
 import ctypes
 import os
+import time
 
 import windows
 import windows.debug
