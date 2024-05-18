@@ -1,6 +1,7 @@
 import pytest
 import textwrap
 import ctypes
+import time
 
 import windows
 import windows.generated_def as gdef
@@ -97,6 +98,7 @@ def test_self_iat_hook_multithread():
 def test_remote_iat_hook(proc32_64):
     proc32_64.execute_python("import windows")
     proc32_64.execute_python("windows.utils.create_console()")
+    time.sleep(0.5) # Let all initialisation finish (runtime windows + remote python)
 
     code = """
     import windows.generated_def as gdef
