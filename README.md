@@ -1,6 +1,7 @@
 # PythonForWindows
 
 [![Join the chat at https://gitter.im/PythonForWindows/general](https://badges.gitter.im/PythonForWindows/general.svg)](https://gitter.im/PythonForWindows/general)
+[![Pytest](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml/badge.svg?branch=master)](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
 
 PythonForWindows (PFW) is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
@@ -37,9 +38,10 @@ python setup.py install
 
 #### Python3
 
-python3 support is still in beta.
-All the tests pass on master, but I did not test it heavily on real case.
-Do not hesitate report bugs and issues.
+PythonForWindows support python3 and is currently tested for Python2.7, 3.6 & 3.11 via [Github Workflow](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
+Regarding the handling of encoding in the project it's currently a mix of Ascii & Unicode that may be awkward on Python3 as automatic encoding/decoding is not present.
+
+The aim of passing the whole project under unicode is actvily ongoing.
 
 ## Overview
 
