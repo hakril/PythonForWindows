@@ -457,6 +457,9 @@ class EvtChannel(object):
             List all event with a given EventID while searching for a specific field value (Sysmon for the test here)
                 ``Event/System[EventID=3] and Event/EventData/Data[@Name='DestinationIp'] and Event/EventData[Data='10.0.0.2']``
 
+            List all events with a given provider of Microsoft-Windows-TaskScheduler:
+                ``Event/System/Provider[@Name='Microsoft-Windows-TaskScheduler']``
+
         :rtype: :class:`EvtQuery`
         """
         if ids and filter:
@@ -527,6 +530,9 @@ class EvtFile(EvtChannel):
 
 class ChannelConfig(EvtHandle):
     """The configuration of a event channel"""
+
+    # TODO: https://learn.microsoft.com/en-us/windows/win32/api/winevt/nf-winevt-evtsetchannelconfigproperty
+
     def __init__(self, handle, name=None):
         super(ChannelConfig, self).__init__(handle)
         self.name = name
