@@ -530,4 +530,6 @@ class TestProcessWithCheckGarbage(object):
 
 
 def test_testouille():
+    import locale
+    print(sys.stdout.isatty(), sys.stdout.encoding, locale.getpreferredencoding(), sys.getdefaultencoding(), sys.getfilesystemencoding())
     assert sys.stdout.encoding == "BADVALUE"
