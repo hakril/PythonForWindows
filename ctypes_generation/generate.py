@@ -567,7 +567,7 @@ class StructureDocGenerator(NoTemplatedGenerator):
             self.emitline(struct.name)
             self.emitline(self.STRUCT_NAME_SEPARATOR * len(struct.name))
             # Emit typedef
-            for name, type in  struct.typedef.items():
+            for name, type in  sorted(struct.typedef.items()):
                 self.emitline(".. class:: {0}".format(name))
                 self.emitline("")
                 if hasattr(type, "type"):
@@ -605,7 +605,7 @@ class StructureDocGenerator(NoTemplatedGenerator):
             self.emitline(enum.name)
             self.emitline(self.STRUCT_NAME_SEPARATOR * len(enum.name))
              # Emit typedef
-            for name, type in  enum.typedef.items():
+            for name, type in  sorted(enum.typedef.items()):
                 self.emitline(".. class:: {0}".format(name))
                 self.emitline("")
                 if hasattr(type, "type"):
@@ -639,10 +639,17 @@ class MetaFileGenerator(NoTemplatedGenerator):
     def add_export_module(self, module):
         self.add_exportlist(module.name, module.name, module.modules_exports())
 
-    def generate(self):
+    def pformat_exports_set(self, exports):
+        """A pretty print-function that have the same behavior on py2 & py3 (pprint.pformat is not)"""
+        assert isinstance(exports, set)
+        # import pdb;pdb.set_trace()
+        export_list = [repr(e) for e in sorted(exports)]
+        return "{{{0}}}\n".format(",\n".join(export_list)) # -> {export_list}
 
+    def generate(self):
         for name, modname, exports in self.modules:
-            self.emitline("{0} = {1}".format(name, pprint.pformat(exports)))
+            # import pdb;pdb.set_trace()
+            self.emitline("{0} = {1}".format(name, self.pformat_exports_set(exports)))
 
         self.emitline(META_WALKER)
 
