@@ -267,11 +267,7 @@ class NdrGuid(object):
     def pack(cls, data):
         if not isinstance(data, gdef.IID):
             data = gdef.IID.from_string(data)
-<<<<<<< HEAD
         return bytes(bytearray(data))
-=======
-        return bytearray(data)
->>>>>>> 205311d (Working on WinAPI Wide-transition)
 
     @classmethod
     def unpack(self, stream):
@@ -288,11 +284,7 @@ class NdrContextHandle(object):
     def pack(cls, data):
         if not isinstance(data, gdef.IID):
             data = gdef.IID.from_string(data)
-<<<<<<< HEAD
         return bytes(struct.pack("<I", 0) + bytearray(data))
-=======
-        return struct.pack("<I", 0) + bytearray(data)
->>>>>>> 205311d (Working on WinAPI Wide-transition)
 
     @classmethod
     def unpack(self, stream):
