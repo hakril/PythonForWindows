@@ -20,7 +20,7 @@ class WmiComInterface(object):
     def errcheck(self, result, func, args):
         if result < 0:
             wmitag = gdef.WBEMSTATUS.mapper[result & 0xffffffff]
-            raise ctypes.WinError(result, wmitag)
+            raise ctypes.WinError(result, repr(wmitag))
         return args
 
 sentinel = object()
@@ -60,7 +60,7 @@ class QualifierSet(gdef.IWbemQualifierSet):
 
 # https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nn-wbemcli-iwbemclassobject
 
-WmiMethod = namedtuple("WmiMethod", ["inparam", "outparam"])
+WmiMethod = namedtuple("WmiMethod", ["name", "inparam", "outparam"])
 
 # https://docs.microsoft.com/en-us/windows/desktop/WmiSdk/calling-a-method
 class WmiObject(gdef.IWbemClassObject, WmiComInterface):
@@ -93,7 +93,12 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         outpararm = type(self)()
         variant_res = windows.com.Variant()
         self.GetMethod(name, 0, inpararm, outpararm)
-        return WmiMethod(inpararm, outpararm)
+        return WmiMethod(name, inpararm, outpararm)
+
+    def get_text(self, flags=0):
+        text = gdef.BSTR()
+        self.GetObjectText(flags, text)
+        return text.value
 
 
     def put_variant(self, name, variant):
@@ -104,7 +109,10 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
 
     def put(self, name, value):
         """Set the property ``name`` to ``value``"""
-        variant_value = windows.com.Variant(value)
+        if isinstance(value, gdef.VARIANT):
+            variant_value = value
+        else:
+            variant_value = windows.com.Variant(value)
         return self.put_variant(name, variant_value)
 
     def spawn_instance(self):
@@ -123,6 +131,7 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         :returns: ``WBEM_GENUS_CLASS(0x1L)`` if the :class:`WmiObject` is a Class and ``WBEM_GENUS_INSTANCE(0x2L)`` for instances and events.
         """
         return gdef.tag_WBEM_GENUS_TYPE.mapper[self.get("__GENUS")]
+
 
     ## Higher level API
     def get_properties(self, system_properties=False):
@@ -143,6 +152,24 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         return properties
 
     properties = property(get_properties) #: The properties of the object (exclude system properties)
+
+    def get_methods(self):
+        self.BeginMethodEnumeration(0)
+        methods = {}
+        while True:
+            name = gdef.BSTR()
+            inpararm = type(self)()
+            outpararm = type(self)()
+            if self.NextMethod(0, name, inpararm, outpararm) == gdef.WBEM_S_NO_MORE_DATA:
+                self.EndMethodEnumeration()
+                return methods
+            namestr = name.value
+            methods[namestr] = WmiMethod(namestr, inpararm, outpararm)
+            windows.winproxy.SysFreeString(name)
+            del name
+
+    methods = property(get_methods)
+
 
     @property
     def qualifier_set(self): # changer de nom ?
@@ -184,6 +211,24 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         return """ {0}\n
         {1}
         """.format(repr(self), "\n".join(": ".join([x[0], str(x[1])]) for x in sorted(self.items())))
+
+
+class WmiTextSrc(gdef.IWbemObjectTextSrc, WmiComInterface):
+    CLSID_WbemObjectTextSrc = "8D1C559D-84F0-4bb3-A7D5-56A7435A9BA6" # CLSID_WbemObjectTextSrc
+
+
+    @classmethod
+    def create(cls):
+        self = cls()
+        windows.com.create_instance(cls.CLSID_WbemObjectTextSrc, self)
+        return self
+
+    def get_text(self, obj, textformat):
+        btext = gdef.BSTR()
+        self.GetText(0, obj, textformat, None, btext)
+        result = btext.value
+        print("TODO: SysFreeString")
+        return result
 
 
 class WmiEnumeration(gdef.IEnumWbemClassObject, WmiComInterface):
