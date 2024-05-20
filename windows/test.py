@@ -3,7 +3,7 @@ import windows.generated_def as gdef
 from windows.utils import create_process, DisableWow64FsRedirection
 
 
-test_binary_name = "notepad.exe"
+test_binary_name = "winver.exe"
 DEFAULT_CREATION_FLAGS = gdef.CREATE_NEW_CONSOLE
 
 if windows.system.bitness == 32:
