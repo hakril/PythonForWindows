@@ -34,7 +34,7 @@ def test_security_descriptor_from_binary(binsd):
 
 def test_security_descriptor_from_unicode_file(tmpdir):
     TARGET_FILENAME = u"내 한국은 최고의 한국.txt"
-    TARGET_PATH = os.path.join(tmpdir, TARGET_FILENAME)
+    TARGET_PATH = os.path.join(str(tmpdir), TARGET_FILENAME)
     with open(TARGET_PATH, "w") as f:
         f.write("Hello Test")
     assert SecurityDescriptor.from_filename(TARGET_PATH)
