@@ -520,6 +520,7 @@ class TestProcessWithCheckGarbage(object):
         p = windows.utils.create_process(target_programe, dwCreationFlags=gdef.CREATE_NEW_CONSOLE)
         try:
             assert windows.system.processes
+            print(sys.stdout.encoding)
             print(windows.system.processes) # Check for encoding error in __repr__ of WinProcess
         finally:
             p.exit()
@@ -527,3 +528,6 @@ class TestProcessWithCheckGarbage(object):
             time.sleep(0.5) # Fail on Azure CI of no sleep
             os.unlink(target_programe)
 
+
+def test_testouille():
+    assert sys.stdout.encoding == "BADVALUE"
