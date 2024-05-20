@@ -36,7 +36,7 @@ if is_py3:
         repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
 
         def urepr_encode(s):
-            return s.encode(repr_encoding, "backslashreplace")
+            return s.encode(repr_encoding, "backslashreplace").decode()
 
 else: # py2.7
     def str_from_ascii_function(s):
