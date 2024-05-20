@@ -142,8 +142,8 @@ def randomkeypair(keysize=1024):
 def test_certificate(rawcert):
     cert = windows.crypto.Certificate.from_buffer(rawcert)
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
-    assert cert.name == b'PythonForWindowsTest'
-    assert cert.issuer == b'PythonForWindowsTest'
+    assert cert.name == u'PythonForWindowsTest'
+    assert cert.issuer == u'PythonForWindowsTest'
     assert cert.thumbprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
     assert cert.encoded == rawcert
     assert cert.version == 2

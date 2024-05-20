@@ -26,10 +26,17 @@ if is_py3:
             return s.decode("latin1")
         return s
 
-    # No encoding of unicode repr
+    # No encoding of unicode repr if we target a TTY
     # Python3 handle unicode natively in string and console output
-    def urepr_encode(s):
-        return s
+
+    if sys.stdout.isatty():
+        def urepr_encode(s):
+            return s
+    else: # Not a TTY (seen in github CI) : if no explict encoding on stdout : use the locale to encode it the best we can to prevent print error
+        repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
+
+        def urepr_encode_notty(s):
+            return ustr.encode(repr_encoding, "backslashreplace")
 
 else: # py2.7
     def str_from_ascii_function(s):
@@ -49,8 +56,9 @@ else: # py2.7
         return s
 
     # sys.stdout.encoding may be None if not a tty
-    # Use sys.stdout.isatty() ?
+    # Use sys.stdout.isatty() ? in py2 we will never return unicode in anycase
     repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
+    repr_encoding = "cp1252"
 
     def urepr_encode(ustr):
         # assert isinstance(s, unicode) # Make the check explicitly ?

@@ -527,9 +527,3 @@ class TestProcessWithCheckGarbage(object):
             p.wait()
             time.sleep(0.5) # Fail on Azure CI of no sleep
             os.unlink(target_programe)
-
-
-def test_testouille():
-    import locale
-    print(sys.stdout.isatty(), sys.stdout.encoding, locale.getpreferredencoding(), sys.getdefaultencoding(), sys.getfilesystemencoding())
-    assert sys.stdout.encoding == "BADVALUE"
