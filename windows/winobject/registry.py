@@ -7,7 +7,7 @@ from collections import namedtuple, defaultdict
 import windows
 from windows.dbgprint import dbgprint
 import windows.generated_def as gdef
-from windows import winproxy
+from windows import winproxy, security
 from windows.pycompat import basestring, int_types, is_py3
 
 WENCODING = "utf-16-le"
@@ -374,8 +374,61 @@ class PyHKey(object):
     def empty(self):
         windows.winproxy.RegDeleteTreeW(self.phkey, None)
 
+    ## Security API
+    def get_security_descriptor(self, query_sacl=False, flags=security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION):
+        open_flags = gdef.READ_CONTROL
+        if query_sacl:
+            open_flags |= gdef.ACCESS_SYSTEM_SECURITY
+
+        # tmp_handle will autoclose if SecurityDescriptor.from_handle fails
+        tmp_handle = self._open_key(None, self.fullname, open_flags)
+        return security.SecurityDescriptor.from_handle(tmp_handle, query_sacl=query_sacl, flags=flags, obj_type="key")
 
 
+    def set_security_descriptor(self, sd):
+        if isinstance(sd, basestring):
+            sd = security.SecurityDescriptor.from_string(sd)
+        open_flags = gdef.WRITE_OWNER | gdef.WRITE_DAC
+        if (sd.sacl and
+            any(ace.Header.AceType != gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE for ace in sd.sacl)):
+            # Print error if requested but no SecurityPrivilege ?
+            open_flags |= gdef.ACCESS_SYSTEM_SECURITY
+        tmp_handle = self._open_key(self.surkey.phkey, self.name, open_flags)
+        # tmp_handle will autoclose if SecurityDescriptor.from_handle fails
+        sd._apply_to_handle_and_type(tmp_handle, gdef.SE_KERNEL_OBJECT)
+
+    security_descriptor = property(get_security_descriptor, set_security_descriptor)
+    _sentinel = object()
+
+    def update_security_descriptor(self, owner=_sentinel, dacl=_sentinel, sacl=_sentinel, group=_sentinel):
+        """[WIP] Api for simple SD update may change"""
+        # In any case, open the key with the given bitness of explicitly stated in the sam
+        open_flags = self.sam & (gdef.KEY_WOW64_64KEY | gdef.KEY_WOW64_32KEY)
+        set_security_info_flags = 0
+        temp_sd = security.SecurityDescriptor.create()
+        if owner is not self._sentinel:
+            open_flags |= gdef.WRITE_OWNER
+            set_security_info_flags |= gdef.OWNER_SECURITY_INFORMATION
+            temp_sd.owner = owner
+        if dacl is not self._sentinel:
+            open_flags |= gdef.WRITE_DAC
+            set_security_info_flags |= gdef.DACL_SECURITY_INFORMATION
+            temp_sd.owner = dacl
+        if sacl is not self._sentinel:
+            temp_sd.sacl = sacl
+            set_security_info_flags |= gdef.LABEL_SECURITY_INFORMATION
+            if any(ace.Header.AceType != gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE for ace in sacl):
+                open_flags |= gdef.ACCESS_SYSTEM_SECURITY
+                set_security_info_flags |= gdef.SACL_SECURITY_INFORMATION
+        if group is not self._sentinel:
+            raise NotImplementedError("update_security_descriptor with group")
+
+        # Create the temporary handle for assignement
+        tmp_handle = self._open_key(self.surkey.phkey, self.name, open_flags)
+        # tmp_handle will autoclose if SecurityDescriptor.from_handle fails
+        temp_sd._apply_to_handle_and_type(tmp_handle, gdef.SE_KERNEL_OBJECT, set_security_info_flags)
+
+    ##! Security API
     def __setitem__(self, name, value):
         rtype = None
         if not (isinstance(value, basestring) or isinstance(value, int_types)):
