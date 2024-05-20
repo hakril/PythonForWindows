@@ -157,6 +157,26 @@ def lookup_sid(psid):
     winproxy.LookupAccountSidW(None, psid, username, usernamesize, computername, computernamesize, peUse)
     return computername[:computernamesize.value], username[:usernamesize.value]
 
+
+def lookup_name(computer, user):
+    sid_size = gdef.DWORD()
+    domain_size = gdef.DWORD(0)
+    stype = gdef.SID_NAME_USE()
+
+    try:
+        windows.winproxy.LookupAccountNameW(computer, user, None, sid_size, None, domain_size, stype)
+    except WindowsError as e:
+        pass
+
+    domain = ctypes.create_unicode_buffer(domain_size.value)
+    sid = ctypes.c_buffer(sid_size.value)
+    windows.winproxy.LookupAccountNameW(computer, user, sid, sid_size, domain, domain_size, stype)
+
+    psid = PSID.from_buffer_copy(ctypes.pointer(sid))
+    psid._save_value = sid # Save the SID object so that it's now deleted prematurly
+    return domain[:domain_size.value], psid, stype.value
+
+
 def enable_privilege(lpszPrivilege, bEnablePrivilege):
     """
     Enable or disable a privilege::
