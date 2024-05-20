@@ -2830,6 +2830,11 @@ NtProtectVirtualMemoryParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'), (1, 'N
 NtQuerySystemInformationPrototype = WINFUNCTYPE(NTSTATUS, SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG)
 NtQuerySystemInformationParams = ((1, 'SystemInformationClass'), (1, 'SystemInformation'), (1, 'SystemInformationLength'), (1, 'ReturnLength'))
 
+#def NtQuerySystemInformationEx(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength):
+#    return NtQuerySystemInformationEx.ctypes_function(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength)
+NtQuerySystemInformationExPrototype = WINFUNCTYPE(NTSTATUS, SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PVOID, ULONG, PULONG)
+NtQuerySystemInformationExParams = ((1, 'SystemInformationClass'), (1, 'InputBuffer'), (1, 'InputBufferLength'), (1, 'SystemInformation'), (1, 'SystemInformationLength'), (1, 'ReturnLength'))
+
 #def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength):
 #    return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
 NtQueryInformationProcessPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG)
@@ -3549,6 +3554,16 @@ AllocConsoleParams = ()
 #    return FreeConsole.ctypes_function()
 FreeConsolePrototype = WINFUNCTYPE(BOOL)
 FreeConsoleParams = ()
+
+#def GetConsoleOutputCP():
+#    return GetConsoleOutputCP.ctypes_function()
+GetConsoleOutputCPPrototype = WINFUNCTYPE(UINT)
+GetConsoleOutputCPParams = ()
+
+#def GetConsoleCP():
+#    return GetConsoleCP.ctypes_function()
+GetConsoleCPPrototype = WINFUNCTYPE(UINT)
+GetConsoleCPParams = ()
 
 #def GetStdHandle(nStdHandle):
 #    return GetStdHandle.ctypes_function(nStdHandle)

@@ -1,5 +1,7 @@
 from .windef import *
 import windows # Allow extended-struct to use windows/winproxy/...
+import windows.pycompat
+
 from ctypes import *
 from ctypes.wintypes import *
 
@@ -4649,6 +4651,16 @@ class _RTL_PATH_TYPE(EnumType):
 RTL_PATH_TYPE = _RTL_PATH_TYPE
 
 
+NtProductWinNt = EnumValue("_NT_PRODUCT_TYPE", "NtProductWinNt", 0x1)
+NtProductLanManNt = EnumValue("_NT_PRODUCT_TYPE", "NtProductLanManNt", 0x2)
+NtProductServer = EnumValue("_NT_PRODUCT_TYPE", "NtProductServer", 0x3)
+class _NT_PRODUCT_TYPE(EnumType):
+    values = [NtProductWinNt, NtProductLanManNt, NtProductServer]
+    mapper = FlagMapper(*values)
+PNT_PRODUCT_TYPE = POINTER(_NT_PRODUCT_TYPE)
+NT_PRODUCT_TYPE = _NT_PRODUCT_TYPE
+
+
 # Self referencing struct tricks
 class _LIST_ENTRY(Structure): pass
 PLIST_ENTRY = POINTER(_LIST_ENTRY)
@@ -4707,7 +4719,7 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         return cls(size, size, ctypes.cast(buffer, PVOID))
 
     def __repr__(self):
-        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
+        return windows.pycompat.urepr_encode(u"""<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self))))
 
     def __sprint__(self):
         try:
@@ -9106,6 +9118,322 @@ class _FILE_RENAME_INFORMATION(INITIAL_FILE_RENAME_INFORMATION):
 
 FILE_RENAME_INFORMATION = _FILE_RENAME_INFORMATION
 PFILE_RENAME_INFORMATION = POINTER(_FILE_RENAME_INFORMATION)
+StandardDesign = EnumValue("_ALTERNATIVE_ARCHITECTURE_TYPE", "StandardDesign", 0x0)
+NEC98x86 = EnumValue("_ALTERNATIVE_ARCHITECTURE_TYPE", "NEC98x86", 0x1)
+EndAlternatives = EnumValue("_ALTERNATIVE_ARCHITECTURE_TYPE", "EndAlternatives", 0x2)
+class _ALTERNATIVE_ARCHITECTURE_TYPE(EnumType):
+    values = [StandardDesign, NEC98x86, EndAlternatives]
+    mapper = FlagMapper(*values)
+ALTERNATIVE_ARCHITECTURE_TYPE = _ALTERNATIVE_ARCHITECTURE_TYPE
+
+
+class _XSTATE_FEATURE(Structure):
+    _fields_ = [
+        ("Offset", DWORD),
+        ("Size", DWORD),
+    ]
+XSTATE_FEATURE = _XSTATE_FEATURE
+PXSTATE_FEATURE = POINTER(_XSTATE_FEATURE)
+
+class _ANON__ANON__XSTATE_CONFIGURATION_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("OptimizedSave", DWORD, 1),
+    ("CompactionEnabled", DWORD, 1),
+    ]
+
+class _ANON__XSTATE_CONFIGURATION_SUB_UNION_1(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("ControlFlags", DWORD),
+        ("anon_01", _ANON__ANON__XSTATE_CONFIGURATION_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+class _XSTATE_CONFIGURATION(Structure):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("EnabledFeatures", DWORD64),
+        ("EnabledVolatileFeatures", DWORD64),
+        ("Size", DWORD),
+        ("anon_01", _ANON__XSTATE_CONFIGURATION_SUB_UNION_1),
+        ("Features", XSTATE_FEATURE * (MAXIMUM_XSTATE_FEATURES)),
+        ("EnabledSupervisorFeatures", DWORD64),
+        ("AlignedFeatures", DWORD64),
+        ("AllFeatureSize", DWORD),
+        ("AllFeatures", DWORD * (MAXIMUM_XSTATE_FEATURES)),
+    ]
+XSTATE_CONFIGURATION = _XSTATE_CONFIGURATION
+PXSTATE_CONFIGURATION = POINTER(_XSTATE_CONFIGURATION)
+
+class _KSYSTEM_TIME(Structure):
+    _fields_ = [
+        ("LowPart", ULONG),
+        ("High1Time", LONG),
+        ("High2Time", LONG),
+    ]
+KSYSTEM_TIME = _KSYSTEM_TIME
+PKSYSTEM_TIME = POINTER(_KSYSTEM_TIME)
+
+class _ANON__ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("NXSupportPolicy", BYTE, 2),
+    ("SEHValidationPolicy", BYTE, 2),
+    ("CurDirDevicesSkippedForDlls", BYTE, 2),
+    ("Reserved", BYTE, 2),
+    ]
+
+class _ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_1(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("MitigationPolicies", BYTE),
+        ("anon_01", _ANON__ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+
+class _ANON__ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_2_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("DbgErrorPortPresent", ULONG, 1),
+    ("DbgElevationEnabled", ULONG, 1),
+    ("DbgVirtEnabled", ULONG, 1),
+    ("DbgInstallerDetectEnabled", ULONG, 1),
+    ("DbgLkgEnabled", ULONG, 1),
+    ("DbgDynProcessorEnabled", ULONG, 1),
+    ("DbgConsoleBrokerEnabled", ULONG, 1),
+    ("DbgSecureBootEnabled", ULONG, 1),
+    ("DbgMultiSessionSku", ULONG, 1),
+    ("DbgMultiUsersInSessionSku", ULONG, 1),
+    ("DbgStateSeparationEnabled", ULONG, 1),
+    ("SpareBits", ULONG, 21),
+    ]
+
+class _ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_2(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("SharedDataFlags", ULONG),
+        ("anon_01", _ANON__ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_2_SUB_STRUCTURE_1),
+    ]
+
+class _PFW_MINIMAL_KUSER_SHARED_DATA(Structure):
+    _anonymous_ = ("anon_01","anon_02")
+    _fields_ = [
+        ("TickCountLowDeprecated", ULONG),
+        ("TickCountMultiplier", ULONG),
+        ("InterruptTime", KSYSTEM_TIME),
+        ("SystemTime", KSYSTEM_TIME),
+        ("TimeZoneBias", KSYSTEM_TIME),
+        ("ImageNumberLow", USHORT),
+        ("ImageNumberHigh", USHORT),
+        ("NtSystemRoot", WCHAR * (260)),
+        ("MaxStackTraceDepth", ULONG),
+        ("CryptoExponent", ULONG),
+        ("TimeZoneId", ULONG),
+        ("LargePageMinimum", ULONG),
+        ("AitSamplingValue", ULONG),
+        ("AppCompatFlag", ULONG),
+        ("RNGSeedVersion", ULONGLONG),
+        ("GlobalValidationRunlevel", ULONG),
+        ("TimeZoneBiasStamp", LONG),
+        ("NtBuildNumber", ULONG),
+        ("NtProductType", NT_PRODUCT_TYPE),
+        ("ProductTypeIsValid", BOOLEAN),
+        ("Reserved0", BOOLEAN * (1)),
+        ("NativeProcessorArchitecture", USHORT),
+        ("NtMajorVersion", ULONG),
+        ("NtMinorVersion", ULONG),
+        ("ProcessorFeatures", BOOLEAN * (PROCESSOR_FEATURE_MAX)),
+        ("Reserved1", ULONG),
+        ("Reserved3", ULONG),
+        ("TimeSlip", ULONG),
+        ("AlternativeArchitecture", ALTERNATIVE_ARCHITECTURE_TYPE),
+        ("BootId", ULONG),
+        ("SystemExpirationDate", LARGE_INTEGER),
+        ("SuiteMask", ULONG),
+        ("KdDebuggerEnabled", BOOLEAN),
+        ("anon_01", _ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_1),
+        ("CyclesPerYield", USHORT),
+        ("ActiveConsoleId", ULONG),
+        ("DismountCount", ULONG),
+        ("ComPlusPackage", ULONG),
+        ("LastSystemRITEventTickCount", ULONG),
+        ("NumberOfPhysicalPages", ULONG),
+        ("SafeBootMode", BOOLEAN),
+        ("VirtualizationFlags", UCHAR),
+        ("Reserved12", UCHAR * (2)),
+        ("anon_02", _ANON__PFW_MINIMAL_KUSER_SHARED_DATA_SUB_UNION_2),
+        ("DataFlagsPad", ULONG * (1)),
+        ("TestRetInstruction", ULONGLONG),
+    ]
+PFW_MINIMAL_KUSER_SHARED_DATA = _PFW_MINIMAL_KUSER_SHARED_DATA
+
+class _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("NXSupportPolicy", BYTE, 2),
+    ("SEHValidationPolicy", BYTE, 2),
+    ("CurDirDevicesSkippedForDlls", BYTE, 2),
+    ("Reserved", BYTE, 2),
+    ]
+
+class _ANON__KUSER_SHARED_DATA_SUB_UNION_1(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("MitigationPolicies", BYTE),
+        ("anon_01", _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+
+class _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_2_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("DbgErrorPortPresent", ULONG, 1),
+    ("DbgElevationEnabled", ULONG, 1),
+    ("DbgVirtEnabled", ULONG, 1),
+    ("DbgInstallerDetectEnabled", ULONG, 1),
+    ("DbgLkgEnabled", ULONG, 1),
+    ("DbgDynProcessorEnabled", ULONG, 1),
+    ("DbgConsoleBrokerEnabled", ULONG, 1),
+    ("DbgSecureBootEnabled", ULONG, 1),
+    ("DbgMultiSessionSku", ULONG, 1),
+    ("DbgMultiUsersInSessionSku", ULONG, 1),
+    ("DbgStateSeparationEnabled", ULONG, 1),
+    ("SpareBits", ULONG, 21),
+    ]
+
+class _ANON__KUSER_SHARED_DATA_SUB_UNION_2(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("SharedDataFlags", ULONG),
+        ("anon_01", _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_2_SUB_STRUCTURE_1),
+    ]
+
+
+class _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_3_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("Win32Process", ULONG, 1),
+    ("Sgx2Enclave", ULONG, 1),
+    ("VbsBasicEnclave", ULONG, 1),
+    ("SpareBits", ULONG, 29),
+    ]
+
+class _ANON__KUSER_SHARED_DATA_SUB_UNION_3(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("AllFlags", ULONG),
+        ("anon_01", _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_3_SUB_STRUCTURE_1),
+    ]
+
+
+class _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_4_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("ReservedTickCountOverlay", ULONG * (3)),
+        ("TickCountPad", ULONG * (1)),
+    ]
+
+class _ANON__KUSER_SHARED_DATA_SUB_UNION_4(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("TickCount", KSYSTEM_TIME),
+        ("TickCountQuad", ULONG64),
+        ("anon_01", _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_4_SUB_STRUCTURE_1),
+    ]
+
+
+class _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_5_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("QpcBypassEnabled", UCHAR),
+        ("QpcShift", UCHAR),
+    ]
+
+class _ANON__KUSER_SHARED_DATA_SUB_UNION_5(Union):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("QpcData", USHORT),
+        ("anon_01", _ANON__ANON__KUSER_SHARED_DATA_SUB_UNION_5_SUB_STRUCTURE_1),
+    ]
+
+class _KUSER_SHARED_DATA(Structure):
+    _anonymous_ = ("anon_01","anon_02","UserCetAvailableEnvironments","anon_04","anon_05")
+    _fields_ = [
+        ("TickCountLowDeprecated", ULONG),
+        ("TickCountMultiplier", ULONG),
+        ("InterruptTime", KSYSTEM_TIME),
+        ("SystemTime", KSYSTEM_TIME),
+        ("TimeZoneBias", KSYSTEM_TIME),
+        ("ImageNumberLow", USHORT),
+        ("ImageNumberHigh", USHORT),
+        ("NtSystemRoot", WCHAR * (260)),
+        ("MaxStackTraceDepth", ULONG),
+        ("CryptoExponent", ULONG),
+        ("TimeZoneId", ULONG),
+        ("LargePageMinimum", ULONG),
+        ("AitSamplingValue", ULONG),
+        ("AppCompatFlag", ULONG),
+        ("RNGSeedVersion", ULONGLONG),
+        ("GlobalValidationRunlevel", ULONG),
+        ("TimeZoneBiasStamp", LONG),
+        ("NtBuildNumber", ULONG),
+        ("NtProductType", NT_PRODUCT_TYPE),
+        ("ProductTypeIsValid", BOOLEAN),
+        ("Reserved0", BOOLEAN * (1)),
+        ("NativeProcessorArchitecture", USHORT),
+        ("NtMajorVersion", ULONG),
+        ("NtMinorVersion", ULONG),
+        ("ProcessorFeatures", BOOLEAN * (PROCESSOR_FEATURE_MAX)),
+        ("Reserved1", ULONG),
+        ("Reserved3", ULONG),
+        ("TimeSlip", ULONG),
+        ("AlternativeArchitecture", ALTERNATIVE_ARCHITECTURE_TYPE),
+        ("BootId", ULONG),
+        ("SystemExpirationDate", LARGE_INTEGER),
+        ("SuiteMask", ULONG),
+        ("KdDebuggerEnabled", BOOLEAN),
+        ("anon_01", _ANON__KUSER_SHARED_DATA_SUB_UNION_1),
+        ("CyclesPerYield", USHORT),
+        ("ActiveConsoleId", ULONG),
+        ("DismountCount", ULONG),
+        ("ComPlusPackage", ULONG),
+        ("LastSystemRITEventTickCount", ULONG),
+        ("NumberOfPhysicalPages", ULONG),
+        ("SafeBootMode", BOOLEAN),
+        ("VirtualizationFlags", UCHAR),
+        ("Reserved12", UCHAR * (2)),
+        ("anon_02", _ANON__KUSER_SHARED_DATA_SUB_UNION_2),
+        ("DataFlagsPad", ULONG * (1)),
+        ("TestRetInstruction", ULONGLONG),
+        ("QpcFrequency", LONGLONG),
+        ("SystemCall", ULONG),
+        ("UserCetAvailableEnvironments", _ANON__KUSER_SHARED_DATA_SUB_UNION_3),
+        ("SystemCallPad", ULONGLONG * (2)),
+        ("anon_04", _ANON__KUSER_SHARED_DATA_SUB_UNION_4),
+        ("Cookie", ULONG),
+        ("CookiePad", ULONG * (1)),
+        ("ConsoleSessionForegroundProcessId", LONGLONG),
+        ("TimeUpdateLock", ULONGLONG),
+        ("BaselineSystemTimeQpc", ULONGLONG),
+        ("BaselineInterruptTimeQpc", ULONGLONG),
+        ("QpcSystemTimeIncrement", ULONGLONG),
+        ("QpcInterruptTimeIncrement", ULONGLONG),
+        ("QpcSystemTimeIncrementShift", UCHAR),
+        ("QpcInterruptTimeIncrementShift", UCHAR),
+        ("UnparkedProcessorCount", USHORT),
+        ("EnclaveFeatureMask", ULONG * (4)),
+        ("TelemetryCoverageRound", ULONG),
+        ("UserModeGlobalLogger", USHORT * (16)),
+        ("ImageFileExecutionOptions", ULONG),
+        ("LangGenerationCount", ULONG),
+        ("Reserved4", ULONGLONG),
+        ("InterruptTimeBias", ULONGLONG),
+        ("QpcBias", ULONGLONG),
+        ("ActiveProcessorCount", ULONG),
+        ("ActiveGroupCount", UCHAR),
+        ("Reserved9", UCHAR),
+        ("anon_05", _ANON__KUSER_SHARED_DATA_SUB_UNION_5),
+        ("TimeZoneBiasEffectiveStart", LARGE_INTEGER),
+        ("TimeZoneBiasEffectiveEnd", LARGE_INTEGER),
+        ("XState", XSTATE_CONFIGURATION),
+        ("FeatureConfigurationChangeStamp", KSYSTEM_TIME),
+        ("Spare", ULONG),
+    ]
+KUSER_SHARED_DATA = _KUSER_SHARED_DATA
+PKUSER_SHARED_DATA = POINTER(_KUSER_SHARED_DATA)
+
 PolicyAuditLogInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditLogInformation", 0x1)
 PolicyAuditEventsInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyAuditEventsInformation", 0x2)
 PolicyPrimaryDomainInformation = EnumValue("_POLICY_INFORMATION_CLASS", "PolicyPrimaryDomainInformation", 0x3)
