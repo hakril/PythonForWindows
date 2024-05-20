@@ -35,7 +35,7 @@ if is_py3:
     else: # Not a TTY (seen in github CI) : if no explict encoding on stdout : use the locale to encode it the best we can to prevent print error
         repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
 
-        def urepr_encode_notty(s):
+        def urepr_encode(s):
             return ustr.encode(repr_encoding, "backslashreplace")
 
 else: # py2.7
