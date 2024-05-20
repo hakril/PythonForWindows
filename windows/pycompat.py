@@ -5,6 +5,7 @@ is_py3 = (sys.version_info.major >= 3)
 
 # retrieve info about current encoding output
 # Provite a warning if sys.stdout.encoding do not match GetConsoleOutputCP() ?
+# Also : we may have no sys.stdout at all
 
 
 
@@ -29,11 +30,11 @@ if is_py3:
     # No encoding of unicode repr if we target a TTY
     # Python3 handle unicode natively in string and console output
 
-    if sys.stdout.isatty():
+    if sys.stdout and sys.stdout.isatty():
         def urepr_encode(s):
             return s
     else: # Not a TTY (seen in github CI) : if no explict encoding on stdout : use the locale to encode it the best we can to prevent print error
-        repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
+        repr_encoding = (sys.stdout and sys.stdout.encoding) or locale.getpreferredencoding()
 
         def urepr_encode(s):
             return s.encode(repr_encoding, "backslashreplace").decode()
@@ -57,8 +58,7 @@ else: # py2.7
 
     # sys.stdout.encoding may be None if not a tty
     # Use sys.stdout.isatty() ? in py2 we will never return unicode in anycase
-    repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
-    repr_encoding = "cp1252"
+    repr_encoding = (sys.stdout and sys.stdout.encoding) or locale.getpreferredencoding()
 
     def urepr_encode(ustr):
         # assert isinstance(s, unicode) # Make the check explicitly ?
