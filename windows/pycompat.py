@@ -1,4 +1,5 @@
 import sys
+import locale
 
 is_py3 = (sys.version_info.major >= 3)
 
@@ -47,7 +48,9 @@ else: # py2.7
         # No unicode for now on py2
         return s
 
-    repr_encoding = sys.stdout.encoding
+    # sys.stdout.encoding may be None if not a tty
+    # Use sys.stdout.isatty() ?
+    repr_encoding = sys.stdout.encoding or locale.getpreferredencoding()
 
     def urepr_encode(ustr):
         # assert isinstance(s, unicode) # Make the check explicitly ?
