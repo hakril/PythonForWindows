@@ -155,6 +155,18 @@ class BitsCopyJob(IBackgroundCopyJob):
         return retry_delay.value
 
     @property
+    def no_progress_timeout(self):
+        timeout = gdef.ULONG()
+        self.GetNoProgressTimeout(timeout)
+        return timeout.value
+
+    @property
+    def error_count(self):
+        errors = gdef.ULONG()
+        self.GetErrorCount(errors)
+        return errors.value
+
+    @property
     def proxy_settings(self):
         ProxyUsage = gdef.BG_JOB_PROXY_USAGE()
         ProxyList = gdef.LPWSTR()
