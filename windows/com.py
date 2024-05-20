@@ -90,6 +90,17 @@ def resolve_progid(progid):
 # Todo: ctypes_generation extended struct ?
 class SafeArray(SAFEARRAY):
         @classmethod
+        def create(cls, elttype, dims):
+            # Array of bound for each dimension
+            bound_array = windows.utils.BUFFER(gdef.SAFEARRAYBOUND)(nbelt=len(dims))
+            for i, dim in enumerate(dims):
+                bound_array[i].lLbound = 0
+                bound_array[i].cElements = dim
+            array_ptr = windows.winproxy.SafeArrayCreate(elttype, len(dims), bound_array)
+            return cls.from_PSAFEARRAY(array_ptr)
+
+
+        @classmethod
         def of_type(cls, addr, t):
             self = cls.from_address(addr)
             self.elt_type = t
@@ -115,6 +126,29 @@ class SafeArray(SAFEARRAY):
                 raise ValueError("Size of elements != sizeof(type)")
             data = [t.from_address(self.pvData + (i + llbound) * ctypes.sizeof(t)).value for i in range(nb_element)]
             return data
+
+        def put_element(self, indexes, element):
+            indexes_array = windows.utils.BUFFER(gdef.LONG)(*indexes)
+            if not isinstance(element, VARIANT):
+                pass
+                # element = Variant(element)
+                # import pdb; pdb.set_trace()
+                # element = ctypes.pointer(variant)
+                # print(hex(ctypes.addressof(element)))
+                # windows.utils.sprint(element)
+                # import pdb; pdb.set_trace()
+            windows.winproxy.SafeArrayPutElement(self, indexes_array, element)
+
+        def get_element(self, indexes):
+            indexes_array = windows.utils.BUFFER(gdef.LONG)(*indexes)
+            element = ctypes.create_string_buffer(0x1000)
+            windows.winproxy.SafeArrayGetElement(self, indexes_array, element)
+            return element # Need cleaning ?
+
+        def __repr__(self):
+            bound_array = windows.utils.resized_array(self.rgsabound, self.cDims)
+            dims = [int(b.cElements) for b in bound_array]
+            return "<{0} of dimension {1}: {2}>".format(type(self).__name__, len(dims), dims)
 
 #VT_VALUE_TO_TYPE = {
 #VT_I2 : SHORT,
@@ -157,6 +191,9 @@ def check_type_bstr(value):
 def check_type_bool(value):
     return isinstance(value, bool)
 
+def check_type_safearray(value):
+    return isinstance(value, LPSAFEARRAY)
+
 def check_type_array(value):
     return True
 
@@ -190,6 +227,7 @@ class Variant(VARIANT):
         (VT_I4, "lVal", check_type_i4),
         (VT_I8, "llVal", check_type_i8),
         (VT_BSTR, "bstrVal", check_type_bstr),
+        (VT_SAFEARRAY , "parray", check_type_safearray),
         (VT_NULL, None, check_type_null),
         (VT_EMPTY, None, never_match),
         (VT_DISPATCH, "pdispVal", never_match), # I cannot recognize DISPATCH ptr for now
