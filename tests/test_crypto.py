@@ -92,7 +92,7 @@ def rawpfx():
     return b64decode(TEST_PFX)
 
 PFW_TEST_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainerTest"
-RANDOM_CERTIF_NAME = b"PythonForWindowsGeneratedRandomCertifTest"
+RANDOM_CERTIF_NAME = "PythonForWindowsGeneratedRandomCertifTest"
 RANDOM_PFX_PASSWORD = "PythonForWindowsGeneratedRandomPFXPassword"
 
 @pytest.fixture()
@@ -125,7 +125,7 @@ def randomkeypair(keysize=1024):
     crypt_algo.pszObjId = gdef.szOID_RSA_SHA256RSA.encode("ascii") # do something else (bytes in generated ctypes ?)
 
     # This is fucking dumb, there is no .format on bytes object...
-    certif_name = b"".join((b"CN=", RANDOM_CERTIF_NAME))
+    certif_name = "".join(("CN=", RANDOM_CERTIF_NAME))
     # Generate a self-signed certificate based on the given key-container and signature algorithme
     certif = windows.crypto.generation.generate_selfsigned_certificate(certif_name, key_info=KeyProvInfo, signature_algo=crypt_algo)
     # Add the newly created certificate to our TMP cert-store
