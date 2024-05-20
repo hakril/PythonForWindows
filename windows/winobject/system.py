@@ -539,9 +539,9 @@ class System(object):
         process_entry.dwSize = ctypes.sizeof(process_entry)
         winproxy.Process32FirstW(snap, process_entry)
         processes = []
-        processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        processes.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         while winproxy.Process32NextW(snap, process_entry):
-            processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+            processes.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
 
         # Forge a dict pid -> process
         proc_dict = {proc.pid: proc for proc in processes}
