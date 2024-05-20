@@ -4,9 +4,12 @@ import os.path
 import re
 import glob
 import textwrap
-import StringIO
-import pprint
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO # Py3
 
+import pprint
 import shutil
 
 import dummy_wintypes
@@ -73,7 +76,7 @@ class StructureParsedFile(ParsedFile):
 
     def compute_imports_exports_for_struct(self, struct):
         self.asser_struct_not_already_in_import(struct)
-        if any(x in self.imports for x in [struct.name] + struct.typedef.keys()):
+        if any(x in self.imports for x in [struct.name] + list(struct.typedef)):
             print("Export <{0}> defined after first use".format(struct.name))
             raise ValueError("LOL")
         if struct.name is not None: # Anonymous structs
@@ -94,7 +97,7 @@ class StructureParsedFile(ParsedFile):
                 self.add_imports(*nb_rep.get_names())
 
     def asser_struct_not_already_in_import(self, struct):
-        for sname in [struct.name] + struct.typedef.keys():
+        for sname in [struct.name] + list(struct.typedef):
             try:
                 already_used = self.imports_by_struct[sname]
                 raise ValueError("Structure <{0}> is defined after being used in <{1}>".format(sname, already_used))
@@ -277,7 +280,7 @@ class CtypesGenerator(object):
     def __init__(self, parsed_files, template):
         self.files = parsed_files # Already in generation order
         self.template = template # MAKE BETTER
-        self.result = StringIO.StringIO()
+        self.result = StringIO()
         self.imported_name = set([])
 
     def add_import_name(self, name):
@@ -327,7 +330,7 @@ class CtypesGenerator(object):
 class NoTemplatedGenerator(CtypesGenerator):
    def __init__(self, parsed_files):
        self.files = parsed_files # Already in generation order
-       self.result = StringIO.StringIO()
+       self.result = StringIO()
        self.imported_name = set([])
 
    def copy_template(self):
@@ -627,7 +630,7 @@ def generate_walker(namelist, target_module):
 
 class MetaFileGenerator(NoTemplatedGenerator):
     def __init__(self):
-       self.result = StringIO.StringIO()
+       self.result = StringIO()
        self.modules = []
 
     def add_exportlist(self, name, modname, exports):

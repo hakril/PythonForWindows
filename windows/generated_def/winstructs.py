@@ -476,14 +476,14 @@ class _GUID(Structure):
         ("Data3", USHORT),
         ("Data4", BYTE * (8)),
     ]
-REFCLSID = POINTER(_GUID)
-LPCGUID = POINTER(_GUID)
-REFGUID = POINTER(_GUID)
-LPGUID = POINTER(_GUID)
-IID = _GUID
 CLSID = _GUID
-LPCLSID = POINTER(_GUID)
 GUID = _GUID
+IID = _GUID
+LPCGUID = POINTER(_GUID)
+LPCLSID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
+REFCLSID = POINTER(_GUID)
+REFGUID = POINTER(_GUID)
 REFIID = POINTER(_GUID)
 
 INITIAL_GUID = _GUID
@@ -546,14 +546,14 @@ class _GUID(INITIAL_GUID):
             return NotImplemented
         return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
 
-REFCLSID = POINTER(_GUID)
-LPCGUID = POINTER(_GUID)
-REFGUID = POINTER(_GUID)
-LPGUID = POINTER(_GUID)
-IID = _GUID
 CLSID = _GUID
-LPCLSID = POINTER(_GUID)
 GUID = _GUID
+IID = _GUID
+LPCGUID = POINTER(_GUID)
+LPCLSID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
+REFCLSID = POINTER(_GUID)
+REFGUID = POINTER(_GUID)
 REFIID = POINTER(_GUID)
 class IO_Des_s(Structure):
     _fields_ = [
@@ -563,8 +563,8 @@ class IO_Des_s(Structure):
         ("IOD_Alloc_End", DWORDLONG),
         ("IOD_DesFlags", DWORD),
     ]
-PIO_DES = POINTER(IO_Des_s)
 IO_DES = IO_Des_s
+PIO_DES = POINTER(IO_Des_s)
 
 class IO_Range_s(Structure):
     _fields_ = [
@@ -609,8 +609,8 @@ class DMA_Des_s(Structure):
         ("DD_Flags", DWORD),
         ("DD_Alloc_Chan", ULONG),
     ]
-PDMA_DES = POINTER(DMA_Des_s)
 DMA_DES = DMA_Des_s
+PDMA_DES = POINTER(DMA_Des_s)
 
 class DMA_Range_s(Structure):
     _fields_ = [
@@ -640,8 +640,8 @@ class IRQ_Des_32_s(Structure):
         ("IRQD_Alloc_Num", ULONG),
         ("IRQD_Affinity", ULONG32),
     ]
-PIRQ_DES_32 = POINTER(IRQ_Des_32_s)
 IRQ_DES_32 = IRQ_Des_32_s
+PIRQ_DES_32 = POINTER(IRQ_Des_32_s)
 
 class IRQ_Range_s(Structure):
     _fields_ = [
@@ -670,8 +670,8 @@ class BusNumber_Range_s(Structure):
         ("BUSR_nBusNumbers", ULONG),
         ("BUSR_Flags", ULONG),
     ]
-PBUSNUMBER_RANGE = POINTER(BusNumber_Range_s)
 BUSNUMBER_RANGE = BusNumber_Range_s
+PBUSNUMBER_RANGE = POINTER(BusNumber_Range_s)
 
 class BusNumber_Resource_s(Structure):
     _fields_ = [
@@ -690,15 +690,15 @@ class CS_Des_s(Structure):
         ("CSD_ClassGuid", GUID),
         ("CSD_Signature", BYTE * (ANYSIZE_ARRAY)),
     ]
-PCS_DES = POINTER(CS_Des_s)
 CS_DES = CS_Des_s
+PCS_DES = POINTER(CS_Des_s)
 
 class CS_Resource_s(Structure):
     _fields_ = [
         ("CS_Header", CS_DES),
     ]
-PCS_RESOURCE = POINTER(CS_Resource_s)
 CS_RESOURCE = CS_Resource_s
+PCS_RESOURCE = POINTER(CS_Resource_s)
 
 class DMA_Des_s(Structure):
     _fields_ = [
@@ -707,16 +707,16 @@ class DMA_Des_s(Structure):
         ("DD_Flags", DWORD),
         ("DD_Alloc_Chan", ULONG),
     ]
-PDMA_DES = POINTER(DMA_Des_s)
 DMA_DES = DMA_Des_s
+PDMA_DES = POINTER(DMA_Des_s)
 
 class DMA_Resource_s(Structure):
     _fields_ = [
         ("DMA_Header", DMA_DES),
         ("DMA_Data", DMA_RANGE * (ANYSIZE_ARRAY)),
     ]
-PDMA_RESOURCE = POINTER(DMA_Resource_s)
 DMA_RESOURCE = DMA_Resource_s
+PDMA_RESOURCE = POINTER(DMA_Resource_s)
 
 class IO_Des_s(Structure):
     _fields_ = [
@@ -726,8 +726,8 @@ class IO_Des_s(Structure):
         ("IOD_Alloc_End", DWORDLONG),
         ("IOD_DesFlags", DWORD),
     ]
-PIO_DES = POINTER(IO_Des_s)
 IO_DES = IO_Des_s
+PIO_DES = POINTER(IO_Des_s)
 
 class IO_Resource_s(Structure):
     _fields_ = [
@@ -742,8 +742,8 @@ class IRQ_Resource_32_s(Structure):
         ("IRQ_Header", IRQ_DES_32),
         ("IRQ_Data", IRQ_RANGE * (ANYSIZE_ARRAY)),
     ]
-PIRQ_RESOURCE_32 = POINTER(IRQ_Resource_32_s)
 IRQ_RESOURCE_32 = IRQ_Resource_32_s
+PIRQ_RESOURCE_32 = POINTER(IRQ_Resource_32_s)
 
 class IRQ_Resource_64_s(Structure):
     _fields_ = [
@@ -778,8 +778,8 @@ class MfCard_Resource_s(Structure):
     _fields_ = [
         ("MfCard_Header", MFCARD_DES),
     ]
-PMFCARD_RESOURCE = POINTER(MfCard_Resource_s)
 MFCARD_RESOURCE = MfCard_Resource_s
+PMFCARD_RESOURCE = POINTER(MfCard_Resource_s)
 
 class PcCard_Des_s(Structure):
     _fields_ = [
@@ -801,8 +801,8 @@ class PcCard_Resource_s(Structure):
     _fields_ = [
         ("PcCard_Header", PCCARD_DES),
     ]
-PPCCARD_RESOURCE = POINTER(PcCard_Resource_s)
 PCCARD_RESOURCE = PcCard_Resource_s
+PPCCARD_RESOURCE = POINTER(PcCard_Resource_s)
 
 class Mem_Large_Range_s(Structure):
     _fields_ = [
@@ -813,8 +813,8 @@ class Mem_Large_Range_s(Structure):
         ("MLR_Flags", DWORD),
         ("MLR_Reserved", DWORD),
     ]
-PMEM_LARGE_RANGE = POINTER(Mem_Large_Range_s)
 MEM_LARGE_RANGE = Mem_Large_Range_s
+PMEM_LARGE_RANGE = POINTER(Mem_Large_Range_s)
 
 class Mem_Large_Des_s(Structure):
     _fields_ = [
@@ -825,8 +825,8 @@ class Mem_Large_Des_s(Structure):
         ("MLD_Flags", DWORD),
         ("MLD_Reserved", DWORD),
     ]
-PMEM_LARGE_DES = POINTER(Mem_Large_Des_s)
 MEM_LARGE_DES = Mem_Large_Des_s
+PMEM_LARGE_DES = POINTER(Mem_Large_Des_s)
 
 class Mem_Large_Resource_s(Structure):
     _fields_ = [
@@ -955,8 +955,8 @@ class tagSAFEARRAYBOUND(Structure):
         ("cElements", ULONG),
         ("lLbound", LONG),
     ]
-SAFEARRAYBOUND = tagSAFEARRAYBOUND
 LPSAFEARRAYBOUND = POINTER(tagSAFEARRAYBOUND)
+SAFEARRAYBOUND = tagSAFEARRAYBOUND
 
 class tagSAFEARRAY(Structure):
     _fields_ = [
@@ -967,8 +967,8 @@ class tagSAFEARRAY(Structure):
         ("pvData", PVOID),
         ("rgsabound", SAFEARRAYBOUND * (1)),
     ]
-SAFEARRAY = tagSAFEARRAY
 LPSAFEARRAY = POINTER(tagSAFEARRAY)
+SAFEARRAY = tagSAFEARRAY
 
 class __tagBRECORD(Structure):
     _fields_ = [
@@ -1026,10 +1026,10 @@ class __tagVARIANT(Structure):
         ("wReserved3", WORD),
         ("_VARIANT_NAME_3", _ANON_TMP_variant_sub_union),
     ]
-LPVARIANTARG = POINTER(__tagVARIANT)
-VARIANTARG = __tagVARIANT
-VARIANT = __tagVARIANT
 LPVARIANT = POINTER(__tagVARIANT)
+LPVARIANTARG = POINTER(__tagVARIANT)
+VARIANT = __tagVARIANT
+VARIANTARG = __tagVARIANT
 _tagVARIANT = __tagVARIANT
 
 VIRTUAL_DISK_ACCESS_NONE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_NONE", 0x0)
@@ -1105,8 +1105,8 @@ class _VIRTUAL_STORAGE_TYPE(Structure):
         ("DeviceId", ULONG),
         ("VendorId", GUID),
     ]
-VIRTUAL_STORAGE_TYPE = _VIRTUAL_STORAGE_TYPE
 PVIRTUAL_STORAGE_TYPE = POINTER(_VIRTUAL_STORAGE_TYPE)
+VIRTUAL_STORAGE_TYPE = _VIRTUAL_STORAGE_TYPE
 
 class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -1144,8 +1144,8 @@ class _OPEN_VIRTUAL_DISK_PARAMETERS(Structure):
         ("Version", OPEN_VIRTUAL_DISK_VERSION),
         ("anon_01", _ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1),
     ]
-POPEN_VIRTUAL_DISK_PARAMETERS = POINTER(_OPEN_VIRTUAL_DISK_PARAMETERS)
 OPEN_VIRTUAL_DISK_PARAMETERS = _OPEN_VIRTUAL_DISK_PARAMETERS
+POPEN_VIRTUAL_DISK_PARAMETERS = POINTER(_OPEN_VIRTUAL_DISK_PARAMETERS)
 
 class _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -1194,8 +1194,8 @@ _INTERNET_BUFFERSA._fields_ = [
 
 # Self referencing struct tricks
 class _INTERNET_BUFFERSW(Structure): pass
-LPINTERNET_BUFFERSW = POINTER(_INTERNET_BUFFERSW)
 INTERNET_BUFFERSW = _INTERNET_BUFFERSW
+LPINTERNET_BUFFERSW = POINTER(_INTERNET_BUFFERSW)
 _INTERNET_BUFFERSW._fields_ = [
     ("dwStructSize", DWORD),
     ("Next", POINTER(_INTERNET_BUFFERSW)),
@@ -1256,8 +1256,8 @@ MaxProcessMitigationPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "MaxProcess
 class _PROCESS_MITIGATION_POLICY(EnumType):
     values = [ProcessDEPPolicy, ProcessASLRPolicy, ProcessDynamicCodePolicy, ProcessStrictHandleCheckPolicy, ProcessSystemCallDisablePolicy, ProcessMitigationOptionsMask, ProcessExtensionPointDisablePolicy, ProcessReserved1Policy, ProcessSignaturePolicy, MaxProcessMitigationPolicy]
     mapper = FlagMapper(*values)
-PROCESS_MITIGATION_POLICY = _PROCESS_MITIGATION_POLICY
 PPROCESS_MITIGATION_POLICY = POINTER(_PROCESS_MITIGATION_POLICY)
+PROCESS_MITIGATION_POLICY = _PROCESS_MITIGATION_POLICY
 
 
 class _ANON__ANON__PROCESS_MITIGATION_DEP_POLICY_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
@@ -1328,8 +1328,8 @@ class _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY(Structure):
     _fields_ = [
         ("anon_01", _ANON__PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_SUB_UNION_1),
     ]
-PROCESS_MITIGATION_DYNAMIC_CODE_POLICY = _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
 PPROCESS_MITIGATION_DYNAMIC_CODE_POLICY = POINTER(_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY)
+PROCESS_MITIGATION_DYNAMIC_CODE_POLICY = _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
 
 class _ANON__ANON__PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -1350,8 +1350,8 @@ class _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY(Structure):
     _fields_ = [
         ("anon_01", _ANON__PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_SUB_UNION_1),
     ]
-PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY = _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
 PPROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY = POINTER(_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY)
+PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY = _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
 
 class _ANON__ANON__PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -1393,8 +1393,8 @@ class _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY(Structure):
     _fields_ = [
         ("anon_01", _ANON__PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_SUB_UNION_1),
     ]
-PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY = _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
 PPROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY = POINTER(_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY)
+PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY = _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
 
 class _ANON__ANON__PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -1483,16 +1483,16 @@ class _MIB_IPNETROW_LH(Structure):
         ("dwAddr", DWORD),
         ("anon_01", _ANON__MIB_IPNETROW_LH_SUB_UNION_1),
     ]
-PMIB_IPNETROW = POINTER(_MIB_IPNETROW_LH)
 MIB_IPNETROW = _MIB_IPNETROW_LH
+PMIB_IPNETROW = POINTER(_MIB_IPNETROW_LH)
 
 class _MIB_IPNETTABLE(Structure):
     _fields_ = [
         ("dwNumEntries", DWORD),
         ("table", MIB_IPNETROW * (ANY_SIZE)),
     ]
-PMIB_IPNETTABLE = POINTER(_MIB_IPNETTABLE)
 MIB_IPNETTABLE = _MIB_IPNETTABLE
+PMIB_IPNETTABLE = POINTER(_MIB_IPNETTABLE)
 
 TCP_TABLE_BASIC_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_LISTENER", 0x0)
 TCP_TABLE_BASIC_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_CONNECTIONS", 0x1)
@@ -1573,16 +1573,16 @@ class _MIB_IPADDRROW_XP(Structure):
         ("wType", USHORT),
     ]
 MIB_IPADDRROW = _MIB_IPADDRROW_XP
-PMIB_IPADDRROW_XP = POINTER(_MIB_IPADDRROW_XP)
 MIB_IPADDRROW_XP = _MIB_IPADDRROW_XP
+PMIB_IPADDRROW_XP = POINTER(_MIB_IPADDRROW_XP)
 
 class _MIB_IPADDRTABLE(Structure):
     _fields_ = [
         ("dwNumEntries", DWORD),
         ("table", MIB_IPADDRROW * (ANY_SIZE)),
     ]
-PMIB_IPADDRTABLE = POINTER(_MIB_IPADDRTABLE)
 MIB_IPADDRTABLE = _MIB_IPADDRTABLE
+PMIB_IPADDRTABLE = POINTER(_MIB_IPADDRTABLE)
 
 class _MIB_IFROW(Structure):
     _fields_ = [
@@ -1611,16 +1611,16 @@ class _MIB_IFROW(Structure):
         ("dwDescrLen", DWORD),
         ("bDescr", UCHAR * (MAXLEN_IFDESCR)),
     ]
-PMIB_IFROW = POINTER(_MIB_IFROW)
 MIB_IFROW = _MIB_IFROW
+PMIB_IFROW = POINTER(_MIB_IFROW)
 
 class _MIB_IFTABLE(Structure):
     _fields_ = [
         ("dwNumEntries", DWORD),
         ("table", MIB_IFROW * (ANY_SIZE)),
     ]
-PMIB_IFTABLE = POINTER(_MIB_IFTABLE)
 MIB_IFTABLE = _MIB_IFTABLE
+PMIB_IFTABLE = POINTER(_MIB_IFTABLE)
 
 class _MIB_TCPROW_OWNER_PID(Structure):
     _fields_ = [
@@ -1674,8 +1674,8 @@ class _MIB_UDP6TABLE_OWNER_PID(Structure):
         ("dwNumEntries", DWORD),
         ("table", MIB_UDP6ROW_OWNER_PID * (ANY_SIZE)),
     ]
-PMIB_UDP6TABLE_OWNER_PID = POINTER(_MIB_UDP6TABLE_OWNER_PID)
 MIB_UDP6TABLE_OWNER_PID = _MIB_UDP6TABLE_OWNER_PID
+PMIB_UDP6TABLE_OWNER_PID = POINTER(_MIB_UDP6TABLE_OWNER_PID)
 
 class _MIB_TCP6ROW_OWNER_PID(Structure):
     _fields_ = [
@@ -1715,21 +1715,21 @@ class _IP_ADAPTER_INDEX_MAP(Structure):
         ("Index", ULONG),
         ("Name", WCHAR * (MAX_ADAPTER_NAME)),
     ]
-PIP_ADAPTER_INDEX_MAP = POINTER(_IP_ADAPTER_INDEX_MAP)
 IP_ADAPTER_INDEX_MAP = _IP_ADAPTER_INDEX_MAP
+PIP_ADAPTER_INDEX_MAP = POINTER(_IP_ADAPTER_INDEX_MAP)
 
 class _IP_INTERFACE_INFO(Structure):
     _fields_ = [
         ("NumAdapters", LONG),
         ("Adapter", IP_ADAPTER_INDEX_MAP * (1)),
     ]
-PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
 IP_INTERFACE_INFO = _IP_INTERFACE_INFO
+PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
 
 # Self referencing struct tricks
 class _DNS_CACHE_ENTRY(Structure): pass
-PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
 DNS_CACHE_ENTRY = _DNS_CACHE_ENTRY
+PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
 _DNS_CACHE_ENTRY._fields_ = [
     ("pNext", POINTER(_DNS_CACHE_ENTRY)),
     ("pszName", PCWSTR),
@@ -1875,9 +1875,9 @@ class DNS_SIG_DATAA(Structure):
         ("pNameSigner", PSTR),
         ("Signature", BYTE * (1)),
     ]
-PDNS_SIG_DATAA = POINTER(DNS_SIG_DATAA)
-PDNS_RRSIG_DATAA = POINTER(DNS_SIG_DATAA)
 DNS_RRSIG_DATAA = DNS_SIG_DATAA
+PDNS_RRSIG_DATAA = POINTER(DNS_SIG_DATAA)
+PDNS_SIG_DATAA = POINTER(DNS_SIG_DATAA)
 
 class DNS_KEY_DATA(Structure):
     _fields_ = [
@@ -1888,9 +1888,9 @@ class DNS_KEY_DATA(Structure):
         ("wPad", WORD),
         ("Key", BYTE * (1)),
     ]
+DNS_DNSKEY_DATA = DNS_KEY_DATA
 PDNS_DNSKEY_DATA = POINTER(DNS_KEY_DATA)
 PDNS_KEY_DATA = POINTER(DNS_KEY_DATA)
-DNS_DNSKEY_DATA = DNS_KEY_DATA
 
 class DNS_DHCID_DATA(Structure):
     _fields_ = [
@@ -2257,8 +2257,8 @@ class _ANON__DNSRECORDA_SUB_UNION_2(Union):
 
 # Self referencing struct tricks
 class _DnsRecordA(Structure): pass
-PDNS_RECORDA = POINTER(_DnsRecordA)
 DNS_RECORDA = _DnsRecordA
+PDNS_RECORDA = POINTER(_DnsRecordA)
 _DnsRecordA._fields_ = [
     ("pNext", POINTER(_DnsRecordA)),
     ("pName", PSTR),
@@ -2385,8 +2385,8 @@ class _DnsAddr(Structure):
         ("MaxSa", CHAR * (DNS_ADDR_MAX_SOCKADDR_LENGTH)),
         ("DnsAddrUserDword", DWORD * (8)),
     ]
-PDNS_ADDR = POINTER(_DnsAddr)
 DNS_ADDR = _DnsAddr
+PDNS_ADDR = POINTER(_DnsAddr)
 
 class _DnsAddrArray(Structure):
     _fields_ = [
@@ -2401,8 +2401,8 @@ class _DnsAddrArray(Structure):
         ("Reserved2", DWORD),
         ("AddrArray", DNS_ADDR * (ANY_SIZE)),
     ]
-PDNS_ADDR_ARRAY = POINTER(_DnsAddrArray)
 DNS_ADDR_ARRAY = _DnsAddrArray
+PDNS_ADDR_ARRAY = POINTER(_DnsAddrArray)
 
 class _DNS_QUERY_REQUEST(Structure):
     _fields_ = [
@@ -2415,15 +2415,15 @@ class _DNS_QUERY_REQUEST(Structure):
         ("pQueryCompletionCallback", PDNS_QUERY_COMPLETION_ROUTINE),
         ("pQueryContext", PVOID),
     ]
-PDNS_QUERY_REQUEST = POINTER(_DNS_QUERY_REQUEST)
 DNS_QUERY_REQUEST = _DNS_QUERY_REQUEST
+PDNS_QUERY_REQUEST = POINTER(_DNS_QUERY_REQUEST)
 
 class _DNS_QUERY_CANCEL(Structure):
     _fields_ = [
         ("Reserved", CHAR * (32)),
     ]
-PDNS_QUERY_CANCEL = POINTER(_DNS_QUERY_CANCEL)
 DNS_QUERY_CANCEL = _DNS_QUERY_CANCEL
+PDNS_QUERY_CANCEL = POINTER(_DNS_QUERY_CANCEL)
 
 class _DNS_QUERY_RESULT(Structure):
     _fields_ = [
@@ -2441,13 +2441,13 @@ class IP_ADDRESS_STRING(Structure):
         ("String", CHAR * (4 * 4)),
     ]
 IP_MASK_STRING = IP_ADDRESS_STRING
-PIP_MASK_STRING = POINTER(IP_ADDRESS_STRING)
 PIP_ADDRESS_STRING = POINTER(IP_ADDRESS_STRING)
+PIP_MASK_STRING = POINTER(IP_ADDRESS_STRING)
 
 # Self referencing struct tricks
 class _IP_ADDR_STRING(Structure): pass
-PIP_ADDR_STRING = POINTER(_IP_ADDR_STRING)
 IP_ADDR_STRING = _IP_ADDR_STRING
+PIP_ADDR_STRING = POINTER(_IP_ADDR_STRING)
 _IP_ADDR_STRING._fields_ = [
     ("Next", POINTER(_IP_ADDR_STRING)),
     ("IpAddress", IP_ADDRESS_STRING),
@@ -2487,10 +2487,10 @@ class _IP_PER_ADAPTER_INFO_W2KSP1(Structure):
         ("CurrentDnsServer", PIP_ADDR_STRING),
         ("DnsServerList", IP_ADDR_STRING),
     ]
-PIP_PER_ADAPTER_INFO = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
 IP_PER_ADAPTER_INFO = _IP_PER_ADAPTER_INFO_W2KSP1
-PIP_PER_ADAPTER_INFO_W2KSP1 = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
 IP_PER_ADAPTER_INFO_W2KSP1 = _IP_PER_ADAPTER_INFO_W2KSP1
+PIP_PER_ADAPTER_INFO = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
+PIP_PER_ADAPTER_INFO_W2KSP1 = POINTER(_IP_PER_ADAPTER_INFO_W2KSP1)
 
 KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
 KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
@@ -2529,8 +2529,8 @@ class _KEY_VALUE_BASIC_INFORMATION(Structure):
         ("NameLength", ULONG),
         ("Name", WCHAR * (1)),
     ]
-PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
 KEY_VALUE_BASIC_INFORMATION = _KEY_VALUE_BASIC_INFORMATION
+PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
 
 class _KEY_VALUE_FULL_INFORMATION(Structure):
     _fields_ = [
@@ -2551,8 +2551,8 @@ class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
         ("DataLength", ULONG),
         ("Data", UCHAR * (1)),
     ]
-PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
 KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
+PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
 
 class _IMAGE_FILE_HEADER(Structure):
     _fields_ = [
@@ -2884,8 +2884,8 @@ class _SERVICE_STATUS(Structure):
         ("dwCheckPoint", DWORD),
         ("dwWaitHint", DWORD),
     ]
-SERVICE_STATUS = _SERVICE_STATUS
 LPSERVICE_STATUS = POINTER(_SERVICE_STATUS)
+SERVICE_STATUS = _SERVICE_STATUS
 
 class _SERVICE_STATUS_PROCESS(Structure):
     _fields_ = [
@@ -2958,8 +2958,8 @@ class _ENUM_SERVICE_STATUS_PROCESSA(Structure):
         ("lpDisplayName", LPSTR),
         ("ServiceStatusProcess", SERVICE_STATUS_PROCESS),
     ]
-LPENUM_SERVICE_STATUS_PROCESSA = POINTER(_ENUM_SERVICE_STATUS_PROCESSA)
 ENUM_SERVICE_STATUS_PROCESSA = _ENUM_SERVICE_STATUS_PROCESSA
+LPENUM_SERVICE_STATUS_PROCESSA = POINTER(_ENUM_SERVICE_STATUS_PROCESSA)
 
 class _ENUM_SERVICE_STATUS_PROCESSW(Structure):
     _fields_ = [
@@ -2976,8 +2976,8 @@ class _ENUM_SERVICE_STATUSA(Structure):
         ("lpDisplayName", LPSTR),
         ("ServiceStatus", SERVICE_STATUS),
     ]
-LPENUM_SERVICE_STATUSA = POINTER(_ENUM_SERVICE_STATUSA)
 ENUM_SERVICE_STATUSA = _ENUM_SERVICE_STATUSA
+LPENUM_SERVICE_STATUSA = POINTER(_ENUM_SERVICE_STATUSA)
 
 class _ENUM_SERVICE_STATUSW(Structure):
     _fields_ = [
@@ -3000,8 +3000,8 @@ class _QUERY_SERVICE_CONFIGA(Structure):
         ("lpServiceStartName", LPSTR),
         ("lpDisplayName", LPSTR),
     ]
-QUERY_SERVICE_CONFIGA = _QUERY_SERVICE_CONFIGA
 LPQUERY_SERVICE_CONFIGA = POINTER(_QUERY_SERVICE_CONFIGA)
+QUERY_SERVICE_CONFIGA = _QUERY_SERVICE_CONFIGA
 
 class _QUERY_SERVICE_CONFIGW(Structure):
     _fields_ = [
@@ -3031,8 +3031,8 @@ class _SERVICE_TABLE_ENTRYW(Structure):
         ("lpServiceName", LPWSTR),
         ("lpServiceProc", LPSERVICE_MAIN_FUNCTIONW),
     ]
-SERVICE_TABLE_ENTRYW = _SERVICE_TABLE_ENTRYW
 LPSERVICE_TABLE_ENTRYW = POINTER(_SERVICE_TABLE_ENTRYW)
+SERVICE_TABLE_ENTRYW = _SERVICE_TABLE_ENTRYW
 
 class _SP_DEVICE_INTERFACE_DATA(Structure):
     _fields_ = [
@@ -3100,8 +3100,8 @@ class _SHFILEOPSTRUCTA(Structure):
         ("hNameMappings", LPVOID),
         ("lpszProgressTitle", PCSTR),
     ]
-SHFILEOPSTRUCTA = _SHFILEOPSTRUCTA
 LPSHFILEOPSTRUCTA = POINTER(_SHFILEOPSTRUCTA)
+SHFILEOPSTRUCTA = _SHFILEOPSTRUCTA
 
 SymNone = EnumValue("SYM_TYPE", "SymNone", 0x0)
 SymCoff = EnumValue("SYM_TYPE", "SymCoff", 0x1)
@@ -3296,8 +3296,8 @@ class _IMAGEHLP_MODULE64(Structure):
         ("SourceIndexed", BOOL),
         ("Publics", BOOL),
     ]
-PIMAGEHLP_MODULE64 = POINTER(_IMAGEHLP_MODULE64)
 IMAGEHLP_MODULE64 = _IMAGEHLP_MODULE64
+PIMAGEHLP_MODULE64 = POINTER(_IMAGEHLP_MODULE64)
 
 class _IMAGEHLP_MODULEW64(Structure):
     _fields_ = [
@@ -3327,8 +3327,8 @@ class _IMAGEHLP_MODULEW64(Structure):
         ("MachineType", DWORD),
         ("Reserved", DWORD),
     ]
-PIMAGEHLP_MODULEW64 = POINTER(_IMAGEHLP_MODULEW64)
 IMAGEHLP_MODULEW64 = _IMAGEHLP_MODULEW64
+PIMAGEHLP_MODULEW64 = POINTER(_IMAGEHLP_MODULEW64)
 
 class _SYMBOL_INFO(Structure):
     _fields_ = [
@@ -3348,8 +3348,8 @@ class _SYMBOL_INFO(Structure):
         ("MaxNameLen", ULONG),
         ("Name", CHAR * (1)),
     ]
-SYMBOL_INFO = _SYMBOL_INFO
 PSYMBOL_INFO = POINTER(_SYMBOL_INFO)
+SYMBOL_INFO = _SYMBOL_INFO
 
 class _SYMBOL_INFOW(Structure):
     _fields_ = [
@@ -3369,8 +3369,8 @@ class _SYMBOL_INFOW(Structure):
         ("MaxNameLen", ULONG),
         ("Name", WCHAR * (1)),
     ]
-SYMBOL_INFOW = _SYMBOL_INFOW
 PSYMBOL_INFOW = POINTER(_SYMBOL_INFOW)
+SYMBOL_INFOW = _SYMBOL_INFOW
 
 class SYMSRV_INDEX_INFOW(Structure):
     _fields_ = [
@@ -3411,8 +3411,8 @@ class _IMAGEHLP_SYMBOL(Structure):
         ("MaxNameLength", DWORD),
         ("Name", CHAR * (1)),
     ]
-PIMAGEHLP_SYMBOL = POINTER(_IMAGEHLP_SYMBOL)
 IMAGEHLP_SYMBOL = _IMAGEHLP_SYMBOL
+PIMAGEHLP_SYMBOL = POINTER(_IMAGEHLP_SYMBOL)
 
 class _IMAGEHLP_SYMBOL64(Structure):
     _fields_ = [
@@ -3423,8 +3423,8 @@ class _IMAGEHLP_SYMBOL64(Structure):
         ("MaxNameLength", DWORD),
         ("Name", CHAR * (1)),
     ]
-PIMAGEHLP_SYMBOL64 = POINTER(_IMAGEHLP_SYMBOL64)
 IMAGEHLP_SYMBOL64 = _IMAGEHLP_SYMBOL64
+PIMAGEHLP_SYMBOL64 = POINTER(_IMAGEHLP_SYMBOL64)
 
 class _IMAGEHLP_SYMBOLW64(Structure):
     _fields_ = [
@@ -3435,8 +3435,8 @@ class _IMAGEHLP_SYMBOLW64(Structure):
         ("MaxNameLength", DWORD),
         ("Name", WCHAR * (1)),
     ]
-PIMAGEHLP_SYMBOLW64 = POINTER(_IMAGEHLP_SYMBOLW64)
 IMAGEHLP_SYMBOLW64 = _IMAGEHLP_SYMBOLW64
+PIMAGEHLP_SYMBOLW64 = POINTER(_IMAGEHLP_SYMBOLW64)
 
 class _IMAGEHLP_STACK_FRAME(Structure):
     _fields_ = [
@@ -3461,8 +3461,8 @@ class _IMAGEHLP_CBA_EVENT(Structure):
         ("desc", PCHAR),
         ("object", PVOID),
     ]
-PIMAGEHLP_CBA_EVENT = POINTER(_IMAGEHLP_CBA_EVENT)
 IMAGEHLP_CBA_EVENT = _IMAGEHLP_CBA_EVENT
+PIMAGEHLP_CBA_EVENT = POINTER(_IMAGEHLP_CBA_EVENT)
 
 class _IMAGEHLP_CBA_EVENTW(Structure):
     _fields_ = [
@@ -3471,8 +3471,8 @@ class _IMAGEHLP_CBA_EVENTW(Structure):
         ("desc", PCWSTR),
         ("object", PVOID),
     ]
-PIMAGEHLP_CBA_EVENTW = POINTER(_IMAGEHLP_CBA_EVENTW)
 IMAGEHLP_CBA_EVENTW = _IMAGEHLP_CBA_EVENTW
+PIMAGEHLP_CBA_EVENTW = POINTER(_IMAGEHLP_CBA_EVENTW)
 
 class _IMAGEHLP_CBA_READ_MEMORY(Structure):
     _fields_ = [
@@ -3481,8 +3481,8 @@ class _IMAGEHLP_CBA_READ_MEMORY(Structure):
         ("bytes", DWORD),
         ("bytesread", POINTER(DWORD)),
     ]
-PIMAGEHLP_CBA_READ_MEMORY = POINTER(_IMAGEHLP_CBA_READ_MEMORY)
 IMAGEHLP_CBA_READ_MEMORY = _IMAGEHLP_CBA_READ_MEMORY
+PIMAGEHLP_CBA_READ_MEMORY = POINTER(_IMAGEHLP_CBA_READ_MEMORY)
 
 class _IMAGEHLP_DEFERRED_SYMBOL_LOAD(Structure):
     _fields_ = [
@@ -3494,8 +3494,8 @@ class _IMAGEHLP_DEFERRED_SYMBOL_LOAD(Structure):
         ("Reparse", BOOLEAN),
         ("hFile", HANDLE),
     ]
-PIMAGEHLP_DEFERRED_SYMBOL_LOAD = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD)
 IMAGEHLP_DEFERRED_SYMBOL_LOAD = _IMAGEHLP_DEFERRED_SYMBOL_LOAD
+PIMAGEHLP_DEFERRED_SYMBOL_LOAD = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD)
 
 class _IMAGEHLP_DEFERRED_SYMBOL_LOAD64(Structure):
     _fields_ = [
@@ -3532,8 +3532,8 @@ class _IMAGEHLP_DUPLICATE_SYMBOL64(Structure):
         ("Symbol", PIMAGEHLP_SYMBOL64),
         ("SelectedSymbol", DWORD),
     ]
-PIMAGEHLP_DUPLICATE_SYMBOL64 = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL64)
 IMAGEHLP_DUPLICATE_SYMBOL64 = _IMAGEHLP_DUPLICATE_SYMBOL64
+PIMAGEHLP_DUPLICATE_SYMBOL64 = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL64)
 
 class _IMAGEHLP_DUPLICATE_SYMBOL(Structure):
     _fields_ = [
@@ -3542,8 +3542,8 @@ class _IMAGEHLP_DUPLICATE_SYMBOL(Structure):
         ("Symbol", PIMAGEHLP_SYMBOL),
         ("SelectedSymbol", DWORD),
     ]
-PIMAGEHLP_DUPLICATE_SYMBOL = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL)
 IMAGEHLP_DUPLICATE_SYMBOL = _IMAGEHLP_DUPLICATE_SYMBOL
+PIMAGEHLP_DUPLICATE_SYMBOL = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL)
 
 class _tagADDRESS(Structure):
     _fields_ = [
@@ -3551,8 +3551,8 @@ class _tagADDRESS(Structure):
         ("Segment", WORD),
         ("Mode", ADDRESS_MODE),
     ]
-LPADDRESS = POINTER(_tagADDRESS)
 ADDRESS = _tagADDRESS
+LPADDRESS = POINTER(_tagADDRESS)
 
 class _tagADDRESS64(Structure):
     _fields_ = [
@@ -3560,16 +3560,16 @@ class _tagADDRESS64(Structure):
         ("Segment", WORD),
         ("Mode", ADDRESS_MODE),
     ]
-LPADDRESS64 = POINTER(_tagADDRESS64)
 ADDRESS64 = _tagADDRESS64
+LPADDRESS64 = POINTER(_tagADDRESS64)
 
 class _tagADDRESS64(_tagADDRESS64):
     def __repr__(self):
         if not self.Segment:
             return "<{0} {offset:#x}>".format(type(self).__name__, offset=self.Offset)
         return "<{0} {seg:#x}:{offset:#x}>".format(type(self).__name__, seg=self.Segment, offset=self.Offset)
-LPADDRESS64 = POINTER(_tagADDRESS64)
 ADDRESS64 = _tagADDRESS64
+LPADDRESS64 = POINTER(_tagADDRESS64)
 class _KDHELP(Structure):
     _fields_ = [
         ("Thread", DWORD),
@@ -3625,8 +3625,8 @@ class _tagSTACKFRAME(Structure):
         ("KdHelp", KDHELP),
         ("AddrBStore", ADDRESS),
     ]
-STACKFRAME = _tagSTACKFRAME
 LPSTACKFRAME = POINTER(_tagSTACKFRAME)
+STACKFRAME = _tagSTACKFRAME
 
 class _tagSTACKFRAME64(Structure):
     _fields_ = [
@@ -3642,8 +3642,8 @@ class _tagSTACKFRAME64(Structure):
         ("Reserved", DWORD64 * (3)),
         ("KdHelp", KDHELP64),
     ]
-STACKFRAME64 = _tagSTACKFRAME64
 LPSTACKFRAME64 = POINTER(_tagSTACKFRAME64)
+STACKFRAME64 = _tagSTACKFRAME64
 
 class _tagSTACKFRAME_EX(Structure):
     _fields_ = [
@@ -3795,10 +3795,10 @@ class tagRGBTRIPLE(Structure):
         ("rgbtGreen", BYTE),
         ("rgbtRed", BYTE),
     ]
-NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
 LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-RGBTRIPLE = tagRGBTRIPLE
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
 PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
 
 class tagBITMAPFILEHEADER(Structure):
     _pack_ = 2
@@ -3810,8 +3810,8 @@ class tagBITMAPFILEHEADER(Structure):
         ("bfOffBits", DWORD),
     ]
 BITMAPFILEHEADER = tagBITMAPFILEHEADER
-PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
 LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
 
 class tagBITMAPCOREHEADER(Structure):
     _fields_ = [
@@ -3821,9 +3821,9 @@ class tagBITMAPCOREHEADER(Structure):
         ("bcPlanes", WORD),
         ("bcBitCount", WORD),
     ]
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
 LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
 PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-BITMAPCOREHEADER = tagBITMAPCOREHEADER
 
 class tagBITMAP(Structure):
     _fields_ = [
@@ -3835,10 +3835,10 @@ class tagBITMAP(Structure):
         ("bmBitsPixel", WORD),
         ("bmBits", LPVOID),
     ]
-NPBITMAP = POINTER(tagBITMAP)
-LPBITMAP = POINTER(tagBITMAP)
-PBITMAP = POINTER(tagBITMAP)
 BITMAP = tagBITMAP
+LPBITMAP = POINTER(tagBITMAP)
+NPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
 
 class tagBITMAPINFOHEADER(Structure):
     _fields_ = [
@@ -3855,8 +3855,8 @@ class tagBITMAPINFOHEADER(Structure):
         ("biClrImportant", DWORD),
     ]
 BITMAPINFOHEADER = tagBITMAPINFOHEADER
-PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
 LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
 
 class tagRGBQUAD(Structure):
     _fields_ = [
@@ -3872,17 +3872,17 @@ class tagBITMAPINFO(Structure):
         ("bmiHeader", BITMAPINFOHEADER),
         ("bmiColors", RGBQUAD * (1)),
     ]
+BITMAPINFO = tagBITMAPINFO
 LPBITMAPINFO = POINTER(tagBITMAPINFO)
 PBITMAPINFO = POINTER(tagBITMAPINFO)
-BITMAPINFO = tagBITMAPINFO
 
 class tagBITMAPCOREINFO(Structure):
     _fields_ = [
         ("bmciHeader", BITMAPCOREHEADER),
         ("bmciColors", RGBTRIPLE * (1)),
     ]
-LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
 BITMAPCOREINFO = tagBITMAPCOREINFO
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
 PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
 
 class tagWNDCLASSEXA(Structure):
@@ -3900,8 +3900,8 @@ class tagWNDCLASSEXA(Structure):
         ("lpszClassName", LPCSTR),
         ("hIconSm", HICON),
     ]
-PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
 LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
 WNDCLASSEXA = tagWNDCLASSEXA
 
 class tagWNDCLASSEXW(Structure):
@@ -3919,9 +3919,9 @@ class tagWNDCLASSEXW(Structure):
         ("lpszClassName", LPWSTR),
         ("hIconSm", HICON),
     ]
-WNDCLASSEXW = tagWNDCLASSEXW
 LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
 PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+WNDCLASSEXW = tagWNDCLASSEXW
 
 SystemBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBasicInformation", 0x0)
 SystemProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorInformation", 0x1)
@@ -4379,8 +4379,8 @@ ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromD
 class _THREAD_INFORMATION_CLASS(EnumType):
     values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
     mapper = FlagMapper(*values)
-THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
 PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
+THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
 
 
 VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)
@@ -4474,8 +4474,8 @@ TokenImpersonation = EnumValue("tagTOKEN_TYPE", "TokenImpersonation", 0x2)
 class tagTOKEN_TYPE(EnumType):
     values = [TokenPrimary, TokenImpersonation]
     mapper = FlagMapper(*values)
-TOKEN_TYPE = tagTOKEN_TYPE
 PTOKEN_TYPE = POINTER(tagTOKEN_TYPE)
+TOKEN_TYPE = tagTOKEN_TYPE
 
 
 FileFsVolumeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsVolumeInformation", 0x1)
@@ -4502,8 +4502,8 @@ SecurityDelegation = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityDelegat
 class _SECURITY_IMPERSONATION_LEVEL(EnumType):
     values = [SecurityAnonymous, SecurityIdentification, SecurityImpersonation, SecurityDelegation]
     mapper = FlagMapper(*values)
-SECURITY_IMPERSONATION_LEVEL = _SECURITY_IMPERSONATION_LEVEL
 PSECURITY_IMPERSONATION_LEVEL = POINTER(_SECURITY_IMPERSONATION_LEVEL)
+SECURITY_IMPERSONATION_LEVEL = _SECURITY_IMPERSONATION_LEVEL
 
 
 ObjectBasicInformation = EnumValue("_OBJECT_INFORMATION_CLASS", "ObjectBasicInformation", 0x0)
@@ -4533,8 +4533,8 @@ SidTypeLabel = EnumValue("_SID_NAME_USE", "SidTypeLabel", 0xa)
 class _SID_NAME_USE(EnumType):
     values = [SidTypeUser, SidTypeGroup, SidTypeDomain, SidTypeAlias, SidTypeWellKnownGroup, SidTypeDeletedAccount, SidTypeInvalid, SidTypeUnknown, SidTypeComputer, SidTypeLabel]
     mapper = FlagMapper(*values)
-SID_NAME_USE = _SID_NAME_USE
 PSID_NAME_USE = POINTER(_SID_NAME_USE)
+SID_NAME_USE = _SID_NAME_USE
 
 
 NET_FW_ACTION_BLOCK = EnumValue("NET_FW_ACTION_", "NET_FW_ACTION_BLOCK", 0x0)
@@ -4657,14 +4657,14 @@ NtProductServer = EnumValue("_NT_PRODUCT_TYPE", "NtProductServer", 0x3)
 class _NT_PRODUCT_TYPE(EnumType):
     values = [NtProductWinNt, NtProductLanManNt, NtProductServer]
     mapper = FlagMapper(*values)
-PNT_PRODUCT_TYPE = POINTER(_NT_PRODUCT_TYPE)
 NT_PRODUCT_TYPE = _NT_PRODUCT_TYPE
+PNT_PRODUCT_TYPE = POINTER(_NT_PRODUCT_TYPE)
 
 
 # Self referencing struct tricks
 class _LIST_ENTRY(Structure): pass
-PLIST_ENTRY = POINTER(_LIST_ENTRY)
 LIST_ENTRY = _LIST_ENTRY
+PLIST_ENTRY = POINTER(_LIST_ENTRY)
 PRLIST_ENTRY = POINTER(_LIST_ENTRY)
 _LIST_ENTRY._fields_ = [
     ("Flink", POINTER(_LIST_ENTRY)),
@@ -4677,8 +4677,8 @@ class _PEB_LDR_DATA(Structure):
         ("Reserved2", PVOID * (3)),
         ("InMemoryOrderModuleList", LIST_ENTRY),
     ]
-PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
 PEB_LDR_DATA = _PEB_LDR_DATA
+PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
 
 class _LSA_UNICODE_STRING(Structure):
     _fields_ = [
@@ -4686,10 +4686,10 @@ class _LSA_UNICODE_STRING(Structure):
         ("MaximumLength", USHORT),
         ("Buffer", PVOID),
     ]
-PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-UNICODE_STRING = _LSA_UNICODE_STRING
 LSA_UNICODE_STRING = _LSA_UNICODE_STRING
 PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+UNICODE_STRING = _LSA_UNICODE_STRING
 
 INITIAL_LSA_UNICODE_STRING = _LSA_UNICODE_STRING
 
@@ -4728,17 +4728,17 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
             # Bad buffer: print raw infos
             return """<{0} len={1} maxlen={2} buffer={3}>""".format(type(self).__name__, self.Length, self.MaximumLength, self.Buffer)
 
-PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-UNICODE_STRING = _LSA_UNICODE_STRING
 LSA_UNICODE_STRING = _LSA_UNICODE_STRING
 PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+UNICODE_STRING = _LSA_UNICODE_STRING
 class _CURDIR(Structure):
     _fields_ = [
         ("DosPath", UNICODE_STRING),
         ("Handle", PVOID),
     ]
-PCURDIR = POINTER(_CURDIR)
 CURDIR = _CURDIR
+PCURDIR = POINTER(_CURDIR)
 
 class _RTL_DRIVE_LETTER_CURDIR(Structure):
     _fields_ = [
@@ -4912,8 +4912,8 @@ class _PEB(Structure):
         ("SystemAssemblyStorageMap", PVOID),
         ("MinimumStackCommit", PVOID),
     ]
-PPEB = POINTER(_PEB)
 PEB = _PEB
+PPEB = POINTER(_PEB)
 
 class _SECURITY_ATTRIBUTES(Structure):
     _fields_ = [
@@ -4921,9 +4921,9 @@ class _SECURITY_ATTRIBUTES(Structure):
         ("lpSecurityDescriptor", LPVOID),
         ("bInheritHandle", BOOL),
     ]
-SECURITY_ATTRIBUTES = _SECURITY_ATTRIBUTES
 LPSECURITY_ATTRIBUTES = POINTER(_SECURITY_ATTRIBUTES)
 PSECURITY_ATTRIBUTES = POINTER(_SECURITY_ATTRIBUTES)
+SECURITY_ATTRIBUTES = _SECURITY_ATTRIBUTES
 
 class _SYSTEM_VERIFIER_INFORMATION(Structure):
     _fields_ = [
@@ -4961,24 +4961,24 @@ class _SYSTEM_PROCESS_ID_INFORMATION(Structure):
         ("ProcessId", HANDLE),
         ("ImageName", UNICODE_STRING),
     ]
-SYSTEM_PROCESS_ID_INFORMATION = _SYSTEM_PROCESS_ID_INFORMATION
 PSYSTEM_PROCESS_ID_INFORMATION = POINTER(_SYSTEM_PROCESS_ID_INFORMATION)
+SYSTEM_PROCESS_ID_INFORMATION = _SYSTEM_PROCESS_ID_INFORMATION
 
 class _CLIENT_ID(Structure):
     _fields_ = [
         ("UniqueProcess", HANDLE),
         ("UniqueThread", HANDLE),
     ]
-PCLIENT_ID = POINTER(_CLIENT_ID)
 CLIENT_ID = _CLIENT_ID
+PCLIENT_ID = POINTER(_CLIENT_ID)
 
 class _CLIENT_ID64(Structure):
     _fields_ = [
         ("UniqueProcess", ULONG64),
         ("UniqueThread", ULONG64),
     ]
-PCLIENT_ID64 = POINTER(_CLIENT_ID64)
 CLIENT_ID64 = _CLIENT_ID64
+PCLIENT_ID64 = POINTER(_CLIENT_ID64)
 
 class _CLIENT_ID32(Structure):
     _fields_ = [
@@ -5002,8 +5002,194 @@ class _LDR_DATA_TABLE_ENTRY(Structure):
         ("CheckSum", ULONG),
         ("TimeDateStamp", ULONG),
     ]
-PLDR_DATA_TABLE_ENTRY = POINTER(_LDR_DATA_TABLE_ENTRY)
 LDR_DATA_TABLE_ENTRY = _LDR_DATA_TABLE_ENTRY
+PLDR_DATA_TABLE_ENTRY = POINTER(_LDR_DATA_TABLE_ENTRY)
+
+class _IMAGE_FILE_HEADER(Structure):
+    _fields_ = [
+        ("Machine", WORD),
+        ("NumberOfSections", WORD),
+        ("TimeDateStamp", DWORD),
+        ("PointerToSymbolTable", DWORD),
+        ("NumberOfSymbols", DWORD),
+        ("SizeOfOptionalHeader", WORD),
+        ("Characteristics", WORD),
+    ]
+IMAGE_FILE_HEADER = _IMAGE_FILE_HEADER
+PIMAGE_FILE_HEADER = POINTER(_IMAGE_FILE_HEADER)
+
+class _IMAGE_DATA_DIRECTORY(Structure):
+    _fields_ = [
+        ("VirtualAddress", DWORD),
+        ("Size", DWORD),
+    ]
+IMAGE_DATA_DIRECTORY = _IMAGE_DATA_DIRECTORY
+PIMAGE_DATA_DIRECTORY = POINTER(_IMAGE_DATA_DIRECTORY)
+
+class _IMAGE_SECTION_HEADER(Structure):
+    _fields_ = [
+        ("Name", BYTE * (IMAGE_SIZEOF_SHORT_NAME)),
+        ("VirtualSize", DWORD),
+        ("VirtualAddress", DWORD),
+        ("SizeOfRawData", DWORD),
+        ("PointerToRawData", DWORD),
+        ("PointerToRelocations", DWORD),
+        ("PointerToLinenumbers", DWORD),
+        ("NumberOfRelocations", WORD),
+        ("NumberOfLinenumbers", WORD),
+        ("Characteristics", DWORD),
+    ]
+IMAGE_SECTION_HEADER = _IMAGE_SECTION_HEADER
+PIMAGE_SECTION_HEADER = POINTER(_IMAGE_SECTION_HEADER)
+
+class _IMAGE_OPTIONAL_HEADER64(Structure):
+    _fields_ = [
+        ("Magic", WORD),
+        ("MajorLinkerVersion", BYTE),
+        ("MinorLinkerVersion", BYTE),
+        ("SizeOfCode", DWORD),
+        ("SizeOfInitializedData", DWORD),
+        ("SizeOfUninitializedData", DWORD),
+        ("AddressOfEntryPoint", DWORD),
+        ("BaseOfCode", DWORD),
+        ("ImageBase", ULONGLONG),
+        ("SectionAlignment", DWORD),
+        ("FileAlignment", DWORD),
+        ("MajorOperatingSystemVersion", WORD),
+        ("MinorOperatingSystemVersion", WORD),
+        ("MajorImageVersion", WORD),
+        ("MinorImageVersion", WORD),
+        ("MajorSubsystemVersion", WORD),
+        ("MinorSubsystemVersion", WORD),
+        ("Win32VersionValue", DWORD),
+        ("SizeOfImage", DWORD),
+        ("SizeOfHeaders", DWORD),
+        ("CheckSum", DWORD),
+        ("Subsystem", WORD),
+        ("DllCharacteristics", WORD),
+        ("SizeOfStackReserve", ULONGLONG),
+        ("SizeOfStackCommit", ULONGLONG),
+        ("SizeOfHeapReserve", ULONGLONG),
+        ("SizeOfHeapCommit", ULONGLONG),
+        ("LoaderFlags", DWORD),
+        ("NumberOfRvaAndSizes", DWORD),
+        ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
+    ]
+IMAGE_OPTIONAL_HEADER64 = _IMAGE_OPTIONAL_HEADER64
+PIMAGE_OPTIONAL_HEADER64 = POINTER(_IMAGE_OPTIONAL_HEADER64)
+
+class _IMAGE_OPTIONAL_HEADER(Structure):
+    _fields_ = [
+        ("Magic", WORD),
+        ("MajorLinkerVersion", BYTE),
+        ("MinorLinkerVersion", BYTE),
+        ("SizeOfCode", DWORD),
+        ("SizeOfInitializedData", DWORD),
+        ("SizeOfUninitializedData", DWORD),
+        ("AddressOfEntryPoint", DWORD),
+        ("BaseOfCode", DWORD),
+        ("BaseOfData", DWORD),
+        ("ImageBase", DWORD),
+        ("SectionAlignment", DWORD),
+        ("FileAlignment", DWORD),
+        ("MajorOperatingSystemVersion", WORD),
+        ("MinorOperatingSystemVersion", WORD),
+        ("MajorImageVersion", WORD),
+        ("MinorImageVersion", WORD),
+        ("MajorSubsystemVersion", WORD),
+        ("MinorSubsystemVersion", WORD),
+        ("Win32VersionValue", DWORD),
+        ("SizeOfImage", DWORD),
+        ("SizeOfHeaders", DWORD),
+        ("CheckSum", DWORD),
+        ("Subsystem", WORD),
+        ("DllCharacteristics", WORD),
+        ("SizeOfStackReserve", DWORD),
+        ("SizeOfStackCommit", DWORD),
+        ("SizeOfHeapReserve", DWORD),
+        ("SizeOfHeapCommit", DWORD),
+        ("LoaderFlags", DWORD),
+        ("NumberOfRvaAndSizes", DWORD),
+        ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
+    ]
+IMAGE_OPTIONAL_HEADER32 = _IMAGE_OPTIONAL_HEADER
+PIMAGE_OPTIONAL_HEADER32 = POINTER(_IMAGE_OPTIONAL_HEADER)
+
+class _IMAGE_NT_HEADERS64(Structure):
+    _fields_ = [
+        ("Signature", DWORD),
+        ("FileHeader", IMAGE_FILE_HEADER),
+        ("OptionalHeader", IMAGE_OPTIONAL_HEADER64),
+    ]
+IMAGE_NT_HEADERS64 = _IMAGE_NT_HEADERS64
+PIMAGE_NT_HEADERS64 = POINTER(_IMAGE_NT_HEADERS64)
+
+class _IMAGE_NT_HEADERS(Structure):
+    _fields_ = [
+        ("Signature", DWORD),
+        ("FileHeader", IMAGE_FILE_HEADER),
+        ("OptionalHeader", IMAGE_OPTIONAL_HEADER32),
+    ]
+IMAGE_NT_HEADERS32 = _IMAGE_NT_HEADERS
+PIMAGE_NT_HEADERS32 = POINTER(_IMAGE_NT_HEADERS)
+
+class _IMAGE_IMPORT_DESCRIPTOR(Structure):
+    _fields_ = [
+        ("OriginalFirstThunk", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("ForwarderChain", DWORD),
+        ("Name", DWORD),
+        ("FirstThunk", DWORD),
+    ]
+IMAGE_IMPORT_DESCRIPTOR = _IMAGE_IMPORT_DESCRIPTOR
+PIMAGE_IMPORT_DESCRIPTOR = POINTER(_IMAGE_IMPORT_DESCRIPTOR)
+
+class _IMAGE_IMPORT_BY_NAME(Structure):
+    _fields_ = [
+        ("Hint", WORD),
+        ("Name", BYTE * (1)),
+    ]
+IMAGE_IMPORT_BY_NAME = _IMAGE_IMPORT_BY_NAME
+PIMAGE_IMPORT_BY_NAME = POINTER(_IMAGE_IMPORT_BY_NAME)
+
+class _IMAGE_EXPORT_DIRECTORY(Structure):
+    _fields_ = [
+        ("Characteristics", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("MajorVersion", WORD),
+        ("MinorVersion", WORD),
+        ("Name", DWORD),
+        ("Base", DWORD),
+        ("NumberOfFunctions", DWORD),
+        ("NumberOfNames", DWORD),
+        ("AddressOfFunctions", DWORD),
+        ("AddressOfNames", DWORD),
+        ("AddressOfNameOrdinals", DWORD),
+    ]
+IMAGE_EXPORT_DIRECTORY = _IMAGE_EXPORT_DIRECTORY
+PIMAGE_EXPORT_DIRECTORY = POINTER(_IMAGE_EXPORT_DIRECTORY)
+
+class _IMAGE_DEBUG_DIRECTORY(Structure):
+    _fields_ = [
+        ("Characteristics", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("MajorVersion", WORD),
+        ("MinorVersion", WORD),
+        ("Type", DWORD),
+        ("SizeOfData", DWORD),
+        ("AddressOfRawData", DWORD),
+        ("PointerToRawData", DWORD),
+    ]
+IMAGE_DEBUG_DIRECTORY = _IMAGE_DEBUG_DIRECTORY
+PIMAGE_DEBUG_DIRECTORY = POINTER(_IMAGE_DEBUG_DIRECTORY)
+
+class _IMAGE_BASE_RELOCATION(Structure):
+    _fields_ = [
+        ("VirtualAddress", DWORD),
+        ("SizeOfBlock", DWORD),
+    ]
+IMAGE_BASE_RELOCATION = _IMAGE_BASE_RELOCATION
+PIMAGE_BASE_RELOCATION = POINTER(_IMAGE_BASE_RELOCATION)
 
 class _MEMORY_BASIC_INFORMATION(Structure):
     _fields_ = [
@@ -5015,8 +5201,8 @@ class _MEMORY_BASIC_INFORMATION(Structure):
         ("Protect", DWORD),
         ("Type", DWORD),
     ]
-PMEMORY_BASIC_INFORMATION = POINTER(_MEMORY_BASIC_INFORMATION)
 MEMORY_BASIC_INFORMATION = _MEMORY_BASIC_INFORMATION
+PMEMORY_BASIC_INFORMATION = POINTER(_MEMORY_BASIC_INFORMATION)
 
 class _THREAD_BASIC_INFORMATION(Structure):
     _fields_ = [
@@ -5027,8 +5213,8 @@ class _THREAD_BASIC_INFORMATION(Structure):
         ("Priority", KPRIORITY),
         ("BasePriority", KPRIORITY),
     ]
-THREAD_BASIC_INFORMATION = _THREAD_BASIC_INFORMATION
 PTHREAD_BASIC_INFORMATION = POINTER(_THREAD_BASIC_INFORMATION)
+THREAD_BASIC_INFORMATION = _THREAD_BASIC_INFORMATION
 
 class _MEMORY_BASIC_INFORMATION32(Structure):
     _fields_ = [
@@ -5094,8 +5280,8 @@ class _MEMORY_BASIC_INFORMATION64(Structure):
         ("Type", DWORD),
         ("__alignment2", DWORD),
     ]
-PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
 MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
+PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
 
 INITIAL_MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
 
@@ -5134,28 +5320,28 @@ class _MEMORY_BASIC_INFORMATION64(INITIAL_MEMORY_BASIC_INFORMATION64):
     def __repr__(self):
         return "<MEMORY_BASIC_INFORMATION64 BaseAddress={0:#08x} RegionSize={1:#08x} State={2} Type={3} Protect={4}>".format(
             self.BaseAddress, self.RegionSize, self.State, self.Type, self.Protect)
-PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
 MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
+PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
 class _PSAPI_WORKING_SET_BLOCK(Union):
     _fields_ = [
         ("Flags", PVOID),
     ]
-PSAPI_WORKING_SET_BLOCK = _PSAPI_WORKING_SET_BLOCK
 PPSAPI_WORKING_SET_BLOCK = POINTER(_PSAPI_WORKING_SET_BLOCK)
+PSAPI_WORKING_SET_BLOCK = _PSAPI_WORKING_SET_BLOCK
 
 class _PSAPI_WORKING_SET_BLOCK32(Union):
     _fields_ = [
         ("Flags", DWORD),
     ]
-PSAPI_WORKING_SET_BLOCK32 = _PSAPI_WORKING_SET_BLOCK32
 PPSAPI_WORKING_SET_BLOCK32 = POINTER(_PSAPI_WORKING_SET_BLOCK32)
+PSAPI_WORKING_SET_BLOCK32 = _PSAPI_WORKING_SET_BLOCK32
 
 class _PSAPI_WORKING_SET_BLOCK64(Union):
     _fields_ = [
         ("Flags", ULONG64),
     ]
-PSAPI_WORKING_SET_BLOCK64 = _PSAPI_WORKING_SET_BLOCK64
 PPSAPI_WORKING_SET_BLOCK64 = POINTER(_PSAPI_WORKING_SET_BLOCK64)
+PSAPI_WORKING_SET_BLOCK64 = _PSAPI_WORKING_SET_BLOCK64
 
 class _PSAPI_WORKING_SET_INFORMATION(Structure):
     _fields_ = [
@@ -5178,15 +5364,15 @@ class _PSAPI_WORKING_SET_INFORMATION64(Structure):
         ("NumberOfEntries", ULONG64),
         ("WorkingSetInfo", PSAPI_WORKING_SET_BLOCK64 * (1)),
     ]
-PSAPI_WORKING_SET_INFORMATION64 = _PSAPI_WORKING_SET_INFORMATION64
 PPSAPI_WORKING_SET_INFORMATION64 = POINTER(_PSAPI_WORKING_SET_INFORMATION64)
+PSAPI_WORKING_SET_INFORMATION64 = _PSAPI_WORKING_SET_INFORMATION64
 
 class _PSAPI_WORKING_SET_EX_BLOCK(Union):
     _fields_ = [
         ("Flags", PVOID),
     ]
-PSAPI_WORKING_SET_EX_BLOCK = _PSAPI_WORKING_SET_EX_BLOCK
 PPSAPI_WORKING_SET_EX_BLOCK = POINTER(_PSAPI_WORKING_SET_EX_BLOCK)
+PSAPI_WORKING_SET_EX_BLOCK = _PSAPI_WORKING_SET_EX_BLOCK
 
 class _PSAPI_WORKING_SET_EX_BLOCK32(Union):
     _fields_ = [
@@ -5199,8 +5385,8 @@ class _PSAPI_WORKING_SET_EX_BLOCK64(Union):
     _fields_ = [
         ("Flags", ULONG64),
     ]
-PSAPI_WORKING_SET_EX_BLOCK64 = _PSAPI_WORKING_SET_EX_BLOCK64
 PPSAPI_WORKING_SET_EX_BLOCK64 = POINTER(_PSAPI_WORKING_SET_EX_BLOCK64)
+PSAPI_WORKING_SET_EX_BLOCK64 = _PSAPI_WORKING_SET_EX_BLOCK64
 
 class _PSAPI_WORKING_SET_EX_INFORMATION(Structure):
     _fields_ = [
@@ -5215,8 +5401,8 @@ class _PSAPI_WORKING_SET_EX_INFORMATION32(Structure):
         ("VirtualAddress", DWORD),
         ("VirtualAttributes", PSAPI_WORKING_SET_EX_BLOCK32),
     ]
-PSAPI_WORKING_SET_EX_INFORMATION32 = _PSAPI_WORKING_SET_EX_INFORMATION32
 PPSAPI_WORKING_SET_EX_INFORMATION32 = POINTER(_PSAPI_WORKING_SET_EX_INFORMATION32)
+PSAPI_WORKING_SET_EX_INFORMATION32 = _PSAPI_WORKING_SET_EX_INFORMATION32
 
 class _PSAPI_WORKING_SET_EX_INFORMATION64(Structure):
     _fields_ = [
@@ -5271,8 +5457,8 @@ class _STARTUPINFOW(Structure):
         ("hStdOutput", HANDLE),
         ("hStdError", HANDLE),
     ]
-STARTUPINFOW = _STARTUPINFOW
 LPSTARTUPINFOW = POINTER(_STARTUPINFOW)
+STARTUPINFOW = _STARTUPINFOW
 
 class _STARTUPINFOEXA(Structure):
     _fields_ = [
@@ -5287,8 +5473,8 @@ class _STARTUPINFOEXW(Structure):
         ("StartupInfo", STARTUPINFOW),
         ("lpAttributeList", LPPROC_THREAD_ATTRIBUTE_LIST),
     ]
-STARTUPINFOEXW = _STARTUPINFOEXW
 LPSTARTUPINFOEXW = POINTER(_STARTUPINFOEXW)
+STARTUPINFOEXW = _STARTUPINFOEXW
 
 class _PROCESS_INFORMATION(Structure):
     _fields_ = [
@@ -5298,8 +5484,8 @@ class _PROCESS_INFORMATION(Structure):
         ("dwThreadId", DWORD),
     ]
 LPPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
-PROCESS_INFORMATION = _PROCESS_INFORMATION
 PPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
+PROCESS_INFORMATION = _PROCESS_INFORMATION
 
 class _FLOATING_SAVE_AREA(Structure):
     _fields_ = [
@@ -5343,9 +5529,9 @@ class _CONTEXT32(Structure):
         ("SegSs", DWORD),
         ("ExtendedRegisters", BYTE * (512)),
     ]
-PCONTEXT32 = POINTER(_CONTEXT32)
 CONTEXT32 = _CONTEXT32
 LPCONTEXT32 = POINTER(_CONTEXT32)
+PCONTEXT32 = POINTER(_CONTEXT32)
 
 class _WOW64_FLOATING_SAVE_AREA(Structure):
     _fields_ = [
@@ -5419,8 +5605,8 @@ class _XSAVE_FORMAT_64(Structure):
         ("XmmRegisters", M128A * (16)),
         ("Reserved4", BYTE * (96)),
     ]
-XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
 PXSAVE_FORMAT_64 = POINTER(_XSAVE_FORMAT_64)
+XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
 
 class _XSAVE_FORMAT_32(Structure):
     _fields_ = [
@@ -5443,8 +5629,8 @@ class _XSAVE_FORMAT_32(Structure):
         ("StackControl", DWORD * (7)),
         ("Cr0NpxState", DWORD),
     ]
-XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
 PXSAVE_FORMAT_32 = POINTER(_XSAVE_FORMAT_32)
+XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
 
 class _TMP_DUMMYSTRUCTNAME(Structure):
     _fields_ = [
@@ -5525,9 +5711,9 @@ class _CONTEXT64(Structure):
         ("LastExceptionToRip", DWORD64),
         ("LastExceptionFromRip", DWORD64),
     ]
-PCONTEXT64 = POINTER(_CONTEXT64)
 CONTEXT64 = _CONTEXT64
 LPCONTEXT64 = POINTER(_CONTEXT64)
+PCONTEXT64 = POINTER(_CONTEXT64)
 
 class tagPROCESSENTRY32W(Structure):
     _fields_ = [
@@ -5542,8 +5728,8 @@ class tagPROCESSENTRY32W(Structure):
         ("dwFlags", DWORD),
         ("szExeFile", WCHAR * (MAX_PATH)),
     ]
-PPROCESSENTRY32W = POINTER(tagPROCESSENTRY32W)
 LPPROCESSENTRY32W = POINTER(tagPROCESSENTRY32W)
+PPROCESSENTRY32W = POINTER(tagPROCESSENTRY32W)
 PROCESSENTRY32W = tagPROCESSENTRY32W
 
 class tagPROCESSENTRY32(Structure):
@@ -5559,9 +5745,9 @@ class tagPROCESSENTRY32(Structure):
         ("dwFlags", DWORD),
         ("szExeFile", CHAR * (MAX_PATH)),
     ]
-PROCESSENTRY32 = tagPROCESSENTRY32
-PPROCESSENTRY32 = POINTER(tagPROCESSENTRY32)
 LPPROCESSENTRY32 = POINTER(tagPROCESSENTRY32)
+PPROCESSENTRY32 = POINTER(tagPROCESSENTRY32)
+PROCESSENTRY32 = tagPROCESSENTRY32
 
 class tagTHREADENTRY32(Structure):
     _fields_ = [
@@ -5573,9 +5759,9 @@ class tagTHREADENTRY32(Structure):
         ("tpDeltaPri", LONG),
         ("dwFlags", DWORD),
     ]
+LPTHREADENTRY32 = POINTER(tagTHREADENTRY32)
 PTHREADENTRY32 = POINTER(tagTHREADENTRY32)
 THREADENTRY32 = tagTHREADENTRY32
-LPTHREADENTRY32 = POINTER(tagTHREADENTRY32)
 
 class _LUID(Structure):
     _fields_ = [
@@ -5614,9 +5800,9 @@ class _OSVERSIONINFOA(Structure):
         ("dwPlatformId", DWORD),
         ("szCSDVersion", CHAR * (128)),
     ]
-POSVERSIONINFOA = POINTER(_OSVERSIONINFOA)
-OSVERSIONINFOA = _OSVERSIONINFOA
 LPOSVERSIONINFOA = POINTER(_OSVERSIONINFOA)
+OSVERSIONINFOA = _OSVERSIONINFOA
+POSVERSIONINFOA = POINTER(_OSVERSIONINFOA)
 
 class _OSVERSIONINFOW(Structure):
     _fields_ = [
@@ -5627,11 +5813,11 @@ class _OSVERSIONINFOW(Structure):
         ("dwPlatformId", DWORD),
         ("szCSDVersion", WCHAR * (128)),
     ]
-RTL_OSVERSIONINFOW = _OSVERSIONINFOW
-PRTL_OSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
 LPOSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
-POSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
 OSVERSIONINFOW = _OSVERSIONINFOW
+POSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
+PRTL_OSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
+RTL_OSVERSIONINFOW = _OSVERSIONINFOW
 
 class _OSVERSIONINFOEXA(Structure):
     _fields_ = [
@@ -5647,9 +5833,9 @@ class _OSVERSIONINFOEXA(Structure):
         ("wProductType", BYTE),
         ("wReserved", BYTE),
     ]
+LPOSVERSIONINFOEXA = POINTER(_OSVERSIONINFOEXA)
 OSVERSIONINFOEXA = _OSVERSIONINFOEXA
 POSVERSIONINFOEXA = POINTER(_OSVERSIONINFOEXA)
-LPOSVERSIONINFOEXA = POINTER(_OSVERSIONINFOEXA)
 
 class _OSVERSIONINFOEXW(Structure):
     _fields_ = [
@@ -5665,16 +5851,16 @@ class _OSVERSIONINFOEXW(Structure):
         ("wProductType", BYTE),
         ("wReserved", BYTE),
     ]
-PRTL_OSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 LPOSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 POSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
+PRTL_OSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 
 # Self referencing struct tricks
 class _EXCEPTION_RECORD(Structure): pass
-PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
 EXCEPTION_RECORD = _EXCEPTION_RECORD
+PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
 _EXCEPTION_RECORD._fields_ = [
     ("ExceptionCode", DWORD),
     ("ExceptionFlags", DWORD),
@@ -5706,8 +5892,8 @@ class _EXCEPTION_RECORD64(Structure):
         ("__unusedAlignment", DWORD),
         ("ExceptionInformation", DWORD64 * (EXCEPTION_MAXIMUM_PARAMETERS)),
     ]
-PEXCEPTION_RECORD64 = POINTER(_EXCEPTION_RECORD64)
 EXCEPTION_RECORD64 = _EXCEPTION_RECORD64
+PEXCEPTION_RECORD64 = POINTER(_EXCEPTION_RECORD64)
 
 class _EXCEPTION_POINTERS64(Structure):
     _fields_ = [
@@ -5722,8 +5908,8 @@ class _EXCEPTION_POINTERS32(Structure):
         ("ExceptionRecord", PEXCEPTION_RECORD),
         ("ContextRecord", PCONTEXT32),
     ]
-PEXCEPTION_POINTERS32 = POINTER(_EXCEPTION_POINTERS32)
 EXCEPTION_POINTERS32 = _EXCEPTION_POINTERS32
+PEXCEPTION_POINTERS32 = POINTER(_EXCEPTION_POINTERS32)
 
 class _DEBUG_PROCESSOR_IDENTIFICATION_ALPHA(Structure):
     _fields_ = [
@@ -5751,8 +5937,8 @@ class _DEBUG_PROCESSOR_IDENTIFICATION_IA64(Structure):
         ("ArchRev", ULONG),
         ("VendorString", CHAR * (16)),
     ]
-PDEBUG_PROCESSOR_IDENTIFICATION_IA64 = POINTER(_DEBUG_PROCESSOR_IDENTIFICATION_IA64)
 DEBUG_PROCESSOR_IDENTIFICATION_IA64 = _DEBUG_PROCESSOR_IDENTIFICATION_IA64
+PDEBUG_PROCESSOR_IDENTIFICATION_IA64 = POINTER(_DEBUG_PROCESSOR_IDENTIFICATION_IA64)
 
 class _DEBUG_PROCESSOR_IDENTIFICATION_X86(Structure):
     _fields_ = [
@@ -5780,8 +5966,8 @@ class _DEBUG_PROCESSOR_IDENTIFICATION_ALL(Union):
         ("X86", DEBUG_PROCESSOR_IDENTIFICATION_X86),
         ("Arm", DEBUG_PROCESSOR_IDENTIFICATION_ARM),
     ]
-PDEBUG_PROCESSOR_IDENTIFICATION_ALL = POINTER(_DEBUG_PROCESSOR_IDENTIFICATION_ALL)
 DEBUG_PROCESSOR_IDENTIFICATION_ALL = _DEBUG_PROCESSOR_IDENTIFICATION_ALL
+PDEBUG_PROCESSOR_IDENTIFICATION_ALL = POINTER(_DEBUG_PROCESSOR_IDENTIFICATION_ALL)
 
 class _MODLOAD_DATA(Structure):
     _fields_ = [
@@ -5791,8 +5977,8 @@ class _MODLOAD_DATA(Structure):
         ("size", DWORD),
         ("flags", DWORD),
     ]
-PMODLOAD_DATA = POINTER(_MODLOAD_DATA)
 MODLOAD_DATA = _MODLOAD_DATA
+PMODLOAD_DATA = POINTER(_MODLOAD_DATA)
 
 class _SYSTEM_MODULE32(Structure):
     _fields_ = [
@@ -5806,8 +5992,8 @@ class _SYSTEM_MODULE32(Structure):
         ("ModuleNameOffset", USHORT),
         ("ImageName", CHAR * (256)),
     ]
-SYSTEM_MODULE32 = _SYSTEM_MODULE32
 PSYSTEM_MODULE32 = POINTER(_SYSTEM_MODULE32)
+SYSTEM_MODULE32 = _SYSTEM_MODULE32
 
 class _SYSTEM_MODULE64(Structure):
     _fields_ = [
@@ -5821,8 +6007,8 @@ class _SYSTEM_MODULE64(Structure):
         ("ModuleNameOffset", USHORT),
         ("ImageName", CHAR * (256)),
     ]
-SYSTEM_MODULE64 = _SYSTEM_MODULE64
 PSYSTEM_MODULE64 = POINTER(_SYSTEM_MODULE64)
+SYSTEM_MODULE64 = _SYSTEM_MODULE64
 
 class _SYSTEM_MODULE_INFORMATION32(Structure):
     _fields_ = [
@@ -5855,8 +6041,8 @@ class _DEBUG_BREAKPOINT_PARAMETERS(Structure):
         ("CommandSize", ULONG),
         ("OffsetExpressionSize", ULONG),
     ]
-PDEBUG_BREAKPOINT_PARAMETERS = POINTER(_DEBUG_BREAKPOINT_PARAMETERS)
 DEBUG_BREAKPOINT_PARAMETERS = _DEBUG_BREAKPOINT_PARAMETERS
+PDEBUG_BREAKPOINT_PARAMETERS = POINTER(_DEBUG_BREAKPOINT_PARAMETERS)
 
 class _DEBUG_REGISTER_DESCRIPTION(Structure):
     _fields_ = [
@@ -5883,8 +6069,8 @@ class _DEBUG_STACK_FRAME(Structure):
         ("Virtual", BOOL),
         ("FrameNumber", ULONG),
     ]
-PDEBUG_STACK_FRAME = POINTER(_DEBUG_STACK_FRAME)
 DEBUG_STACK_FRAME = _DEBUG_STACK_FRAME
+PDEBUG_STACK_FRAME = POINTER(_DEBUG_STACK_FRAME)
 
 class _DEBUG_LAST_EVENT_INFO_BREAKPOINT(Structure):
     _fields_ = [
@@ -5905,37 +6091,37 @@ class _DEBUG_LAST_EVENT_INFO_EXIT_THREAD(Structure):
     _fields_ = [
         ("ExitCode", ULONG),
     ]
-PDEBUG_LAST_EVENT_INFO_EXIT_THREAD = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_THREAD)
 DEBUG_LAST_EVENT_INFO_EXIT_THREAD = _DEBUG_LAST_EVENT_INFO_EXIT_THREAD
+PDEBUG_LAST_EVENT_INFO_EXIT_THREAD = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_THREAD)
 
 class _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS(Structure):
     _fields_ = [
         ("ExitCode", ULONG),
     ]
-PDEBUG_LAST_EVENT_INFO_EXIT_PROCESS = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_PROCESS)
 DEBUG_LAST_EVENT_INFO_EXIT_PROCESS = _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS
+PDEBUG_LAST_EVENT_INFO_EXIT_PROCESS = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_PROCESS)
 
 class _DEBUG_LAST_EVENT_INFO_LOAD_MODULE(Structure):
     _fields_ = [
         ("Base", ULONG64),
     ]
-PDEBUG_LAST_EVENT_INFO_LOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_LOAD_MODULE)
 DEBUG_LAST_EVENT_INFO_LOAD_MODULE = _DEBUG_LAST_EVENT_INFO_LOAD_MODULE
+PDEBUG_LAST_EVENT_INFO_LOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_LOAD_MODULE)
 
 class _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE(Structure):
     _fields_ = [
         ("Base", ULONG64),
     ]
-PDEBUG_LAST_EVENT_INFO_UNLOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE)
 DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE = _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
+PDEBUG_LAST_EVENT_INFO_UNLOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE)
 
 class _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR(Structure):
     _fields_ = [
         ("Error", ULONG),
         ("Level", ULONG),
     ]
-PDEBUG_LAST_EVENT_INFO_SYSTEM_ERROR = POINTER(_DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR)
 DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR = _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
+PDEBUG_LAST_EVENT_INFO_SYSTEM_ERROR = POINTER(_DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR)
 
 class _DEBUG_SPECIFIC_FILTER_PARAMETERS(Structure):
     _fields_ = [
@@ -5957,8 +6143,8 @@ class _DEBUG_EXCEPTION_FILTER_PARAMETERS(Structure):
         ("SecondCommandSize", ULONG),
         ("ExceptionCode", ULONG),
     ]
-PDEBUG_EXCEPTION_FILTER_PARAMETERS = POINTER(_DEBUG_EXCEPTION_FILTER_PARAMETERS)
 DEBUG_EXCEPTION_FILTER_PARAMETERS = _DEBUG_EXCEPTION_FILTER_PARAMETERS
+PDEBUG_EXCEPTION_FILTER_PARAMETERS = POINTER(_DEBUG_EXCEPTION_FILTER_PARAMETERS)
 
 class _TMP_signscale(Structure):
     _fields_ = [
@@ -6042,15 +6228,15 @@ class _JIT_DEBUG_INFO(Structure):
         ("lpExceptionRecord", ULONG64),
         ("lpContextRecord", ULONG64),
     ]
-LPJIT_DEBUG_INFO = POINTER(_JIT_DEBUG_INFO)
 JIT_DEBUG_INFO = _JIT_DEBUG_INFO
+LPJIT_DEBUG_INFO = POINTER(_JIT_DEBUG_INFO)
 
 class _SID_IDENTIFIER_AUTHORITY(Structure):
     _fields_ = [
         ("Value", BYTE * (6)),
     ]
-SID_IDENTIFIER_AUTHORITY = _SID_IDENTIFIER_AUTHORITY
 PSID_IDENTIFIER_AUTHORITY = POINTER(_SID_IDENTIFIER_AUTHORITY)
+SID_IDENTIFIER_AUTHORITY = _SID_IDENTIFIER_AUTHORITY
 
 class _STRING(Structure):
     _fields_ = [
@@ -6058,10 +6244,10 @@ class _STRING(Structure):
         ("MaximumLength", USHORT),
         ("Buffer", LPCSTR),
     ]
+PANSI_STRING = POINTER(_STRING)
 PCANSI_STRING = POINTER(_STRING)
 PSTRING = POINTER(_STRING)
 STRING = _STRING
-PANSI_STRING = POINTER(_STRING)
 
 class _OBJECT_ATTRIBUTES(Structure):
     _fields_ = [
@@ -6072,8 +6258,8 @@ class _OBJECT_ATTRIBUTES(Structure):
         ("SecurityDescriptor", PVOID),
         ("SecurityQualityOfService", PVOID),
     ]
-POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 OBJECT_ATTRIBUTES = _OBJECT_ATTRIBUTES
+POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 
 class _OBJECT_ATTRIBUTES(_OBJECT_ATTRIBUTES):
     @classmethod
@@ -6092,8 +6278,8 @@ class _OBJECT_ATTRIBUTES(_OBJECT_ATTRIBUTES):
             return super(_OBJECT_ATTRIBUTES, self).__repr__()
         # .contents allow compatibility with remotectypes
         return """<{0} ObjectName="{1}">""".format(type(self).__name__, self.ObjectName.contents.str)
-POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 OBJECT_ATTRIBUTES = _OBJECT_ATTRIBUTES
+POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 class _TMP_UNION_IO_STATUS_BLOCK(Union):
     _fields_ = [
         ("Status", NTSTATUS),
@@ -6161,8 +6347,8 @@ class _SYSTEM_HANDLE_INFORMATION64(Structure):
         ("HandleCount", ULONG),
         ("Handles", SYSTEM_HANDLE64 * (1)),
     ]
-SYSTEM_HANDLE_INFORMATION64 = _SYSTEM_HANDLE_INFORMATION64
 PSYSTEM_HANDLE_INFORMATION64 = POINTER(_SYSTEM_HANDLE_INFORMATION64)
+SYSTEM_HANDLE_INFORMATION64 = _SYSTEM_HANDLE_INFORMATION64
 
 class __PUBLIC_OBJECT_TYPE_INFORMATION(Structure):
     _fields_ = [
@@ -6180,8 +6366,8 @@ class _PUBLIC_OBJECT_BASIC_INFORMATION(Structure):
         ("PointerCount", ULONG),
         ("Reserved", ULONG * (10)),
     ]
-PUBLIC_OBJECT_BASIC_INFORMATION = _PUBLIC_OBJECT_BASIC_INFORMATION
 PPUBLIC_OBJECT_BASIC_INFORMATION = POINTER(_PUBLIC_OBJECT_BASIC_INFORMATION)
+PUBLIC_OBJECT_BASIC_INFORMATION = _PUBLIC_OBJECT_BASIC_INFORMATION
 
 class _OBJECT_TYPES_INFORMATION(Structure):
     _fields_ = [
@@ -6288,8 +6474,8 @@ class _DEBUG_SYMBOL_ENTRY(Structure):
         ("Arg32", ULONG),
         ("Reserved", ULONG),
     ]
-PDEBUG_SYMBOL_ENTRY = POINTER(_DEBUG_SYMBOL_ENTRY)
 DEBUG_SYMBOL_ENTRY = _DEBUG_SYMBOL_ENTRY
+PDEBUG_SYMBOL_ENTRY = POINTER(_DEBUG_SYMBOL_ENTRY)
 
 class _DEBUG_MODULE_PARAMETERS(Structure):
     _fields_ = [
@@ -6306,8 +6492,8 @@ class _DEBUG_MODULE_PARAMETERS(Structure):
         ("MappedImageNameSize", ULONG),
         ("Reserved", ULONG64 * (2)),
     ]
-PDEBUG_MODULE_PARAMETERS = POINTER(_DEBUG_MODULE_PARAMETERS)
 DEBUG_MODULE_PARAMETERS = _DEBUG_MODULE_PARAMETERS
+PDEBUG_MODULE_PARAMETERS = POINTER(_DEBUG_MODULE_PARAMETERS)
 
 class _DEBUG_MODULE_AND_ID(Structure):
     _fields_ = [
@@ -6366,8 +6552,8 @@ class _RTL_UNLOAD_EVENT_TRACE32(Structure):
         ("ImageName", WCHAR * (32)),
         ("Version", ULONG * (2)),
     ]
-RTL_UNLOAD_EVENT_TRACE32 = _RTL_UNLOAD_EVENT_TRACE32
 PRTL_UNLOAD_EVENT_TRACE32 = POINTER(_RTL_UNLOAD_EVENT_TRACE32)
+RTL_UNLOAD_EVENT_TRACE32 = _RTL_UNLOAD_EVENT_TRACE32
 
 class _RTL_UNLOAD_EVENT_TRACE64(Structure):
     _fields_ = [
@@ -6389,8 +6575,8 @@ class _FILE_FS_ATTRIBUTE_INFORMATION(Structure):
         ("FileSystemNameLength", ULONG),
         ("FileSystemName", WCHAR * (1)),
     ]
-PFILE_FS_ATTRIBUTE_INFORMATION = POINTER(_FILE_FS_ATTRIBUTE_INFORMATION)
 FILE_FS_ATTRIBUTE_INFORMATION = _FILE_FS_ATTRIBUTE_INFORMATION
+PFILE_FS_ATTRIBUTE_INFORMATION = POINTER(_FILE_FS_ATTRIBUTE_INFORMATION)
 
 class _FILE_FS_LABEL_INFORMATION(Structure):
     _fields_ = [
@@ -6407,8 +6593,8 @@ class _FILE_FS_SIZE_INFORMATION(Structure):
         ("SectorsPerAllocationUnit", ULONG),
         ("BytesPerSector", ULONG),
     ]
-PFILE_FS_SIZE_INFORMATION = POINTER(_FILE_FS_SIZE_INFORMATION)
 FILE_FS_SIZE_INFORMATION = _FILE_FS_SIZE_INFORMATION
+PFILE_FS_SIZE_INFORMATION = POINTER(_FILE_FS_SIZE_INFORMATION)
 
 class _FILE_FS_DEVICE_INFORMATION(Structure):
     _fields_ = [
@@ -6438,8 +6624,8 @@ class _FILE_FS_FULL_SIZE_INFORMATION(Structure):
         ("SectorsPerAllocationUnit", ULONG),
         ("BytesPerSector", ULONG),
     ]
-PFILE_FS_FULL_SIZE_INFORMATION = POINTER(_FILE_FS_FULL_SIZE_INFORMATION)
 FILE_FS_FULL_SIZE_INFORMATION = _FILE_FS_FULL_SIZE_INFORMATION
+PFILE_FS_FULL_SIZE_INFORMATION = POINTER(_FILE_FS_FULL_SIZE_INFORMATION)
 
 class _FILE_FS_OBJECTID_INFORMATION(Structure):
     _fields_ = [
@@ -6488,8 +6674,8 @@ class _FILE_FS_SECTOR_SIZE_INFORMATION(Structure):
         ("ByteOffsetForSectorAlignment", ULONG),
         ("ByteOffsetForPartitionAlignment", ULONG),
     ]
-PFILE_FS_SECTOR_SIZE_INFORMATION = POINTER(_FILE_FS_SECTOR_SIZE_INFORMATION)
 FILE_FS_SECTOR_SIZE_INFORMATION = _FILE_FS_SECTOR_SIZE_INFORMATION
+PFILE_FS_SECTOR_SIZE_INFORMATION = POINTER(_FILE_FS_SECTOR_SIZE_INFORMATION)
 
 class _RTLP_CURDIR_REF(Structure):
     _fields_ = [
@@ -6554,18 +6740,18 @@ class _FILETIME(Structure):
         ("dwLowDateTime", DWORD),
         ("dwHighDateTime", DWORD),
     ]
+FILETIME = _FILETIME
 LPFILETIME = POINTER(_FILETIME)
 PFILETIME = POINTER(_FILETIME)
-FILETIME = _FILETIME
 
 INITIAL_FILETIME = FILETIME
 
 class _FILETIME(INITIAL_FILETIME):
     def __int__(self):
         return (self.dwHighDateTime << 32) + self.dwLowDateTime
+FILETIME = _FILETIME
 LPFILETIME = POINTER(_FILETIME)
 PFILETIME = POINTER(_FILETIME)
-FILETIME = _FILETIME
 AlpcBasicInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcBasicInformation", 0x0)
 AlpcPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcPortInformation", 0x1)
 AlpcAssociateCompletionPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAssociateCompletionPortInformation", 0x2)
@@ -6608,8 +6794,8 @@ class _ALPC_PORT_ATTRIBUTES32(Structure):
         ("MaxTotalSectionSize", SIZE_T),
         ("DupObjectTypes", ULONG),
     ]
-PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
 ALPC_PORT_ATTRIBUTES32 = _ALPC_PORT_ATTRIBUTES32
+PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
 
 class _ALPC_PORT_ATTRIBUTES64(Structure):
     _fields_ = [
@@ -6696,8 +6882,8 @@ class _PORT_MESSAGE64(Structure):
         ("MessageId", ULONG),
         ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
     ]
-PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
 PORT_MESSAGE64 = _PORT_MESSAGE64
+PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
 
 class _ALPC_SERVER_INFORMATION_TMP_IN(Structure):
     _fields_ = [
@@ -6728,8 +6914,8 @@ class _ALPC_CONTEXT_ATTR(Structure):
         ("MessageId", ULONG),
         ("CallbackId", ULONG),
     ]
-PALPC_CONTEXT_ATTR = POINTER(_ALPC_CONTEXT_ATTR)
 ALPC_CONTEXT_ATTR = _ALPC_CONTEXT_ATTR
+PALPC_CONTEXT_ATTR = POINTER(_ALPC_CONTEXT_ATTR)
 
 class _ALPC_CONTEXT_ATTR32(Structure):
     _fields_ = [
@@ -6760,8 +6946,8 @@ class _ALPC_HANDLE_ATTR(Structure):
         ("ObjectType", ULONG),
         ("DesiredAccess", ACCESS_MASK),
     ]
-PALPC_HANDLE_ATTR = POINTER(_ALPC_HANDLE_ATTR)
 ALPC_HANDLE_ATTR = _ALPC_HANDLE_ATTR
+PALPC_HANDLE_ATTR = POINTER(_ALPC_HANDLE_ATTR)
 
 class _ALPC_HANDLE_ATTR32(Structure):
     _fields_ = [
@@ -6780,8 +6966,8 @@ class _ALPC_HANDLE_ATTR64(Structure):
         ("ObjectType", ULONG),
         ("DesiredAccess", ACCESS_MASK),
     ]
-PALPC_HANDLE_ATTR64 = POINTER(_ALPC_HANDLE_ATTR64)
 ALPC_HANDLE_ATTR64 = _ALPC_HANDLE_ATTR64
+PALPC_HANDLE_ATTR64 = POINTER(_ALPC_HANDLE_ATTR64)
 
 class _ALPC_SECURITY_ATTR(Structure):
     _fields_ = [
@@ -6789,8 +6975,8 @@ class _ALPC_SECURITY_ATTR(Structure):
         ("QoS", PSECURITY_QUALITY_OF_SERVICE),
         ("ContextHandle", ALPC_HANDLE),
     ]
-PALPC_SECURITY_ATTR = POINTER(_ALPC_SECURITY_ATTR)
 ALPC_SECURITY_ATTR = _ALPC_SECURITY_ATTR
+PALPC_SECURITY_ATTR = POINTER(_ALPC_SECURITY_ATTR)
 
 class _ALPC_SECURITY_ATTR32(Structure):
     _fields_ = [
@@ -6807,8 +6993,8 @@ class _ALPC_SECURITY_ATTR64(Structure):
         ("QoS", ULONGLONG),
         ("ContextHandle", ULONGLONG),
     ]
-PALPC_SECURITY_ATTR64 = POINTER(_ALPC_SECURITY_ATTR64)
 ALPC_SECURITY_ATTR64 = _ALPC_SECURITY_ATTR64
+PALPC_SECURITY_ATTR64 = POINTER(_ALPC_SECURITY_ATTR64)
 
 class _ALPC_DATA_VIEW_ATTR(Structure):
     _fields_ = [
@@ -6817,8 +7003,8 @@ class _ALPC_DATA_VIEW_ATTR(Structure):
         ("ViewBase", PVOID),
         ("ViewSize", PVOID),
     ]
-PALPC_DATA_VIEW_ATTR = POINTER(_ALPC_DATA_VIEW_ATTR)
 ALPC_DATA_VIEW_ATTR = _ALPC_DATA_VIEW_ATTR
+PALPC_DATA_VIEW_ATTR = POINTER(_ALPC_DATA_VIEW_ATTR)
 
 class _ALPC_DATA_VIEW_ATTR32(Structure):
     _fields_ = [
@@ -6827,8 +7013,8 @@ class _ALPC_DATA_VIEW_ATTR32(Structure):
         ("ViewBase", ULONG),
         ("ViewSize", ULONG),
     ]
-PALPC_DATA_VIEW_ATTR32 = POINTER(_ALPC_DATA_VIEW_ATTR32)
 ALPC_DATA_VIEW_ATTR32 = _ALPC_DATA_VIEW_ATTR32
+PALPC_DATA_VIEW_ATTR32 = POINTER(_ALPC_DATA_VIEW_ATTR32)
 
 class _ALPC_DATA_VIEW_ATTR64(Structure):
     _fields_ = [
@@ -6837,8 +7023,8 @@ class _ALPC_DATA_VIEW_ATTR64(Structure):
         ("ViewBase", ULONGLONG),
         ("ViewSize", ULONGLONG),
     ]
-PALPC_DATA_VIEW_ATTR64 = POINTER(_ALPC_DATA_VIEW_ATTR64)
 ALPC_DATA_VIEW_ATTR64 = _ALPC_DATA_VIEW_ATTR64
+PALPC_DATA_VIEW_ATTR64 = POINTER(_ALPC_DATA_VIEW_ATTR64)
 
 class _ALPC_TOKEN_ATTR(Structure):
     _fields_ = [
@@ -6860,8 +7046,8 @@ class _ALPC_DIRECT_ATTR32(Structure):
     _fields_ = [
         ("Event", ULONG),
     ]
-PALPC_DIRECT_ATTR32 = POINTER(_ALPC_DIRECT_ATTR32)
 ALPC_DIRECT_ATTR32 = _ALPC_DIRECT_ATTR32
+PALPC_DIRECT_ATTR32 = POINTER(_ALPC_DIRECT_ATTR32)
 
 class _ALPC_DIRECT_ATTR64(Structure):
     _fields_ = [
@@ -6874,8 +7060,8 @@ class _ALPC_WORK_ON_BEHALF_ATTR(Structure):
     _fields_ = [
         ("Ticket", ULONGLONG),
     ]
-PALPC_WORK_ON_BEHALF_ATTR = POINTER(_ALPC_WORK_ON_BEHALF_ATTR)
 ALPC_WORK_ON_BEHALF_ATTR = _ALPC_WORK_ON_BEHALF_ATTR
+PALPC_WORK_ON_BEHALF_ATTR = POINTER(_ALPC_WORK_ON_BEHALF_ATTR)
 
 class _RPC_IF_ID(Structure):
     _fields_ = [
@@ -6900,8 +7086,8 @@ class _PORT_VIEW(Structure):
         ("ViewBase", PVOID),
         ("TargetViewBase", PVOID),
     ]
-PPORT_VIEW = POINTER(_PORT_VIEW)
 PORT_VIEW = _PORT_VIEW
+PPORT_VIEW = POINTER(_PORT_VIEW)
 
 class _REMOTE_PORT_VIEW(Structure):
     _fields_ = [
@@ -6909,8 +7095,8 @@ class _REMOTE_PORT_VIEW(Structure):
         ("ViewSize", ULONG),
         ("ViewBase", PVOID),
     ]
-REMOTE_PORT_VIEW = _REMOTE_PORT_VIEW
 PREMOTE_PORT_VIEW = POINTER(_REMOTE_PORT_VIEW)
+REMOTE_PORT_VIEW = _REMOTE_PORT_VIEW
 
 class tagCOMVERSION(Structure):
     _fields_ = [
@@ -7141,8 +7327,8 @@ class tagPARAMDESCEX(Structure):
         ("cBytes", ULONG),
         ("varDefaultValue", VARIANTARG),
     ]
-PARAMDESCEX = tagPARAMDESCEX
 LPPARAMDESCEX = POINTER(tagPARAMDESCEX)
+PARAMDESCEX = tagPARAMDESCEX
 
 class tagPARAMDESC(Structure):
     _fields_ = [
@@ -7198,8 +7384,8 @@ class tagFUNCDESC(Structure):
         ("elemdescFunc", ELEMDESC),
         ("wFuncFlags", WORD),
     ]
-LPFUNCDESC = POINTER(tagFUNCDESC)
 FUNCDESC = tagFUNCDESC
+LPFUNCDESC = POINTER(tagFUNCDESC)
 
 class _TMP_VARDESC_UNION(Union):
     _fields_ = [
@@ -7226,8 +7412,8 @@ class tagBINDPTR(Union):
         ("lpvardesc", POINTER(VARDESC)),
         ("lptcomp", PVOID),
     ]
-LPBINDPTR = POINTER(tagBINDPTR)
 BINDPTR = tagBINDPTR
+LPBINDPTR = POINTER(tagBINDPTR)
 
 class tagIDLDESC(Structure):
     _fields_ = [
@@ -7270,8 +7456,8 @@ class tagTYPEATTR(Structure):
         ("tdescAlias", TYPEDESC),
         ("idldescType", IDLDESC),
     ]
-TYPEATTR = tagTYPEATTR
 LPTYPEATTR = POINTER(tagTYPEATTR)
+TYPEATTR = tagTYPEATTR
 
 class _CERT_STRONG_SIGN_SERIALIZED_INFO(Structure):
     _fields_ = [
@@ -7305,32 +7491,32 @@ class _CRYPTOAPI_BLOB(Structure):
         ("cbData", DWORD),
         ("pbData", POINTER(BYTE)),
     ]
-CRYPT_INTEGER_BLOB = _CRYPTOAPI_BLOB
-PCRYPT_DATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_OBJID_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_DER_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRL_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_UINT_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CERT_NAME_BLOB = _CRYPTOAPI_BLOB
-PCRYPT_DIGEST_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_INTEGER_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CERT_RDN_VALUE_BLOB = _CRYPTOAPI_BLOB
-PCERT_NAME_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_HASH_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_DATA_BLOB = _CRYPTOAPI_BLOB
-DATA_BLOB = _CRYPTOAPI_BLOB
-CRYPT_UINT_BLOB = _CRYPTOAPI_BLOB
-PCERT_RDN_VALUE_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_HASH_BLOB = _CRYPTOAPI_BLOB
-CRL_BLOB = _CRYPTOAPI_BLOB
-PCERT_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_DIGEST_BLOB = _CRYPTOAPI_BLOB
-CRYPT_OBJID_BLOB = _CRYPTOAPI_BLOB
 CERT_BLOB = _CRYPTOAPI_BLOB
-CRYPT_DER_BLOB = _CRYPTOAPI_BLOB
-PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CERT_NAME_BLOB = _CRYPTOAPI_BLOB
+CERT_RDN_VALUE_BLOB = _CRYPTOAPI_BLOB
+CRL_BLOB = _CRYPTOAPI_BLOB
 CRYPT_ATTR_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DATA_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DER_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DIGEST_BLOB = _CRYPTOAPI_BLOB
+CRYPT_HASH_BLOB = _CRYPTOAPI_BLOB
+CRYPT_INTEGER_BLOB = _CRYPTOAPI_BLOB
+CRYPT_OBJID_BLOB = _CRYPTOAPI_BLOB
+CRYPT_UINT_BLOB = _CRYPTOAPI_BLOB
+DATA_BLOB = _CRYPTOAPI_BLOB
+PCERT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCERT_NAME_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCERT_RDN_VALUE_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRL_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DIGEST_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_HASH_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_INTEGER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_OBJID_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_UINT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
 
 class _CRYPTOAPI_BLOB(_CRYPTOAPI_BLOB):
     @classmethod
@@ -7343,32 +7529,32 @@ class _CRYPTOAPI_BLOB(_CRYPTOAPI_BLOB):
     @property
     def data(self):
         return bytearray(self.pbData[:self.cbData])
-CRYPT_INTEGER_BLOB = _CRYPTOAPI_BLOB
-PCRYPT_DATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_OBJID_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_DER_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRL_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_UINT_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CERT_NAME_BLOB = _CRYPTOAPI_BLOB
-PCRYPT_DIGEST_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_INTEGER_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CERT_RDN_VALUE_BLOB = _CRYPTOAPI_BLOB
-PCERT_NAME_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_HASH_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_DATA_BLOB = _CRYPTOAPI_BLOB
-DATA_BLOB = _CRYPTOAPI_BLOB
-CRYPT_UINT_BLOB = _CRYPTOAPI_BLOB
-PCERT_RDN_VALUE_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_HASH_BLOB = _CRYPTOAPI_BLOB
-CRL_BLOB = _CRYPTOAPI_BLOB
-PCERT_BLOB = POINTER(_CRYPTOAPI_BLOB)
-CRYPT_DIGEST_BLOB = _CRYPTOAPI_BLOB
-CRYPT_OBJID_BLOB = _CRYPTOAPI_BLOB
 CERT_BLOB = _CRYPTOAPI_BLOB
-CRYPT_DER_BLOB = _CRYPTOAPI_BLOB
-PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
-PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CERT_NAME_BLOB = _CRYPTOAPI_BLOB
+CERT_RDN_VALUE_BLOB = _CRYPTOAPI_BLOB
+CRL_BLOB = _CRYPTOAPI_BLOB
 CRYPT_ATTR_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DATA_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DER_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DIGEST_BLOB = _CRYPTOAPI_BLOB
+CRYPT_HASH_BLOB = _CRYPTOAPI_BLOB
+CRYPT_INTEGER_BLOB = _CRYPTOAPI_BLOB
+CRYPT_OBJID_BLOB = _CRYPTOAPI_BLOB
+CRYPT_UINT_BLOB = _CRYPTOAPI_BLOB
+DATA_BLOB = _CRYPTOAPI_BLOB
+PCERT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCERT_NAME_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCERT_RDN_VALUE_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRL_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DIGEST_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_HASH_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_INTEGER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_OBJID_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_UINT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
 class CRYPTCATATTRIBUTE_(Structure):
     _fields_ = [
         ("cbStruct", DWORD),
@@ -7403,8 +7589,8 @@ class SIP_INDIRECT_DATA_(Structure):
         ("DigestAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
         ("Digest", CRYPT_HASH_BLOB),
     ]
-SIP_INDIRECT_DATA = SIP_INDIRECT_DATA_
 PSIP_INDIRECT_DATA = POINTER(SIP_INDIRECT_DATA_)
+SIP_INDIRECT_DATA = SIP_INDIRECT_DATA_
 
 class CRYPTCATMEMBER_(Structure):
     _fields_ = [
@@ -7430,8 +7616,8 @@ class WINTRUST_FILE_INFO_(Structure):
         ("hFile", HANDLE),
         ("pgKnownSubject", POINTER(GUID)),
     ]
-WINTRUST_FILE_INFO = WINTRUST_FILE_INFO_
 PWINTRUST_FILE_INFO = POINTER(WINTRUST_FILE_INFO_)
+WINTRUST_FILE_INFO = WINTRUST_FILE_INFO_
 
 class _CRYPT_ATTRIBUTE(Structure):
     _fields_ = [
@@ -7439,8 +7625,8 @@ class _CRYPT_ATTRIBUTE(Structure):
         ("cValue", DWORD),
         ("rgValue", PCRYPT_ATTR_BLOB),
     ]
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 
 OLD_CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
 
@@ -7464,16 +7650,16 @@ class _CRYPT_ATTRIBUTE(_CRYPT_ATTRIBUTE):
             return """<{0} pszObjId="{1}" Values={2}>""".format(type(self).__name__, self.pszObjId, self.cValue)
         flag = SZOID_MAPPER[self.pszObjId]
         return """<{0} pszObjId="{1}" ({2}) Values={3}>""".format(type(self).__name__, flag, flag.name, self.cValue)
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 class _CTL_ENTRY(Structure):
     _fields_ = [
         ("SubjectIdentifier", CRYPT_DATA_BLOB),
         ("cAttribute", DWORD),
         ("rgAttribute", PCRYPT_ATTRIBUTE),
     ]
-PCTL_ENTRY = POINTER(_CTL_ENTRY)
 CTL_ENTRY = _CTL_ENTRY
+PCTL_ENTRY = POINTER(_CTL_ENTRY)
 
 class _CRYPT_ATTRIBUTE(Structure):
     _fields_ = [
@@ -7481,8 +7667,8 @@ class _CRYPT_ATTRIBUTE(Structure):
         ("cValue", DWORD),
         ("rgValue", PCRYPT_ATTR_BLOB),
     ]
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 
 OLD_CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
 
@@ -7506,8 +7692,8 @@ class _CRYPT_ATTRIBUTE(_CRYPT_ATTRIBUTE):
             return """<{0} pszObjId="{1}" Values={2}>""".format(type(self).__name__, self.pszObjId, self.cValue)
         flag = SZOID_MAPPER[self.pszObjId]
         return """<{0} pszObjId="{1}" ({2}) Values={3}>""".format(type(self).__name__, flag, flag.name, self.cValue)
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 class _CRYPT_ATTRIBUTES(Structure):
     _fields_ = [
         ("cAttr", DWORD),
@@ -7575,8 +7761,8 @@ class _CRL_CONTEXT(Structure):
         ("pCrlInfo", PCRL_INFO),
         ("hCertStore", HCERTSTORE),
     ]
-PCCRL_CONTEXT = POINTER(_CRL_CONTEXT)
 CRL_CONTEXT = _CRL_CONTEXT
+PCCRL_CONTEXT = POINTER(_CRL_CONTEXT)
 PCRL_CONTEXT = POINTER(_CRL_CONTEXT)
 
 class _CMSG_SIGNER_INFO(Structure):
@@ -7599,9 +7785,9 @@ class _CTL_USAGE(Structure):
         ("rgpszUsageIdentifier", POINTER(LPSTR)),
     ]
 CERT_ENHKEY_USAGE = _CTL_USAGE
-PCTL_USAGE = POINTER(_CTL_USAGE)
 CTL_USAGE = _CTL_USAGE
 PCERT_ENHKEY_USAGE = POINTER(_CTL_USAGE)
+PCTL_USAGE = POINTER(_CTL_USAGE)
 
 class _CTL_INFO(Structure):
     _fields_ = [
@@ -7631,9 +7817,9 @@ class _CTL_CONTEXT(Structure):
         ("pbCtlContent", POINTER(BYTE)),
         ("cbCtlContent", DWORD),
     ]
-PCTL_CONTEXT = POINTER(_CTL_CONTEXT)
 CTL_CONTEXT = _CTL_CONTEXT
 PCCTL_CONTEXT = POINTER(_CTL_CONTEXT)
+PCTL_CONTEXT = POINTER(_CTL_CONTEXT)
 
 class WINTRUST_CATALOG_INFO_(Structure):
     _fields_ = [
@@ -7683,8 +7869,8 @@ class _CERT_PUBLIC_KEY_INFO(Structure):
         ("Algorithm", CRYPT_ALGORITHM_IDENTIFIER),
         ("PublicKey", CRYPT_BIT_BLOB),
     ]
-PCERT_PUBLIC_KEY_INFO = POINTER(_CERT_PUBLIC_KEY_INFO)
 CERT_PUBLIC_KEY_INFO = _CERT_PUBLIC_KEY_INFO
+PCERT_PUBLIC_KEY_INFO = POINTER(_CERT_PUBLIC_KEY_INFO)
 
 class _CERT_INFO(Structure):
     _fields_ = [
@@ -7736,8 +7922,8 @@ class _CERT_CONTEXT(Structure):
         ("pCertInfo", PCERT_INFO),
         ("hCertStore", HCERTSTORE),
     ]
-PCCERT_CONTEXT = POINTER(_CERT_CONTEXT)
 CERT_CONTEXT = _CERT_CONTEXT
+PCCERT_CONTEXT = POINTER(_CERT_CONTEXT)
 PCERT_CONTEXT = POINTER(_CERT_CONTEXT)
 
 class WINTRUST_SGNR_INFO_(Structure):
@@ -7748,8 +7934,8 @@ class WINTRUST_SGNR_INFO_(Structure):
         ("chStores", DWORD),
         ("pahStores", POINTER(HCERTSTORE)),
     ]
-WINTRUST_SGNR_INFO = WINTRUST_SGNR_INFO_
 PWINTRUST_SGNR_INFO = POINTER(WINTRUST_SGNR_INFO_)
+WINTRUST_SGNR_INFO = WINTRUST_SGNR_INFO_
 
 class WINTRUST_CERT_INFO_(Structure):
     _fields_ = [
@@ -7761,8 +7947,8 @@ class WINTRUST_CERT_INFO_(Structure):
         ("dwFlags", DWORD),
         ("psftVerifyAsOf", POINTER(FILETIME)),
     ]
-WINTRUST_CERT_INFO = WINTRUST_CERT_INFO_
 PWINTRUST_CERT_INFO = POINTER(WINTRUST_CERT_INFO_)
+WINTRUST_CERT_INFO = WINTRUST_CERT_INFO_
 
 class _TMP_WINTRUST_UNION_TYPE(Union):
     _fields_ = [
@@ -7823,8 +8009,8 @@ class _CRYPT_HASH_MESSAGE_PARA(Structure):
         ("HashAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
         ("pvHashAuxInfo", PVOID),
     ]
-PCRYPT_HASH_MESSAGE_PARA = POINTER(_CRYPT_HASH_MESSAGE_PARA)
 CRYPT_HASH_MESSAGE_PARA = _CRYPT_HASH_MESSAGE_PARA
+PCRYPT_HASH_MESSAGE_PARA = POINTER(_CRYPT_HASH_MESSAGE_PARA)
 
 class _CRYPT_KEY_VERIFY_MESSAGE_PARA(Structure):
     _fields_ = [
@@ -7852,8 +8038,8 @@ class _SPC_SERIALIZED_OBJECT(Structure):
         ("ClassId", SPC_UUID),
         ("SerializedData", CRYPT_DATA_BLOB),
     ]
-SPC_SERIALIZED_OBJECT = _SPC_SERIALIZED_OBJECT
 PSPC_SERIALIZED_OBJECT = POINTER(_SPC_SERIALIZED_OBJECT)
+SPC_SERIALIZED_OBJECT = _SPC_SERIALIZED_OBJECT
 
 class _TMP_SPC_LINK_UNION(Union):
     _fields_ = [
@@ -7885,8 +8071,8 @@ class _CERT_TRUST_STATUS(Structure):
         ("dwErrorStatus", DWORD),
         ("dwInfoStatus", DWORD),
     ]
-PCERT_TRUST_STATUS = POINTER(_CERT_TRUST_STATUS)
 CERT_TRUST_STATUS = _CERT_TRUST_STATUS
+PCERT_TRUST_STATUS = POINTER(_CERT_TRUST_STATUS)
 
 class _CERT_TRUST_LIST_INFO(Structure):
     _fields_ = [
@@ -7894,8 +8080,8 @@ class _CERT_TRUST_LIST_INFO(Structure):
         ("pCtlEntry", PCTL_ENTRY),
         ("pCtlContext", PCCTL_CONTEXT),
     ]
-PCERT_TRUST_LIST_INFO = POINTER(_CERT_TRUST_LIST_INFO)
 CERT_TRUST_LIST_INFO = _CERT_TRUST_LIST_INFO
+PCERT_TRUST_LIST_INFO = POINTER(_CERT_TRUST_LIST_INFO)
 
 class _CERT_REVOCATION_CRL_INFO(Structure):
     _fields_ = [
@@ -7931,9 +8117,9 @@ class _CERT_CHAIN_ELEMENT(Structure):
         ("pApplicationUsage", PCERT_ENHKEY_USAGE),
         ("pwszExtendedErrorInfo", LPCWSTR),
     ]
-PCERT_CHAIN_ELEMENT = POINTER(_CERT_CHAIN_ELEMENT)
 CERT_CHAIN_ELEMENT = _CERT_CHAIN_ELEMENT
 PCCERT_CHAIN_ELEMENT = POINTER(_CERT_CHAIN_ELEMENT)
+PCERT_CHAIN_ELEMENT = POINTER(_CERT_CHAIN_ELEMENT)
 
 class _CERT_SIMPLE_CHAIN(Structure):
     _fields_ = [
@@ -7946,14 +8132,14 @@ class _CERT_SIMPLE_CHAIN(Structure):
         ("dwRevocationFreshnessTime", DWORD),
     ]
 CERT_SIMPLE_CHAIN = _CERT_SIMPLE_CHAIN
-PCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 PCCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
+PCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 
 # Self referencing struct tricks
 class _CERT_CHAIN_CONTEXT(Structure): pass
 CERT_CHAIN_CONTEXT = _CERT_CHAIN_CONTEXT
-PCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
 PCCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
+PCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
 _CERT_CHAIN_CONTEXT._fields_ = [
     ("cbSize", DWORD),
     ("TrustStatus", CERT_TRUST_STATUS),
@@ -8016,16 +8202,16 @@ class _SYSTEMTIME(Structure):
         ("wMilliseconds", WORD),
     ]
 LPSYSTEMTIME = POINTER(_SYSTEMTIME)
-SYSTEMTIME = _SYSTEMTIME
 PSYSTEMTIME = POINTER(_SYSTEMTIME)
+SYSTEMTIME = _SYSTEMTIME
 
 class _CERT_EXTENSIONS(Structure):
     _fields_ = [
         ("cExtension", DWORD),
         ("rgExtension", PCERT_EXTENSION),
     ]
-PCERT_EXTENSIONS = POINTER(_CERT_EXTENSIONS)
 CERT_EXTENSIONS = _CERT_EXTENSIONS
+PCERT_EXTENSIONS = POINTER(_CERT_EXTENSIONS)
 
 class _CRYPT_KEY_PROV_PARAM(Structure):
     _fields_ = [
@@ -8060,8 +8246,8 @@ class _CRYPT_ENCRYPT_MESSAGE_PARA(Structure):
         ("dwFlags", DWORD),
         ("dwInnerContentType", DWORD),
     ]
-PCRYPT_ENCRYPT_MESSAGE_PARA = POINTER(_CRYPT_ENCRYPT_MESSAGE_PARA)
 CRYPT_ENCRYPT_MESSAGE_PARA = _CRYPT_ENCRYPT_MESSAGE_PARA
+PCRYPT_ENCRYPT_MESSAGE_PARA = POINTER(_CRYPT_ENCRYPT_MESSAGE_PARA)
 
 class _CRYPT_DECRYPT_MESSAGE_PARA(Structure):
     _fields_ = [
@@ -8071,8 +8257,8 @@ class _CRYPT_DECRYPT_MESSAGE_PARA(Structure):
         ("rghCertStore", POINTER(HCERTSTORE)),
         ("dwFlags", DWORD),
     ]
-PCRYPT_DECRYPT_MESSAGE_PARA = POINTER(_CRYPT_DECRYPT_MESSAGE_PARA)
 CRYPT_DECRYPT_MESSAGE_PARA = _CRYPT_DECRYPT_MESSAGE_PARA
+PCRYPT_DECRYPT_MESSAGE_PARA = POINTER(_CRYPT_DECRYPT_MESSAGE_PARA)
 
 class _CERT_KEY_CONTEXT(Structure):
     _fields_ = [
@@ -8089,8 +8275,8 @@ class _CRYPT_ENCODE_PARA(Structure):
         ("pfnAlloc", PVOID),
         ("pfnFree", PVOID),
     ]
-PCRYPT_ENCODE_PARA = POINTER(_CRYPT_ENCODE_PARA)
 CRYPT_ENCODE_PARA = _CRYPT_ENCODE_PARA
+PCRYPT_ENCODE_PARA = POINTER(_CRYPT_ENCODE_PARA)
 
 class _TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO(Union):
     _fields_ = [
@@ -8111,8 +8297,8 @@ class _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO(Structure):
         ("Date", FILETIME),
         ("pOtherAttr", PCRYPT_ATTRIBUTE_TYPE_VALUE),
     ]
-PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO)
 CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO = _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO)
 
 class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
     _fields_ = [
@@ -8123,8 +8309,8 @@ class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
         ("RecipientPublicKey", CRYPT_BIT_BLOB),
         ("RecipientId", CERT_ID),
     ]
-PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO)
 CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO)
 
 class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
     _fields_ = [
@@ -8135,8 +8321,8 @@ class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
         ("RecipientPublicKey", CRYPT_BIT_BLOB),
         ("RecipientId", CERT_ID),
     ]
-PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO)
 CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO)
 
 class _TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO(Union):
     _fields_ = [
@@ -8153,8 +8339,8 @@ class _CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO(Structure):
         ("Date", FILETIME),
         ("pOtherAttr", PCRYPT_ATTRIBUTE_TYPE_VALUE),
     ]
-PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO = POINTER(_CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO)
 CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO = _CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO
+PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO = POINTER(_CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO)
 
 class _CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO(Structure):
     _fields_ = [
@@ -8171,8 +8357,8 @@ class _CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO(Structure):
         ("cRecipientEncryptedKeys", DWORD),
         ("rgpRecipientEncryptedKeys", POINTER(PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO)),
     ]
-PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO)
 CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO = _CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO)
 
 class _TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION(Union):
     _fields_ = [
@@ -8208,8 +8394,8 @@ class _CMSG_ENVELOPED_ENCODE_INFO(Structure):
         ("cUnprotectedAttr", DWORD),
         ("rgUnprotectedAttr", PCRYPT_ATTRIBUTE),
     ]
-PCMSG_ENVELOPED_ENCODE_INFO = POINTER(_CMSG_ENVELOPED_ENCODE_INFO)
 CMSG_ENVELOPED_ENCODE_INFO = _CMSG_ENVELOPED_ENCODE_INFO
+PCMSG_ENVELOPED_ENCODE_INFO = POINTER(_CMSG_ENVELOPED_ENCODE_INFO)
 
 class _CMSG_STREAM_INFO(Structure):
     _fields_ = [
@@ -8234,8 +8420,8 @@ class _CMSG_CTRL_DECRYPT_PARA(Structure):
         ("dwKeySpec", DWORD),
         ("dwRecipientIndex", DWORD),
     ]
-PCMSG_CTRL_DECRYPT_PARA = POINTER(_CMSG_CTRL_DECRYPT_PARA)
 CMSG_CTRL_DECRYPT_PARA = _CMSG_CTRL_DECRYPT_PARA
+PCMSG_CTRL_DECRYPT_PARA = POINTER(_CMSG_CTRL_DECRYPT_PARA)
 
 class _SPC_PE_IMAGE_DATA(Structure):
     _fields_ = [
@@ -8261,8 +8447,8 @@ class _PUBLICKEYSTRUC(Structure):
         ("reserved", WORD),
         ("aiKeyAlg", ALG_ID),
     ]
-PUBLICKEYSTRUC = _PUBLICKEYSTRUC
 BLOBHEADER = _PUBLICKEYSTRUC
+PUBLICKEYSTRUC = _PUBLICKEYSTRUC
 
 class _STRUCT_PLAINTEXTKEYBLOB(Structure):
     _fields_ = [
@@ -8270,16 +8456,16 @@ class _STRUCT_PLAINTEXTKEYBLOB(Structure):
         ("dwKeySize", DWORD),
         ("rgbKeyData", BYTE * (0)),
     ]
-STRUCT_PLAINTEXTKEYBLOB = _STRUCT_PLAINTEXTKEYBLOB
 PSTRUCT_PLAINTEXTKEYBLOB = POINTER(_STRUCT_PLAINTEXTKEYBLOB)
+STRUCT_PLAINTEXTKEYBLOB = _STRUCT_PLAINTEXTKEYBLOB
 
 class _EXCEPTION_DEBUG_INFO(Structure):
     _fields_ = [
         ("ExceptionRecord", EXCEPTION_RECORD),
         ("dwFirstChance", DWORD),
     ]
-LPEXCEPTION_DEBUG_INFO = POINTER(_EXCEPTION_DEBUG_INFO)
 EXCEPTION_DEBUG_INFO = _EXCEPTION_DEBUG_INFO
+LPEXCEPTION_DEBUG_INFO = POINTER(_EXCEPTION_DEBUG_INFO)
 
 class _CREATE_THREAD_DEBUG_INFO(Structure):
     _fields_ = [
@@ -8287,8 +8473,8 @@ class _CREATE_THREAD_DEBUG_INFO(Structure):
         ("lpThreadLocalBase", LPVOID),
         ("lpStartAddress", LPTHREAD_START_ROUTINE),
     ]
-LPCREATE_THREAD_DEBUG_INFO = POINTER(_CREATE_THREAD_DEBUG_INFO)
 CREATE_THREAD_DEBUG_INFO = _CREATE_THREAD_DEBUG_INFO
+LPCREATE_THREAD_DEBUG_INFO = POINTER(_CREATE_THREAD_DEBUG_INFO)
 
 class _CREATE_PROCESS_DEBUG_INFO(Structure):
     _fields_ = [
@@ -8317,8 +8503,8 @@ class _EXIT_PROCESS_DEBUG_INFO(Structure):
     _fields_ = [
         ("dwExitCode", DWORD),
     ]
-LPEXIT_PROCESS_DEBUG_INFO = POINTER(_EXIT_PROCESS_DEBUG_INFO)
 EXIT_PROCESS_DEBUG_INFO = _EXIT_PROCESS_DEBUG_INFO
+LPEXIT_PROCESS_DEBUG_INFO = POINTER(_EXIT_PROCESS_DEBUG_INFO)
 
 class _LOAD_DLL_DEBUG_INFO(Structure):
     _fields_ = [
@@ -8329,8 +8515,8 @@ class _LOAD_DLL_DEBUG_INFO(Structure):
         ("lpImageName", LPVOID),
         ("fUnicode", WORD),
     ]
-LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
 LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
+LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
 
 # typedef struct _LOAD_DLL_DEBUG_INFO {
 #     HANDLE hFile;
@@ -8344,14 +8530,14 @@ LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
 class _LOAD_DLL_DEBUG_INFO(_LOAD_DLL_DEBUG_INFO):
     def hello(self):
         return "hello"
-LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
 LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
+LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
 class _UNLOAD_DLL_DEBUG_INFO(Structure):
     _fields_ = [
         ("lpBaseOfDll", LPVOID),
     ]
-UNLOAD_DLL_DEBUG_INFO = _UNLOAD_DLL_DEBUG_INFO
 LPUNLOAD_DLL_DEBUG_INFO = POINTER(_UNLOAD_DLL_DEBUG_INFO)
+UNLOAD_DLL_DEBUG_INFO = _UNLOAD_DLL_DEBUG_INFO
 
 class _OUTPUT_DEBUG_STRING_INFO(Structure):
     _fields_ = [
@@ -8359,8 +8545,8 @@ class _OUTPUT_DEBUG_STRING_INFO(Structure):
         ("fUnicode", WORD),
         ("nDebugStringLength", WORD),
     ]
-OUTPUT_DEBUG_STRING_INFO = _OUTPUT_DEBUG_STRING_INFO
 LPOUTPUT_DEBUG_STRING_INFO = POINTER(_OUTPUT_DEBUG_STRING_INFO)
+OUTPUT_DEBUG_STRING_INFO = _OUTPUT_DEBUG_STRING_INFO
 
 class _RIP_INFO(Structure):
     _fields_ = [
@@ -8391,8 +8577,8 @@ class _DEBUG_EVENT(Structure):
         ("dwThreadId", DWORD),
         ("u", _TMP_UNION_DEBUG_INFO),
     ]
-LPDEBUG_EVENT = POINTER(_DEBUG_EVENT)
 DEBUG_EVENT = _DEBUG_EVENT
+LPDEBUG_EVENT = POINTER(_DEBUG_EVENT)
 
 EvtRpcLogin = EnumValue("_EVT_LOGIN_CLASS", "EvtRpcLogin", 0x1)
 class _EVT_LOGIN_CLASS(EnumType):
@@ -8652,8 +8838,8 @@ class _EVENTLOGRECORD(Structure):
         ("DataLength", DWORD),
         ("DataOffset", DWORD),
     ]
-PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
 EVENTLOGRECORD = _EVENTLOGRECORD
+PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
 
 class _EVENTLOG_FULL_INFORMATION(Structure):
     _fields_ = [
@@ -8713,8 +8899,8 @@ class _EVT_VARIANT(Structure):
         ("Count", DWORD),
         ("Type", DWORD),
     ]
-PEVT_VARIANT = POINTER(_EVT_VARIANT)
 EVT_VARIANT = _EVT_VARIANT
+PEVT_VARIANT = POINTER(_EVT_VARIANT)
 
 class _EVT_RPC_LOGIN(Structure):
     _fields_ = [
@@ -8833,16 +9019,16 @@ class _FILE_ALIGNMENT_INFORMATION(Structure):
     _fields_ = [
         ("AlignmentRequirement", ULONG),
     ]
-PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
 FILE_ALIGNMENT_INFORMATION = _FILE_ALIGNMENT_INFORMATION
+PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
 
 class _FILE_ATTRIBUTE_TAG_INFORMATION(Structure):
     _fields_ = [
         ("FileAttributes", ULONG),
         ("ReparseTag", ULONG),
     ]
-PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
 FILE_ATTRIBUTE_TAG_INFORMATION = _FILE_ATTRIBUTE_TAG_INFORMATION
+PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
 
 class _FILE_BASIC_INFORMATION(Structure):
     _fields_ = [
@@ -8859,30 +9045,30 @@ class _FILE_EA_INFORMATION(Structure):
     _fields_ = [
         ("EaSize", ULONG),
     ]
-PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
 FILE_EA_INFORMATION = _FILE_EA_INFORMATION
+PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
 
 class _FILE_IO_PRIORITY_HINT_INFORMATION(Structure):
     _fields_ = [
         ("PriorityHint", IO_PRIORITY_HINT),
     ]
-PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
 FILE_IO_PRIORITY_HINT_INFORMATION = _FILE_IO_PRIORITY_HINT_INFORMATION
+PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
 
 class _FILE_MODE_INFORMATION(Structure):
     _fields_ = [
         ("Mode", ULONG),
     ]
-PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
 FILE_MODE_INFORMATION = _FILE_MODE_INFORMATION
+PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
 
 class _FILE_NAME_INFORMATION(Structure):
     _fields_ = [
         ("FileNameLength", ULONG),
         ("FileName", WCHAR * (1)),
     ]
-PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
 FILE_NAME_INFORMATION = _FILE_NAME_INFORMATION
+PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
 
 class _FILE_NETWORK_OPEN_INFORMATION(Structure):
     _fields_ = [
@@ -8894,8 +9080,8 @@ class _FILE_NETWORK_OPEN_INFORMATION(Structure):
         ("EndOfFile", LARGE_INTEGER),
         ("FileAttributes", ULONG),
     ]
-PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
 FILE_NETWORK_OPEN_INFORMATION = _FILE_NETWORK_OPEN_INFORMATION
+PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
 
 class _FILE_STANDARD_INFORMATION(Structure):
     _fields_ = [
@@ -8919,8 +9105,8 @@ class _FILE_POSITION_INFORMATION(Structure):
     _fields_ = [
         ("CurrentByteOffset", LARGE_INTEGER),
     ]
-PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
 FILE_POSITION_INFORMATION = _FILE_POSITION_INFORMATION
+PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
 
 class _FILE_IS_REMOTE_DEVICE_INFORMATION(Structure):
     _fields_ = [
@@ -8941,8 +9127,8 @@ class _FILE_ALL_INFORMATION(Structure):
         ("AlignmentInformation", FILE_ALIGNMENT_INFORMATION),
         ("NameInformation", FILE_NAME_INFORMATION),
     ]
-PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
 FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
+PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
 
 class _FILE_STREAM_INFORMATION(Structure):
     _fields_ = [
@@ -8959,8 +9145,8 @@ class _FILE_DISPOSITION_INFORMATION(Structure):
     _fields_ = [
         ("DeleteFile", BOOLEAN),
     ]
-PFILE_DISPOSITION_INFORMATION = POINTER(_FILE_DISPOSITION_INFORMATION)
 FILE_DISPOSITION_INFORMATION = _FILE_DISPOSITION_INFORMATION
+PFILE_DISPOSITION_INFORMATION = POINTER(_FILE_DISPOSITION_INFORMATION)
 
 class _FILE_FULL_EA_INFORMATION(Structure):
     _fields_ = [
@@ -9014,8 +9200,8 @@ class _FILE_LINK_INFORMATION(Structure):
         ("FileNameLength", ULONG),
         ("FileName", WCHAR * (1)),
     ]
-PFILE_LINK_INFORMATION = POINTER(_FILE_LINK_INFORMATION)
 FILE_LINK_INFORMATION = _FILE_LINK_INFORMATION
+PFILE_LINK_INFORMATION = POINTER(_FILE_LINK_INFORMATION)
 
 class _WIN32_FIND_DATAA(Structure):
     _fields_ = [
@@ -9053,9 +9239,9 @@ class _WIN32_FIND_DATAW(Structure):
         ("dwCreatorType", DWORD),
         ("wFinderFlags", WORD),
     ]
+LPWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
 PWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
 WIN32_FIND_DATAW = _WIN32_FIND_DATAW
-LPWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
 
 class _FILE_NOTIFY_INFORMATION(Structure):
     _fields_ = [
@@ -9084,8 +9270,8 @@ class _FILE_NOTIFY_EXTENDED_INFORMATION(Structure):
         ("FileNameLength", DWORD),
         ("FileName", WCHAR * (1)),
     ]
-PFILE_NOTIFY_EXTENDED_INFORMATION = POINTER(_FILE_NOTIFY_EXTENDED_INFORMATION)
 FILE_NOTIFY_EXTENDED_INFORMATION = _FILE_NOTIFY_EXTENDED_INFORMATION
+PFILE_NOTIFY_EXTENDED_INFORMATION = POINTER(_FILE_NOTIFY_EXTENDED_INFORMATION)
 
 class _ANON__FILE_RENAME_INFORMATION_SUB_UNION_1(Union):
     _fields_ = [
@@ -9132,8 +9318,8 @@ class _XSTATE_FEATURE(Structure):
         ("Offset", DWORD),
         ("Size", DWORD),
     ]
-XSTATE_FEATURE = _XSTATE_FEATURE
 PXSTATE_FEATURE = POINTER(_XSTATE_FEATURE)
+XSTATE_FEATURE = _XSTATE_FEATURE
 
 class _ANON__ANON__XSTATE_CONFIGURATION_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -9161,8 +9347,8 @@ class _XSTATE_CONFIGURATION(Structure):
         ("AllFeatureSize", DWORD),
         ("AllFeatures", DWORD * (MAXIMUM_XSTATE_FEATURES)),
     ]
-XSTATE_CONFIGURATION = _XSTATE_CONFIGURATION
 PXSTATE_CONFIGURATION = POINTER(_XSTATE_CONFIGURATION)
+XSTATE_CONFIGURATION = _XSTATE_CONFIGURATION
 
 class _KSYSTEM_TIME(Structure):
     _fields_ = [
@@ -9475,16 +9661,16 @@ class _LSA_OBJECT_ATTRIBUTES(Structure):
         ("SecurityDescriptor", PVOID),
         ("SecurityQualityOfService", PVOID),
     ]
-PLSA_OBJECT_ATTRIBUTES = POINTER(_LSA_OBJECT_ATTRIBUTES)
 LSA_OBJECT_ATTRIBUTES = _LSA_OBJECT_ATTRIBUTES
+PLSA_OBJECT_ATTRIBUTES = POINTER(_LSA_OBJECT_ATTRIBUTES)
 
 class _POLICY_PRIMARY_DOMAIN_INFO(Structure):
     _fields_ = [
         ("Name", LSA_UNICODE_STRING),
         ("Sid", PSID),
     ]
-PPOLICY_PRIMARY_DOMAIN_INFO = POINTER(_POLICY_PRIMARY_DOMAIN_INFO)
 POLICY_PRIMARY_DOMAIN_INFO = _POLICY_PRIMARY_DOMAIN_INFO
+PPOLICY_PRIMARY_DOMAIN_INFO = POINTER(_POLICY_PRIMARY_DOMAIN_INFO)
 
 class _POLICY_LSA_SERVER_ROLE_INFO(Structure):
     _fields_ = [
@@ -9506,8 +9692,8 @@ class _POLICY_PRIMARY_DOMAIN_INFO(Structure):
         ("Name", LSA_UNICODE_STRING),
         ("Sid", PSID),
     ]
-PPOLICY_PRIMARY_DOMAIN_INFO = POINTER(_POLICY_PRIMARY_DOMAIN_INFO)
 POLICY_PRIMARY_DOMAIN_INFO = _POLICY_PRIMARY_DOMAIN_INFO
+PPOLICY_PRIMARY_DOMAIN_INFO = POINTER(_POLICY_PRIMARY_DOMAIN_INFO)
 
 class _LSA_TRANSLATED_SID(Structure):
     _fields_ = [
@@ -9525,8 +9711,8 @@ class _LSA_TRANSLATED_SID2(Structure):
         ("DomainIndex", LONG),
         ("Flags", ULONG),
     ]
-PLSA_TRANSLATED_SID2 = POINTER(_LSA_TRANSLATED_SID2)
 LSA_TRANSLATED_SID2 = _LSA_TRANSLATED_SID2
+PLSA_TRANSLATED_SID2 = POINTER(_LSA_TRANSLATED_SID2)
 
 class _LSA_TRANSLATED_NAME(Structure):
     _fields_ = [
@@ -9557,8 +9743,8 @@ class _LOCALGROUP_INFO_0(Structure):
     _fields_ = [
         ("lgrpi0_name", LPWSTR),
     ]
-LPLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
 LOCALGROUP_INFO_0 = _LOCALGROUP_INFO_0
+LPLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
 PLOCALGROUP_INFO_0 = POINTER(_LOCALGROUP_INFO_0)
 
 class _LOCALGROUP_INFO_1(Structure):
@@ -9566,16 +9752,16 @@ class _LOCALGROUP_INFO_1(Structure):
         ("lgrpi1_name", LPWSTR),
         ("lgrpi1_comment", LPWSTR),
     ]
-LPLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
 LOCALGROUP_INFO_1 = _LOCALGROUP_INFO_1
+LPLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
 PLOCALGROUP_INFO_1 = POINTER(_LOCALGROUP_INFO_1)
 
 class _LOCALGROUP_MEMBERS_INFO_0(Structure):
     _fields_ = [
         ("lgrmi0_sid", PSID),
     ]
-LPLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
 LOCALGROUP_MEMBERS_INFO_0 = _LOCALGROUP_MEMBERS_INFO_0
+LPLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
 PLOCALGROUP_MEMBERS_INFO_0 = POINTER(_LOCALGROUP_MEMBERS_INFO_0)
 
 class _LOCALGROUP_MEMBERS_INFO_1(Structure):
@@ -9584,8 +9770,8 @@ class _LOCALGROUP_MEMBERS_INFO_1(Structure):
         ("lgrmi1_sidusage", SID_NAME_USE),
         ("lgrmi1_name", LPWSTR),
     ]
-LPLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
 LOCALGROUP_MEMBERS_INFO_1 = _LOCALGROUP_MEMBERS_INFO_1
+LPLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
 PLOCALGROUP_MEMBERS_INFO_1 = POINTER(_LOCALGROUP_MEMBERS_INFO_1)
 
 class _LOCALGROUP_MEMBERS_INFO_2(Structure):
@@ -9594,17 +9780,17 @@ class _LOCALGROUP_MEMBERS_INFO_2(Structure):
         ("lgrmi2_sidusage", SID_NAME_USE),
         ("lgrmi2_domainandname", LPWSTR),
     ]
+LOCALGROUP_MEMBERS_INFO_2 = _LOCALGROUP_MEMBERS_INFO_2
 LPLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
 PLOCALGROUP_MEMBERS_INFO_2 = POINTER(_LOCALGROUP_MEMBERS_INFO_2)
-LOCALGROUP_MEMBERS_INFO_2 = _LOCALGROUP_MEMBERS_INFO_2
 
 class _LOCALGROUP_MEMBERS_INFO_3(Structure):
     _fields_ = [
         ("lgrmi3_domainandname", LPWSTR),
     ]
+LOCALGROUP_MEMBERS_INFO_3 = _LOCALGROUP_MEMBERS_INFO_3
 LPLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
 PLOCALGROUP_MEMBERS_INFO_3 = POINTER(_LOCALGROUP_MEMBERS_INFO_3)
-LOCALGROUP_MEMBERS_INFO_3 = _LOCALGROUP_MEMBERS_INFO_3
 
 class _NET_DISPLAY_USER(Structure):
     _fields_ = [
@@ -9626,8 +9812,8 @@ class _NET_DISPLAY_MACHINE(Structure):
         ("usri2_user_id", DWORD),
         ("usri2_next_index", DWORD),
     ]
-PNET_DISPLAY_MACHINE = POINTER(_NET_DISPLAY_MACHINE)
 NET_DISPLAY_MACHINE = _NET_DISPLAY_MACHINE
+PNET_DISPLAY_MACHINE = POINTER(_NET_DISPLAY_MACHINE)
 
 class _NET_DISPLAY_GROUP(Structure):
     _fields_ = [
@@ -9637,15 +9823,15 @@ class _NET_DISPLAY_GROUP(Structure):
         ("grpi3_attributes", DWORD),
         ("grpi3_next_index", DWORD),
     ]
-PNET_DISPLAY_GROUP = POINTER(_NET_DISPLAY_GROUP)
 NET_DISPLAY_GROUP = _NET_DISPLAY_GROUP
+PNET_DISPLAY_GROUP = POINTER(_NET_DISPLAY_GROUP)
 
 class _USER_INFO_0(Structure):
     _fields_ = [
         ("usri0_name", LPWSTR),
     ]
-PUSER_INFO_0 = POINTER(_USER_INFO_0)
 LPUSER_INFO_0 = POINTER(_USER_INFO_0)
+PUSER_INFO_0 = POINTER(_USER_INFO_0)
 USER_INFO_0 = _USER_INFO_0
 
 class _USER_INFO_1(Structure):
@@ -9659,8 +9845,8 @@ class _USER_INFO_1(Structure):
         ("usri1_flags", DWORD),
         ("usri1_script_path", LPWSTR),
     ]
-PUSER_INFO_1 = POINTER(_USER_INFO_1)
 LPUSER_INFO_1 = POINTER(_USER_INFO_1)
+PUSER_INFO_1 = POINTER(_USER_INFO_1)
 USER_INFO_1 = _USER_INFO_1
 
 class _USER_INFO_2(Structure):
@@ -9690,9 +9876,9 @@ class _USER_INFO_2(Structure):
         ("usri2_country_code", DWORD),
         ("usri2_code_page", DWORD),
     ]
+LPUSER_INFO_2 = POINTER(_USER_INFO_2)
 PUSER_INFO_2 = POINTER(_USER_INFO_2)
 USER_INFO_2 = _USER_INFO_2
-LPUSER_INFO_2 = POINTER(_USER_INFO_2)
 
 class _USER_INFO_3(Structure):
     _fields_ = [
@@ -9726,9 +9912,9 @@ class _USER_INFO_3(Structure):
         ("usri3_home_dir_drive", LPWSTR),
         ("usri3_password_expired", DWORD),
     ]
+LPUSER_INFO_3 = POINTER(_USER_INFO_3)
 PUSER_INFO_3 = POINTER(_USER_INFO_3)
 USER_INFO_3 = _USER_INFO_3
-LPUSER_INFO_3 = POINTER(_USER_INFO_3)
 
 class _USER_INFO_10(Structure):
     _fields_ = [
@@ -9737,9 +9923,9 @@ class _USER_INFO_10(Structure):
         ("usri10_usr_comment", LPWSTR),
         ("usri10_full_name", LPWSTR),
     ]
-USER_INFO_10 = _USER_INFO_10
-PUSER_INFO_10 = POINTER(_USER_INFO_10)
 LPUSER_INFO_10 = POINTER(_USER_INFO_10)
+PUSER_INFO_10 = POINTER(_USER_INFO_10)
+USER_INFO_10 = _USER_INFO_10
 
 class _USER_INFO_11(Structure):
     _fields_ = [
@@ -9764,9 +9950,9 @@ class _USER_INFO_11(Structure):
         ("usri11_logon_hours", PBYTE),
         ("usri11_code_page", DWORD),
     ]
+LPUSER_INFO_11 = POINTER(_USER_INFO_11)
 PUSER_INFO_11 = POINTER(_USER_INFO_11)
 USER_INFO_11 = _USER_INFO_11
-LPUSER_INFO_11 = POINTER(_USER_INFO_11)
 
 class _USER_INFO_20(Structure):
     _fields_ = [
@@ -9776,9 +9962,9 @@ class _USER_INFO_20(Structure):
         ("usri20_flags", DWORD),
         ("usri20_user_id", DWORD),
     ]
+LPUSER_INFO_20 = POINTER(_USER_INFO_20)
 PUSER_INFO_20 = POINTER(_USER_INFO_20)
 USER_INFO_20 = _USER_INFO_20
-LPUSER_INFO_20 = POINTER(_USER_INFO_20)
 
 class _USER_INFO_23(Structure):
     _fields_ = [
@@ -9788,17 +9974,17 @@ class _USER_INFO_23(Structure):
         ("usri23_flags", DWORD),
         ("usri23_user_sid", PSID),
     ]
-USER_INFO_23 = _USER_INFO_23
-PUSER_INFO_23 = POINTER(_USER_INFO_23)
 LPUSER_INFO_23 = POINTER(_USER_INFO_23)
+PUSER_INFO_23 = POINTER(_USER_INFO_23)
+USER_INFO_23 = _USER_INFO_23
 
 class _GROUP_INFO_0(Structure):
     _fields_ = [
         ("grpi0_name", LPWSTR),
     ]
-PGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
 GROUP_INFO_0 = _GROUP_INFO_0
 LPGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
+PGROUP_INFO_0 = POINTER(_GROUP_INFO_0)
 
 class _GROUP_INFO_1(Structure):
     _fields_ = [
@@ -9806,8 +9992,8 @@ class _GROUP_INFO_1(Structure):
         ("grpi1_comment", LPWSTR),
     ]
 GROUP_INFO_1 = _GROUP_INFO_1
-PGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
 LPGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
+PGROUP_INFO_1 = POINTER(_GROUP_INFO_1)
 
 class _GROUP_INFO_2(Structure):
     _fields_ = [
@@ -9816,8 +10002,8 @@ class _GROUP_INFO_2(Structure):
         ("grpi2_group_id", DWORD),
         ("grpi2_attributes", DWORD),
     ]
-PGROUP_INFO_2 = POINTER(_GROUP_INFO_2)
 GROUP_INFO_2 = _GROUP_INFO_2
+PGROUP_INFO_2 = POINTER(_GROUP_INFO_2)
 
 class _GROUP_INFO_3(Structure):
     _fields_ = [
@@ -9834,17 +10020,17 @@ class _GROUP_USERS_INFO_0(Structure):
         ("grui0_name", LPWSTR),
     ]
 GROUP_USERS_INFO_0 = _GROUP_USERS_INFO_0
-PGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
 LPGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
+PGROUP_USERS_INFO_0 = POINTER(_GROUP_USERS_INFO_0)
 
 class _GROUP_USERS_INFO_1(Structure):
     _fields_ = [
         ("grui1_name", LPWSTR),
         ("grui1_attributes", DWORD),
     ]
-PGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
 GROUP_USERS_INFO_1 = _GROUP_USERS_INFO_1
 LPGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
+PGROUP_USERS_INFO_1 = POINTER(_GROUP_USERS_INFO_1)
 
 AclRevisionInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclRevisionInformation", 0x1)
 AclSizeInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclSizeInformation", 0x2)
@@ -9909,15 +10095,15 @@ class _ACL(Structure):
         ("AceCount", WORD),
         ("Sbz2", WORD),
     ]
-PACL = POINTER(_ACL)
 ACL = _ACL
+PACL = POINTER(_ACL)
 
 class _ACL_REVISION_INFORMATION(Structure):
     _fields_ = [
         ("AclRevision", DWORD),
     ]
-PACL_REVISION_INFORMATION = POINTER(_ACL_REVISION_INFORMATION)
 ACL_REVISION_INFORMATION = _ACL_REVISION_INFORMATION
+PACL_REVISION_INFORMATION = POINTER(_ACL_REVISION_INFORMATION)
 
 class _ACL_SIZE_INFORMATION(Structure):
     _fields_ = [
@@ -9925,8 +10111,8 @@ class _ACL_SIZE_INFORMATION(Structure):
         ("AclBytesInUse", DWORD),
         ("AclBytesFree", DWORD),
     ]
-PACL_SIZE_INFORMATION = POINTER(_ACL_SIZE_INFORMATION)
 ACL_SIZE_INFORMATION = _ACL_SIZE_INFORMATION
+PACL_SIZE_INFORMATION = POINTER(_ACL_SIZE_INFORMATION)
 
 class _ACE_HEADER(Structure):
     _fields_ = [
@@ -9934,8 +10120,8 @@ class _ACE_HEADER(Structure):
         ("AceFlags", BYTE),
         ("AceSize", WORD),
     ]
-PACE_HEADER = POINTER(_ACE_HEADER)
 ACE_HEADER = _ACE_HEADER
+PACE_HEADER = POINTER(_ACE_HEADER)
 
 class _ACCESS_ALLOWED_ACE(Structure):
     _fields_ = [
@@ -9943,8 +10129,8 @@ class _ACCESS_ALLOWED_ACE(Structure):
         ("Mask", ACCESS_MASK),
         ("SidStart", DWORD),
     ]
-PACCESS_ALLOWED_ACE = POINTER(_ACCESS_ALLOWED_ACE)
 ACCESS_ALLOWED_ACE = _ACCESS_ALLOWED_ACE
+PACCESS_ALLOWED_ACE = POINTER(_ACCESS_ALLOWED_ACE)
 
 class _ACCESS_ALLOWED_CALLBACK_ACE(Structure):
     _fields_ = [
@@ -9952,8 +10138,8 @@ class _ACCESS_ALLOWED_CALLBACK_ACE(Structure):
         ("Mask", ACCESS_MASK),
         ("SidStart", DWORD),
     ]
-PACCESS_ALLOWED_CALLBACK_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_ACE)
 ACCESS_ALLOWED_CALLBACK_ACE = _ACCESS_ALLOWED_CALLBACK_ACE
+PACCESS_ALLOWED_CALLBACK_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_ACE)
 
 class _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE(Structure):
     _fields_ = [
@@ -9964,8 +10150,8 @@ class _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE(Structure):
         ("InheritedObjectType", GUID),
         ("SidStart", DWORD),
     ]
-PACCESS_ALLOWED_CALLBACK_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE)
 ACCESS_ALLOWED_CALLBACK_OBJECT_ACE = _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+PACCESS_ALLOWED_CALLBACK_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE)
 
 class _ACCESS_DENIED_CALLBACK_OBJECT_ACE(Structure):
     _fields_ = [
@@ -9988,8 +10174,8 @@ class _ACCESS_ALLOWED_OBJECT_ACE(Structure):
         ("InheritedObjectType", GUID),
         ("SidStart", DWORD),
     ]
-PACCESS_ALLOWED_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_OBJECT_ACE)
 ACCESS_ALLOWED_OBJECT_ACE = _ACCESS_ALLOWED_OBJECT_ACE
+PACCESS_ALLOWED_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_OBJECT_ACE)
 
 class _ACCESS_DENIED_ACE(Structure):
     _fields_ = [
@@ -10027,8 +10213,8 @@ class _SYSTEM_MANDATORY_LABEL_ACE(Structure):
         ("Mask", ACCESS_MASK),
         ("SidStart", DWORD),
     ]
-SYSTEM_MANDATORY_LABEL_ACE = _SYSTEM_MANDATORY_LABEL_ACE
 PSYSTEM_MANDATORY_LABEL_ACE = POINTER(_SYSTEM_MANDATORY_LABEL_ACE)
+SYSTEM_MANDATORY_LABEL_ACE = _SYSTEM_MANDATORY_LABEL_ACE
 
 class _SYSTEM_AUDIT_ACE(Structure):
     _fields_ = [
@@ -10061,8 +10247,8 @@ class _SYSTEM_SCOPED_POLICY_ID_ACE(Structure):
         ("Mask", ACCESS_MASK),
         ("SidStart", DWORD),
     ]
-SYSTEM_SCOPED_POLICY_ID_ACE = _SYSTEM_SCOPED_POLICY_ID_ACE
 PSYSTEM_SCOPED_POLICY_ID_ACE = POINTER(_SYSTEM_SCOPED_POLICY_ID_ACE)
+SYSTEM_SCOPED_POLICY_ID_ACE = _SYSTEM_SCOPED_POLICY_ID_ACE
 
 class _SYSTEM_PROCESS_TRUST_LABEL_ACE(Structure):
     _fields_ = [
@@ -10082,8 +10268,8 @@ class _SYSTEM_AUDIT_OBJECT_ACE(Structure):
         ("InheritedObjectType", GUID),
         ("SidStart", DWORD),
     ]
-SYSTEM_AUDIT_OBJECT_ACE = _SYSTEM_AUDIT_OBJECT_ACE
 PSYSTEM_AUDIT_OBJECT_ACE = POINTER(_SYSTEM_AUDIT_OBJECT_ACE)
+SYSTEM_AUDIT_OBJECT_ACE = _SYSTEM_AUDIT_OBJECT_ACE
 
 class _SYSTEM_ALARM_OBJECT_ACE(Structure):
     _fields_ = [
@@ -10094,8 +10280,8 @@ class _SYSTEM_ALARM_OBJECT_ACE(Structure):
         ("InheritedObjectType", GUID),
         ("SidStart", DWORD),
     ]
-SYSTEM_ALARM_OBJECT_ACE = _SYSTEM_ALARM_OBJECT_ACE
 PSYSTEM_ALARM_OBJECT_ACE = POINTER(_SYSTEM_ALARM_OBJECT_ACE)
+SYSTEM_ALARM_OBJECT_ACE = _SYSTEM_ALARM_OBJECT_ACE
 
 class _SYSTEM_AUDIT_CALLBACK_ACE(Structure):
     _fields_ = [
@@ -10112,8 +10298,8 @@ class _SYSTEM_ALARM_CALLBACK_ACE(Structure):
         ("Mask", ACCESS_MASK),
         ("SidStart", DWORD),
     ]
-SYSTEM_ALARM_CALLBACK_ACE = _SYSTEM_ALARM_CALLBACK_ACE
 PSYSTEM_ALARM_CALLBACK_ACE = POINTER(_SYSTEM_ALARM_CALLBACK_ACE)
+SYSTEM_ALARM_CALLBACK_ACE = _SYSTEM_ALARM_CALLBACK_ACE
 
 class _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE(Structure):
     _fields_ = [
@@ -10158,32 +10344,32 @@ class _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1(Structure):
         ("ValueCount", DWORD),
         ("Values", CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION),
     ]
-PCLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 = POINTER(_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1)
 CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 = _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+PCLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 = POINTER(_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1)
 
 class _CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE(Structure):
     _fields_ = [
         ("Version", DWORD64),
         ("Name", PWSTR),
     ]
-PCLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE)
 CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE = _CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE
+PCLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE)
 
 class _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE(Structure):
     _fields_ = [
         ("pValue", PVOID),
         ("ValueLength", DWORD),
     ]
-PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE)
 CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE)
 
 class _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE(Structure):
     _fields_ = [
         ("Length", DWORD),
         ("OctetString", BYTE * (ANYSIZE_ARRAY)),
     ]
-PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE)
 CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE = _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
+PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE = POINTER(_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE)
 
 class _CLAIM_SECURITY_ATTRIBUTE_V1_UNION(Union):
     _fields_ = [
@@ -10243,8 +10429,8 @@ class _GENERIC_MAPPING(Structure):
         ("GenericExecute", ACCESS_MASK),
         ("GenericAll", ACCESS_MASK),
     ]
-PGENERIC_MAPPING = POINTER(_GENERIC_MAPPING)
 GENERIC_MAPPING = _GENERIC_MAPPING
+PGENERIC_MAPPING = POINTER(_GENERIC_MAPPING)
 
 class _PRIVILEGE_SET(Structure):
     _fields_ = [
@@ -10252,8 +10438,8 @@ class _PRIVILEGE_SET(Structure):
         ("Control", DWORD),
         ("Privilege", LUID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
     ]
-PRIVILEGE_SET = _PRIVILEGE_SET
 PPRIVILEGE_SET = POINTER(_PRIVILEGE_SET)
+PRIVILEGE_SET = _PRIVILEGE_SET
 
 class _OBJECTS_AND_NAME_A(Structure):
     _fields_ = [
@@ -10273,8 +10459,8 @@ class _OBJECTS_AND_SID(Structure):
         ("InheritedObjectTypeGuid", GUID),
         ("pSid", PSID),
     ]
-POBJECTS_AND_SID = POINTER(_OBJECTS_AND_SID)
 OBJECTS_AND_SID = _OBJECTS_AND_SID
+POBJECTS_AND_SID = POINTER(_OBJECTS_AND_SID)
 
 class _ANON__TRUSTEE_A_SUB_UNION_1(Union):
     _fields_ = [
@@ -10287,9 +10473,9 @@ class _ANON__TRUSTEE_A_SUB_UNION_1(Union):
 # Self referencing struct tricks
 class _TRUSTEE_A(Structure): pass
 PTRUSTEEA = POINTER(_TRUSTEE_A)
+PTRUSTEE_A = POINTER(_TRUSTEE_A)
 TRUSTEEA = _TRUSTEE_A
 TRUSTEE_A = _TRUSTEE_A
-PTRUSTEE_A = POINTER(_TRUSTEE_A)
 _TRUSTEE_A._fields_ = [
     ("pMultipleTrustee", POINTER(_TRUSTEE_A)),
     ("MultipleTrusteeOperation", MULTIPLE_TRUSTEE_OPERATION),
@@ -10320,10 +10506,10 @@ class _ANON__TRUSTEE_W_SUB_UNION_1(Union):
 
 # Self referencing struct tricks
 class _TRUSTEE_W(Structure): pass
-PTRUSTEE_W = POINTER(_TRUSTEE_W)
-TRUSTEE_W = _TRUSTEE_W
 PTRUSTEEW = POINTER(_TRUSTEE_W)
+PTRUSTEE_W = POINTER(_TRUSTEE_W)
 TRUSTEEW = _TRUSTEE_W
+TRUSTEE_W = _TRUSTEE_W
 _TRUSTEE_W._fields_ = [
     ("pMultipleTrustee", POINTER(_TRUSTEE_W)),
     ("MultipleTrusteeOperation", MULTIPLE_TRUSTEE_OPERATION),
@@ -10341,9 +10527,9 @@ class _EXPLICIT_ACCESS_W(Structure):
         ("Trustee", TRUSTEE_W),
     ]
 EXPLICIT_ACCESSW = _EXPLICIT_ACCESS_W
+EXPLICIT_ACCESS_W = _EXPLICIT_ACCESS_W
 PEXPLICIT_ACCESSW = POINTER(_EXPLICIT_ACCESS_W)
 PEXPLICIT_ACCESS_W = POINTER(_EXPLICIT_ACCESS_W)
-EXPLICIT_ACCESS_W = _EXPLICIT_ACCESS_W
 
 ComputerNameNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameNetBIOS", 0x0)
 ComputerNameDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsHostname", 0x1)
@@ -10389,8 +10575,8 @@ class _SYSTEM_PROCESS_INFORMATION(Structure):
         ("PrivatePageCount", SIZE_T),
         ("Reserved6", LARGE_INTEGER * (6)),
     ]
-SYSTEM_PROCESS_INFORMATION = _SYSTEM_PROCESS_INFORMATION
 PSYSTEM_PROCESS_INFORMATION = POINTER(_SYSTEM_PROCESS_INFORMATION)
+SYSTEM_PROCESS_INFORMATION = _SYSTEM_PROCESS_INFORMATION
 
 class _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION(Structure):
     _fields_ = [
@@ -10400,8 +10586,8 @@ class _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION(Structure):
         ("Reserved1", LARGE_INTEGER * (2)),
         ("Reserved2", ULONG),
     ]
-SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
 PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = POINTER(_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION)
+SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
 
 class _SYSTEM_REGISTRY_QUOTA_INFORMATION(Structure):
     _fields_ = [
@@ -10409,8 +10595,8 @@ class _SYSTEM_REGISTRY_QUOTA_INFORMATION(Structure):
         ("RegistryQuotaUsed", ULONG),
         ("Reserved1", PVOID),
     ]
-SYSTEM_REGISTRY_QUOTA_INFORMATION = _SYSTEM_REGISTRY_QUOTA_INFORMATION
 PSYSTEM_REGISTRY_QUOTA_INFORMATION = POINTER(_SYSTEM_REGISTRY_QUOTA_INFORMATION)
+SYSTEM_REGISTRY_QUOTA_INFORMATION = _SYSTEM_REGISTRY_QUOTA_INFORMATION
 
 class _SYSTEM_BASIC_INFORMATION(Structure):
     _fields_ = [
@@ -10477,8 +10663,8 @@ class _TRACE_PROVIDER_INSTANCE_INFO(Structure):
         ("Pid", ULONG),
         ("Flags", ULONG),
     ]
-TRACE_PROVIDER_INSTANCE_INFO = _TRACE_PROVIDER_INSTANCE_INFO
 PTRACE_PROVIDER_INSTANCE_INFO = POINTER(_TRACE_PROVIDER_INSTANCE_INFO)
+TRACE_PROVIDER_INSTANCE_INFO = _TRACE_PROVIDER_INSTANCE_INFO
 
 class _TRACE_ENABLE_INFO(Structure):
     _fields_ = [
@@ -10643,8 +10829,8 @@ class _ETW_BUFFER_CONTEXT(Structure):
         ("anon_01", _ANON__ETW_BUFFER_CONTEXT_SUB_UNION_1),
         ("LoggerId", USHORT),
     ]
-PETW_BUFFER_CONTEXT = POINTER(_ETW_BUFFER_CONTEXT)
 ETW_BUFFER_CONTEXT = _ETW_BUFFER_CONTEXT
+PETW_BUFFER_CONTEXT = POINTER(_ETW_BUFFER_CONTEXT)
 
 class _ANON__EVENT_TRACE_SUB_UNION_1(Union):
     _fields_ = [
@@ -10719,8 +10905,8 @@ class _TRACE_LOGFILE_HEADER(Structure):
         ("ReservedFlags", ULONG),
         ("BuffersLost", ULONG),
     ]
-TRACE_LOGFILE_HEADER = _TRACE_LOGFILE_HEADER
 PTRACE_LOGFILE_HEADER = POINTER(_TRACE_LOGFILE_HEADER)
+TRACE_LOGFILE_HEADER = _TRACE_LOGFILE_HEADER
 
 class _ANON__EVENT_TRACE_LOGFILEA_SUB_UNION_1(Union):
     _fields_ = [
@@ -10796,8 +10982,8 @@ class _EVENT_FILTER_DESCRIPTOR(Structure):
         ("Size", ULONG),
         ("Type", ULONG),
     ]
-PEVENT_FILTER_DESCRIPTOR = POINTER(_EVENT_FILTER_DESCRIPTOR)
 EVENT_FILTER_DESCRIPTOR = _EVENT_FILTER_DESCRIPTOR
+PEVENT_FILTER_DESCRIPTOR = POINTER(_EVENT_FILTER_DESCRIPTOR)
 
 class _ENABLE_TRACE_PARAMETERS(Structure):
     _fields_ = [
@@ -10822,15 +11008,15 @@ class _EVENT_DESCRIPTOR(Structure):
         ("Keyword", ULONGLONG),
     ]
 EVENT_DESCRIPTOR = _EVENT_DESCRIPTOR
-PEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
 PCEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
+PEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
 
 class _EVENT_DESCRIPTOR(_EVENT_DESCRIPTOR):
     def __repr__(self):
         return "<{0} Id={self.Id} Opcode={self.Opcode} Version={self.Version} Level={self.Level}>".format(type(self).__name__, self=self)
 EVENT_DESCRIPTOR = _EVENT_DESCRIPTOR
-PEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
 PCEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
+PEVENT_DESCRIPTOR = POINTER(_EVENT_DESCRIPTOR)
 class _ANON__ANON__EVENT_HEADER_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
         ("KernelTime", ULONG),
@@ -10911,8 +11097,8 @@ class _TRACE_GUID_REGISTRATION(Structure):
         ("Guid", LPCGUID),
         ("RegHandle", HANDLE),
     ]
-TRACE_GUID_REGISTRATION = _TRACE_GUID_REGISTRATION
 PTRACE_GUID_REGISTRATION = POINTER(_TRACE_GUID_REGISTRATION)
+TRACE_GUID_REGISTRATION = _TRACE_GUID_REGISTRATION
 
 class _ANON__ANON__EVENT_DATA_DESCRIPTOR_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
     _fields_ = [
@@ -10988,8 +11174,8 @@ MaxTokenInfoClass = EnumValue("_TOKEN_INFORMATION_CLASS", "MaxTokenInfoClass", 0
 class _TOKEN_INFORMATION_CLASS(EnumType):
     values = [TokenInvalid, TokenUser, TokenGroups, TokenPrivileges, TokenOwner, TokenPrimaryGroup, TokenDefaultDacl, TokenSource, TokenType, TokenImpersonationLevel, TokenStatistics, TokenRestrictedSids, TokenSessionId, TokenGroupsAndPrivileges, TokenSessionReference, TokenSandBoxInert, TokenAuditPolicy, TokenOrigin, TokenElevationType, TokenLinkedToken, TokenElevation, TokenHasRestrictions, TokenAccessInformation, TokenVirtualizationAllowed, TokenVirtualizationEnabled, TokenIntegrityLevel, TokenUIAccess, TokenMandatoryPolicy, TokenLogonSid, TokenIsAppContainer, TokenCapabilities, TokenAppContainerSid, TokenAppContainerNumber, TokenUserClaimAttributes, TokenDeviceClaimAttributes, TokenRestrictedUserClaimAttributes, TokenRestrictedDeviceClaimAttributes, TokenDeviceGroups, TokenRestrictedDeviceGroups, TokenSecurityAttributes, TokenIsRestricted, TokenProcessTrustLevel, TokenPrivateNameSpace, TokenSingletonAttributes, TokenBnoIsolation, TokenChildProcessFlags, MaxTokenInfoClass]
     mapper = FlagMapper(*values)
-TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
 PTOKEN_INFORMATION_CLASS = POINTER(_TOKEN_INFORMATION_CLASS)
+TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
 
 
 TokenElevationTypeDefault = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeDefault", 0x1)
@@ -10998,8 +11184,8 @@ TokenElevationTypeLimited = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTy
 class _TOKEN_ELEVATION_TYPE(EnumType):
     values = [TokenElevationTypeDefault, TokenElevationTypeFull, TokenElevationTypeLimited]
     mapper = FlagMapper(*values)
-TOKEN_ELEVATION_TYPE = _TOKEN_ELEVATION_TYPE
 PTOKEN_ELEVATION_TYPE = POINTER(_TOKEN_ELEVATION_TYPE)
+TOKEN_ELEVATION_TYPE = _TOKEN_ELEVATION_TYPE
 
 
 class _TOKEN_PRIVILEGES(Structure):
@@ -11007,23 +11193,23 @@ class _TOKEN_PRIVILEGES(Structure):
         ("PrivilegeCount", DWORD),
         ("Privileges", LUID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
     ]
-TOKEN_PRIVILEGES = _TOKEN_PRIVILEGES
 PTOKEN_PRIVILEGES = POINTER(_TOKEN_PRIVILEGES)
+TOKEN_PRIVILEGES = _TOKEN_PRIVILEGES
 
 class _TOKEN_ELEVATION(Structure):
     _fields_ = [
         ("TokenIsElevated", DWORD),
     ]
-TOKEN_ELEVATION = _TOKEN_ELEVATION
 PTOKEN_ELEVATION = POINTER(_TOKEN_ELEVATION)
+TOKEN_ELEVATION = _TOKEN_ELEVATION
 
 class _SID_AND_ATTRIBUTES(Structure):
     _fields_ = [
         ("Sid", PSID),
         ("Attributes", DWORD),
     ]
-SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
 PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
+SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
 
 _INITIAL_SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
 class _SID_AND_ATTRIBUTES(_INITIAL_SID_AND_ATTRIBUTES):
@@ -11040,14 +11226,14 @@ class _SID_AND_ATTRIBUTES(_INITIAL_SID_AND_ATTRIBUTES):
         # SE_GROUP_INTEGRITY_ENABLED,
         # SE_GROUP_LOGON_ID,
         # SE_GROUP_RESOURCE))
-SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
 PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
+SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
 class _TOKEN_MANDATORY_LABEL(Structure):
     _fields_ = [
         ("Label", SID_AND_ATTRIBUTES),
     ]
-TOKEN_MANDATORY_LABEL = _TOKEN_MANDATORY_LABEL
 PTOKEN_MANDATORY_LABEL = POINTER(_TOKEN_MANDATORY_LABEL)
+TOKEN_MANDATORY_LABEL = _TOKEN_MANDATORY_LABEL
 
 class _TOKEN_USER(Structure):
     _fields_ = [
@@ -11060,23 +11246,23 @@ class _TOKEN_DEFAULT_DACL(Structure):
     _fields_ = [
         ("DefaultDacl", PACL),
     ]
-TOKEN_DEFAULT_DACL = _TOKEN_DEFAULT_DACL
 PTOKEN_DEFAULT_DACL = POINTER(_TOKEN_DEFAULT_DACL)
+TOKEN_DEFAULT_DACL = _TOKEN_DEFAULT_DACL
 
 class _TOKEN_GROUPS(Structure):
     _fields_ = [
         ("GroupCount", DWORD),
         ("Groups", SID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
     ]
-TOKEN_GROUPS = _TOKEN_GROUPS
 PTOKEN_GROUPS = POINTER(_TOKEN_GROUPS)
+TOKEN_GROUPS = _TOKEN_GROUPS
 
 class _TOKEN_OWNER(Structure):
     _fields_ = [
         ("Owner", PSID),
     ]
-TOKEN_OWNER = _TOKEN_OWNER
 PTOKEN_OWNER = POINTER(_TOKEN_OWNER)
+TOKEN_OWNER = _TOKEN_OWNER
 
 class _TOKEN_PRIMARY_GROUP(Structure):
     _fields_ = [
@@ -11113,8 +11299,8 @@ class _TOKEN_ORIGIN(Structure):
     _fields_ = [
         ("OriginatingLogonSession", LUID),
     ]
-TOKEN_ORIGIN = _TOKEN_ORIGIN
 PTOKEN_ORIGIN = POINTER(_TOKEN_ORIGIN)
+TOKEN_ORIGIN = _TOKEN_ORIGIN
 
 class _TOKEN_LINKED_TOKEN(Structure):
     _fields_ = [
@@ -11127,8 +11313,8 @@ class _TOKEN_MANDATORY_POLICY(Structure):
     _fields_ = [
         ("Policy", DWORD),
     ]
-TOKEN_MANDATORY_POLICY = _TOKEN_MANDATORY_POLICY
 PTOKEN_MANDATORY_POLICY = POINTER(_TOKEN_MANDATORY_POLICY)
+TOKEN_MANDATORY_POLICY = _TOKEN_MANDATORY_POLICY
 
 class _SID_AND_ATTRIBUTES_HASH(Structure):
     _fields_ = [
@@ -11136,8 +11322,8 @@ class _SID_AND_ATTRIBUTES_HASH(Structure):
         ("SidAttr", PSID_AND_ATTRIBUTES),
         ("Hash", SID_HASH_ENTRY * (SID_HASH_SIZE)),
     ]
-SID_AND_ATTRIBUTES_HASH = _SID_AND_ATTRIBUTES_HASH
 PSID_AND_ATTRIBUTES_HASH = POINTER(_SID_AND_ATTRIBUTES_HASH)
+SID_AND_ATTRIBUTES_HASH = _SID_AND_ATTRIBUTES_HASH
 
 class _TOKEN_APPCONTAINER_INFORMATION(Structure):
     _fields_ = [
@@ -11178,8 +11364,8 @@ class _TOKEN_GROUPS_AND_PRIVILEGES(Structure):
         ("Privileges", PLUID_AND_ATTRIBUTES),
         ("AuthenticationId", LUID),
     ]
-TOKEN_GROUPS_AND_PRIVILEGES = _TOKEN_GROUPS_AND_PRIVILEGES
 PTOKEN_GROUPS_AND_PRIVILEGES = POINTER(_TOKEN_GROUPS_AND_PRIVILEGES)
+TOKEN_GROUPS_AND_PRIVILEGES = _TOKEN_GROUPS_AND_PRIVILEGES
 
 class _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE(Structure):
     _fields_ = [
@@ -11216,8 +11402,8 @@ class _TOKEN_SECURITY_ATTRIBUTE_V1(Structure):
         ("ValueCount", ULONG),
         ("Values", TOKEN_SECURITY_ATTRIBUTE_V1_UNION),
     ]
-TOKEN_SECURITY_ATTRIBUTE_V1 = _TOKEN_SECURITY_ATTRIBUTE_V1
 PTOKEN_SECURITY_ATTRIBUTE_V1 = POINTER(_TOKEN_SECURITY_ATTRIBUTE_V1)
+TOKEN_SECURITY_ATTRIBUTE_V1 = _TOKEN_SECURITY_ATTRIBUTE_V1
 
 class _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION(Union):
     _fields_ = [
@@ -11255,8 +11441,8 @@ class _API_SET_NAMESPACE_ENTRY(Structure):
         ("AliasLength", ULONG),
         ("DataOffset", ULONG),
     ]
-PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
 API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
+PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
 
 class _API_SET_NAMESPACE_ARRAY(Structure):
     _fields_ = [
@@ -11266,8 +11452,8 @@ class _API_SET_NAMESPACE_ARRAY(Structure):
         ("Count", ULONG),
         ("Array", API_SET_NAMESPACE_ENTRY * (ANYSIZE_ARRAY)),
     ]
-PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
 API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
+PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
 
 class _API_SET_VALUE_ENTRY_V2(Structure):
     _fields_ = [
@@ -11276,8 +11462,8 @@ class _API_SET_VALUE_ENTRY_V2(Structure):
         ("ValueOffset", ULONG),
         ("ValueLength", ULONG),
     ]
-PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
 API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
+PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
 
 class _API_SET_VALUE_ARRAY_V2(Structure):
     _fields_ = [
@@ -11293,8 +11479,8 @@ class _API_SET_NAMESPACE_ENTRY_V2(Structure):
         ("NameLength", ULONG),
         ("DataOffset", ULONG),
     ]
-PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
 API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
+PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
 
 class _API_SET_NAMESPACE_ARRAY_V2(Structure):
     _fields_ = [
@@ -11334,8 +11520,8 @@ class _API_SET_NAMESPACE_ENTRY_V4(Structure):
         ("AliasLength", ULONG),
         ("DataOffset", ULONG),
     ]
-PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
 API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
+PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
 
 class _API_SET_NAMESPACE_ENTRY_V6(Structure):
     _fields_ = [
@@ -11744,8 +11930,8 @@ class WSAData64(Structure):
         ("szDescription", CHAR * (WSADESCRIPTION_LEN + 1)),
         ("szSystemStatus", CHAR * (WSASYS_STATUS_LEN + 1)),
     ]
-WSADATA64 = WSAData64
 LPWSADATA64 = POINTER(WSAData64)
+WSADATA64 = WSAData64
 
 class WSAData32(Structure):
     _fields_ = [
@@ -11852,8 +12038,8 @@ class _WSAPROTOCOL_INFOA(Structure):
         ("dwProviderReserved", DWORD),
         ("szProtocol", CHAR * (WSAPROTOCOL_LEN + 1)),
     ]
-WSAPROTOCOL_INFOA = _WSAPROTOCOL_INFOA
 LPWSAPROTOCOL_INFOA = POINTER(_WSAPROTOCOL_INFOA)
+WSAPROTOCOL_INFOA = _WSAPROTOCOL_INFOA
 
 class _WSAPROTOCOL_INFOW(Structure):
     _fields_ = [
@@ -11883,8 +12069,8 @@ WSAPROTOCOL_INFOW = _WSAPROTOCOL_INFOW
 
 # Self referencing struct tricks
 class addrinfo(Structure): pass
-PADDRINFOA = POINTER(addrinfo)
 ADDRINFOA = addrinfo
+PADDRINFOA = POINTER(addrinfo)
 addrinfo._fields_ = [
     ("ai_flags", INT),
     ("ai_family", INT),

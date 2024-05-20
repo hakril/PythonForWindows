@@ -134,20 +134,6 @@ class WinFuncParser(Parser):
         return res
 
 
-
-
-def dbg_lexer(data):
-    for i in Lexer(data).token_generation():
-        print i
-
-def dbg_parser(data):
-    return WinFuncParser(data).parse()
-
-def dbg_validate(data):
-    return validate_structs(Parser(data).parse())
-
-
-
 if __name__ == "__main__":
     import sys
     data = open(sys.argv[1], 'r').read()

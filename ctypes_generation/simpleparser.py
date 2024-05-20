@@ -1,5 +1,8 @@
 import collections
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO # Py3
 
 TupleToken = collections.namedtuple('Token', ['value'])
 
@@ -189,8 +192,8 @@ class Parser(object):
         data = data.replace("\\\n", "")
         # Step 4 Remove comments:
 
-        ins = StringIO.StringIO(data)
-        outs = StringIO.StringIO()
+        ins = StringIO(data)
+        outs = StringIO()
 
         in_str = False
         res = []
