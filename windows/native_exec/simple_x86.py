@@ -1128,6 +1128,13 @@ def assemble_instructions_generator(str):
         except:
             raise ValueError("Unknow mnemonic <{0}>".format(mnemo))
 
+        if issubclass(instr_object, Raw):
+            # Raw should received the raw buffer as it expect encoded hex
+            # The transformation may transform 'raw 9090' (nopnop) as 0n9090
+            # If other fake-instr need this : make a class attribute
+            yield instr_object(*args_raw)
+            continue
+
         args = []
         if args_raw:
             for arg in args_raw[0].split(","):

@@ -258,6 +258,23 @@ def test_assembler():
     CheckInstr(Not)('RAX')
     CheckInstr(Not)(mem('[RAX]'))
 
+    # Check RIP relative instructions
+    CheckInstr(Mov)(mem('[rip + 0x41414141]'), 0x42424242)
+    CheckInstr(Mov)(mem('[rip + 0x41414141]'), 'R8')
+    CheckInstr(Mov)("RAX", mem('[rip + 0x2]'))
+    CheckInstr(Mov)("RAX", mem('[rip + -5]'))
+    CheckInstr(Mov)("RAX", mem('[rip + 0x41414141]'))
+    CheckInstr(Lea)("RAX", mem('[rip + 0x2]'))
+    CheckInstr(Lea)("RAX", mem('[rip + -5]'))
+    CheckInstr(Lea)("EAX", mem('[rip + 0x2]'))
+    CheckInstr(Lea)("R15", mem('[rip + 0x2]'))
+
+    with pytest.raises(ValueError):
+        CheckInstr(Mov, must_fail=True)('RAX', mem('[RIP + RCX]')) # Invalid mem parsing
+    with pytest.raises(ValueError):
+        CheckInstr(Mov, must_fail=True)('REX', mem('[RIP * 2]')) # Invalid mem parsing
+    with pytest.raises(ValueError):
+        CheckInstr(Mov, must_fail=True)('REX', mem('[RCX + RIP]')) # Invalid mem parsing
 
     CheckInstr(ScasB, expected_result="scasb al, byte ptr [rdi]")()
     CheckInstr(ScasW, expected_result="scasw ax, word ptr [rdi]")()
@@ -296,6 +313,10 @@ def test_simple_x64_raw_instruction():
     # Test the fake instruction "raw"
     # By emetting a multi-char nop manually
     CheckInstr(Raw, expected_result="nop word ptr [rax + rax]")("66 0F 1F 84 00 00 00 00 00")
+
+def test_simple_x64_assemble_raw_one_byte():
+    # Test the fake instruction "raw" inside an assemble that may translate str to int
+    assert x64.assemble("ret; raw 90; ret") ==  b"\xc3\x90\xc3"
 
 def test_x64_32b_register_lower_upper():
     assert x64.assemble("mov eax, 42") == x64.assemble("mov EAX, 42")
