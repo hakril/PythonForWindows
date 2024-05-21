@@ -3,7 +3,7 @@ from windows import winproxy
 import windows.generated_def as gdef
 import ctypes
 
-from windows.pycompat import is_py3
+from windows.pycompat import is_py3, urepr_encode
 
 if is_py3:
     from multiprocessing.connection import PipeConnection as native_PipeConnection
@@ -14,11 +14,11 @@ else:
 
 def full_pipe_address(addr):
     """Return the full address of the pipe `addr`"""
-    if not isinstance(addr, bytes):
-        addr = addr.encode("ascii")
-    if addr.startswith(b"\\\\"):
+    if isinstance(addr, bytes):
+        addr = addr.decode("ascii")
+    if addr.startswith(u"\\\\"):
         return addr
-    return br"\\.\pipe" + "\\".encode() + addr
+    return u"\\\\.\\pipe" + u"\\" + addr
 
 class PipeConnection(object): # Cannot inherit: crash the interpreter
     """A wrapper arround :class:`_multiprocessing.PipeConnection` able to work as a ContextManager"""
@@ -54,7 +54,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
             security_attributes.bInheritHandle = True # Accept as arg ?
 
 
-        pipehandle = winproxy.CreateNamedPipeA(
+        pipehandle = winproxy.CreateNamedPipeW(
             addr, gdef.PIPE_ACCESS_DUPLEX,
             gdef.PIPE_TYPE_MESSAGE | gdef.PIPE_READMODE_MESSAGE |
             gdef.PIPE_WAIT,
@@ -70,7 +70,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
         :returns type: :class:`PipeConnection`
         """
         addr = full_pipe_address(addr)
-        pipehandle = winproxy.CreateFileA(addr, gdef.GENERIC_READ | gdef.GENERIC_WRITE, 0, None, gdef.OPEN_EXISTING, 0, None)
+        pipehandle = winproxy.CreateFileW(addr, gdef.GENERIC_READ | gdef.GENERIC_WRITE, 0, None, gdef.OPEN_EXISTING, 0, None)
         winproxy.SetNamedPipeHandleState(pipehandle, gdef.ULONG(gdef.PIPE_READMODE_MESSAGE), None, None)
         return cls.from_handle(pipehandle, name=addr, server=False)
 
@@ -108,7 +108,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
         self.close()
 
     def __repr__(self):
-        return """<{0} name="{1}" server={2}>""".format(type(self).__name__, self.name, self.server)
+        return urepr_encode(u"""<{0} name="{1}" server={2}>""".format(type(self).__name__, self.name, self.server))
 
 
 connect = PipeConnection.connect
