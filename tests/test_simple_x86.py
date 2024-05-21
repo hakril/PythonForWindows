@@ -246,6 +246,10 @@ def test_simple_x64_raw_instruction():
     # By emetting a multi-char nop manually
     CheckInstr(Raw, expected_result="nop word ptr [eax + eax]")("66 0F 1F 84 00 00 00 00 00")
 
+def test_simple_x86_assemble_raw_one_byte():
+    # Test the fake instruction "raw" inside an assemble that may translate str to int
+    assert x86.assemble("ret; raw 90; ret") ==  b"\xc3\x90\xc3"
+
 def test_x86_multiple_instr_add_instr_and_str():
     res = x86.MultipleInstr()
     res += x86.Nop()
