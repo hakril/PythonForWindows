@@ -31,7 +31,11 @@ class TestSystemWithCheckGarbage(object):
         return windows.system.services
 
     def test_logicaldrives(self):
-        return windows.system.logicaldrives
+        for ldrive in windows.system.logicaldrives:
+            assert ldrive
+            assert ldrive.name
+            assert ldrive.path
+            assert ldrive.volume_info
 
     def test_wmi(self):
         return windows.system.wmi
