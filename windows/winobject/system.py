@@ -225,13 +225,8 @@ class System(object):
         :type: :class:`str`
         """
         size = gdef.DWORD(0x1000)
-        # For now I don't know what is best as A vs W APIs...
-        if windows.pycompat.is_py3:
-            buf = ctypes.create_unicode_buffer(size.value)
-            winproxy.GetComputerNameW(buf, ctypes.byref(size))
-        else:
-            buf = ctypes.create_string_buffer(size.value)
-            winproxy.GetComputerNameA(buf, ctypes.byref(size))
+        buf = ctypes.create_unicode_buffer(size.value)
+        winproxy.GetComputerNameW(buf, ctypes.byref(size))
         return buf[:size.value]
 
     def _computer_name_ex(self, nametype):
@@ -445,29 +440,29 @@ class System(object):
 
     @utils.fixedpropety
     def windir(self):
-        buffer = ctypes.c_buffer(0x100)
-        reslen = winproxy.GetWindowsDirectoryA(buffer)
+        buffer = ctypes.create_unicode_buffer(0x100)
+        reslen = winproxy.GetWindowsDirectoryW(buffer)
         return buffer[:reslen]
 
     def get_version(self):
-        data = gdef.OSVERSIONINFOEXA()
+        data = gdef.OSVERSIONINFOEXW()
         data.dwOSVersionInfoSize = ctypes.sizeof(data)
-        winproxy.GetVersionExA(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(gdef.OSVERSIONINFOA)))
+        winproxy.GetVersionExW(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(gdef.OSVERSIONINFOW)))
         return data
 
     def get_file_version(self, name):
-        size = winproxy.GetFileVersionInfoSizeA(name)
-        buf = ctypes.c_buffer(size)
-        winproxy.GetFileVersionInfoA(name, 0, size, buf)
-
+        size = winproxy.GetFileVersionInfoSizeW(name)
+        buf = ctypes.create_unicode_buffer(size)
+        winproxy.GetFileVersionInfoW(name, 0, size, buf)
         bufptr = gdef.PVOID()
         bufsize = gdef.UINT()
-        winproxy.VerQueryValueA(buf, "\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
-        tup = struct.unpack("<HH", bufstr.value[:4])
+        # Return binary data : the W is only or the input string in this case
+        winproxy.VerQueryValueW(buf, u"\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
+        tup = windows.utils.BUFFER(gdef.USHORT, 2).from_address(bufptr.value)[:]
         req = "{0:04x}{1:04x}".format(*tup)
-        winproxy.VerQueryValueA(buf, "\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
+        del tup
+        winproxy.VerQueryValueW(buf, u"\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
+        bufstr = ctypes.cast(bufptr, gdef.LPWSTR)
         return bufstr.value
 
     @utils.fixedpropety

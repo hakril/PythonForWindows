@@ -16,6 +16,7 @@ if is_py3:
     int_types = int
     basestring = str
     anybuff = (str, bytes)
+    unicode_type = str
 
     def raw_encode(s):
         if isinstance(s, str):
@@ -46,6 +47,7 @@ else: # py2.7
     int_types = (int, long)
     basestring = basestring
     anybuff = basestring
+    unicode_type = unicode
 
     def raw_encode(s):
         if isinstance(s, unicode):

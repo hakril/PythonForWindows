@@ -1,6 +1,7 @@
 import ctypes
 import pytest
 import windows
+import windows.pycompat
 import windows.generated_def as gdef
 
 from .pfwtest import *
@@ -26,7 +27,7 @@ class TestSystemWithCheckGarbage(object):
     def test_computer_name(self):
         computer_name = windows.system.computer_name
         assert computer_name
-        assert isinstance(computer_name, str)
+        assert isinstance(computer_name, windows.pycompat.unicode_type) # Check unicode in both py2 / py3
 
     def test_services(self):
         return windows.system.services
@@ -120,3 +121,9 @@ def test_unicode_environ_dict():
     unicode_environ[UNICODE_STRING_1] = UNICODE_RU_STRING
     assert check_env_variable_exist(UNICODE_STRING_1)
 
+def test_get_file_version():
+    assert windows.system.get_file_version(u"ntdll")
+    assert windows.system.get_file_version(u"kernel32")
+    res = windows.system.get_file_version(u"ntmarta")
+    assert res
+    assert isinstance(res, windows.pycompat.unicode_type)
