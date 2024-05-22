@@ -13,9 +13,32 @@ def symctx():
 # symbols.engine.options = gdef.SYMOPT_UNDNAME
 
 def test_symbols_loadfile(symctx):
-    mod = symctx.load_file(path=r"c:\windows\system32\ntdll.dll", addr=0x42000)
+    mod = symctx.load_file(path=u"c:\\windows\\system32\\ntdll.dll", addr=0x42000)
     assert mod.addr == 0x42000
     # Resolve by name
-    createfile = symctx[b"ntdll!NtCreateFile"]
+    createfile = symctx[u"ntdll!NtCreateFile"]
     # Resolve by addr
-    assert symctx[createfile.addr].name in (b"NtCreateFile", b"ZwCreateFile")
+    assert symctx[createfile.addr].name in (u"NtCreateFile", u"ZwCreateFile")
+
+
+def test_symbols_module_info(symctx):
+    mod = symctx.load_file(path=u"c:\\windows\\system32\\ntdll.dll", addr=0x42000)
+    assert mod.name == u"ntdll" # SymGetModuleInfo64
+    assert symctx.modules[0].name == u"ntdll" # SymEnumerateModules64
+
+def test_symbols_search(symctx):
+    mod = symctx.load_file(path=u"c:\\windows\\system32\\ntdll.dll", addr=0x42000)
+    res = symctx.search(u"ntdll!*CreateFile")
+    assert set(s.name for s in res) == {"NtCreateFile", "ZwCreateFile"}
+
+
+def test_symbols(symctx):
+    mod = symctx.load_file(path=u"c:\\windows\\system32\\ntdll.dll", addr=0x42000)
+    createfile = symctx[u"ntdll!NtCreateFile"]
+    res = symctx.get_symbols(int(createfile))
+    assert set(s.name for s in res) == {"NtCreateFile", "ZwCreateFile"}
+    print("LOL")
+
+# TO test:
+
+# SymbolInfoBase / SymbolType / get_type

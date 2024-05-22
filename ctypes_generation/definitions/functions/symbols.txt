@@ -29,6 +29,13 @@ BOOL WINAPI SymFromAddr(
   _Inout_   PSYMBOL_INFO Symbol
 );
 
+BOOL WINAPI SymFromAddrW(
+  [in]            HANDLE        hProcess,
+  [in]            DWORD64       Address,
+  [out, optional] PDWORD64      Displacement,
+  [in, out]       PSYMBOL_INFOW Symbol
+);
+
 
 BOOL WINAPI SymGetModuleInfo64(
   _In_  HANDLE             hProcess,
@@ -46,6 +53,12 @@ BOOL WINAPI SymInitialize(
   _In_     HANDLE hProcess,
   _In_opt_ LPCSTR UserSearchPath,
   _In_     BOOL   fInvadeProcess
+);
+
+BOOL WINAPI SymInitializeW(
+  [in]           HANDLE hProcess,
+  [in, optional] PCWSTR UserSearchPath,
+  [in]           BOOL   fInvadeProcess
 );
 
 BOOL WINAPI SymFromName(
@@ -115,6 +128,12 @@ BOOL WINAPI SymEnumerateModules64(
   _In_ HANDLE                      hProcess,
   _In_ PVOID                        EnumModulesCallback,
   _In_ PVOID                       UserContext
+);
+
+BOOL WINAPI SymEnumerateModulesW64(
+  [in]           HANDLE                       hProcess,
+  [in]           PSYM_ENUMMODULES_CALLBACKW64 EnumModulesCallback,
+  [in, optional] PVOID                        UserContext
 );
 
 BOOL SymNext(

@@ -2440,6 +2440,11 @@ SymLoadModuleExWParams = ((1, 'hProcess'), (1, 'hFile'), (1, 'ImageName'), (1, '
 SymFromAddrPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PDWORD64, PSYMBOL_INFO)
 SymFromAddrParams = ((1, 'hProcess'), (1, 'Address'), (1, 'Displacement'), (1, 'Symbol'))
 
+#def SymFromAddrW(hProcess, Address, Displacement, Symbol):
+#    return SymFromAddrW.ctypes_function(hProcess, Address, Displacement, Symbol)
+SymFromAddrWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PDWORD64, PSYMBOL_INFOW)
+SymFromAddrWParams = ((1, 'hProcess'), (1, 'Address'), (1, 'Displacement'), (1, 'Symbol'))
+
 #def SymGetModuleInfo64(hProcess, dwAddr, ModuleInfo):
 #    return SymGetModuleInfo64.ctypes_function(hProcess, dwAddr, ModuleInfo)
 SymGetModuleInfo64Prototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PIMAGEHLP_MODULE64)
@@ -2454,6 +2459,11 @@ SymGetModuleInfoW64Params = ((1, 'hProcess'), (1, 'qwAddr'), (1, 'ModuleInfo'))
 #    return SymInitialize.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
 SymInitializePrototype = WINFUNCTYPE(BOOL, HANDLE, LPCSTR, BOOL)
 SymInitializeParams = ((1, 'hProcess'), (1, 'UserSearchPath'), (1, 'fInvadeProcess'))
+
+#def SymInitializeW(hProcess, UserSearchPath, fInvadeProcess):
+#    return SymInitializeW.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
+SymInitializeWPrototype = WINFUNCTYPE(BOOL, HANDLE, PCWSTR, BOOL)
+SymInitializeWParams = ((1, 'hProcess'), (1, 'UserSearchPath'), (1, 'fInvadeProcess'))
 
 #def SymFromName(hProcess, Name, Symbol):
 #    return SymFromName.ctypes_function(hProcess, Name, Symbol)
@@ -2504,6 +2514,11 @@ SymEnumTypesByNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 
 #    return SymEnumerateModules64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
 SymEnumerateModules64Prototype = WINFUNCTYPE(BOOL, HANDLE, PVOID, PVOID)
 SymEnumerateModules64Params = ((1, 'hProcess'), (1, 'EnumModulesCallback'), (1, 'UserContext'))
+
+#def SymEnumerateModulesW64(hProcess, EnumModulesCallback, UserContext):
+#    return SymEnumerateModulesW64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
+SymEnumerateModulesW64Prototype = WINFUNCTYPE(BOOL, HANDLE, PSYM_ENUMMODULES_CALLBACKW64, PVOID)
+SymEnumerateModulesW64Params = ((1, 'hProcess'), (1, 'EnumModulesCallback'), (1, 'UserContext'))
 
 #def SymNext(hProcess, si):
 #    return SymNext.ctypes_function(hProcess, si)

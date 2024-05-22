@@ -22,7 +22,7 @@ def set_dbghelp_path(path):
     """
     loaded_modules =  [m.name.lower() for m in windows.current_process.peb.modules]
     if os.path.isdir(path):
-        path = os.path.join(path, str(windows.current_process.bitness), "dbghelp.dll")
+        path = os.path.join(path, str(windows.current_process.bitness), u"dbghelp.dll")
     if "dbghelp.dll" in loaded_modules:
         raise ValueError("setup_dbghelp_path should be called before any dbghelp function")
     # Change the DLL used by DbgHelpProxy
@@ -31,7 +31,7 @@ def set_dbghelp_path(path):
 
 # Load symbol config from ENV if present
 try:
-    env_dbghelp_path = os.environ["PFW_DBGHELP_PATH"]
+    env_dbghelp_path = windows.system.environ["PFW_DBGHELP_PATH"]
     # Setup the dbghelp path used by PFW
     set_dbghelp_path(env_dbghelp_path)
 except KeyError as e:
@@ -65,7 +65,12 @@ class SymbolInfoBase(object):
             return None
         size = self.NameLen
         addr = ctypes.addressof(self) + type(self).Name.offset
-        return (self.CHAR_TYPE * size).from_address(addr)[:]
+        # self.NameLen should not include the final \x00
+        # But some W api (like SymSearchW) returns SYMBOL_INFOW with the leading \x00
+        # For NtCreateFile:
+            # A() API -> NameLen == 12
+            # W() API -> NameLen == 13
+        return (self.CHAR_TYPE * size).from_address(addr)[:].strip(u"\x00")
 
     @property
     def fullname(self):
@@ -117,6 +122,9 @@ class SymbolInfoBase(object):
 
 
 class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
+    CHAR_TYPE = gdef.CHAR
+
+class SymbolInfoW(gdef.SYMBOL_INFOW, SymbolInfoBase):
     """Represent a Symbol.
     This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
     with the handling on displacement embeded into it.s
@@ -128,7 +136,7 @@ class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
         >>> sym1 = sh["kernelbase!CreateFileW"]
         >>> sym2 = sh[int(sym1) + 3]
         >>> sym2
-        <SymbolInfoA name="CreateFileW" start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol>
+        <SymbolInfoW name="CreateFileW" start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol>
         >>> hex(sym2.start)
         '0x100f20b0L'
         >>> hex(sym2.addr)
@@ -138,13 +146,10 @@ class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
         >>> str(sym2)
         'kernelbase!CreateFileW+0x3'
     """
-    CHAR_TYPE = gdef.CHAR
-
-class SymbolInfoW(gdef.SYMBOL_INFOW, SymbolInfoBase):
     CHAR_TYPE = gdef.WCHAR
 
-# We use the A Api in our code (for now)
-SymbolInfo = SymbolInfoA
+# Unicode everywhere !
+SymbolInfo = SymbolInfoW
 
 class SymbolType(object):
     def __init__(self, typeid, modbase, resolver):
@@ -243,9 +248,9 @@ class SymbolType(object):
         return '<{0} name="{1}" tag={2}>'.format(type(self).__name__, self.name, self.tag)
 
 
-class SymbolModule(gdef.IMAGEHLP_MODULE64):
+class SymbolModule(gdef.IMAGEHLP_MODULEW64):
     """Represent a loaded symbol module
-    (see `MSDN IMAGEHLP_MODULE64 <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_module64>`_)
+    (see `MSDN _IMAGEHLP_MODULEW64 <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_modulew64>`_)
 
     .. note::
 
@@ -307,7 +312,7 @@ class SymbolModule(gdef.IMAGEHLP_MODULE64):
         return LoadedPdbName
 
     def __repr__(self):
-        pdb_basename = self.LoadedPdbName.split(b"\\")[-1]
+        pdb_basename = self.LoadedPdbName.split("\\")[-1]
         return '<{0} name="{1}" type={2} pdb="{3}" addr={4:#x}>'.format(type(self).__name__, self.name, self.type.value.name, pdb_basename, self.addr)
 
 
@@ -322,7 +327,7 @@ class SymbolHandler(object):
         self.handle = handle #: The handle of the symbol handler
         if not engine.options_already_setup:
             engine.set_options(DEFAULT_DBG_OPTION)
-        winproxy.SymInitialize(handle, search_path, invade_process)
+        winproxy.SymInitializeW(handle, search_path, invade_process)
 
 
     def load_module(self, file_handle=None, path=None, name=None, addr=0, size=0, data=None, flags=0):
@@ -350,10 +355,8 @@ class SymbolHandler(object):
                 path = name
             except Exception as e:
                 pass
-        # Expect a-string
-        path = windows.pycompat.raw_encode(path)
         try:
-            load_addr = winproxy.SymLoadModuleEx(self.handle, file_handle, path, name, addr, size, data, flags)
+            load_addr = winproxy.SymLoadModuleExW(self.handle, file_handle, path, name, addr, size, data, flags)
         except WindowsError as e:
             # if e.winerror == 0:
                 # Already loaded ?
@@ -375,7 +378,7 @@ class SymbolHandler(object):
 
 
     @staticmethod
-    @ctypes.WINFUNCTYPE(gdef.BOOL, gdef.PCSTR, gdef.DWORD64, ctypes.py_object)
+    @ctypes.WINFUNCTYPE(gdef.BOOL, gdef.PVOID, gdef.DWORD64, ctypes.py_object)
     def modules_aggregator(modname, modaddr, ctx):
         ctx.append(modaddr)
         return True
@@ -387,14 +390,14 @@ class SymbolHandler(object):
         :return: [:class:`SymbolModule`] -- A list of modules
         """
         res = []
-        windows.winproxy.SymEnumerateModules64(self.handle, self.modules_aggregator, res)
+        windows.winproxy.SymEnumerateModulesW64(self.handle, self.modules_aggregator, res)
         return [self.get_module(addr) for addr in res]
 
 
     def get_module(self, base):
         modinfo = SymbolModule(self)
         modinfo.SizeOfStruct = ctypes.sizeof(modinfo)
-        winproxy.SymGetModuleInfo64(self.handle, base, modinfo)
+        winproxy.SymGetModuleInfoW64(self.handle, base, modinfo)
         return modinfo
 
     def symbol_and_displacement_from_address(self, addr):
@@ -405,7 +408,7 @@ class SymbolHandler(object):
         sym = buff[0]
         sym.SizeOfStruct = ctypes.sizeof(SymbolInfo)
         sym.MaxNameLen  = max_len_size
-        winproxy.SymFromAddr(self.handle, addr, displacement, buff) # SymFromAddrW	 ?
+        winproxy.SymFromAddrW(self.handle, addr, displacement, buff)
         sym.resolver = self
         sym.displacement = displacement.value
         return sym
@@ -418,9 +421,7 @@ class SymbolHandler(object):
         sym = buff[0]
         sym.SizeOfStruct = ctypes.sizeof(SymbolInfo)
         sym.MaxNameLen  = max_len_size
-        # Expect a-string
-        name = windows.pycompat.raw_encode(name)
-        windows.winproxy.SymFromName(self.handle, name, buff)
+        windows.winproxy.SymFromNameW(self.handle, name, buff)
         sym.resolver = self
         sym.displacement = 0
         return sym
@@ -468,7 +469,7 @@ class SymbolHandler(object):
     @ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)
     def simple_aggregator(info, size, ctx):
         sym = info[0]
-        fullsize = sym.SizeOfStruct + sym.NameLen
+        fullsize = sym.SizeOfStruct + (sym.NameLen * ctypes.sizeof(SymbolInfo.CHAR_TYPE))
         cpy = windows.utils.BUFFER(SymbolInfo)(size=fullsize)
         ctypes.memmove(cpy, info, fullsize)
         ctx.append(cpy[0])
@@ -482,9 +483,9 @@ class SymbolHandler(object):
         >>> sh = windows.debug.symbols.VirtualSymbolHandler()
         >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
         >>> sh.search("kernelbase!CreateFile*")
-        [<SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=SymTagFunction>,
-            <SymbolInfoA name="CreateFileMoniker" addr=0x10117d80 tag=SymTagFunction>,
-            <SymbolInfoA name="CreateFile2" addr=0x1011e690 tag=SymTagFunction>,
+        [<SymbolInfoW name="CreateFileInternal" addr=0x100f2120 tag=SymTagFunction>,
+            <SymbolInfoW name="CreateFileMoniker" addr=0x10117d80 tag=SymTagFunction>,
+            <SymbolInfoW name="CreateFile2" addr=0x1011e690 tag=SymTagFunction>,
             ...]
         """
         res = []
@@ -494,9 +495,7 @@ class SymbolHandler(object):
             callback = ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)(callback)
 
         addr = getattr(mod, "addr", mod) # Retrieve mod.addr, else us the value directly
-        # Expect A-string
-        mask = windows.pycompat.raw_encode(mask)
-        windows.winproxy.SymSearch(self.handle, gdef.DWORD64(addr), 0, tag, mask, 0, callback, res, options)
+        windows.winproxy.SymSearchW(self.handle, gdef.DWORD64(addr), 0, tag, mask, 0, callback, res, options)
         for sym in res:
             sym.resolver = self
             sym.displacement = 0
@@ -509,7 +508,7 @@ class SymbolHandler(object):
         else:
             callback = ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)(callback)
         try:
-            windows.winproxy.SymEnumSymbolsForAddr(self.handle, addr, callback, res)
+            windows.winproxy.SymEnumSymbolsForAddrW(self.handle, addr, callback, res)
         except WindowsError as e:
             if e.winerror == gdef.ERROR_MOD_NOT_FOUND:
                 return []
@@ -607,9 +606,6 @@ class StackWalker(object):
             frame.AddrFrame.Offset = ctx.Ebp
         # Need RBP on 64b ?
         return frame
-
-
-
 
 
 
