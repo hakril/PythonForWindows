@@ -56,9 +56,8 @@ UNICODE_PIPE_NAME = u"Wyczyść moją rurę"
 
 def test_pipe_unicode_name():
     with windows.pipe.create(UNICODE_PIPE_NAME) as np:
-
-        # Try the connect API with the unicode name
+        # also Try the connect API with the unicode name
         np2 = windows.pipe.connect(UNICODE_PIPE_NAME)
-        import pdb;pdb.set_trace()
-        print(repr(np))
-        print("LOL")
+        assert np.name == np2.name == UNICODE_PIPE_NAME
+        assert UNICODE_PIPE_NAME in np.path
+        assert UNICODE_PIPE_NAME in np2.path
