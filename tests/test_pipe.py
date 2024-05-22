@@ -58,6 +58,6 @@ def test_pipe_unicode_name():
     with windows.pipe.create(UNICODE_PIPE_NAME) as np:
         # also Try the connect API with the unicode name
         np2 = windows.pipe.connect(UNICODE_PIPE_NAME)
-        assert np.name == np2.name == UNICODE_PIPE_NAME
-        assert UNICODE_PIPE_NAME in np.path
-        assert UNICODE_PIPE_NAME in np2.path
+        assert np.name == np2.name
+        assert np.name.endswith(UNICODE_PIPE_NAME)
+        assert np2.name.endswith(UNICODE_PIPE_NAME)

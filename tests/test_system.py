@@ -1,6 +1,7 @@
 import ctypes
 import pytest
 import windows
+import windows.generated_def as gdef
 
 from .pfwtest import *
 
@@ -39,7 +40,7 @@ class TestSystemWithCheckGarbage(object):
                 assert ldrive.volume_info
             except WindowsError as e:
                 #handle ERROR_NOT_READY returned by A: in github CI
-                if e.winerror != ERROR_NOT_READY:
+                if e.winerror != gdef.ERROR_NOT_READY:
                     raise
 
     def test_wmi(self):
