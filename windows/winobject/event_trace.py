@@ -97,28 +97,28 @@ class EventTraceProperties(gdef.EVENT_TRACE_PROPERTIES):
 
     def get_logfilename(self):
         assert self.LogFileNameOffset
-        return windows.current_process.read_string(ctypes.addressof(self) + self.LogFileNameOffset)
+        return windows.current_process.read_wstring(ctypes.addressof(self) + self.LogFileNameOffset)
 
     def set_logfilename(self, filename):
         assert self.LogFileNameOffset
         if not filename.endswith("\x00"):
             filename += "\x00"
-        return windows.current_process.write_memory(ctypes.addressof(self) + self.LogFileNameOffset, filename)
+        return windows.current_process.write_memory(ctypes.addressof(self) + self.LogFileNameOffset, filename.encode("utf-16-le"))
 
     logfile = property(get_logfilename, set_logfilename) #: The logfile associated with the session
 
     def get_logger_name(self):
         assert self.LoggerNameOffset
-        return windows.current_process.read_string(ctypes.addressof(self) + self.LoggerNameOffset)
+        return windows.current_process.read_wstring(ctypes.addressof(self) + self.LoggerNameOffset)
 
 
-    def set_logfilename(self, filename):
+    def set_logger_name(self, filename):
         assert self.LoggerNameOffset
         if not filename.endswith("\x00"):
             filename += "\x00"
-        return windows.current_process.write_memory(ctypes.addressof(self) + self.LoggerNameOffset, filename)
+        return windows.current_process.write_memory(ctypes.addressof(self) + self.LoggerNameOffset, filename.encode("utf-16-le"))
 
-    name = property(get_logger_name, set_logfilename) #: The name of the session
+    name = property(get_logger_name, set_logger_name) #: The name of the session
 
     @property
     def guid(self):
@@ -168,7 +168,7 @@ class CtxProcess(object):
 class EtwTrace(object):
     """Represent an ETW Trace for tracing/processing events"""
     def __init__(self, name, logfile=None, guid=None):
-        self.name = windows.pycompat.raw_encode(name) #: The name of the trace
+        self.name = name #: The name of the trace
         self.logfile = logfile #: The logging file of the trace (``None`` means real time trace)
         if guid and isinstance(guid, basestring):
             guid = gdef.GUID.from_string(guid)
@@ -179,7 +179,7 @@ class EtwTrace(object):
         """Return ``True`` if the trace already exist (based on its name)"""
         prop = EventTraceProperties.create()
         try:
-            windows.winproxy.ControlTraceA(self.handle, self.name, prop, gdef.EVENT_TRACE_CONTROL_QUERY)
+            windows.winproxy.ControlTraceW(self.handle, self.name, prop, gdef.EVENT_TRACE_CONTROL_QUERY)
         except WindowsError as e:
             if e.winerror == gdef.ERROR_WMI_INSTANCE_NOT_FOUND:
                 return False # Not found -> does not exists
@@ -199,7 +199,7 @@ class EtwTrace(object):
         if self.name: # Base REAL_TIME on option ? name presence ? logfile presence ?
             prop.LogFileMode |= gdef.EVENT_TRACE_REAL_TIME_MODE
         handle = gdef.TRACEHANDLE()
-        windows.winproxy.StartTraceA(handle, self.name, prop)
+        windows.winproxy.StartTraceW(handle, self.name, prop)
         if not self.guid:
             self.guid = prop.Wnode.Guid
         self.handle = handle
@@ -212,7 +212,7 @@ class EtwTrace(object):
         """
         prop = EventTraceProperties.create()
         try:
-            windows.winproxy.ControlTraceA(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_STOP)
+            windows.winproxy.ControlTraceW(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_STOP)
         except WindowsError as e:
             if soft and e.winerror == gdef.ERROR_WMI_INSTANCE_NOT_FOUND:
                 return False
@@ -222,7 +222,7 @@ class EtwTrace(object):
     def flush(self):
         """Flush the trace"""
         prop = EventTraceProperties.create()
-        windows.winproxy.ControlTraceA(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_FLUSH)
+        windows.winproxy.ControlTraceW(0, self.name, prop, gdef.EVENT_TRACE_CONTROL_FLUSH)
 
 
     def enable(self, guid, flags=0xff, level=0xff):
@@ -424,7 +424,7 @@ class EtwManager(object):
         # Cast as array/ptr does not handle subtypes very-well
         tarray = ctypes.cast(array, ctypes.POINTER(ctypes.POINTER(gdef.EVENT_TRACE_PROPERTIES)))
         count = gdef.DWORD()
-        windows.winproxy.QueryAllTracesA(tarray, MAX_ETW_SESSIONS, count)
+        windows.winproxy.QueryAllTracesW(tarray, MAX_ETW_SESSIONS, count)
         return t[:count.value]
 
 
