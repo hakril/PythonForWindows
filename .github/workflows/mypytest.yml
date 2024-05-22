@@ -68,3 +68,4 @@ jobs:
         if: always()
         with:
           files: junit/test-results.xml
+          check_name: PyTest Results for ${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}}
