@@ -7,6 +7,8 @@ import windows.generated_def as gdef
 from windows.security import SecurityDescriptor
 from windows.utils import fixedproperty
 
+from windows.pycompat import urepr_encode
+
 
 class DeviceManager(object):
     """Represent the device manager"""
@@ -44,7 +46,6 @@ class DeviceManager(object):
 class DeviceClass(gdef.GUID):
     """A Device class, which is mainly a :class:`GUID` with additional attributes"""
     def __init__(self):
-        # Bypass GUID __init__ that is not revelant here
         pass
 
     @fixedproperty
@@ -61,17 +62,17 @@ class DeviceClass(gdef.GUID):
         return self.enumerate_devices()
 
     def enumerate_devices(self, flags=0):
-        handle = winproxy.SetupDiGetClassDevsA(self, Flags=flags)
+        handle = winproxy.SetupDiGetClassDevsW(self, Flags=flags)
         return DeviceInformationSet(handle)
 
     def _get_device_class_name(self):
-        name = ctypes.create_string_buffer(gdef.MAX_CLASS_NAME_LEN)
-        winproxy.SetupDiClassNameFromGuidA(self, name)
+        name = ctypes.create_unicode_buffer(gdef.MAX_CLASS_NAME_LEN)
+        winproxy.SetupDiClassNameFromGuidW(self, name)
         return name.value
 
     def __repr__(self):
         guid_cls = self.to_string()
-        return """<{0} name="{1}" guid={2}>""".format(type(self).__name__, self.name, guid_cls)
+        return urepr_encode(u"""<{0} name="{1}" guid={2}>""".format(type(self).__name__, self.name, guid_cls))
 
     __str__ = __repr__ # Overwrite default GUID str
 
@@ -288,7 +289,7 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
         return SecurityDescriptor.from_binary(self.raw_security_descriptor)
 
     def __repr__(self):
-        return """<{0} "{1}" (id={2})>""".format(type(self).__name__, self.description, self.DevInst)
+        return urepr_encode(u"""<{0} "{1}" (id={2})>""".format(type(self).__name__, self.description, self.DevInst))
 
 
 class LogicalConfiguration(gdef.HANDLE):
@@ -328,7 +329,7 @@ class LogicalConfiguration(gdef.HANDLE):
         return list(self.get_resources_for_type(gdef.ResType_All))
 
     def __repr__(self):
-        return "<{0}>".format(type(self).__name__)
+        return urepr_encode(u"<{0}>".format(type(self).__name__))
 
 
 ResType_Mapper = gdef.FlagMapper(
@@ -386,7 +387,7 @@ class ResourceDescriptor(gdef.HANDLE):
         return bytearray(buffer[:data_size])
 
     def __repr__(self):
-        return "<{0} type={1!r}>".format(type(self).__name__, self.type)
+        return urepr_encode(u"<{0} type={1!r}>".format(type(self).__name__, self.type))
 
 
 class ResourceDescriptorWithHeader(ResourceDescriptor):
