@@ -120,10 +120,11 @@ def device_io_control(handle, iocode, buffer):
     return outbuffer[:returned_size.value]
 
 
-
+# TODO: remove/rename me
+# Real API with WinProcess.create() ?
 def tmp_cp_as(path, token):
     proc_info = PROCESS_INFORMATION()
-    windows.winproxy.CreateProcessAsUserA(token, path, lpCommandLine=None, dwCreationFlags=gdef.CREATE_NEW_CONSOLE, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=None)
+    windows.winproxy.CreateProcessAsUserW(token, path, lpCommandLine=None, dwCreationFlags=gdef.CREATE_NEW_CONSOLE, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=None)
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 def find_handle(proc, value):
@@ -131,7 +132,7 @@ def find_handle(proc, value):
 
 def lookup_privilege_value(privilege_name):
     luid = LUID()
-    winproxy.LookupPrivilegeValueA(None, privilege_name, byref(luid))
+    winproxy.LookupPrivilegeValueW(None, privilege_name, byref(luid))
     return luid
 
 def lookup_privilege_name(privilege_value):
@@ -139,8 +140,8 @@ def lookup_privilege_name(privilege_value):
         luid = LUID(privilege_value[1], privilege_value[0])
         privilege_value = luid
     size = DWORD(0x100)
-    buff = ctypes.c_buffer(size.value)
-    winproxy.LookupPrivilegeNameA(None, privilege_value, buff, size)
+    buff = ctypes.create_unicode_buffer(size.value)
+    winproxy.LookupPrivilegeNameW(None, privilege_value, buff, size)
     return buff[:size.value]
 
 
@@ -188,7 +189,7 @@ def enable_privilege(lpszPrivilege, bEnablePrivilege):
     hToken = HANDLE()
 
     winproxy.OpenProcessToken(winproxy.GetCurrentProcess(), TOKEN_ALL_ACCESS, byref(hToken))
-    winproxy.LookupPrivilegeValueA(None, lpszPrivilege, byref(luid))
+    winproxy.LookupPrivilegeValueW(None, lpszPrivilege, byref(luid))
     tp.PrivilegeCount = 1
     tp.Privileges[0].Luid = luid
     if bEnablePrivilege:
@@ -542,13 +543,13 @@ def dospath_to_ntpath(dospath):
 
 def get_shared_mapping(name=None, handle=INVALID_HANDLE_VALUE, size=0x1000):
     # TODO: real code
-    h = windows.winproxy.CreateFileMappingA(handle, dwMaximumSizeLow=size, lpName=name)
+    h = windows.winproxy.CreateFileMappingW(handle, dwMaximumSizeLow=size, lpName=name)
     addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
     return addr
 
 
 def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, security=None, creation=gdef.OPEN_EXISTING, flags=gdef.FILE_ATTRIBUTE_NORMAL):
-    return windows.winproxy.CreateFileA(name, access, share, security, creation, flags, 0)
+    return windows.winproxy.CreateFileW(name, access, share, security, creation, flags, 0)
 
 #def mapfile(file):
 #    fhandle = get_handle_from_file(file)
