@@ -2510,6 +2510,11 @@ SymEnumTypesParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'EnumSymbolsCallbac
 SymEnumTypesByNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PVOID, PVOID)
 SymEnumTypesByNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
 
+#def SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypesByNameW.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
+SymEnumTypesByNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PVOID, PVOID)
+SymEnumTypesByNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
+
 #def SymEnumerateModules64(hProcess, EnumModulesCallback, UserContext):
 #    return SymEnumerateModules64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
 SymEnumerateModules64Prototype = WINFUNCTYPE(BOOL, HANDLE, PVOID, PVOID)
@@ -2634,6 +2639,11 @@ SymEnumSymbolsForAddrWParams = ((1, 'hProcess'), (1, 'Address'), (1, 'EnumSymbol
 #    return SymGetTypeFromName.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
 SymGetTypeFromNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PSYMBOL_INFO)
 SymGetTypeFromNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Name'), (1, 'Symbol'))
+
+#def SymGetTypeFromNameW(hProcess, BaseOfDll, Name, Symbol):
+#    return SymGetTypeFromNameW.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
+SymGetTypeFromNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PSYMBOL_INFOW)
+SymGetTypeFromNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Name'), (1, 'Symbol'))
 
 #def SymGetTypeInfo(hProcess, ModBase, TypeId, GetType, pInfo):
 #    return SymGetTypeInfo.ctypes_function(hProcess, ModBase, TypeId, GetType, pInfo)

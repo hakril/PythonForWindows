@@ -50,8 +50,7 @@ class SymbolInfoBase(object):
 
     def __init__(self, *args, **kwargs):
         self.resolver = kwargs.get("resolver", None)
-        #: POUET POUET
-        self.displacement = kwargs.get("displacement", 0) #: POUET POUET
+        self.displacement = kwargs.get("displacement", 0)
 
 
     def as_type(self):
@@ -162,7 +161,15 @@ class SymbolType(object):
         res = ires
         if res is None:
             res = TST_TYPE_RES_TYPE.get(typeinfo, gdef.DWORD)()
-        windows.winproxy.SymGetTypeInfo(self.resolver.handle, self.modbase, self._typeid, typeinfo, ctypes.byref(res))
+        try:
+            windows.winproxy.SymGetTypeInfo(self.resolver.handle, self.modbase, self._typeid, typeinfo, ctypes.byref(res))
+        except WindowsError as e:
+            if e.winerror == gdef.ERROR_INVALID_FUNCTION:
+                # invalid function on object -> None
+                # We may lose some information with that between no return value VS error
+                # Explicit verification on attributes per tags ?
+                return None
+            raise
         if ires is not None:
             return ires
         newres = res.value
@@ -212,12 +219,21 @@ class SymbolType(object):
         return self._get_type_info(gdef.TI_GET_OFFSET)
 
     @property
+    def count(self):
+        # Only valid on tag == SymTagArrayType
+        return self._get_type_info(gdef.TI_GET_COUNT)
+
+    @property
     def nb_children(self):
         return self._get_type_info(gdef.TI_GET_CHILDRENCOUNT)
 
     @property
     def value(self):
         return self._get_type_info(gdef.TI_GET_VALUE)
+
+    @property
+    def address(self):
+        return self._get_type_info(gdef.TI_GET_ADDRESS)
 
     @property
     def children(self):
@@ -237,15 +253,25 @@ class SymbolType(object):
 
     # Constructor
     def new_typeid(self, newtypeid):
+        if newtypeid is None:
+            return None
         return type(self)(newtypeid, self.modbase, self.resolver)
 
     def __repr__(self):
         if self.tag == gdef.SymTagBaseType:
             return '<{0} <basetype> {1!r}>'.format(type(self).__name__, self.basetype)
+        elif self.tag == gdef.SymTagArrayType:
+            target_type = self.type.name
+            array_size = self.count
+            return '<{0} {1}[{2}] tag={3!r}>'.format(type(self).__name__, target_type, array_size, self.tag)
         elif self.tag == gdef.SymTagPointerType:
             target_type = self.type.name
-            return '<{0} PTR TO "{1}" tag={2}>'.format(type(self).__name__, target_type, self.tag)
-        return '<{0} name="{1}" tag={2}>'.format(type(self).__name__, self.name, self.tag)
+            if self.type.tag == gdef.SymTagBaseType:
+                target_type = repr(self.type.basetype)
+            else:
+                target_type = self.type.name
+            return '<{0} PTR TO "{1}" tag={2!r}>'.format(type(self).__name__, target_type, self.tag)
+        return '<{0} name="{1}" tag={2!r}>'.format(type(self).__name__, self.name, self.tag)
 
 
 class SymbolModule(gdef.IMAGEHLP_MODULEW64):
@@ -526,7 +552,7 @@ class SymbolHandler(object):
         buff = windows.utils.BUFFER(SymbolInfo)(size=full_size)
         buff[0].SizeOfStruct = ctypes.sizeof(SymbolInfo)
         buff[0].MaxNameLen  = max_len_size
-        windows.winproxy.SymGetTypeFromName(self.handle, mod, name, buff)
+        windows.winproxy.SymGetTypeFromNameW(self.handle, mod, name, buff)
         return SymbolType.from_symbol_info(buff[0], resolver=self)
 
 

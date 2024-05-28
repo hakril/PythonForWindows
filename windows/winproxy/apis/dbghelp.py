@@ -105,6 +105,10 @@ def SymGetTypeInfo(hProcess, ModBase, TypeId, GetType, pInfo):
     return SymGetTypeInfo.ctypes_function(hProcess, ModBase, TypeId, GetType, pInfo)
 
 @DbgHelpProxy()
+def SymGetTypeFromNameW(hProcess, BaseOfDll, Name, Symbol):
+   return SymGetTypeFromNameW.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
+
+@DbgHelpProxy()
 def SymEnumSymbols(hProcess, BaseOfDll, Mask, EnumSymbolsCallback, UserContext=None):
     UserContext = transform_pyobject_to_pvoid(UserContext)
     return SymEnumSymbols.ctypes_function(hProcess, BaseOfDll, Mask, EnumSymbolsCallback, UserContext)
