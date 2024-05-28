@@ -39,10 +39,16 @@ class LogicalDrive(AutoHandle):
         """The target path of the device
 
         :type: :class:`str`"""
-        res = query_dos_device(self.name.strip("\\"))
-        if len(res) != 1:
-            raise ValueError("[Unexpected result] query_dos_device(logicaldrive) returned multiple path")
-        return res[0]
+        # QueryDosDevice can returns multiple path if DefineDosDevice(AW) was used before
+        # Looks like its per-process
+        # But in ths cas the first entry is the effective-one and the others are the previous entries
+        # https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querydosdevicea
+        # The first null-terminated string stored into the buffer is the current mapping for the device. The other null-terminated strings represent undeleted prior mappings for the device.
+        return query_dos_device(self.name.strip("\\"))[0]
+
+    @property
+    def query_dos_device(self):
+        return query_dos_device(self.name.strip("\\"))
 
     def query_info(self, info):
         return windows.utils.query_volume_information(self.handle, info)
