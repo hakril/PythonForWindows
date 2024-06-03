@@ -399,7 +399,39 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
    return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
 
+## Io
 
+@Kernel32Proxy()
+def GetOverlappedResult(hFile, lpOverlapped, lpNumberOfBytesTransferred, bWait):
+   return GetOverlappedResult.ctypes_function(hFile, lpOverlapped, lpNumberOfBytesTransferred, bWait)
+
+@Kernel32Proxy()
+def CreateIoCompletionPort(FileHandle, ExistingCompletionPort, CompletionKey, NumberOfConcurrentThreads):
+   return CreateIoCompletionPort.ctypes_function(FileHandle, ExistingCompletionPort, CompletionKey, NumberOfConcurrentThreads)
+
+@Kernel32Proxy()
+def GetQueuedCompletionStatus(CompletionPort, lpNumberOfBytesTransferred, lpCompletionKey, lpOverlapped, dwMilliseconds):
+   return GetQueuedCompletionStatus.ctypes_function(CompletionPort, lpNumberOfBytesTransferred, lpCompletionKey, lpOverlapped, dwMilliseconds)
+
+@Kernel32Proxy()
+def GetQueuedCompletionStatusEx(CompletionPort, lpCompletionPortEntries, ulCount, ulNumEntriesRemoved, dwMilliseconds, fAlertable):
+   return GetQueuedCompletionStatusEx.ctypes_function(CompletionPort, lpCompletionPortEntries, ulCount, ulNumEntriesRemoved, dwMilliseconds, fAlertable)
+
+@Kernel32Proxy()
+def PostQueuedCompletionStatus(CompletionPort, dwNumberOfBytesTransferred, dwCompletionKey, lpOverlapped):
+   return PostQueuedCompletionStatus.ctypes_function(CompletionPort, dwNumberOfBytesTransferred, dwCompletionKey, lpOverlapped)
+
+@Kernel32Proxy()
+def CancelIo(hFile):
+   return CancelIo.ctypes_function(hFile)
+
+@Kernel32Proxy()
+def CancelIoEx(hFile, lpOverlapped):
+   return CancelIoEx.ctypes_function(hFile, lpOverlapped)
+
+@Kernel32Proxy()
+def CancelSynchronousIo(hThread):
+   return CancelSynchronousIo.ctypes_function(hThread)
 
 
 ## Other
