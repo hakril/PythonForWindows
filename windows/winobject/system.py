@@ -475,6 +475,32 @@ class System(object):
         key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
         return int(key["CurrentBuildNumber"].value)
 
+    @utils.fixedproperty
+    def versionstr(self):
+            # Best effort. use get_file_version if registry code fails
+        try:
+            # Does not works on Win7..
+            # Missing CurrentMajorVersionNumber/CurrentMinorVersionNumber/UBR
+            # We have CurrentVersion instead
+            # Use this code and get_file_version as a backup ?
+            curver_key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+            try:
+                major = curver_key["CurrentMajorVersionNumber"].value
+                minor = curver_key["CurrentMinorVersionNumber"].value
+            except WindowsError as e:
+                version = curver_key["CurrentVersion"].value
+                # May raise ValueError if no "."
+                major, minor = version.split(".")
+            build = curver_key["CurrentBuildNumber"].value
+            # Update Build Revision
+            try:
+                ubr = curver_key["UBR"].value
+            except WindowsError as e:
+                ubr = 0 # Not present on Win7
+            return "{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
+        except (WindowsError, ValueError):
+            return self.get_file_version("ntdll")
+
     @utils.fixedpropety
     def kuser_shared_data(self):
         # For now we only returns a "common-group" KUSER which only contains the
