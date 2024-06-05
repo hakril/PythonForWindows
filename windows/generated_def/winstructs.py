@@ -1241,8 +1241,8 @@ class _OVERLAPPED_ENTRY(Structure):
         ("Internal", ULONG_PTR),
         ("dwNumberOfBytesTransferred", DWORD),
     ]
-OVERLAPPED_ENTRY = _OVERLAPPED_ENTRY
 LPOVERLAPPED_ENTRY = POINTER(_OVERLAPPED_ENTRY)
+OVERLAPPED_ENTRY = _OVERLAPPED_ENTRY
 
 ProcessDEPPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessDEPPolicy", 0x0)
 ProcessASLRPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessASLRPolicy", 0x1)
@@ -2589,8 +2589,8 @@ class _IMAGE_SECTION_HEADER(Structure):
         ("NumberOfLinenumbers", WORD),
         ("Characteristics", DWORD),
     ]
-PIMAGE_SECTION_HEADER = POINTER(_IMAGE_SECTION_HEADER)
 IMAGE_SECTION_HEADER = _IMAGE_SECTION_HEADER
+PIMAGE_SECTION_HEADER = POINTER(_IMAGE_SECTION_HEADER)
 
 class _IMAGE_OPTIONAL_HEADER64(Structure):
     _fields_ = [
@@ -2625,8 +2625,8 @@ class _IMAGE_OPTIONAL_HEADER64(Structure):
         ("NumberOfRvaAndSizes", DWORD),
         ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
     ]
-PIMAGE_OPTIONAL_HEADER64 = POINTER(_IMAGE_OPTIONAL_HEADER64)
 IMAGE_OPTIONAL_HEADER64 = _IMAGE_OPTIONAL_HEADER64
+PIMAGE_OPTIONAL_HEADER64 = POINTER(_IMAGE_OPTIONAL_HEADER64)
 
 class _IMAGE_OPTIONAL_HEADER(Structure):
     _fields_ = [
@@ -2662,8 +2662,8 @@ class _IMAGE_OPTIONAL_HEADER(Structure):
         ("NumberOfRvaAndSizes", DWORD),
         ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
     ]
-PIMAGE_OPTIONAL_HEADER32 = POINTER(_IMAGE_OPTIONAL_HEADER)
 IMAGE_OPTIONAL_HEADER32 = _IMAGE_OPTIONAL_HEADER
+PIMAGE_OPTIONAL_HEADER32 = POINTER(_IMAGE_OPTIONAL_HEADER)
 
 class _IMAGE_NT_HEADERS64(Structure):
     _fields_ = [
@@ -2671,8 +2671,8 @@ class _IMAGE_NT_HEADERS64(Structure):
         ("FileHeader", IMAGE_FILE_HEADER),
         ("OptionalHeader", IMAGE_OPTIONAL_HEADER64),
     ]
-PIMAGE_NT_HEADERS64 = POINTER(_IMAGE_NT_HEADERS64)
 IMAGE_NT_HEADERS64 = _IMAGE_NT_HEADERS64
+PIMAGE_NT_HEADERS64 = POINTER(_IMAGE_NT_HEADERS64)
 
 class _IMAGE_NT_HEADERS(Structure):
     _fields_ = [
@@ -2699,8 +2699,8 @@ class _IMAGE_IMPORT_BY_NAME(Structure):
         ("Hint", WORD),
         ("Name", BYTE * (1)),
     ]
-PIMAGE_IMPORT_BY_NAME = POINTER(_IMAGE_IMPORT_BY_NAME)
 IMAGE_IMPORT_BY_NAME = _IMAGE_IMPORT_BY_NAME
+PIMAGE_IMPORT_BY_NAME = POINTER(_IMAGE_IMPORT_BY_NAME)
 
 class _IMAGE_EXPORT_DIRECTORY(Structure):
     _fields_ = [
@@ -2730,16 +2730,16 @@ class _IMAGE_DEBUG_DIRECTORY(Structure):
         ("AddressOfRawData", DWORD),
         ("PointerToRawData", DWORD),
     ]
-PIMAGE_DEBUG_DIRECTORY = POINTER(_IMAGE_DEBUG_DIRECTORY)
 IMAGE_DEBUG_DIRECTORY = _IMAGE_DEBUG_DIRECTORY
+PIMAGE_DEBUG_DIRECTORY = POINTER(_IMAGE_DEBUG_DIRECTORY)
 
 class _IMAGE_BASE_RELOCATION(Structure):
     _fields_ = [
         ("VirtualAddress", DWORD),
         ("SizeOfBlock", DWORD),
     ]
-PIMAGE_BASE_RELOCATION = POINTER(_IMAGE_BASE_RELOCATION)
 IMAGE_BASE_RELOCATION = _IMAGE_BASE_RELOCATION
+PIMAGE_BASE_RELOCATION = POINTER(_IMAGE_BASE_RELOCATION)
 
 class _IMAGE_LOAD_CONFIG_CODE_INTEGRITY(Structure):
     _fields_ = [
@@ -2748,8 +2748,8 @@ class _IMAGE_LOAD_CONFIG_CODE_INTEGRITY(Structure):
         ("CatalogOffset", DWORD),
         ("Reserved", DWORD),
     ]
-PIMAGE_LOAD_CONFIG_CODE_INTEGRITY = POINTER(_IMAGE_LOAD_CONFIG_CODE_INTEGRITY)
 IMAGE_LOAD_CONFIG_CODE_INTEGRITY = _IMAGE_LOAD_CONFIG_CODE_INTEGRITY
+PIMAGE_LOAD_CONFIG_CODE_INTEGRITY = POINTER(_IMAGE_LOAD_CONFIG_CODE_INTEGRITY)
 
 class _IMAGE_LOAD_CONFIG_DIRECTORY32(Structure):
     _fields_ = [
@@ -5005,192 +5005,6 @@ class _LDR_DATA_TABLE_ENTRY(Structure):
     ]
 LDR_DATA_TABLE_ENTRY = _LDR_DATA_TABLE_ENTRY
 PLDR_DATA_TABLE_ENTRY = POINTER(_LDR_DATA_TABLE_ENTRY)
-
-class _IMAGE_FILE_HEADER(Structure):
-    _fields_ = [
-        ("Machine", WORD),
-        ("NumberOfSections", WORD),
-        ("TimeDateStamp", DWORD),
-        ("PointerToSymbolTable", DWORD),
-        ("NumberOfSymbols", DWORD),
-        ("SizeOfOptionalHeader", WORD),
-        ("Characteristics", WORD),
-    ]
-IMAGE_FILE_HEADER = _IMAGE_FILE_HEADER
-PIMAGE_FILE_HEADER = POINTER(_IMAGE_FILE_HEADER)
-
-class _IMAGE_DATA_DIRECTORY(Structure):
-    _fields_ = [
-        ("VirtualAddress", DWORD),
-        ("Size", DWORD),
-    ]
-IMAGE_DATA_DIRECTORY = _IMAGE_DATA_DIRECTORY
-PIMAGE_DATA_DIRECTORY = POINTER(_IMAGE_DATA_DIRECTORY)
-
-class _IMAGE_SECTION_HEADER(Structure):
-    _fields_ = [
-        ("Name", BYTE * (IMAGE_SIZEOF_SHORT_NAME)),
-        ("VirtualSize", DWORD),
-        ("VirtualAddress", DWORD),
-        ("SizeOfRawData", DWORD),
-        ("PointerToRawData", DWORD),
-        ("PointerToRelocations", DWORD),
-        ("PointerToLinenumbers", DWORD),
-        ("NumberOfRelocations", WORD),
-        ("NumberOfLinenumbers", WORD),
-        ("Characteristics", DWORD),
-    ]
-IMAGE_SECTION_HEADER = _IMAGE_SECTION_HEADER
-PIMAGE_SECTION_HEADER = POINTER(_IMAGE_SECTION_HEADER)
-
-class _IMAGE_OPTIONAL_HEADER64(Structure):
-    _fields_ = [
-        ("Magic", WORD),
-        ("MajorLinkerVersion", BYTE),
-        ("MinorLinkerVersion", BYTE),
-        ("SizeOfCode", DWORD),
-        ("SizeOfInitializedData", DWORD),
-        ("SizeOfUninitializedData", DWORD),
-        ("AddressOfEntryPoint", DWORD),
-        ("BaseOfCode", DWORD),
-        ("ImageBase", ULONGLONG),
-        ("SectionAlignment", DWORD),
-        ("FileAlignment", DWORD),
-        ("MajorOperatingSystemVersion", WORD),
-        ("MinorOperatingSystemVersion", WORD),
-        ("MajorImageVersion", WORD),
-        ("MinorImageVersion", WORD),
-        ("MajorSubsystemVersion", WORD),
-        ("MinorSubsystemVersion", WORD),
-        ("Win32VersionValue", DWORD),
-        ("SizeOfImage", DWORD),
-        ("SizeOfHeaders", DWORD),
-        ("CheckSum", DWORD),
-        ("Subsystem", WORD),
-        ("DllCharacteristics", WORD),
-        ("SizeOfStackReserve", ULONGLONG),
-        ("SizeOfStackCommit", ULONGLONG),
-        ("SizeOfHeapReserve", ULONGLONG),
-        ("SizeOfHeapCommit", ULONGLONG),
-        ("LoaderFlags", DWORD),
-        ("NumberOfRvaAndSizes", DWORD),
-        ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
-    ]
-IMAGE_OPTIONAL_HEADER64 = _IMAGE_OPTIONAL_HEADER64
-PIMAGE_OPTIONAL_HEADER64 = POINTER(_IMAGE_OPTIONAL_HEADER64)
-
-class _IMAGE_OPTIONAL_HEADER(Structure):
-    _fields_ = [
-        ("Magic", WORD),
-        ("MajorLinkerVersion", BYTE),
-        ("MinorLinkerVersion", BYTE),
-        ("SizeOfCode", DWORD),
-        ("SizeOfInitializedData", DWORD),
-        ("SizeOfUninitializedData", DWORD),
-        ("AddressOfEntryPoint", DWORD),
-        ("BaseOfCode", DWORD),
-        ("BaseOfData", DWORD),
-        ("ImageBase", DWORD),
-        ("SectionAlignment", DWORD),
-        ("FileAlignment", DWORD),
-        ("MajorOperatingSystemVersion", WORD),
-        ("MinorOperatingSystemVersion", WORD),
-        ("MajorImageVersion", WORD),
-        ("MinorImageVersion", WORD),
-        ("MajorSubsystemVersion", WORD),
-        ("MinorSubsystemVersion", WORD),
-        ("Win32VersionValue", DWORD),
-        ("SizeOfImage", DWORD),
-        ("SizeOfHeaders", DWORD),
-        ("CheckSum", DWORD),
-        ("Subsystem", WORD),
-        ("DllCharacteristics", WORD),
-        ("SizeOfStackReserve", DWORD),
-        ("SizeOfStackCommit", DWORD),
-        ("SizeOfHeapReserve", DWORD),
-        ("SizeOfHeapCommit", DWORD),
-        ("LoaderFlags", DWORD),
-        ("NumberOfRvaAndSizes", DWORD),
-        ("DataDirectory", IMAGE_DATA_DIRECTORY * (IMAGE_NUMBEROF_DIRECTORY_ENTRIES)),
-    ]
-IMAGE_OPTIONAL_HEADER32 = _IMAGE_OPTIONAL_HEADER
-PIMAGE_OPTIONAL_HEADER32 = POINTER(_IMAGE_OPTIONAL_HEADER)
-
-class _IMAGE_NT_HEADERS64(Structure):
-    _fields_ = [
-        ("Signature", DWORD),
-        ("FileHeader", IMAGE_FILE_HEADER),
-        ("OptionalHeader", IMAGE_OPTIONAL_HEADER64),
-    ]
-IMAGE_NT_HEADERS64 = _IMAGE_NT_HEADERS64
-PIMAGE_NT_HEADERS64 = POINTER(_IMAGE_NT_HEADERS64)
-
-class _IMAGE_NT_HEADERS(Structure):
-    _fields_ = [
-        ("Signature", DWORD),
-        ("FileHeader", IMAGE_FILE_HEADER),
-        ("OptionalHeader", IMAGE_OPTIONAL_HEADER32),
-    ]
-IMAGE_NT_HEADERS32 = _IMAGE_NT_HEADERS
-PIMAGE_NT_HEADERS32 = POINTER(_IMAGE_NT_HEADERS)
-
-class _IMAGE_IMPORT_DESCRIPTOR(Structure):
-    _fields_ = [
-        ("OriginalFirstThunk", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("ForwarderChain", DWORD),
-        ("Name", DWORD),
-        ("FirstThunk", DWORD),
-    ]
-IMAGE_IMPORT_DESCRIPTOR = _IMAGE_IMPORT_DESCRIPTOR
-PIMAGE_IMPORT_DESCRIPTOR = POINTER(_IMAGE_IMPORT_DESCRIPTOR)
-
-class _IMAGE_IMPORT_BY_NAME(Structure):
-    _fields_ = [
-        ("Hint", WORD),
-        ("Name", BYTE * (1)),
-    ]
-IMAGE_IMPORT_BY_NAME = _IMAGE_IMPORT_BY_NAME
-PIMAGE_IMPORT_BY_NAME = POINTER(_IMAGE_IMPORT_BY_NAME)
-
-class _IMAGE_EXPORT_DIRECTORY(Structure):
-    _fields_ = [
-        ("Characteristics", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("MajorVersion", WORD),
-        ("MinorVersion", WORD),
-        ("Name", DWORD),
-        ("Base", DWORD),
-        ("NumberOfFunctions", DWORD),
-        ("NumberOfNames", DWORD),
-        ("AddressOfFunctions", DWORD),
-        ("AddressOfNames", DWORD),
-        ("AddressOfNameOrdinals", DWORD),
-    ]
-IMAGE_EXPORT_DIRECTORY = _IMAGE_EXPORT_DIRECTORY
-PIMAGE_EXPORT_DIRECTORY = POINTER(_IMAGE_EXPORT_DIRECTORY)
-
-class _IMAGE_DEBUG_DIRECTORY(Structure):
-    _fields_ = [
-        ("Characteristics", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("MajorVersion", WORD),
-        ("MinorVersion", WORD),
-        ("Type", DWORD),
-        ("SizeOfData", DWORD),
-        ("AddressOfRawData", DWORD),
-        ("PointerToRawData", DWORD),
-    ]
-IMAGE_DEBUG_DIRECTORY = _IMAGE_DEBUG_DIRECTORY
-PIMAGE_DEBUG_DIRECTORY = POINTER(_IMAGE_DEBUG_DIRECTORY)
-
-class _IMAGE_BASE_RELOCATION(Structure):
-    _fields_ = [
-        ("VirtualAddress", DWORD),
-        ("SizeOfBlock", DWORD),
-    ]
-IMAGE_BASE_RELOCATION = _IMAGE_BASE_RELOCATION
-PIMAGE_BASE_RELOCATION = POINTER(_IMAGE_BASE_RELOCATION)
 
 class _MEMORY_BASIC_INFORMATION(Structure):
     _fields_ = [
