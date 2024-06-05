@@ -29,7 +29,7 @@ def query_link(linkpath):
         # If our initial 1000 buffer is not enought (improbable) retry with correct size
         v = gdef.LSA_UNICODE_STRING.from_size(s.value)
         winproxy.NtQuerySymbolicLinkObject(res, v, s)
-    return v.str
+    return v.str # Unicode
 
 
 class KernelObject(object):

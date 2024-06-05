@@ -672,9 +672,7 @@ class CurrentProcess(Process):
 
     def write_memory(self, addr, data):
         """Write data at addr"""
-        data = bytes(raw_encode(data))
-        # buffertype = (c_char * len(data)).from_address(addr)
-        # buffertype[:len(data)] = data
+        data = bytes(raw_encode(data)) # We should only accept byte, but we are kind and will try to encode to latin-1 for simple ascii compat
         ctypes.memmove(addr, data, len(data))
         return True
 
@@ -1056,7 +1054,7 @@ class WinProcess(Process):
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
-        data = raw_encode(data)
+        data = raw_encode(data) # We should only accept byte, but we are kind and will try to encode to latin-1 for simple ascii compat
         if windows.current_process.bitness == 32 and self.bitness == 64:
             if not winproxy.is_implemented(winproxy.NtWow64WriteVirtualMemory64):
                 raise ValueError("NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
