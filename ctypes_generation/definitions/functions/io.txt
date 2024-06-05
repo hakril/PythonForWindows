@@ -1,0 +1,51 @@
+BOOL GetOverlappedResult(
+  [in]  HANDLE       hFile,
+  [in]  LPOVERLAPPED lpOverlapped,
+  [out] LPDWORD      lpNumberOfBytesTransferred,
+  [in]  BOOL         bWait
+);
+
+HANDLE CreateIoCompletionPort(
+  [in]           HANDLE    FileHandle,
+  [in, optional] HANDLE    ExistingCompletionPort,
+  [in]           ULONG_PTR CompletionKey,
+  [in]           DWORD     NumberOfConcurrentThreads
+);
+
+BOOL GetQueuedCompletionStatus(
+  [in]  HANDLE       CompletionPort,
+        LPDWORD      lpNumberOfBytesTransferred,
+  [out] PULONG_PTR   lpCompletionKey,
+  [out] LPOVERLAPPED *lpOverlapped,
+  [in]  DWORD        dwMilliseconds
+);
+
+BOOL GetQueuedCompletionStatusEx(
+  [in]  HANDLE             CompletionPort,
+  [out] LPOVERLAPPED_ENTRY lpCompletionPortEntries,
+  [in]  ULONG              ulCount,
+  [out] PULONG             ulNumEntriesRemoved,
+  [in]  DWORD              dwMilliseconds,
+  [in]  BOOL               fAlertable
+);
+
+BOOL PostQueuedCompletionStatus(
+  [in]           HANDLE       CompletionPort,
+  [in]           DWORD        dwNumberOfBytesTransferred,
+  [in]           ULONG_PTR    dwCompletionKey,
+  [in, optional] LPOVERLAPPED lpOverlapped
+);
+
+BOOL CancelIo(
+  [in] HANDLE hFile
+);
+
+BOOL CancelIoEx(
+  [in]           HANDLE       hFile,
+  [in, optional] LPOVERLAPPED lpOverlapped
+);
+
+BOOL CancelSynchronousIo(
+  [in] HANDLE hThread
+);
+

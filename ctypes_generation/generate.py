@@ -661,9 +661,11 @@ class ModuleGenerator(object):
     def add_module_dependancy(self, module):
         self.dependances_modules.add(module)
 
-
     def get_template_filename(self):
         return pjoin(self.src, "template.py")
+
+    def get_template_exports(self):
+        return []
 
     def parse_source_directory(self, recurse=False):
         self.nodes += ParsedDirectory(self.filetype, self.src, recurse=recurse).nodes
@@ -702,7 +704,11 @@ class ModuleGenerator(object):
     def generate(self):
         self.parse_source_directory()
         # Flatten the graph
-        flatten_nodes = self.resolve_dependancies()
+        template_exports = self.get_template_exports()
+        if template_exports:
+            template_exports = [FakeExporter(template_exports)]
+        flatten_nodes = self.resolve_dependancies(depnodes=template_exports)
+        assert flatten_nodes
         self.generate_from_nodelist(flatten_nodes)
         self.nodes = flatten_nodes
 
@@ -713,6 +719,7 @@ class ModuleGenerator(object):
             depnodes += moddep.nodes
         flatten_nodes = self.resolve_dependancies(depnodes=depnodes)
         self.generate_from_nodelist(flatten_nodes)
+        self.nodes = flatten_nodes
 
     def after_ctypes_generator_init(self, ctypesgen):
         pass
@@ -756,6 +763,11 @@ shutil.copy(from_here(r"definitions\flag.py"), DEST_DIR)
 print("== Generating defines ==")
 # Generate defines
 definemodulegenerator = ModuleGenerator("windef", DefinitionParsedFile, DefineCtypesGenerator, DefineDocGenerator, from_here(r"definitions\defines"))
+# The windef.py template explicitly export CTL_CODE macro as a python function to simplify parsing
+# Add here the fact that this symbol is exported somewhere to prevent a
+#  ValueError: Missing dependancy <CTL_CODE> of <DefinitionParsedFile "XXX">
+# Give a nive way to the template to give its list of exports ?
+definemodulegenerator.get_template_exports = lambda : ["CTL_CODE"]
 definemodulegenerator.generate()
 definemodulegenerator.generate_doc(from_here(r"..\docs\source\windef_generated.rst"))
 

@@ -1380,6 +1380,46 @@ WinHttpAddRequestHeadersParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHe
 WinHttpQueryHeadersPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPCWSTR, LPVOID, LPDWORD, LPDWORD)
 WinHttpQueryHeadersParams = ((1, 'hRequest'), (1, 'dwInfoLevel'), (1, 'pwszName'), (1, 'lpBuffer'), (1, 'lpdwBufferLength'), (1, 'lpdwIndex'))
 
+#def GetOverlappedResult(hFile, lpOverlapped, lpNumberOfBytesTransferred, bWait):
+#    return GetOverlappedResult.ctypes_function(hFile, lpOverlapped, lpNumberOfBytesTransferred, bWait)
+GetOverlappedResultPrototype = WINFUNCTYPE(BOOL, HANDLE, LPOVERLAPPED, LPDWORD, BOOL)
+GetOverlappedResultParams = ((1, 'hFile'), (1, 'lpOverlapped'), (1, 'lpNumberOfBytesTransferred'), (1, 'bWait'))
+
+#def CreateIoCompletionPort(FileHandle, ExistingCompletionPort, CompletionKey, NumberOfConcurrentThreads):
+#    return CreateIoCompletionPort.ctypes_function(FileHandle, ExistingCompletionPort, CompletionKey, NumberOfConcurrentThreads)
+CreateIoCompletionPortPrototype = WINFUNCTYPE(HANDLE, HANDLE, HANDLE, ULONG_PTR, DWORD)
+CreateIoCompletionPortParams = ((1, 'FileHandle'), (1, 'ExistingCompletionPort'), (1, 'CompletionKey'), (1, 'NumberOfConcurrentThreads'))
+
+#def GetQueuedCompletionStatus(CompletionPort, lpNumberOfBytesTransferred, lpCompletionKey, lpOverlapped, dwMilliseconds):
+#    return GetQueuedCompletionStatus.ctypes_function(CompletionPort, lpNumberOfBytesTransferred, lpCompletionKey, lpOverlapped, dwMilliseconds)
+GetQueuedCompletionStatusPrototype = WINFUNCTYPE(BOOL, HANDLE, LPDWORD, PULONG_PTR, POINTER(LPOVERLAPPED), DWORD)
+GetQueuedCompletionStatusParams = ((1, 'CompletionPort'), (1, 'lpNumberOfBytesTransferred'), (1, 'lpCompletionKey'), (1, 'lpOverlapped'), (1, 'dwMilliseconds'))
+
+#def GetQueuedCompletionStatusEx(CompletionPort, lpCompletionPortEntries, ulCount, ulNumEntriesRemoved, dwMilliseconds, fAlertable):
+#    return GetQueuedCompletionStatusEx.ctypes_function(CompletionPort, lpCompletionPortEntries, ulCount, ulNumEntriesRemoved, dwMilliseconds, fAlertable)
+GetQueuedCompletionStatusExPrototype = WINFUNCTYPE(BOOL, HANDLE, LPOVERLAPPED_ENTRY, ULONG, PULONG, DWORD, BOOL)
+GetQueuedCompletionStatusExParams = ((1, 'CompletionPort'), (1, 'lpCompletionPortEntries'), (1, 'ulCount'), (1, 'ulNumEntriesRemoved'), (1, 'dwMilliseconds'), (1, 'fAlertable'))
+
+#def PostQueuedCompletionStatus(CompletionPort, dwNumberOfBytesTransferred, dwCompletionKey, lpOverlapped):
+#    return PostQueuedCompletionStatus.ctypes_function(CompletionPort, dwNumberOfBytesTransferred, dwCompletionKey, lpOverlapped)
+PostQueuedCompletionStatusPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, ULONG_PTR, LPOVERLAPPED)
+PostQueuedCompletionStatusParams = ((1, 'CompletionPort'), (1, 'dwNumberOfBytesTransferred'), (1, 'dwCompletionKey'), (1, 'lpOverlapped'))
+
+#def CancelIo(hFile):
+#    return CancelIo.ctypes_function(hFile)
+CancelIoPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CancelIoParams = ((1, 'hFile'),)
+
+#def CancelIoEx(hFile, lpOverlapped):
+#    return CancelIoEx.ctypes_function(hFile, lpOverlapped)
+CancelIoExPrototype = WINFUNCTYPE(BOOL, HANDLE, LPOVERLAPPED)
+CancelIoExParams = ((1, 'hFile'), (1, 'lpOverlapped'))
+
+#def CancelSynchronousIo(hThread):
+#    return CancelSynchronousIo.ctypes_function(hThread)
+CancelSynchronousIoPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CancelSynchronousIoParams = ((1, 'hThread'),)
+
 #def LsaOpenPolicy(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle):
 #    return LsaOpenPolicy.ctypes_function(SystemName, ObjectAttributes, DesiredAccess, PolicyHandle)
 LsaOpenPolicyPrototype = WINFUNCTYPE(NTSTATUS, PLSA_UNICODE_STRING, PLSA_OBJECT_ATTRIBUTES, ACCESS_MASK, PLSA_HANDLE)

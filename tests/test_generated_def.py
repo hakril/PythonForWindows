@@ -101,6 +101,19 @@ def test_cs_custom_define():
     assert windows.generated_def.CS_USER_32B == 0x23
     assert windows.generated_def.CS_USER_64B == 0x33
 
+
+def test_CTL_CODE_macro():
+    """Test that the CTL_CODE() macro, (reimplemented in python in windef.py) returns the correct values"""
+    # The hardcoded values are from magnumdb (https://www.magnumdb.com)
+
+    assert gdef.FSCTL_REQUEST_OPLOCK_LEVEL_1 == 0x00090000
+    assert gdef.FSCTL_GET_NTFS_VOLUME_DATA == 0x00090064
+    assert gdef.FSCTL_REPAIR_COPIES == 0x0009C2B4
+    assert gdef.FSCTL_SET_REPARSE_POINT_EX == 0x0009040C
+    assert gdef.IOCTL_MOUNTMGR_CREATE_POINT == 0x006DC000
+    assert gdef.IOCTL_MOUNTMGR_QUERY_POINTS == 0x006D0008
+
+
 # typedef struct _DnsRecordFlags
 # {
 #     DWORD   Section     : 2;
