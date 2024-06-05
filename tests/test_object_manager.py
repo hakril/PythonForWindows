@@ -55,5 +55,4 @@ def test_unicode_kernel_object():
     assert UNICODE_PORT_NAME in objmanager[u"\\RPC Control"].keys()
     assert objmanager[UNICODE_PORT_PATH]
     assert objmanager[UNICODE_PORT_PATH].fullname == UNICODE_PORT_PATH
-    import pdb;pdb.set_trace()
     alpc_port.disconnect()
