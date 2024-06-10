@@ -287,32 +287,32 @@ class System(object):
         version = self.version
         is_workstation = self.product_type == gdef.VER_NT_WORKSTATION
         if version == (10, 0):
-            return ["Windows Server 2016", "Windows 10"][is_workstation]
+            return [u"Windows Server 2016", u"Windows 10"][is_workstation]
         elif version == (6, 3):
-            return  ["Windows Server 2012 R2", "Windows 8.1"][is_workstation]
+            return  [u"Windows Server 2012 R2", u"Windows 8.1"][is_workstation]
         elif version == (6, 2):
-            return ["Windows Server 2012", "Windows 8"][is_workstation]
+            return [u"Windows Server 2012", u"Windows 8"][is_workstation]
         elif version == (6, 1):
-            return ["Windows Server 2008 R2", "Windows 7"][is_workstation]
+            return [u"Windows Server 2008 R2", u"Windows 7"][is_workstation]
         elif version == (6, 0):
-            return ["Windows Server 2008", "Windows Vista"][is_workstation]
+            return [u"Windows Server 2008", u"Windows Vista"][is_workstation]
         elif version == (5, 2):
             metric = winproxy.GetSystemMetrics(gdef.SM_SERVERR2)
             if is_workstation:
                 if self.bitness == 64:
-                    return "Windows XP Professional x64 Edition"
+                    return u"Windows XP Professional x64 Edition"
                 else:
-                    return "TODO: version (5.2) + is_workstation + bitness == 32"
+                    return u"TODO: version (5.2) + is_workstation + bitness == 32"
             elif metric != 0:
-                return "Windows Server 2003 R2"
+                return u"Windows Server 2003 R2"
             else:
-                return "Windows Server 2003"
+                return u"Windows Server 2003"
         elif version == (5, 1):
-            return "Windows XP"
+            return u"Windows XP"
         elif version == (5, 0):
-            return "Windows 2000"
+            return u"Windows 2000"
         else:
-            return "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+            return u"Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
     VERSION_MAPPER = gdef.FlagMapper(gdef.VER_NT_WORKSTATION, gdef.VER_NT_DOMAIN_CONTROLLER, gdef.VER_NT_SERVER)
     @utils.fixedpropety
@@ -497,7 +497,7 @@ class System(object):
                 ubr = curver_key["UBR"].value
             except WindowsError as e:
                 ubr = 0 # Not present on Win7
-            return "{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
+            return u"{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
         except (WindowsError, ValueError):
             return self.get_file_version("ntdll")
 
