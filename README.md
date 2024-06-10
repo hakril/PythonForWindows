@@ -13,8 +13,10 @@ Complete online documentation is available [here][ONLINE_DOC]
 You can find some examples of code in the [samples directory][SAMPLE_DIR] or [online][ONLINE_SAMPLE].
 
 PythonForWindows is principally known for:
-	- its ALPC-RPC Client (see [samples](https://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc))
-	- its generated [ctypes definitions](https://github.com/hakril/PythonForWindows/tree/master/windows/generated_def).
+
+- its ALPC-RPC Client (see [samples](https://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc))
+- its generated [ctypes definitions](https://github.com/hakril/PythonForWindows/tree/master/windows/generated_def).
+
 
 
 If you have any issue, question or suggestion do not hesitate to create an issue or reach me out.
