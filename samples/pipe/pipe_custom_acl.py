@@ -1,4 +1,5 @@
 import windows.test
+import windows.pipe
 
 p = windows.test.pop_proc_32()
 print("Child is {0}".format(p))
@@ -7,6 +8,7 @@ PIPE_NAME = "PFW_Pipe"
 
 lower_integrity = """
 import windows
+import windows.pipe
 windows.current_process.token.integrity = 0x1000
 """
 

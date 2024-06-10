@@ -33,7 +33,7 @@ l2ec6CyjDQc6HcQBNCsbJVq6qGtQbYNE+ih+KhIU4tO5jf25xthf2g==
 -----END CERTIFICATE-----"""
 
 
-raw_cert = base64.decodestring(b"".join(windowscert.split(b"\n")[1:-1]))
+raw_cert = base64.decodebytes(b"".join(windowscert.split(b"\n")[1:-1]))
 cert = windows.crypto.Certificate.from_buffer(raw_cert)
 
 print("Analysing certificate: {0}".format(cert))

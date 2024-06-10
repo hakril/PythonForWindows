@@ -1,5 +1,6 @@
 import windows
 import windows.test
+import windows.pipe
 
 p = windows.test.pop_proc_32()
 print("Child is {0}".format(p))
@@ -8,6 +9,7 @@ PIPE_NAME = "PFW_Pipe"
 
 rcode = """
 import windows
+import windows.pipe
 
 f = open('tst.txt', "w+")
 fh = windows.utils.get_handle_from_file(f)

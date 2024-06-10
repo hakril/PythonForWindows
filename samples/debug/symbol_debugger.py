@@ -30,7 +30,7 @@ class MyInfoBP(windows.debug.Breakpoint):
             dbg.current_process.exit()
         print("")
 
-dbg = windows.debug.SymbolDebugger.debug(b"c:\\windows\\system32\\notepad.exe")
-dbg.add_bp(MyInfoBP("kernelbase!CreateFileInternal+2"))
+dbg = windows.debug.SymbolDebugger.debug("C:\\windows\\system32\\notepad.exe")
+dbg.add_bp(MyInfoBP("kernelbase!CreateFileInternal"))
 dbg.add_bp(MyInfoBP("ntdll!LdrpInitializeProcess"))
 dbg.loop()

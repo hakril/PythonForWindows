@@ -3,6 +3,7 @@ import os.path
 sys.path.append(os.path.abspath(__file__ + "\..\.."))
 
 import windows
+import windows.pipe
 import windows.generated_def as gdef
 
 devmgr = windows.system.device_manager
@@ -14,7 +15,7 @@ for cls in devmgr.classes[:3]:
 
 print("Finding device class 'System'")
 # Allow devmgr.classes["name"] ?
-system_cls = [cls for cls in devmgr.classes if cls.name == b"System"][0]
+system_cls = [cls for cls in devmgr.classes if cls.name == "System"][0]
 print("  * {0}".format(system_cls))
 print("  Enumerating some devices of 'System'")
 devices = system_cls.devices.all()

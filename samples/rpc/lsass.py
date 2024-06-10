@@ -100,4 +100,4 @@ print("Privileges:")
 ## Unpack the resulting 'LSAPR_PRIVILEGE_ENUM_BUFFER'
 priviledges = LSAPR_PRIVILEGE_ENUM_BUFFER.unpack(ndr.NdrStream(res))
 for priv in priviledges:
-    print priv
+    print(priv)

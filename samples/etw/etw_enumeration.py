@@ -13,6 +13,7 @@ for sess in etwmgr.sessions[:2]:
     print("     * id: {0}".format(sess.id))
     print("     * logfile: {0}".format(sess.logfile))
 
+sess = etwmgr.sessions[1]
 target_id = sess.id
 NB_MATCH = 0
 print("")
