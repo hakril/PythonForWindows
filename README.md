@@ -13,7 +13,7 @@ Complete online documentation is available [here][ONLINE_DOC]
 You can find some examples of code in the [samples directory][SAMPLE_DIR] or [online][ONLINE_SAMPLE].
 
 PythonForWindows is principally known for:
-	- its ALPC-RPC Client (see [samples](http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc))
+	- its ALPC-RPC Client (see [samples](https://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc))
 	- its generated [ctypes definitions](https://github.com/hakril/PythonForWindows/tree/master/windows/generated_def).
 
 
@@ -44,7 +44,7 @@ Since 1.0.0, the code uses "wide APIs" whenever possible and accept/returns pyth
 ### Python2
 
 PythonForWindows continues to support python2.7 as its the only way to have it running on `Windows XP` & `Windows Server 2003` which are sadly still seen in production.
-Encoding errors at print time might be awkward for unicode string on python2, see the [PythonForWindows encoding guide](http://hakril.github.io/PythonForWindows/build/html/encoding.html) in the documentation.
+Encoding errors at print time might be awkward for unicode string on python2, see the [PythonForWindows encoding guide](https://hakril.github.io/PythonForWindows/build/html/encoding.html) in the documentation.
 
 
 ## Overview
@@ -593,8 +593,8 @@ The path of `dbghelp.dll` can also be given via the `PFW_DBGHELP_PATH` environme
 
 [LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
-[ONLINE_DOC]: http://hakril.github.io/PythonForWindows/
-[ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/build/html/sample.html
-[ONLINE_SAMPLE_ALPC]: http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-alpc
-[ONLINE_SAMPLE_RPC]: http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc
-[ONLINE_IATHOOK]: http://hakril.github.io/PythonForWindows/build/html/iat_hook.html
+[ONLINE_DOC]: https://hakril.github.io/PythonForWindows/
+[ONLINE_SAMPLE]: https://hakril.github.io/PythonForWindows/build/html/sample.html
+[ONLINE_SAMPLE_ALPC]: https://hakril.github.io/PythonForWindows/build/html/sample.html#windows-alpc
+[ONLINE_SAMPLE_RPC]: https://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc
+[ONLINE_IATHOOK]: https://hakril.github.io/PythonForWindows/build/html/iat_hook.html
