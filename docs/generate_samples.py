@@ -13,9 +13,9 @@ python_exe = sys.executable
 
 def generate_output_result(target, output):
     print("Generating result of <{0}>".format(target))
-    p = subprocess.Popen([python_exe, target], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    p = subprocess.Popen([python_exe, target], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
     result = p.communicate()
-    with open(os.path.join(resultdir, output), "wb") as f:
+    with open(os.path.join(resultdir, output), "w") as f:
         f.write("(cmd) python {0}\n".format(target))
         f.write(result[0])
 
