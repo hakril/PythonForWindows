@@ -225,13 +225,8 @@ class System(object):
         :type: :class:`str`
         """
         size = gdef.DWORD(0x1000)
-        # For now I don't know what is best as A vs W APIs...
-        if windows.pycompat.is_py3:
-            buf = ctypes.create_unicode_buffer(size.value)
-            winproxy.GetComputerNameW(buf, ctypes.byref(size))
-        else:
-            buf = ctypes.create_string_buffer(size.value)
-            winproxy.GetComputerNameA(buf, ctypes.byref(size))
+        buf = ctypes.create_unicode_buffer(size.value)
+        winproxy.GetComputerNameW(buf, ctypes.byref(size))
         return buf[:size.value]
 
     def _computer_name_ex(self, nametype):
@@ -292,32 +287,32 @@ class System(object):
         version = self.version
         is_workstation = self.product_type == gdef.VER_NT_WORKSTATION
         if version == (10, 0):
-            return ["Windows Server 2016", "Windows 10"][is_workstation]
+            return [u"Windows Server 2016", u"Windows 10"][is_workstation]
         elif version == (6, 3):
-            return  ["Windows Server 2012 R2", "Windows 8.1"][is_workstation]
+            return  [u"Windows Server 2012 R2", u"Windows 8.1"][is_workstation]
         elif version == (6, 2):
-            return ["Windows Server 2012", "Windows 8"][is_workstation]
+            return [u"Windows Server 2012", u"Windows 8"][is_workstation]
         elif version == (6, 1):
-            return ["Windows Server 2008 R2", "Windows 7"][is_workstation]
+            return [u"Windows Server 2008 R2", u"Windows 7"][is_workstation]
         elif version == (6, 0):
-            return ["Windows Server 2008", "Windows Vista"][is_workstation]
+            return [u"Windows Server 2008", u"Windows Vista"][is_workstation]
         elif version == (5, 2):
             metric = winproxy.GetSystemMetrics(gdef.SM_SERVERR2)
             if is_workstation:
                 if self.bitness == 64:
-                    return "Windows XP Professional x64 Edition"
+                    return u"Windows XP Professional x64 Edition"
                 else:
-                    return "TODO: version (5.2) + is_workstation + bitness == 32"
+                    return u"TODO: version (5.2) + is_workstation + bitness == 32"
             elif metric != 0:
-                return "Windows Server 2003 R2"
+                return u"Windows Server 2003 R2"
             else:
-                return "Windows Server 2003"
+                return u"Windows Server 2003"
         elif version == (5, 1):
-            return "Windows XP"
+            return u"Windows XP"
         elif version == (5, 0):
-            return "Windows 2000"
+            return u"Windows 2000"
         else:
-            return "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+            return u"Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
     VERSION_MAPPER = gdef.FlagMapper(gdef.VER_NT_WORKSTATION, gdef.VER_NT_DOMAIN_CONTROLLER, gdef.VER_NT_SERVER)
     @utils.fixedpropety
@@ -445,34 +440,44 @@ class System(object):
 
     @utils.fixedpropety
     def windir(self):
-        buffer = ctypes.c_buffer(0x100)
-        reslen = winproxy.GetWindowsDirectoryA(buffer)
+        buffer = ctypes.create_unicode_buffer(0x100)
+        reslen = winproxy.GetWindowsDirectoryW(buffer)
         return buffer[:reslen]
 
     def get_version(self):
-        data = gdef.OSVERSIONINFOEXA()
+        data = gdef.OSVERSIONINFOEXW()
         data.dwOSVersionInfoSize = ctypes.sizeof(data)
-        winproxy.GetVersionExA(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(gdef.OSVERSIONINFOA)))
+        winproxy.GetVersionExW(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(gdef.OSVERSIONINFOW)))
         return data
 
     def get_file_version(self, name):
-        size = winproxy.GetFileVersionInfoSizeA(name)
-        buf = ctypes.c_buffer(size)
-        winproxy.GetFileVersionInfoA(name, 0, size, buf)
-
+        size = winproxy.GetFileVersionInfoSizeW(name)
+        buf = ctypes.create_unicode_buffer(size)
+        winproxy.GetFileVersionInfoW(name, 0, size, buf)
         bufptr = gdef.PVOID()
         bufsize = gdef.UINT()
-        winproxy.VerQueryValueA(buf, "\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
-        tup = struct.unpack("<HH", bufstr.value[:4])
+        # Return binary data : the W is only or the input string in this case
+        winproxy.VerQueryValueW(buf, u"\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
+        tup = windows.utils.BUFFER(gdef.USHORT, 2).from_address(bufptr.value)[:]
         req = "{0:04x}{1:04x}".format(*tup)
-        winproxy.VerQueryValueA(buf, "\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
+        del tup
+        winproxy.VerQueryValueW(buf, u"\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
+        bufstr = ctypes.cast(bufptr, gdef.LPWSTR)
         return bufstr.value
 
     @utils.fixedpropety
     def build_number(self):
-        # Best effort. use get_file_version if registry code fails
+        # Will only work on Windows 10 ?
+        build = self.kuser_shared_data.NtBuildNumber
+        if build: # 0 before windows 10
+            return build
+
+        key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+        return int(key["CurrentBuildNumber"].value)
+
+    @utils.fixedproperty
+    def versionstr(self):
+            # Best effort. use get_file_version if registry code fails
         try:
             # Does not works on Win7..
             # Missing CurrentMajorVersionNumber/CurrentMinorVersionNumber/UBR
@@ -492,9 +497,16 @@ class System(object):
                 ubr = curver_key["UBR"].value
             except WindowsError as e:
                 ubr = 0 # Not present on Win7
-            return "{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
+            return u"{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
         except (WindowsError, ValueError):
             return self.get_file_version("ntdll")
+
+    @utils.fixedpropety
+    def kuser_shared_data(self):
+        # For now we only returns a "common-group" KUSER which only contains the
+        # 0x300 first bytes.
+        # These are the part that do not move much between XP & Win10
+        return gdef.PFW_MINIMAL_KUSER_SHARED_DATA.from_address(gdef.MM_SHARED_USER_DATA_VA)
 
 
     @staticmethod
@@ -505,9 +517,9 @@ class System(object):
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPPROCESS, 0)
         winproxy.Process32FirstW(snap, process_entry)
         res = []
-        res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        res.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         while winproxy.Process32NextW(snap, process_entry):
-            res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+            res.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         winproxy.CloseHandle(snap)
         return res
 
@@ -548,9 +560,9 @@ class System(object):
         process_entry.dwSize = ctypes.sizeof(process_entry)
         winproxy.Process32FirstW(snap, process_entry)
         processes = []
-        processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        processes.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
         while winproxy.Process32NextW(snap, process_entry):
-            processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+            processes.append(process.WinProcess._from_PROCESSENTRY32W(process_entry))
 
         # Forge a dict pid -> process
         proc_dict = {proc.pid: proc for proc in processes}

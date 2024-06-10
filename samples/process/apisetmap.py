@@ -7,7 +7,8 @@ apism = cp.peb.apisetmap
 
 print("ApiSetMap: {0} (version = {1})".format(apism, apism.version))
 
-dll_demos_fullname = 'api-ms-win-core-processthreads-l1-1-3'
+# Find the current version of "api-ms-win-core-processthreads" used by windows
+dll_demos_fullname = [x for x in windows.current_process.peb.apisetmap.apisetmap_dict if "api-ms-win-core-processthreads" in x][0]
 dll_demos_utilname = 'api-ms-win-core-processthreads-l1-1-'
 
 print("Entries in 'apisetmap_dict' are the full api-dll path extracted")

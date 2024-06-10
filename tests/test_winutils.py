@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import pytest
 import os
@@ -5,6 +6,7 @@ import tempfile
 
 from datetime import datetime, timedelta
 import windows.utils
+import windows.pycompat
 import windows.generated_def as gdef
 from .pfwtest import *
 
@@ -176,3 +178,15 @@ def test_sprint_certificate():
     # With Sub-struct / Pointer & string
     # It was broken on py3 -> ense this test
     windows.utils.sprint(cert)
+
+
+
+def test_lookup_name():
+    assert windows.utils.lookup_name(None, u"SYSTEM")
+    assert windows.utils.lookup_name(None, u"SYSTEM")[1] == gdef.PSID.from_string("S-1-5-18")
+    assert isinstance(windows.utils.lookup_name(None, u"SYSTEM")[0], windows.pycompat.unicode_type)
+
+def test_lookup_sid():
+    domain, user = windows.utils.lookup_sid(gdef.PSID.from_string(u"S-1-5-18"))
+    assert isinstance(domain, windows.pycompat.unicode_type)
+    assert isinstance(user, windows.pycompat.unicode_type)

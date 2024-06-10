@@ -2440,6 +2440,11 @@ SymLoadModuleExWParams = ((1, 'hProcess'), (1, 'hFile'), (1, 'ImageName'), (1, '
 SymFromAddrPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PDWORD64, PSYMBOL_INFO)
 SymFromAddrParams = ((1, 'hProcess'), (1, 'Address'), (1, 'Displacement'), (1, 'Symbol'))
 
+#def SymFromAddrW(hProcess, Address, Displacement, Symbol):
+#    return SymFromAddrW.ctypes_function(hProcess, Address, Displacement, Symbol)
+SymFromAddrWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PDWORD64, PSYMBOL_INFOW)
+SymFromAddrWParams = ((1, 'hProcess'), (1, 'Address'), (1, 'Displacement'), (1, 'Symbol'))
+
 #def SymGetModuleInfo64(hProcess, dwAddr, ModuleInfo):
 #    return SymGetModuleInfo64.ctypes_function(hProcess, dwAddr, ModuleInfo)
 SymGetModuleInfo64Prototype = WINFUNCTYPE(BOOL, HANDLE, DWORD64, PIMAGEHLP_MODULE64)
@@ -2454,6 +2459,11 @@ SymGetModuleInfoW64Params = ((1, 'hProcess'), (1, 'qwAddr'), (1, 'ModuleInfo'))
 #    return SymInitialize.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
 SymInitializePrototype = WINFUNCTYPE(BOOL, HANDLE, LPCSTR, BOOL)
 SymInitializeParams = ((1, 'hProcess'), (1, 'UserSearchPath'), (1, 'fInvadeProcess'))
+
+#def SymInitializeW(hProcess, UserSearchPath, fInvadeProcess):
+#    return SymInitializeW.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
+SymInitializeWPrototype = WINFUNCTYPE(BOOL, HANDLE, PCWSTR, BOOL)
+SymInitializeWParams = ((1, 'hProcess'), (1, 'UserSearchPath'), (1, 'fInvadeProcess'))
 
 #def SymFromName(hProcess, Name, Symbol):
 #    return SymFromName.ctypes_function(hProcess, Name, Symbol)
@@ -2500,10 +2510,20 @@ SymEnumTypesParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'EnumSymbolsCallbac
 SymEnumTypesByNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PVOID, PVOID)
 SymEnumTypesByNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
 
+#def SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypesByNameW.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
+SymEnumTypesByNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PVOID, PVOID)
+SymEnumTypesByNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
+
 #def SymEnumerateModules64(hProcess, EnumModulesCallback, UserContext):
 #    return SymEnumerateModules64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
 SymEnumerateModules64Prototype = WINFUNCTYPE(BOOL, HANDLE, PVOID, PVOID)
 SymEnumerateModules64Params = ((1, 'hProcess'), (1, 'EnumModulesCallback'), (1, 'UserContext'))
+
+#def SymEnumerateModulesW64(hProcess, EnumModulesCallback, UserContext):
+#    return SymEnumerateModulesW64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
+SymEnumerateModulesW64Prototype = WINFUNCTYPE(BOOL, HANDLE, PSYM_ENUMMODULES_CALLBACKW64, PVOID)
+SymEnumerateModulesW64Params = ((1, 'hProcess'), (1, 'EnumModulesCallback'), (1, 'UserContext'))
 
 #def SymNext(hProcess, si):
 #    return SymNext.ctypes_function(hProcess, si)
@@ -2619,6 +2639,11 @@ SymEnumSymbolsForAddrWParams = ((1, 'hProcess'), (1, 'Address'), (1, 'EnumSymbol
 #    return SymGetTypeFromName.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
 SymGetTypeFromNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PSYMBOL_INFO)
 SymGetTypeFromNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Name'), (1, 'Symbol'))
+
+#def SymGetTypeFromNameW(hProcess, BaseOfDll, Name, Symbol):
+#    return SymGetTypeFromNameW.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
+SymGetTypeFromNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PSYMBOL_INFOW)
+SymGetTypeFromNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Name'), (1, 'Symbol'))
 
 #def SymGetTypeInfo(hProcess, ModBase, TypeId, GetType, pInfo):
 #    return SymGetTypeInfo.ctypes_function(hProcess, ModBase, TypeId, GetType, pInfo)
@@ -2829,6 +2854,11 @@ NtProtectVirtualMemoryParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'), (1, 'N
 #    return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 NtQuerySystemInformationPrototype = WINFUNCTYPE(NTSTATUS, SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG)
 NtQuerySystemInformationParams = ((1, 'SystemInformationClass'), (1, 'SystemInformation'), (1, 'SystemInformationLength'), (1, 'ReturnLength'))
+
+#def NtQuerySystemInformationEx(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength):
+#    return NtQuerySystemInformationEx.ctypes_function(SystemInformationClass, InputBuffer, InputBufferLength, SystemInformation, SystemInformationLength, ReturnLength)
+NtQuerySystemInformationExPrototype = WINFUNCTYPE(NTSTATUS, SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PVOID, ULONG, PULONG)
+NtQuerySystemInformationExParams = ((1, 'SystemInformationClass'), (1, 'InputBuffer'), (1, 'InputBufferLength'), (1, 'SystemInformation'), (1, 'SystemInformationLength'), (1, 'ReturnLength'))
 
 #def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength):
 #    return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
@@ -3549,6 +3579,16 @@ AllocConsoleParams = ()
 #    return FreeConsole.ctypes_function()
 FreeConsolePrototype = WINFUNCTYPE(BOOL)
 FreeConsoleParams = ()
+
+#def GetConsoleOutputCP():
+#    return GetConsoleOutputCP.ctypes_function()
+GetConsoleOutputCPPrototype = WINFUNCTYPE(UINT)
+GetConsoleOutputCPParams = ()
+
+#def GetConsoleCP():
+#    return GetConsoleCP.ctypes_function()
+GetConsoleCPPrototype = WINFUNCTYPE(UINT)
+GetConsoleCPParams = ()
 
 #def GetStdHandle(nStdHandle):
 #    return GetStdHandle.ctypes_function(nStdHandle)

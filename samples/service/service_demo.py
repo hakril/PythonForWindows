@@ -6,7 +6,7 @@ for service in windows.system.services[:3]:
     print(" * {0}".format(service))
 print("")
 
-TARGET_SERVICE = b"TapiSrv"
+TARGET_SERVICE = "TapiSrv"
 print("Retriving service <{0}>".format(TARGET_SERVICE))
 service = windows.system.services[TARGET_SERVICE]
 print("{0}".format(service))

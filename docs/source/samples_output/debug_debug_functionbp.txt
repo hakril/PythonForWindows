@@ -1,11 +1,11 @@
 (cmd) python debug\debug_functionbp.py
-NtCreateFile of <86250608>: handle = 0x124
-Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\notepad.exe.mui>
+NtCreateFile of <50173784>: handle = 0x1c4
+Handle manually found! typename=<File>, name=<\Device\HarddiskVolume3\Windows\Globalization\Sorting\SortDefault.nls>
 
-NtCreateFile of <1996168876>: handle = 0x150
-Handle manually found! typename=<File>, name=<\Device\DeviceApi>
+NtCreateFile of <50181528>: handle = 0x1ec
+Handle manually found! typename=<File>, name=<\Device\HarddiskVolume3\Windows\Fonts\StaticCache.dat>
 
-NtCreateFile of <86206640>: handle = 0x280
-Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\Fonts\StaticCache.dat>
+NtCreateFile of <50195912>: handle = 0x1fc
+Handle manually found! typename=<File>, name=<\Device\HarddiskVolume3\Windows\Branding\Basebrd\basebrd.dll>
 
 Exiting process

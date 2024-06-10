@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import windows.security
 from windows.security import SecurityDescriptor
 from .pfwtest import *
@@ -29,6 +30,14 @@ b'\x01\x00\x14\x80\x8c\x00\x00\x00\x98\x00\x00\x00\x14\x00\x00\x000\x00\x00\x00\
 @pytest.mark.parametrize("binsd", TEST_BIN_SDDL)
 def test_security_descriptor_from_binary(binsd):
     sd = SecurityDescriptor.from_binary(binsd)
+
+
+def test_security_descriptor_from_unicode_file(tmpdir):
+    TARGET_FILENAME = u"내 한국은 최고의 한국.txt"
+    TARGET_PATH = os.path.join(str(tmpdir), TARGET_FILENAME)
+    with open(TARGET_PATH, "w") as f:
+        f.write("Hello Test")
+    assert SecurityDescriptor.from_filename(TARGET_PATH)
 
 
 def test_empty_security_descriptor():

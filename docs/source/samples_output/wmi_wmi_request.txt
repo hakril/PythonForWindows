@@ -1,20 +1,17 @@
 (cmd) python wmi\wmi_request.py
-WMI requester is <windows.winobject.wmi.WmiManager object at 0x04258918>
+WMI requester is <windows.winobject.wmi.WmiManager object at 0x000001CD1A46E150>
 Selecting * from 'Win32_Process'
-They are <308> processes
+They are <329> processes
 Looking for ourself via pid
 Some info about our process:
     * Name -> python.exe
-    * ProcessId -> 27144
-    * OSName -> Microsoft Windows 10 Pro|C:\WINDOWS|\Device\Harddisk0\Partition2
-    * UserModeTime -> 2812500
-    * WindowsVersion -> 10.0.17134
-    * CommandLine -> C:\Python27\python.exe  wmi\wmi_request.py
+    * ProcessId -> 28460
+    * OSName -> Microsoft Windows 11 Pro|C:\Windows|\Device\Harddisk0\Partition3
+    * UserModeTime -> 0
+    * WindowsVersion -> 10.0.22631
+    * CommandLine -> C:\Users\cleme\AppData\Local\Programs\Python\Python311\python.exe  wmi\wmi_request.py
 <Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
-    * {u'Caption': u'B:', u'FreeSpace': None, u'FileSystem': None}
-    * {u'Caption': u'C:', u'FreeSpace': u'5701517312', u'FileSystem': u'NTFS'}
-    * {u'Caption': u'D:', u'FreeSpace': u'47657324544', u'FileSystem': u'NTFS'}
-    * {u'Caption': u'E:', u'FreeSpace': u'89507512320', u'FileSystem': u'NTFS'}
+    * {'Caption': 'C:', 'FileSystem': 'NTFS', 'FreeSpace': '925749731328'}
 
  ==== Advanced use ====
 Listing some namespaces:
@@ -23,8 +20,8 @@ Listing some namespaces:
     * StandardCimv2
 Querying non-default namespace: <WmiNamespace "root\SecurityCenter2">
 Listing some available classes:
-    * <WmiObject class "FirewallProduct">
-    * <WmiObject class "AntiVirusProduct">
     * <WmiObject class "AntiSpywareProduct">
+    * <WmiObject class "AntiVirusProduct">
+    * <WmiObject class "FirewallProduct">
 Listing <AntiVirusProduct>:
     * Windows Defender

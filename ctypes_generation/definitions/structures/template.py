@@ -1,4 +1,6 @@
 import windows # Allow extended-struct to use windows/winproxy/...
+import windows.pycompat
+
 from ctypes import *
 from ctypes.wintypes import *
 

@@ -1,71 +1,90 @@
 import ctypes
 import pytest
 import windows
+import windows.pycompat
+import windows.generated_def as gdef
 
 from .pfwtest import *
 
 @check_for_gc_garbage
 class TestSystemWithCheckGarbage(object):
     def test_version(self):
-        return windows.system.version
+        assert windows.system.version
 
     def test_version_name(self):
-        return windows.system.version_name
+        assert is_unicode(windows.system.version_name)
 
     def test_version_product_type(self):
-        return windows.system.product_type
+        assert windows.system.product_type
 
     def test_version_edition(self):
-        return windows.system.edition
+       assert windows.system.edition
 
     def test_version_windir(self):
-        return windows.system.windir
+        assert is_unicode(windows.system.windir)
+
+    def test_version_versionstr(self):
+        assert is_unicode(windows.system.windir)
 
 
     def test_computer_name(self):
         computer_name = windows.system.computer_name
         assert computer_name
-        assert isinstance(computer_name, str)
+        assert is_unicode(computer_name)
 
     def test_services(self):
-        return windows.system.services
+        assert windows.system.services
 
     def test_logicaldrives(self):
-        return windows.system.logicaldrives
+        for ldrive in windows.system.logicaldrives:
+            assert ldrive
+            assert ldrive.name
+            assert ldrive.path
+            assert is_unicode(ldrive.path)
+            try:
+                assert ldrive.volume_info
+            except WindowsError as e:
+                #handle ERROR_NOT_READY returned by A: in github CI
+                if e.winerror != gdef.ERROR_NOT_READY:
+                    raise
 
     def test_wmi(self):
-        return windows.system.wmi
+        assert windows.system.wmi is not None
 
     def test_handles(self):
-        return windows.system.handles
+        assert windows.system.handles
 
     def test_bitness(self):
-        return windows.system.bitness
+        assert windows.system.bitness
 
     def test_evtlog(self):
-        return windows.system.event_log
+        assert windows.system.event_log
 
     def test_task_scheduler(self):
-        return windows.system.task_scheduler
+        assert windows.system.task_scheduler
 
     def test_task_object_manager(self):
-        return windows.system.object_manager
+        assert windows.system.object_manager
 
     def test_system_modules_ntosk(self):
+        # NtQuerySystemInformation(gdef.SystemModuleInformation) returns CHAR so not unicode
+        # Another Nt API that returns unicode ?
+        # assert is_unicode(windows.system.modules[0].name)
         assert windows.system.modules[0].name.endswith(b"ntoskrnl.exe")
 
 
 @check_for_gc_garbage
 class TestSystemWithCheckGarbageAndHandleLeak(object):
     def test_threads(self):
-        return windows.system.threads
+        assert windows.system.threads
 
     def test_processes(self):
         procs = windows.system.processes
         assert windows.current_process.pid in [p.pid for p in procs]
+        assert is_unicode(windows.system.processes[0].name)
 
     def test_system_modules(self):
-        return windows.system.modules
+        assert windows.system.modules
 
 
 # Test environement dict
@@ -110,3 +129,6 @@ def test_unicode_environ_dict():
     unicode_environ[UNICODE_STRING_1] = UNICODE_RU_STRING
     assert check_env_variable_exist(UNICODE_STRING_1)
 
+def test_get_file_version():
+    assert is_unicode(windows.system.get_file_version(u"ntdll"))
+    assert is_unicode(windows.system.get_file_version(u"kernel32"))

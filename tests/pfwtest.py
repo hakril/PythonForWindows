@@ -67,3 +67,7 @@ if windows.pycompat.is_py3:
     b64decode = base64.decodebytes
 else:
     b64decode = base64.decodestring
+
+
+def is_unicode(data):
+    return isinstance(data, windows.pycompat.unicode_type)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 
 import windows.crypto
@@ -7,6 +8,10 @@ import windows.crypto.generation
 from .pfwtest import *
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
+
+## Cert info:
+#  Name: PythonForWindowsTest
+#  Serial: '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
 
 TEST_CERT = b"""
 MIIBwTCCASqgAwIBAgIQG46Uyws+67ZBOfPJCbFrRjANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQD
@@ -19,8 +24,27 @@ qcLpN1iWoL9UijNhTY37+U5+ycFT8QksT3Xmh9lEIqXMh121uViy2P/3p+Ek31AN9bB+BhWIM6PQ
 gy+ApYDdSwTtWFARSrMqk7rRHUveYEfMw72yaOWDxCzcopEuADKrrYEute4CzZuXF9PbbgK6"""
 
 ## Cert info:
-#  Name: PythonForWindowsTest
-#  Serial: '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
+#  Name: фжющдфя
+#  Serial: '17 f7 d2 1b 78 01 b5 9d 43 4a 4e 54 2a 1a 30 4b'
+
+UNICODE_CERT_NAME = u'\u0444\u0436\u044e\u0449\u0434\u0444\u044f' # фжющдфя
+
+UNICODE_TEST_CERT = b"""
+MIIDAjCCAeqgAwIBAgIQF/fSG3gBtZ1DSk5UKhowSzANBgkqhkiG9w0BAQsFADAZMRcwFQYDVQQD
+DA7RhNC20Y7RidC00YTRjzAeFw0yMDA3MTcxMDA4MjdaFw0yMTA3MTcxMDI4MjdaMBkxFzAVBgNV
+BAMMDtGE0LbRjtGJ0LTRhNGPMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7cX6C0O1
+UQJa+e6z7wZVGV2/xdbZoir4oWglqv3Ax95x0sERgdjTj9ZmCyvgyzwSxi80Q8N6TUi0tUS1o0ig
+SpjF97lD1wVZlb+mVW6vi16G5JUGH2WBtIZ8j4hW3rTBg7R8V9I2VXw3u/36udnWgkKvEOQPSicw
+5T1FrJeAQniRJHjSo20yh5jx7d1O4gtJBJEUjEkW8YFq9g7c/ThwWYv9p20q/Du2XUC2M9OQOdT4
+6rJUkb5btXPNWgdkMz9VCVwG0VTbJicEkCwRnBngbTC77IodN3pD+hoJk/9ecWOVMlrYJDQ2w5rL
+ZnhN7akhVCX8b+UWoXw0fUV8yTtlaQIDAQABo0YwRDAOBgNVHQ8BAf8EBAMCB4AwEwYDVR0lBAww
+CgYIKwYBBQUHAwMwHQYDVR0OBBYEFHwVaUqnE2RvcX/tkioXZS5MJKN+MA0GCSqGSIb3DQEBCwUA
+A4IBAQAdqc5lFyatDq+MYg08MedFd1DSgaR2ZbMXcOxvc7WPFH6RnW/w1kX9nWeHWaMO6tfLPfbk
+BPxbCYYEwVPEguQ+aV94RDOJgMXeqRnSguhdGD4QO8M08Cd8HhykXX0gbSjKR10i/b98oHqyoPmR
+Cne9Uuv9W6DTMTyZM4er8MLIa/UzfpVb0Edxa9rYqYYixRnX8/9cTx83g4XSxA0ghwftcpwjijMD
+H0umvThot/cF/neBIX69JxP6zT951ce5gmo/hYXAt/1RnDULCJtsKaIU7hOIOxilVxjV4rHjybw5
+nPYyGwKCd0BAEG5tpTXlCeGbE5aw85o4mASH/Xp5DSMx"""
+
 
 TEST_PFX_PASSWORD = "TestPassword"
 
@@ -59,13 +83,16 @@ DgMCGgQU70h/rEXLQOberGvgJenggoWU5poEFCfdE1wNK1M38Yp3+qfjEqNIJGCPAgIH0A==
 def rawcert():
     return b64decode(TEST_CERT)
 
+@pytest.fixture()
+def raw_unicodecert():
+    return b64decode(UNICODE_TEST_CERT)
 
 @pytest.fixture()
 def rawpfx():
     return b64decode(TEST_PFX)
 
 PFW_TEST_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainerTest"
-RANDOM_CERTIF_NAME = b"PythonForWindowsGeneratedRandomCertifTest"
+RANDOM_CERTIF_NAME = "PythonForWindowsGeneratedRandomCertifTest"
 RANDOM_PFX_PASSWORD = "PythonForWindowsGeneratedRandomPFXPassword"
 
 @pytest.fixture()
@@ -98,7 +125,7 @@ def randomkeypair(keysize=1024):
     crypt_algo.pszObjId = gdef.szOID_RSA_SHA256RSA.encode("ascii") # do something else (bytes in generated ctypes ?)
 
     # This is fucking dumb, there is no .format on bytes object...
-    certif_name = b"".join((b"CN=", RANDOM_CERTIF_NAME))
+    certif_name = "".join(("CN=", RANDOM_CERTIF_NAME))
     # Generate a self-signed certificate based on the given key-container and signature algorithme
     certif = windows.crypto.generation.generate_selfsigned_certificate(certif_name, key_info=KeyProvInfo, signature_algo=crypt_algo)
     # Add the newly created certificate to our TMP cert-store
@@ -115,8 +142,8 @@ def randomkeypair(keysize=1024):
 def test_certificate(rawcert):
     cert = windows.crypto.Certificate.from_buffer(rawcert)
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
-    assert cert.name == b'PythonForWindowsTest'
-    assert cert.issuer == b'PythonForWindowsTest'
+    assert cert.name == u'PythonForWindowsTest'
+    assert cert.issuer == u'PythonForWindowsTest'
     assert cert.thumbprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
     assert cert.encoded == rawcert
     assert cert.version == 2
@@ -125,6 +152,12 @@ def test_certificate(rawcert):
     cert.chains # TODO: craft a certificate with a chain for test purpose
     cert.store.certs
     cert.properties
+
+def test_unicode_certificate(raw_unicodecert):
+    cert = windows.crypto.Certificate.from_buffer(raw_unicodecert)
+    assert cert.serial == '17 f7 d2 1b 78 01 b5 9d 43 4a 4e 54 2a 1a 30 4b'
+    assert cert.name == UNICODE_CERT_NAME
+    assert cert.issuer == UNICODE_CERT_NAME
 
 
 def test_pfx(rawcert, rawpfx):

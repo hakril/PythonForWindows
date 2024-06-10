@@ -1,16 +1,16 @@
 (cmd) python debug\symbols\processsymdemo.py
 Namespace(dbghelp=None)
-Target is <WinProcess "notepad.exe" pid 14280 at 0x4e177b0>
+Target is <WinProcess "winver.exe" pid 18600 at 0x23a15d4cdd0>
 Some loaded modules are:
- * <SymbolModule name="notepad" type=SymDeferred pdb="" addr=0xc10000>
- * <SymbolModule name="ntdll" type=SymDeferred pdb="" addr=0x77bc0000>
- * <SymbolModule name="KERNEL32" type=SymDeferred pdb="" addr=0x77480000>
+ * <SymbolModule name="winver" type=SymDeferred pdb="" addr=0x7ff658a30000>
+ * <SymbolModule name="ntdll" type=SymDeferred pdb="" addr=0x7ff8e5a10000>
+ * <SymbolModule name="KERNEL32" type=SymDeferred pdb="" addr=0x7ff8e3760000>
 
 Resolving function <advapi32!CreateServiceEx>
 Symbol found !
-  * __repr__: <SymbolInfoA name="CreateServiceEx" start=0x764647b0 tag=SymTagPublicSymbol>
+  * __repr__: <SymbolInfoW name="CreateServiceEx" start=0x7ff8e4b2d2e0 tag=SymTagPublicSymbol>
   * __str__: advapi32!CreateServiceEx
-  * addr: 0x764647b0
+  * addr: 0x7ff8e4b2d2e0
   * name: CreateServiceEx
   * fullname: advapi32!CreateServiceEx
-  * module: <SymbolModule name="advapi32" type=SymPdb pdb="advapi32.pdb" addr=0x76440000>
+  * module: <SymbolModule name="advapi32" type=SymPdb pdb="advapi32.pdb" addr=0x7ff8e4b10000>

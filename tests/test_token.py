@@ -117,7 +117,14 @@ def test_token_duplicate(newtok):
         assert x.impersonation_level == i
 
 
-
+def test_set_thread_token():
+    tok = windows.current_process.token
+    imp_tok = tok.duplicate(type=gdef.TokenImpersonation, impersonation_level=gdef.SecurityImpersonation)
+    cur_thread = windows.current_thread
+    try:
+        cur_thread.token = imp_tok # Test some impersonnation
+    finally:
+        cur_thread.token = None
 
 
 # def test_token_groups

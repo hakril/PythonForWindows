@@ -1,3 +1,5 @@
+import sys
+
 import windows
 import windows.generated_def as gdef
 
@@ -7,6 +9,7 @@ try:
     unichr # Py2/Py3 compat
 except NameError:
     unichr = chr
+
 
 # http://pubs.opengroup.org/onlinepubs/9629399/chap14.htm#tagcjh_19_03_07
 
@@ -500,9 +503,10 @@ class NdrConformantVaryingArrays(object):
     def _post_unpack(cls, result):
         return result
 
-    def get_alignment(self):
+    @classmethod
+    def get_alignment(cls):
         # TODO: test on array of Hyper
-        return max(4, self.MEMBER_TYPE.get_alignment())
+        return max(4, cls.MEMBER_TYPE.get_alignment())
 
 
 class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
@@ -591,7 +595,7 @@ class NdrWriteStream(object):
         self.data_size = 0
 
     def get_data(self):
-        data = b"".join(self.data_parts)
+        data = b"".join(bytes(x) for x in self.data_parts)
         assert len(data) == self.data_size
         return data
 

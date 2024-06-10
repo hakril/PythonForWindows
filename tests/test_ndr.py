@@ -1,6 +1,7 @@
 import pytest
 
 from windows.rpc import ndr
+import windows.generated_def as gdef
 from .pfwtest import *
 
 from tests.test_rpc import UACParameters
@@ -57,6 +58,10 @@ target = "APPP\x01\x02\x03\x04\x05\x06\x07\x08\x44PPP\x09\x0a\x0b\x0c\x0d\x0e\x0
 NDR_PACK_TEST_CASE = [
     # Simple case
     (ndr.make_structure([ndr.NdrLong, ndr.NdrLong]), (2, 2), b"\x02\x00\x00\x00\x02\x00\x00\x00"),
+    # Test GUID packing
+    (ndr.NdrGuid, gdef.GUID.from_string("42424242-42424242-4242-4242-424242424242"), b"BBBBBBBBBBBBBBBB"),
+    # Test CtxHandle packing
+    (ndr.NdrContextHandle, gdef.GUID.from_string("42424242-42424242-4242-4242-424242424242"), b"\x00\x00\x00\x00BBBBBBBBBBBBBBBB"),
     # Check alignement on small native types (dword aligned)
     (ndr.make_structure([ndr.NdrShort, ndr.NdrByte]), (0x0101, 2), b"\x01\x01\x02"),
     # Check alignement on small native types (dword aligned)
@@ -83,6 +88,16 @@ NDR_PACK_TEST_CASE = [
     (InternalAlignementStructure,
         [0x4141, 0x42, 0x43434343, 0x44, 0x4545, 0x46],
         b"AABPCCCCDPEEF"),
+
+    # Variying array in a struct
+    (ndr.make_parameters([
+            ndr.NdrLong,
+            ndr.NdrCharConformantVaryingArrays,
+            ndr.NdrLong,
+            ndr.NdrLong]),
+            [0x42424242, [0x41, 0x42, 0x43, 0x44], 0x43434343, 0x44444444],
+            b"BBBB\x04\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00ABCDCCCCDDDD"),
+
 
     # Nested alignement
     # Alignement with a sub-structure that also have internal alignement
@@ -112,10 +127,6 @@ NDR_PACK_TEST_CASE = [
     #     b"\x01\x01\x01\x01APPP\x02\x02\x02\x02\x03\x03\x03\x03\x44PPP\x05\x05\x05\x05\x06\x06\x06\x06BPPPCCCCPPPPEEEEEEEEF")
 
 ]
-
-
-
-
 @pytest.mark.parametrize("ndrobj, values, result", NDR_PACK_TEST_CASE)
 def test_ndr_packing(ndrobj, values, result):
      assert ndrobj.pack(values) == result

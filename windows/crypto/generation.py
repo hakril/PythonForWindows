@@ -13,7 +13,7 @@ def generate_selfsigned_certificate(name="CN=DEFAULT", prov=None, key_info=None,
     """
     size = ULONG(len(name) + 0x100)
     buffer = (ctypes.c_ubyte * size.value)()
-    winproxy.CertStrToNameA(X509_ASN_ENCODING, name,  CERT_OID_NAME_STR, None, buffer, size, None)
+    winproxy.CertStrToNameW(X509_ASN_ENCODING, name, CERT_OID_NAME_STR, None, buffer, size, None)
     blobname = CRYPT_DATA_BLOB(size.value, buffer)
     cert = winproxy.CertCreateSelfSignCertificate(prov, blobname, flags, key_info, signature_algo, None, None, None)
     return windows.crypto.Certificate.from_pointer(cert)

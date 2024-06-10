@@ -26,7 +26,7 @@ def SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize=None, Required
 
 
 @SetupApiProxy()
-def SetupDiClassNameFromGuidW(Guid):
+def SetupDiClassNameFromGuidW(ClassGuid, ClassName, ClassNameSize=None, RequiredSize=None):
 
     """
         Given a class Guid, return the name associated or raise an Exception

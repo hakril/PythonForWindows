@@ -177,7 +177,7 @@ class WinStruct(object):
 
     def generate_typedef_ctypes(self):
         typedef_ctypes = []
-        for typedef_name, value in self.typedef.items():
+        for typedef_name, value in sorted(self.typedef.items()):
             str_value = self.name
             if typedef_name == str_value: # Do not generate "X= X" line (anonymous structs gen this)
                 continue
@@ -237,7 +237,7 @@ class WinEnum(object):
         lines += ["    values = [{0}]".format(", ".join([name for i, name in self.fields]))]
         lines += ["    mapper = FlagMapper(*values)".format(self.name)]
 
-        for typedef_name, value in self.typedef.items():
+        for typedef_name, value in sorted(self.typedef.items()):
             str_value = self.name
             if typedef_name == str_value: # Do not generate "X= X" line (anonymous enum gen this)
                 continue

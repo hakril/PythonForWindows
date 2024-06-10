@@ -365,6 +365,14 @@ def GetStdHandle(nStdHandle):
 def SetStdHandle(nStdHandle, hHandle):
     return SetStdHandle.ctypes_function(nStdHandle, hHandle)
 
+@Kernel32Proxy()
+def GetConsoleOutputCP():
+    return GetConsoleOutputCP.ctypes_function()
+
+@Kernel32Proxy()
+def GetConsoleCP():
+    return GetConsoleCP.ctypes_function()
+
 ## System
 
 @Kernel32Proxy()

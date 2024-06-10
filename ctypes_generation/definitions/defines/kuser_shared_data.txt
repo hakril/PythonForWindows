@@ -1,0 +1,14 @@
+#define MM_SHARED_USER_DATA_VA 0x7FFE0000
+
+#define XSTATE_LEGACY_FLOATING_POINT        (0)
+#define XSTATE_LEGACY_SSE                   (1)
+#define XSTATE_GSSE                         (2)
+#define XSTATE_AVX                          (XSTATE_GSSE)
+#define XSTATE_MPX_BNDREGS                  (3)
+#define XSTATE_MPX_BNDCSR                   (4)
+#define XSTATE_AVX512_KMASK                 (5)
+#define XSTATE_AVX512_ZMM_H                 (6)
+#define XSTATE_AVX512_ZMM                   (7)
+#define XSTATE_IPT                          (8)
+#define XSTATE_LWP                          (62)
+#define MAXIMUM_XSTATE_FEATURES             (64)

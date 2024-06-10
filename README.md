@@ -1,6 +1,5 @@
 # PythonForWindows
 
-[![Join the chat at https://gitter.im/PythonForWindows/general](https://badges.gitter.im/PythonForWindows/general.svg)](https://gitter.im/PythonForWindows/general)
 [![Pytest](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml/badge.svg?branch=master)](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
 
 PythonForWindows (PFW) is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
@@ -8,17 +7,17 @@ Its goal is to offer abstractions around some of the OS features in a (I hope) p
 It also tries to make the barrier between python and native execution thinner in both ways.
 There is no external dependencies but it relies heavily on the `ctypes` module.
 
-
-Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
-Let's say that the codebase evolves with my needs and my curiosity.
+Let's say that the codebase evolves with my needs, my researches and my curiosity.
 
 Complete online documentation is available [here][ONLINE_DOC]
 You can find some examples of code in the [samples directory][SAMPLE_DIR] or [online][ONLINE_SAMPLE].
 
-PythonForWindows is principally known for its ALPC-RPC Client (see [samples](http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc)).
+PythonForWindows is principally known for:
+	- its ALPC-RPC Client (see [samples](http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc))
+	- its generated [ctypes definitions](https://github.com/hakril/PythonForWindows/tree/master/windows/generated_def).
 
 
-If you have any issue, question or suggestion do not hesitate to join [the Gitter channel](https://gitter.im/PythonForWindows/general).
+If you have any issue, question or suggestion do not hesitate to create an issue or reach me out.
 I am always glad to have feedbacks from people using this project.
 
 ## Installation
@@ -36,12 +35,17 @@ You can also install PythonForWindows by cloning it and using the ``setup.py`` s
 python setup.py install
 ``
 
-#### Python3
+## Encoding & unicode
 
-PythonForWindows support python3 and is currently tested for Python2.7, 3.6 & 3.11 via [Github Workflow](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
-Regarding the handling of encoding in the project it's currently a mix of Ascii & Unicode that may be awkward on Python3 as automatic encoding/decoding is not present.
+PythonForWindows support `python2.7` & `python3` and is currently tested for `Python2.7`, `3.6` & `3.11` via [Github Workflow](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
 
-The aim of passing the whole project under unicode is actvily ongoing.
+Since 1.0.0, the code uses "wide APIs" whenever possible and accept/returns python3 `str` (py2.7 `unicode` type) almost everywhere. Any functions/APIs not accepting unicode string can be  considered a bug if its not stated explicitly in the documentation.
+
+### Python2
+
+PythonForWindows continues to support python2.7 as its the only way to have it running on `Windows XP` & `Windows Server 2003` which are sadly still seen in production.
+Encoding errors at print time might be awkward for unicode string on python2, see the [PythonForWindows encoding guide](http://hakril.github.io/PythonForWindows/build/html/encoding.html) in the documentation.
+
 
 ## Overview
 
@@ -530,6 +534,52 @@ The local debugger handles
 
 * Standard breakpoint ``int3``
 * Hardware Execution breakpoint ``DrX``
+
+### Symbols
+
+Classes around the Symbols APIs of `dbghelp.dll` are also implemented and can be used independently of the Debugger.
+The path of `dbghelp.dll` can also be given via the `PFW_DBGHELP_PATH` environment variable.
+
+
+```python
+# Python3
+
+>>> from windows.debug import symbols
+>>> # symbols.set_dbghelp_path(MY_DBGHELP_PATH)
+>>> symbols.engine.options = 0 # Disable defered load
+>>> sh = symbols.VirtualSymbolHandler()
+>>> ntmod = sh.load_file(r"c:\windows\system32\ntdll.dll", addr=0x420000)
+>>> ntmod
+<SymbolModule name="ntdll" type=SymPdb pdb="ntdll.pdb" addr=0x420000>
+>>> ntmod.name
+'ntdll'
+>>> ntmod.path
+'c:\\windows\\system32\\ntdll.dll'
+>>> ntmod.pdb
+'c:\\Symbols\\ntdll.pdb\\8D5D5ED5D5B8AA609A82600C14E3004D1\\ntdll.pdb'
+>>> sym = sh["ntdll!LdrLoadDll"]
+>>> sym
+<SymbolInfoW name="LdrLoadDll" start=0x44a160 tag=SymTagFunction>
+>>> sym.fullname
+'ntdll!LdrLoadDll'
+>>> hex(sym.addr)
+'0x44a160'
+>>> sh.search("ntdll!*CreateFile")
+[<SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagFunction>, <SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagPublicSymbol>, <SymbolInfoW name="NtCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="ZwCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="__imp_NtCreateFile" start=0x55cb70 tag=SymTagPublicSymbol>]
+# Some types exploration
+>>> sh.get_type("ntdll!_PEB")
+<SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
+>>> peb = _
+>>> peb = sh.get_type("ntdll!_PEB")
+>>> peb
+<SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
+>>> peb.size
+2000
+>>> peb.children[:3]
+[<SymbolType name="InheritedAddressSpace" tag=_SymTagEnum.SymTagData(0x7)>, <SymbolType name="ReadImageFileExecOptions" tag=_SymTagEnum.SymTagData(0x7)>, <SymbolType name="BeingDebugged" tag=_SymTagEnum.SymTagData(0x7)>]
+>>> peb.children[2].offset
+2
+```
 
 ### Other stuff (see doc / samples)
 

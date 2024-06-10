@@ -24,6 +24,10 @@ def SymInitialize(hProcess, UserSearchPath, fInvadeProcess):
     return SymInitialize.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
 
 @DbgHelpProxy()
+def SymInitializeW(hProcess, UserSearchPath, fInvadeProcess):
+   return SymInitializeW.ctypes_function(hProcess, UserSearchPath, fInvadeProcess)
+
+@DbgHelpProxy()
 def SymCleanup(hProcess):
     return SymCleanup.ctypes_function(hProcess)
 
@@ -44,12 +48,24 @@ def SymFromAddr(hProcess, Address, Displacement, Symbol):
     return SymFromAddr.ctypes_function(hProcess, Address, Displacement, Symbol)
 
 @DbgHelpProxy()
+def SymFromAddrW(hProcess, Address, Displacement, Symbol):
+   return SymFromAddrW.ctypes_function(hProcess, Address, Displacement, Symbol)
+
+@DbgHelpProxy()
 def SymGetModuleInfo64(hProcess, dwAddr, ModuleInfo):
     return SymGetModuleInfo64.ctypes_function(hProcess, dwAddr, ModuleInfo)
 
 @DbgHelpProxy()
+def SymGetModuleInfoW64(hProcess, qwAddr, ModuleInfo):
+   return SymGetModuleInfoW64.ctypes_function(hProcess, qwAddr, ModuleInfo)
+
+@DbgHelpProxy()
 def SymFromName(hProcess, Name, Symbol):
     return SymFromName.ctypes_function(hProcess, Name, Symbol)
+
+@DbgHelpProxy()
+def SymFromNameW(hProcess, Name, Symbol):
+   return SymFromNameW.ctypes_function(hProcess, Name, Symbol)
 
 @DbgHelpProxy()
 def SymLoadModuleEx(hProcess, hFile, ImageName, ModuleName, BaseOfDll, DllSize, Data, Flags):
@@ -89,6 +105,10 @@ def SymGetTypeInfo(hProcess, ModBase, TypeId, GetType, pInfo):
     return SymGetTypeInfo.ctypes_function(hProcess, ModBase, TypeId, GetType, pInfo)
 
 @DbgHelpProxy()
+def SymGetTypeFromNameW(hProcess, BaseOfDll, Name, Symbol):
+   return SymGetTypeFromNameW.ctypes_function(hProcess, BaseOfDll, Name, Symbol)
+
+@DbgHelpProxy()
 def SymEnumSymbols(hProcess, BaseOfDll, Mask, EnumSymbolsCallback, UserContext=None):
     UserContext = transform_pyobject_to_pvoid(UserContext)
     return SymEnumSymbols.ctypes_function(hProcess, BaseOfDll, Mask, EnumSymbolsCallback, UserContext)
@@ -122,6 +142,11 @@ def SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserConte
 def SymEnumerateModules64(hProcess, EnumModulesCallback, UserContext=None):
     UserContext = transform_pyobject_to_pvoid(UserContext)
     return SymEnumerateModules64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
+
+@DbgHelpProxy()
+def SymEnumerateModulesW64(hProcess, EnumModulesCallback, UserContext=None):
+    UserContext = transform_pyobject_to_pvoid(UserContext)
+    return SymEnumerateModulesW64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
 
 @DbgHelpProxy()
 def SymGetTypeFromName(hProcess, BaseOfDll, Name, Symbol):

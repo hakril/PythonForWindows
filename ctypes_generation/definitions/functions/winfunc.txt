@@ -450,6 +450,9 @@ BOOL AllocConsole();
 
 BOOL FreeConsole();
 
+UINT WINAPI GetConsoleOutputCP();
+UINT WINAPI GetConsoleCP();
+
 HANDLE WINAPI GetStdHandle(
   _In_  DWORD nStdHandle
 );

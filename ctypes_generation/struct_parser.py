@@ -212,16 +212,6 @@ class SimpleTypesParser(Parser):
                 self.next_token()
         return results
 
-def dbg_lexer(data):
-    for i in Lexer(data).token_generation():
-        print i
-
-def dbg_parser(data):
-    return WinStructParser(data).parse()
-
-def dbg_validate(data):
-    return validate_structs(Parser(data).parse())
-
 
 if __name__ == "__main__":
     import sys

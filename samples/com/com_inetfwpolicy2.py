@@ -17,7 +17,7 @@ print("")
 
 print("Generating CLSID")
 NetFwPolicy2CLSID = windows.com.IID.from_string("E2B3C97F-6AE1-41AC-817A-F6F92166D7DD")
-print(NetFwPolicy2CLSID)
+print(repr(NetFwPolicy2CLSID))
 print("")
 
 print("Creating COM instance")

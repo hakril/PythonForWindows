@@ -16,18 +16,18 @@ Chain 0:
     * issuer: <Microsoft Root Certificate Authority 2010>
 
 Looking for <Microsoft Root Certificate Authority 2010> in trusted certificates
-matches = [<Certificate "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">]
-Found it !
+matches = []
+Not found :(
 
 == PE Analysis ==
-Target sha1 = <339e4c236e716d4b6f6b10359c425eb3d1478df7>
-Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)>
+Target sha1 = <5f7905b56952e28316edcbce0206d7bec34de2a1>
+Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xa)>
 File has 1 signer(s):
 Signer 0:
    * Issuer: bytearray(b'0\x81\x841\x0b0\t\x06\x03U\x04\x06\x13\x02US1\x130\x11\x06\x03U\x04\x08\x13\nWashington1\x100\x0e\x06\x03U\x04\x07\x13\x07Redmond1\x1e0\x1c\x06\x03U\x04\n\x13\x15Microsoft Corporation1.0,\x06\x03U\x04\x03\x13%Microsoft Windows Production PCA 2011')
-   * HashAlgorithme: 2.16.840.1.101.3.4.2.1
-   * Certificate: <Certificate "Microsoft Windows" serial="33 00 00 01 73 30 31 07 26 65 b8 b9 b3 00 00 00 00 01 73">
+   * HashAlgorithme: b'2.16.840.1.101.3.4.2.1'
+   * Certificate: <Certificate "Microsoft Windows" serial="33 00 00 04 5c 3d 56 72 66 6c b7 54 17 00 00 00 00 04 5c">
 
 File embdeds 2 certificate(s):
-   * 0) <Certificate "Microsoft Windows" serial="33 00 00 01 73 30 31 07 26 65 b8 b9 b3 00 00 00 00 01 73">
+   * 0) <Certificate "Microsoft Windows" serial="33 00 00 04 5c 3d 56 72 66 6c b7 54 17 00 00 00 00 04 5c">
    * 1) <Certificate "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">

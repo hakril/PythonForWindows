@@ -45,7 +45,7 @@ class WinFunc(object):
 
 class WinFuncParser(Parser):
     known_io_info_type = ["__in", "__in_opt", "_In_", "_In_opt_", "_Inout_", "_Out_opt_", "_Out_", "_Reserved_", "_Inout_opt_", "__inout_opt", "__out", "__inout", "__deref_out", "_Outptr_"]
-    known_io_info_with_param = ["_Out_writes_bytes_", "_In_reads_bytes_opt_", "_In_reads_bytes_", "_Out_writes_", "_Out_writes_bytes_to_opt_"]
+    known_io_info_with_param = ["_Out_writes_bytes_", "_In_reads_bytes_opt_", "_In_reads_bytes_", "_Out_writes_", "_Out_writes_bytes_to_opt_", "_Out_writes_bytes_opt_"]
     known_declarations = {
         "WINAPI" : "WINFUNCTYPE",
         "LDAPAPI" : "CFUNCTYPE"
@@ -132,20 +132,6 @@ class WinFuncParser(Parser):
         while self.peek() is not None:
             res.append(self.parse_winfunc())
         return res
-
-
-
-
-def dbg_lexer(data):
-    for i in Lexer(data).token_generation():
-        print i
-
-def dbg_parser(data):
-    return WinFuncParser(data).parse()
-
-def dbg_validate(data):
-    return validate_structs(Parser(data).parse())
-
 
 
 if __name__ == "__main__":

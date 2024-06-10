@@ -26,7 +26,7 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         return cls(size, size, ctypes.cast(buffer, PVOID))
 
     def __repr__(self):
-        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
+        return windows.pycompat.urepr_encode(u"""<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self))))
 
     def __sprint__(self):
         try:

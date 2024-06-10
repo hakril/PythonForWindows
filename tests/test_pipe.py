@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import windows.pipe
 from .pfwtest import *
 
@@ -49,3 +51,13 @@ def test_pipe_recv_object(proc32_64):
     obj = windows.pipe.recv_object(PIPE_NAME)
     assert obj == {'Hello': 2}
 
+
+UNICODE_PIPE_NAME = u"Wyczyść moją rurę"
+
+def test_pipe_unicode_name():
+    with windows.pipe.create(UNICODE_PIPE_NAME) as np:
+        # also Try the connect API with the unicode name
+        np2 = windows.pipe.connect(UNICODE_PIPE_NAME)
+        assert np.name == np2.name
+        assert np.name.endswith(UNICODE_PIPE_NAME)
+        assert np2.name.endswith(UNICODE_PIPE_NAME)

@@ -5,6 +5,7 @@ from collections import namedtuple
 import windows
 from windows import winproxy
 import windows.generated_def as gdef
+from windows.pycompat import urepr_encode
 
 
 def query_link(linkpath):
@@ -28,7 +29,7 @@ def query_link(linkpath):
         # If our initial 1000 buffer is not enought (improbable) retry with correct size
         v = gdef.LSA_UNICODE_STRING.from_size(s.value)
         winproxy.NtQuerySymbolicLinkObject(res, v, s)
-    return v.str
+    return v.str # Unicode
 
 
 class KernelObject(object):
@@ -152,7 +153,7 @@ class KernelObject(object):
         return (name for name, type in self._directory_query_generator())
 
     def __repr__(self):
-        return """<{0} "{1}" (type="{2}")>""".format(type(self).__name__, self.fullname, self.type)
+        return urepr_encode(u"""<{0} "{1}" (type="{2}")>""".format(type(self).__name__, self.fullname, self.type))
 
     def get(self, name):
         """Retrieve the object ``name`` in the current directory.

@@ -29,7 +29,7 @@ from windows.winobject import apisetmap
 from windows.winobject import token
 from windows import security
 
-from windows.pycompat import raw_encode, raw_decode, basestring
+from windows.pycompat import raw_encode, raw_decode, basestring, urepr_encode
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""
@@ -672,9 +672,7 @@ class CurrentProcess(Process):
 
     def write_memory(self, addr, data):
         """Write data at addr"""
-        data = raw_encode(data)
-        # buffertype = (c_char * len(data)).from_address(addr)
-        # buffertype[:len(data)] = data
+        data = bytes(raw_encode(data)) # We should only accept byte, but we are kind and will try to encode to latin-1 for simple ascii compat
         ctypes.memmove(addr, data, len(data))
         return True
 
@@ -702,7 +700,7 @@ class CurrentProcess(Process):
 
         :rtype: :class:`LoadedModule`
         """
-        dllbase =  winproxy.LoadLibraryA(dll_path)
+        dllbase =  winproxy.LoadLibraryW(dll_path)
         return [m for m in self.peb.modules if m.baseaddr == dllbase][0]
 
     def execute(self, code, parameter=0):
@@ -958,7 +956,7 @@ class WinThread(Thread):
                 owner_name = owner.name
             except EnvironmentError:
                 owner_name = "!cannot-retrieve-owner-name"
-        return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
+        return urepr_encode(u'<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self))))
 
 
     @staticmethod
@@ -1001,9 +999,8 @@ class WinProcess(Process):
         return WinProcess(handle=handle)
 
     @classmethod
-    def _from_PROCESSENTRY32(cls, entry):
-        # Temporary encoded name
-        name = entry.szExeFile.encode(errors="backslashreplace")
+    def _from_PROCESSENTRY32W(cls, entry):
+        name = entry.szExeFile
         pid = entry.th32ProcessID
         ppid = entry.th32ParentProcessID
         return cls(pid=pid, name=name, ppid=ppid)
@@ -1015,10 +1012,10 @@ class WinProcess(Process):
 
         :type: :class:`str`
 		"""
-        buffer = ctypes.c_buffer(0x1024)
-        rsize = winproxy.GetProcessImageFileNameA(self.limited_handle, buffer) # Use a syscall and not some remote process reading
-        # GetProcessImageFileNameA returns the fullpath
-        return buffer[:rsize].decode().split("\\")[-1]
+        buffer = ctypes.create_unicode_buffer(0x1024)
+        rsize = winproxy.GetProcessImageFileNameW(self.limited_handle, buffer)
+        # GetProcessImageFileNameW returns the fullpath
+        return buffer[:rsize].split("\\")[-1]
 
     @utils.fixedpropety
     def pid(self):
@@ -1035,13 +1032,13 @@ class WinProcess(Process):
         try:
             exe_name = self.name
         except WindowsError as e:
-            exe_name = "!cannot-retrieve-name"
+            exe_name = u"!cannot-retrieve-name"
         try:
             if self.is_exit:
-                return '<{0} "{1}" pid {2} (DEAD) at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self)))
+                return urepr_encode(u'<{0} "{1}" pid {2} (DEAD) at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self))))
         except WindowsError: # Cannot open process
             pass
-        return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self)))
+        return urepr_encode(u'<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self))))
 
     def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE, addr=None):
         """Allocate memory in the process
@@ -1057,7 +1054,7 @@ class WinProcess(Process):
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
-        data = raw_encode(data)
+        data = raw_encode(data) # We should only accept byte, but we are kind and will try to encode to latin-1 for simple ascii compat
         if windows.current_process.bitness == 32 and self.bitness == 64:
             if not winproxy.is_implemented(winproxy.NtWow64WriteVirtualMemory64):
                 raise ValueError("NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
@@ -1260,7 +1257,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
         return self.FullDllName.str.lower()
 
     def __repr__(self):
-        return '<{0} "{1}" at {2}>'.format(self.__class__.__name__, self.name, hex(id(self)))
+        return urepr_encode(u'<{0} "{1}" at {2}>'.format(self.__class__.__name__, self.name, hex(id(self))))
 
     @property
     def pe(self):
