@@ -535,6 +535,52 @@ The local debugger handles
 * Standard breakpoint ``int3``
 * Hardware Execution breakpoint ``DrX``
 
+### Symbols
+
+Classes around the Symbols APIs of `dbghelp.dll` are also implemented and can be used independently of the Debugger.
+The path of `dbghelp.dll` can also be given via the `PFW_DBGHELP_PATH` environment variable.
+
+
+```python
+# Python3
+
+>>> from windows.debug import symbols
+>>> # symbols.set_dbghelp_path(MY_DBGHELP_PATH)
+>>> symbols.engine.options = 0 # Disable defered load
+>>> sh = symbols.VirtualSymbolHandler()
+>>> ntmod = sh.load_file(r"c:\windows\system32\ntdll.dll", addr=0x420000)
+>>> ntmod
+<SymbolModule name="ntdll" type=SymPdb pdb="ntdll.pdb" addr=0x420000>
+>>> ntmod.name
+'ntdll'
+>>> ntmod.path
+'c:\\windows\\system32\\ntdll.dll'
+>>> ntmod.pdb
+'c:\\Symbols\\ntdll.pdb\\8D5D5ED5D5B8AA609A82600C14E3004D1\\ntdll.pdb'
+>>> sym = sh["ntdll!LdrLoadDll"]
+>>> sym
+<SymbolInfoW name="LdrLoadDll" start=0x44a160 tag=SymTagFunction>
+>>> sym.fullname
+'ntdll!LdrLoadDll'
+>>> hex(sym.addr)
+'0x44a160'
+>>> sh.search("ntdll!*CreateFile")
+[<SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagFunction>, <SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagPublicSymbol>, <SymbolInfoW name="NtCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="ZwCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="__imp_NtCreateFile" start=0x55cb70 tag=SymTagPublicSymbol>]
+# Some types exploration
+>>> sh.get_type("ntdll!_PEB")
+<SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
+>>> peb = _
+>>> peb = sh.get_type("ntdll!_PEB")
+>>> peb
+<SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
+>>> peb.size
+2000
+>>> peb.children[:3]
+[<SymbolType name="InheritedAddressSpace" tag=_SymTagEnum.SymTagData(0x7)>, <SymbolType name="ReadImageFileExecOptions" tag=_SymTagEnum.SymTagData(0x7)>, <SymbolType name="BeingDebugged" tag=_SymTagEnum.SymTagData(0x7)>]
+>>> peb.children[2].offset
+2
+```
+
 ### Other stuff (see doc / samples)
 
 - Network
