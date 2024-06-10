@@ -1,15 +1,15 @@
 (cmd) python com\com_inetfwpolicy2.py
 Initialisation of COM
 Creating INetFwPolicy2 variable
-<INetFwPolicy2 object at 0x060677B0> (value = None)
+<INetFwPolicy2<NULL> at 0x2925a3e2350> (value = None)
 
 Generating CLSID
-<IID "E2B3C97F-6AE1-41AC-817A-F6F92166D7DD">
+<GUID "E2B3C97F-6AE1-41AC-817A-F6F92166D7DD">
 
 Creating COM instance
-<INetFwPolicy2 object at 0x060677B0> (value = 0x85678080)
+<INetFwPolicy2 at 0x2925a3e2350> (value = 0x2827524184096)
 
 Checking for enabled profiles
-   * NET_FW_PROFILE2_DOMAIN(0x1L) -> True
-   * NET_FW_PROFILE2_PRIVATE(0x2L) -> True
-   * NET_FW_PROFILE2_PUBLIC(0x4L) -> True
+   * NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN(0x1) -> True
+   * NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE(0x2) -> True
+   * NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC(0x4) -> True

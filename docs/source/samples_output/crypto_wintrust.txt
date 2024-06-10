@@ -4,12 +4,12 @@ Checking signature of <C:\windows\system32\ntdll.dll>
  check_signature: <0>
  full_signature_information:
     * signed <True>
-    * catalog <C:\WINDOWS\system32\CatRoot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\Package_802_for_KB4054517~31bf3856ad364e35~amd64~~10.0.1.6.cat>
+    * catalog <C:\Windows\system32\CatRoot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\Microsoft-Windows-Client-Desktop-Required-Package051420~31bf3856ad364e35~amd64~~10.0.22621.3593.cat>
     * catalogsigned <True>
     * additionalinfo <0>
 Checking signature of some loaded DLL
-<c:\python27\python.exe> : False (TRUST_E_NOSIGNATURE(0x800b0100L))
+<c:\users\cleme\appdata\local\programs\python\python311\python.exe> : True
 <c:\windows\system32\ntdll.dll> : True
 <c:\windows\system32\kernel32.dll> : True
 <c:\windows\system32\kernelbase.dll> : True
-<c:\windows\winsxs\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.9317_none_508dca76bcbcfe81\msvcr90.dll> : True
+<c:\windows\system32\ucrtbase.dll> : True

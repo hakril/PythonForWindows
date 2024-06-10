@@ -1,30 +1,30 @@
 (cmd) python debug\symbols\virtsymdemo.py
 Namespace(dbghelp=None)
-Ntdll module is: <SymbolModule name="ntdll" type=SymPdb pdb="wntdll.pdb" addr=0x420000>
+Ntdll module is: <SymbolModule name="ntdll" type=SymPdb pdb="ntdll.pdb" addr=0x420000>
   * name = ntdll
   * addr = 0x420000
   * path = c:\windows\system32\ntdll.dll
-  * type = <SYM_TYPE SymPdb(0x3L)>
-  * pdb = d:\symbols\wntdll.pdb\3D038F31BBBF51C701937460DBAB1F531\wntdll.pdb
+  * type = <SYM_TYPE SymPdb(0x3)>
+  * pdb = c:\Symbols\ntdll.pdb\8D5D5ED5D5B8AA609A82600C14E3004D1\ntdll.pdb
 
 Resolving function <LdrLoadDll>
 Symbol found !
-  * __repr__: <SymbolInfoA name="LdrLoadDll" start=0x464d30 tag=SymTagFunction>
+  * __repr__: <SymbolInfoW name="LdrLoadDll" start=0x44a160 tag=SymTagFunction>
   * __str__: ntdll!LdrLoadDll
-  * addr: 0x464d30
+  * addr: 0x44a160
   * name: LdrLoadDll
   * fullname: ntdll!LdrLoadDll
-  * module: <SymbolModule name="ntdll" type=SymPdb pdb="wntdll.pdb" addr=0x420000>
+  * module: <SymbolModule name="ntdll" type=SymPdb pdb="ntdll.pdb" addr=0x420000>
 
 Loading kernelbase
-Loaded modules are: [<SymbolModule name="ntdll" type=SymPdb pdb="wntdll.pdb" addr=0x420000>, <SymbolModule name="kernelbase" type=SymPdb pdb="wkernelbase.pdb" addr=0x1230000>]
+Loaded modules are: [<SymbolModule name="ntdll" type=SymPdb pdb="ntdll.pdb" addr=0x420000>, <SymbolModule name="kernelbase" type=SymPdb pdb="kernelbase.pdb" addr=0x1230000>]
 Looking up address: 0x1231242
 Symbol resolved !
-  * __repr__: <SymbolInfoA name="__load_config_used" start=0x1231230 displacement=0x12 tag=SymTagPublicSymbol>
-  * __str__: kernelbase!__load_config_used+0x12
-  * start: 0x1231230
+  * __repr__: <SymbolInfoW name="PsspThunkWin32Nt_HANDLE_ENTRY" start=0x1231240 displacement=0x2 tag=SymTagPublicSymbol>
+  * __str__: kernelbase!PsspThunkWin32Nt_HANDLE_ENTRY+0x2
+  * start: 0x1231240
   * addr: 0x1231242
-  * displacement: 0x12
-  * name: __load_config_used
-  * fullname: kernelbase!__load_config_used+0x12
-  * module: <SymbolModule name="kernelbase" type=SymPdb pdb="wkernelbase.pdb" addr=0x1230000>
+  * displacement: 0x2
+  * name: PsspThunkWin32Nt_HANDLE_ENTRY
+  * fullname: kernelbase!PsspThunkWin32Nt_HANDLE_ENTRY+0x2
+  * module: <SymbolModule name="kernelbase" type=SymPdb pdb="kernelbase.pdb" addr=0x1230000>

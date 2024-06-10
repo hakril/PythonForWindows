@@ -2,13 +2,13 @@
 WMI namespace is <<WmiNamespace "root\cimv2">>
 Process class is <WmiObject class "Win32_Process">
 Method Create InParams is <<WmiObject class "__PARAMETERS">>
-Method Create InParams properties are <[u'CommandLine', u'CurrentDirectory', u'ProcessStartupInformation']>
+Method Create InParams properties are <['CommandLine', 'CurrentDirectory', 'ProcessStartupInformation']>
 Creating instance of inparam
 InParam instance is <<WmiObject instance of "__PARAMETERS">>
 Setting <CommandLine>
 Executing method
 OutParams is <WmiObject instance of "__PARAMETERS">
-Out params values are: [u'ProcessId', u'ReturnValue']
-Created process is <WinProcess "notepad.exe" pid 24036 at 0x3d04390>
+Out params values are: ['ProcessId', 'ReturnValue']
+Created process is <WinProcess "notepad.exe" pid 26744 at 0x180e84d48d0>
 Waiting 1s
 Killing the process

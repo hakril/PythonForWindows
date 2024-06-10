@@ -4,12 +4,12 @@ Catching call to <INetFwPolicy2.FirewallEnabled>
 Info about parameters 0:
  * param0info.fIn -> 0x1
  * param0info.fOut -> 0x0
- * param0info.stackOffset -> 0x4L
- * param0info.cbParam -> 0x4L
+ * param0info.stackOffset -> 0x8
+ * param0info.cbParam -> 0x8
 param0 value = 2
 Leaving the sink !
 return value = 1234
 firewall enabled = VARIANT_BOOL(True)
 Testing a function taking a PTR to a COM interface
-Before call: (<ICallFrameEvents object at 0x066EF3F0>, None)
-After call: (<ICallFrameEvents object at 0x066EF3F0>, 107934504)
+Before call: (<ICallFrameEvents<NULL> at 0x1fb65de5550>, None)
+After call: (<ICallFrameEvents at 0x1fb65de5550>, 2179257488408)
