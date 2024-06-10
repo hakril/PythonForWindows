@@ -69,3 +69,6 @@ jobs:
         with:
           files: junit/test-results.xml
           check_name: PyTest Results for ${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}}
+          secondary_rate_limit_wait_seconds: 90
+          seconds_between_github_writes: 10
+          seconds_between_github_reads: 1
