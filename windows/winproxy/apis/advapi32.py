@@ -47,7 +47,7 @@ def OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle):
 
 @Advapi32Proxy()
 def SetThreadToken(Thread, Token):
-    if isinstance(Thread, (int, long)):
+    if isinstance(Thread, windows.pycompat.int_types):
         Thread = gdef.HANDLE(Thread)
     return SetThreadToken.ctypes_function(Thread, Token)
 

@@ -5,6 +5,7 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from windows import utils
+from windows import winproxy
 from windows.pycompat import int_types
 import windows.generated_def as gdef
 from windows.generated_def import *
@@ -40,6 +41,8 @@ from windows.pycompat import basestring, urepr_encode
 
 class ServiceManager(utils.AutoHandle):
     """An object to query, list and explore services"""
+    _close_function = staticmethod(winproxy.CloseServiceHandle)
+
     def __init__(self):
         self.enum_flags = None #: Lazy computed at first enum
 
