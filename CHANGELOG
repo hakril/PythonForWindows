@@ -1,3 +1,13 @@
+1.0.0:
+
+Unicode everywhere:
+	Whenever possible, PythonForWindows use W() (wide) APIs and returns unicode string.
+	This means `str` for python3 & `unicode` for python2.7
+
+windows.system.build_number now returns a int : the actual build number
+windows.system.build_number became windows.system.versionstr
+
+
 Between 0.4 & 0.5:
     == New features ==
         - windows.security

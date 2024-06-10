@@ -77,6 +77,7 @@ Documentation
    wip.rst
    internals.rst
    sample.rst
+   encoding.rst
 
 
 Indices and tables
