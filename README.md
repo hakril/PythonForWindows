@@ -569,9 +569,6 @@ The path of `dbghelp.dll` can also be given via the `PFW_DBGHELP_PATH` environme
 >>> sh.search("ntdll!*CreateFile")
 [<SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagFunction>, <SymbolInfoW name="EtwpCreateFile" start=0x47d9ec tag=SymTagPublicSymbol>, <SymbolInfoW name="NtCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="ZwCreateFile" start=0x4c03e0 tag=SymTagPublicSymbol>, <SymbolInfoW name="__imp_NtCreateFile" start=0x55cb70 tag=SymTagPublicSymbol>]
 # Some types exploration
->>> sh.get_type("ntdll!_PEB")
-<SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
->>> peb = _
 >>> peb = sh.get_type("ntdll!_PEB")
 >>> peb
 <SymbolType name="_PEB" tag=_SymTagEnum.SymTagUDT(0xb)>
