@@ -1,9 +1,9 @@
 import ctypes
 import struct
 
-import native_function
-import simple_x86 as x86
-import simple_x64 as x64
+from windows.native_exec import native_function
+import windows.native_exec.simple_x86 as x86
+import windows.native_exec.simple_x64 as x64
 from windows.generated_def.winstructs import *
 
 
@@ -126,13 +126,13 @@ def get_vendor_id():
 
 # platform.processor() could do the trick
 def is_intel_proc():
-    """get_vendor_id() == 'GenuineIntel'"""
-    return get_vendor_id() == "GenuineIntel"
+    """get_vendor_id() == b'GenuineIntel'"""
+    return get_vendor_id() == b"GenuineIntel"
 
 
 def is_amd_proc():
-    """get_vendor_id() == 'AuthenticAMD'"""
-    return get_vendor_id() == "AuthenticAMD"
+    """get_vendor_id() == b'AuthenticAMD'"""
+    return get_vendor_id() == b"AuthenticAMD"
 
 
 def get_proc_family_model():
