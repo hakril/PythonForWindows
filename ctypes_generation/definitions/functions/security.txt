@@ -334,8 +334,3 @@ BOOL WINAPI MakeSelfRelativeSD(
   [out, optional] PSECURITY_DESCRIPTOR pSelfRelativeSecurityDescriptor,
   [in, out]       LPDWORD              lpdwBufferLength
 );
-
-BOOL WINAPI InitializeSecurityDescriptor(
-  [out] PSECURITY_DESCRIPTOR pSecurityDescriptor,
-  [in]  DWORD                dwRevision
-);

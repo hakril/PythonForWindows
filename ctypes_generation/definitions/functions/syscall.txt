@@ -314,19 +314,6 @@ NTSTATUS WINAPI NtFreeVirtualMemory(
 );
 
 
-
-NTSTATUS WINAPI NtGetContextThread(
-    __in    HANDLE hThread,
-    __inout LPCONTEXT lpContext
-);
-
-
-NTSTATUS WINAPI NtSetContextThread(
-    __in HANDLE hThread,
-    __in CONST LPCONTEXT lpContext
-);
-
-
 NTSTATUS NtCreateSection(
     PHANDLE            SectionHandle,
     ACCESS_MASK        DesiredAccess,

@@ -104,21 +104,7 @@ BOOL InternetSetOptionW(
   DWORD     dwBufferLength
 );
 
-BOOL HttpSendRequestA(
-  HINTERNET hRequest,
-  LPCSTR    lpszHeaders,
-  DWORD     dwHeadersLength,
-  LPVOID    lpOptional,
-  DWORD     dwOptionalLength
-);
 
-BOOL HttpSendRequestW(
-  HINTERNET hRequest,
-  LPCWSTR   lpszHeaders,
-  DWORD     dwHeadersLength,
-  LPVOID    lpOptional,
-  DWORD     dwOptionalLength
-);
 
 BOOL InternetReadFile(
   HINTERNET hFile,

@@ -63,16 +63,16 @@ typedef union _PORT_MESSAGE32_TMP_UNION
 {
         ULONG ClientViewSize;
         ULONG CallbackId;
-} PORT_MESSAGE_TMP_UNION;
+} PORT_MESSAGE32_TMP_UNION;
 
 typedef union _PORT_MESSAGE64_TMP_UNION
 {
         ULONGLONG ClientViewSize;
         ULONG CallbackId;
-} PORT_MESSAGE_TMP_UNION;
+} PORT_MESSAGE64_TMP_UNION;
 
 
-typedef struct _PORT_MESSAGE_TMP_SUBSTRUCT_S1
+typedef struct
 {
     CSHORT DataLength;
     CSHORT TotalLength;

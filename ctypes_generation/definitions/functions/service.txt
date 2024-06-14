@@ -67,11 +67,6 @@ SC_HANDLE WINAPI OpenServiceW(
   _In_ DWORD     dwDesiredAccess
 );
 
-BOOL ControlService(
-  SC_HANDLE        hService,
-  DWORD            dwControl,
-  LPSERVICE_STATUS lpServiceStatus
-);
 
 BOOL QueryServiceStatus(
   SC_HANDLE        hService,

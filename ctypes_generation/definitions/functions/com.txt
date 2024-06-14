@@ -118,10 +118,6 @@ HRESULT SafeArrayGetVartype(
   [out] VARTYPE   *pvt
 );
 
-VOID SysFreeString(
-  [in, optional] BSTR bstrString
-);
-
 HRESULT SafeArrayCopy(
   [in]  SAFEARRAY   *psa,
   [out] LPSAFEARRAY *ppsaOut

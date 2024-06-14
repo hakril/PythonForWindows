@@ -45,9 +45,6 @@ BOOL FindCloseChangeNotification(
   HANDLE hChangeHandle
 );
 
-BOOL FindNextChangeNotification(
-  HANDLE hChangeHandle
-);
 
 BOOL ReadDirectoryChangesW(
   HANDLE                          hDirectory,

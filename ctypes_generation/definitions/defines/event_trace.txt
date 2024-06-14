@@ -45,9 +45,6 @@
 #define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // Auto-switch log file
 #define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // Pre-allocate mode
 
-#define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // Auto-switch log file
-#define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // Pre-allocate mode
-
 //
 // Logger Mode flags on Vista and above
 //

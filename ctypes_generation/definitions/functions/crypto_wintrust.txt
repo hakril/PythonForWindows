@@ -52,11 +52,6 @@ BOOL WINAPI CryptCATAdminReleaseContext(
   _In_ DWORD     dwFlags
 );
 
-CRYPTCATATTRIBUTE* WINAPI CryptCATGetAttrInfo(
-  _In_ HANDLE         hCatalog,
-  _In_ CRYPTCATMEMBER *pCatMember,
-  _In_ LPWSTR         pwszReferenceTag
-);
 
 CRYPTCATMEMBER* WINAPI CryptCATGetMemberInfo(
   _In_ HANDLE hCatalog,
@@ -323,24 +318,7 @@ BOOL CryptDestroyHash(
   HCRYPTHASH hHash
 );
 
-BOOL CryptEncrypt(
-  HCRYPTKEY  hKey,
-  HCRYPTHASH hHash,
-  BOOL       Final,
-  DWORD      dwFlags,
-  BYTE       *pbData,
-  DWORD      *pdwDataLen,
-  DWORD      dwBufLen
-);
 
-BOOL CryptDecrypt(
-  HCRYPTKEY  hKey,
-  HCRYPTHASH hHash,
-  BOOL       Final,
-  DWORD      dwFlags,
-  BYTE       *pbData,
-  DWORD      *pdwDataLen
-);
 
 BOOL CryptDeriveKey(
   HCRYPTPROV hProv,

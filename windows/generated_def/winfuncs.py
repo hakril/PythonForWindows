@@ -385,11 +385,6 @@ SafeArrayPutElementParams = ((1, 'psa'), (1, 'rgIndices'), (1, 'pv'))
 SafeArrayGetVartypePrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(VARTYPE))
 SafeArrayGetVartypeParams = ((1, 'psa'), (1, 'pvt'))
 
-#def SysFreeString(bstrString):
-#    return SysFreeString.ctypes_function(bstrString)
-SysFreeStringPrototype = WINFUNCTYPE(VOID, BSTR)
-SysFreeStringParams = ((1, 'bstrString'),)
-
 #def SafeArrayCopy(psa, ppsaOut):
 #    return SafeArrayCopy.ctypes_function(psa, ppsaOut)
 SafeArrayCopyPrototype = WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY), POINTER(LPSAFEARRAY))
@@ -449,11 +444,6 @@ CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (
 #    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
 CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
 CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
-
-#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
-#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
-CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
-CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
 
 #def CryptCATGetMemberInfo(hCatalog, pwszReferenceTag):
 #    return CryptCATGetMemberInfo.ctypes_function(hCatalog, pwszReferenceTag)
@@ -619,16 +609,6 @@ CryptSignHashWParams = ((1, 'hHash'), (1, 'dwKeySpec'), (1, 'szDescription'), (1
 #    return CryptDestroyHash.ctypes_function(hHash)
 CryptDestroyHashPrototype = WINFUNCTYPE(BOOL, HCRYPTHASH)
 CryptDestroyHashParams = ((1, 'hHash'),)
-
-#def CryptEncrypt(hKey, hHash, Final, dwFlags, pbData, pdwDataLen, dwBufLen):
-#    return CryptEncrypt.ctypes_function(hKey, hHash, Final, dwFlags, pbData, pdwDataLen, dwBufLen)
-CryptEncryptPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY, HCRYPTHASH, BOOL, DWORD, POINTER(BYTE), POINTER(DWORD), DWORD)
-CryptEncryptParams = ((1, 'hKey'), (1, 'hHash'), (1, 'Final'), (1, 'dwFlags'), (1, 'pbData'), (1, 'pdwDataLen'), (1, 'dwBufLen'))
-
-#def CryptDecrypt(hKey, hHash, Final, dwFlags, pbData, pdwDataLen):
-#    return CryptDecrypt.ctypes_function(hKey, hHash, Final, dwFlags, pbData, pdwDataLen)
-CryptDecryptPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY, HCRYPTHASH, BOOL, DWORD, POINTER(BYTE), POINTER(DWORD))
-CryptDecryptParams = ((1, 'hKey'), (1, 'hHash'), (1, 'Final'), (1, 'dwFlags'), (1, 'pbData'), (1, 'pdwDataLen'))
 
 #def CryptDeriveKey(hProv, Algid, hBaseData, dwFlags, phKey):
 #    return CryptDeriveKey.ctypes_function(hProv, Algid, hBaseData, dwFlags, phKey)
@@ -1195,11 +1175,6 @@ FindNextChangeNotificationParams = ((1, 'hChangeHandle'),)
 FindCloseChangeNotificationPrototype = WINFUNCTYPE(BOOL, HANDLE)
 FindCloseChangeNotificationParams = ((1, 'hChangeHandle'),)
 
-#def FindNextChangeNotification(hChangeHandle):
-#    return FindNextChangeNotification.ctypes_function(hChangeHandle)
-FindNextChangeNotificationPrototype = WINFUNCTYPE(BOOL, HANDLE)
-FindNextChangeNotificationParams = ((1, 'hChangeHandle'),)
-
 #def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine):
 #    return ReadDirectoryChangesW.ctypes_function(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine)
 ReadDirectoryChangesWPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, DWORD, BOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE)
@@ -1284,16 +1259,6 @@ InternetSetOptionAParams = ((1, 'hInternet'), (1, 'dwOption'), (1, 'lpBuffer'), 
 #    return InternetSetOptionW.ctypes_function(hInternet, dwOption, lpBuffer, dwBufferLength)
 InternetSetOptionWPrototype = WINFUNCTYPE(BOOL, HINTERNET, DWORD, LPVOID, DWORD)
 InternetSetOptionWParams = ((1, 'hInternet'), (1, 'dwOption'), (1, 'lpBuffer'), (1, 'dwBufferLength'))
-
-#def HttpSendRequestA(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
-#    return HttpSendRequestA.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
-HttpSendRequestAPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCSTR, DWORD, LPVOID, DWORD)
-HttpSendRequestAParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
-
-#def HttpSendRequestW(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength):
-#    return HttpSendRequestW.ctypes_function(hRequest, lpszHeaders, dwHeadersLength, lpOptional, dwOptionalLength)
-HttpSendRequestWPrototype = WINFUNCTYPE(BOOL, HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD)
-HttpSendRequestWParams = ((1, 'hRequest'), (1, 'lpszHeaders'), (1, 'dwHeadersLength'), (1, 'lpOptional'), (1, 'dwOptionalLength'))
 
 #def InternetReadFile(hFile, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead):
 #    return InternetReadFile.ctypes_function(hFile, lpBuffer, dwNumberOfBytesToRead, lpdwNumberOfBytesRead)
@@ -1475,11 +1440,6 @@ OpenFileMappingAParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lp
 UnmapViewOfFilePrototype = WINFUNCTYPE(BOOL, LPCVOID)
 UnmapViewOfFileParams = ((1, 'lpBaseAddress'),)
 
-#def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
-#    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
-NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
-NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
-
 #def NetQueryDisplayInformation(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer):
 #    return NetQueryDisplayInformation.ctypes_function(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer)
 NetQueryDisplayInformationPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, DWORD, DWORD, DWORD, LPDWORD, POINTER(PVOID))
@@ -1510,11 +1470,6 @@ NetGroupGetUsersParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1,
 NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
 NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
 
-#def NetLocalGroupGetInfo(servername, groupname, level, bufptr):
-#    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
-NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
-NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
-
 #def NetLocalGroupGetMembers(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
 #    return NetLocalGroupGetMembers.ctypes_function(servername, localgroupname, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
 NetLocalGroupGetMembersPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
@@ -1524,11 +1479,6 @@ NetLocalGroupGetMembersParams = ((1, 'servername'), (1, 'localgroupname'), (1, '
 #    return NetLocalGroupGetInfo.ctypes_function(servername, groupname, level, bufptr)
 NetLocalGroupGetInfoPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, LPCWSTR, DWORD, POINTER(LPBYTE))
 NetLocalGroupGetInfoParams = ((1, 'servername'), (1, 'groupname'), (1, 'level'), (1, 'bufptr'))
-
-#def NetLocalGroupEnum(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle):
-#    return NetLocalGroupEnum.ctypes_function(servername, level, bufptr, prefmaxlen, entriesread, totalentries, resumehandle)
-NetLocalGroupEnumPrototype = WINFUNCTYPE(NET_API_STATUS, LPCWSTR, DWORD, POINTER(LPBYTE), DWORD, LPDWORD, LPDWORD, PDWORD_PTR)
-NetLocalGroupEnumParams = ((1, 'servername'), (1, 'level'), (1, 'bufptr'), (1, 'prefmaxlen'), (1, 'entriesread'), (1, 'totalentries'), (1, 'resumehandle'))
 
 #def NetApiBufferFree(Buffer):
 #    return NetApiBufferFree.ctypes_function(Buffer)
@@ -2145,11 +2095,6 @@ MakeAbsoluteSDParams = ((1, 'pSelfRelativeSecurityDescriptor'), (1, 'pAbsoluteSe
 MakeSelfRelativeSDPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, PSECURITY_DESCRIPTOR, LPDWORD)
 MakeSelfRelativeSDParams = ((1, 'pAbsoluteSecurityDescriptor'), (1, 'pSelfRelativeSecurityDescriptor'), (1, 'lpdwBufferLength'))
 
-#def InitializeSecurityDescriptor(pSecurityDescriptor, dwRevision):
-#    return InitializeSecurityDescriptor.ctypes_function(pSecurityDescriptor, dwRevision)
-InitializeSecurityDescriptorPrototype = WINFUNCTYPE(BOOL, PSECURITY_DESCRIPTOR, DWORD)
-InitializeSecurityDescriptorParams = ((1, 'pSecurityDescriptor'), (1, 'dwRevision'))
-
 #def OpenSCManagerA(lpMachineName, lpDatabaseName, dwDesiredAccess):
 #    return OpenSCManagerA.ctypes_function(lpMachineName, lpDatabaseName, dwDesiredAccess)
 OpenSCManagerAPrototype = WINFUNCTYPE(SC_HANDLE, LPCSTR, LPCSTR, DWORD)
@@ -2194,11 +2139,6 @@ OpenServiceAParams = ((1, 'hSCManager'), (1, 'lpServiceName'), (1, 'dwDesiredAcc
 #    return OpenServiceW.ctypes_function(hSCManager, lpServiceName, dwDesiredAccess)
 OpenServiceWPrototype = WINFUNCTYPE(SC_HANDLE, SC_HANDLE, LPCWSTR, DWORD)
 OpenServiceWParams = ((1, 'hSCManager'), (1, 'lpServiceName'), (1, 'dwDesiredAccess'))
-
-#def ControlService(hService, dwControl, lpServiceStatus):
-#    return ControlService.ctypes_function(hService, dwControl, lpServiceStatus)
-ControlServicePrototype = WINFUNCTYPE(BOOL, SC_HANDLE, DWORD, LPSERVICE_STATUS)
-ControlServiceParams = ((1, 'hService'), (1, 'dwControl'), (1, 'lpServiceStatus'))
 
 #def QueryServiceStatus(hService, lpServiceStatus):
 #    return QueryServiceStatus.ctypes_function(hService, lpServiceStatus)
@@ -2930,16 +2870,6 @@ NtEnumerateSystemEnvironmentValuesExParams = ((1, 'InformationClass'), (1, 'Buff
 NtFreeVirtualMemoryPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, POINTER(PVOID), PSIZE_T, ULONG)
 NtFreeVirtualMemoryParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'), (1, 'RegionSize'), (1, 'FreeType'))
 
-#def NtGetContextThread(hThread, lpContext):
-#    return NtGetContextThread.ctypes_function(hThread, lpContext)
-NtGetContextThreadPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, LPCONTEXT)
-NtGetContextThreadParams = ((1, 'hThread'), (1, 'lpContext'))
-
-#def NtSetContextThread(hThread, lpContext):
-#    return NtSetContextThread.ctypes_function(hThread, lpContext)
-NtSetContextThreadPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, LPCONTEXT)
-NtSetContextThreadParams = ((1, 'hThread'), (1, 'lpContext'))
-
 #def NtCreateSection(SectionHandle, DesiredAccess, ObjectAttributes, MaximumSize, SectionPageProtection, AllocationAttributes, FileHandle):
 #    return NtCreateSection.ctypes_function(SectionHandle, DesiredAccess, ObjectAttributes, MaximumSize, SectionPageProtection, AllocationAttributes, FileHandle)
 NtCreateSectionPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, PLARGE_INTEGER, ULONG, ULONG, HANDLE)
@@ -3355,11 +3285,6 @@ CreateThreadParams = ((1, 'lpThreadAttributes'), (1, 'dwStackSize'), (1, 'lpStar
 CreateRemoteThreadPrototype = WINFUNCTYPE(HANDLE, HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD)
 CreateRemoteThreadParams = ((1, 'hProcess'), (1, 'lpThreadAttributes'), (1, 'dwStackSize'), (1, 'lpStartAddress'), (1, 'lpParameter'), (1, 'dwCreationFlags'), (1, 'lpThreadId'))
 
-#def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect):
-#    return VirtualProtect.ctypes_function(lpAddress, dwSize, flNewProtect, lpflOldProtect)
-VirtualProtectPrototype = WINFUNCTYPE(BOOL, LPVOID, SIZE_T, DWORD, PDWORD)
-VirtualProtectParams = ((1, 'lpAddress'), (1, 'dwSize'), (1, 'flNewProtect'), (1, 'lpflOldProtect'))
-
 #def CreateProcessA(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation):
 #    return CreateProcessA.ctypes_function(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 CreateProcessAPrototype = WINFUNCTYPE(BOOL, LPCSTR, LPSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL, DWORD, LPVOID, LPCSTR, LPSTARTUPINFOA, LPPROCESS_INFORMATION)
@@ -3440,11 +3365,6 @@ CreateFileAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode
 CreateFileWPrototype = WINFUNCTYPE(HANDLE, LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE)
 CreateFileWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'))
 
-#def OpenProcessToken(ProcessHandle, DesiredAccess, TokenHandle):
-#    return OpenProcessToken.ctypes_function(ProcessHandle, DesiredAccess, TokenHandle)
-OpenProcessTokenPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, PHANDLE)
-OpenProcessTokenParams = ((1, 'ProcessHandle'), (1, 'DesiredAccess'), (1, 'TokenHandle'))
-
 #def DuplicateToken(ExistingTokenHandle, ImpersonationLevel, DuplicateTokenHandle):
 #    return DuplicateToken.ctypes_function(ExistingTokenHandle, ImpersonationLevel, DuplicateTokenHandle)
 DuplicateTokenPrototype = WINFUNCTYPE(BOOL, HANDLE, SECURITY_IMPERSONATION_LEVEL, PHANDLE)
@@ -3454,11 +3374,6 @@ DuplicateTokenParams = ((1, 'ExistingTokenHandle'), (1, 'ImpersonationLevel'), (
 #    return DuplicateTokenEx.ctypes_function(hExistingToken, dwDesiredAccess, lpTokenAttributes, ImpersonationLevel, TokenType, phNewToken)
 DuplicateTokenExPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPSECURITY_ATTRIBUTES, SECURITY_IMPERSONATION_LEVEL, TOKEN_TYPE, PHANDLE)
 DuplicateTokenExParams = ((1, 'hExistingToken'), (1, 'dwDesiredAccess'), (1, 'lpTokenAttributes'), (1, 'ImpersonationLevel'), (1, 'TokenType'), (1, 'phNewToken'))
-
-#def OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle):
-#    return OpenThreadToken.ctypes_function(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle)
-OpenThreadTokenPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, BOOL, PHANDLE)
-OpenThreadTokenParams = ((1, 'ThreadHandle'), (1, 'DesiredAccess'), (1, 'OpenAsSelf'), (1, 'TokenHandle'))
 
 #def SetThreadToken(Thread, Token):
 #    return SetThreadToken.ctypes_function(Thread, Token)
@@ -3665,11 +3580,6 @@ GetThreadIdParams = ((1, 'Thread'),)
 DeviceIoControlPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPVOID, DWORD, LPDWORD, LPOVERLAPPED)
 DeviceIoControlParams = ((1, 'hDevice'), (1, 'dwIoControlCode'), (1, 'lpInBuffer'), (1, 'nInBufferSize'), (1, 'lpOutBuffer'), (1, 'nOutBufferSize'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'))
 
-#def GetTokenInformation(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength):
-#    return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
-GetTokenInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, TOKEN_INFORMATION_CLASS, LPVOID, DWORD, PDWORD)
-GetTokenInformationParams = ((1, 'TokenHandle'), (1, 'TokenInformationClass'), (1, 'TokenInformation'), (1, 'TokenInformationLength'), (1, 'ReturnLength'))
-
 #def Wow64DisableWow64FsRedirection(OldValue):
 #    return Wow64DisableWow64FsRedirection.ctypes_function(OldValue)
 Wow64DisableWow64FsRedirectionPrototype = WINFUNCTYPE(BOOL, POINTER(PVOID))
@@ -3694,11 +3604,6 @@ Wow64GetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
 #    return SetConsoleCtrlHandler.ctypes_function(HandlerRoutine, Add)
 SetConsoleCtrlHandlerPrototype = WINFUNCTYPE(BOOL, PHANDLER_ROUTINE, BOOL)
 SetConsoleCtrlHandlerParams = ((1, 'HandlerRoutine'), (1, 'Add'))
-
-#def WinVerifyTrust(hwnd, pgActionID, pWVTData):
-#    return WinVerifyTrust.ctypes_function(hwnd, pgActionID, pWVTData)
-WinVerifyTrustPrototype = WINFUNCTYPE(LONG, HWND, POINTER(GUID), LPVOID)
-WinVerifyTrustParams = ((1, 'hwnd'), (1, 'pgActionID'), (1, 'pWVTData'))
 
 #def GlobalAlloc(uFlags, dwBytes):
 #    return GlobalAlloc.ctypes_function(uFlags, dwBytes)

@@ -98,12 +98,6 @@ typedef struct _CTL_ENTRY {
 } CTL_ENTRY, *PCTL_ENTRY;
 
 
-typedef struct _CRYPT_ATTRIBUTE {
-    LPSTR               pszObjId;
-    DWORD               cValue;
-    PCRYPT_ATTR_BLOB    rgValue;
-} CRYPT_ATTRIBUTE, *PCRYPT_ATTRIBUTE;
-
 typedef struct _CRYPT_ATTRIBUTES {
     DWORD                cAttr;
     PCRYPT_ATTRIBUTE     rgAttr;
@@ -596,15 +590,6 @@ typedef struct _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO {
 } CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO, *PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO;
 
 
-
-typedef struct _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO {
-  DWORD                      cbSize;
-  CRYPT_ALGORITHM_IDENTIFIER KeyEncryptionAlgorithm;
-  PVOID                      pvKeyEncryptionAuxInfo;
-  HCRYPTPROV_LEGACY          hCryptProv;
-  CRYPT_BIT_BLOB             RecipientPublicKey;
-  CERT_ID                    RecipientId;
-} CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO, *PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO;
 
 typedef struct _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO {
   DWORD                      cbSize;

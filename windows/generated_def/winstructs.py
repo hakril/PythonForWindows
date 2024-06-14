@@ -66,8 +66,6 @@ NTSTATUS = DWORD
 TDHSTATUS = ULONG
 DNS_STATUS = ULONG
 LSTATUS = LONG#Registryfunctionsreturnvalue|typedef_Return_type_success_(return==ERROR_SUCCESS)LONGLSTATUS;
-SECURITY_INFORMATION = DWORD
-PSECURITY_INFORMATION = POINTER(SECURITY_INFORMATION)
 PULONG = POINTER(ULONG)
 PDWORD = POINTER(DWORD)
 LPDWORD = POINTER(DWORD)
@@ -120,8 +118,6 @@ PULONG64 = POINTER(ULONG64)
 PBYTE = POINTER(BYTE)
 PUINT = POINTER(UINT)
 PHKEY = POINTER(HKEY)
-ACCESS_MASK = DWORD
-REGSAM = ACCESS_MASK
 PBOOLEAN = POINTER(BOOLEAN)
 SECURITY_CONTEXT_TRACKING_MODE = BOOLEAN
 HCRYPTPROV_LEGACY = PULONG
@@ -156,7 +152,6 @@ INT64 = LONGLONG
 UINT8 = BYTE
 UINT16 = USHORT
 UINT32 = UINT
-UINT64 = ULONGLONG
 ULONG32 = UINT32
 LONG32 = INT32
 PHANDLE = POINTER(HANDLE)
@@ -182,6 +177,7 @@ SECURITY_DESCRIPTOR_CONTROL = WORD
 PSECURITY_DESCRIPTOR_CONTROL = POINTER(SECURITY_DESCRIPTOR_CONTROL)
 ACCESS_MASK = DWORD
 PACCESS_MASK = POINTER(ACCESS_MASK)
+REGSAM = ACCESS_MASK
 SECURITY_INFORMATION = DWORD
 PSECURITY_INFORMATION = POINTER(SECURITY_INFORMATION)
 PSECURITY_ATTRIBUTES_OPAQUE = PVOID
@@ -701,16 +697,6 @@ class CS_Resource_s(Structure):
 CS_RESOURCE = CS_Resource_s
 PCS_RESOURCE = POINTER(CS_Resource_s)
 
-class DMA_Des_s(Structure):
-    _fields_ = [
-        ("DD_Count", DWORD),
-        ("DD_Type", DWORD),
-        ("DD_Flags", DWORD),
-        ("DD_Alloc_Chan", ULONG),
-    ]
-DMA_DES = DMA_Des_s
-PDMA_DES = POINTER(DMA_Des_s)
-
 class DMA_Resource_s(Structure):
     _fields_ = [
         ("DMA_Header", DMA_DES),
@@ -718,17 +704,6 @@ class DMA_Resource_s(Structure):
     ]
 DMA_RESOURCE = DMA_Resource_s
 PDMA_RESOURCE = POINTER(DMA_Resource_s)
-
-class IO_Des_s(Structure):
-    _fields_ = [
-        ("IOD_Count", DWORD),
-        ("IOD_Type", DWORD),
-        ("IOD_Alloc_Base", DWORDLONG),
-        ("IOD_Alloc_End", DWORDLONG),
-        ("IOD_DesFlags", DWORD),
-    ]
-IO_DES = IO_Des_s
-PIO_DES = POINTER(IO_Des_s)
 
 class IO_Resource_s(Structure):
     _fields_ = [
@@ -4605,14 +4580,6 @@ class _SE_OBJECT_TYPE(EnumType):
 SE_OBJECT_TYPE = _SE_OBJECT_TYPE
 
 
-ViewShare = EnumValue("_SECTION_INHERIT", "ViewShare", 0x1)
-ViewUnmap = EnumValue("_SECTION_INHERIT", "ViewUnmap", 0x2)
-class _SECTION_INHERIT(EnumType):
-    values = [ViewShare, ViewUnmap]
-    mapper = FlagMapper(*values)
-SECTION_INHERIT = _SECTION_INHERIT
-
-
 COINIT_APARTMENTTHREADED = EnumValue("tagCOINIT", "COINIT_APARTMENTTHREADED", 0x2)
 COINIT_MULTITHREADED = EnumValue("tagCOINIT", "COINIT_MULTITHREADED", 0x0)
 COINIT_DISABLE_OLE1DDE = EnumValue("tagCOINIT", "COINIT_DISABLE_OLE1DDE", 0x4)
@@ -6459,15 +6426,6 @@ class _FILE_FS_DRIVER_PATH_INFORMATION(Structure):
 FILE_FS_DRIVER_PATH_INFORMATION = _FILE_FS_DRIVER_PATH_INFORMATION
 PFILE_FS_DRIVER_PATH_INFORMATION = POINTER(_FILE_FS_DRIVER_PATH_INFORMATION)
 
-class _FILE_FS_DRIVER_PATH_INFORMATION(Structure):
-    _fields_ = [
-        ("DriverInPath", BOOLEAN),
-        ("DriverNameLength", ULONG),
-        ("DriverName", WCHAR * (1)),
-    ]
-FILE_FS_DRIVER_PATH_INFORMATION = _FILE_FS_DRIVER_PATH_INFORMATION
-PFILE_FS_DRIVER_PATH_INFORMATION = POINTER(_FILE_FS_DRIVER_PATH_INFORMATION)
-
 class _FILE_FS_VOLUME_INFORMATION(Structure):
     _fields_ = [
         ("VolumeCreationTime", LARGE_INTEGER),
@@ -6641,14 +6599,14 @@ class _PORT_MESSAGE32_TMP_UNION(Union):
         ("ClientViewSize", ULONG),
         ("CallbackId", ULONG),
     ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
+PORT_MESSAGE32_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
 
 class _PORT_MESSAGE64_TMP_UNION(Union):
     _fields_ = [
         ("ClientViewSize", ULONGLONG),
         ("CallbackId", ULONG),
     ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
+PORT_MESSAGE64_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
 
 class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
     _fields_ = [
@@ -7476,39 +7434,6 @@ class _CTL_ENTRY(Structure):
 CTL_ENTRY = _CTL_ENTRY
 PCTL_ENTRY = POINTER(_CTL_ENTRY)
 
-class _CRYPT_ATTRIBUTE(Structure):
-    _fields_ = [
-        ("pszObjId", LPSTR),
-        ("cValue", DWORD),
-        ("rgValue", PCRYPT_ATTR_BLOB),
-    ]
-CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
-
-OLD_CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
-
-class _CRYPT_ATTRIBUTE(_CRYPT_ATTRIBUTE):
-    @property
-    def count(self): # __len__ ?
-        return self.cValue
-
-    @property
-    def values(self):
-        return self.rgValue[:self.cValue]
-
-    @property
-    def objid(self):
-        # SZOID_MAPPER defined in the generated structures template.py
-        return SZOID_MAPPER[self.pszObjId]
-
-    def __repr__(self):
-        # return """<{0} pszObjId={1!r} Values={2}>""".format(type(self).__name__, self.objid, self.cValue)
-        if not self.pszObjId in SZOID_MAPPER:
-            return """<{0} pszObjId="{1}" Values={2}>""".format(type(self).__name__, self.pszObjId, self.cValue)
-        flag = SZOID_MAPPER[self.pszObjId]
-        return """<{0} pszObjId="{1}" ({2}) Values={3}>""".format(type(self).__name__, flag, flag.name, self.cValue)
-CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
-PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
 class _CRYPT_ATTRIBUTES(Structure):
     _fields_ = [
         ("cAttr", DWORD),
@@ -8114,18 +8039,6 @@ class _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO(Structure):
     ]
 CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO = _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
 PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO)
-
-class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
-    _fields_ = [
-        ("cbSize", DWORD),
-        ("KeyEncryptionAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
-        ("pvKeyEncryptionAuxInfo", PVOID),
-        ("hCryptProv", HCRYPTPROV_LEGACY),
-        ("RecipientPublicKey", CRYPT_BIT_BLOB),
-        ("RecipientId", CERT_ID),
-    ]
-CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
-PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO = POINTER(_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO)
 
 class _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO(Structure):
     _fields_ = [
@@ -9501,14 +9414,6 @@ class _POLICY_ACCOUNT_DOMAIN_INFO(Structure):
     ]
 POLICY_ACCOUNT_DOMAIN_INFO = _POLICY_ACCOUNT_DOMAIN_INFO
 PPOLICY_ACCOUNT_DOMAIN_INFO = POINTER(_POLICY_ACCOUNT_DOMAIN_INFO)
-
-class _POLICY_PRIMARY_DOMAIN_INFO(Structure):
-    _fields_ = [
-        ("Name", LSA_UNICODE_STRING),
-        ("Sid", PSID),
-    ]
-POLICY_PRIMARY_DOMAIN_INFO = _POLICY_PRIMARY_DOMAIN_INFO
-PPOLICY_PRIMARY_DOMAIN_INFO = POINTER(_POLICY_PRIMARY_DOMAIN_INFO)
 
 class _LSA_TRANSLATED_SID(Structure):
     _fields_ = [
@@ -11313,7 +11218,7 @@ class _API_SET_VALUE_ARRAY_V4(Structure):
         ("Array", API_SET_VALUE_ENTRY_V2 * (ANYSIZE_ARRAY)),
     ]
 API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
+PAPI_SET_VALUE_ARRAY_V4 = POINTER(_API_SET_VALUE_ARRAY_V4)
 
 class _API_SET_NAMESPACE_ARRAY_V4(Structure):
     _fields_ = [
