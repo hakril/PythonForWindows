@@ -34,8 +34,10 @@ The ``system`` object
 
     See sample :ref:`sample_system`
 
-.. currentmodule:: windows.winobject
+.. module:: windows.winobject.system
 
 .. autoclass:: windows.winobject.system.System
-    :no-show-inheritance:
+   :members:
+   :show-inheritance:
+   :inherited-members:
 

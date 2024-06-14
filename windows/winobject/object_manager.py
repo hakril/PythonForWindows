@@ -200,11 +200,6 @@ class KernelObject(object):
 
 class ObjectManager(object):
     """Represent the object manager.
-
-    .. note::
-
-        For now, it only offers the ``root`` :class:`KernelObject`. But I want a ``manager`` object accessible
-        from ``windows.system`` just like other API and not directly the ``root`` directory.
     """
 
     @property
