@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.native_exec.simple_x86 &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.native_exec.simple_x86 &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.native_exec.simple_x86</a></li> 
       </ul>
     </div>  
 
@@ -214,8 +211,10 @@
         <span class="k">return</span> <span class="kc">True</span>
 
 
-<div class="viewcode-block" id="create_displacement"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.create_displacement">[docs]</a><span class="k">def</span> <span class="nf">create_displacement</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates a X86 memory access description&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="create_displacement">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.create_displacement">[docs]</a>
+<span class="k">def</span> <span class="nf">create_displacement</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a X86 memory access description&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -225,13 +224,19 @@
     <span class="k">return</span> <span class="n">mem_access</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="deref"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.deref">[docs]</a><span class="k">def</span> <span class="nf">deref</span><span class="p">(</span><span class="n">disp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a memory access for an immediate value ``Ex: [0x42424242]``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="deref">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.deref">[docs]</a>
+<span class="k">def</span> <span class="nf">deref</span><span class="p">(</span><span class="n">disp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a memory access for an immediate value ``Ex: [0x42424242]``&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="mem"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.mem">[docs]</a><span class="k">def</span> <span class="nf">mem</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parse a memory access string of format ``[EXPR]`` or ``seg:[EXPR]``</span>
+
+<div class="viewcode-block" id="mem">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.mem">[docs]</a>
+<span class="k">def</span> <span class="nf">mem</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a memory access string of format ``[EXPR]`` or ``seg:[EXPR]``</span>
 
 <span class="sd">       ``EXPR`` may describe: ``BASE | INDEX * SCALE | DISPLACEMENT`` or any combinaison (in this order)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -295,6 +300,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple displacement in mem expression &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
             <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">disp</span>
     <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="o">**</span><span class="n">parsed_items</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># Helper to get the BitArray associated to a register</span>
@@ -642,7 +648,7 @@
 <span class="n">instr_state</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;instr_state&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;previous&#39;</span><span class="p">,</span> <span class="s1">&#39;prefixes&#39;</span><span class="p">])</span>
 
 <span class="k">class</span> <span class="nc">Instruction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class of instructions, use `encoding` to find a valid way to assemble the instruction&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class of instructions, use `encoding` to find a valid way to assemble the instruction&quot;&quot;&quot;</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
@@ -694,7 +700,7 @@
 
 <span class="c1"># Jump helpers</span>
 <span class="k">class</span> <span class="nc">DelayedJump</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A jump to a label :NAME&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A jump to a label :NAME&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
@@ -702,7 +708,7 @@
 
 
 <span class="k">class</span> <span class="nc">JmpType</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Dispatcher between a real jump or DelayedJump if parameters is a label&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dispatcher between a real jump or DelayedJump if parameters is a label&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -713,7 +719,7 @@
 
 
 <span class="k">class</span> <span class="nc">JmpImm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Immediat parameters for Jump instruction</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Immediat parameters for Jump instruction</span>
 <span class="sd">       Sub a specified size from the size to jump to `emulate` a jump from the begin address of the instruction&quot;&quot;&quot;</span>
     <span class="n">accept_as_Ximmediat</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -748,10 +754,10 @@
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x9a</span><span class="p">),</span> <span class="n">SegmentSelectorAbsoluteAddr</span><span class="p">())]</span>
 
-<div class="viewcode-block" id="Jmp"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.Jmp">[docs]</a><span class="k">class</span> <span class="nc">Jmp</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Jmp</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xeb</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xe9</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span>
-                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xea</span><span class="p">),</span> <span class="n">SegmentSelectorAbsoluteAddr</span><span class="p">())]</span></div>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xea</span><span class="p">),</span> <span class="n">SegmentSelectorAbsoluteAddr</span><span class="p">())]</span>
 
 
 <span class="k">class</span> <span class="nc">Jz</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
@@ -821,13 +827,13 @@
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
 
 
-<div class="viewcode-block" id="Mov"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.Mov">[docs]</a><span class="k">class</span> <span class="nc">Mov</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Mov</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">])),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xc7</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0xB8</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x8C</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__SEGREG</span><span class="p">])),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f20</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f22</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">True</span><span class="p">))]</span></div>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f22</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">True</span><span class="p">))]</span>
 
 
 <span class="k">class</span> <span class="nc">Movsb</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
@@ -965,17 +971,17 @@
 
 
 <span class="k">class</span> <span class="nc">_NopArtifact</span><span class="p">(</span><span class="n">Nop</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Special NOP used in shellcode reduction&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special NOP used in shellcode reduction&quot;&quot;&quot;</span>
     <span class="k">pass</span>
 
 
 <span class="k">class</span> <span class="nc">Byte</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Output a raw byte&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Output a raw byte&quot;&quot;&quot;</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">UImm8</span><span class="p">(),)]</span>
 
 
 <span class="k">class</span> <span class="nc">Raw</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Output raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Output raw data&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;raw &#39;opcode&#39; only accept one argument&quot;</span><span class="p">)</span>
@@ -1170,6 +1176,13 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow mnemonic &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mnemo</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">instr_object</span><span class="p">,</span> <span class="n">Raw</span><span class="p">):</span>
+            <span class="c1"># Raw should received the raw buffer as it expect encoded hex</span>
+            <span class="c1"># The transformation may transform &#39;raw 9090&#39; (nopnop) as 0n9090</span>
+            <span class="c1"># If other fake-instr need this : make a class attribute</span>
+            <span class="k">yield</span> <span class="n">instr_object</span><span class="p">(</span><span class="o">*</span><span class="n">args_raw</span><span class="p">)</span>
+            <span class="k">continue</span>
+
         <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">args_raw</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args_raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
@@ -1185,7 +1198,7 @@
         <span class="k">yield</span> <span class="n">instr_object</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Play test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Play test&quot;&quot;&quot;</span>
     <span class="n">shellcode</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
     <span class="n">shellcode</span> <span class="o">+=</span> <span class="nb">str</span>
     <span class="k">return</span> <span class="n">shellcode</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
@@ -1228,23 +1241,22 @@
         <span class="n">idc</span><span class="o">.</span><span class="n">MakeFunction</span><span class="p">(</span><span class="n">idc</span><span class="o">.</span><span class="n">MinEA</span><span class="p">())</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1258,13 +1270,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.native_exec.simple_x86</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

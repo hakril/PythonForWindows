@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.com &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.com &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.com</a></li> 
       </ul>
     </div>  
 
@@ -64,8 +61,10 @@
 <span class="c1"># Simple raw -&gt; UUID</span>
 <span class="c1"># &quot;-&quot;.join(&quot;{:02X}&quot;.format(c) for c in struct.unpack(&quot;&lt;IHHHBBBBBB&quot;, x))</span>
 
-<div class="viewcode-block" id="init"><a class="viewcode-back" href="../../com.html#windows.com.init">[docs]</a><span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Init COM with some default parameters&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="init">
+<a class="viewcode-back" href="../../com.html#windows.com.init">[docs]</a>
+<span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Init COM with some default parameters&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeEx</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -73,6 +72,7 @@
     <span class="k">if</span> <span class="n">t</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">t</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
     <span class="k">return</span> <span class="n">initsecurity</span><span class="p">()</span></div>
+
 
 <span class="k">def</span> <span class="nf">initsecurity</span><span class="p">():</span> <span class="c1"># Should take some parameters..</span>
     <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -111,14 +111,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetDocumentation</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
-<div class="viewcode-block" id="create_instance"><a class="viewcode-back" href="../../com.html#windows.com.create_instance">[docs]</a><span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">targetinterface</span><span class="p">,</span> <span class="n">custom_iid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span> <span class="o">|</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A simple wrapper around ``CoCreateInstance &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;``&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="create_instance">
+<a class="viewcode-back" href="../../com.html#windows.com.create_instance">[docs]</a>
+<span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">targetinterface</span><span class="p">,</span> <span class="n">custom_iid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span> <span class="o">|</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A simple wrapper around ``CoCreateInstance &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;``&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">custom_iid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">targetinterface</span><span class="o">.</span><span class="n">IID</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
         <span class="n">clsiid</span> <span class="o">=</span> <span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">clsiid</span><span class="p">)</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">targetinterface</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">resolve_progid</span><span class="p">(</span><span class="n">progid</span><span class="p">):</span>
@@ -131,6 +134,17 @@
 <span class="c1"># Improved COM object</span>
 <span class="c1"># Todo: ctypes_generation extended struct ?</span>
 <span class="k">class</span> <span class="nc">SafeArray</span><span class="p">(</span><span class="n">SAFEARRAY</span><span class="p">):</span>
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elttype</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+            <span class="c1"># Array of bound for each dimension</span>
+            <span class="n">bound_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SAFEARRAYBOUND</span><span class="p">)(</span><span class="n">nbelt</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+                <span class="n">bound_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">lLbound</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">bound_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">cElements</span> <span class="o">=</span> <span class="n">dim</span>
+            <span class="n">array_ptr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SafeArrayCreate</span><span class="p">(</span><span class="n">elttype</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">),</span> <span class="n">bound_array</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_PSAFEARRAY</span><span class="p">(</span><span class="n">array_ptr</span><span class="p">)</span>
+
+
         <span class="nd">@classmethod</span>
         <span class="k">def</span> <span class="nf">of_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
@@ -157,6 +171,29 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Size of elements != sizeof(type)&quot;</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvData</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">llbound</span><span class="p">)</span> <span class="o">*</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_element</span><span class="p">)]</span>
             <span class="k">return</span> <span class="n">data</span>
+
+        <span class="k">def</span> <span class="nf">put_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexes</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+            <span class="n">indexes_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">)(</span><span class="o">*</span><span class="n">indexes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">VARIANT</span><span class="p">):</span>
+                <span class="k">pass</span>
+                <span class="c1"># element = Variant(element)</span>
+                <span class="c1"># import pdb; pdb.set_trace()</span>
+                <span class="c1"># element = ctypes.pointer(variant)</span>
+                <span class="c1"># print(hex(ctypes.addressof(element)))</span>
+                <span class="c1"># windows.utils.sprint(element)</span>
+                <span class="c1"># import pdb; pdb.set_trace()</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SafeArrayPutElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexes_array</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">get_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexes</span><span class="p">):</span>
+            <span class="n">indexes_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">)(</span><span class="o">*</span><span class="n">indexes</span><span class="p">)</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SafeArrayGetElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexes_array</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">element</span> <span class="c1"># Need cleaning ?</span>
+
+        <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">bound_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">resized_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rgsabound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cDims</span><span class="p">)</span>
+            <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">cElements</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bound_array</span><span class="p">]</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> of dimension </span><span class="si">{1}</span><span class="s2">: </span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">),</span> <span class="n">dims</span><span class="p">)</span>
 
 <span class="c1">#VT_VALUE_TO_TYPE = {</span>
 <span class="c1">#VT_I2 : SHORT,</span>
@@ -199,6 +236,9 @@
 <span class="k">def</span> <span class="nf">check_type_bool</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">check_type_safearray</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">LPSAFEARRAY</span><span class="p">)</span>
+
 <span class="k">def</span> <span class="nf">check_type_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="kc">True</span>
 
@@ -232,6 +272,7 @@
         <span class="p">(</span><span class="n">VT_I4</span><span class="p">,</span> <span class="s2">&quot;lVal&quot;</span><span class="p">,</span> <span class="n">check_type_i4</span><span class="p">),</span>
         <span class="p">(</span><span class="n">VT_I8</span><span class="p">,</span> <span class="s2">&quot;llVal&quot;</span><span class="p">,</span> <span class="n">check_type_i8</span><span class="p">),</span>
         <span class="p">(</span><span class="n">VT_BSTR</span><span class="p">,</span> <span class="s2">&quot;bstrVal&quot;</span><span class="p">,</span> <span class="n">check_type_bstr</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_SAFEARRAY</span> <span class="p">,</span> <span class="s2">&quot;parray&quot;</span><span class="p">,</span> <span class="n">check_type_safearray</span><span class="p">),</span>
         <span class="p">(</span><span class="n">VT_NULL</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">check_type_null</span><span class="p">),</span>
         <span class="p">(</span><span class="n">VT_EMPTY</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span>
         <span class="p">(</span><span class="n">VT_DISPATCH</span><span class="p">,</span> <span class="s2">&quot;pdispVal&quot;</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span> <span class="c1"># I cannot recognize DISPATCH ptr for now</span>
@@ -334,8 +375,10 @@
 
 
 
-<div class="viewcode-block" id="COMImplementation"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation">[docs]</a><span class="k">class</span> <span class="nc">COMImplementation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The base class to implements COM object respecting a given interface&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="COMImplementation">
+<a class="viewcode-back" href="../../com.html#windows.com.COMImplementation">[docs]</a>
+<span class="k">class</span> <span class="nc">COMImplementation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The base class to implements COM object respecting a given interface&quot;&quot;&quot;</span>
     <span class="n">IMPLEMENT</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">get_index_of_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
@@ -356,7 +399,7 @@
             <span class="n">implem</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">implem</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; implementing &lt;</span><span class="si">{1}</span><span class="s2">&gt; has no method &lt;</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">func_name</span><span class="p">))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">implem</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">implem</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> implementing &lt;</span><span class="si">{1}</span><span class="s2">&gt;: &lt;</span><span class="si">{2}</span><span class="s2">&gt; is not callable&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">func_name</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">True</span>
 
@@ -381,39 +424,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vtable_pointer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vtable</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_as_parameter_</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vtable_pointer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="COMImplementation.QueryInterface"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.QueryInterface">[docs]</a>    <span class="k">def</span> <span class="nf">QueryInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">piid</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="COMImplementation.QueryInterface">
+<a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.QueryInterface">[docs]</a>
+    <span class="k">def</span> <span class="nf">QueryInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">piid</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">piid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IUnknown</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="n">IID</span><span class="p">):</span>
             <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">this</span>
             <span class="k">return</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">E_NOINTERFACE</span></div>
 
-<div class="viewcode-block" id="COMImplementation.AddRef"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.AddRef">[docs]</a>    <span class="k">def</span> <span class="nf">AddRef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Default ``AddRef`` implementation that returns ``1``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="COMImplementation.AddRef">
+<a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.AddRef">[docs]</a>
+    <span class="k">def</span> <span class="nf">AddRef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default ``AddRef`` implementation that returns ``1``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="COMImplementation.Release"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.Release">[docs]</a>    <span class="k">def</span> <span class="nf">Release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Default ``Release`` implementation that returns ``1``&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+<div class="viewcode-block" id="COMImplementation.Release">
+<a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.Release">[docs]</a>
+    <span class="k">def</span> <span class="nf">Release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default ``Release`` implementation that returns ``1``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+</div>
+
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -427,13 +479,14 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.com</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.debug.breakpoints &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.debug.breakpoints &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.debug.breakpoints</a></li> 
       </ul>
     </div>  
 
@@ -53,8 +50,10 @@
 <span class="n">HARDWARE_EXEC_BP</span> <span class="o">=</span> <span class="s2">&quot;HXBP&quot;</span>
 <span class="n">MEMORY_BREAKPOINT</span> <span class="o">=</span> <span class="s2">&quot;MEMBP&quot;</span>
 
-<div class="viewcode-block" id="Breakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint">[docs]</a><span class="k">class</span> <span class="nc">Breakpoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An standard (Int3) breakpoint (type == ``STANDARD_BP``)&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Breakpoint">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint">[docs]</a>
+<span class="k">class</span> <span class="nc">Breakpoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An standard (Int3) breakpoint (type == ``STANDARD_BP``)&quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">STANDARD_BP</span> <span class="c1"># REAL BP</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
@@ -62,9 +61,13 @@
     <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinProcess</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Breakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
-        <span class="k">pass</span></div></div>
+<div class="viewcode-block" id="Breakpoint.trigger">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint.trigger">[docs]</a>
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
 
 
 <span class="k">class</span> <span class="nc">ProxyBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
@@ -77,20 +80,27 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="HXBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.HXBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">HXBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An hardware-execution breakpoint (type == ``HARDWARE_EXEC_BP``)&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="HXBreakpoint">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.HXBreakpoint">[docs]</a>
+<span class="k">class</span> <span class="nc">HXBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An hardware-execution breakpoint (type == ``HARDWARE_EXEC_BP``)&quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">HARDWARE_EXEC_BP</span>
 
     <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinThread</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MemoryBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">MemoryBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A memory breakpoint (type == ``MEMORY_BREAKPOINT``)&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MemoryBreakpoint">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint">[docs]</a>
+<span class="k">class</span> <span class="nc">MemoryBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A memory breakpoint (type == ``MEMORY_BREAKPOINT``)&quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">MEMORY_BREAKPOINT</span>
     <span class="n">DEFAULT_EVENTS</span> <span class="o">=</span> <span class="s2">&quot;RWX&quot;</span>
     <span class="n">DEFAULT_SIZE</span> <span class="o">=</span> <span class="mh">0x1000</span>
-<div class="viewcode-block" id="MemoryBreakpoint.__init__"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;``size``: the size of the memory breakpoint.</span>
+<div class="viewcode-block" id="MemoryBreakpoint.__init__">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``size``: the size of the memory breakpoint.</span>
 
 <span class="sd">        ``events``: a string representing the events that interest the BP (any of &quot;RWX&quot;)&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MemoryBreakpoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
@@ -98,9 +108,14 @@
         <span class="n">events</span> <span class="o">=</span> <span class="n">events</span> <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_EVENTS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">events</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MemoryBreakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
-        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="MemoryBreakpoint.trigger">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.trigger">[docs]</a>
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
 
 
 <span class="c1">## Arguments Helper (need to move this elsewhere)</span>
@@ -184,7 +199,7 @@
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">extract_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Extracts the functions parameters in an :class:`OrderedDict`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the functions parameters in an :class:`OrderedDict`&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_32bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cproc</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
@@ -261,30 +276,45 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_breakpoint</span><span class="o">.</span><span class="n">ret_trigger</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FunctionCallBP"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP">[docs]</a><span class="k">class</span> <span class="nc">FunctionCallBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Breakpoint that allow to trigger at the return of a function&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="FunctionCallBP.break_on_ret"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.break_on_ret">[docs]</a>    <span class="k">def</span> <span class="nf">break_on_ret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FunctionCallBP">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP">[docs]</a>
+<span class="k">class</span> <span class="nc">FunctionCallBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Breakpoint that allow to trigger at the return of a function&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FunctionCallBP.break_on_ret">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.break_on_ret">[docs]</a>
+    <span class="k">def</span> <span class="nf">break_on_ret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`&quot;&quot;&quot;</span>
         <span class="n">return_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ret_addr</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span>
         <span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FunctionRetBP</span><span class="p">(</span><span class="n">return_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FunctionCallBP.get_ret_addr"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.get_ret_addr">[docs]</a>    <span class="k">def</span> <span class="nf">get_ret_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the return address of the current target, only valid in the trigger() function.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FunctionCallBP.get_ret_addr">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.get_ret_addr">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_ret_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the return address of the current target, only valid in the trigger() function.&quot;&quot;&quot;</span>
         <span class="n">cproc</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span>
         <span class="k">return</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_ptr</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FunctionCallBP.ret_trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.ret_trigger">[docs]</a>    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called at the return of the function if :func:`break_on_ret` was called&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ret_trigger&quot;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="FunctionCallBP.ret_trigger">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.ret_trigger">[docs]</a>
+    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called at the return of the function if :func:`break_on_ret` was called&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ret_trigger&quot;</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="FunctionBP"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionBP">[docs]</a><span class="k">class</span> <span class="nc">FunctionBP</span><span class="p">(</span><span class="n">FunctionCallBP</span><span class="p">,</span> <span class="n">FunctionParamDumpBP</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A breakpoint that accepts a function from :mod:`windows.winproxy` and able to:</span>
+
+<div class="viewcode-block" id="FunctionBP">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionBP">[docs]</a>
+<span class="k">class</span> <span class="nc">FunctionBP</span><span class="p">(</span><span class="n">FunctionCallBP</span><span class="p">,</span> <span class="n">FunctionParamDumpBP</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A breakpoint that accepts a function from :mod:`windows.winproxy` and able to:</span>
 
 <span class="sd">        - Extract the arguments of the functions</span>
 <span class="sd">        - Break at the return of the function</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
 
 <span class="k">class</span> <span class="nc">PrintBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -300,23 +330,22 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">format_dict</span><span class="p">))</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -330,13 +359,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.debug.breakpoints</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

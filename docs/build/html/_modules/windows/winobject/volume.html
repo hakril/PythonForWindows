@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.volume &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.winobject.volume &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.volume</a></li> 
       </ul>
     </div>  
 
@@ -52,7 +49,9 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 
-<div class="viewcode-block" id="LogicalDrive"><a class="viewcode-back" href="../../../volume.html#windows.winobject.volume.LogicalDrive">[docs]</a><span class="k">class</span> <span class="nc">LogicalDrive</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<div class="viewcode-block" id="LogicalDrive">
+<a class="viewcode-back" href="../../../volume.html#windows.winobject.volume.LogicalDrive">[docs]</a>
+<span class="k">class</span> <span class="nc">LogicalDrive</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="n">DRIVE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">DRIVE_UNKNOWN</span><span class="p">,</span> <span class="n">DRIVE_NO_ROOT_DIR</span><span class="p">,</span> <span class="n">DRIVE_REMOVABLE</span><span class="p">,</span>
                     <span class="n">DRIVE_FIXED</span><span class="p">,</span> <span class="n">DRIVE_REMOTE</span><span class="p">,</span> <span class="n">DRIVE_CDROM</span><span class="p">,</span> <span class="n">DRIVE_RAMDISK</span><span class="p">)</span>
 
@@ -61,7 +60,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The type of drive, values are:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The type of drive, values are:</span>
 
 <span class="sd">            * DRIVE_UNKNOWN(0x0L)</span>
 <span class="sd">            * DRIVE_NO_ROOT_DIR(0x1L)</span>
@@ -73,18 +72,24 @@
 
 <span class="sd">        :type: :class:`long` or :class:`int` (or subclass)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetDriveTypeA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetDriveTypeW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DRIVE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The target path of the device</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The target path of the device</span>
 
 <span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">query_dos_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;[Unexpected result] query_dos_device(logicaldrive) returned multiple path&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># QueryDosDevice can returns multiple path if DefineDosDevice(AW) was used before</span>
+        <span class="c1"># Looks like its per-process</span>
+        <span class="c1"># But in ths cas the first entry is the effective-one and the others are the previous entries</span>
+        <span class="c1"># https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querydosdevicea</span>
+        <span class="c1"># The first null-terminated string stored into the buffer is the current mapping for the device. The other null-terminated strings represent undeleted prior mappings for the device.</span>
+        <span class="k">return</span> <span class="n">query_dos_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">query_dos_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">query_dos_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">query_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">query_volume_information</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
@@ -99,54 +104,54 @@
 
     <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">nt_name</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dospath_to_ntpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">nt_name</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_READ</span><span class="p">,</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateFileW</span><span class="p">(</span><span class="n">nt_name</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_READ</span><span class="p">,</span>
                                                 <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_SHARE_READ</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FLAG_BACKUP_SEMANTICS</span> <span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">handle</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; (</span><span class="si">{2}</span><span class="s2">)&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
+
 <span class="k">def</span> <span class="nf">enum_logical_drive</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">LogicalDrive</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_logical_drive_names</span><span class="p">()]</span>
 
 <span class="k">def</span> <span class="nf">get_logical_drive_names</span><span class="p">():</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mh">0x100</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLogicalDriveStringsA</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLogicalDriveStringsW</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="n">drivename</span><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
-    <span class="n">volume_name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">fs_name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">volume_name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">fs_name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
     <span class="n">flags</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">GetVolumeInformationA</span><span class="p">(</span><span class="n">drivename</span><span class="p">,</span> <span class="n">volume_name</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">flags</span><span class="p">),</span> <span class="n">fs_name</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">GetVolumeInformationW</span><span class="p">(</span><span class="n">drivename</span><span class="p">,</span> <span class="n">volume_name</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">flags</span><span class="p">),</span> <span class="n">fs_name</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">volume_name</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">fs_name</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">query_dos_device</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">QueryDosDeviceA</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">QueryDosDeviceW</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -160,13 +165,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.volume</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

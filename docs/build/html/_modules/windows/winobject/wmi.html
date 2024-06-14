@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.wmi &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.winobject.wmi &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.wmi</a></li> 
       </ul>
     </div>  
 
@@ -58,18 +55,18 @@
 <span class="c1"># Common error check for all WMI COM interfaces</span>
 <span class="c1"># This &#39;just&#39; add the corresponding &#39;WBEMSTATUS&#39; to the hresult error code</span>
 <span class="k">class</span> <span class="nc">WmiComInterface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class used for COM call error checking for WMI interfaces&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class used for COM call error checking for WMI interfaces&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">errcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">wmitag</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEMSTATUS</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="n">result</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">]</span>
-            <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">wmitag</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">wmitag</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">args</span>
 
 <span class="n">sentinel</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
 <span class="c1"># POC</span>
 <span class="k">class</span> <span class="nc">QualifierSet</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemQualifierSet</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">get_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`</span>
 
 <span class="sd">        :return: :class:`~windows.com.Variant`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -81,7 +78,7 @@
         <span class="k">return</span> <span class="n">variant_res</span>
 
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">sentinel</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the value of the property ``name``. The return value depends of the type of the property and can vary&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the value of the property ``name``. The return value depends of the type of the property and can vary&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variant</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -102,16 +99,20 @@
 
 <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nn-wbemcli-iwbemclassobject</span>
 
-<span class="n">WmiMethod</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;WmiMethod&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inparam&quot;</span><span class="p">,</span> <span class="s2">&quot;outparam&quot;</span><span class="p">])</span>
+<span class="n">WmiMethod</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;WmiMethod&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;inparam&quot;</span><span class="p">,</span> <span class="s2">&quot;outparam&quot;</span><span class="p">])</span>
 
 <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/WmiSdk/calling-a-method</span>
-<div class="viewcode-block" id="WmiObject"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject">[docs]</a><span class="k">class</span> <span class="nc">WmiObject</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemClassObject</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The WmiObject (which wrap ``IWbemClassObject``) contains and manipulates both class definitions and class object instances.</span>
+<div class="viewcode-block" id="WmiObject">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject">[docs]</a>
+<span class="k">class</span> <span class="nc">WmiObject</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemClassObject</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The WmiObject (which wrap ``IWbemClassObject``) contains and manipulates both class definitions and class object instances.</span>
 <span class="sd">    Can be used as a mapping to access properties.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="WmiObject.get_variant"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_variant">[docs]</a>    <span class="k">def</span> <span class="nf">get_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`</span>
+<div class="viewcode-block" id="WmiObject.get_variant">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_variant">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`</span>
 
 <span class="sd">        :return: :class:`~windows.com.Variant`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -122,12 +123,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">variant_res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">variant_res</span></div>
 
-<div class="viewcode-block" id="WmiObject.get"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the value of the property ``name``. The return value depends of the type of the property and can vary&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiObject.get">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the value of the property ``name``. The return value depends of the type of the property and can vary&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variant</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
 
-<div class="viewcode-block" id="WmiObject.get_method"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_method">[docs]</a>    <span class="k">def</span> <span class="nf">get_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the information about the method ``name``</span>
+
+<div class="viewcode-block" id="WmiObject.get_method">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_method">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the information about the method ``name``</span>
 
 <span class="sd">        :returns: :class:`WmiMethod`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -135,7 +142,13 @@
         <span class="n">outpararm</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
         <span class="n">variant_res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetMethod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inpararm</span><span class="p">,</span> <span class="n">outpararm</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">WmiMethod</span><span class="p">(</span><span class="n">inpararm</span><span class="p">,</span> <span class="n">outpararm</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">WmiMethod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">inpararm</span><span class="p">,</span> <span class="n">outpararm</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetObjectText</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">value</span>
 
 
     <span class="k">def</span> <span class="nf">put_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">variant</span><span class="p">):</span>
@@ -144,13 +157,21 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;WmiObject attributes name must be str, not &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nametype</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Put</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">variant</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WmiObject.put"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the property ``name`` to ``value``&quot;&quot;&quot;</span>
-        <span class="n">variant_value</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<div class="viewcode-block" id="WmiObject.put">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.put">[docs]</a>
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the property ``name`` to ``value``&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT</span><span class="p">):</span>
+            <span class="n">variant_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">variant_value</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">put_variant</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">variant_value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WmiObject.spawn_instance"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.spawn_instance">[docs]</a>    <span class="k">def</span> <span class="nf">spawn_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new object of the class represented by the current :class:`WmiObject`</span>
+
+<div class="viewcode-block" id="WmiObject.spawn_instance">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.spawn_instance">[docs]</a>
+    <span class="k">def</span> <span class="nf">spawn_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new object of the class represented by the current :class:`WmiObject`</span>
 
 <span class="sd">        :returns: :class:`WmiObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -158,17 +179,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">SpawnInstance</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">genus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The genus of the object.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The genus of the object.</span>
 
 <span class="sd">        :returns: ``WBEM_GENUS_CLASS(0x1L)`` if the :class:`WmiObject` is a Class and ``WBEM_GENUS_INSTANCE(0x2L)`` for instances and events.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">tag_WBEM_GENUS_TYPE</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__GENUS&quot;</span><span class="p">)]</span>
 
+
     <span class="c1">## Higher level API</span>
-<div class="viewcode-block" id="WmiObject.get_properties"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_properties">[docs]</a>    <span class="k">def</span> <span class="nf">get_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the list of properties names available for the current object.</span>
+<div class="viewcode-block" id="WmiObject.get_properties">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_properties">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of properties names available for the current object.</span>
 <span class="sd">        If ``system_properties`` is ``False`` property names begining with ``_`` are ignored.</span>
 
 <span class="sd">        :returns: [:class:`str`] -- A list of string</span>
@@ -184,7 +209,26 @@
         <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">BSTR</span><span class="p">)</span> <span class="k">if</span> <span class="n">system_properties</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">))]</span>
         <span class="k">return</span> <span class="n">properties</span></div>
 
+
     <span class="n">properties</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_properties</span><span class="p">)</span> <span class="c1">#: The properties of the object (exclude system properties)</span>
+
+    <span class="k">def</span> <span class="nf">get_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BeginMethodEnumeration</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">methods</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+            <span class="n">inpararm</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">outpararm</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NextMethod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">inpararm</span><span class="p">,</span> <span class="n">outpararm</span><span class="p">)</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_S_NO_MORE_DATA</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">EndMethodEnumeration</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">methods</span>
+            <span class="n">namestr</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">methods</span><span class="p">[</span><span class="n">namestr</span><span class="p">]</span> <span class="o">=</span> <span class="n">WmiMethod</span><span class="p">(</span><span class="n">namestr</span><span class="p">,</span> <span class="n">inpararm</span><span class="p">,</span> <span class="n">outpararm</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SysFreeString</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">name</span>
+
+    <span class="n">methods</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_methods</span><span class="p">)</span>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">qualifier_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># changer de nom ?</span>
@@ -199,9 +243,12 @@
 
     <span class="c1"># Make WmiObject a mapping object</span>
 
-<div class="viewcode-block" id="WmiObject.keys"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The properties of the object (include system properties)&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="WmiObject.keys">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.keys">[docs]</a>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The properties of the object (include system properties)&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_properties</span><span class="p">(</span><span class="n">system_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
 
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">get</span>
     <span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">put</span>
@@ -223,17 +270,40 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> instance of &quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__Class&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__sprint__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot; </span><span class="si">{0}</span><span class="se">\n</span><span class="s2"></span>
-<span class="s2">        </span><span class="si">{1}</span><span class="s2"></span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot; </span><span class="si">{0}</span><span class="se">\n</span>
+<span class="s2">        </span><span class="si">{1}</span>
 <span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span></div>
 
 
-<div class="viewcode-block" id="WmiEnumeration"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration">[docs]</a><span class="k">class</span> <span class="nc">WmiEnumeration</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IEnumWbemClassObject</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an enumeration of object that can be itered&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">WmiTextSrc</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemObjectTextSrc</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
+    <span class="n">CLSID_WbemObjectTextSrc</span> <span class="o">=</span> <span class="s2">&quot;8D1C559D-84F0-4bb3-A7D5-56A7435A9BA6&quot;</span> <span class="c1"># CLSID_WbemObjectTextSrc</span>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">CLSID_WbemObjectTextSrc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">textformat</span><span class="p">):</span>
+        <span class="n">btext</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">textformat</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">btext</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">btext</span><span class="o">.</span><span class="n">value</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TODO: SysFreeString&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<div class="viewcode-block" id="WmiEnumeration">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration">[docs]</a>
+<span class="k">class</span> <span class="nc">WmiEnumeration</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IEnumWbemClassObject</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an enumeration of object that can be itered&quot;&quot;&quot;</span>
     <span class="n">DEFAULT_TIMEOUT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span> <span class="c1">#: The default timeout</span>
 
-<div class="viewcode-block" id="WmiEnumeration.next"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the next object in the enumeration with `timeout`.</span>
+<div class="viewcode-block" id="WmiEnumeration.next">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.next">[docs]</a>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the next object in the enumeration with `timeout`.</span>
 
 <span class="sd">        :raises: ``WindowsError(WBEM_S_TIMEDOUT)`` if timeout expire</span>
 <span class="sd">        :returns: :class:`WmiObject`</span>
@@ -250,62 +320,88 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">obj</span></div>
 
-<div class="viewcode-block" id="WmiEnumeration.__iter__"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return an iterator with ``DEFAULT_TIMEOUT``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiEnumeration.__iter__">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.__iter__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator with ``DEFAULT_TIMEOUT``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_timeout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_TIMEOUT</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WmiEnumeration.iter_timeout"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.iter_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">iter_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return an iterator with a custom ``timeout``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiEnumeration.iter_timeout">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.iter_timeout">[docs]</a>
+    <span class="k">def</span> <span class="nf">iter_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator with a custom ``timeout``&quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span>
             <span class="k">yield</span> <span class="n">obj</span></div>
 
-<div class="viewcode-block" id="WmiEnumeration.all"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return all elements in the enumeration as a list</span>
+
+<div class="viewcode-block" id="WmiEnumeration.all">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration.all">[docs]</a>
+    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all elements in the enumeration as a list</span>
 
 <span class="sd">        :returns: [:class:`WmiObject`] - A list of :class:`WmiObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># SqlAlchemy like :)</span></div></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># SqlAlchemy like :)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="WmiCallResult"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult">[docs]</a><span class="k">class</span> <span class="nc">WmiCallResult</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemCallResult</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The result of a WMI call/query. Real result value type depends of the context&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiCallResult">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult">[docs]</a>
+<span class="k">class</span> <span class="nc">WmiCallResult</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemCallResult</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of a WMI call/query. Real result value type depends of the context&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">namespace_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_type</span> <span class="o">=</span> <span class="n">result_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">namespace_name</span> <span class="o">=</span> <span class="n">namespace_name</span>
 
-<div class="viewcode-block" id="WmiCallResult.get_call_status"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_call_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_call_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The status of the call&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="WmiCallResult.get_call_status">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_call_status">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_call_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The status of the call&quot;&quot;&quot;</span>
         <span class="n">status</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetCallStatus</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">WBEMSTATUS</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="n">status</span><span class="o">.</span><span class="n">value</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="WmiCallResult.get_result_object"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The result as a :class:`WmiObject` (returned by :func:`WmiNamespace.exec_method`)&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiCallResult.get_result_object">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_result_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The result as a :class:`WmiObject` (returned by :func:`WmiNamespace.exec_method`)&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">WmiObject</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetResultObject</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="WmiCallResult.get_result_string"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_string">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The result as a :class:`WmiObject` (returned by :func:`WmiNamespace.put_instance`)&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiCallResult.get_result_string">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_string">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_result_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The result as a :class:`WmiObject` (returned by :func:`WmiNamespace.put_instance`)&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetResultString</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="WmiCallResult.get_result_service"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_service">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The result as a :class:`WmiNamespace` (not used yet)&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiCallResult.get_result_service">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiCallResult.get_result_service">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_result_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The result as a :class:`WmiNamespace` (not used yet)&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">WmiNamespace</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetResultServices</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The result of the correct type based on ``self.result_type``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The result of the correct type based on ``self.result_type``&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot call &lt;result&gt; with no result_type&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;get_result_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_type</span><span class="p">)()</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">WmiLocator</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemLocator</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
@@ -313,8 +409,10 @@
 
 
 <span class="c1"># !TEST CODE</span>
-<div class="viewcode-block" id="WmiNamespace"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace">[docs]</a><span class="k">class</span> <span class="nc">WmiNamespace</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemServices</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;An object to perform wmi request to a given ``namespace``&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="WmiNamespace">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace">[docs]</a>
+<span class="k">class</span> <span class="nc">WmiNamespace</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemServices</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;An object to perform wmi request to a given ``namespace``&quot;&quot;&quot;</span>
 
     <span class="c1">#CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string(&#39;CB8555CC-9128-11D1-AD9B-00C04FD8FDFF&#39;)</span>
     <span class="n">WbemLocator_CLSID</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;4590F811-1D3A-11D0-891F-00AA004B2E24&#39;</span><span class="p">)</span>
@@ -325,9 +423,11 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">namespace</span>
 
-<div class="viewcode-block" id="WmiNamespace.connect"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.connect">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="WmiNamespace.connect">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.connect">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Connect to ``namespace`` using ``user`` and ``password`` for authentification if given</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Connect to ``namespace`` using ``user`` and ``password`` for authentification if given</span>
 
 <span class="sd">        :return: :class:`WmiNamespace` - The connected :class:`WmiNamespace`&quot;&quot;&quot;</span>
         <span class="c1"># this method assert com is initialised</span>
@@ -338,8 +438,11 @@
         <span class="n">locator</span><span class="o">.</span><span class="n">Release</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.query"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the list of :class:`WmiObject` matching ``query``.</span>
+
+<div class="viewcode-block" id="WmiNamespace.query">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.query">[docs]</a>
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of :class:`WmiObject` matching ``query``.</span>
 
 <span class="sd">        This API is the `simple one`, if you need timeout or complexe feature see :func:`exec_query`</span>
 
@@ -347,8 +450,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exec_query</span><span class="p">(</span><span class="n">query</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.select"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the list of :class:`WmiObject` that are instance of ``clsname``. Deep has the same meaning as in :func:`create_instance_enum`.</span>
+
+<div class="viewcode-block" id="WmiNamespace.select">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.select">[docs]</a>
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of :class:`WmiObject` that are instance of ``clsname``. Deep has the same meaning as in :func:`create_instance_enum`.</span>
 
 <span class="sd">        This API is the `simple one`, if you need timeout or complexe feature see :func:`create_instance_enum`</span>
 
@@ -357,8 +463,11 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_instance_enum</span><span class="p">(</span><span class="n">clsname</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="WmiNamespace.exec_query"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.exec_query">[docs]</a>    <span class="k">def</span> <span class="nf">exec_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Execute a WQL query with custom flags and returns a ::class:`WmiEnumeration` that can be used to</span>
+
+<div class="viewcode-block" id="WmiNamespace.exec_query">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.exec_query">[docs]</a>
+    <span class="k">def</span> <span class="nf">exec_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a WQL query with custom flags and returns a ::class:`WmiEnumeration` that can be used to</span>
 <span class="sd">        iter the result with timeouts</span>
 
 <span class="sd">        :returns: :class:`WmiEnumeration`</span>
@@ -367,10 +476,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ExecQuery</span><span class="p">(</span><span class="s2">&quot;WQL&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">enumerator</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">enumerator</span></div>
 
+
     <span class="c1"># Create friendly name for create_class_enum &amp; create_instance_enum ?</span>
 
-<div class="viewcode-block" id="WmiNamespace.create_class_enum"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.create_class_enum">[docs]</a>    <span class="k">def</span> <span class="nf">create_class_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">superclass</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Enumerate the classes in the ``namespace`` that match ``superclass``.</span>
+<div class="viewcode-block" id="WmiNamespace.create_class_enum">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.create_class_enum">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_class_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">superclass</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enumerate the classes in the ``namespace`` that match ``superclass``.</span>
 <span class="sd">        if ``superclass`` is None will enumerate all top-level class. ``deep`` allow to returns all subclasses</span>
 
 <span class="sd">        :returns: :class:`WmiEnumeration`</span>
@@ -385,16 +497,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">CreateClassEnum</span><span class="p">(</span><span class="n">superclass</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">enumerator</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">enumerator</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of classes in the namespace. This a a wrapper arround :func:`create_class_enum`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of classes in the namespace. This a a wrapper arround :func:`create_class_enum`.</span>
 
 <span class="sd">        :return: [:class:`WmiObject`] - A list of :class:`WmiObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_class_enum</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WmiNamespace.create_instance_enum"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.create_instance_enum">[docs]</a>    <span class="k">def</span> <span class="nf">create_instance_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Enumerate the instances of ``clsname``. Deep allows to enumerate the instance of subclasses as well</span>
+<div class="viewcode-block" id="WmiNamespace.create_instance_enum">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.create_instance_enum">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_instance_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_ENUM_FLAGS</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enumerate the instances of ``clsname``. Deep allows to enumerate the instance of subclasses as well</span>
 
 <span class="sd">        :returns: :class:`WmiEnumeration`</span>
 
@@ -413,8 +528,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">CreateInstanceEnum</span><span class="p">(</span><span class="n">clsname</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">enumerator</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">enumerator</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.get_object"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.get_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the object matching ``path``. If ``path`` is a class name return the class object``</span>
+
+<div class="viewcode-block" id="WmiNamespace.get_object">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.get_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the object matching ``path``. If ``path`` is a class name return the class object``</span>
 
 <span class="sd">        :return: :class:`WmiObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -422,8 +540,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_FLAG_RETURN_WBEM_COMPLETE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.put_instance"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.put_instance">[docs]</a>    <span class="k">def</span> <span class="nf">put_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_FLAG_CREATE_ONLY</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Creates or updates an instance of an existing class in the namespace</span>
+
+<div class="viewcode-block" id="WmiNamespace.put_instance">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.put_instance">[docs]</a>
+    <span class="k">def</span> <span class="nf">put_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_FLAG_CREATE_ONLY</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates or updates an instance of an existing class in the namespace</span>
 
 <span class="sd">        :return: :class:`WmiCallResult` ``(string)`` - Used to retrieve the string representing the path of the object created/updated</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -431,14 +552,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">PutInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.delete_instance"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.delete_instance">[docs]</a>    <span class="k">def</span> <span class="nf">delete_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;TODO: Document&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WmiNamespace.delete_instance">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.delete_instance">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;TODO: Document&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IWbemClassObject</span><span class="p">):</span>
             <span class="n">instance</span> <span class="o">=</span> <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;__Path&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DeleteInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WmiNamespace.exec_method"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.exec_method">[docs]</a>    <span class="k">def</span> <span class="nf">exec_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">inparam</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exec method named on ``object`` with ``inparam``.</span>
+
+<div class="viewcode-block" id="WmiNamespace.exec_method">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.exec_method">[docs]</a>
+    <span class="k">def</span> <span class="nf">exec_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">inparam</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exec method named on ``object`` with ``inparam``.</span>
 
 <span class="sd">           :params obj: The :class:`WmiObject` or path of the object the call apply to</span>
 <span class="sd">           :params method: The name of the method to call on the object</span>
@@ -466,12 +593,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ExecMethod</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inparam</span><span class="p">,</span> <span class="n">outparam</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">outparam</span> <span class="ow">or</span> <span class="n">result</span></div>
 
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">null</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span> <span class="k">else</span> <span class="s2">&quot; (NULL)&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WmiManager"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiManager">[docs]</a><span class="k">class</span> <span class="nc">WmiManager</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access</span>
+
+<div class="viewcode-block" id="WmiManager">
+<a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiManager">[docs]</a>
+<span class="k">class</span> <span class="nc">WmiManager</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access</span>
 <span class="sd">    :class:`WmiNamespace` by name</span>
 
 <span class="sd">    Example:</span>
@@ -490,19 +621,19 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;:func:`WmiRequester.select` for default WMI namespace &#39;root\\cimv2&#39;&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;:func:`WmiRequester.select` for default WMI namespace &#39;root\\cimv2&#39;&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_namespace</span><span class="o">.</span><span class="n">select</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;:func:`WmiRequester.query` for default WMI namespace &#39;root\\cimv2&#39;&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;:func:`WmiRequester.query` for default WMI namespace &#39;root\\cimv2&#39;&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_namespace</span><span class="o">.</span><span class="n">query</span>
 
     <span class="k">def</span> <span class="nf">get_subnamespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s2">&quot;root&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">root</span><span class="p">]</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;__NameSpace&quot;</span><span class="p">)]</span>
 
     <span class="n">namespaces</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_subnamespaces</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The list of available WMI namespaces&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The list of available WMI namespaces&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_open_wmi_requester</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">WmiNamespace</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
@@ -513,25 +644,25 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -545,13 +676,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.wmi</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

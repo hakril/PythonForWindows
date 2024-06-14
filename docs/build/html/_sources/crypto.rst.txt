@@ -34,13 +34,6 @@ import_pfx
 Certificate
 """""""""""
 
-.. warning::
-
-    The classes described here are still under test and possible rewrite/refactor.
-
-    The classes, methods and properties described here will problably change as I haven't yet had the time
-    to try it out in real cases and figure out the final look of the API I want to do.
-
 .. note::
 
     See sample :ref:`sample_crypto_certificate`

@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.device_manager &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.winobject.device_manager &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.device_manager</a></li> 
       </ul>
     </div>  
 
@@ -49,14 +46,18 @@
 <span class="kn">from</span> <span class="nn">windows.security</span> <span class="kn">import</span> <span class="n">SecurityDescriptor</span>
 <span class="kn">from</span> <span class="nn">windows.utils</span> <span class="kn">import</span> <span class="n">fixedproperty</span>
 
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">urepr_encode</span>
 
-<div class="viewcode-block" id="DeviceManager"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceManager">[docs]</a><span class="k">class</span> <span class="nc">DeviceManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent the device manager&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DeviceManager">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceManager">[docs]</a>
+<span class="k">class</span> <span class="nc">DeviceManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent the device manager&quot;&quot;&quot;</span>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of installed device classes.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of installed device classes.</span>
 
 <span class="sd">        :return: [:class:`DeviceClass`] -- A list of :class:`DeviceClass`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -83,42 +84,47 @@
         <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="DeviceClass"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceClass">[docs]</a><span class="k">class</span> <span class="nc">DeviceClass</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Device class, which is mainly a :class:`GUID` with additional attributes&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DeviceClass">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceClass">[docs]</a>
+<span class="k">class</span> <span class="nc">DeviceClass</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Device class, which is mainly a :class:`GUID` with additional attributes&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Bypass GUID __init__ that is not revelant here</span>
         <span class="k">pass</span>
 
     <span class="nd">@fixedproperty</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the device class&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the device class&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_device_class_name</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">devices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The set of devices of the current class.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The set of devices of the current class.</span>
 
 <span class="sd">        :type: :class:`DeviceInformationSet`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_devices</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">enumerate_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetupDiGetClassDevsA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetupDiGetClassDevsW</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">DeviceInformationSet</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_device_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAX_CLASS_NAME_LEN</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">SetupDiClassNameFromGuidA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAX_CLASS_NAME_LEN</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SetupDiClassNameFromGuidW</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">guid_cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot; guid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">guid_cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">urepr_encode</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot; guid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">guid_cls</span><span class="p">))</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span> <span class="c1"># Overwrite default GUID str</span></div>
 
-<div class="viewcode-block" id="DeviceInformationSet"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInformationSet">[docs]</a><span class="k">class</span> <span class="nc">DeviceInformationSet</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HDEVINFO</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A device instances, can be itered to retrieve the underliyings :class:`DeviceInstance`&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DeviceInformationSet">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInformationSet">[docs]</a>
+<span class="k">class</span> <span class="nc">DeviceInformationSet</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HDEVINFO</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A device instances, can be itered to retrieve the underliyings :class:`DeviceInstance`&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">all_device_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
@@ -137,16 +143,22 @@
         <span class="n">winproxy</span><span class="o">.</span><span class="n">SetupDiEnumDeviceInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
-<div class="viewcode-block" id="DeviceInformationSet.enum_device_interface"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInformationSet.enum_device_interface">[docs]</a>    <span class="k">def</span> <span class="nf">enum_device_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Not Implemented Yet&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DeviceInformationSet.enum_device_interface">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInformationSet.enum_device_interface">[docs]</a>
+    <span class="k">def</span> <span class="nf">enum_device_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Not Implemented Yet&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;enum_device_interface&quot;</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="DeviceInstance"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInstance">[docs]</a><span class="k">class</span> <span class="nc">DeviceInstance</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SP_DEVINFO_DATA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An instance of a Device.</span>
+
+<div class="viewcode-block" id="DeviceInstance">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DeviceInstance">[docs]</a>
+<span class="k">class</span> <span class="nc">DeviceInstance</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SP_DEVINFO_DATA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An instance of a Device.</span>
 
 <span class="sd">    The properties are from the page https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_address</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -180,65 +192,65 @@
         <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">getter</span><span class="p">)</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_FRIENDLYNAME</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The name of the device&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the device&quot;&quot;&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_DEVICEDESC</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The description of the device&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The description of the device&quot;&quot;&quot;</span>
     <span class="n">hardware_id</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_HARDWAREID</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The list of hardware IDs for the device.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The list of hardware IDs for the device.</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_hardwareid)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">enumerator_name</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_ENUMERATOR_NAME</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The enumerator name of the devices</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The enumerator name of the devices</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_enumerator_name)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_DRIVER</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The driver of the device</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The driver of the device</span>
 <span class="sd">    https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_driver</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Map on Device type ?</span>
     <span class="c1"># https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_DEVTYPE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The type of device</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The type of device</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">upper_filters</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_UPPERFILTERS</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A list of string that contains the names of a device&#39;s upper filter drivers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of string that contains the names of a device&#39;s upper filter drivers.&quot;&quot;&quot;</span>
     <span class="n">lower_filters</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_LOWERFILTERS</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A list of string that contains the names of a device&#39;s lower filter drivers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of string that contains the names of a device&#39;s lower filter drivers.&quot;&quot;&quot;</span>
     <span class="n">raw_security_descriptor</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_SECURITY</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The raw (binary) security descriptor of the device&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The raw (binary) security descriptor of the device&quot;&quot;&quot;</span>
     <span class="c1"># I would prefer to use the security_descriptor sddl</span>
     <span class="c1"># ssdl = _generate_property_getter(gdef.SPDRP_SECURITY_SDS)</span>
     <span class="n">service_name</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_SERVICE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The name of the service for the device</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the service for the device</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_service)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_MFG</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The name of the device manufacturer.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the device manufacturer.&quot;&quot;&quot;</span>
     <span class="n">location_information</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_LOCATION_INFORMATION</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The hardware location of a device.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The hardware location of a device.&quot;&quot;&quot;</span>
     <span class="n">location_paths</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_LOCATION_PATHS</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;A list of strings that represents the location of the device in the device tree.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of strings that represents the location of the device in the device tree.&quot;&quot;&quot;</span>
     <span class="c1"># Looks like it can raise ERROR_NO_SUCH_DEVINST</span>
     <span class="c1"># install_date = _generate_property_getter(gdef.SPDRP_INSTALL_STATE)</span>
     <span class="n">capabilites</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_CAPABILITIES</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The device capabilites</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The device capabilites</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_capabilities)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bus_type</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_BUSTYPEGUID</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The function retrieves the GUID for the device&#39;s bus type.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The function retrieves the GUID for the device&#39;s bus type.&quot;&quot;&quot;</span>
     <span class="n">bus_number</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_BUSNUMBER</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The device&#39;s bus number.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The device&#39;s bus number.&quot;&quot;&quot;</span>
     <span class="n">address</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_ADDRESS</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The device&#39;s address.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The device&#39;s address.&quot;&quot;&quot;</span>
     <span class="n">ui_number</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_UI_NUMBER</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Retrieves a DWORD value set to the value of the UINumber member of the device&#39;s&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves a DWORD value set to the value of the UINumber member of the device&#39;s&quot;&quot;&quot;</span>
     <span class="n">ui_number_desc_format</span> <span class="o">=</span> <span class="n">_generate_property_getter</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_UI_NUMBER_DESC_FORMAT</span><span class="p">)</span>
 
     <span class="c1"># Getter with special error handling</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">device_object_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The function retrieves a string that contains the name that is associated with the device&#39;s PDO.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function retrieves a string that contains the name that is associated with the device&#39;s PDO.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SPDRP_PHYSICAL_DEVICE_OBJECT_NAME</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -285,7 +297,7 @@
     <span class="c1"># !!! Only one allocated configuration can exist for each device instance.</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">allocated_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The allocated configuration of the device.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The allocated configuration of the device.</span>
 <span class="sd">        (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists)</span>
 
 <span class="sd">        :type: :class:`LogicalConfiguration`</span>
@@ -304,7 +316,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">boot_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The boot configuration of the device.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The boot configuration of the device.</span>
 <span class="sd">        (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists)</span>
 
 <span class="sd">        :type: :class:`LogicalConfiguration`</span>
@@ -322,7 +334,7 @@
     <span class="c1"># &#39;advanced&#39; attributes extrapolated from properties</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The security descriptor of the device.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The security descriptor of the device.</span>
 
 <span class="sd">        :type: :class:`~windows.security.SecurityDescriptor`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -330,11 +342,14 @@
         <span class="k">return</span> <span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_binary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_security_descriptor</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; (id=</span><span class="si">{2}</span><span class="s2">)&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DevInst</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">urepr_encode</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; (id=</span><span class="si">{2}</span><span class="s2">)&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DevInst</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="LogicalConfiguration"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.LogicalConfiguration">[docs]</a><span class="k">class</span> <span class="nc">LogicalConfiguration</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Logical Configuration of a Device instance&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LogicalConfiguration">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.LogicalConfiguration">[docs]</a>
+<span class="k">class</span> <span class="nc">LogicalConfiguration</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logical Configuration of a Device instance&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">get_next_resource_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">resdes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">resdes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -363,14 +378,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of resources in the current logical configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of resources in the current logical configuration</span>
 
 <span class="sd">        :type: [:class:`ResourceDescriptor`] -- A list of [:class:`ResourceDescriptor`]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_resources_for_type</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ResType_All</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">urepr_encode</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span></div>
+
 
 
 <span class="n">ResType_Mapper</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
@@ -388,8 +404,10 @@
 
 <span class="p">)</span>
 
-<div class="viewcode-block" id="ResourceDescriptor"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ResourceDescriptor">[docs]</a><span class="k">class</span> <span class="nc">ResourceDescriptor</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Describe a resource allocated or reserved by a device instance.</span>
+<div class="viewcode-block" id="ResourceDescriptor">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ResourceDescriptor">[docs]</a>
+<span class="k">class</span> <span class="nc">ResourceDescriptor</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describe a resource allocated or reserved by a device instance.</span>
 <span class="sd">    This class is a base class, all resources returned by :class:`LogicalConfiguration` should be one of the following:</span>
 
 <span class="sd">        * :class:`ResourceNoType`</span>
@@ -417,7 +435,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rawdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The raw data describing the resource&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The raw data describing the resource&quot;&quot;&quot;</span>
         <span class="n">data_size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">CM_Get_Res_Des_Data_Size</span><span class="p">(</span><span class="n">data_size</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
@@ -428,7 +446,8 @@
         <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">data_size</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> type=</span><span class="si">{1!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">urepr_encode</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> type=</span><span class="si">{1!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">))</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">ResourceDescriptorWithHeader</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
@@ -463,35 +482,49 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Resource descriptor with non-zero entry in range array&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ResourceNoType"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ResourceNoType">[docs]</a><span class="k">class</span> <span class="nc">ResourceNoType</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
+<div class="viewcode-block" id="ResourceNoType">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ResourceNoType">[docs]</a>
+<span class="k">class</span> <span class="nc">ResourceNoType</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span></div>
 
-<div class="viewcode-block" id="MemoryResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MemoryResource">[docs]</a><span class="k">class</span> <span class="nc">MemoryResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type MEM_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MemoryResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MemoryResource">[docs]</a>
+<span class="k">class</span> <span class="nc">MemoryResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type MEM_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">MEM_RESOURCE</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">-</span><span class="si">{2:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">MD_Alloc_Base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">MD_Alloc_End</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="IoResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.IoResource">[docs]</a><span class="k">class</span> <span class="nc">IoResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type IO_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IoResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.IoResource">[docs]</a>
+<span class="k">class</span> <span class="nc">IoResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type IO_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IO_RESOURCE</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">-</span><span class="si">{2:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">IOD_Alloc_Base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">IOD_Alloc_End</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DmaResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DmaResource">[docs]</a><span class="k">class</span> <span class="nc">DmaResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type DMA_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DmaResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DmaResource">[docs]</a>
+<span class="k">class</span> <span class="nc">DmaResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type DMA_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DMA_RESOURCE</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">DD_Alloc_Chan</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="IrqResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.IrqResource">[docs]</a><span class="k">class</span> <span class="nc">IrqResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type IRQ_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IrqResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.IrqResource">[docs]</a>
+<span class="k">class</span> <span class="nc">IrqResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type IRQ_RESOURCE&quot;&quot;&quot;</span>
     <span class="c1"># 32/64 based on current process bitness</span>
     <span class="c1"># Cross bitness cannot be implemented as &gt;=Win8 block it</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IRQ_RESOURCE</span>
@@ -500,28 +533,40 @@
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">IRQD_Alloc_Num</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BusNumberResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.BusNumberResource">[docs]</a><span class="k">class</span> <span class="nc">BusNumberResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type BUSNUMBER_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BusNumberResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.BusNumberResource">[docs]</a>
+<span class="k">class</span> <span class="nc">BusNumberResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeaderAndRanges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type BUSNUMBER_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BUSNUMBER_RESOURCE</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">-</span><span class="si">{2:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">BUSD_Alloc_Base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">BUSD_Alloc_End</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MemLargeResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MemLargeResource">[docs]</a><span class="k">class</span> <span class="nc">MemLargeResource</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type MEM_LARGE_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MemLargeResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MemLargeResource">[docs]</a>
+<span class="k">class</span> <span class="nc">MemLargeResource</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type MEM_LARGE_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">MEM_LARGE_RESOURCE</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> : [</span><span class="si">{1:#016x}</span><span class="s2">-</span><span class="si">{2:#016x}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">MLD_Alloc_Base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">MLD_Alloc_End</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ClassSpecificResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ClassSpecificResource">[docs]</a><span class="k">class</span> <span class="nc">ClassSpecificResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type CS_RESOURCE&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassSpecificResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.ClassSpecificResource">[docs]</a>
+<span class="k">class</span> <span class="nc">ClassSpecificResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type CS_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CS_RESOURCE</span></div>
+
     <span class="c1"># Any idea for __str__ ?</span>
 
-<div class="viewcode-block" id="DevicePrivateResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DevicePrivateResource">[docs]</a><span class="k">class</span> <span class="nc">DevicePrivateResource</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A device private resource</span>
+<div class="viewcode-block" id="DevicePrivateResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.DevicePrivateResource">[docs]</a>
+<span class="k">class</span> <span class="nc">DevicePrivateResource</span><span class="p">(</span><span class="n">ResourceDescriptor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A device private resource</span>
 <span class="sd">    (https://docs.microsoft.com/en-us/windows-hardware/drivers/install/devprivate-resource)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -529,16 +574,23 @@
     <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
+
     <span class="c1"># Any idea for __str__ ?</span>
 
-<div class="viewcode-block" id="MfCardConfigResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MfCardConfigResource">[docs]</a><span class="k">class</span> <span class="nc">MfCardConfigResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type MFCARD_RESOURCE&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MfCardConfigResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.MfCardConfigResource">[docs]</a>
+<span class="k">class</span> <span class="nc">MfCardConfigResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type MFCARD_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">MFCARD_RESOURCE</span></div>
+
     <span class="c1"># Any idea for __str__ ?</span>
 
-<div class="viewcode-block" id="PcCardConfigResource"><a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.PcCardConfigResource">[docs]</a><span class="k">class</span> <span class="nc">PcCardConfigResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A resource of type PCCARD_RESOURCE&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PcCardConfigResource">
+<a class="viewcode-back" href="../../../device_manager.html#windows.winobject.device_manager.PcCardConfigResource">[docs]</a>
+<span class="k">class</span> <span class="nc">PcCardConfigResource</span><span class="p">(</span><span class="n">ResourceDescriptorWithHeader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource of type PCCARD_RESOURCE&quot;&quot;&quot;</span>
     <span class="n">DATA_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PCCARD_RESOURCE</span></div>
+
     <span class="c1"># Any idea for __str__ ?</span>
 
 <span class="c1"># Flemme de faire une meta-classe pour ca..</span>
@@ -557,23 +609,22 @@
 <span class="p">})</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -587,13 +638,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.device_manager</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

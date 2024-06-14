@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.event_log &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.winobject.event_log &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.event_log</a></li> 
       </ul>
     </div>  
 
@@ -106,20 +103,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">()</span>
 
 <span class="c1"># Class high-level API</span>
-<div class="viewcode-block" id="EvtQuery"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery">[docs]</a><span class="k">class</span> <span class="nc">EvtQuery</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an Event-log query&quot;&quot;&quot;</span>
-    <span class="n">TIMEOUT</span> <span class="o">=</span> <span class="mh">0x1000</span>
+<div class="viewcode-block" id="EvtQuery">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtQuery</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an Event-log query&quot;&quot;&quot;</span>
+    <span class="n">DEFAULT_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x1000</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EvtQuery</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_TIMEOUT</span>
 
     <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the next :class:`EvtEvent` matching the query&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the next :class:`EvtEvent` matching the query&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">event</span> <span class="o">=</span> <span class="n">EvtEvent</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtNext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtNext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_NO_MORE_ITEMS</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">StopIteration</span>
@@ -130,8 +130,10 @@
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-<div class="viewcode-block" id="EvtQuery.seek"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.seek">[docs]</a>    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">seek_flags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Seek to ``position``.</span>
+<div class="viewcode-block" id="EvtQuery.seek">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.seek">[docs]</a>
+    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">seek_flags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Seek to ``position``.</span>
 <span class="sd">        ``seek_flags`` can be one of:</span>
 
 <span class="sd">            * ``None``</span>
@@ -157,27 +159,37 @@
                 <span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtSeek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seek_flags</span><span class="p">)</span></div>
 
+
     <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span> <span class="c1"># Yep.. real name is &#39;next&#39; in Py2 :D</span>
 
-<div class="viewcode-block" id="EvtQuery.all"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># SqlAlchemy like :)</span>
-        <span class="sd">&quot;&quot;&quot;Return a list with all the query results</span>
+<div class="viewcode-block" id="EvtQuery.all">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.all">[docs]</a>
+    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># SqlAlchemy like :)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list with all the query results</span>
 
 <span class="sd">        :rtype: [:class:`EvtEvent`] -- A list of Event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EvtQuery.first"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.first">[docs]</a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># SqlAlchemy like :) -&gt; allow testing in interactive console</span>
-        <span class="sd">&quot;&quot;&quot;Return the first query result</span>
+
+<div class="viewcode-block" id="EvtQuery.first">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.first">[docs]</a>
+    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># SqlAlchemy like :) -&gt; allow testing in interactive console</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the first query result</span>
 
 <span class="sd">        :rtype: :class:`EvtEvent` -- An Event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div></div>
+        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</div>
 
 
 
 
-<div class="viewcode-block" id="EvtEvent"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent">[docs]</a><span class="k">class</span> <span class="nc">EvtEvent</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An Event log&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EvtEvent">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtEvent</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An Event log&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EvtEvent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
@@ -208,14 +220,17 @@
         <span class="k">assert</span> <span class="n">xml</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">xml</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<div class="viewcode-block" id="EvtEvent.value"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve a value from the event.</span>
+<div class="viewcode-block" id="EvtEvent.value">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent.value">[docs]</a>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a value from the event.</span>
 <span class="sd">        ``name`` is an XPath expressions that uniquely identify a node or attribute in the event.</span>
 <span class="sd">        (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa385352(v=vs.85).aspx)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values</span><span class="p">((</span><span class="n">name</span><span class="p">,),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
 
     <span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">):</span>
         <span class="n">nbelt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
@@ -235,12 +250,15 @@
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
 
-<div class="viewcode-block" id="EvtEvent.event_values"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent.event_values">[docs]</a>    <span class="k">def</span> <span class="nf">event_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The values of the event in a list&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EvtEvent.event_values">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent.event_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">event_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The values of the event in a list&quot;&quot;&quot;</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextUser</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtClose</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
 
     <span class="k">def</span> <span class="nf">get_raw_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">):</span>
         <span class="n">nbelt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
@@ -258,47 +276,47 @@
     <span class="c1"># Properties arround common Event/System values</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">provider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The provider of the event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The provider of the event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_values</span><span class="p">()[</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtSystemProviderName</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">computer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The computer that generated the event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The computer that generated the event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_values</span><span class="p">()[</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtSystemComputer</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The ID of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ID of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/EventID&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The version of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The version of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/Version&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The level of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The level of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/Level&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">opcode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The opcode of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The opcode of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/Opcode&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">time_created</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The creation time of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The creation time of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/TimeCreated/@SystemTime&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The process ID of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The process ID of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/Execution/@ProcessID&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The process ID of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The process ID of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Event/System/Execution/@ThreadID&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -308,12 +326,12 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The User ID associated with the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The User ID associated with the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_values</span><span class="p">()[</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtSystemUserID</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The medata for the current Event</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The medata for the current Event</span>
 
 <span class="sd">        :type: :class:`EventMetadata`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -328,7 +346,7 @@
     <span class="c1"># Test</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># user/event specifique data</span>
-        <span class="sd">&quot;&quot;&quot;A dict of EventData Name:Value for the current dict.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A dict of EventData Name:Value for the current dict.</span>
 
 <span class="sd">        :type: :class:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -379,12 +397,13 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;``Event.time_created`` as a :class:``datetime``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``Event.time_created`` as a :class:``datetime``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">datetime_from_filetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_created</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">creation_time</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">datetime_from_filetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_created</span><span class="p">)</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> id=&quot;</span><span class="si">{self.id}</span><span class="s1">&quot; time=&quot;</span><span class="si">{creation_time}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">creation_time</span><span class="o">=</span><span class="n">creation_time</span><span class="p">)</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">ImprovedEVT_VARIANT</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT</span><span class="p">):</span>
@@ -470,8 +489,10 @@
 
 
 
-<div class="viewcode-block" id="EvtChannel"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel">[docs]</a><span class="k">class</span> <span class="nc">EvtChannel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An Event Log channel&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EvtChannel">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtChannel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An Event Log channel&quot;&quot;&quot;</span>
     <span class="n">DEFAULT_QUERY_FLAGS</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtQueryChannelPath</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtQueryForwardDirection</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -479,8 +500,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># For classic only</span>
 
-<div class="viewcode-block" id="EvtChannel.query"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Query the event with the ``ids`` or perform a query with the raw query ``filter``</span>
+<div class="viewcode-block" id="EvtChannel.query">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel.query">[docs]</a>
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Query the event with the ``ids`` or perform a query with the raw query ``filter``</span>
 
 <span class="sd">        Both parameters are mutually exclusive.</span>
 
@@ -498,6 +521,9 @@
 <span class="sd">            List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</span>
 <span class="sd">                ``Event/System[EventID=3] and Event/EventData/Data[@Name=&#39;DestinationIp&#39;] and Event/EventData[Data=&#39;10.0.0.2&#39;]``</span>
 
+<span class="sd">            List all events with a given provider of Microsoft-Windows-TaskScheduler:</span>
+<span class="sd">                ``Event/System/Provider[@Name=&#39;Microsoft-Windows-TaskScheduler&#39;]``</span>
+
 <span class="sd">        :rtype: :class:`EvtQuery`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">ids</span> <span class="ow">and</span> <span class="nb">filter</span><span class="p">:</span>
@@ -508,11 +534,12 @@
             <span class="n">ids_filter</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;EventID=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">)</span>
             <span class="nb">filter</span> <span class="o">=</span> <span class="s2">&quot;Event/System[</span><span class="si">{0}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ids_filter</span><span class="p">)</span>
         <span class="n">query_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">EvtQuery</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_QUERY_FLAGS</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">EvtQuery</span><span class="p">(</span><span class="n">query_handle</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">EvtQuery</span><span class="p">(</span><span class="n">query_handle</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of all events in the channels, an alias for ``channel.query().all()``</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of all events in the channels, an alias for ``channel.query().all()``</span>
 
 <span class="sd">        :type: [:class:`EvtEvent`] -- A list of :class:`EvtEvent`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -520,14 +547,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The configuration of the channel</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The configuration of the channel</span>
 
 <span class="sd">        :type: :class:`ChannelConfig`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ChannelConfig</span><span class="o">.</span><span class="n">from_channel_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EvtChannel.get_event_metadata"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel.get_event_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the metadata for the event ID ``id``</span>
+<div class="viewcode-block" id="EvtChannel.get_event_metadata">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel.get_event_metadata">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the metadata for the event ID ``id``</span>
 
 <span class="sd">        :rtype: :class:`EventMetadata`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -539,6 +568,7 @@
         <span class="n">pub_metada</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">evtm</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">evtm</span> <span class="k">for</span> <span class="n">evtm</span> <span class="ow">in</span> <span class="n">pub_metada</span><span class="o">.</span><span class="n">events_metadata</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
+
 
     <span class="k">def</span> <span class="nf">get_classic_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">providername</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">providername</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span><span class="p">:</span>
@@ -553,38 +583,56 @@
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="EvtFile"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtFile">[docs]</a><span class="k">class</span> <span class="nc">EvtFile</span><span class="p">(</span><span class="n">EvtChannel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an Evtx file&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EvtFile">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtFile">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtFile</span><span class="p">(</span><span class="n">EvtChannel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an Evtx file&quot;&quot;&quot;</span>
     <span class="n">DEFAULT_QUERY_FLAGS</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtQueryFilePath</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtQueryForwardDirection</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Not implemented for EvtFile</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Not implemented for EvtFile</span>
 
 <span class="sd">        :raise: :class:`NotImplementedError`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot retrieve the configuration of an EvtFile&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ChannelConfig"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig">[docs]</a><span class="k">class</span> <span class="nc">ChannelConfig</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The configuration of a event channel&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ChannelConfig">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig">[docs]</a>
+<span class="k">class</span> <span class="nc">ChannelConfig</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The configuration of a event channel&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: https://learn.microsoft.com/en-us/windows/win32/api/winevt/nf-winevt-evtsetchannelconfigproperty</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ChannelConfig</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="ChannelConfig.from_channel_name"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig.from_channel_name">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ChannelConfig.from_channel_name">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig.from_channel_name">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_channel_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the :class:`ChannelConfig` for the channel ``name``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the :class:`ChannelConfig` for the channel ``name``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtOpenChannelConfig</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`EvtPublisher` for the channel&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`EvtPublisher` for the channel&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">EvtPublisher</span><span class="p">(</span><span class="n">chaninfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtChannelConfigOwningPublisher</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ChannelConfig.publishers"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig.publishers">[docs]</a>    <span class="k">def</span> <span class="nf">publishers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;TEST&quot;</span>
+<div class="viewcode-block" id="ChannelConfig.publishers">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig.publishers">[docs]</a>
+    <span class="k">def</span> <span class="nf">publishers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The list of Publisher publishing on the channel. seems pertinent for Legacy channel like &quot;System&quot;</span>
+
+<span class="sd">        :type: [:class:`EvtPublisher`] - A list of :class:`EvtPublisher`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">EvtPublisher</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span> <span class="k">for</span> <span class="n">pub</span> <span class="ow">in</span> <span class="n">chaninfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtChannelPublisherList</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">]</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -597,15 +645,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">classic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;``True`` if the channel is a classic event channel (for example the Application or System log)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``True`` if the channel is a classic event channel (for example the Application or System log)&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">chaninfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtChannelConfigClassicEventlog</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">PublisherMetadataChannel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataChannel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataChannel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_metadata</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadataChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -617,32 +666,32 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The flags of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The flags of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_channel_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferenceFlags</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_channel_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferencePath</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The reference id of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The reference id of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_channel_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferenceID</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The reference index of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The reference index of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_channel_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferenceIndex</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataChannel``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_channel_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferenceMessageID</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">PublisherMetadataLevel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataLevel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataLevel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_metadata</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadataLevel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pub_metadata</span> <span class="o">=</span> <span class="n">pub_metadata</span>
@@ -665,7 +714,7 @@
 
 
 <span class="k">class</span> <span class="nc">PublisherMetadataOpcode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataOpcode (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataOpcode (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_metadata</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadataOpcode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pub_metadata</span> <span class="o">=</span> <span class="n">pub_metadata</span>
@@ -676,22 +725,22 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_opcode_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataOpcodeName</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The opcode value of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The opcode value of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_opcode_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataOpcodeValue</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataOpcode``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_opcode_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataOpcodeMessageID</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">PublisherMetadataKeyword</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataKeyword (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataKeyword (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_metadata</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadataKeyword</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -703,21 +752,21 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataKeywordName</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The value of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The value of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataKeywordValue</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The message id of the ``PublisherMetadataKeyword``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataKeywordMessageID</span><span class="p">))</span>
 
 <span class="k">class</span> <span class="nc">PublisherMetadataTask</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataTask (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PublisherMetadataTask (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_metadata</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadataTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pub_metadata</span> <span class="o">=</span> <span class="n">pub_metadata</span>
@@ -728,32 +777,34 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataTaskName</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The value of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The value of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataTaskValue</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">event_guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The event GUId of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The event GUId of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataTaskEventGuid</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The message ID GUId of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The message ID GUId of the ``PublisherMetadataTask``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query_keyword_metadata_property</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataTaskMessageID</span><span class="p">))</span>
 
-<div class="viewcode-block" id="EvtPublisher"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtPublisher">[docs]</a><span class="k">class</span> <span class="nc">EvtPublisher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An Event provider&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EvtPublisher">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtPublisher">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtPublisher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An Event provider&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the metadata for this publisher</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the metadata for this publisher</span>
 
 <span class="sd">        :type: :class:`PublisherMetadata`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -763,20 +814,26 @@
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PublisherMetadata"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata">[docs]</a><span class="k">class</span> <span class="nc">PublisherMetadata</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The metadata about an event provider&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PublisherMetadata">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata">[docs]</a>
+<span class="k">class</span> <span class="nc">PublisherMetadata</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The metadata about an event provider&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="PublisherMetadata.from_publisher_name"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata.from_publisher_name">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PublisherMetadata.from_publisher_name">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata.from_publisher_name">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_publisher_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadata` for the publisher ``name``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadata` for the publisher ``name``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtOpenPublisherMetadata</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The GUID associated with this provider</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The GUID associated with this provider</span>
 
 <span class="sd">        :type:  [:class:`GUID`] -- the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -784,7 +841,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">chanrefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Identifies the channels child element of the provider.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Identifies the channels child element of the provider.</span>
 
 <span class="sd">        :type: :class:`PropertyArray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -792,7 +849,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">levelrefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Identifies the levels child element of the provider.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Identifies the levels child element of the provider.</span>
 
 <span class="sd">        :type: :class:`PropertyArray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -800,7 +857,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">opcoderefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Identifies the opcodes child element of the provider.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Identifies the opcodes child element of the provider.</span>
 
 <span class="sd">        :type: :class:`PropertyArray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -808,7 +865,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">keywordrefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of keywords defined by this provider</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of keywords defined by this provider</span>
 
 <span class="sd">        :type: :class:`PropertyArray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -816,7 +873,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">taskrefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of tasks defined by this provider</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of tasks defined by this provider</span>
 
 <span class="sd">        :type: :class:`PropertyArray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -824,7 +881,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channels_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataChannel` for each channel this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataChannel` for each channel this provider defines</span>
 
 <span class="sd">        :yield: :class:`PublisherMetadataChannel`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -832,7 +889,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">levels_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataLevel` for each level this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataLevel` for each level this provider defines</span>
 
 <span class="sd">        :yield: :class:`PublisherMetadataLevel`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -840,7 +897,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">opcodes_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataOpcode` for each opcode this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataOpcode` for each opcode this provider defines</span>
 
 <span class="sd">        :yield: :class:`PublisherMetadataOpcode`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -848,7 +905,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tasks_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataTask` for each opcode this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataTask` for each opcode this provider defines</span>
 
 <span class="sd">        :yield: :class:`PublisherMetadataTask`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -856,7 +913,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">keywords_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataKeyword` for each opcode this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`PublisherMetadataKeyword` for each opcode this provider defines</span>
 
 <span class="sd">        :yield: :class:`PublisherMetadataKeyword`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -864,7 +921,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">events_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The :class:`EventMetadata` for each event this provider defines</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The :class:`EventMetadata` for each event this provider defines</span>
 
 <span class="sd">        :yield: :class:`EventMetadata`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -881,7 +938,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel_name_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The dict of channel defined by this provider by their id</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The dict of channel defined by this provider by their id</span>
 
 <span class="sd">        :type: :class:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -895,7 +952,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of :class:`EvtChannel` defined by this provider</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of :class:`EvtChannel` defined by this provider</span>
 
 <span class="sd">        :type: [:class:`EvtChannel`] -- A list of :class:`EvtChannel`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -903,7 +960,9 @@
         <span class="n">propertyid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataChannelReferencePath</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">EvtChannel</span><span class="p">(</span><span class="n">chansref</span><span class="o">.</span><span class="n">property</span><span class="p">(</span><span class="n">propertyid</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chansref</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="PublisherMetadata.message"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata.message">[docs]</a>    <span class="k">def</span> <span class="nf">message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msgid</span><span class="p">):</span>
+<div class="viewcode-block" id="PublisherMetadata.message">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PublisherMetadata.message">[docs]</a>
+    <span class="k">def</span> <span class="nf">message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msgid</span><span class="p">):</span>
         <span class="s2">&quot;TODO&quot;</span>
         <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
@@ -916,27 +975,28 @@
                 <span class="k">raise</span>
         <span class="k">return</span> <span class="n">sbuff</span><span class="o">.</span><span class="n">value</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">publishinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataPublisherMessageID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_filepath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">publishinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataMessageFilePath</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_resource_filepath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">publishinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataResourceFilePath</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_parameter_filepath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">publishinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtPublisherMetadataParameterFilePath</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
@@ -945,7 +1005,10 @@
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PropertyArray"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PropertyArray">[docs]</a><span class="k">class</span> <span class="nc">PropertyArray</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVT_OBJECT_ARRAY_PROPERTY_HANDLE</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PropertyArray">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.PropertyArray">[docs]</a>
+<span class="k">class</span> <span class="nc">PropertyArray</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVT_OBJECT_ARRAY_PROPERTY_HANDLE</span><span class="p">):</span>
     <span class="s2">&quot;TODO&quot;</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -956,8 +1019,11 @@
     <span class="k">def</span> <span class="nf">property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">arrayproperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
 
-<div class="viewcode-block" id="EventMetadata"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EventMetadata">[docs]</a><span class="k">class</span> <span class="nc">EventMetadata</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The Metadata about a given Event type</span>
+
+<div class="viewcode-block" id="EventMetadata">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EventMetadata">[docs]</a>
+<span class="k">class</span> <span class="nc">EventMetadata</span><span class="p">(</span><span class="n">EvtHandle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Metadata about a given Event type</span>
 
 
 <span class="sd">    see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa385517(v=vs.85).aspx</span>
@@ -965,7 +1031,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The ID of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ID of the Event&quot;&quot;&quot;</span>
         <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/wes/eventschema-systempropertiestype-complextype</span>
         <span class="c1"># Qualifiers:</span>
         <span class="c1"># A legacy provider uses a 32-bit number to identify its events.</span>
@@ -977,42 +1043,42 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The version of the Event&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The version of the Event&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventVersion</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The Channel attribute of the Event definition&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Channel attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventChannel</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">keyword</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The keyword attribute of the Event definition&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The keyword attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventKeyword</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">opcode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The opcode attribute of the Event definition&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The opcode attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventOpcode</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The level attribute of the Event definition&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The level attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventLevel</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The task attribute of the Event definition&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The task attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventTask</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Identifies the message attribute of the event definition.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Identifies the message attribute of the event definition.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventMessageID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Identifies the template attribute of the event definition which is an XML string&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Identifies the template attribute of the event definition which is an XML string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventTemplate</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">_parse_event_template_data_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
@@ -1047,7 +1113,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">event_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of attribute specifique for this event.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of attribute specifique for this event.</span>
 <span class="sd">        Retrieved by parsing :data:`EventMetadata.template`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span>
@@ -1063,16 +1129,22 @@
         <span class="k">return</span> <span class="n">xmltemplate</span></div>
 
 
-<div class="viewcode-block" id="EvtlogManager"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager">[docs]</a><span class="k">class</span> <span class="nc">EvtlogManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The main Evt class to open Evt channel/publisher and evtx file&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EvtlogManager">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager">[docs]</a>
+<span class="k">class</span> <span class="nc">EvtlogManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main Evt class to open Evt channel/publisher and evtx file&quot;&quot;&quot;</span>
     <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa385784(v=vs.85).aspx</span>
 
-<div class="viewcode-block" id="EvtlogManager.is_implemented"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.is_implemented">[docs]</a>    <span class="k">def</span> <span class="nf">is_implemented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return ``True`` if the new Evt-API is implemented on the current computer</span>
+<div class="viewcode-block" id="EvtlogManager.is_implemented">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.is_implemented">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_implemented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ``True`` if the new Evt-API is implemented on the current computer</span>
 
 <span class="sd">        see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa385784(v=vs.85).aspx</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtQuery</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1114,8 +1186,10 @@
 
 
 
-<div class="viewcode-block" id="EvtlogManager.open_channel"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_channel">[docs]</a>    <span class="k">def</span> <span class="nf">open_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Open the Evt channel with ``name``</span>
+<div class="viewcode-block" id="EvtlogManager.open_channel">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_channel">[docs]</a>
+    <span class="k">def</span> <span class="nf">open_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the Evt channel with ``name``</span>
 
 <span class="sd">        :rtype: :class:`EvtChannel`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1123,8 +1197,11 @@
         <span class="n">chan</span><span class="o">.</span><span class="n">config</span> <span class="c1"># Force to retrieve a handle (check channel exists)</span>
         <span class="k">return</span> <span class="n">chan</span></div>
 
-<div class="viewcode-block" id="EvtlogManager.open_evtx_file"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_evtx_file">[docs]</a>    <span class="k">def</span> <span class="nf">open_evtx_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Open the evtx file with ``filename``</span>
+
+<div class="viewcode-block" id="EvtlogManager.open_evtx_file">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_evtx_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">open_evtx_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the evtx file with ``filename``</span>
 
 <span class="sd">        :rtype: :class:`EvtFile`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1134,8 +1211,11 @@
         <span class="n">file</span> <span class="o">=</span> <span class="n">EvtFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">file</span></div>
 
-<div class="viewcode-block" id="EvtlogManager.open_publisher"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_publisher">[docs]</a>    <span class="k">def</span> <span class="nf">open_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Open the Evt publisher with ``name``</span>
+
+<div class="viewcode-block" id="EvtlogManager.open_publisher">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.open_publisher">[docs]</a>
+    <span class="k">def</span> <span class="nf">open_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the Evt publisher with ``name``</span>
 
 <span class="sd">        :rtype: :class:`EvtPublisher`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1143,8 +1223,11 @@
         <span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span> <span class="c1"># Force to retrieve a handle (check channel exists)</span>
         <span class="k">return</span> <span class="n">publisher</span></div>
 
-<div class="viewcode-block" id="EvtlogManager.__getitem__"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Open the Evt Channel/Publisher or Evtx file with ``name``</span>
+
+<div class="viewcode-block" id="EvtlogManager.__getitem__">
+<a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtlogManager.__getitem__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the Evt Channel/Publisher or Evtx file with ``name``</span>
 
 <span class="sd">        :rtype: :class:`EvtChannel` or :class:`EvtPublisher` or :class:`EvtFile`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1160,27 +1243,28 @@
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_ACCESS_DENIED</span><span class="p">:</span>
                 <span class="k">raise</span>
         <span class="c1"># Raise FILE_NOT_FOUND if not found (last chance)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_evtx_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_evtx_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+</div>
+
 
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1194,13 +1278,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.event_log</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.task_scheduler</a></li> 
       </ul>
     </div>  
 
@@ -71,7 +68,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ITEM_TYPE</span>
 
     <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return elements nb ``index``. Collection index starts at 1&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return elements nb ``index``. Collection index starts at 1&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; Index start as 1&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -90,7 +87,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the list of item in the collection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of item in the collection</span>
 
 <span class="sd">        :type: :class:`list`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -118,51 +115,60 @@
     <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">id_doc</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Describe an action performed by a task&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Action">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Action">[docs]</a>
+<span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describe an action performed by a task&quot;&quot;&quot;</span>
     <span class="n">ACTION_SUBTYPE</span> <span class="o">=</span> <span class="p">{}</span>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the :class:`Action`-subtype according to :data:`AbstractAction.type`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the :class:`Action`-subtype according to :data:`AbstractAction.type`&quot;&quot;&quot;</span>
         <span class="n">subinterface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ACTION_SUBTYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">]</span> <span class="c1"># KeyError ?</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">subinterface</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ExecAction"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ExecAction">[docs]</a><span class="k">class</span> <span class="nc">ExecAction</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IExecAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an action of type</span>
+
+<div class="viewcode-block" id="ExecAction">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ExecAction">[docs]</a>
+<span class="k">class</span> <span class="nc">ExecAction</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IExecAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an action of type</span>
 <span class="sd">        :data:`~windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_EXEC`&quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Path&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;put_Path&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;[R-W] The path of the programm to execute&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[R-W] The path of the programm to execute&quot;&quot;&quot;</span>
 
     <span class="n">arguments</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Arguments&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">arguments</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="s2">&quot;put_Arguments&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;[R-W] The arguments for the command to execute&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[R-W] The arguments for the command to execute&quot;&quot;&quot;</span>
 
     <span class="n">working_directory</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_WorkingDirectory&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The working directory for the command to execute&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The working directory for the command to execute&quot;&quot;&quot;</span></div>
+
 
 <span class="c1"># Register action subtype</span>
 <span class="n">Action</span><span class="o">.</span><span class="n">ACTION_SUBTYPE</span><span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_ACTION_EXEC</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExecAction</span>
 
-<div class="viewcode-block" id="ComHandlerAction"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ComHandlerAction">[docs]</a><span class="k">class</span> <span class="nc">ComHandlerAction</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IComHandlerAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an action of type</span>
+<div class="viewcode-block" id="ComHandlerAction">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ComHandlerAction">[docs]</a>
+<span class="k">class</span> <span class="nc">ComHandlerAction</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IComHandlerAction</span><span class="p">,</span> <span class="n">AbstractAction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an action of type</span>
 <span class="sd">        :data:`~windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_COM_HANDLER`&quot;&quot;&quot;</span>
 
     <span class="n">classid</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_ClassId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">classid</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">classid</span><span class="p">,</span> <span class="s2">&quot;put_ClassId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The CLSID of the COM server executed</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The CLSID of the COM server executed</span>
 
 <span class="sd">    :type: :class:`~windows.generated_def.winstructs.BSTR`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Data&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;put_Data&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The DATA for the COM class</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The DATA for the COM class</span>
 
 <span class="sd">    :type: :class:`~windows.generated_def.winstructs.BSTR`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
 
 <span class="c1"># Register action subtype</span>
 <span class="n">Action</span><span class="o">.</span><span class="n">ACTION_SUBTYPE</span><span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_ACTION_COM_HANDLER</span><span class="p">]</span> <span class="o">=</span> <span class="n">ComHandlerAction</span>
@@ -179,20 +185,27 @@
 
 <span class="n">Action</span><span class="o">.</span><span class="n">ACTION_SUBTYPE</span><span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_ACTION_SHOW_MESSAGE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ShowMessageAction</span>
 
-<div class="viewcode-block" id="Trigger"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Trigger">[docs]</a><span class="k">class</span> <span class="nc">Trigger</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITrigger</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A task trigger&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Trigger">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Trigger">[docs]</a>
+<span class="k">class</span> <span class="nc">Trigger</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITrigger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A task trigger&quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Type&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_TRIGGER_TYPE2</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The type of trigger</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The type of trigger</span>
 
 <span class="sd">    :type: :class:`~windows.generated_def.winstructs.TASK_TRIGGER_TYPE2`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="ActionCollection"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection">[docs]</a><span class="k">class</span> <span class="nc">ActionCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IActionCollection</span><span class="p">,</span>  <span class="n">TaskCollectionType</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ActionCollection">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection">[docs]</a>
+<span class="k">class</span> <span class="nc">ActionCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IActionCollection</span><span class="p">,</span>  <span class="n">TaskCollectionType</span><span class="p">):</span>
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Action</span>
 
-<div class="viewcode-block" id="ActionCollection.create"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new action of type ``action_type``</span>
+<div class="viewcode-block" id="ActionCollection.create">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection.create">[docs]</a>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new action of type ``action_type``</span>
 
 <span class="sd">        :rtype: A subclass of :class:`Action`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -200,39 +213,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">action_type</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">subtype</span></div>
 
-<div class="viewcode-block" id="ActionCollection.get_item"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection.get_item">[docs]</a>    <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ActionCollection.get_item">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.ActionCollection.get_item">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="n">item</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ActionCollection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="c1"># Need to Release() item ?</span>
-        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">subtype</span></div></div>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">subtype</span></div>
+</div>
 
-<div class="viewcode-block" id="TriggerCollection"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TriggerCollection">[docs]</a><span class="k">class</span> <span class="nc">TriggerCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITriggerCollection</span><span class="p">,</span>  <span class="n">TaskCollectionType</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TriggerCollection">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TriggerCollection">[docs]</a>
+<span class="k">class</span> <span class="nc">TriggerCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITriggerCollection</span><span class="p">,</span>  <span class="n">TaskCollectionType</span><span class="p">):</span>
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Trigger</span></div>
 
 
-<div class="viewcode-block" id="TaskRegistrationInfo"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskRegistrationInfo">[docs]</a><span class="k">class</span> <span class="nc">TaskRegistrationInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegistrationInfo</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Provides the administrative information that can be used to describe the task.</span>
+
+<div class="viewcode-block" id="TaskRegistrationInfo">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskRegistrationInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskRegistrationInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegistrationInfo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides the administrative information that can be used to describe the task.</span>
 
 <span class="sd">    This information includes details such as a description of the task,</span>
 <span class="sd">    the author of the task, the date the task is registered,</span>
 <span class="sd">    and the security descriptor of the task.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">author</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Author&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The author of the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The author of the task&quot;&quot;&quot;</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Description&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The description of the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The description of the task&quot;&quot;&quot;</span>
     <span class="n">date</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Date&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The registration date of the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The registration date of the task&quot;&quot;&quot;</span>
     <span class="n">source</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Source&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Where the task originated from.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Where the task originated from.</span>
 
 <span class="sd">    For example, a task may originate from a component, service, application, or user.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">documentation</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Documentation&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Any additional documentation for the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Any additional documentation for the task&quot;&quot;&quot;</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_URI&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;the URI of the task.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;the URI of the task.&quot;&quot;&quot;</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Version&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The version number of the task.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The version number of the task.&quot;&quot;&quot;</span>
 
     <span class="c1"># Return WindowsError: [Error -2147467263] Not implemented</span>
     <span class="c1"># xml = generate_simple_getter(&quot;get_XmlText&quot;, gdef.BSTR)</span>
@@ -248,95 +271,104 @@
 
 
 
-<div class="viewcode-block" id="TaskPrincipal"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskPrincipal">[docs]</a><span class="k">class</span> <span class="nc">TaskPrincipal</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IPrincipal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Provides the security credentials for a principal.</span>
+
+<div class="viewcode-block" id="TaskPrincipal">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskPrincipal">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskPrincipal</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IPrincipal</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides the security credentials for a principal.</span>
 <span class="sd">    These security credentials define the security context for the tasks that are associated with the principal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_DisplayName&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;put_DisplayName&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The name of the principal&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the principal&quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="s2">&quot;put_Id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;the identifier of the principal.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;the identifier of the principal.&quot;&quot;&quot;</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_UserId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="s2">&quot;put_UserId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;the user identifier that is required to run the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;the user identifier that is required to run the task&quot;&quot;&quot;</span>
     <span class="n">group_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_GroupId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">group_id</span> <span class="o">=</span> <span class="n">add_simple_setter</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="s2">&quot;put_GroupId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;the user group that is required to run the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;the user group that is required to run the task&quot;&quot;&quot;</span>
     <span class="n">run_level</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RunLevel&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_RUNLEVEL_TYPE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;the privilege level that is required to run the tasks</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;the privilege level that is required to run the tasks</span>
 
 <span class="sd">    :type: :class:`~windows.generated_def.winstructs.TASK_RUNLEVEL_TYPE`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logon_type</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_LogonType&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_LOGON_TYPE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot; logon method that is required to run the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; logon method that is required to run the task</span>
 
 <span class="sd">    :type: :class:`~windows.generated_def.winstructs.TASK_LOGON_TYPE`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="TaskDefinition"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskDefinition">[docs]</a><span class="k">class</span> <span class="nc">TaskDefinition</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskDefinition</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The definition of a task&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskDefinition">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskDefinition">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskDefinition</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskDefinition</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The definition of a task&quot;&quot;&quot;</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Actions&quot;</span><span class="p">,</span> <span class="n">ActionCollection</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The list of actions of the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The list of actions of the task</span>
 
 <span class="sd">    :type: :class:`ActionCollection`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">triggers</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Triggers&quot;</span><span class="p">,</span> <span class="n">TriggerCollection</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The list of triggers of the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The list of triggers of the task</span>
 
 <span class="sd">    :type: :class:`TriggerCollection`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">registration_info</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RegistrationInfo&quot;</span><span class="p">,</span> <span class="n">TaskRegistrationInfo</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The registration information of the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The registration information of the task</span>
 
 <span class="sd">    :type: :class:`TaskRegistrationInfo`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">principal</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Principal&quot;</span><span class="p">,</span> <span class="n">TaskPrincipal</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The principal that provides the security credentials for the task.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The principal that provides the security credentials for the task.</span>
 <span class="sd">    These security credentials define the security context for the tasks that are associated with the principal.</span>
 
 <span class="sd">    :type: :class:`TaskPrincipal`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_XmlText&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The XML representig the task definition</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The XML representig the task definition</span>
 
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 
-<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTask</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A scheduled task&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Task">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Task">[docs]</a>
+<span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A scheduled task&quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Name&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The name of the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the task&quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Path&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The path of the task&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The path of the task&quot;&quot;&quot;</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_State&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_STATE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The state of the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The state of the task</span>
 
 
 <span class="sd">        :type: :class:`~windows.generated_def.winstructs.TASK_STATE`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">enabled</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Enabled&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT_BOOL</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;``True`` is the task is enabled&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;``True`` is the task is enabled&quot;&quot;&quot;</span>
     <span class="n">last_runtime</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_LastRunTime&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DATE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Gets the last time the registered task was last run.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the last time the registered task was last run.&quot;&quot;&quot;</span>
     <span class="n">next_runtime</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_NextRunTime&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DATE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Gets the next time the registered task will be run.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the next time the registered task will be run.&quot;&quot;&quot;</span>
 
     <span class="n">definition</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Definition&quot;</span><span class="p">,</span> <span class="n">TaskDefinition</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The definition of the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The definition of the task</span>
 
 <span class="sd">        :type: :class:`TaskDefinition`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Xml&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The XML representig the task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The XML representig the task</span>
 
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -356,7 +388,10 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; at </span><span class="si">{2:#x}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="TaskCollection"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskCollection">[docs]</a><span class="k">class</span> <span class="nc">TaskCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTaskCollection</span><span class="p">,</span> <span class="n">TaskCollectionType</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TaskCollection">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskCollection">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTaskCollection</span><span class="p">,</span> <span class="n">TaskCollectionType</span><span class="p">):</span>
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Task</span>
     <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="n">vindex</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">()</span>
@@ -365,16 +400,22 @@
         <span class="k">return</span> <span class="n">vindex</span></div>
 
 
-<div class="viewcode-block" id="TaskService"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService">[docs]</a><span class="k">class</span> <span class="nc">TaskService</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskService</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The task scheduler&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="TaskService.create"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new :class:`TaskDefinition` that can be used to create/register a new scheduled task</span>
+
+<div class="viewcode-block" id="TaskService">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskService</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskService</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The task scheduler&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TaskService.create">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService.create">[docs]</a>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new :class:`TaskDefinition` that can be used to create/register a new scheduled task</span>
 
 <span class="sd">        :rtype: :class:`TaskDefinition`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">TaskDefinition</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NewTask</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
+
 
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">server</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">server</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT</span><span class="p">()</span> <span class="c1"># Empty variant</span>
@@ -383,8 +424,10 @@
         <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">password</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT</span><span class="p">()</span> <span class="c1"># Empty variant</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Connect</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TaskService.folder"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService.folder">[docs]</a>    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the :class:`TaskFolder` with ``name``</span>
+<div class="viewcode-block" id="TaskService.folder">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskService.folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the :class:`TaskFolder` with ``name``</span>
 
 <span class="sd">        :rtype: :class:`TaskFolder`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -392,25 +435,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetFolder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">folder</span></div>
 
+
     <span class="fm">__call__</span> <span class="o">=</span> <span class="n">folder</span> <span class="c1"># use the same &#39;API&#39; than the registry</span>
-    <span class="sd">&quot;&quot;&quot;Alias for :func:`folder`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Alias for :func:`folder`&quot;&quot;&quot;</span>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The root ``\`` :class:`TaskFolder`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The root ``\`` :class:`TaskFolder`&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="TaskFolder"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder">[docs]</a><span class="k">class</span> <span class="nc">TaskFolder</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskFolder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A folder of tasks&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskFolder">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskFolder</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskFolder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A folder of tasks&quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Path&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Name&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">folders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of sub-folders</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of sub-folders</span>
 
 <span class="sd">        :type: :class:`TaskFolderCollection`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -418,8 +465,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetFolders</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
-<div class="viewcode-block" id="TaskFolder.register"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">taskdef</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_CREATE</span><span class="p">,</span> <span class="n">userid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logonType</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_LOGON_NONE</span><span class="p">,</span> <span class="n">ssid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Register the task definition ``taskdef`` as a new task with ``name``</span>
+<div class="viewcode-block" id="TaskFolder.register">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.register">[docs]</a>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">taskdef</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_CREATE</span><span class="p">,</span> <span class="n">userid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logonType</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_LOGON_NONE</span><span class="p">,</span> <span class="n">ssid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register the task definition ``taskdef`` as a new task with ``name``</span>
 
 <span class="sd">        :rtype: :class:`Task`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -432,9 +481,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">RegisterTaskDefinition</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">taskdef</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logonType</span><span class="p">,</span> <span class="n">ssid</span><span class="p">,</span> <span class="n">new_task</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_task</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_ENUM_HIDDEN</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of tasks in the folder</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of tasks in the folder</span>
 
 <span class="sd">        :type: :class:`TaskCollection`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -442,8 +492,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetTasks</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tasks</span>
 
-<div class="viewcode-block" id="TaskFolder.get_task"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.get_task">[docs]</a>    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve the task with ``name`` in the current folder</span>
+<div class="viewcode-block" id="TaskFolder.get_task">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.get_task">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the task with ``name`` in the current folder</span>
 
 <span class="sd">        :rtype: :class:`Task`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -451,32 +503,45 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetTask</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="TaskFolder.delete_task"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.delete_task">[docs]</a>    <span class="k">def</span> <span class="nf">delete_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete the task with ``name`` in the current folder&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskFolder.delete_task">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.delete_task">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete the task with ``name`` in the current folder&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DeleteTask</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TaskFolder.folder"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.folder">[docs]</a>    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the :class:`TaskFolder` with ``name``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskFolder.folder">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the :class:`TaskFolder` with ``name``&quot;&quot;&quot;</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">TaskFolder</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetFolder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">folder</span></div>
 
-<div class="viewcode-block" id="TaskFolder.create_folder"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.create_folder">[docs]</a>    <span class="k">def</span> <span class="nf">create_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new sub-:class:`TaskFolder` with ``name``&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskFolder.create_folder">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.create_folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sub-:class:`TaskFolder` with ``name``&quot;&quot;&quot;</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">TaskFolder</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CreateFolder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT</span><span class="p">(),</span> <span class="n">folder</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">folder</span></div>
 
-<div class="viewcode-block" id="TaskFolder.delete_folder"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.delete_folder">[docs]</a>    <span class="k">def</span> <span class="nf">delete_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete the sub-folder with ``name`` in the current folder&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskFolder.delete_folder">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolder.delete_folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete the sub-folder with ``name`` in the current folder&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DeleteFolder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
+
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">get_task</span>
-    <span class="sd">&quot;&quot;&quot; Alias for :func:`get_task`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Alias for :func:`get_task`&quot;&quot;&quot;</span>
     <span class="fm">__delitem__</span> <span class="o">=</span> <span class="n">delete_task</span>
-    <span class="sd">&quot;&quot;&quot; Alias for :func:`delete_task`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Alias for :func:`delete_task`&quot;&quot;&quot;</span>
     <span class="fm">__call__</span> <span class="o">=</span> <span class="n">folder</span> <span class="c1"># use the same &#39;API&#39; than the registry</span>
-    <span class="sd">&quot;&quot;&quot; Alias for :func:`folder`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Alias for :func:`folder`&quot;&quot;&quot;</span>
 
 
 
@@ -484,7 +549,10 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; at </span><span class="si">{2:#x}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="TaskFolderCollection"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolderCollection">[docs]</a><span class="k">class</span> <span class="nc">TaskFolderCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskFolderCollection</span><span class="p">,</span> <span class="n">TaskCollectionType</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TaskFolderCollection">
+<a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskFolderCollection">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskFolderCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskFolderCollection</span><span class="p">,</span> <span class="n">TaskCollectionType</span><span class="p">):</span>
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">TaskFolder</span>
 
     <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
@@ -492,6 +560,7 @@
         <span class="n">vindex</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VT_I4</span>
         <span class="n">vindex</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">lVal</span> <span class="o">=</span> <span class="n">index</span>
         <span class="k">return</span> <span class="n">vindex</span></div>
+
 
 <span class="c1"># windows.com.init()</span>
 <span class="c1"># clsid_task_scheduler = gdef.IID.from_string(&quot;0f87369f-a4e5-4cfc-bd3e-73e6154572dd&quot;)</span>
@@ -527,23 +596,22 @@
 <span class="c1"># print(path)</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -557,13 +625,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.winobject.task_scheduler</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

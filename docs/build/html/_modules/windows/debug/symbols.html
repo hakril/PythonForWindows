@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.debug.symbols &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.debug.symbols &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.debug.symbols</a></li> 
       </ul>
     </div>  
 
@@ -54,8 +51,10 @@
 <span class="n">DEFAULT_DBG_OPTION</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYMOPT_DEFERRED_LOADS</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYMOPT_UNDNAME</span>
 
 
-<div class="viewcode-block" id="set_dbghelp_path"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.set_dbghelp_path">[docs]</a><span class="k">def</span> <span class="nf">set_dbghelp_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set the path of the ``dbghelp.dll`` file to use. It allow to configure a different version of the DLL handling PDB downloading.</span>
+<div class="viewcode-block" id="set_dbghelp_path">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.set_dbghelp_path">[docs]</a>
+<span class="k">def</span> <span class="nf">set_dbghelp_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the path of the ``dbghelp.dll`` file to use. It allow to configure a different version of the DLL handling PDB downloading.</span>
 
 <span class="sd">    If ``path`` is a directory, the final ``dbghelp.dll`` will be computed as</span>
 <span class="sd">    ``path\&lt;current_process_bitness&gt;\dbghelp.dll``.</span>
@@ -64,16 +63,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">loaded_modules</span> <span class="o">=</span>  <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">),</span> <span class="s2">&quot;dbghelp.dll&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">),</span> <span class="sa">u</span><span class="s2">&quot;dbghelp.dll&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="s2">&quot;dbghelp.dll&quot;</span> <span class="ow">in</span> <span class="n">loaded_modules</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;setup_dbghelp_path should be called before any dbghelp function&quot;</span><span class="p">)</span>
     <span class="c1"># Change the DLL used by DbgHelpProxy</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">DbgHelpProxy</span><span class="o">.</span><span class="n">APIDLL</span> <span class="o">=</span> <span class="n">path</span>
     <span class="k">return</span></div>
 
+
 <span class="c1"># Load symbol config from ENV if present</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">env_dbghelp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span><span class="p">]</span>
+    <span class="n">env_dbghelp_path</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PFW_DBGHELP_PATH&quot;</span><span class="p">]</span>
     <span class="c1"># Setup the dbghelp path used by PFW</span>
     <span class="n">set_dbghelp_path</span><span class="p">(</span><span class="n">env_dbghelp_path</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -82,7 +82,7 @@
 
 
 <span class="k">class</span> <span class="nc">SymbolInfoBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a Symbol.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a Symbol.</span>
 <span class="sd">    This class in based on the class `SYMBOL_INFO &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info&gt;`_</span>
 <span class="sd">    with the handling on displacement embeded into it.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -92,8 +92,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolver</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resolver&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="c1">#: POUET POUET</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">#: POUET POUET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="nf">as_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -102,33 +101,38 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the symbol&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the symbol&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">NameLen</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NameLen</span>
         <span class="n">addr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">offset</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CHAR_TYPE</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)[:]</span>
+        <span class="c1"># self.NameLen should not include the final \x00</span>
+        <span class="c1"># But some W api (like SymSearchW) returns SYMBOL_INFOW with the leading \x00</span>
+        <span class="c1"># For NtCreateFile:</span>
+            <span class="c1"># A() API -&gt; NameLen == 12</span>
+            <span class="c1"># W() API -&gt; NameLen == 13</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CHAR_TYPE</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)[:]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The fullname of the symbol in the windbg format ``mod!sym+displacement``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The fullname of the symbol in the windbg format ``mod!sym+displacement``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The address of the symbol&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The address of the symbol&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Address</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The address of the start of the symbol</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The address of the start of the symbol</span>
 <span class="sd">        If the symbol include a displacement, it is not taken into account</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Address</span>
 
     <span class="nd">@property</span> <span class="c1"># Fixed ?</span>
     <span class="k">def</span> <span class="nf">module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The module containing the symbol</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The module containing the symbol</span>
 
 <span class="sd">        :type: :class:`SymbolModule`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -136,18 +140,18 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The Tag of the module</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Tag of the module</span>
 
 <span class="sd">        :type: :class:`~windows.generated_def.winstructs.SymTagEnum`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagEnum</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Tag</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An alias for ``addr``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;An alias for ``addr``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">addr</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The fullname of the symbol in the windbg format ``mod!sym+displacement``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The fullname of the symbol in the windbg format ``mod!sym+displacement``&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{self.module.name}</span><span class="s2">!</span><span class="si">{self.name}</span><span class="s2">+</span><span class="si">{self.displacement:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{self.module.name}</span><span class="s2">!</span><span class="si">{self.name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
@@ -158,8 +162,14 @@
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> name=&quot;</span><span class="si">{1}</span><span class="s1">&quot; start=</span><span class="si">{2:#x}</span><span class="s1"> tag=</span><span class="si">{3}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SymbolInfoA"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolInfoA">[docs]</a><span class="k">class</span> <span class="nc">SymbolInfoA</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYMBOL_INFO</span><span class="p">,</span> <span class="n">SymbolInfoBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a Symbol.</span>
+<div class="viewcode-block" id="SymbolInfoA">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolInfoA">[docs]</a>
+<span class="k">class</span> <span class="nc">SymbolInfoA</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYMBOL_INFO</span><span class="p">,</span> <span class="n">SymbolInfoBase</span><span class="p">):</span>
+    <span class="n">CHAR_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CHAR</span></div>
+
+
+<span class="k">class</span> <span class="nc">SymbolInfoW</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYMBOL_INFOW</span><span class="p">,</span> <span class="n">SymbolInfoBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a Symbol.</span>
 <span class="sd">    This class in based on the class `SYMBOL_INFO &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info&gt;`_</span>
 <span class="sd">    with the handling on displacement embeded into it.s</span>
 
@@ -170,7 +180,7 @@
 <span class="sd">        &gt;&gt;&gt; sym1 = sh[&quot;kernelbase!CreateFileW&quot;]</span>
 <span class="sd">        &gt;&gt;&gt; sym2 = sh[int(sym1) + 3]</span>
 <span class="sd">        &gt;&gt;&gt; sym2</span>
-<span class="sd">        &lt;SymbolInfoA name=&quot;CreateFileW&quot; start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol&gt;</span>
+<span class="sd">        &lt;SymbolInfoW name=&quot;CreateFileW&quot; start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol&gt;</span>
 <span class="sd">        &gt;&gt;&gt; hex(sym2.start)</span>
 <span class="sd">        &#39;0x100f20b0L&#39;</span>
 <span class="sd">        &gt;&gt;&gt; hex(sym2.addr)</span>
@@ -180,13 +190,10 @@
 <span class="sd">        &gt;&gt;&gt; str(sym2)</span>
 <span class="sd">        &#39;kernelbase!CreateFileW+0x3&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">CHAR_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CHAR</span></div>
-
-<span class="k">class</span> <span class="nc">SymbolInfoW</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYMBOL_INFOW</span><span class="p">,</span> <span class="n">SymbolInfoBase</span><span class="p">):</span>
     <span class="n">CHAR_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WCHAR</span>
 
-<span class="c1"># We use the A Api in our code (for now)</span>
-<span class="n">SymbolInfo</span> <span class="o">=</span> <span class="n">SymbolInfoA</span>
+<span class="c1"># Unicode everywhere !</span>
+<span class="n">SymbolInfo</span> <span class="o">=</span> <span class="n">SymbolInfoW</span>
 
 <span class="k">class</span> <span class="nc">SymbolType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typeid</span><span class="p">,</span> <span class="n">modbase</span><span class="p">,</span> <span class="n">resolver</span><span class="p">):</span>
@@ -199,7 +206,15 @@
         <span class="n">res</span> <span class="o">=</span> <span class="n">ires</span>
         <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">TST_TYPE_RES_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">typeinfo</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)()</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetTypeInfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolver</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modbase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typeid</span><span class="p">,</span> <span class="n">typeinfo</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetTypeInfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolver</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modbase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typeid</span><span class="p">,</span> <span class="n">typeinfo</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_FUNCTION</span><span class="p">:</span>
+                <span class="c1"># invalid function on object -&gt; None</span>
+                <span class="c1"># We may lose some information with that between no return value VS error</span>
+                <span class="c1"># Explicit verification on attributes per tags ?</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">raise</span>
         <span class="k">if</span> <span class="n">ires</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ires</span>
         <span class="n">newres</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
@@ -249,12 +264,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_OFFSET</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Only valid on tag == SymTagArrayType</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_COUNT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nb_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_CHILDRENCOUNT</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_VALUE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_info</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TI_GET_ADDRESS</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -274,20 +298,32 @@
 
     <span class="c1"># Constructor</span>
     <span class="k">def</span> <span class="nf">new_typeid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newtypeid</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">newtypeid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">newtypeid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modbase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolver</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagBaseType</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &lt;basetype&gt; </span><span class="si">{1!r}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basetype</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagArrayType</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">array_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">[</span><span class="si">{2}</span><span class="s1">] tag=</span><span class="si">{3!r}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">array_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagPointerType</span><span class="p">:</span>
             <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span>
-            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> PTR TO &quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> name=&quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SymTagBaseType</span><span class="p">:</span>
+                <span class="n">target_type</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">basetype</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> PTR TO &quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2!r}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> name=&quot;</span><span class="si">{1}</span><span class="s1">&quot; tag=</span><span class="si">{2!r}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SymbolModule"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolModule">[docs]</a><span class="k">class</span> <span class="nc">SymbolModule</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IMAGEHLP_MODULE64</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a loaded symbol module</span>
-<span class="sd">    (see `MSDN IMAGEHLP_MODULE64 &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_module64&gt;`_)</span>
+<div class="viewcode-block" id="SymbolModule">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolModule">[docs]</a>
+<span class="k">class</span> <span class="nc">SymbolModule</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IMAGEHLP_MODULEW64</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a loaded symbol module</span>
+<span class="sd">    (see `MSDN _IMAGEHLP_MODULEW64 &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_modulew64&gt;`_)</span>
 
 <span class="sd">    .. note::</span>
 
@@ -301,22 +337,22 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The load address of the module&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The load address of the module&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">BaseOfImage</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The name of the module&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the module&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModuleName</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The full path and file name of the file from which symbols were loaded.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The full path and file name of the file from which symbols were loaded.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoadedImageName</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The type of module (:class:`~windows.generated_def.winstructs.SYM_TYPE`),</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The type of module (:class:`~windows.generated_def.winstructs.SYM_TYPE`),</span>
 <span class="sd">        which can be one of:</span>
 
 <span class="sd">            =========== =========================</span>
@@ -335,7 +371,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The local path of the loaded PDB if present</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The local path of the loaded PDB if present</span>
 
 <span class="sd">        Exemple:</span>
 <span class="sd">            &gt;&gt;&gt; sh = windows.debug.symbols.VirtualSymbolHandler()</span>
@@ -349,13 +385,14 @@
         <span class="k">return</span> <span class="n">LoadedPdbName</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pdb_basename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoadedPdbName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pdb_basename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoadedPdbName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> name=&quot;</span><span class="si">{1}</span><span class="s1">&quot; type=</span><span class="si">{2}</span><span class="s1"> pdb=&quot;</span><span class="si">{3}</span><span class="s1">&quot; addr=</span><span class="si">{4:#x}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">pdb_basename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># https://docs.microsoft.com/en-us/windows/win32/debug/symbol-handler-initialization</span>
 <span class="k">class</span> <span class="nc">SymbolHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class of symbol handler&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class of symbol handler&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">search_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">invade_process</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/api/dbghelp/nf-dbghelp-syminitialize</span>
@@ -364,11 +401,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span> <span class="c1">#: The handle of the symbol handler</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">options_already_setup</span><span class="p">:</span>
             <span class="n">engine</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">DEFAULT_DBG_OPTION</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymInitialize</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">search_path</span><span class="p">,</span> <span class="n">invade_process</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymInitializeW</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">search_path</span><span class="p">,</span> <span class="n">invade_process</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="nf">load_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load a module at a given ``addr``. The module to load can be pass via a ``file_handle``</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load a module at a given ``addr``. The module to load can be pass via a ``file_handle``</span>
 <span class="sd">        or the direct ``path`` of the file to load.</span>
 
 <span class="sd">        :return: :class:`SymbolModule` -- The loaded module</span>
@@ -392,10 +429,8 @@
                 <span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">pass</span>
-        <span class="c1"># Expect a-string</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">raw_encode</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">load_addr</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SymLoadModuleEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">file_handle</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+            <span class="n">load_addr</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SymLoadModuleExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">file_handle</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="c1"># if e.winerror == 0:</span>
                 <span class="c1"># Already loaded ?</span>
@@ -405,38 +440,38 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">load_addr</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load the module ``path`` at ``addr``</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the module ``path`` at ``addr``</span>
 
 <span class="sd">        :return: :class:`SymbolModule` -- The loaded module</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">unload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Unload the module at ``addr``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unload the module at ``addr``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SymUnloadModule64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
 
 
     <span class="nd">@staticmethod</span>
-    <span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PCSTR</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD64</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">)</span>
+    <span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD64</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">modules_aggregator</span><span class="p">(</span><span class="n">modname</span><span class="p">,</span> <span class="n">modaddr</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modaddr</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">modules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of loaded modules</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of loaded modules</span>
 
 <span class="sd">        :return: [:class:`SymbolModule`] -- A list of modules</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymEnumerateModules64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules_aggregator</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymEnumerateModulesW64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules_aggregator</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span> <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
 
 
     <span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
         <span class="n">modinfo</span> <span class="o">=</span> <span class="n">SymbolModule</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">modinfo</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">modinfo</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetModuleInfo64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">modinfo</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetModuleInfoW64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">modinfo</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modinfo</span>
 
     <span class="k">def</span> <span class="nf">symbol_and_displacement_from_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
@@ -447,7 +482,7 @@
         <span class="n">sym</span> <span class="o">=</span> <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">)</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">MaxNameLen</span>  <span class="o">=</span> <span class="n">max_len_size</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymFromAddr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span> <span class="c1"># SymFromAddrW	 ?</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SymFromAddrW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">resolver</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">value</span>
         <span class="k">return</span> <span class="n">sym</span>
@@ -460,15 +495,13 @@
         <span class="n">sym</span> <span class="o">=</span> <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">)</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">MaxNameLen</span>  <span class="o">=</span> <span class="n">max_len_size</span>
-        <span class="c1"># Expect a-string</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">raw_encode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymFromName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymFromNameW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">resolver</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">sym</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">sym</span>
 
     <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_or_addr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resolve ``name_or_addr``.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve ``name_or_addr``.</span>
 
 <span class="sd">        If its an int -&gt; Return the :class:`SymbolInfo` at the address.</span>
 <span class="sd">        If its a string -&gt; Return the :class:`SymbolInfo` corresponding to the symbol name</span>
@@ -504,29 +537,29 @@
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">resolve</span>
-    <span class="sd">&quot;&quot;&quot;Alias to resolve for simpler use&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Alias to resolve for simpler use&quot;&quot;&quot;</span>
 
     <span class="nd">@staticmethod</span>
     <span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span> <span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">simple_aggregator</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
         <span class="n">sym</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">fullsize</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">+</span> <span class="n">sym</span><span class="o">.</span><span class="n">NameLen</span>
+        <span class="n">fullsize</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">+</span> <span class="p">(</span><span class="n">sym</span><span class="o">.</span><span class="n">NameLen</span> <span class="o">*</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="o">.</span><span class="n">CHAR_TYPE</span><span class="p">))</span>
         <span class="n">cpy</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="n">fullsize</span><span class="p">)</span>
         <span class="n">ctypes</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">cpy</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">fullsize</span><span class="p">)</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYMSEARCH_ALLITEMS</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Search the symbols matching ``mask`` (``Windbg`` like).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search the symbols matching ``mask`` (``Windbg`` like).</span>
 
 <span class="sd">        :return: [:class:`SymbolInfo`] -- A list of :class:`SymbolInfo`</span>
 
 <span class="sd">        &gt;&gt;&gt; sh = windows.debug.symbols.VirtualSymbolHandler()</span>
 <span class="sd">        &gt;&gt;&gt; mod = sh.load_file(r&quot;c:\windows\system32\kernelbase.dll&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; sh.search(&quot;kernelbase!CreateFile*&quot;)</span>
-<span class="sd">        [&lt;SymbolInfoA name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;,</span>
-<span class="sd">            &lt;SymbolInfoA name=&quot;CreateFileMoniker&quot; addr=0x10117d80 tag=SymTagFunction&gt;,</span>
-<span class="sd">            &lt;SymbolInfoA name=&quot;CreateFile2&quot; addr=0x1011e690 tag=SymTagFunction&gt;,</span>
+<span class="sd">        [&lt;SymbolInfoW name=&quot;CreateFileInternal&quot; addr=0x100f2120 tag=SymTagFunction&gt;,</span>
+<span class="sd">            &lt;SymbolInfoW name=&quot;CreateFileMoniker&quot; addr=0x10117d80 tag=SymTagFunction&gt;,</span>
+<span class="sd">            &lt;SymbolInfoW name=&quot;CreateFile2&quot; addr=0x1011e690 tag=SymTagFunction&gt;,</span>
 <span class="sd">            ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
@@ -536,9 +569,7 @@
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span> <span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">)(</span><span class="n">callback</span><span class="p">)</span>
 
         <span class="n">addr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="s2">&quot;addr&quot;</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span> <span class="c1"># Retrieve mod.addr, else us the value directly</span>
-        <span class="c1"># Expect A-string</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">raw_encode</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymSearch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD64</span><span class="p">(</span><span class="n">addr</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymSearchW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD64</span><span class="p">(</span><span class="n">addr</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">sym</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
             <span class="n">sym</span><span class="o">.</span><span class="n">resolver</span> <span class="o">=</span> <span class="bp">self</span>
             <span class="n">sym</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="mi">0</span>
@@ -551,7 +582,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span> <span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">py_object</span><span class="p">)(</span><span class="n">callback</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymEnumSymbolsForAddr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymEnumSymbolsForAddrW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_MOD_NOT_FOUND</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">[]</span>
@@ -569,7 +600,7 @@
         <span class="n">buff</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="n">full_size</span><span class="p">)</span>
         <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SizeOfStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">SymbolInfo</span><span class="p">)</span>
         <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">MaxNameLen</span>  <span class="o">=</span> <span class="n">max_len_size</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetTypeFromName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetTypeFromNameW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SymbolType</span><span class="o">.</span><span class="n">from_symbol_info</span><span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 
@@ -652,11 +683,10 @@
 
 
 
-
-
-
-<div class="viewcode-block" id="VirtualSymbolHandler"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.VirtualSymbolHandler">[docs]</a><span class="k">class</span> <span class="nc">VirtualSymbolHandler</span><span class="p">(</span><span class="n">SymbolHandler</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A SymbolHandler where its handle is not a valid process handle</span>
+<div class="viewcode-block" id="VirtualSymbolHandler">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.VirtualSymbolHandler">[docs]</a>
+<span class="k">class</span> <span class="nc">VirtualSymbolHandler</span><span class="p">(</span><span class="n">SymbolHandler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A SymbolHandler where its handle is not a valid process handle</span>
 <span class="sd">    Allow to create/resolve symbol in a &#39;virtual&#39; process</span>
 <span class="sd">    But all API needing a real process handle will fail</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -668,14 +698,20 @@
     <span class="c1"># The VirtualSymbolHandler is not based on an existing process</span>
     <span class="c1"># So load() in its simplest for should just take the path of the file to load</span>
     <span class="n">load</span> <span class="o">=</span> <span class="n">SymbolHandler</span><span class="o">.</span><span class="n">load_file</span>
-    <span class="sd">&quot;&quot;&quot;An alias for :func:`VirtualSymbolHandler.load_file`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An alias for :func:`VirtualSymbolHandler.load_file`&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="VirtualSymbolHandler.refresh"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.VirtualSymbolHandler.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Do nothing for a :class:`VirtualSymbolHandler`&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="kc">False</span></div></div>
+<div class="viewcode-block" id="VirtualSymbolHandler.refresh">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.VirtualSymbolHandler.refresh">[docs]</a>
+    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do nothing for a :class:`VirtualSymbolHandler`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ProcessSymbolHandler"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler">[docs]</a><span class="k">class</span> <span class="nc">ProcessSymbolHandler</span><span class="p">(</span><span class="n">SymbolHandler</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProcessSymbolHandler">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler">[docs]</a>
+<span class="k">class</span> <span class="nc">ProcessSymbolHandler</span><span class="p">(</span><span class="n">SymbolHandler</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">search_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">invade_process</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ProcessSymbolHandler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">search_path</span><span class="p">,</span> <span class="n">invade_process</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">process</span>
@@ -684,8 +720,10 @@
     <span class="c1"># So load() in its simplest form should be able to load the symbol for an existing</span>
     <span class="c1"># module that is already loaded</span>
     <span class="c1"># Question: should be able to load other module at other address ?</span>
-<div class="viewcode-block" id="ProcessSymbolHandler.load"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load the :class:`SymbolModule` associated with the loaded module ``name`` (as found in the PEB)</span>
+<div class="viewcode-block" id="ProcessSymbolHandler.load">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler.load">[docs]</a>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the :class:`SymbolModule` associated with the loaded module ``name`` (as found in the PEB)</span>
 
 <span class="sd">        :return: :class:`SymbolModule`</span>
 
@@ -707,8 +745,11 @@
         <span class="n">mod</span> <span class="o">=</span> <span class="n">mods</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="n">mod</span><span class="o">.</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">mod</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ProcessSymbolHandler.refresh"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Update the list of loaded modules to match the modules present in the target process</span>
+
+<div class="viewcode-block" id="ProcessSymbolHandler.refresh">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.ProcessSymbolHandler.refresh">[docs]</a>
+    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the list of loaded modules to match the modules present in the target process</span>
 
 <span class="sd">        .. note::</span>
 <span class="sd">            This function only call `SymRefreshModuleList &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symrefreshmodulelist&gt;`_ for now.</span>
@@ -733,12 +774,16 @@
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymRefreshModuleList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
 
 
+
     <span class="k">def</span> <span class="nf">stackwalk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="SymbolEngine"><a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolEngine">[docs]</a><span class="k">class</span> <span class="nc">SymbolEngine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent the global symbol engine. Just a proxy to get/set global engine options</span>
+
+<div class="viewcode-block" id="SymbolEngine">
+<a class="viewcode-back" href="../../../debug.html#windows.debug.symbols.SymbolEngine">[docs]</a>
+<span class="k">class</span> <span class="nc">SymbolEngine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent the global symbol engine. Just a proxy to get/set global engine options</span>
 
 <span class="sd">    Its instance can be accessed using ``windows.debug.symbols.engine``</span>
 
@@ -764,13 +809,14 @@
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetOptions</span><span class="p">()</span>
 
     <span class="n">options</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_options</span><span class="p">,</span> <span class="n">set_options</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;The options of the Symbol engine</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The options of the Symbol engine</span>
 <span class="sd">    (`see options &lt;https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symsetoptions#parameters&gt;`_)</span>
 
 <span class="sd">    .. note::</span>
 
 <span class="sd">        Default options are: ``gdef.SYMOPT_DEFERRED_LOADS + gdef.SYMOPT_UNDNAME``</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
 
 <span class="n">engine</span> <span class="o">=</span> <span class="n">SymbolEngine</span><span class="p">()</span>
 <span class="sd">&quot;&quot;&quot;The instance of the :class:`SymbolEngine`&quot;&quot;&quot;</span>
@@ -786,23 +832,22 @@
 <span class="p">}</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -816,13 +861,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.debug.symbols</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

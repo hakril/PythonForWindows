@@ -159,11 +159,11 @@ I pay particular attention to this case because I am an heavy user of the intera
 the ``__repr__`` function cannot return an ``unicode`` object and must return a ``str``.
 But as I want to be able to output repr for objects with unicode attributes (like a お前はもう死んでい certificate), I need to encode my unicode __repr__.
 
-In those cases, I encode the repr with the stdout encoding (with backslash escape for non-encodable error).
+In those cases, I encode the repr with the stdout encoding (with backslash escape for non-encodable characters).
 This should assure that the result can always be written to stdout.
 
 But based on the encoding of stdout and the code page 3 case may appear.
-For exmple with an object having the following unicode repr:
+For example with an object having the following unicode repr:
 
     * <Certificate "お前はもう死んでい" serial="19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99">
 
@@ -171,7 +171,7 @@ The possibilities are:
 
     * stdout encoding do not handle full unicode (like cp437)
         * repr will be backslash escaped to allow printing
-        * <Certificate "\u304a\u524d\u306f\u3082\u3046\u6b7b\u3093\u3067\u3044" serial="19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99">
+        * <Certificate "\\u304a\\u524d\\u306f\\u3082\\u3046\\u6b7b\\u3093\\u3067\\u3044" serial="19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99">
 
     * stdout encoding is utf-8 but code page is not (like cp437)
         * console will output gibberish by trying to interpret utf-8 as a custom CodePage

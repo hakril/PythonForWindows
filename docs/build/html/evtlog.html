@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.16. Event Log &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2.16. Event Log &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,8 +34,9 @@
         <li class="right" >
           <a href="task_scheduler.html" title="2.15. Task scheduler"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U"><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.16. </span>Event Log</a></li> 
       </ul>
     </div>  
 
@@ -47,821 +45,762 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.winobject.event_log">
-<span id="event-log"></span><h1>2.16. Event Log<a class="headerlink" href="#module-windows.winobject.event_log" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.winobject.event_log">
+<span id="event-log"></span><h1><span class="section-number">2.16. </span>Event Log<a class="headerlink" href="#module-windows.winobject.event_log" title="Link to this heading">¶</a></h1>
 <p>Some part of the Event Log WINAPI are not straightforward.</p>
 <p>I have tried to offer some abstraction without completly hidding the some underlying subtilities (for now).</p>
 <p>The current API may need some works to provide simpler/highter level API in the future.</p>
 <p>The <a class="reference internal" href="#windows.winobject.event_log.EvtlogManager" title="windows.winobject.event_log.EvtlogManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtlogManager</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.event_log" title="windows.winobject.system.System.event_log"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.event_log</span></code></a></p>
 <p>For now, the best thing to do is look at the sample:</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#sample-event-log"><span class="std std-ref">Event Log</span></a></p>
+<p class="admonition-title">Note</p>
+<p>See sample <a class="reference internal" href="sample.html#sample-event-log"><span class="std std-ref">Event Log</span></a></p>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This API have not been tested on real case yet and may be subject to changes.</p>
-</div>
-<div class="section" id="evtlogmanager">
-<h2>2.16.1. EvtlogManager<a class="headerlink" href="#evtlogmanager" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtlogManager">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtlogManager</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager" title="Permalink to this definition">¶</a></dt>
+<section id="evtlogmanager">
+<h2><span class="section-number">2.16.1. </span>EvtlogManager<a class="headerlink" href="#evtlogmanager" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtlogManager</span></span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager" title="Link to this definition">¶</a></dt>
 <dd><p>The main Evt class to open Evt channel/publisher and evtx file</p>
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtlogManager.__getitem__">
-<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.__getitem__" title="Link to this definition">¶</a></dt>
 <dd><p>Open the Evt Channel/Publisher or Evtx file with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a> or <a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a> or <a class="reference internal" href="#windows.winobject.event_log.EvtFile" title="windows.winobject.event_log.EvtFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtFile</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a> or <a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a> or <a class="reference internal" href="#windows.winobject.event_log.EvtFile" title="windows.winobject.event_log.EvtFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtFile</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtlogManager.is_implemented">
-<code class="descname">is_implemented</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.is_implemented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.is_implemented" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager.is_implemented">
+<span class="sig-name descname"><span class="pre">is_implemented</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.is_implemented"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.is_implemented" title="Link to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the new Evt-API is implemented on the current computer</p>
 <p>see: <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa385784(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/aa385784(v=vs.85).aspx</a></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtlogManager.open_channel">
-<code class="descname">open_channel</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_channel" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager.open_channel">
+<span class="sig-name descname"><span class="pre">open_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_channel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_channel" title="Link to this definition">¶</a></dt>
 <dd><p>Open the Evt channel with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtlogManager.open_evtx_file">
-<code class="descname">open_evtx_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_evtx_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_evtx_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager.open_evtx_file">
+<span class="sig-name descname"><span class="pre">open_evtx_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_evtx_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_evtx_file" title="Link to this definition">¶</a></dt>
 <dd><p>Open the evtx file with <code class="docutils literal notranslate"><span class="pre">filename</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtFile" title="windows.winobject.event_log.EvtFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtFile</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtFile" title="windows.winobject.event_log.EvtFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtFile</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtlogManager.open_publisher">
-<code class="descname">open_publisher</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_publisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_publisher" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtlogManager.open_publisher">
+<span class="sig-name descname"><span class="pre">open_publisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager.open_publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager.open_publisher" title="Link to this definition">¶</a></dt>
 <dd><p>Open the Evt publisher with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="channel">
-<h2>2.16.2. Channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="evtchannel">
-<h3>2.16.2.1. EvtChannel<a class="headerlink" href="#evtchannel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtChannel">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtChannel</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="channel">
+<h2><span class="section-number">2.16.2. </span>Channel<a class="headerlink" href="#channel" title="Link to this heading">¶</a></h2>
+<section id="evtchannel">
+<h3><span class="section-number">2.16.2.1. </span>EvtChannel<a class="headerlink" href="#evtchannel" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel" title="Link to this definition">¶</a></dt>
 <dd><p>An Event Log channel</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtChannel.config">
-<code class="descname">config</code><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.config" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtChannel.config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.config" title="Link to this definition">¶</a></dt>
 <dd><p>The configuration of the channel</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig" title="windows.winobject.event_log.ChannelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelConfig</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig" title="windows.winobject.event_log.ChannelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelConfig</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtChannel.events">
-<code class="descname">events</code><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.events" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtChannel.events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.events" title="Link to this definition">¶</a></dt>
 <dd><p>The list of all events in the channels, an alias for <code class="docutils literal notranslate"><span class="pre">channel.query().all()</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtChannel.get_event_metadata">
-<code class="descname">get_event_metadata</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel.get_event_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.get_event_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtChannel.get_event_metadata">
+<span class="sig-name descname"><span class="pre">get_event_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel.get_event_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.get_event_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Return the metadata for the event ID <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtChannel.query">
-<code class="descname">query</code><span class="sig-paren">(</span><em>filter=None</em>, <em>ids=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.query" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtChannel.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel.query" title="Link to this definition">¶</a></dt>
 <dd><p>Query the event with the <code class="docutils literal notranslate"><span class="pre">ids</span></code> or perform a query with the raw query <code class="docutils literal notranslate"><span class="pre">filter</span></code></p>
 <p>Both parameters are mutually exclusive.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Here are some query examples</p>
-<dl class="last docutils">
-<dt>List all events with a event data attribute named ‘RuleName’:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/EventData/Data[&#64;Name='RuleName']</span></code></dd>
-<dt>List all events with a event data value of ‘C:\WINDOWS\System32\svchost.exe’:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></dd>
-<dt>List all events with an EventID of 2006:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></dd>
-<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></dd>
+<dl class="simple">
+<dt>List all events with a event data attribute named ‘RuleName’:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/EventData/Data[&#64;Name='RuleName']</span></code></p>
+</dd>
+<dt>List all events with a event data value of ‘C:\WINDOWS\System32\svchost.exe’:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></p>
+</dd>
+<dt>List all events with an EventID of 2006:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></p>
+</dd>
+<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></p>
+</dd>
+<dt>List all events with a given provider of Microsoft-Windows-TaskScheduler:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System/Provider[&#64;Name='Microsoft-Windows-TaskScheduler']</span></code></p>
+</dd>
 </dl>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtQuery" title="windows.winobject.event_log.EvtQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtQuery</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtQuery" title="windows.winobject.event_log.EvtQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtQuery</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="channelconfig">
-<h3>2.16.2.2. ChannelConfig<a class="headerlink" href="#channelconfig" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.ChannelConfig">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">ChannelConfig</code><span class="sig-paren">(</span><em>handle</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="channelconfig">
+<h3><span class="section-number">2.16.2.2. </span>ChannelConfig<a class="headerlink" href="#channelconfig" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">ChannelConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig" title="Link to this definition">¶</a></dt>
 <dd><p>The configuration of a event channel</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.ChannelConfig.classic">
-<code class="descname">classic</code><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.classic" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.classic">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classic</span></span><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.classic" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the channel is a classic event channel (for example the Application or System log)</p>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="windows.winobject.event_log.ChannelConfig.from_channel_name">
-<em class="property">classmethod </em><code class="descname">from_channel_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig.from_channel_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.from_channel_name" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.from_channel_name">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_channel_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig.from_channel_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.from_channel_name" title="Link to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="#windows.winobject.event_log.ChannelConfig" title="windows.winobject.event_log.ChannelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelConfig</span></code></a> for the channel <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.ChannelConfig.publisher">
-<code class="descname">publisher</code><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.publisher" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.publisher">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publisher</span></span><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.publisher" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a> for the channel</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.ChannelConfig.publishers">
-<code class="descname">publishers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig.publishers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.publishers" title="Permalink to this definition">¶</a></dt>
-<dd><p>TEST</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.publishers">
+<span class="sig-name descname"><span class="pre">publishers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig.publishers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.publishers" title="Link to this definition">¶</a></dt>
+<dd><p>The list of Publisher publishing on the channel. seems pertinent for Legacy channel like “System”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a>] - A list of <a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.ChannelConfig.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_log.ChannelConfig.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="publisher">
-<h2>2.16.3. Publisher<a class="headerlink" href="#publisher" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="evtpublisher">
-<h3>2.16.3.1. EvtPublisher<a class="headerlink" href="#evtpublisher" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtPublisher">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtPublisher</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtPublisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtPublisher" title="Permalink to this definition">¶</a></dt>
+</section>
+</section>
+<section id="publisher">
+<h2><span class="section-number">2.16.3. </span>Publisher<a class="headerlink" href="#publisher" title="Link to this heading">¶</a></h2>
+<section id="evtpublisher">
+<h3><span class="section-number">2.16.3.1. </span>EvtPublisher<a class="headerlink" href="#evtpublisher" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtPublisher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtPublisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtPublisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtPublisher" title="Link to this definition">¶</a></dt>
 <dd><p>An Event provider</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtPublisher.metadata">
-<code class="descname">metadata</code><a class="headerlink" href="#windows.winobject.event_log.EvtPublisher.metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtPublisher.metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtPublisher.metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Return the metadata for this publisher</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata" title="windows.winobject.event_log.PublisherMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadata</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata" title="windows.winobject.event_log.PublisherMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadata</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="publishermetadata">
-<h3>2.16.3.2. PublisherMetadata<a class="headerlink" href="#publishermetadata" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.PublisherMetadata">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">PublisherMetadata</code><span class="sig-paren">(</span><em>handle</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="publishermetadata">
+<h3><span class="section-number">2.16.3.2. </span>PublisherMetadata<a class="headerlink" href="#publishermetadata" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">PublisherMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata" title="Link to this definition">¶</a></dt>
 <dd><p>The metadata about an event provider</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.channel_name_by_id">
-<code class="descname">channel_name_by_id</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channel_name_by_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.channel_name_by_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_name_by_id</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channel_name_by_id" title="Link to this definition">¶</a></dt>
 <dd><p>The dict of channel defined by this provider by their id</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.channels">
-<code class="descname">channels</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channels" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channels" title="Link to this definition">¶</a></dt>
 <dd><p>The list of <a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a> defined by this provider</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtChannel" title="windows.winobject.event_log.EvtChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtChannel</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.channels_metadata">
-<code class="descname">channels_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channels_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.channels_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channels_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataChannel</span></code> for each channel this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataChannel</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataChannel</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.chanrefs">
-<code class="descname">chanrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.chanrefs" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.chanrefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chanrefs</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.chanrefs" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies the channels child element of the provider.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.events_metadata">
-<code class="descname">events_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.events_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.events_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.events_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a> for each event this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="windows.winobject.event_log.PublisherMetadata.from_publisher_name">
-<em class="property">classmethod </em><code class="descname">from_publisher_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata.from_publisher_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.from_publisher_name" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.from_publisher_name">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_publisher_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata.from_publisher_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.from_publisher_name" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata" title="windows.winobject.event_log.PublisherMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadata</span></code></a> for the publisher <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.guid">
-<code class="descname">guid</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.guid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.guid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">guid</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.guid" title="Link to this definition">¶</a></dt>
 <dd><p>The GUID associated with this provider</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<code class="xref py py-class docutils literal notranslate"><span class="pre">GUID</span></code>] – the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GUID</span></code>] – the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.keywordrefs">
-<code class="descname">keywordrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywordrefs" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.keywordrefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keywordrefs</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywordrefs" title="Link to this definition">¶</a></dt>
 <dd><p>The list of keywords defined by this provider</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.keywords_metadata">
-<code class="descname">keywords_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywords_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.keywords_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keywords_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywords_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataKeyword</span></code> for each opcode this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataKeyword</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataKeyword</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.levelrefs">
-<code class="descname">levelrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levelrefs" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.levelrefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">levelrefs</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levelrefs" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies the levels child element of the provider.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.levels_metadata">
-<code class="descname">levels_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levels_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.levels_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">levels_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levels_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataLevel</span></code> for each level this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataLevel</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataLevel</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.PublisherMetadata.message">
-<code class="descname">message</code><span class="sig-paren">(</span><em>msgid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata.message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msgid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata.message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message" title="Link to this definition">¶</a></dt>
 <dd><p>TODO</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.message_filepath">
-<code class="descname">message_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_filepath" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.message_filepath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_filepath</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_filepath" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.message_id">
-<code class="descname">message_id</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.message_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_id</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_id" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.message_parameter_filepath">
-<code class="descname">message_parameter_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_parameter_filepath" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.message_parameter_filepath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_parameter_filepath</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_parameter_filepath" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.message_resource_filepath">
-<code class="descname">message_resource_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_resource_filepath" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.message_resource_filepath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_resource_filepath</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_resource_filepath" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.opcoderefs">
-<code class="descname">opcoderefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcoderefs" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.opcoderefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opcoderefs</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcoderefs" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies the opcodes child element of the provider.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.opcodes_metadata">
-<code class="descname">opcodes_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcodes_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.opcodes_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opcodes_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcodes_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataOpcode</span></code> for each opcode this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataOpcode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataOpcode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.taskrefs">
-<code class="descname">taskrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.taskrefs" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.taskrefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">taskrefs</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.taskrefs" title="Link to this definition">¶</a></dt>
 <dd><p>The list of tasks defined by this provider</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.tasks_metadata">
-<code class="descname">tasks_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.tasks_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.tasks_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tasks_metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.tasks_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataTask</span></code> for each opcode this provider defines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataTask</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataTask</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PublisherMetadata.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PublisherMetadata.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="evtfile">
-<h2>2.16.4. EvtFile<a class="headerlink" href="#evtfile" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtFile">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtFile</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtFile" title="Permalink to this definition">¶</a></dt>
+</section>
+</section>
+<section id="evtfile">
+<h2><span class="section-number">2.16.4. </span>EvtFile<a class="headerlink" href="#evtfile" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtFile" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an Evtx file</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtFile.config">
-<code class="descname">config</code><a class="headerlink" href="#windows.winobject.event_log.EvtFile.config" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtFile.config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.config" title="Link to this definition">¶</a></dt>
 <dd><p>Not implemented for EvtFile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raise<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtFile.events">
-<code class="descname">events</code><a class="headerlink" href="#windows.winobject.event_log.EvtFile.events" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtFile.events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.events" title="Link to this definition">¶</a></dt>
 <dd><p>The list of all events in the channels, an alias for <code class="docutils literal notranslate"><span class="pre">channel.query().all()</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtFile.get_event_metadata">
-<code class="descname">get_event_metadata</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.get_event_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtFile.get_event_metadata">
+<span class="sig-name descname"><span class="pre">get_event_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.get_event_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Return the metadata for the event ID <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtFile.query">
-<code class="descname">query</code><span class="sig-paren">(</span><em>filter=None</em>, <em>ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.query" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtFile.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtFile.query" title="Link to this definition">¶</a></dt>
 <dd><p>Query the event with the <code class="docutils literal notranslate"><span class="pre">ids</span></code> or perform a query with the raw query <code class="docutils literal notranslate"><span class="pre">filter</span></code></p>
 <p>Both parameters are mutually exclusive.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Here are some query examples</p>
-<dl class="last docutils">
-<dt>List all events with a event data attribute named ‘RuleName’:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/EventData/Data[&#64;Name='RuleName']</span></code></dd>
-<dt>List all events with a event data value of ‘C:\WINDOWS\System32\svchost.exe’:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></dd>
-<dt>List all events with an EventID of 2006:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></dd>
-<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></dd>
+<dl class="simple">
+<dt>List all events with a event data attribute named ‘RuleName’:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/EventData/Data[&#64;Name='RuleName']</span></code></p>
+</dd>
+<dt>List all events with a event data value of ‘C:\WINDOWS\System32\svchost.exe’:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/EventData[Data='C:\WINDOWS\System32\svchost.exe']</span></code></p>
+</dd>
+<dt>List all events with an EventID of 2006:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=2006]</span></code></p>
+</dd>
+<dt>List all event with a given EventID while searching for a specific field value (Sysmon for the test here)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System[EventID=3]</span> <span class="pre">and</span> <span class="pre">Event/EventData/Data[&#64;Name='DestinationIp']</span> <span class="pre">and</span> <span class="pre">Event/EventData[Data='10.0.0.2']</span></code></p>
+</dd>
+<dt>List all events with a given provider of Microsoft-Windows-TaskScheduler:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Event/System/Provider[&#64;Name='Microsoft-Windows-TaskScheduler']</span></code></p>
+</dd>
 </dl>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtQuery" title="windows.winobject.event_log.EvtQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtQuery</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtQuery" title="windows.winobject.event_log.EvtQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtQuery</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="event">
-<h2>2.16.5. Event<a class="headerlink" href="#event" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="evtevent">
-<h3>2.16.5.1. EvtEvent<a class="headerlink" href="#evtevent" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtEvent">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtEvent</code><span class="sig-paren">(</span><em>handle=0</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="event">
+<h2><span class="section-number">2.16.5. </span>Event<a class="headerlink" href="#event" title="Link to this heading">¶</a></h2>
+<section id="evtevent">
+<h3><span class="section-number">2.16.5.1. </span>EvtEvent<a class="headerlink" href="#evtevent" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent" title="Link to this definition">¶</a></dt>
 <dd><p>An Event log</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.computer">
-<code class="descname">computer</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.computer" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.computer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computer</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.computer" title="Link to this definition">¶</a></dt>
 <dd><p>The computer that generated the event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.data">
-<code class="descname">data</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.data" title="Link to this definition">¶</a></dt>
 <dd><p>A dict of EventData Name:Value for the current dict.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.date">
-<code class="descname">date</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.date" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.date">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.date" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">Event.time_created</span></code> as a :class:<code class="docutils literal notranslate"><span class="pre">datetime</span></code></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtEvent.event_values">
-<code class="descname">event_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent.event_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.event_values" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.event_values">
+<span class="sig-name descname"><span class="pre">event_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent.event_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.event_values" title="Link to this definition">¶</a></dt>
 <dd><p>The values of the event in a list</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.id">
-<code class="descname">id</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.id" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.id" title="Link to this definition">¶</a></dt>
 <dd><p>The ID of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.level">
-<code class="descname">level</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.level" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.level" title="Link to this definition">¶</a></dt>
 <dd><p>The level of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.metadata">
-<code class="descname">metadata</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.metadata" title="Link to this definition">¶</a></dt>
 <dd><p>The medata for the current Event</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EventMetadata" title="windows.winobject.event_log.EventMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventMetadata</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.opcode">
-<code class="descname">opcode</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.opcode" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.opcode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opcode</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.opcode" title="Link to this definition">¶</a></dt>
 <dd><p>The opcode of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.pid">
-<code class="descname">pid</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.pid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.pid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.pid" title="Link to this definition">¶</a></dt>
 <dd><p>The process ID of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.provider">
-<code class="descname">provider</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.provider" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.provider">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">provider</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.provider" title="Link to this definition">¶</a></dt>
 <dd><p>The provider of the event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.tid">
-<code class="descname">tid</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.tid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.tid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tid</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.tid" title="Link to this definition">¶</a></dt>
 <dd><p>The process ID of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.time_created">
-<code class="descname">time_created</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.time_created" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.time_created">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time_created</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.time_created" title="Link to this definition">¶</a></dt>
 <dd><p>The creation time of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.user">
-<code class="descname">user</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.user" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.user">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.user" title="Link to this definition">¶</a></dt>
 <dd><p>The User ID associated with the Event</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtEvent.value">
-<code class="descname">value</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.value" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve a value from the event.
 <code class="docutils literal notranslate"><span class="pre">name</span></code> is an XPath expressions that uniquely identify a node or attribute in the event.
 (see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa385352(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/aa385352(v=vs.85).aspx</a>)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtEvent.version">
-<code class="descname">version</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.version" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtEvent.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.version" title="Link to this definition">¶</a></dt>
 <dd><p>The version of the Event</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="eventmetadata">
-<h3>2.16.5.2. EventMetadata<a class="headerlink" href="#eventmetadata" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.EventMetadata">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EventMetadata</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#EventMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EventMetadata" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="eventmetadata">
+<h3><span class="section-number">2.16.5.2. </span>EventMetadata<a class="headerlink" href="#eventmetadata" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EventMetadata</span></span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EventMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EventMetadata" title="Link to this definition">¶</a></dt>
 <dd><p>The Metadata about a given Event type</p>
 <p>see: <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa385517(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/aa385517(v=vs.85).aspx</a></p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.channel_id">
-<code class="descname">channel_id</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.channel_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.channel_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_id</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.channel_id" title="Link to this definition">¶</a></dt>
 <dd><p>The Channel attribute of the Event definition</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.event_data">
-<code class="descname">event_data</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.event_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.event_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">event_data</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.event_data" title="Link to this definition">¶</a></dt>
 <dd><p>The list of attribute specifique for this event.
 Retrieved by parsing <a class="reference internal" href="#windows.winobject.event_log.EventMetadata.template" title="windows.winobject.event_log.EventMetadata.template"><code class="xref py py-data docutils literal notranslate"><span class="pre">EventMetadata.template</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.id">
-<code class="descname">id</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.id" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.id" title="Link to this definition">¶</a></dt>
 <dd><p>The ID of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.keyword">
-<code class="descname">keyword</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.keyword" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.keyword">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keyword</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.keyword" title="Link to this definition">¶</a></dt>
 <dd><p>The keyword attribute of the Event definition</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.level">
-<code class="descname">level</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.level" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.level" title="Link to this definition">¶</a></dt>
 <dd><p>The level attribute of the Event definition</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.message_id">
-<code class="descname">message_id</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.message_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.message_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_id</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.message_id" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies the message attribute of the event definition.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.opcode">
-<code class="descname">opcode</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.opcode" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.opcode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opcode</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.opcode" title="Link to this definition">¶</a></dt>
 <dd><p>The opcode attribute of the Event definition</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.task">
-<code class="descname">task</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.task" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.task">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.task" title="Link to this definition">¶</a></dt>
 <dd><p>The task attribute of the Event definition</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.template">
-<code class="descname">template</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.template" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.template">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">template</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.template" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies the template attribute of the event definition which is an XML string</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EventMetadata.version">
-<code class="descname">version</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.version" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EventMetadata.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.version" title="Link to this definition">¶</a></dt>
 <dd><p>The version of the Event</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="evtquery">
-<h3>2.16.5.3. EvtQuery<a class="headerlink" href="#evtquery" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_log.EvtQuery">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtQuery</code><span class="sig-paren">(</span><em>handle=0</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="evtquery">
+<h3><span class="section-number">2.16.5.3. </span>EvtQuery<a class="headerlink" href="#evtquery" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">EvtQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an Event-log query</p>
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtQuery.all">
-<code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.all" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.all" title="Link to this definition">¶</a></dt>
 <dd><p>Return a list with all the query results</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of Event</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of Event</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtQuery.first">
-<code class="descname">first</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.first" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.first">
+<span class="sig-name descname"><span class="pre">first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.first" title="Link to this definition">¶</a></dt>
 <dd><p>Return the first query result</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a> – An Event</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a> – An Event</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtQuery.next">
-<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.next" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.next">
+<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.next" title="Link to this definition">¶</a></dt>
 <dd><p>Return the next <a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a> matching the query</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_log.EvtQuery.seek">
-<code class="descname">seek</code><span class="sig-paren">(</span><em>position</em>, <em>seek_flags=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.seek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.seek" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.seek">
+<span class="sig-name descname"><span class="pre">seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seek_flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.seek" title="Link to this definition">¶</a></dt>
 <dd><p>Seek to <code class="docutils literal notranslate"><span class="pre">position</span></code>.
 <code class="docutils literal notranslate"><span class="pre">seek_flags</span></code> can be one of:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">None</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToFirst</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToLast</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToBookmark</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToFirst</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToLast</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToBookmark</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>If <code class="docutils literal notranslate"><span class="pre">seek_flags</span></code> is None:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">position</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> will use <code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToFirst</span></code></li>
-<li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">position</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> will use <code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToLast</span></code> and with <code class="docutils literal notranslate"><span class="pre">position+1</span></code></dt>
-<dd><ul class="first last">
-<li>This allow retrieve the <code class="docutils literal notranslate"><span class="pre">position</span></code> lasts events</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> will use <code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToFirst</span></code></p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">position</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> will use <code class="docutils literal notranslate"><span class="pre">EvtSeekRelativeToLast</span></code> and with <code class="docutils literal notranslate"><span class="pre">position+1</span></code></dt><dd><ul>
+<li><p>This allow retrieve the <code class="docutils literal notranslate"><span class="pre">position</span></code> lasts events</p></li>
 </ul>
 </dd>
 </dl>
@@ -870,71 +809,212 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
 </div></blockquote>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_log.EvtQuery.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_log.EvtQuery.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="todo">
-<h2>2.16.6. TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.event_log.PropertyArray">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">PropertyArray</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#PropertyArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PropertyArray" title="Permalink to this definition">¶</a></dt>
+</section>
+</section>
+<section id="todo">
+<h2><span class="section-number">2.16.6. </span>TODO<a class="headerlink" href="#todo" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PropertyArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_log.</span></span><span class="sig-name descname"><span class="pre">PropertyArray</span></span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PropertyArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_log.PropertyArray" title="Link to this definition">¶</a></dt>
 <dd><p>TODO</p>
-<dl class="attribute">
-<dt id="windows.winobject.event_log.PropertyArray.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.PropertyArray.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PropertyArray.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.event_log.PropertyArray.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_log.PropertyArray.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.event_log.PropertyArray.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">2.16. Event Log</a><ul>
-<li><a class="reference internal" href="#evtlogmanager">2.16.1. EvtlogManager</a></li>
+<li><a class="reference internal" href="#evtlogmanager">2.16.1. EvtlogManager</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager"><code class="docutils literal notranslate"><span class="pre">EvtlogManager</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager.__getitem__"><code class="docutils literal notranslate"><span class="pre">__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager.is_implemented"><code class="docutils literal notranslate"><span class="pre">is_implemented()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager.open_channel"><code class="docutils literal notranslate"><span class="pre">open_channel()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager.open_evtx_file"><code class="docutils literal notranslate"><span class="pre">open_evtx_file()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtlogManager.open_publisher"><code class="docutils literal notranslate"><span class="pre">open_publisher()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#channel">2.16.2. Channel</a><ul>
-<li><a class="reference internal" href="#evtchannel">2.16.2.1. EvtChannel</a></li>
-<li><a class="reference internal" href="#channelconfig">2.16.2.2. ChannelConfig</a></li>
+<li><a class="reference internal" href="#evtchannel">2.16.2.1. EvtChannel</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtChannel"><code class="docutils literal notranslate"><span class="pre">EvtChannel</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtChannel.config"><code class="docutils literal notranslate"><span class="pre">config</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtChannel.events"><code class="docutils literal notranslate"><span class="pre">events</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtChannel.get_event_metadata"><code class="docutils literal notranslate"><span class="pre">get_event_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtChannel.query"><code class="docutils literal notranslate"><span class="pre">query()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#channelconfig">2.16.2.2. ChannelConfig</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig"><code class="docutils literal notranslate"><span class="pre">ChannelConfig</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.classic"><code class="docutils literal notranslate"><span class="pre">classic</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.from_channel_name"><code class="docutils literal notranslate"><span class="pre">from_channel_name()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.publisher"><code class="docutils literal notranslate"><span class="pre">publisher</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.publishers"><code class="docutils literal notranslate"><span class="pre">publishers()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.ChannelConfig.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#publisher">2.16.3. Publisher</a><ul>
-<li><a class="reference internal" href="#evtpublisher">2.16.3.1. EvtPublisher</a></li>
-<li><a class="reference internal" href="#publishermetadata">2.16.3.2. PublisherMetadata</a></li>
+<li><a class="reference internal" href="#evtpublisher">2.16.3.1. EvtPublisher</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtPublisher"><code class="docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtPublisher.metadata"><code class="docutils literal notranslate"><span class="pre">metadata</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evtfile">2.16.4. EvtFile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#publishermetadata">2.16.3.2. PublisherMetadata</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata"><code class="docutils literal notranslate"><span class="pre">PublisherMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.channel_name_by_id"><code class="docutils literal notranslate"><span class="pre">channel_name_by_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.channels"><code class="docutils literal notranslate"><span class="pre">channels</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.channels_metadata"><code class="docutils literal notranslate"><span class="pre">channels_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.chanrefs"><code class="docutils literal notranslate"><span class="pre">chanrefs</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.events_metadata"><code class="docutils literal notranslate"><span class="pre">events_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.from_publisher_name"><code class="docutils literal notranslate"><span class="pre">from_publisher_name()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.guid"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.keywordrefs"><code class="docutils literal notranslate"><span class="pre">keywordrefs</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.keywords_metadata"><code class="docutils literal notranslate"><span class="pre">keywords_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.levelrefs"><code class="docutils literal notranslate"><span class="pre">levelrefs</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.levels_metadata"><code class="docutils literal notranslate"><span class="pre">levels_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.message"><code class="docutils literal notranslate"><span class="pre">message()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.message_filepath"><code class="docutils literal notranslate"><span class="pre">message_filepath</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.message_id"><code class="docutils literal notranslate"><span class="pre">message_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.message_parameter_filepath"><code class="docutils literal notranslate"><span class="pre">message_parameter_filepath</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.message_resource_filepath"><code class="docutils literal notranslate"><span class="pre">message_resource_filepath</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.opcoderefs"><code class="docutils literal notranslate"><span class="pre">opcoderefs</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.opcodes_metadata"><code class="docutils literal notranslate"><span class="pre">opcodes_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.taskrefs"><code class="docutils literal notranslate"><span class="pre">taskrefs</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.tasks_metadata"><code class="docutils literal notranslate"><span class="pre">tasks_metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evtfile">2.16.4. EvtFile</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtFile"><code class="docutils literal notranslate"><span class="pre">EvtFile</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtFile.config"><code class="docutils literal notranslate"><span class="pre">config</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtFile.events"><code class="docutils literal notranslate"><span class="pre">events</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtFile.get_event_metadata"><code class="docutils literal notranslate"><span class="pre">get_event_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtFile.query"><code class="docutils literal notranslate"><span class="pre">query()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#event">2.16.5. Event</a><ul>
-<li><a class="reference internal" href="#evtevent">2.16.5.1. EvtEvent</a></li>
-<li><a class="reference internal" href="#eventmetadata">2.16.5.2. EventMetadata</a></li>
-<li><a class="reference internal" href="#evtquery">2.16.5.3. EvtQuery</a></li>
+<li><a class="reference internal" href="#evtevent">2.16.5.1. EvtEvent</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent"><code class="docutils literal notranslate"><span class="pre">EvtEvent</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.computer"><code class="docutils literal notranslate"><span class="pre">computer</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.data"><code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.date"><code class="docutils literal notranslate"><span class="pre">date</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.event_values"><code class="docutils literal notranslate"><span class="pre">event_values()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.level"><code class="docutils literal notranslate"><span class="pre">level</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.metadata"><code class="docutils literal notranslate"><span class="pre">metadata</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.opcode"><code class="docutils literal notranslate"><span class="pre">opcode</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.pid"><code class="docutils literal notranslate"><span class="pre">pid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.provider"><code class="docutils literal notranslate"><span class="pre">provider</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.tid"><code class="docutils literal notranslate"><span class="pre">tid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.time_created"><code class="docutils literal notranslate"><span class="pre">time_created</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.user"><code class="docutils literal notranslate"><span class="pre">user</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.value"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtEvent.version"><code class="docutils literal notranslate"><span class="pre">version</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#todo">2.16.6. TODO</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#eventmetadata">2.16.5.2. EventMetadata</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata"><code class="docutils literal notranslate"><span class="pre">EventMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.channel_id"><code class="docutils literal notranslate"><span class="pre">channel_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.event_data"><code class="docutils literal notranslate"><span class="pre">event_data</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.keyword"><code class="docutils literal notranslate"><span class="pre">keyword</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.level"><code class="docutils literal notranslate"><span class="pre">level</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.message_id"><code class="docutils literal notranslate"><span class="pre">message_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.opcode"><code class="docutils literal notranslate"><span class="pre">opcode</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.task"><code class="docutils literal notranslate"><span class="pre">task</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.template"><code class="docutils literal notranslate"><span class="pre">template</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EventMetadata.version"><code class="docutils literal notranslate"><span class="pre">version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evtquery">2.16.5.3. EvtQuery</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery"><code class="docutils literal notranslate"><span class="pre">EvtQuery</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.all"><code class="docutils literal notranslate"><span class="pre">all()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.first"><code class="docutils literal notranslate"><span class="pre">first()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.next"><code class="docutils literal notranslate"><span class="pre">next()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.seek"><code class="docutils literal notranslate"><span class="pre">seek()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.EvtQuery.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#todo">2.16.6. TODO</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.PropertyArray"><code class="docutils literal notranslate"><span class="pre">PropertyArray</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_log.PropertyArray.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_log.PropertyArray.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="task_scheduler.html"
-                        title="previous chapter">2.15. Task scheduler</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="etw.html"
-                        title="next chapter">2.17. ETW – Event Tracing for Windows</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="task_scheduler.html"
+                          title="previous chapter"><span class="section-number">2.15. </span>Task scheduler</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="etw.html"
+                          title="next chapter"><span class="section-number">2.17. </span>ETW – Event Tracing for Windows</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -942,18 +1022,16 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -973,13 +1051,14 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
         <li class="right" >
           <a href="task_scheduler.html" title="2.15. Task scheduler"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" ><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.16. </span>Event Log</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

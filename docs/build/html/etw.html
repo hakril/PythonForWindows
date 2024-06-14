@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.17. ETW – Event Tracing for Windows &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2.17. ETW – Event Tracing for Windows &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,8 +34,9 @@
         <li class="right" >
           <a href="evtlog.html" title="2.16. Event Log"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U"><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.17. </span>ETW – Event Tracing for Windows</a></li> 
       </ul>
     </div>  
 
@@ -47,140 +45,131 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.winobject.event_trace">
-<span id="etw-event-tracing-for-windows"></span><h1>2.17. ETW – Event Tracing for Windows<a class="headerlink" href="#module-windows.winobject.event_trace" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.winobject.event_trace">
+<span id="etw-event-tracing-for-windows"></span><h1><span class="section-number">2.17. </span>ETW – Event Tracing for Windows<a class="headerlink" href="#module-windows.winobject.event_trace" title="Link to this heading">¶</a></h1>
 <p>The <a class="reference internal" href="#windows.winobject.event_trace.EtwManager" title="windows.winobject.event_trace.EtwManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">EtwManager</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.etw" title="windows.winobject.system.System.etw"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.etw</span></code></a></p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This code is the result of my research on <code class="docutils literal notranslate"><span class="pre">ETW</span></code> that lead to this presentation <a class="reference external" href="https://www.rump.beer/2019/slides/etw_lazy_reverser.pdf">ETW for the lazy reverser (FR)</a></p>
+<p class="admonition-title">Note</p>
+<p>This code is the result of my research on <code class="docutils literal notranslate"><span class="pre">ETW</span></code> that lead to this presentation <a class="reference external" href="https://www.rump.beer/2019/slides/etw_lazy_reverser.pdf">ETW for the lazy reverser (FR)</a></p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#sample-etw"><span class="std std-ref">ETW (Event Tracing for Windows)</span></a></p>
+<p class="admonition-title">Note</p>
+<p>See sample <a class="reference internal" href="sample.html#sample-etw"><span class="std std-ref">ETW (Event Tracing for Windows)</span></a></p>
 </div>
-<div class="section" id="etwmanager">
-<h2>2.17.1. EtwManager<a class="headerlink" href="#etwmanager" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.event_trace.EtwManager">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_trace.</code><code class="descname">EtwManager</code><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwManager" title="Permalink to this definition">¶</a></dt>
+<section id="etwmanager">
+<h2><span class="section-number">2.17.1. </span>EtwManager<a class="headerlink" href="#etwmanager" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_trace.</span></span><span class="sig-name descname"><span class="pre">EtwManager</span></span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwManager" title="Link to this definition">¶</a></dt>
 <dd><p>An object to query ETW session/providers and open new trace</p>
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwManager.open_trace">
-<code class="descname">open_trace</code><span class="sig-paren">(</span><em>name=None</em>, <em>logfile=None</em>, <em>guid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwManager.open_trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.open_trace" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwManager.open_trace">
+<span class="sig-name descname"><span class="pre">open_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwManager.open_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.open_trace" title="Link to this definition">¶</a></dt>
 <dd><p>Open a new ETW Trace</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace" title="windows.winobject.event_trace.EtwTrace"><code class="xref py py-class docutils literal notranslate"><span class="pre">EtwTrace</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace" title="windows.winobject.event_trace.EtwTrace"><code class="xref py py-class docutils literal notranslate"><span class="pre">EtwTrace</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EtwManager.providers">
-<code class="descname">providers</code><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.providers" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwManager.providers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">providers</span></span><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.providers" title="Link to this definition">¶</a></dt>
 <dd><p>The list of currently existing ETW providers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<code class="xref py py-class docutils literal notranslate"><span class="pre">TraceProvider</span></code>] – A list of ETW providers</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TraceProvider</span></code>] – A list of ETW providers</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EtwManager.sessions">
-<code class="descname">sessions</code><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.sessions" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwManager.sessions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sessions</span></span><a class="headerlink" href="#windows.winobject.event_trace.EtwManager.sessions" title="Link to this definition">¶</a></dt>
 <dd><p>The list of currently active ETW session.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties" title="windows.winobject.event_trace.EventTraceProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties" title="windows.winobject.event_trace.EventTraceProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties" title="windows.winobject.event_trace.EventTraceProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a>] – A list of <a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties" title="windows.winobject.event_trace.EventTraceProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="tracing-events">
-<h2>2.17.2. Tracing Events<a class="headerlink" href="#tracing-events" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="etwtrace">
-<h3>2.17.2.1. EtwTrace<a class="headerlink" href="#etwtrace" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_trace.EtwTrace">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_trace.</code><code class="descname">EtwTrace</code><span class="sig-paren">(</span><em>name</em>, <em>logfile=None</em>, <em>guid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="tracing-events">
+<h2><span class="section-number">2.17.2. </span>Tracing Events<a class="headerlink" href="#tracing-events" title="Link to this heading">¶</a></h2>
+<section id="etwtrace">
+<h3><span class="section-number">2.17.2.1. </span>EtwTrace<a class="headerlink" href="#etwtrace" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_trace.</span></span><span class="sig-name descname"><span class="pre">EtwTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an ETW Trace for tracing/processing events</p>
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.enable">
-<code class="descname">enable</code><span class="sig-paren">(</span><em>guid</em>, <em>flags=255</em>, <em>level=255</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.enable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.enable" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.enable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.enable" title="Link to this definition">¶</a></dt>
 <dd><p>Enable the specified event trace provider.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.enable_ex">
-<code class="descname">enable_ex</code><span class="sig-paren">(</span><em>guid</em>, <em>flags=255</em>, <em>level=255</em>, <em>any_keyword=4294967295L</em>, <em>all_keyword=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.enable_ex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.enable_ex" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.enable_ex">
+<span class="sig-name descname"><span class="pre">enable_ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">any_keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4294967295</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.enable_ex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.enable_ex" title="Link to this definition">¶</a></dt>
 <dd><p>Enable the specified event trace provider.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.exists">
-<code class="descname">exists</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.exists" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.exists">
+<span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.exists" title="Link to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the trace already exist (based on its name)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.flush">
-<code class="descname">flush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.flush" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.flush"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.flush" title="Link to this definition">¶</a></dt>
 <dd><p>Flush the trace</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EtwTrace.guid">
-<code class="descname">guid</code><em class="property"> = None</em><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.guid" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.guid">
+<span class="sig-name descname"><span class="pre">guid</span></span><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.guid" title="Link to this definition">¶</a></dt>
 <dd><p>The guid of the trace</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EtwTrace.logfile">
-<code class="descname">logfile</code><em class="property"> = None</em><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.logfile" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.logfile">
+<span class="sig-name descname"><span class="pre">logfile</span></span><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.logfile" title="Link to this definition">¶</a></dt>
 <dd><p>The logging file of the trace (<code class="docutils literal notranslate"><span class="pre">None</span></code> means real time trace)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EtwTrace.name">
-<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.name" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.name" title="Link to this definition">¶</a></dt>
 <dd><p>The name of the trace</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.process">
-<code class="descname">process</code><span class="sig-paren">(</span><em>callback</em>, <em>begin=None</em>, <em>end=None</em>, <em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.process" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.process" title="Link to this definition">¶</a></dt>
 <dd><p>Process the event retrieved by the trace.
 This function will call <code class="docutils literal notranslate"><span class="pre">callback</span></code> with any <a class="reference internal" href="#windows.winobject.event_trace.EventRecord" title="windows.winobject.event_trace.EventRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventRecord</span></code></a> in the trace.
 <code class="docutils literal notranslate"><span class="pre">begin/end</span></code> allow to filter and only process events in a given timeframe.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p class="admonition-title">Warning</p>
 <p>If the trace if <code class="docutils literal notranslate"><span class="pre">REALTIME</span></code> (no logfile) this function will hang/process new event until the trace is stopped.</p>
-<p class="last">Using <code class="docutils literal notranslate"><span class="pre">logman</span> <span class="pre">-ets</span> <span class="pre">stop</span> <span class="pre">TRACE_NAME</span></code> for exemple.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">logman</span> <span class="pre">-ets</span> <span class="pre">stop</span> <span class="pre">TRACE_NAME</span></code> for exemple.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.start">
-<code class="descname">start</code><span class="sig-paren">(</span><em>flags=0</em>, <em>mode=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.start" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.start" title="Link to this definition">¶</a></dt>
 <dd><p>Start the tracing</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.event_trace.EtwTrace.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><em>soft=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.stop" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EtwTrace.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EtwTrace.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EtwTrace.stop" title="Link to this definition">¶</a></dt>
 <dd><p>stop the tracing.</p>
 <p><code class="docutils literal notranslate"><span class="pre">soft</span></code> will allow to stop a non-existing trace that do not exists/run.
 This allow for simpler script that stop/start some EtwTrace.</p>
@@ -188,122 +177,169 @@ This allow for simpler script that stop/start some EtwTrace.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="eventtraceproperties">
-<h3>2.17.2.2. EventTraceProperties<a class="headerlink" href="#eventtraceproperties" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_trace.EventTraceProperties">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_trace.</code><code class="descname">EventTraceProperties</code><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventTraceProperties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="eventtraceproperties">
+<h3><span class="section-number">2.17.2.2. </span>EventTraceProperties<a class="headerlink" href="#eventtraceproperties" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_trace.</span></span><span class="sig-name descname"><span class="pre">EventTraceProperties</span></span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventTraceProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an Event Trace session that may exist or now. (<a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-event_trace_properties">https://docs.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-event_trace_properties</a>)</p>
 <p>This class is widly used by <a class="reference internal" href="#windows.winobject.event_trace.EtwTrace" title="windows.winobject.event_trace.EtwTrace"><code class="xref py py-class docutils literal notranslate"><span class="pre">EtwTrace</span></code></a></p>
-<dl class="classmethod">
-<dt id="windows.winobject.event_trace.EventTraceProperties.create">
-<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventTraceProperties.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.create" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventTraceProperties.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.create" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties" title="windows.winobject.event_trace.EventTraceProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventTraceProperties.guid">
-<code class="descname">guid</code><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.guid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties.guid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">guid</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.guid" title="Link to this definition">¶</a></dt>
 <dd><p>The GUID of the Event Trace session (see <code class="docutils literal notranslate"><span class="pre">Wnode.Guid</span></code>)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventTraceProperties.id">
-<code class="descname">id</code><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.id" title="Link to this definition">¶</a></dt>
 <dd><p>The LoggerId if the session (see <code class="docutils literal notranslate"><span class="pre">Wnode.HistoricalContext</span></code>)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventTraceProperties.logfile">
-<code class="descname">logfile</code><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.logfile" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties.logfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">logfile</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.logfile" title="Link to this definition">¶</a></dt>
 <dd><p>The logfile associated with the session</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventTraceProperties.name">
-<code class="descname">name</code><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.name" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventTraceProperties.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventTraceProperties.name" title="Link to this definition">¶</a></dt>
 <dd><p>The name of the session</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="eventrecord">
-<h3>2.17.2.3. EventRecord<a class="headerlink" href="#eventrecord" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.winobject.event_trace.EventRecord">
-<em class="property">class </em><code class="descclassname">windows.winobject.event_trace.</code><code class="descname">EventRecord</code><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_trace.EventRecord" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="windows.winobject.event_trace.EventRecord.guid">
-<code class="descname">guid</code><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.guid" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="eventrecord">
+<h3><span class="section-number">2.17.2.3. </span>EventRecord<a class="headerlink" href="#eventrecord" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.event_trace.</span></span><span class="sig-name descname"><span class="pre">EventRecord</span></span><a class="reference internal" href="_modules/windows/winobject/event_trace.html#EventRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.event_trace.EventRecord" title="Link to this definition">¶</a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord.guid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">guid</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.guid" title="Link to this definition">¶</a></dt>
 <dd><p>Guid of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventRecord.id">
-<code class="descname">id</code><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.id" title="Link to this definition">¶</a></dt>
 <dd><p>ID of the Event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventRecord.pid">
-<code class="descname">pid</code><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.pid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord.pid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.pid" title="Link to this definition">¶</a></dt>
 <dd><p>Process ID that provided the event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventRecord.tid">
-<code class="descname">tid</code><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.tid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord.tid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tid</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.tid" title="Link to this definition">¶</a></dt>
 <dd><p>Thread ID that provided the event</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.event_trace.EventRecord.user_data">
-<code class="descname">user_data</code><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.user_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.event_trace.EventRecord.user_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_data</span></span><a class="headerlink" href="#windows.winobject.event_trace.EventRecord.user_data" title="Link to this definition">¶</a></dt>
 <dd><p>Event specific data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">2.17. ETW – Event Tracing for Windows</a><ul>
-<li><a class="reference internal" href="#etwmanager">2.17.1. EtwManager</a></li>
+<li><a class="reference internal" href="#etwmanager">2.17.1. EtwManager</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwManager"><code class="docutils literal notranslate"><span class="pre">EtwManager</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwManager.open_trace"><code class="docutils literal notranslate"><span class="pre">open_trace()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwManager.providers"><code class="docutils literal notranslate"><span class="pre">providers</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwManager.sessions"><code class="docutils literal notranslate"><span class="pre">sessions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#tracing-events">2.17.2. Tracing Events</a><ul>
-<li><a class="reference internal" href="#etwtrace">2.17.2.1. EtwTrace</a></li>
-<li><a class="reference internal" href="#eventtraceproperties">2.17.2.2. EventTraceProperties</a></li>
-<li><a class="reference internal" href="#eventrecord">2.17.2.3. EventRecord</a></li>
+<li><a class="reference internal" href="#etwtrace">2.17.2.1. EtwTrace</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace"><code class="docutils literal notranslate"><span class="pre">EtwTrace</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.enable"><code class="docutils literal notranslate"><span class="pre">enable()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.enable_ex"><code class="docutils literal notranslate"><span class="pre">enable_ex()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.exists"><code class="docutils literal notranslate"><span class="pre">exists()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.flush"><code class="docutils literal notranslate"><span class="pre">flush()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.guid"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.logfile"><code class="docutils literal notranslate"><span class="pre">logfile</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.process"><code class="docutils literal notranslate"><span class="pre">process()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EtwTrace.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#eventtraceproperties">2.17.2.2. EventTraceProperties</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties"><code class="docutils literal notranslate"><span class="pre">EventTraceProperties</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties.guid"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties.logfile"><code class="docutils literal notranslate"><span class="pre">logfile</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventTraceProperties.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#eventrecord">2.17.2.3. EventRecord</a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord"><code class="docutils literal notranslate"><span class="pre">EventRecord</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord.guid"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord.pid"><code class="docutils literal notranslate"><span class="pre">pid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord.tid"><code class="docutils literal notranslate"><span class="pre">tid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.event_trace.EventRecord.user_data"><code class="docutils literal notranslate"><span class="pre">user_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="evtlog.html"
-                        title="previous chapter">2.16. Event Log</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="native_exec.html"
-                        title="next chapter">3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="evtlog.html"
+                          title="previous chapter"><span class="section-number">2.16. </span>Event Log</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="native_exec.html"
+                          title="next chapter"><span class="section-number">3. </span><code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -311,18 +347,16 @@ This allow for simpler script that stop/start some EtwTrace.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -342,13 +376,14 @@ This allow for simpler script that stop/start some EtwTrace.</p>
         <li class="right" >
           <a href="evtlog.html" title="2.16. Event Log"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" ><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.17. </span>ETW – Event Tracing for Windows</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

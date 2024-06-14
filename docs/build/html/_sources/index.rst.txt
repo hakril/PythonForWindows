@@ -14,9 +14,7 @@ Its goal is to offer abstractions around some of the OS features in a (I hope) p
 It also tries to make the barrier between python and native execution thinner in both ways.
 There is no external dependencies but it relies heavily on the ``ctypes`` module.
 
-
-Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
-Let's say that the codebase evolves with my needs and my curiosity.
+Let's say that the codebase evolves with my needs, my researches and my curiosity.
 
 If you have any issue, question, suggestion do not hesitate to contact me.
 I am always glad to have feedbacks from people using this project.
@@ -44,13 +42,19 @@ You can also install PythonForWindows by cloning it and using the ``setup.py`` a
     python setup.py install
 
 
-Python3
+Encoding & unicode
+^^^^^^^^^^^^^^^^^^
+
+PythonForWindows support `python2.7` & `python3` and is currently tested for `Python2.7`, `3.6` & `3.11` via `Github Workflow <https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml>`_
+
+Since 1.0.0, the code uses "wide APIs" whenever possible and accept/returns python3 `str` (py2.7 `unicode` type) almost everywhere. Any functions/APIs not accepting unicode string can be  considered a bug if its not stated explicitly in the documentation.
+
+
+Python2
 ^^^^^^^
 
-python3 support is still in beta.
-All the tests pass on master, but I did not test it heavily on real case.
-Do not hesitate report bugs and issues.
-
+PythonForWindows continues to support python2.7 as its the only way to have it running on `Windows XP` & `Windows Server 2003` which are sadly still seen in production.
+Encoding errors at print time might be awkward for unicode string on python2, see the `PythonForWindows encoding guide <https://hakril.github.io/PythonForWindows/build/html/encoding.html>`_ in the documentation.
 
 Documentation
 """""""""""""
@@ -77,6 +81,7 @@ Documentation
    wip.rst
    internals.rst
    sample.rst
+   encoding.rst
 
 
 Indices and tables

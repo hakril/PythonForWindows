@@ -1,26 +1,22 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>17. Python, Windows &amp; encoding &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>19. Python, Windows &amp; encoding &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="18. Internals" href="internals.html" />
-    <link rel="prev" title="16. Early Work In Progress" href="wip.html" /> 
+    <link rel="prev" title="18. Samples of code" href="sample.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,12 +28,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="18. Internals"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="wip.html" title="16. Early Work In Progress"
+          <a href="sample.html" title="18. Samples of code"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">19. </span>Python, Windows &amp; encoding</a></li> 
       </ul>
     </div>  
 
@@ -46,18 +40,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="python-windows-encoding">
-<span id="py-windows-encoding"></span><h1>17. Python, Windows &amp; encoding<a class="headerlink" href="#python-windows-encoding" title="Permalink to this headline">¶</a></h1>
+  <section id="python-windows-encoding">
+<span id="py-windows-encoding"></span><h1><span class="section-number">19. </span>Python, Windows &amp; encoding<a class="headerlink" href="#python-windows-encoding" title="Link to this heading">¶</a></h1>
 <p>This part is only the result of my experimentations and readings and might not reflect the full picture.</p>
 <p>My near-futur goal is to have PythonForWindows fully support unicode and use W (Wide) API.
 This will result in most of the strings handled by PFW being unicode strings.</p>
 <p>In python3 it should work as-is because Windows console handle Wide unicode and Py3 is using the <code class="docutils literal notranslate"><span class="pre">ConsoleWriteW</span></code> API directly.
-The fact that python3 <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> type represent unicode string helps a lot.</p>
+The fact that python3 <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> type represent unicode string helps a lot.</p>
 <p>But, As I want to maintains Python2.7 compatibilty and easyness of use, things beging to become tricky.</p>
 <p>The main problem is the ability to print unicode (chinese / russian / …) in the console and object repr.</p>
-<dl class="docutils">
-<dt>Example:</dt>
-<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;omae.cer&quot;</span><span class="p">)</span>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;omae.cer&quot;</span><span class="p">)</span>
 <span class="go">&lt;Certificate &quot;お前はもう死んでい&quot; serial=&quot;19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99&quot;&gt;</span>
 </pre></div>
 </div>
@@ -71,10 +64,10 @@ The fact that python3 <a class="reference external" href="https://docs.python.or
 <p>For it to work optimaly in Py2.7, it require some tricks in both the codebase, the python configuration and console configuration.</p>
 <p>My goal is to offer the better experience even without any Python/Console configuration.
 But with the additionnal configuration it should be able to print anything without trouble.</p>
-<div class="section" id="what-does-this-additional-configuration-does">
-<h2>17.1. What does this additional configuration does ?<a class="headerlink" href="#what-does-this-additional-configuration-does" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="pythonioencoding">
-<h3>17.1.1. PYTHONIOENCODING<a class="headerlink" href="#pythonioencoding" title="Permalink to this headline">¶</a></h3>
+<section id="what-does-this-additional-configuration-does">
+<h2><span class="section-number">19.1. </span>What does this additional configuration does ?<a class="headerlink" href="#what-does-this-additional-configuration-does" title="Link to this heading">¶</a></h2>
+<section id="pythonioencoding">
+<h3><span class="section-number">19.1.1. </span>PYTHONIOENCODING<a class="headerlink" href="#pythonioencoding" title="Link to this heading">¶</a></h3>
 <p>As the official <a class="reference external" href="https://docs.python.org/2/using/cmdline.html#envvar-PYTHONIOENCODING">Python2 documentation</a> says:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Overrides</span> <span class="n">the</span> <span class="n">encoding</span> <span class="n">used</span> <span class="k">for</span> <span class="n">stdin</span><span class="o">/</span><span class="n">stdout</span><span class="o">/</span><span class="n">stderr</span><span class="p">,</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">syntax</span> <span class="n">encodingname</span><span class="p">:</span><span class="n">errorhandler</span><span class="o">.</span> <span class="n">The</span> <span class="p">:</span><span class="n">errorhandler</span> <span class="n">part</span> <span class="ow">is</span> <span class="n">optional</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">the</span> <span class="n">same</span> <span class="n">meaning</span> <span class="k">as</span> <span class="ow">in</span> <span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span><span class="o">.</span>
 </pre></div>
@@ -103,8 +96,8 @@ UnicodeEncodeError: &#39;charmap&#39; codec can&#39;t encode characters in posit
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Note that the fails is in <code class="docutils literal notranslate"><span class="pre">cp437.py</span></code> directly linked to <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code></p>
+<p class="admonition-title">Note</p>
+<p>Note that the fails is in <code class="docutils literal notranslate"><span class="pre">cp437.py</span></code> directly linked to <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code></p>
 </div>
 <p>By setting <code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code> you force the <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ chcp
@@ -124,9 +117,9 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 </div>
 <p>Well, it does not raise an exception anymore but it’s printing gibberish.
 This is because, as-is the console still expects cp437 as an output.</p>
-</div>
-<div class="section" id="chcp-65001">
-<h3>17.1.2. chcp 65001<a class="headerlink" href="#chcp-65001" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="chcp-65001">
+<h3><span class="section-number">19.1.2. </span>chcp 65001<a class="headerlink" href="#chcp-65001" title="Link to this heading">¶</a></h3>
 <p>The <a class="reference external" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/chcp">chcp</a> commande allow to display/change the active console code page.
 The codepage 65001 stand for UTF-8.</p>
 <p>Thus, setting the console code page to 65001 will tell it to expect UTF-8 as a program output. Which is perfect with our previous setup of <code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code>:</p>
@@ -145,70 +138,66 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 お前はもう死んでい
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="the-case-of-repr">
-<h2>17.2. The case of __repr__<a class="headerlink" href="#the-case-of-repr" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="the-case-of-repr">
+<h2><span class="section-number">19.2. </span>The case of __repr__<a class="headerlink" href="#the-case-of-repr" title="Link to this heading">¶</a></h2>
 <p>The case of UTF-8 and __repr__ in Python2.7 is more tricky.
 I pay particular attention to this case because I am an heavy user of the interactive console and object <code class="docutils literal notranslate"><span class="pre">__repr__</span></code> to explore Windows.</p>
 <p>the <code class="docutils literal notranslate"><span class="pre">__repr__</span></code> function cannot return an <code class="docutils literal notranslate"><span class="pre">unicode</span></code> object and must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.
 But as I want to be able to output repr for objects with unicode attributes (like a お前はもう死んでい certificate), I need to encode my unicode __repr__.</p>
-<p>In those cases, I encode the repr with the stdout encoding (with backslash escape for non-encodable error).
+<p>In those cases, I encode the repr with the stdout encoding (with backslash escape for non-encodable characters).
 This should assure that the result can always be written to stdout.</p>
 <p>But based on the encoding of stdout and the code page 3 case may appear.
-For exmple with an object having the following unicode repr:</p>
+For example with an object having the following unicode repr:</p>
 <blockquote>
 <div><ul class="simple">
-<li>&lt;Certificate “お前はもう死んでい” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</li>
+<li><p>&lt;Certificate “お前はもう死んでい” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</p></li>
 </ul>
 </div></blockquote>
 <p>The possibilities are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><dl class="first docutils">
-<dt>stdout encoding do not handle full unicode (like cp437)</dt>
-<dd><ul class="first last">
-<li>repr will be backslash escaped to allow printing</li>
-<li>&lt;Certificate “u304au524du306fu3082u3046u6b7bu3093u3067u3044” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</li>
+<li><dl class="simple">
+<dt>stdout encoding do not handle full unicode (like cp437)</dt><dd><ul>
+<li><p>repr will be backslash escaped to allow printing</p></li>
+<li><p>&lt;Certificate “\u304a\u524d\u306f\u3082\u3046\u6b7b\u3093\u3067\u3044” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>stdout encoding is utf-8 but code page is not (like cp437)</dt>
-<dd><ul class="first last">
-<li>console will output gibberish by trying to interpret utf-8 as a custom CodePage</li>
-<li>&lt;Certificate “πüèσëìπü»πééπüåµ¡╗πéôπüºπüä” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</li>
+<li><dl class="simple">
+<dt>stdout encoding is utf-8 but code page is not (like cp437)</dt><dd><ul>
+<li><p>console will output gibberish by trying to interpret utf-8 as a custom CodePage</p></li>
+<li><p>&lt;Certificate “πüèσëìπü»πééπüåµ¡╗πéôπüºπüä” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>stdout encoding is utf-8 and code page is 65001</dt>
-<dd><ul class="first last">
-<li>it works !</li>
-<li>&lt;Certificate “お前はもう死んでい” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</li>
+<li><dl class="simple">
+<dt>stdout encoding is utf-8 and code page is 65001</dt><dd><ul>
+<li><p>it works !</p></li>
+<li><p>&lt;Certificate “お前はもう死んでい” serial=”19 da cc 2b a5 61 b6 98 4e 0d 6c 0c cb ce e6 99”&gt;</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="sample-of-test">
-<h2>17.3. Sample of test<a class="headerlink" href="#sample-of-test" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="sample-of-test">
+<h2><span class="section-number">19.3. </span>Sample of test<a class="headerlink" href="#sample-of-test" title="Link to this heading">¶</a></h2>
 <p>I have created a sample <code class="docutils literal notranslate"><span class="pre">samples\encoding\check_encoding_config.py</span></code> that should help to understand and verify the current configuration of the console.
 The code check and display the values of <code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code>, <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code> and the current console code page. It also tries to print an unicode string as well as an unicode object __repr__.</p>
-<div class="section" id="no-setup">
-<h3>17.3.1. No setup<a class="headerlink" href="#no-setup" title="Permalink to this headline">¶</a></h3>
+<section id="no-setup">
+<h3><span class="section-number">19.3.1. </span>No setup<a class="headerlink" href="#no-setup" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code> is not set and code page is something like 437.</p>
 <blockquote>
 <div><ul class="simple">
-<li>The printing of an unicode string will fail</li>
-<li><dl class="first docutils">
-<dt>The printing of an unicode __repr__ will display escaped unicode values</dt>
-<dd><ul class="first last">
-<li>PFW make its best to not raise an encoding related exception on __repr__ by checking <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code></li>
+<li><p>The printing of an unicode string will fail</p></li>
+<li><dl class="simple">
+<dt>The printing of an unicode __repr__ will display escaped unicode values</dt><dd><ul>
+<li><p>PFW make its best to not raise an encoding related exception on __repr__ by checking <code class="docutils literal notranslate"><span class="pre">sys.stdout.encoding</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -237,14 +226,14 @@ Py2 python/console configuration analysis:
 Unicode object repr: &lt;MyUtf8Object name=&quot;\u304a\u524d\u306f\u3082\u3046\u6b7b\u3093\u3067\u3044-\u043a\u0430\u043a\u0438\u0435_\u0444\u0436\u044e\u0449\u0434\u0444\u044f&quot;&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="pythonioencoding-only">
-<h3>17.3.2. PYTHONIOENCODING only<a class="headerlink" href="#pythonioencoding-only" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="pythonioencoding-only">
+<h3><span class="section-number">19.3.2. </span>PYTHONIOENCODING only<a class="headerlink" href="#pythonioencoding-only" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code> is set to <code class="docutils literal notranslate"><span class="pre">utf-8</span></code> and code page is something like 437.</p>
 <blockquote>
 <div><ul class="simple">
-<li>The printing of an unicode string will work but display gibberish</li>
-<li>The printing of an unicode __repr__ will work but display gibberish</li>
+<li><p>The printing of an unicode string will work but display gibberish</p></li>
+<li><p>The printing of an unicode __repr__ will work but display gibberish</p></li>
 </ul>
 </div></blockquote>
 <p>This is due to a mis-match between python output encoding and the console expected output.</p>
@@ -267,9 +256,9 @@ Unicode string print: &lt;πüèσëìπü»πééπüåµ¡╗πéôπüºπü�
 Unicode object repr: &lt;MyUtf8Object name=&quot;πüèσëìπü»πééπüåµ¡╗πéôπüºπüä-╨║╨░╨║╨╕╨╡_╤ä╨╢╤Ä╤ë╨┤╤ä╤Å&quot;&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="full-setup">
-<h3>17.3.3. Full setup<a class="headerlink" href="#full-setup" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="full-setup">
+<h3><span class="section-number">19.3.3. </span>Full setup<a class="headerlink" href="#full-setup" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">PYTHONIOENCODING</span></code> is set to <code class="docutils literal notranslate"><span class="pre">utf-8</span></code> and code page is 65001.
 Everything should work:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ set PYTHONIOENCODING=utf-8
@@ -288,41 +277,43 @@ Unicode string print: &lt;お前はもう死んでい-какие_фжющдфя&
 Unicode object repr: &lt;MyUtf8Object name=&quot;お前はもう死んでい-какие_фжющдфя&quot;&gt;
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">17. Python, Windows &amp; encoding</a><ul>
-<li><a class="reference internal" href="#what-does-this-additional-configuration-does">17.1. What does this additional configuration does ?</a><ul>
-<li><a class="reference internal" href="#pythonioencoding">17.1.1. PYTHONIOENCODING</a></li>
-<li><a class="reference internal" href="#chcp-65001">17.1.2. chcp 65001</a></li>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">19. Python, Windows &amp; encoding</a><ul>
+<li><a class="reference internal" href="#what-does-this-additional-configuration-does">19.1. What does this additional configuration does ?</a><ul>
+<li><a class="reference internal" href="#pythonioencoding">19.1.1. PYTHONIOENCODING</a></li>
+<li><a class="reference internal" href="#chcp-65001">19.1.2. chcp 65001</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-case-of-repr">17.2. The case of __repr__</a></li>
-<li><a class="reference internal" href="#sample-of-test">17.3. Sample of test</a><ul>
-<li><a class="reference internal" href="#no-setup">17.3.1. No setup</a></li>
-<li><a class="reference internal" href="#pythonioencoding-only">17.3.2. PYTHONIOENCODING only</a></li>
-<li><a class="reference internal" href="#full-setup">17.3.3. Full setup</a></li>
+<li><a class="reference internal" href="#the-case-of-repr">19.2. The case of __repr__</a></li>
+<li><a class="reference internal" href="#sample-of-test">19.3. Sample of test</a><ul>
+<li><a class="reference internal" href="#no-setup">19.3.1. No setup</a></li>
+<li><a class="reference internal" href="#pythonioencoding-only">19.3.2. PYTHONIOENCODING only</a></li>
+<li><a class="reference internal" href="#full-setup">19.3.3. Full setup</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="wip.html"
-                        title="previous chapter">16. Early Work In Progress</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="internals.html"
-                        title="next chapter">18. Internals</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="sample.html"
+                          title="previous chapter"><span class="section-number">18. </span>Samples of code</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -330,18 +321,16 @@ Unicode object repr: &lt;MyUtf8Object name=&quot;お前はもう死んでい-к�
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -356,17 +345,15 @@ Unicode object repr: &lt;MyUtf8Object name=&quot;お前はもう死んでい-к�
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="18. Internals"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="wip.html" title="16. Early Work In Progress"
+          <a href="sample.html" title="18. Samples of code"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">19. </span>Python, Windows &amp; encoding</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

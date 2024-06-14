@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>10. windows.com - Component Object Model &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>10. windows.com - Component Object Model &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,7 +34,8 @@
         <li class="right" >
           <a href="debug.html" title="9. windows.debug – Debugging"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">10. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></li> 
       </ul>
     </div>  
 
@@ -46,21 +44,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.com">
-<span id="windows-com-component-object-model"></span><h1>10. <a class="reference internal" href="#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a> - Component Object Model<a class="headerlink" href="#module-windows.com" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.com">
+<span id="windows-com-component-object-model"></span><h1><span class="section-number">10. </span><a class="reference internal" href="#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a> - Component Object Model<a class="headerlink" href="#module-windows.com" title="Link to this heading">¶</a></h1>
 <p>A module to call <cite>COM</cite> interfaces from <cite>Python</cite> or
 <cite>COM</cite> vtable in python.</p>
 <p>This code is only used in <a class="reference internal" href="wmi.html#module-windows.winobject.wmi" title="windows.winobject.wmi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winobject.wmi</span></code></a> and <a class="reference internal" href="network.html#module-windows.winobject.network" title="windows.winobject.network"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winobject.network</span></code></a> for the firewall.
 The ability to create <cite>COM</cite> vtable is used in the <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/">LKD project</a> .</p>
-<div class="section" id="using-a-com-interface">
-<h2>10.1. Using a COM interface<a class="headerlink" href="#using-a-com-interface" title="Permalink to this headline">¶</a></h2>
+<section id="using-a-com-interface">
+<h2><span class="section-number">10.1. </span>Using a COM interface<a class="headerlink" href="#using-a-com-interface" title="Link to this heading">¶</a></h2>
 <p>It’s possible to directly call <cite>COM</cite> interface from python. All you need is the definition of the <cite>COM</cite> interface.</p>
 <p>There are three ways to get the definition of the code interface:</p>
 <blockquote>
 <div><ul class="simple">
-<li>By using it from <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.generated_def.interfaces</span></code></li>
-<li>By writing it yourself : &lt;<a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56">https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56</a>&gt;`_</li>
-<li>By generating it.</li>
+<li><p>By using it from <a class="reference internal" href="interfaces_generated.html#module-windows.generated_def.interfaces" title="windows.generated_def.interfaces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.generated_def.interfaces</span></code></a></p></li>
+<li><p>By writing it yourself : <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56">https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56</a></p></li>
+<li><p>By generating it.</p></li>
 </ul>
 </div></blockquote>
 <p>To generate a <cite>COM</cite> interface you need its definition from the “.c” file.
@@ -70,89 +68,106 @@ Finally re-generate the interface using <code class="docutils literal notranslat
 Then you need to retrieve the interface by using an API returning an object or <code class="xref py py-func docutils literal notranslate"><span class="pre">window.com.create_instance()</span></code>.
 You can then use the instance to call whatever method you need.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">see samples <a class="reference internal" href="sample.html#sample-com"><span class="std std-ref">windows.com</span></a></p>
+<p class="admonition-title">Note</p>
+<p>see samples <a class="reference internal" href="sample.html#sample-com"><span class="std std-ref">windows.com</span></a></p>
 </div>
-</div>
-<div class="section" id="implementing-a-com-interface">
-<h2>10.2. Implementing a COM interface<a class="headerlink" href="#implementing-a-com-interface" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="implementing-a-com-interface">
+<h2><span class="section-number">10.2. </span>Implementing a COM interface<a class="headerlink" href="#implementing-a-com-interface" title="Link to this heading">¶</a></h2>
 <p>To create <cite>COM</cite> object you need to:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>Create your <code class="docutils literal notranslate"><span class="pre">COMImplementation</span></code> with an <code class="docutils literal notranslate"><span class="pre">IMPLEMENT</span></code> attribute  that should be a cominterface <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L48">CODE 1</a></li>
-<li>Implements the methods of the interface <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L55">CODE 2</a></li>
-<li>Create an instance <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L59">CODE3</a></li>
-<li>Pass it to whatever native function expects it <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L272">CODE4</a></li>
+<li><p>Create your <code class="docutils literal notranslate"><span class="pre">COMImplementation</span></code> with an <code class="docutils literal notranslate"><span class="pre">IMPLEMENT</span></code> attribute  that should be a cominterface <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L48">CODE 1</a></p></li>
+<li><p>Implements the methods of the interface <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L55">CODE 2</a></p></li>
+<li><p>Create an instance <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L59">CODE3</a></p></li>
+<li><p>Pass it to whatever native function expects it <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L272">CODE4</a></p></li>
 </ol>
 </div></blockquote>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">see samples <a class="reference internal" href="sample.html#sample-com-icallinterceptor"><span class="std std-ref">ICallInterceptor</span></a></p>
+<p class="admonition-title">Note</p>
+<p>see samples <a class="reference internal" href="sample.html#sample-com-icallinterceptor"><span class="std std-ref">ICallInterceptor</span></a></p>
 </div>
-</div>
-<div class="section" id="api">
-<h2>10.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="windows.com.init">
-<code class="descclassname">windows.com.</code><code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.init" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="api">
+<h2><span class="section-number">10.3. </span>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.com.init">
+<span class="sig-prename descclassname"><span class="pre">windows.com.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.init" title="Link to this definition">¶</a></dt>
 <dd><p>Init COM with some default parameters</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="windows.com.create_instance">
-<code class="descclassname">windows.com.</code><code class="descname">create_instance</code><span class="sig-paren">(</span><em>clsiid</em>, <em>targetinterface</em>, <em>custom_iid=None</em>, <em>context=5L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#create_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.create_instance" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.com.create_instance">
+<span class="sig-prename descclassname"><span class="pre">windows.com.</span></span><span class="sig-name descname"><span class="pre">create_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsiid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetinterface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_iid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#create_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.create_instance" title="Link to this definition">¶</a></dt>
 <dd><p>A simple wrapper around <code class="docutils literal notranslate"><span class="pre">CoCreateInstance</span> <span class="pre">&lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;</span></code></p>
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.com.COMImplementation">
-<em class="property">class </em><code class="descclassname">windows.com.</code><code class="descname">COMImplementation</code><a class="reference internal" href="_modules/windows/com.html#COMImplementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.com.COMImplementation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.com.</span></span><span class="sig-name descname"><span class="pre">COMImplementation</span></span><a class="reference internal" href="_modules/windows/com.html#COMImplementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.COMImplementation" title="Link to this definition">¶</a></dt>
 <dd><p>The base class to implements COM object respecting a given interface</p>
-<dl class="method">
-<dt id="windows.com.COMImplementation.AddRef">
-<code class="descname">AddRef</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.AddRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.AddRef" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.com.COMImplementation.AddRef">
+<span class="sig-name descname"><span class="pre">AddRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.AddRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.COMImplementation.AddRef" title="Link to this definition">¶</a></dt>
 <dd><p>Default <code class="docutils literal notranslate"><span class="pre">AddRef</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.com.COMImplementation.QueryInterface">
-<code class="descname">QueryInterface</code><span class="sig-paren">(</span><em>this</em>, <em>piid</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.QueryInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.QueryInterface" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.com.COMImplementation.QueryInterface">
+<span class="sig-name descname"><span class="pre">QueryInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">this</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">piid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.QueryInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.COMImplementation.QueryInterface" title="Link to this definition">¶</a></dt>
 <dd><p>Default <code class="docutils literal notranslate"><span class="pre">QueryInterface</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">self</span></code> if piid is the implemented interface</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.com.COMImplementation.Release">
-<code class="descname">Release</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.Release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.Release" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.com.COMImplementation.Release">
+<span class="sig-name descname"><span class="pre">Release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.Release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.com.COMImplementation.Release" title="Link to this definition">¶</a></dt>
 <dd><p>Default <code class="docutils literal notranslate"><span class="pre">Release</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">10. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a><ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a><ul>
 <li><a class="reference internal" href="#using-a-com-interface">10.1. Using a COM interface</a></li>
 <li><a class="reference internal" href="#implementing-a-com-interface">10.2. Implementing a COM interface</a></li>
-<li><a class="reference internal" href="#api">10.3. API</a></li>
+<li><a class="reference internal" href="#api">10.3. API</a><ul>
+<li><a class="reference internal" href="#windows.com.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+<li><a class="reference internal" href="#windows.com.create_instance"><code class="docutils literal notranslate"><span class="pre">create_instance()</span></code></a></li>
+<li><a class="reference internal" href="#windows.com.COMImplementation"><code class="docutils literal notranslate"><span class="pre">COMImplementation</span></code></a><ul>
+<li><a class="reference internal" href="#windows.com.COMImplementation.AddRef"><code class="docutils literal notranslate"><span class="pre">AddRef()</span></code></a></li>
+<li><a class="reference internal" href="#windows.com.COMImplementation.QueryInterface"><code class="docutils literal notranslate"><span class="pre">QueryInterface()</span></code></a></li>
+<li><a class="reference internal" href="#windows.com.COMImplementation.Release"><code class="docutils literal notranslate"><span class="pre">Release()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="debug.html"
-                        title="previous chapter">9. <code class="docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="crypto.html"
-                        title="next chapter">11. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="debug.html"
+                          title="previous chapter"><span class="section-number">9. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="crypto.html"
+                          title="next chapter"><span class="section-number">11. </span><code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -160,18 +175,16 @@ You can then use the instance to call whatever method you need.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -191,12 +204,13 @@ You can then use the instance to call whatever method you need.</p>
         <li class="right" >
           <a href="debug.html" title="9. windows.debug – Debugging"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">10. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

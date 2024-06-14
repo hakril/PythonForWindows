@@ -19,10 +19,6 @@ For now, the best thing to do is look at the sample:
 
     See sample :ref:`sample_event_log`
 
-.. warning::
-
-    This API have not been tested on real case yet and may be subject to changes.
-
 
 EvtlogManager
 """""""""""""
