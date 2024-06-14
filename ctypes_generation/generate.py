@@ -635,6 +635,53 @@ class StructureDocGenerator(NoTemplatedGenerator):
                 self.emitline("    .. attribute:: {0}({1})".format(enum_name, enum_value))
                 self.emitline("")
 
+class WinFuncDocGenerator(NoTemplatedGenerator):
+    def copy_template(self):
+        self.emitline(".. module:: windows.generated_def.winfuncs")
+        self.emitline("")
+        self.emitline("Functions")
+        self.emitline("----------")
+
+
+    def generate(self):
+        self.copy_template()
+        for file in self.files:
+            for function in file.data:
+                self.generate_function_doc(function)
+
+    def generate_function_doc(self, function):
+        param_list = ", ".join(name for t, name in function.params)
+        self.emitline(".. function:: {0}({1})".format(function.name, param_list))
+        self.emitline("")
+
+
+
+class ComDocGenerator(NoTemplatedGenerator):
+    def copy_template(self):
+        self.emitline(".. module:: windows.generated_def.interfaces")
+        self.emitline("")
+        self.emitline("Interfaces")
+        self.emitline("----------")
+
+
+    def generate(self):
+        self.copy_template()
+        for file in self.files:
+            interface = file.data
+            self.generate_interface_doc(interface)
+
+    def generate_interface_doc(self, interface):
+        self.emitline(".. class:: {0}".format(interface.name))
+        self.emitline("")
+        for method in interface.methods:
+            self.emitline("    .. method:: {0}".format(method.name))
+        self.emitline("")
+        self.emitline("")
+
+
+
+
+
 META_WALKER = """
 def generate_walker(namelist, target_module):
     def my_walker():
@@ -827,23 +874,25 @@ structure_module_generator.generate_doc(from_here(r"..\docs\source\winstructs_ge
 
 print("== Generating COM interfaces ==")
 # Generate COM interfaces
-com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, None, from_here(r"definitions\com"))
+com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, ComDocGenerator, from_here(r"definitions\com"))
 # Load the interface_to_iid file needed by the 'COMCtypesGenerator'
 com_module_generator.after_ctypes_generator_init = lambda cgen: cgen.parse_iid_file(from_here("definitions\\interface_to_iid.txt"))
 com_module_generator.parse_source_directory(recurse=True)
 com_module_generator.add_module_dependancy(structure_module_generator)
 com_module_generator.resolve_dependancies = com_module_generator.check_dependancies_without_flattening # No real flattening as we have circular dep in Interfaces VTBL
 com_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+com_module_generator.generate_doc(from_here(r"..\docs\source\interfaces_generated.rst"))
 
 print("== Generating functions ==")
 # Generate function
-functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, None, from_here(r"definitions\functions"))
+functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, WinFuncDocGenerator, from_here(r"definitions\functions"))
 # no template file
 functions_module_generator.get_template_filename = lambda : None
 functions_module_generator.parse_source_directory()
 functions_module_generator.add_module_dependancy(structure_module_generator)
 functions_module_generator.add_module_dependancy(com_module_generator)
 functions_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+functions_module_generator.generate_doc(from_here(r"..\docs\source\winfuncs_generated.rst"))
 
 
 print("== Generating META file ==")
