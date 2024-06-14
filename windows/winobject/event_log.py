@@ -548,7 +548,10 @@ class ChannelConfig(EvtHandle):
         return EvtPublisher(chaninfo(self, gdef.EvtChannelConfigOwningPublisher).value)
 
     def publishers(self):
-        "TEST"
+        """ The list of Publisher publishing on the channel. seems pertinent for Legacy channel like "System"
+
+        :type: [:class:`EvtPublisher`] - A list of :class:`EvtPublisher`
+        """
         return [EvtPublisher(pub) for pub in chaninfo(self, gdef.EvtChannelPublisherList).value]
 
     @property

@@ -193,25 +193,12 @@ typedef struct CS_Resource_s {
   CS_DES CS_Header;
 } CS_RESOURCE, *PCS_RESOURCE;
 
-typedef struct DMA_Des_s {
-  DWORD DD_Count;
-  DWORD DD_Type;
-  DWORD DD_Flags;
-  ULONG DD_Alloc_Chan;
-} DMA_DES, *PDMA_DES;
 
 typedef struct DMA_Resource_s {
   DMA_DES   DMA_Header;
   DMA_RANGE DMA_Data[ANYSIZE_ARRAY];
 } DMA_RESOURCE, *PDMA_RESOURCE;
 
-typedef struct IO_Des_s {
-  DWORD     IOD_Count;
-  DWORD     IOD_Type;
-  DWORDLONG IOD_Alloc_Base;
-  DWORDLONG IOD_Alloc_End;
-  DWORD     IOD_DesFlags;
-} IO_DES, *PIO_DES;
 
 typedef struct IO_Resource_s {
   IO_DES   IO_Header;

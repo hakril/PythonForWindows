@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.7. Network &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2.7. Network &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,8 +34,9 @@
         <li class="right" >
           <a href="registry.html" title="2.6. Registry"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U"><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.7. </span>Network</a></li> 
       </ul>
     </div>  
 
@@ -47,526 +45,522 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.winobject.network">
-<span id="network"></span><h1>2.7. Network<a class="headerlink" href="#module-windows.winobject.network" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.winobject.network">
+<span id="network"></span><h1><span class="section-number">2.7. </span>Network<a class="headerlink" href="#module-windows.winobject.network" title="Link to this heading">¶</a></h1>
 <p>The <a class="reference internal" href="#windows.winobject.network.Network" title="windows.winobject.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.network" title="windows.winobject.system.System.network"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.network</span></code></a></p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#sample-network-exploration"><span class="std std-ref">Network - socket exploration</span></a></p>
+<p class="admonition-title">Note</p>
+<p>See sample <a class="reference internal" href="sample.html#sample-network-exploration"><span class="std std-ref">Network - socket exploration</span></a></p>
 </div>
-<dl class="class">
-<dt id="windows.winobject.network.Network">
-<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">Network</code><a class="reference internal" href="_modules/windows/winobject/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.Network" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="windows.winobject.network.Network.firewall">
-<code class="descname">firewall</code><a class="headerlink" href="#windows.winobject.network.Network.firewall" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.network.Network">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.network.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><a class="reference internal" href="_modules/windows/winobject/network.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.Network" title="Link to this definition">¶</a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Network.firewall">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">firewall</span></span><a class="headerlink" href="#windows.winobject.network.Network.firewall" title="Link to this definition">¶</a></dt>
 <dd><p>The firewall of the system</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.network.Firewall" title="windows.winobject.network.Firewall"><code class="xref py py-class docutils literal notranslate"><span class="pre">Firewall</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.network.Firewall" title="windows.winobject.network.Firewall"><code class="xref py py-class docutils literal notranslate"><span class="pre">Firewall</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.Network.ipv4">
-<code class="descname">ipv4</code><a class="headerlink" href="#windows.winobject.network.Network.ipv4" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Network.ipv4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ipv4</span></span><a class="headerlink" href="#windows.winobject.network.Network.ipv4" title="Link to this definition">¶</a></dt>
 <dd><p>List of TCP IPv4 socket (connection and listening)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.TCP4Connection" title="windows.winobject.network.TCP4Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCP4Connection</span></code></a>]</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.network.TCP4Connection" title="windows.winobject.network.TCP4Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCP4Connection</span></code></a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.Network.ipv6">
-<code class="descname">ipv6</code><a class="headerlink" href="#windows.winobject.network.Network.ipv6" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Network.ipv6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ipv6</span></span><a class="headerlink" href="#windows.winobject.network.Network.ipv6" title="Link to this definition">¶</a></dt>
 <dd><p>List of TCP IPv6 socket (connection and listening)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.TCP6Connection" title="windows.winobject.network.TCP6Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCP6Connection</span></code></a>]</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.network.TCP6Connection" title="windows.winobject.network.TCP6Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCP6Connection</span></code></a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<div class="section" id="connections">
-<h2>2.7.1. Connections<a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.network.TCP4Connection">
-<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">TCP4Connection</code><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection" title="Permalink to this definition">¶</a></dt>
+<section id="connections">
+<h2><span class="section-number">2.7.1. </span>Connections<a class="headerlink" href="#connections" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.network.</span></span><span class="sig-name descname"><span class="pre">TCP4Connection</span></span><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection" title="Link to this definition">¶</a></dt>
 <dd><p>A TCP4 socket (connected or listening)</p>
-<dl class="method">
-<dt id="windows.winobject.network.TCP4Connection.close">
-<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection.close" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection.close" title="Link to this definition">¶</a></dt>
 <dd><p>Close the connection &lt;require elevated process&gt;</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.established">
-<code class="descname">established</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.established" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.established">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">established</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.established" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if connection is established else it’s a listening socket</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.local_addr">
-<code class="descname">local_addr</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_addr" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.local_addr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_addr</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_addr" title="Link to this definition">¶</a></dt>
 <dd><p>Local address IP (x.x.x.x)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.local_port">
-<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_port" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.local_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_port</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_port" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.remote_addr">
-<code class="descname">remote_addr</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_addr" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.remote_addr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_addr</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_addr" title="Link to this definition">¶</a></dt>
 <dd><p>remote address IP (x.x.x.x)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.remote_host">
-<code class="descname">remote_host</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_host" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.remote_host">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_host</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_host" title="Link to this definition">¶</a></dt>
 <dd><p>Identification of the remote hostname.
 Equals <code class="docutils literal notranslate"><span class="pre">remote_addr</span></code> if the resolution fails</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.remote_port">
-<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_port" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.remote_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_port</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_port" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP4Connection.remote_proto">
-<code class="descname">remote_proto</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_proto" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP4Connection.remote_proto">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_proto</span></span><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_proto" title="Link to this definition">¶</a></dt>
 <dd><p>Identification of the protocol associated with the remote port.
 Equals <code class="docutils literal notranslate"><span class="pre">remote_port</span></code> if no protocol is associated with it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.winobject.network.TCP6Connection">
-<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">TCP6Connection</code><a class="reference internal" href="_modules/windows/winobject/network.html#TCP6Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP6Connection" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.network.</span></span><span class="sig-name descname"><span class="pre">TCP6Connection</span></span><a class="reference internal" href="_modules/windows/winobject/network.html#TCP6Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.TCP6Connection" title="Link to this definition">¶</a></dt>
 <dd><p>A TCP6 socket (connected or listening)</p>
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.established">
-<code class="descname">established</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.established" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.established">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">established</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.established" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if connection is established else it’s a listening socket</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.local_addr">
-<code class="descname">local_addr</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_addr" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.local_addr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_addr</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_addr" title="Link to this definition">¶</a></dt>
 <dd><p>Local address IP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.local_port">
-<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_port" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.local_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_port</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_port" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.remote_addr">
-<code class="descname">remote_addr</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_addr" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.remote_addr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_addr</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_addr" title="Link to this definition">¶</a></dt>
 <dd><p>remote address IP</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.remote_host">
-<code class="descname">remote_host</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_host" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.remote_host">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_host</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_host" title="Link to this definition">¶</a></dt>
 <dd><p>Equals to <code class="docutils literal notranslate"><span class="pre">self.remote_addr</span></code> for Ipv6</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.remote_port">
-<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_port" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.remote_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_port</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_port" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.TCP6Connection.remote_proto">
-<code class="descname">remote_proto</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_proto" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.TCP6Connection.remote_proto">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_proto</span></span><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_proto" title="Link to this definition">¶</a></dt>
 <dd><p>Equals to <code class="docutils literal notranslate"><span class="pre">self.remote_port</span></code> for Ipv6</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="firewall">
-<h2>2.7.2. Firewall<a class="headerlink" href="#firewall" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.network.Firewall">
-<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">Firewall</code><a class="reference internal" href="_modules/windows/winobject/network.html#Firewall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.Firewall" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="firewall">
+<h2><span class="section-number">2.7.2. </span>Firewall<a class="headerlink" href="#firewall" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.network.</span></span><span class="sig-name descname"><span class="pre">Firewall</span></span><a class="reference internal" href="_modules/windows/winobject/network.html#Firewall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.Firewall" title="Link to this definition">¶</a></dt>
 <dd><p>The windows firewall</p>
-<dl class="attribute">
-<dt id="windows.winobject.network.Firewall.current_profile_types">
-<code class="descname">current_profile_types</code><a class="headerlink" href="#windows.winobject.network.Firewall.current_profile_types" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall.current_profile_types">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_profile_types</span></span><a class="headerlink" href="#windows.winobject.network.Firewall.current_profile_types" title="Link to this definition">¶</a></dt>
 <dd><p>Mask of the profiles currently enabled</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.Firewall.enabled">
-<code class="descname">enabled</code><a class="headerlink" href="#windows.winobject.network.Firewall.enabled" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#windows.winobject.network.Firewall.enabled" title="Link to this definition">¶</a></dt>
 <dd><p>A maping of the active firewall profiles</p>
 <p>{</p>
 <p><code class="docutils literal notranslate"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN(0x1L)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>,</p>
 <p><code class="docutils literal notranslate"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE(0x2L)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>,</p>
 <p><code class="docutils literal notranslate"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC(0x4L)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>,</p>
 <p>}</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.Firewall.rules">
-<code class="descname">rules</code><a class="headerlink" href="#windows.winobject.network.Firewall.rules" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.network.Firewall.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall.rules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rules</span></span><a class="headerlink" href="#windows.winobject.network.Firewall.rules" title="Link to this definition">¶</a></dt>
 <dd><p>The rules of the firewall</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.FirewallRule" title="windows.winobject.network.FirewallRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallRule</span></code></a>] – A list of rule</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.network.FirewallRule" title="windows.winobject.network.FirewallRule"><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallRule</span></code></a>] – A list of rule</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.Firewall.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.network.Firewall.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.network.Firewall.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.network.Firewall.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.winobject.network.FirewallRule">
-<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">FirewallRule</code><a class="reference internal" href="_modules/windows/winobject/network.html#FirewallRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.FirewallRule" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.network.</span></span><span class="sig-name descname"><span class="pre">FirewallRule</span></span><a class="reference internal" href="_modules/windows/winobject/network.html#FirewallRule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.network.FirewallRule" title="Link to this definition">¶</a></dt>
 <dd><p>A rule of the firewall</p>
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.action">
-<code class="descname">action</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.action" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.action">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">action</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.action" title="Link to this definition">¶</a></dt>
 <dd><p>Action of the rule, values might be:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_BLOCK(0x0L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_ALLOW(0x1L)</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_BLOCK(0x0L)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_ALLOW(0x1L)</span></code></p></li>
 </ul>
 </div></blockquote>
-<p>subclass of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></a></p>
+<p>subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.application_name">
-<code class="descname">application_name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.application_name" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.application_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">application_name</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.application_name" title="Link to this definition">¶</a></dt>
 <dd><p>Name of the application to which apply the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.description">
-<code class="descname">description</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.description" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.description" title="Link to this definition">¶</a></dt>
 <dd><p>Description of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.direction">
-<code class="descname">direction</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.direction" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.direction">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">direction</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.direction" title="Link to this definition">¶</a></dt>
 <dd><p>Direction of the rule, values might be:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN(0x1L)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT(0x2L)</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN(0x1L)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT(0x2L)</span></code></p></li>
 </ul>
 </div></blockquote>
-<p>subclass of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></a></p>
+<p>subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.enabled">
-<code class="descname">enabled</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.enabled" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.enabled" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if rule is enabled</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.grouping">
-<code class="descname">grouping</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.grouping" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.from_param">
+<span class="sig-name descname"><span class="pre">from_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.network.FirewallRule.from_param" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a Python object into a function call parameter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.grouping">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grouping</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.grouping" title="Link to this definition">¶</a></dt>
 <dd><p>Grouping of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.interface_types">
-<code class="descname">interface_types</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.interface_types" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.interface_types">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interface_types</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.interface_types" title="Link to this definition">¶</a></dt>
 <dd><p>Types of interface of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.local_address">
-<code class="descname">local_address</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_address" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.local_address">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_address</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_address" title="Link to this definition">¶</a></dt>
 <dd><p>Local address of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.local_port">
-<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_port" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.local_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_port</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_port" title="Link to this definition">¶</a></dt>
 <dd><p>Local port of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.name">
-<code class="descname">name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.name" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.name" title="Link to this definition">¶</a></dt>
 <dd><p>Name of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.protocol">
-<code class="descname">protocol</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.protocol" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.protocol">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protocol</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.protocol" title="Link to this definition">¶</a></dt>
 <dd><p>Protocol to which apply the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">long</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.remote_address">
-<code class="descname">remote_address</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_address" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.remote_address">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_address</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_address" title="Link to this definition">¶</a></dt>
 <dd><p>Remote address of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.remote_port">
-<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_port" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.remote_port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_port</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_port" title="Link to this definition">¶</a></dt>
 <dd><p>Remote port of the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.service_name">
-<code class="descname">service_name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.service_name" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.service_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">service_name</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.service_name" title="Link to this definition">¶</a></dt>
 <dd><p>Name of the service to which apply the rule</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.network.FirewallRule.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.value" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.winobject.network.FirewallRule.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#windows.winobject.network.FirewallRule.value" title="Link to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">2.7. Network</a><ul>
-<li><a class="reference internal" href="#connections">2.7.1. Connections</a></li>
-<li><a class="reference internal" href="#firewall">2.7.2. Firewall</a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.Network.firewall"><code class="docutils literal notranslate"><span class="pre">firewall</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Network.ipv4"><code class="docutils literal notranslate"><span class="pre">ipv4</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Network.ipv6"><code class="docutils literal notranslate"><span class="pre">ipv6</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connections">2.7.1. Connections</a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection"><code class="docutils literal notranslate"><span class="pre">TCP4Connection</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.established"><code class="docutils literal notranslate"><span class="pre">established</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.local_addr"><code class="docutils literal notranslate"><span class="pre">local_addr</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.local_port"><code class="docutils literal notranslate"><span class="pre">local_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.remote_addr"><code class="docutils literal notranslate"><span class="pre">remote_addr</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.remote_host"><code class="docutils literal notranslate"><span class="pre">remote_host</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.remote_port"><code class="docutils literal notranslate"><span class="pre">remote_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP4Connection.remote_proto"><code class="docutils literal notranslate"><span class="pre">remote_proto</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection"><code class="docutils literal notranslate"><span class="pre">TCP6Connection</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.established"><code class="docutils literal notranslate"><span class="pre">established</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.local_addr"><code class="docutils literal notranslate"><span class="pre">local_addr</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.local_port"><code class="docutils literal notranslate"><span class="pre">local_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.remote_addr"><code class="docutils literal notranslate"><span class="pre">remote_addr</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.remote_host"><code class="docutils literal notranslate"><span class="pre">remote_host</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.remote_port"><code class="docutils literal notranslate"><span class="pre">remote_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.TCP6Connection.remote_proto"><code class="docutils literal notranslate"><span class="pre">remote_proto</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#firewall">2.7.2. Firewall</a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall"><code class="docutils literal notranslate"><span class="pre">Firewall</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall.current_profile_types"><code class="docutils literal notranslate"><span class="pre">current_profile_types</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall.enabled"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall.rules"><code class="docutils literal notranslate"><span class="pre">rules</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.Firewall.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule"><code class="docutils literal notranslate"><span class="pre">FirewallRule</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.action"><code class="docutils literal notranslate"><span class="pre">action</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.application_name"><code class="docutils literal notranslate"><span class="pre">application_name</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.description"><code class="docutils literal notranslate"><span class="pre">description</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.direction"><code class="docutils literal notranslate"><span class="pre">direction</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.enabled"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.grouping"><code class="docutils literal notranslate"><span class="pre">grouping</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.interface_types"><code class="docutils literal notranslate"><span class="pre">interface_types</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.local_address"><code class="docutils literal notranslate"><span class="pre">local_address</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.local_port"><code class="docutils literal notranslate"><span class="pre">local_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.protocol"><code class="docutils literal notranslate"><span class="pre">protocol</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.remote_address"><code class="docutils literal notranslate"><span class="pre">remote_address</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.remote_port"><code class="docutils literal notranslate"><span class="pre">remote_port</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.service_name"><code class="docutils literal notranslate"><span class="pre">service_name</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.network.FirewallRule.value"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="registry.html"
-                        title="previous chapter">2.6. Registry</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="service.html"
-                        title="next chapter">2.8. Service</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="registry.html"
+                          title="previous chapter"><span class="section-number">2.6. </span>Registry</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="service.html"
+                          title="next chapter"><span class="section-number">2.8. </span>Service</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -574,18 +568,16 @@ Equals <code class="docutils literal notranslate"><span class="pre">remote_port<
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -605,13 +597,14 @@ Equals <code class="docutils literal notranslate"><span class="pre">remote_port<
         <li class="right" >
           <a href="registry.html" title="2.6. Registry"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" ><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.7. </span>Network</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

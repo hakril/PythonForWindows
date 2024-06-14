@@ -47,6 +47,9 @@ class ParsedFile(object):
         self.compute_imports_exports(self.data)
 
     def add_exports(self, *names):
+        new_names = set(names)
+        if self.exports & new_names:
+            raise ValueError("Error: file <{0}> have multiple definition for <{1}>".format(self.filename, self.exports & new_names))
         self.exports.update(names)
 
     def add_imports(self, *names):
@@ -69,23 +72,24 @@ class StructureParsedFile(ParsedFile):
         structs, enums = data
         for enum in enums:
             self.add_exports(enum.name)
-            self.add_exports(*enum.typedef)
+            self.add_exports(*[n for n in enum.typedef if n != enum.name])
         for struct in structs:
             self.compute_imports_exports_for_struct(struct)
 
 
-    def compute_imports_exports_for_struct(self, struct):
+    def compute_imports_exports_for_struct(self, struct, is_sub_struct=False):
         self.asser_struct_not_already_in_import(struct)
         if any(x in self.imports for x in [struct.name] + list(struct.typedef)):
             print("Export <{0}> defined after first use".format(struct.name))
             raise ValueError("LOL")
-        if struct.name is not None: # Anonymous structs
+        if struct.name is not None and not is_sub_struct: # Anonymous structs
             self.add_exports(struct.name)
-        self.add_exports(*struct.typedef)
+        if not is_sub_struct: # Sub struct will not be directly exposed : so not an export
+            self.add_exports(*[n for n in struct.typedef if n != struct.name])
         for field_type, field_name, nb_rep in struct.fields:
             if field_name is None:
                 # Anon sub-struct/union
-                self.compute_imports_exports_for_struct(field_type)
+                self.compute_imports_exports_for_struct(field_type, is_sub_struct=True)
                 continue
             if field_type.name not in self.exports:
                 self.add_imports(field_type.name)
@@ -117,6 +121,8 @@ class DefinitionParsedFile(ParsedFile):
 
     def compute_imports_exports(self, data):
         for windef in data:
+            if windef.name in self.exports:
+                raise ValueError("File <{filename}> define <{windef}> multiple times".format(filename=self.filename, windef=windef.name))
             self.add_exports(windef.name) # No dependancy check on rvalue for now
             if "|" in windef.code: # Multi flags ? Allow cross-file dependancies
                 # Quick parsing: add all names in the imports
@@ -567,12 +573,18 @@ class StructureDocGenerator(NoTemplatedGenerator):
             self.emitline(struct.name)
             self.emitline(self.STRUCT_NAME_SEPARATOR * len(struct.name))
             # Emit typedef
-            for name, type in  sorted(struct.typedef.items()):
+            for name, type in sorted(struct.typedef.items()):
+                # May have no real type def -> ignore
+                if name == type.name:
+                    continue
                 self.emitline(".. class:: {0}".format(name))
                 self.emitline("")
                 if hasattr(type, "type"):
                     self.emitline("    Pointer to :class:`{0}`".format(type.type.name))
                 else:
+                    if "SYMSRV_INDEX_INFOW" in type.name:
+                        import pdb;pdb.set_trace()
+
                     self.emitline("    Alias for :class:`{0}`".format(type.name))
                 self.emitline("")
             # Emit struct Definition
@@ -606,6 +618,9 @@ class StructureDocGenerator(NoTemplatedGenerator):
             self.emitline(self.STRUCT_NAME_SEPARATOR * len(enum.name))
              # Emit typedef
             for name, type in  sorted(enum.typedef.items()):
+                # May have no real type def -> ignore
+                if name == type.name:
+                    continue
                 self.emitline(".. class:: {0}".format(name))
                 self.emitline("")
                 if hasattr(type, "type"):
@@ -619,6 +634,53 @@ class StructureDocGenerator(NoTemplatedGenerator):
                 self.emitline("")
                 self.emitline("    .. attribute:: {0}({1})".format(enum_name, enum_value))
                 self.emitline("")
+
+class WinFuncDocGenerator(NoTemplatedGenerator):
+    def copy_template(self):
+        self.emitline(".. module:: windows.generated_def.winfuncs")
+        self.emitline("")
+        self.emitline("Functions")
+        self.emitline("----------")
+
+
+    def generate(self):
+        self.copy_template()
+        for file in self.files:
+            for function in file.data:
+                self.generate_function_doc(function)
+
+    def generate_function_doc(self, function):
+        param_list = ", ".join(name for t, name in function.params)
+        self.emitline(".. function:: {0}({1})".format(function.name, param_list))
+        self.emitline("")
+
+
+
+class ComDocGenerator(NoTemplatedGenerator):
+    def copy_template(self):
+        self.emitline(".. module:: windows.generated_def.interfaces")
+        self.emitline("")
+        self.emitline("Interfaces")
+        self.emitline("----------")
+
+
+    def generate(self):
+        self.copy_template()
+        for file in self.files:
+            interface = file.data
+            self.generate_interface_doc(interface)
+
+    def generate_interface_doc(self, interface):
+        self.emitline(".. class:: {0}".format(interface.name))
+        self.emitline("")
+        for method in interface.methods:
+            self.emitline("    .. method:: {0}".format(method.name))
+        self.emitline("")
+        self.emitline("")
+
+
+
+
 
 META_WALKER = """
 def generate_walker(namelist, target_module):
@@ -812,23 +874,25 @@ structure_module_generator.generate_doc(from_here(r"..\docs\source\winstructs_ge
 
 print("== Generating COM interfaces ==")
 # Generate COM interfaces
-com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, None, from_here(r"definitions\com"))
+com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, ComDocGenerator, from_here(r"definitions\com"))
 # Load the interface_to_iid file needed by the 'COMCtypesGenerator'
 com_module_generator.after_ctypes_generator_init = lambda cgen: cgen.parse_iid_file(from_here("definitions\\interface_to_iid.txt"))
 com_module_generator.parse_source_directory(recurse=True)
 com_module_generator.add_module_dependancy(structure_module_generator)
 com_module_generator.resolve_dependancies = com_module_generator.check_dependancies_without_flattening # No real flattening as we have circular dep in Interfaces VTBL
 com_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+com_module_generator.generate_doc(from_here(r"..\docs\source\interfaces_generated.rst"))
 
 print("== Generating functions ==")
 # Generate function
-functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, None, from_here(r"definitions\functions"))
+functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, WinFuncDocGenerator, from_here(r"definitions\functions"))
 # no template file
 functions_module_generator.get_template_filename = lambda : None
 functions_module_generator.parse_source_directory()
 functions_module_generator.add_module_dependancy(structure_module_generator)
 functions_module_generator.add_module_dependancy(com_module_generator)
 functions_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+functions_module_generator.generate_doc(from_here(r"..\docs\source\winfuncs_generated.rst"))
 
 
 print("== Generating META file ==")

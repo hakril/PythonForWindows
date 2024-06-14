@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.4. Token &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2.4. Token &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,8 +34,9 @@
         <li class="right" >
           <a href="process.html" title="2.1. Processes and Threads"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U"><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.4. </span>Token</a></li> 
       </ul>
     </div>  
 
@@ -47,278 +45,275 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.winobject.token">
-<span id="token"></span><h1>2.4. Token<a class="headerlink" href="#module-windows.winobject.token" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.winobject.token">
+<span id="token"></span><h1><span class="section-number">2.4. </span>Token<a class="headerlink" href="#module-windows.winobject.token" title="Link to this heading">¶</a></h1>
 <p>This module expose the <a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> object that can be primarily  retrieved through:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="process.html#windows.winobject.process.WinProcess.token" title="windows.winobject.process.WinProcess.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.winobject.process.WinProcess.token</span></code></a></li>
-<li><a class="reference internal" href="process.html#windows.winobject.process.WinThread.token" title="windows.winobject.process.WinThread.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.winobject.process.WinThread.token</span></code></a></li>
-<li><a class="reference internal" href="process.html#windows.winobject.process.CurrentProcess.token" title="windows.winobject.process.CurrentProcess.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.current_process.token</span></code></a></li>
-<li><a class="reference internal" href="process.html#windows.winobject.process.CurrentThread.token" title="windows.winobject.process.CurrentThread.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.current_thread.token</span></code></a></li>
-<li><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.security.Token</span></code></li>
+<li><p><a class="reference internal" href="process.html#windows.winobject.process.WinProcess.token" title="windows.winobject.process.WinProcess.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.winobject.process.WinProcess.token</span></code></a></p></li>
+<li><p><a class="reference internal" href="process.html#windows.winobject.process.WinThread.token" title="windows.winobject.process.WinThread.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.winobject.process.WinThread.token</span></code></a></p></li>
+<li><p><a class="reference internal" href="process.html#windows.winobject.process.CurrentProcess.token" title="windows.winobject.process.CurrentProcess.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.current_process.token</span></code></a></p></li>
+<li><p><a class="reference internal" href="process.html#windows.winobject.process.CurrentThread.token" title="windows.winobject.process.CurrentThread.token"><code class="xref py py-data docutils literal notranslate"><span class="pre">windows.current_thread.token</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.security.Token</span></code></p></li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>If you need to directly access the <a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> class, please use <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.security.Token</span></code> as the
 path of <code class="docutils literal notranslate"><span class="pre">token.py</span></code> may change.</p>
-<p class="last">Indeed <code class="docutils literal notranslate"><span class="pre">SecurityDescriptor</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Token</span></code> are deeply related and I may move <code class="docutils literal notranslate"><span class="pre">token.py</span></code> to a
+<p>Indeed <code class="docutils literal notranslate"><span class="pre">SecurityDescriptor</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Token</span></code> are deeply related and I may move <code class="docutils literal notranslate"><span class="pre">token.py</span></code> to a
 <code class="docutils literal notranslate"><span class="pre">security/</span></code> directory in the futur.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#token-sample"><span class="std std-ref">Token</span></a></p>
+<p class="admonition-title">Note</p>
+<p>See sample <a class="reference internal" href="sample.html#token-sample"><span class="std std-ref">Token</span></a></p>
 </div>
-<div class="section" id="id1">
-<h2>2.4.1. Token<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.token.Token">
-<em class="property">class </em><code class="descclassname">windows.winobject.token.</code><code class="descname">Token</code><span class="sig-paren">(</span><em>handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token" title="Permalink to this definition">¶</a></dt>
+<section id="id1">
+<h2><span class="section-number">2.4.1. </span>Token<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.token.Token">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.token.</span></span><span class="sig-name descname"><span class="pre">Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token" title="Link to this definition">¶</a></dt>
 <dd><p>Represent a Windows Token.
 The attributes only documented by a type are from the <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_INFORMATION_CLASS" title="windows.generated_def.winstructs.TOKEN_INFORMATION_CLASS"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_INFORMATION_CLASS</span></code></a>, such return values may be improved version of the structure.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ne-winnt-_token_information_class">[MSDN] TOKEN_INFORMATION_CLASS</a></p>
+<p class="admonition-title">Note</p>
+<p>see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ne-winnt-_token_information_class">[MSDN] TOKEN_INFORMATION_CLASS</a></p>
 </div>
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenAccessInformation">
-<code class="descname">TokenAccessInformation</code><a class="headerlink" href="#windows.winobject.token.Token.TokenAccessInformation" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenAccessInformation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenAccessInformation</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenAccessInformation" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ACCESS_INFORMATION" title="windows.generated_def.winstructs.TOKEN_ACCESS_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ACCESS_INFORMATION</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenAppContainerNumber">
-<code class="descname">TokenAppContainerNumber</code><a class="headerlink" href="#windows.winobject.token.Token.TokenAppContainerNumber" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenAppContainerNumber">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenAppContainerNumber</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenAppContainerNumber" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenAppContainerSid">
-<code class="descname">TokenAppContainerSid</code><a class="headerlink" href="#windows.winobject.token.Token.TokenAppContainerSid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenAppContainerSid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenAppContainerSid</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenAppContainerSid" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_APPCONTAINER_INFORMATION" title="windows.generated_def.winstructs.TOKEN_APPCONTAINER_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_APPCONTAINER_INFORMATION</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenCapabilities">
-<code class="descname">TokenCapabilities</code><a class="headerlink" href="#windows.winobject.token.Token.TokenCapabilities" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenCapabilities">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenCapabilities</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenCapabilities" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenGroups" title="windows.winobject.token.TokenGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenGroups</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenDefaultDacl">
-<code class="descname">TokenDefaultDacl</code><a class="headerlink" href="#windows.winobject.token.Token.TokenDefaultDacl" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenDefaultDacl">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenDefaultDacl</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenDefaultDacl" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_DEFAULT_DACL" title="windows.generated_def.winstructs.TOKEN_DEFAULT_DACL"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_DEFAULT_DACL</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenDeviceClaimAttributes">
-<code class="descname">TokenDeviceClaimAttributes</code><a class="headerlink" href="#windows.winobject.token.Token.TokenDeviceClaimAttributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenDeviceClaimAttributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenDeviceClaimAttributes</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenDeviceClaimAttributes" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION" title="windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">CLAIM_SECURITY_ATTRIBUTES_INFORMATION</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenDeviceGroups">
-<code class="descname">TokenDeviceGroups</code><a class="headerlink" href="#windows.winobject.token.Token.TokenDeviceGroups" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenDeviceGroups">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenDeviceGroups</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenDeviceGroups" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenGroups" title="windows.winobject.token.TokenGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenGroups</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenElevation">
-<code class="descname">TokenElevation</code><a class="headerlink" href="#windows.winobject.token.Token.TokenElevation" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenElevation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenElevation</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenElevation" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ELEVATION" title="windows.generated_def.winstructs.TOKEN_ELEVATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ELEVATION</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenElevationType">
-<code class="descname">TokenElevationType</code><a class="headerlink" href="#windows.winobject.token.Token.TokenElevationType" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenElevationType">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenElevationType</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenElevationType" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE" title="windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ELEVATION_TYPE</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenGroups">
-<code class="descname">TokenGroups</code><a class="headerlink" href="#windows.winobject.token.Token.TokenGroups" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenGroups">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenGroups</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenGroups" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenGroups" title="windows.winobject.token.TokenGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenGroups</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenGroupsAndPrivileges">
-<code class="descname">TokenGroupsAndPrivileges</code><a class="headerlink" href="#windows.winobject.token.Token.TokenGroupsAndPrivileges" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenGroupsAndPrivileges">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenGroupsAndPrivileges</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenGroupsAndPrivileges" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_GROUPS_AND_PRIVILEGES" title="windows.generated_def.winstructs.TOKEN_GROUPS_AND_PRIVILEGES"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_GROUPS_AND_PRIVILEGES</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenHasRestrictions">
-<code class="descname">TokenHasRestrictions</code><a class="headerlink" href="#windows.winobject.token.Token.TokenHasRestrictions" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenHasRestrictions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenHasRestrictions</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenHasRestrictions" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenImpersonationLevel">
-<code class="descname">TokenImpersonationLevel</code><a class="headerlink" href="#windows.winobject.token.Token.TokenImpersonationLevel" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenImpersonationLevel">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenImpersonationLevel</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenImpersonationLevel" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL" title="windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SECURITY_IMPERSONATION_LEVEL</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenIntegrityLevel">
-<code class="descname">TokenIntegrityLevel</code><a class="headerlink" href="#windows.winobject.token.Token.TokenIntegrityLevel" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenIntegrityLevel">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenIntegrityLevel</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenIntegrityLevel" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_MANDATORY_LABEL" title="windows.generated_def.winstructs.TOKEN_MANDATORY_LABEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_MANDATORY_LABEL</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenIsAppContainer">
-<code class="descname">TokenIsAppContainer</code><a class="headerlink" href="#windows.winobject.token.Token.TokenIsAppContainer" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenIsAppContainer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenIsAppContainer</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenIsAppContainer" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenLinkedToken">
-<code class="descname">TokenLinkedToken</code><a class="headerlink" href="#windows.winobject.token.Token.TokenLinkedToken" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenLinkedToken">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenLinkedToken</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenLinkedToken" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_LINKED_TOKEN" title="windows.generated_def.winstructs.TOKEN_LINKED_TOKEN"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_LINKED_TOKEN</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenLogonSid">
-<code class="descname">TokenLogonSid</code><a class="headerlink" href="#windows.winobject.token.Token.TokenLogonSid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenLogonSid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenLogonSid</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenLogonSid" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenGroups" title="windows.winobject.token.TokenGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenGroups</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenMandatoryPolicy">
-<code class="descname">TokenMandatoryPolicy</code><a class="headerlink" href="#windows.winobject.token.Token.TokenMandatoryPolicy" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenMandatoryPolicy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenMandatoryPolicy</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenMandatoryPolicy" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_MANDATORY_POLICY" title="windows.generated_def.winstructs.TOKEN_MANDATORY_POLICY"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_MANDATORY_POLICY</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenOrigin">
-<code class="descname">TokenOrigin</code><a class="headerlink" href="#windows.winobject.token.Token.TokenOrigin" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenOrigin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenOrigin</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenOrigin" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ORIGIN" title="windows.generated_def.winstructs.TOKEN_ORIGIN"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ORIGIN</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenOwner">
-<code class="descname">TokenOwner</code><a class="headerlink" href="#windows.winobject.token.Token.TokenOwner" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenOwner">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenOwner</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenOwner" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_OWNER" title="windows.generated_def.winstructs.TOKEN_OWNER"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_OWNER</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenPrimaryGroup">
-<code class="descname">TokenPrimaryGroup</code><a class="headerlink" href="#windows.winobject.token.Token.TokenPrimaryGroup" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenPrimaryGroup">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenPrimaryGroup</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenPrimaryGroup" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_PRIMARY_GROUP" title="windows.generated_def.winstructs.TOKEN_PRIMARY_GROUP"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_PRIMARY_GROUP</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenPrivileges">
-<code class="descname">TokenPrivileges</code><a class="headerlink" href="#windows.winobject.token.Token.TokenPrivileges" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenPrivileges">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenPrivileges</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenPrivileges" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenPrivileges" title="windows.winobject.token.TokenPrivileges"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenProcessTrustLevel">
-<code class="descname">TokenProcessTrustLevel</code><a class="headerlink" href="#windows.winobject.token.Token.TokenProcessTrustLevel" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenProcessTrustLevel">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenProcessTrustLevel</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenProcessTrustLevel" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenRestrictedDeviceGroups">
-<code class="descname">TokenRestrictedDeviceGroups</code><a class="headerlink" href="#windows.winobject.token.Token.TokenRestrictedDeviceGroups" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenRestrictedDeviceGroups">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenRestrictedDeviceGroups</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenRestrictedDeviceGroups" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_GROUPS" title="windows.generated_def.winstructs.TOKEN_GROUPS"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_GROUPS</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenRestrictedSids">
-<code class="descname">TokenRestrictedSids</code><a class="headerlink" href="#windows.winobject.token.Token.TokenRestrictedSids" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenRestrictedSids">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenRestrictedSids</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenRestrictedSids" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenGroups</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenSandBoxInert">
-<code class="descname">TokenSandBoxInert</code><a class="headerlink" href="#windows.winobject.token.Token.TokenSandBoxInert" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenSandBoxInert">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenSandBoxInert</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenSandBoxInert" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenSecurityAttributes">
-<code class="descname">TokenSecurityAttributes</code><a class="headerlink" href="#windows.winobject.token.Token.TokenSecurityAttributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenSecurityAttributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenSecurityAttributes</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenSecurityAttributes" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributesInformation" title="windows.winobject.token.TokenSecurityAttributesInformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributesInformation</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenSessionId">
-<code class="descname">TokenSessionId</code><a class="headerlink" href="#windows.winobject.token.Token.TokenSessionId" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenSessionId">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenSessionId</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenSessionId" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenSource">
-<code class="descname">TokenSource</code><a class="headerlink" href="#windows.winobject.token.Token.TokenSource" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenSource">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenSource</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenSource" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_SOURCE" title="windows.generated_def.winstructs.TOKEN_SOURCE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_SOURCE</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenStatistics">
-<code class="descname">TokenStatistics</code><a class="headerlink" href="#windows.winobject.token.Token.TokenStatistics" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenStatistics">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenStatistics</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenStatistics" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_STATISTICS" title="windows.generated_def.winstructs.TOKEN_STATISTICS"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_STATISTICS</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenType">
-<code class="descname">TokenType</code><a class="headerlink" href="#windows.winobject.token.Token.TokenType" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenType">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenType</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenType" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_TYPE" title="windows.generated_def.winstructs.TOKEN_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_TYPE</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenUIAccess">
-<code class="descname">TokenUIAccess</code><a class="headerlink" href="#windows.winobject.token.Token.TokenUIAccess" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenUIAccess">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenUIAccess</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenUIAccess" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenUser">
-<code class="descname">TokenUser</code><a class="headerlink" href="#windows.winobject.token.Token.TokenUser" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenUser">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenUser</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenUser" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_USER" title="windows.generated_def.winstructs.TOKEN_USER"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_USER</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenUserClaimAttributes">
-<code class="descname">TokenUserClaimAttributes</code><a class="headerlink" href="#windows.winobject.token.Token.TokenUserClaimAttributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenUserClaimAttributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenUserClaimAttributes</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenUserClaimAttributes" title="Link to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION" title="windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">CLAIM_SECURITY_ATTRIBUTES_INFORMATION</span></code></a></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenVirtualizationAllowed">
-<code class="descname">TokenVirtualizationAllowed</code><a class="headerlink" href="#windows.winobject.token.Token.TokenVirtualizationAllowed" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenVirtualizationAllowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenVirtualizationAllowed</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenVirtualizationAllowed" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.TokenVirtualizationEnabled">
-<code class="descname">TokenVirtualizationEnabled</code><a class="headerlink" href="#windows.winobject.token.Token.TokenVirtualizationEnabled" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.TokenVirtualizationEnabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenVirtualizationEnabled</span></span><a class="headerlink" href="#windows.winobject.token.Token.TokenVirtualizationEnabled" title="Link to this definition">¶</a></dt>
 <dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DWORD</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.access_information">
-<code class="descname">access_information</code><a class="headerlink" href="#windows.winobject.token.Token.access_information" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.access_information">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">access_information</span></span><a class="headerlink" href="#windows.winobject.token.Token.access_information" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenAccessInformation (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.adjust_privileges">
-<code class="descname">adjust_privileges</code><span class="sig-paren">(</span><em>privileges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.adjust_privileges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token.adjust_privileges" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.adjust_privileges">
+<span class="sig-name descname"><span class="pre">adjust_privileges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">privileges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.adjust_privileges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token.adjust_privileges" title="Link to this definition">¶</a></dt>
 <dd><p>Adjust the token privileges according to <code class="docutils literal notranslate"><span class="pre">privileges</span></code>.
 This API is the <cite>complex one</cite> to adjust multiple privileges at once.</p>
 <p>To simply enable one privilege see <a class="reference internal" href="#windows.winobject.token.Token.enable_privilege" title="windows.winobject.token.Token.enable_privilege"><code class="xref py py-func docutils literal notranslate"><span class="pre">enable_privilege()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>privileges</strong> – <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_PRIVILEGES" title="windows.generated_def.winstructs.TOKEN_PRIVILEGES"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_PRIVILEGES</span></code></a> (or subclass as <a class="reference internal" href="#windows.winobject.token.TokenPrivileges" title="windows.winobject.token.TokenPrivileges"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a>). To easily update your token privileges use the result of <a class="reference internal" href="#windows.winobject.token.Token.privileges" title="windows.winobject.token.Token.privileges"><code class="xref py py-data docutils literal notranslate"><span class="pre">privileges</span></code></a>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>privileges</strong> – <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_PRIVILEGES" title="windows.generated_def.winstructs.TOKEN_PRIVILEGES"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_PRIVILEGES</span></code></a> (or subclass as <a class="reference internal" href="#windows.winobject.token.TokenPrivileges" title="windows.winobject.token.TokenPrivileges"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a>). To easily update your token privileges use the result of <a class="reference internal" href="#windows.winobject.token.Token.privileges" title="windows.winobject.token.Token.privileges"><code class="xref py py-data docutils literal notranslate"><span class="pre">privileges</span></code></a>.</p>
+</dd>
+</dl>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tok</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">token</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tok</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">token</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">privs</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">privileges</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">privs</span><span class="p">[</span><span class="s2">&quot;SeShutdownPrivilege&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_PRIVILEGE_ENABLED</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">privs</span><span class="p">[</span><span class="s2">&quot;SeUndockPrivilege&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_PRIVILEGE_ENABLED</span>
@@ -327,102 +322,86 @@ This API is the <cite>complex one</cite> to adjust multiple privileges at once.<
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.appcontainer_number">
-<code class="descname">appcontainer_number</code><a class="headerlink" href="#windows.winobject.token.Token.appcontainer_number" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.appcontainer_number">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appcontainer_number</span></span><a class="headerlink" href="#windows.winobject.token.Token.appcontainer_number" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenAppContainerNumber (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.appcontainer_sid">
-<code class="descname">appcontainer_sid</code><a class="headerlink" href="#windows.winobject.token.Token.appcontainer_sid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.appcontainer_sid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appcontainer_sid</span></span><a class="headerlink" href="#windows.winobject.token.Token.appcontainer_sid" title="Link to this definition">¶</a></dt>
 <dd><p>The sid of the TokenAppContainerSid if present else <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.authentication_id">
-<code class="descname">authentication_id</code><a class="headerlink" href="#windows.winobject.token.Token.authentication_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.authentication_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">authentication_id</span></span><a class="headerlink" href="#windows.winobject.token.Token.authentication_id" title="Link to this definition">¶</a></dt>
 <dd><p>The AuthenticationId Specifies an unique identifier assigned to the session this token represents.
 There can be many tokens representing a single logon session.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.capabilities">
-<code class="descname">capabilities</code><a class="headerlink" href="#windows.winobject.token.Token.capabilities" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.capabilities">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">capabilities</span></span><a class="headerlink" href="#windows.winobject.token.Token.capabilities" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenCapabilities (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.computername">
-<code class="descname">computername</code><a class="headerlink" href="#windows.winobject.token.Token.computername" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.computername">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computername</span></span><a class="headerlink" href="#windows.winobject.token.Token.computername" title="Link to this definition">¶</a></dt>
 <dd><p>The computername of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.default_dacl">
-<code class="descname">default_dacl</code><a class="headerlink" href="#windows.winobject.token.Token.default_dacl" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.default_dacl">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_dacl</span></span><a class="headerlink" href="#windows.winobject.token.Token.default_dacl" title="Link to this definition">¶</a></dt>
 <dd><p>The defaul DACL of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="security.html#windows.security.Acl" title="windows.security.Acl"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.security.Acl</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="security.html#windows.security.Acl" title="windows.security.Acl"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.security.Acl</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.duplicate">
-<code class="descname">duplicate</code><span class="sig-paren">(</span><em>access_rigth=MAXIMUM_ALLOWED(0x2000000)</em>, <em>attributes=None</em>, <em>type=None</em>, <em>impersonation_level=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token.duplicate" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.duplicate">
+<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_rigth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MAXIMUM_ALLOWED(0x2000000)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impersonation_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.duplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token.duplicate" title="Link to this definition">¶</a></dt>
 <dd><p>Duplicate the token into a new <a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>type</strong> – The type of token: <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> or <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code></li>
-<li><strong>impersonation_level</strong> – <p>The <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL" title="windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SECURITY_IMPERSONATION_LEVEL</span></code></a> for a <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code>:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The type of token: <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> or <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code></p></li>
+<li><p><strong>impersonation_level</strong> – <p>The <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL" title="windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SECURITY_IMPERSONATION_LEVEL</span></code></a> for a <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code>:</p>
 <ul>
-<li>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> this parameter is ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> or used as-is.</li>
-<li>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code> and this parameter is None, <code class="docutils literal notranslate"><span class="pre">self.impersonation_level</span></code> is used.</li>
-<li>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code> and our Token is a <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> this parameter MUST be provided</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> this parameter is ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> or used as-is.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code> and this parameter is None, <code class="docutils literal notranslate"><span class="pre">self.impersonation_level</span></code> is used.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">TokenImpersonation(0x2L)</span></code> and our Token is a <code class="docutils literal notranslate"><span class="pre">TokenPrimary(0x1L)</span></code> this parameter MUST be provided</p></li>
 </ul>
-</li>
+</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> - The duplicate token</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> - The duplicate token</p>
+</dd>
+</dl>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tok</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tok</span>
 <span class="go">&lt;Token TokenId=0x39d6dde5 Type=TokenPrimary(0x1L)&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tok</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
 <span class="go">&lt;Token TokenId=0x39d7b206 Type=TokenPrimary(0x1L)&gt;</span>
@@ -435,591 +414,629 @@ There can be many tokens representing a single logon session.</p>
 </div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.elevated">
-<code class="descname">elevated</code><a class="headerlink" href="#windows.winobject.token.Token.elevated" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.elevated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">elevated</span></span><a class="headerlink" href="#windows.winobject.token.Token.elevated" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if token is an elevated token</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.elevation_type">
-<code class="descname">elevation_type</code><a class="headerlink" href="#windows.winobject.token.Token.elevation_type" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.elevation_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">elevation_type</span></span><a class="headerlink" href="#windows.winobject.token.Token.elevation_type" title="Link to this definition">¶</a></dt>
 <dd><p>The elevation type of the token.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – Enum value from <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE" title="windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ELEVATION_TYPE</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> – Enum value from <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE" title="windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TOKEN_ELEVATION_TYPE</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.enable_privilege">
-<code class="descname">enable_privilege</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.enable_privilege"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token.enable_privilege" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.enable_privilege">
+<span class="sig-name descname"><span class="pre">enable_privilege</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.enable_privilege"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token.enable_privilege" title="Link to this definition">¶</a></dt>
 <dd><p>Enable privilege <code class="docutils literal notranslate"><span class="pre">name</span></code> in the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code> if <a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> has no privilege <code class="docutils literal notranslate"><span class="pre">name</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code> if <a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> has no privilege <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.get_integrity">
-<code class="descname">get_integrity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.get_integrity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token.get_integrity" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.get_integrity">
+<span class="sig-name descname"><span class="pre">get_integrity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.get_integrity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token.get_integrity" title="Link to this definition">¶</a></dt>
 <dd><p>Return the integrity level of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.groups">
-<code class="descname">groups</code><a class="headerlink" href="#windows.winobject.token.Token.groups" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.groups">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groups</span></span><a class="headerlink" href="#windows.winobject.token.Token.groups" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenGroups (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.groups_and_privileges">
-<code class="descname">groups_and_privileges</code><a class="headerlink" href="#windows.winobject.token.Token.groups_and_privileges" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.groups_and_privileges">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groups_and_privileges</span></span><a class="headerlink" href="#windows.winobject.token.Token.groups_and_privileges" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenGroupsAndPrivileges (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.handle">
-<code class="descname">handle</code><a class="headerlink" href="#windows.winobject.token.Token.handle" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.handle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle</span></span><a class="headerlink" href="#windows.winobject.token.Token.handle" title="Link to this definition">¶</a></dt>
 <dd><p>An handle on the object</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first">HANDLE</p>
-<div class="last admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The handle is automaticaly closed when the object is destroyed</p>
+<dl class="field-list">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HANDLE</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The handle is automaticaly closed when the object is destroyed</p>
 </div>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.has_restriction">
-<code class="descname">has_restriction</code><a class="headerlink" href="#windows.winobject.token.Token.has_restriction" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.has_restriction">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_restriction</span></span><a class="headerlink" href="#windows.winobject.token.Token.has_restriction" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenHasRestrictions (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.id">
-<code class="descname">id</code><a class="headerlink" href="#windows.winobject.token.Token.id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#windows.winobject.token.Token.id" title="Link to this definition">¶</a></dt>
 <dd><p>The TokenId Specifies an unique identifier that identifies this instance of the token object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.impersonation_level">
-<code class="descname">impersonation_level</code><a class="headerlink" href="#windows.winobject.token.Token.impersonation_level" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.impersonation_level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">impersonation_level</span></span><a class="headerlink" href="#windows.winobject.token.Token.impersonation_level" title="Link to this definition">¶</a></dt>
 <dd><p>The impersonation level of a <code class="docutils literal notranslate"><span class="pre">TokenImpersonation</span></code> token.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">WindowsError</span></code> if token is not a <code class="docutils literal notranslate"><span class="pre">TokenImpersonation</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – Enum value from <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL" title="windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SECURITY_IMPERSONATION_LEVEL</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WindowsError</span></code> if token is not a <code class="docutils literal notranslate"><span class="pre">TokenImpersonation</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> – Enum value from <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL" title="windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SECURITY_IMPERSONATION_LEVEL</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.integrity">
-<code class="descname">integrity</code><a class="headerlink" href="#windows.winobject.token.Token.integrity" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.integrity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">integrity</span></span><a class="headerlink" href="#windows.winobject.token.Token.integrity" title="Link to this definition">¶</a></dt>
 <dd><p>The integrity of the token as an int (extracted from integrity PSID)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.token.Token.get_integrity" title="windows.winobject.token.Token.get_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_integrity()</span></code></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.token.Token.set_integrity" title="windows.winobject.token.Token.set_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_integrity()</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Getter<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.token.Token.get_integrity" title="windows.winobject.token.Token.get_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_integrity()</span></code></a></p>
+</dd>
+<dt class="field-even">Setter<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#windows.winobject.token.Token.set_integrity" title="windows.winobject.token.Token.set_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_integrity()</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.integrity_level">
-<code class="descname">integrity_level</code><a class="headerlink" href="#windows.winobject.token.Token.integrity_level" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.integrity_level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">integrity_level</span></span><a class="headerlink" href="#windows.winobject.token.Token.integrity_level" title="Link to this definition">¶</a></dt>
 <dd><p>The integrity level and attributes of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.SID_AND_ATTRIBUTES</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.SID_AND_ATTRIBUTES</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.is_appcontainer">
-<code class="descname">is_appcontainer</code><a class="headerlink" href="#windows.winobject.token.Token.is_appcontainer" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.is_appcontainer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_appcontainer</span></span><a class="headerlink" href="#windows.winobject.token.Token.is_appcontainer" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenIsAppContainer (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.is_elevated">
-<code class="descname">is_elevated</code><a class="headerlink" href="#windows.winobject.token.Token.is_elevated" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.is_elevated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_elevated</span></span><a class="headerlink" href="#windows.winobject.token.Token.is_elevated" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">elevated</span></code> deprecated and may disapear</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.linked_token">
-<code class="descname">linked_token</code><a class="headerlink" href="#windows.winobject.token.Token.linked_token" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.linked_token">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">linked_token</span></span><a class="headerlink" href="#windows.winobject.token.Token.linked_token" title="Link to this definition">¶</a></dt>
 <dd><p>The token linked to our token if present (may raise else)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.logon_sid">
-<code class="descname">logon_sid</code><a class="headerlink" href="#windows.winobject.token.Token.logon_sid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.logon_sid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">logon_sid</span></span><a class="headerlink" href="#windows.winobject.token.Token.logon_sid" title="Link to this definition">¶</a></dt>
 <dd><p>The logon sid of the token. (Case of multiple logon sid not handled and will raise AssertionError)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.SID_AND_ATTRIBUTES</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs.SID_AND_ATTRIBUTES</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.mandatory_policy">
-<code class="descname">mandatory_policy</code><a class="headerlink" href="#windows.winobject.token.Token.mandatory_policy" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.mandatory_policy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mandatory_policy</span></span><a class="headerlink" href="#windows.winobject.token.Token.mandatory_policy" title="Link to this definition">¶</a></dt>
 <dd><p>mandatory integrity access policy for the associated token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_token_mandatory_policy">[MSDN] mandatory policy</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> – see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_token_mandatory_policy">[MSDN] mandatory policy</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.modified_id">
-<code class="descname">modified_id</code><a class="headerlink" href="#windows.winobject.token.Token.modified_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.modified_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modified_id</span></span><a class="headerlink" href="#windows.winobject.token.Token.modified_id" title="Link to this definition">¶</a></dt>
 <dd><p>The ModifiedId Specifies an unique identifier that changes each time the token is modified.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.origin">
-<code class="descname">origin</code><a class="headerlink" href="#windows.winobject.token.Token.origin" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.origin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">origin</span></span><a class="headerlink" href="#windows.winobject.token.Token.origin" title="Link to this definition">¶</a></dt>
 <dd><p>The originating logon session of the token.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.owner">
-<code class="descname">owner</code><a class="headerlink" href="#windows.winobject.token.Token.owner" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.owner">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owner</span></span><a class="headerlink" href="#windows.winobject.token.Token.owner" title="Link to this definition">¶</a></dt>
 <dd><p>The owner sid of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.primary_group">
-<code class="descname">primary_group</code><a class="headerlink" href="#windows.winobject.token.Token.primary_group" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.primary_group">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">primary_group</span></span><a class="headerlink" href="#windows.winobject.token.Token.primary_group" title="Link to this definition">¶</a></dt>
 <dd><p>The sid of the primary group of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.privileges">
-<code class="descname">privileges</code><a class="headerlink" href="#windows.winobject.token.Token.privileges" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.privileges">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">privileges</span></span><a class="headerlink" href="#windows.winobject.token.Token.privileges" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.token.TokenPrivileges" title="windows.winobject.token.TokenPrivileges"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.token.TokenPrivileges" title="windows.winobject.token.TokenPrivileges"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.restricted_sids">
-<code class="descname">restricted_sids</code><a class="headerlink" href="#windows.winobject.token.Token.restricted_sids" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.restricted_sids">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">restricted_sids</span></span><a class="headerlink" href="#windows.winobject.token.Token.restricted_sids" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenRestrictedSids (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.sandbox_inert">
-<code class="descname">sandbox_inert</code><a class="headerlink" href="#windows.winobject.token.Token.sandbox_inert" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.sandbox_inert">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sandbox_inert</span></span><a class="headerlink" href="#windows.winobject.token.Token.sandbox_inert" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenSandBoxInert (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.security_attributes">
-<code class="descname">security_attributes</code><a class="headerlink" href="#windows.winobject.token.Token.security_attributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.security_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">security_attributes</span></span><a class="headerlink" href="#windows.winobject.token.Token.security_attributes" title="Link to this definition">¶</a></dt>
 <dd><p>The security attributes of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1" title="windows.winobject.token.TokenSecurityAttributeV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a>] - A list of token security attributes</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1" title="windows.winobject.token.TokenSecurityAttributeV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a>] - A list of token security attributes</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.session_id">
-<code class="descname">session_id</code><a class="headerlink" href="#windows.winobject.token.Token.session_id" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.session_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">session_id</span></span><a class="headerlink" href="#windows.winobject.token.Token.session_id" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenSessionId (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.set_integrity">
-<code class="descname">set_integrity</code><span class="sig-paren">(</span><em>integrity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.set_integrity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.Token.set_integrity" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.set_integrity">
+<span class="sig-name descname"><span class="pre">set_integrity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">integrity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#Token.set_integrity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.Token.set_integrity" title="Link to this definition">¶</a></dt>
 <dd><p>Set the integrity level of a token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> – <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.statistics">
-<code class="descname">statistics</code><a class="headerlink" href="#windows.winobject.token.Token.statistics" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.statistics">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">statistics</span></span><a class="headerlink" href="#windows.winobject.token.Token.statistics" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenStatistics (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.trust_level">
-<code class="descname">trust_level</code><a class="headerlink" href="#windows.winobject.token.Token.trust_level" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.trust_level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trust_level</span></span><a class="headerlink" href="#windows.winobject.token.Token.trust_level" title="Link to this definition">¶</a></dt>
 <dd><p>The trust level of the process if present else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.type">
-<code class="descname">type</code><a class="headerlink" href="#windows.winobject.token.Token.type" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#windows.winobject.token.Token.type" title="Link to this definition">¶</a></dt>
 <dd><p>The type (Primary / Impersonation) of the token</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.ui_access">
-<code class="descname">ui_access</code><a class="headerlink" href="#windows.winobject.token.Token.ui_access" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.ui_access">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ui_access</span></span><a class="headerlink" href="#windows.winobject.token.Token.ui_access" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenUIAccess (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.user">
-<code class="descname">user</code><a class="headerlink" href="#windows.winobject.token.Token.user" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.user">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#windows.winobject.token.Token.user" title="Link to this definition">¶</a></dt>
 <dd><p>The user sid of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.username">
-<code class="descname">username</code><a class="headerlink" href="#windows.winobject.token.Token.username" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.username">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#windows.winobject.token.Token.username" title="Link to this definition">¶</a></dt>
 <dd><p>The username of the token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.virtualization_allowed">
-<code class="descname">virtualization_allowed</code><a class="headerlink" href="#windows.winobject.token.Token.virtualization_allowed" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.virtualization_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">virtualization_allowed</span></span><a class="headerlink" href="#windows.winobject.token.Token.virtualization_allowed" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenVirtualizationAllowed (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.Token.virtualization_enabled">
-<code class="descname">virtualization_enabled</code><a class="headerlink" href="#windows.winobject.token.Token.virtualization_enabled" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.virtualization_enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">virtualization_enabled</span></span><a class="headerlink" href="#windows.winobject.token.Token.virtualization_enabled" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for TokenVirtualizationEnabled (type may change in the future for improved struct)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.Token.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.token.Token.wait" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.Token.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">INFINITE(0xffffffff)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.token.Token.wait" title="Link to this definition">¶</a></dt>
 <dd><p>Wait for the object</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="tokengroups">
-<h2>2.4.2. TokenGroups<a class="headerlink" href="#tokengroups" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.token.TokenGroups">
-<em class="property">class </em><code class="descclassname">windows.winobject.token.</code><code class="descname">TokenGroups</code><a class="reference internal" href="_modules/windows/winobject/token.html#TokenGroups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenGroups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_GROUPS" title="windows.generated_def.winstructs._TOKEN_GROUPS"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._TOKEN_GROUPS</span></code></a></p>
-<dl class="attribute">
-<dt id="windows.winobject.token.TokenGroups.sids">
-<code class="descname">sids</code><a class="headerlink" href="#windows.winobject.token.TokenGroups.sids" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="tokengroups">
+<h2><span class="section-number">2.4.2. </span>TokenGroups<a class="headerlink" href="#tokengroups" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenGroups">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.token.</span></span><span class="sig-name descname"><span class="pre">TokenGroups</span></span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenGroups" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_GROUPS" title="windows.generated_def.winstructs._TOKEN_GROUPS"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TOKEN_GROUPS</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenGroups.sids">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sids</span></span><a class="headerlink" href="#windows.winobject.token.TokenGroups.sids" title="Link to this definition">¶</a></dt>
 <dd><p>The sids of each group</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSID</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.TokenGroups.sids_and_attributes">
-<code class="descname">sids_and_attributes</code><a class="headerlink" href="#windows.winobject.token.TokenGroups.sids_and_attributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenGroups.sids_and_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sids_and_attributes</span></span><a class="headerlink" href="#windows.winobject.token.TokenGroups.sids_and_attributes" title="Link to this definition">¶</a></dt>
 <dd><p>The sids and attributes of each group</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">SID_AND_ATTRIBUTES</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">SID_AND_ATTRIBUTES</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">SID_AND_ATTRIBUTES</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.SID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.SID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">SID_AND_ATTRIBUTES</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="tokenprivileges">
-<h2>2.4.3. TokenPrivileges<a class="headerlink" href="#tokenprivileges" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.token.TokenPrivileges">
-<em class="property">class </em><code class="descclassname">windows.winobject.token.</code><code class="descname">TokenPrivileges</code><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_PRIVILEGES" title="windows.generated_def.winstructs._TOKEN_PRIVILEGES"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._TOKEN_PRIVILEGES</span></code></a></p>
+</section>
+<section id="tokenprivileges">
+<h2><span class="section-number">2.4.3. </span>TokenPrivileges<a class="headerlink" href="#tokenprivileges" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.token.</span></span><span class="sig-name descname"><span class="pre">TokenPrivileges</span></span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_PRIVILEGES" title="windows.generated_def.winstructs._TOKEN_PRIVILEGES"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TOKEN_PRIVILEGES</span></code></a></p>
 <p>Improved <code class="docutils literal notranslate"><span class="pre">TOKEN_PRIVILEGES</span></code> usable like a mapping</p>
-<dl class="method">
-<dt id="windows.winobject.token.TokenPrivileges.__getitem__">
-<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.__getitem__" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve the attribute value for privilege <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">KeyError if privilege <code class="docutils literal notranslate"><span class="pre">name</span></code> not in the TokenPrivileges</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p>KeyError if privilege <code class="docutils literal notranslate"><span class="pre">name</span></code> not in the TokenPrivileges</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.TokenPrivileges.__setitem__">
-<code class="descname">__setitem__</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.__setitem__" title="Link to this definition">¶</a></dt>
 <dd><p>Set the attribute value for privilege <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">KeyError if privilege <code class="docutils literal notranslate"><span class="pre">name</span></code> not in the TokenPrivileges</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p>KeyError if privilege <code class="docutils literal notranslate"><span class="pre">name</span></code> not in the TokenPrivileges</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.TokenPrivileges.all">
-<code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.all" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.all" title="Link to this definition">¶</a></dt>
 <dd><p>The list of all privileges</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.LUID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.LUID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUID_AND_ATTRIBUTES</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.LUID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.LUID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUID_AND_ATTRIBUTES</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.LUID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.LUID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUID_AND_ATTRIBUTES</span></code></a>] - A list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.LUID_AND_ATTRIBUTES" title="windows.generated_def.winstructs.LUID_AND_ATTRIBUTES"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUID_AND_ATTRIBUTES</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.TokenPrivileges.items">
-<code class="descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.items" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.items" title="Link to this definition">¶</a></dt>
 <dd><p>The (name, Attribute) of all privileges in the TokenPrivileges</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)] - A list of (name, Attribute) tuple</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[(<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)] - A list of (name, Attribute) tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.winobject.token.TokenPrivileges.keys">
-<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.keys" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenPrivileges.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenPrivileges.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenPrivileges.keys" title="Link to this definition">¶</a></dt>
 <dd><p>The name of all privileges in the TokenPrivileges</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] - A list of name</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>] - A list of name</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="tokensecurityattributesinformation">
-<h2>2.4.4. TokenSecurityAttributesInformation<a class="headerlink" href="#tokensecurityattributesinformation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.token.TokenSecurityAttributesInformation">
-<em class="property">class </em><code class="descclassname">windows.winobject.token.</code><code class="descname">TokenSecurityAttributesInformation</code><a class="reference internal" href="_modules/windows/winobject/token.html#TokenSecurityAttributesInformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributesInformation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTES_INFORMATION" title="windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTES_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTES_INFORMATION</span></code></a></p>
-<dl class="attribute">
-<dt id="windows.winobject.token.TokenSecurityAttributesInformation.attributes">
-<code class="descname">attributes</code><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributesInformation.attributes" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="tokensecurityattributesinformation">
+<h2><span class="section-number">2.4.4. </span>TokenSecurityAttributesInformation<a class="headerlink" href="#tokensecurityattributesinformation" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenSecurityAttributesInformation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.token.</span></span><span class="sig-name descname"><span class="pre">TokenSecurityAttributesInformation</span></span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenSecurityAttributesInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributesInformation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTES_INFORMATION" title="windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTES_INFORMATION"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TOKEN_SECURITY_ATTRIBUTES_INFORMATION</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenSecurityAttributesInformation.attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attributes</span></span><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributesInformation.attributes" title="Link to this definition">¶</a></dt>
 <dd><p>Return all the attributes as <a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1" title="windows.winobject.token.TokenSecurityAttributeV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1" title="windows.winobject.token.TokenSecurityAttributeV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a>] - A list of token security attributes</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1" title="windows.winobject.token.TokenSecurityAttributeV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a>] - A list of token security attributes</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="tokensecurityattributev1">
-<h2>2.4.5. TokenSecurityAttributeV1<a class="headerlink" href="#tokensecurityattributev1" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.token.TokenSecurityAttributeV1">
-<em class="property">class </em><code class="descclassname">windows.winobject.token.</code><code class="descname">TokenSecurityAttributeV1</code><a class="reference internal" href="_modules/windows/winobject/token.html#TokenSecurityAttributeV1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTE_V1" title="windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTE_V1"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTE_V1</span></code></a></p>
-<dl class="attribute">
-<dt id="windows.winobject.token.TokenSecurityAttributeV1.name">
-<code class="descname">name</code><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1.name" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="tokensecurityattributev1">
+<h2><span class="section-number">2.4.5. </span>TokenSecurityAttributeV1<a class="headerlink" href="#tokensecurityattributev1" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenSecurityAttributeV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.token.</span></span><span class="sig-name descname"><span class="pre">TokenSecurityAttributeV1</span></span><a class="reference internal" href="_modules/windows/winobject/token.html#TokenSecurityAttributeV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTE_V1" title="windows.generated_def.winstructs._TOKEN_SECURITY_ATTRIBUTE_V1"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TOKEN_SECURITY_ATTRIBUTE_V1</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenSecurityAttributeV1.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1.name" title="Link to this definition">¶</a></dt>
 <dd><p>The name of the security attribute</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.token.TokenSecurityAttributeV1.values">
-<code class="descname">values</code><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1.values" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.token.TokenSecurityAttributeV1.values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">values</span></span><a class="headerlink" href="#windows.winobject.token.TokenSecurityAttributeV1.values" title="Link to this definition">¶</a></dt>
 <dd><p>The values of the security attribute</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">2.4. Token</a><ul>
-<li><a class="reference internal" href="#id1">2.4.1. Token</a></li>
-<li><a class="reference internal" href="#tokengroups">2.4.2. TokenGroups</a></li>
-<li><a class="reference internal" href="#tokenprivileges">2.4.3. TokenPrivileges</a></li>
-<li><a class="reference internal" href="#tokensecurityattributesinformation">2.4.4. TokenSecurityAttributesInformation</a></li>
-<li><a class="reference internal" href="#tokensecurityattributev1">2.4.5. TokenSecurityAttributeV1</a></li>
+<li><a class="reference internal" href="#id1">2.4.1. Token</a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenAccessInformation"><code class="docutils literal notranslate"><span class="pre">TokenAccessInformation</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenAppContainerNumber"><code class="docutils literal notranslate"><span class="pre">TokenAppContainerNumber</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenAppContainerSid"><code class="docutils literal notranslate"><span class="pre">TokenAppContainerSid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenCapabilities"><code class="docutils literal notranslate"><span class="pre">TokenCapabilities</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenDefaultDacl"><code class="docutils literal notranslate"><span class="pre">TokenDefaultDacl</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenDeviceClaimAttributes"><code class="docutils literal notranslate"><span class="pre">TokenDeviceClaimAttributes</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenDeviceGroups"><code class="docutils literal notranslate"><span class="pre">TokenDeviceGroups</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenElevation"><code class="docutils literal notranslate"><span class="pre">TokenElevation</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenElevationType"><code class="docutils literal notranslate"><span class="pre">TokenElevationType</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenGroups"><code class="docutils literal notranslate"><span class="pre">TokenGroups</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenGroupsAndPrivileges"><code class="docutils literal notranslate"><span class="pre">TokenGroupsAndPrivileges</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenHasRestrictions"><code class="docutils literal notranslate"><span class="pre">TokenHasRestrictions</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenImpersonationLevel"><code class="docutils literal notranslate"><span class="pre">TokenImpersonationLevel</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenIntegrityLevel"><code class="docutils literal notranslate"><span class="pre">TokenIntegrityLevel</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenIsAppContainer"><code class="docutils literal notranslate"><span class="pre">TokenIsAppContainer</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenLinkedToken"><code class="docutils literal notranslate"><span class="pre">TokenLinkedToken</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenLogonSid"><code class="docutils literal notranslate"><span class="pre">TokenLogonSid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenMandatoryPolicy"><code class="docutils literal notranslate"><span class="pre">TokenMandatoryPolicy</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenOrigin"><code class="docutils literal notranslate"><span class="pre">TokenOrigin</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenOwner"><code class="docutils literal notranslate"><span class="pre">TokenOwner</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenPrimaryGroup"><code class="docutils literal notranslate"><span class="pre">TokenPrimaryGroup</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenPrivileges"><code class="docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenProcessTrustLevel"><code class="docutils literal notranslate"><span class="pre">TokenProcessTrustLevel</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenRestrictedDeviceGroups"><code class="docutils literal notranslate"><span class="pre">TokenRestrictedDeviceGroups</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenRestrictedSids"><code class="docutils literal notranslate"><span class="pre">TokenRestrictedSids</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenSandBoxInert"><code class="docutils literal notranslate"><span class="pre">TokenSandBoxInert</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenSecurityAttributes"><code class="docutils literal notranslate"><span class="pre">TokenSecurityAttributes</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenSessionId"><code class="docutils literal notranslate"><span class="pre">TokenSessionId</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenSource"><code class="docutils literal notranslate"><span class="pre">TokenSource</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenStatistics"><code class="docutils literal notranslate"><span class="pre">TokenStatistics</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenType"><code class="docutils literal notranslate"><span class="pre">TokenType</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenUIAccess"><code class="docutils literal notranslate"><span class="pre">TokenUIAccess</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenUser"><code class="docutils literal notranslate"><span class="pre">TokenUser</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenUserClaimAttributes"><code class="docutils literal notranslate"><span class="pre">TokenUserClaimAttributes</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenVirtualizationAllowed"><code class="docutils literal notranslate"><span class="pre">TokenVirtualizationAllowed</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.TokenVirtualizationEnabled"><code class="docutils literal notranslate"><span class="pre">TokenVirtualizationEnabled</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.access_information"><code class="docutils literal notranslate"><span class="pre">access_information</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.adjust_privileges"><code class="docutils literal notranslate"><span class="pre">adjust_privileges()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.appcontainer_number"><code class="docutils literal notranslate"><span class="pre">appcontainer_number</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.appcontainer_sid"><code class="docutils literal notranslate"><span class="pre">appcontainer_sid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.authentication_id"><code class="docutils literal notranslate"><span class="pre">authentication_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.capabilities"><code class="docutils literal notranslate"><span class="pre">capabilities</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.computername"><code class="docutils literal notranslate"><span class="pre">computername</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.default_dacl"><code class="docutils literal notranslate"><span class="pre">default_dacl</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.duplicate"><code class="docutils literal notranslate"><span class="pre">duplicate()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.elevated"><code class="docutils literal notranslate"><span class="pre">elevated</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.elevation_type"><code class="docutils literal notranslate"><span class="pre">elevation_type</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.enable_privilege"><code class="docutils literal notranslate"><span class="pre">enable_privilege()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.get_integrity"><code class="docutils literal notranslate"><span class="pre">get_integrity()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.groups"><code class="docutils literal notranslate"><span class="pre">groups</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.groups_and_privileges"><code class="docutils literal notranslate"><span class="pre">groups_and_privileges</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.handle"><code class="docutils literal notranslate"><span class="pre">handle</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.has_restriction"><code class="docutils literal notranslate"><span class="pre">has_restriction</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.impersonation_level"><code class="docutils literal notranslate"><span class="pre">impersonation_level</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.integrity"><code class="docutils literal notranslate"><span class="pre">integrity</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.integrity_level"><code class="docutils literal notranslate"><span class="pre">integrity_level</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.is_appcontainer"><code class="docutils literal notranslate"><span class="pre">is_appcontainer</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.is_elevated"><code class="docutils literal notranslate"><span class="pre">is_elevated</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.linked_token"><code class="docutils literal notranslate"><span class="pre">linked_token</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.logon_sid"><code class="docutils literal notranslate"><span class="pre">logon_sid</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.mandatory_policy"><code class="docutils literal notranslate"><span class="pre">mandatory_policy</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.modified_id"><code class="docutils literal notranslate"><span class="pre">modified_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.origin"><code class="docutils literal notranslate"><span class="pre">origin</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.owner"><code class="docutils literal notranslate"><span class="pre">owner</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.primary_group"><code class="docutils literal notranslate"><span class="pre">primary_group</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.privileges"><code class="docutils literal notranslate"><span class="pre">privileges</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.restricted_sids"><code class="docutils literal notranslate"><span class="pre">restricted_sids</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.sandbox_inert"><code class="docutils literal notranslate"><span class="pre">sandbox_inert</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.security_attributes"><code class="docutils literal notranslate"><span class="pre">security_attributes</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.session_id"><code class="docutils literal notranslate"><span class="pre">session_id</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.set_integrity"><code class="docutils literal notranslate"><span class="pre">set_integrity()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.statistics"><code class="docutils literal notranslate"><span class="pre">statistics</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.trust_level"><code class="docutils literal notranslate"><span class="pre">trust_level</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.ui_access"><code class="docutils literal notranslate"><span class="pre">ui_access</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.user"><code class="docutils literal notranslate"><span class="pre">user</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.username"><code class="docutils literal notranslate"><span class="pre">username</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.virtualization_allowed"><code class="docutils literal notranslate"><span class="pre">virtualization_allowed</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.virtualization_enabled"><code class="docutils literal notranslate"><span class="pre">virtualization_enabled</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.Token.wait"><code class="docutils literal notranslate"><span class="pre">wait()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tokengroups">2.4.2. TokenGroups</a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenGroups"><code class="docutils literal notranslate"><span class="pre">TokenGroups</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenGroups.sids"><code class="docutils literal notranslate"><span class="pre">sids</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenGroups.sids_and_attributes"><code class="docutils literal notranslate"><span class="pre">sids_and_attributes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tokenprivileges">2.4.3. TokenPrivileges</a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges"><code class="docutils literal notranslate"><span class="pre">TokenPrivileges</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges.__getitem__"><code class="docutils literal notranslate"><span class="pre">__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges.__setitem__"><code class="docutils literal notranslate"><span class="pre">__setitem__()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges.all"><code class="docutils literal notranslate"><span class="pre">all()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges.items"><code class="docutils literal notranslate"><span class="pre">items()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenPrivileges.keys"><code class="docutils literal notranslate"><span class="pre">keys()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tokensecurityattributesinformation">2.4.4. TokenSecurityAttributesInformation</a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributesInformation"><code class="docutils literal notranslate"><span class="pre">TokenSecurityAttributesInformation</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributesInformation.attributes"><code class="docutils literal notranslate"><span class="pre">attributes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tokensecurityattributev1">2.4.5. TokenSecurityAttributeV1</a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1"><code class="docutils literal notranslate"><span class="pre">TokenSecurityAttributeV1</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.token.TokenSecurityAttributeV1.values"><code class="docutils literal notranslate"><span class="pre">values</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="process.html"
-                        title="previous chapter">2.1. Processes and Threads</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="exception.html"
-                        title="next chapter">2.5. Exception and Context related structures</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="process.html"
+                          title="previous chapter"><span class="section-number">2.1. </span>Processes and Threads</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="exception.html"
+                          title="next chapter"><span class="section-number">2.5. </span>Exception and Context related structures</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1027,18 +1044,16 @@ There can be many tokens representing a single logon session.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1058,13 +1073,14 @@ There can be many tokens representing a single logon session.</p>
         <li class="right" >
           <a href="process.html" title="2.1. Processes and Threads"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" ><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.4. </span>Token</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

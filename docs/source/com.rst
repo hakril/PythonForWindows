@@ -18,7 +18,7 @@ It's possible to directly call `COM` interface from python. All you need is the 
 There are three ways to get the definition of the code interface:
 
     * By using it from :mod:`windows.generated_def.interfaces`
-    * By writing it yourself : <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56>`_
+    * By writing it yourself : `<https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56>`_
     * By generating it.
 
 To generate a `COM` interface you need its definition from the ".c" file.

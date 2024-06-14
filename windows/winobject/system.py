@@ -134,7 +134,7 @@ class System(object):
         Same as os.environ on py3
         Custom dict built on GetEnvironmentStringsW() on py2
 
-        :type: :class:`dict` -- {unicode: unicode}
+        :type: :class:`dict` -- {:class:`unicode`: :class:`unicode`}
 		"""
         if windows.pycompat.is_py3:
             return os.environ # Py3 environ is already unicode

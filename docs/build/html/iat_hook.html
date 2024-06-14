@@ -1,26 +1,23 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>15. IAT hooking &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>15. IAT hooking &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="16. Early Work In Progress" href="wip.html" />
-    <link rel="prev" title="14.5. WinError" href="winerror_generated.html" /> 
+    <link rel="prev" title="14.7. Interfaces" href="interfaces_generated.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -35,9 +32,10 @@
           <a href="wip.html" title="16. Early Work In Progress"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="winerror_generated.html" title="14.5. WinError"
+          <a href="interfaces_generated.html" title="14.7. Interfaces"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">15. </span>IAT hooking</a></li> 
       </ul>
     </div>  
 
@@ -46,19 +44,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="iat-hooking">
-<h1>15. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h1>
+  <section id="iat-hooking">
+<h1><span class="section-number">15. </span>IAT hooking<a class="headerlink" href="#iat-hooking" title="Link to this heading">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#sample-iat-hook"><span class="std std-ref">IAT hooking</span></a></p>
+<p class="admonition-title">Note</p>
+<p>See sample <a class="reference internal" href="sample.html#sample-iat-hook"><span class="std std-ref">IAT hooking</span></a></p>
 </div>
-<div class="section" id="putting-an-iat-hook">
-<h2>15.1. Putting an IAT hook<a class="headerlink" href="#putting-an-iat-hook" title="Permalink to this headline">¶</a></h2>
+<section id="putting-an-iat-hook">
+<h2><span class="section-number">15.1. </span>Putting an IAT hook<a class="headerlink" href="#putting-an-iat-hook" title="Link to this heading">¶</a></h2>
 <p>To setup your IAT hook you just need:</p>
 <blockquote>
 <div><ul class="simple">
-<li>A callback that respect the <a class="reference internal" href="#hook-protocol"><span class="std std-ref">Hook protocol</span></a></li>
-<li>The <a class="reference internal" href="process.html#windows.pe_parse.IATEntry" title="windows.pe_parse.IATEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.pe_parse.IATEntry</span></code></a> to hook</li>
+<li><p>A callback that respect the <a class="reference internal" href="#hook-protocol"><span class="std std-ref">Hook protocol</span></a></p></li>
+<li><p>The <a class="reference internal" href="process.html#windows.pe_parse.IATEntry" title="windows.pe_parse.IATEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.pe_parse.IATEntry</span></code></a> to hook</p></li>
 </ul>
 </div></blockquote>
 <p>You just need to use the function <a class="reference internal" href="process.html#windows.pe_parse.IATEntry.set_hook" title="windows.pe_parse.IATEntry.set_hook"><code class="xref py py-func docutils literal notranslate"><span class="pre">windows.pe_parse.IATEntry.set_hook()</span></code></a></p>
@@ -80,17 +78,17 @@
 <span class="n">iat_create_file</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">createfile_callback</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="hook-protocol">
-<span id="id1"></span><h2>15.2. Hook protocol<a class="headerlink" href="#hook-protocol" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="callback-arguments">
-<h3>15.2.1. Callback arguments<a class="headerlink" href="#callback-arguments" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="hook-protocol">
+<span id="id1"></span><h2><span class="section-number">15.2. </span>Hook protocol<a class="headerlink" href="#hook-protocol" title="Link to this heading">¶</a></h2>
+<section id="callback-arguments">
+<h3><span class="section-number">15.2.1. </span>Callback arguments<a class="headerlink" href="#callback-arguments" title="Link to this heading">¶</a></h3>
 <p>A hook callback must have the same number of argument as the hooked API, PLUS a last argument <code class="docutils literal notranslate"><span class="pre">real_function</span></code>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">real_function</span></code> argument is a callable that represent the hooked API, it can be called in two ways:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Without argument, the call will be done with the argument originaly passed to your callback. This allows simple redirection to the real API.</li>
-<li>With arguments it will simply call the API with these.</li>
+<li><p>Without argument, the call will be done with the argument originaly passed to your callback. This allows simple redirection to the real API.</p></li>
+<li><p>With arguments it will simply call the API with these.</p></li>
 </ul>
 </div></blockquote>
 <p>Example:</p>
@@ -103,14 +101,14 @@
 </pre></div>
 </div>
 <p>A hook callback must also embed some <a class="reference internal" href="#type-information"><span class="std std-ref">Type Information</span></a></p>
-</div>
-<div class="section" id="callback-type-information">
-<span id="type-information"></span><h3>15.2.2. Callback type information<a class="headerlink" href="#callback-type-information" title="Permalink to this headline">¶</a></h3>
-<p>In order make the magic behind hook callback, <a class="reference external" href="https://docs.python.org/2.7/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> needs to have type information about the API parameters.</p>
+</section>
+<section id="callback-type-information">
+<span id="type-information"></span><h3><span class="section-number">15.2.2. </span>Callback type information<a class="headerlink" href="#callback-type-information" title="Link to this heading">¶</a></h3>
+<p>In order make the magic behind hook callback, <code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code> needs to have type information about the API parameters.</p>
 <p>There is (again) two ways to give those informations to your hook callback. Both techniques use a decorator to setup type information to the callback.</p>
 <blockquote>
 <div><ul>
-<li><p class="first">Giving the type manualy using the decorator <a class="reference internal" href="#windows.hooks.Callback" title="windows.hooks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.hooks.Callback</span></code></a>:</p>
+<li><p>Giving the type manualy using the decorator <a class="reference internal" href="#windows.hooks.Callback" title="windows.hooks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.hooks.Callback</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">windows.hooks</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="c1"># First type is return type, others are parameters types</span>
 <span class="nd">@Callback</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ulong</span><span class="p">)</span>
@@ -123,7 +121,7 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">Using the <cite>Callback</cite> decorator generated from known functions:</p>
+<li><p>Using the <cite>Callback</cite> decorator generated from known functions:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">windows.hooks</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="c1"># Decorator name is always API_NAME + &quot;CallBack&quot;</span>
 <span class="nd">@CreateFileACallback</span>
@@ -137,49 +135,51 @@
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See the list of known functions</p>
+<p class="admonition-title">Note</p>
+<p>See the list of known functions</p>
 </div>
 </div></blockquote>
-</div>
-</div>
-<div class="section" id="module-windows.hooks">
-<span id="windows-hooks"></span><h2>15.3. <a class="reference internal" href="#module-windows.hooks" title="windows.hooks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.hooks</span></code></a><a class="headerlink" href="#module-windows.hooks" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.hooks.Callback">
-<em class="property">class </em><code class="descclassname">windows.hooks.</code><code class="descname">Callback</code><span class="sig-paren">(</span><em>*types</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#Callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.Callback" title="Permalink to this definition">¶</a></dt>
+</section>
+</section>
+<section id="module-windows.hooks">
+<span id="windows-hooks"></span><h2><span class="section-number">15.3. </span><a class="reference internal" href="#module-windows.hooks" title="windows.hooks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.hooks</span></code></a><a class="headerlink" href="#module-windows.hooks" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.hooks.Callback">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.hooks.</span></span><span class="sig-name descname"><span class="pre">Callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">types</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#Callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.hooks.Callback" title="Link to this definition">¶</a></dt>
 <dd><p>Give type information to hook callback</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.hooks.IATHook">
-<em class="property">class </em><code class="descclassname">windows.hooks.</code><code class="descname">IATHook</code><span class="sig-paren">(</span><em>IAT_entry</em>, <em>callback</em>, <em>types=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.hooks.IATHook">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.hooks.</span></span><span class="sig-name descname"><span class="pre">IATHook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IAT_entry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.hooks.IATHook" title="Link to this definition">¶</a></dt>
 <dd><p>Look at my hook &lt;3</p>
-<dl class="method">
-<dt id="windows.hooks.IATHook.disable">
-<code class="descname">disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.disable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook.disable" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.hooks.IATHook.disable">
+<span class="sig-name descname"><span class="pre">disable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.disable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.hooks.IATHook.disable" title="Link to this definition">¶</a></dt>
 <dd><p>Disable the IAT hook</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.hooks.IATHook.enable">
-<code class="descname">enable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.enable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook.enable" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.hooks.IATHook.enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.enable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.hooks.IATHook.enable" title="Link to this definition">¶</a></dt>
 <dd><p>Enable the IAT hook: you MUST keep a reference to the IATHook while the hook is enabled</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">15. IAT hooking</a><ul>
 <li><a class="reference internal" href="#putting-an-iat-hook">15.1. Putting an IAT hook</a></li>
 <li><a class="reference internal" href="#hook-protocol">15.2. Hook protocol</a><ul>
@@ -187,17 +187,30 @@
 <li><a class="reference internal" href="#callback-type-information">15.2.2. Callback type information</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-windows.hooks">15.3. <code class="docutils literal notranslate"><span class="pre">windows.hooks</span></code></a></li>
+<li><a class="reference internal" href="#module-windows.hooks">15.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.hooks</span></code></a><ul>
+<li><a class="reference internal" href="#windows.hooks.Callback"><code class="docutils literal notranslate"><span class="pre">Callback</span></code></a></li>
+<li><a class="reference internal" href="#windows.hooks.IATHook"><code class="docutils literal notranslate"><span class="pre">IATHook</span></code></a><ul>
+<li><a class="reference internal" href="#windows.hooks.IATHook.disable"><code class="docutils literal notranslate"><span class="pre">disable()</span></code></a></li>
+<li><a class="reference internal" href="#windows.hooks.IATHook.enable"><code class="docutils literal notranslate"><span class="pre">enable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="winerror_generated.html"
-                        title="previous chapter">14.5. WinError</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="wip.html"
-                        title="next chapter">16. Early Work In Progress</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="interfaces_generated.html"
+                          title="previous chapter"><span class="section-number">14.7. </span>Interfaces</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="wip.html"
+                          title="next chapter"><span class="section-number">16. </span>Early Work In Progress</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -205,18 +218,16 @@
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -234,14 +245,15 @@
           <a href="wip.html" title="16. Early Work In Progress"
              >next</a> |</li>
         <li class="right" >
-          <a href="winerror_generated.html" title="14.5. WinError"
+          <a href="interfaces_generated.html" title="14.7. Interfaces"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">15. </span>IAT hooking</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

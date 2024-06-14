@@ -59,12 +59,6 @@ Simple types
 
 .. autoclass:: LSTATUS
 
-.. autoclass:: SECURITY_INFORMATION
-
-.. class:: PSECURITY_INFORMATION
-
-    Pointer to :class:`SECURITY_INFORMATION`
-
 .. class:: PULONG
 
     Pointer to :class:`ULONG`
@@ -205,10 +199,6 @@ Simple types
 
     Pointer to :class:`HKEY`
 
-.. autoclass:: ACCESS_MASK
-
-.. autoclass:: REGSAM
-
 .. class:: PBOOLEAN
 
     Pointer to :class:`BOOLEAN`
@@ -287,8 +277,6 @@ Simple types
 
 .. autoclass:: UINT32
 
-.. autoclass:: UINT64
-
 .. autoclass:: ULONG32
 
 .. autoclass:: LONG32
@@ -350,6 +338,8 @@ Simple types
 .. class:: PACCESS_MASK
 
     Pointer to :class:`ACCESS_MASK`
+
+.. autoclass:: REGSAM
 
 .. autoclass:: SECURITY_INFORMATION
 
@@ -546,10 +536,6 @@ __MIDL_IBackgroundCopyJob2_0004
 
 BG_AUTH_CREDENTIALS
 '''''''''''''''''''
-.. class:: BG_AUTH_CREDENTIALS
-
-    Alias for :class:`BG_AUTH_CREDENTIALS`
-
 .. class:: BG_AUTH_CREDENTIALS
 
     .. attribute:: Target
@@ -1118,37 +1104,6 @@ CS_Resource_s
 
         :class:`CS_DES`
 
-DMA_Des_s
-'''''''''
-.. class:: DMA_DES
-
-    Alias for :class:`DMA_Des_s`
-
-.. class:: PDMA_DES
-
-    Pointer to :class:`DMA_Des_s`
-
-.. class:: DMA_Des_s
-
-    .. attribute:: DD_Count
-
-        :class:`DWORD`
-
-
-    .. attribute:: DD_Type
-
-        :class:`DWORD`
-
-
-    .. attribute:: DD_Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: DD_Alloc_Chan
-
-        :class:`ULONG`
-
 DMA_Resource_s
 ''''''''''''''
 .. class:: DMA_RESOURCE
@@ -1169,42 +1124,6 @@ DMA_Resource_s
     .. attribute:: DMA_Data
 
         :class:`DMA_RANGE` ``[ANYSIZE_ARRAY]``
-
-IO_Des_s
-''''''''
-.. class:: IO_DES
-
-    Alias for :class:`IO_Des_s`
-
-.. class:: PIO_DES
-
-    Pointer to :class:`IO_Des_s`
-
-.. class:: IO_Des_s
-
-    .. attribute:: IOD_Count
-
-        :class:`DWORD`
-
-
-    .. attribute:: IOD_Type
-
-        :class:`DWORD`
-
-
-    .. attribute:: IOD_Alloc_Base
-
-        :class:`DWORDLONG`
-
-
-    .. attribute:: IOD_Alloc_End
-
-        :class:`DWORDLONG`
-
-
-    .. attribute:: IOD_DesFlags
-
-        :class:`DWORD`
 
 IO_Resource_s
 '''''''''''''
@@ -2551,10 +2470,6 @@ _MIB_IPNETTABLE
 
 IP6_ADDRESS
 '''''''''''
-.. class:: IP6_ADDRESS
-
-    Alias for :class:`IP6_ADDRESS`
-
 .. class:: PIP6_ADDRESS
 
     Pointer to :class:`IP6_ADDRESS`
@@ -3137,10 +3052,6 @@ _DNS_CACHE_ENTRY
 
 DNS_A_DATA
 ''''''''''
-.. class:: DNS_A_DATA
-
-    Alias for :class:`DNS_A_DATA`
-
 .. class:: PDNS_A_DATA
 
     Pointer to :class:`DNS_A_DATA`
@@ -3153,10 +3064,6 @@ DNS_A_DATA
 
 DNS_PTR_DATAW
 '''''''''''''
-.. class:: DNS_PTR_DATAW
-
-    Alias for :class:`DNS_PTR_DATAW`
-
 .. class:: PDNS_PTR_DATAW
 
     Pointer to :class:`DNS_PTR_DATAW`
@@ -3169,10 +3076,6 @@ DNS_PTR_DATAW
 
 DNS_PTR_DATAA
 '''''''''''''
-.. class:: DNS_PTR_DATAA
-
-    Alias for :class:`DNS_PTR_DATAA`
-
 .. class:: PDNS_PTR_DATAA
 
     Pointer to :class:`DNS_PTR_DATAA`
@@ -3185,10 +3088,6 @@ DNS_PTR_DATAA
 
 DNS_SOA_DATAW
 '''''''''''''
-.. class:: DNS_SOA_DATAW
-
-    Alias for :class:`DNS_SOA_DATAW`
-
 .. class:: PDNS_SOA_DATAW
 
     Pointer to :class:`DNS_SOA_DATAW`
@@ -3231,10 +3130,6 @@ DNS_SOA_DATAW
 
 DNS_SOA_DATAA
 '''''''''''''
-.. class:: DNS_SOA_DATAA
-
-    Alias for :class:`DNS_SOA_DATAA`
-
 .. class:: PDNS_SOA_DATAA
 
     Pointer to :class:`DNS_SOA_DATAA`
@@ -3277,10 +3172,6 @@ DNS_SOA_DATAA
 
 DNS_MINFO_DATAW
 '''''''''''''''
-.. class:: DNS_MINFO_DATAW
-
-    Alias for :class:`DNS_MINFO_DATAW`
-
 .. class:: PDNS_MINFO_DATAW
 
     Pointer to :class:`DNS_MINFO_DATAW`
@@ -3298,10 +3189,6 @@ DNS_MINFO_DATAW
 
 DNS_MINFO_DATAA
 '''''''''''''''
-.. class:: DNS_MINFO_DATAA
-
-    Alias for :class:`DNS_MINFO_DATAA`
-
 .. class:: PDNS_MINFO_DATAA
 
     Pointer to :class:`DNS_MINFO_DATAA`
@@ -3319,10 +3206,6 @@ DNS_MINFO_DATAA
 
 DNS_MX_DATAW
 ''''''''''''
-.. class:: DNS_MX_DATAW
-
-    Alias for :class:`DNS_MX_DATAW`
-
 .. class:: PDNS_MX_DATAW
 
     Pointer to :class:`DNS_MX_DATAW`
@@ -3345,10 +3228,6 @@ DNS_MX_DATAW
 
 DNS_MX_DATAA
 ''''''''''''
-.. class:: DNS_MX_DATAA
-
-    Alias for :class:`DNS_MX_DATAA`
-
 .. class:: PDNS_MX_DATAA
 
     Pointer to :class:`DNS_MX_DATAA`
@@ -3371,10 +3250,6 @@ DNS_MX_DATAA
 
 DNS_TXT_DATAW
 '''''''''''''
-.. class:: DNS_TXT_DATAW
-
-    Alias for :class:`DNS_TXT_DATAW`
-
 .. class:: PDNS_TXT_DATAW
 
     Pointer to :class:`DNS_TXT_DATAW`
@@ -3392,10 +3267,6 @@ DNS_TXT_DATAW
 
 DNS_TXT_DATAA
 '''''''''''''
-.. class:: DNS_TXT_DATAA
-
-    Alias for :class:`DNS_TXT_DATAA`
-
 .. class:: PDNS_TXT_DATAA
 
     Pointer to :class:`DNS_TXT_DATAA`
@@ -3413,10 +3284,6 @@ DNS_TXT_DATAA
 
 DNS_NULL_DATA
 '''''''''''''
-.. class:: DNS_NULL_DATA
-
-    Alias for :class:`DNS_NULL_DATA`
-
 .. class:: PDNS_NULL_DATA
 
     Pointer to :class:`DNS_NULL_DATA`
@@ -3434,10 +3301,6 @@ DNS_NULL_DATA
 
 DNS_WKS_DATA
 ''''''''''''
-.. class:: DNS_WKS_DATA
-
-    Alias for :class:`DNS_WKS_DATA`
-
 .. class:: PDNS_WKS_DATA
 
     Pointer to :class:`DNS_WKS_DATA`
@@ -3460,10 +3323,6 @@ DNS_WKS_DATA
 
 DNS_AAAA_DATA
 '''''''''''''
-.. class:: DNS_AAAA_DATA
-
-    Alias for :class:`DNS_AAAA_DATA`
-
 .. class:: PDNS_AAAA_DATA
 
     Pointer to :class:`DNS_AAAA_DATA`
@@ -3477,10 +3336,6 @@ DNS_AAAA_DATA
 DNS_SIG_DATAW
 '''''''''''''
 .. class:: DNS_RRSIG_DATAW
-
-    Alias for :class:`DNS_SIG_DATAW`
-
-.. class:: DNS_SIG_DATAW
 
     Alias for :class:`DNS_SIG_DATAW`
 
@@ -3549,10 +3404,6 @@ DNS_SIG_DATAA
 
     Alias for :class:`DNS_SIG_DATAA`
 
-.. class:: DNS_SIG_DATAA
-
-    Alias for :class:`DNS_SIG_DATAA`
-
 .. class:: PDNS_RRSIG_DATAA
 
     Pointer to :class:`DNS_SIG_DATAA`
@@ -3618,10 +3469,6 @@ DNS_KEY_DATA
 
     Alias for :class:`DNS_KEY_DATA`
 
-.. class:: DNS_KEY_DATA
-
-    Alias for :class:`DNS_KEY_DATA`
-
 .. class:: PDNS_DNSKEY_DATA
 
     Pointer to :class:`DNS_KEY_DATA`
@@ -3663,10 +3510,6 @@ DNS_KEY_DATA
 
 DNS_DHCID_DATA
 ''''''''''''''
-.. class:: DNS_DHCID_DATA
-
-    Alias for :class:`DNS_DHCID_DATA`
-
 .. class:: PDNS_DHCID_DATA
 
     Pointer to :class:`DNS_DHCID_DATA`
@@ -3684,10 +3527,6 @@ DNS_DHCID_DATA
 
 DNS_NSEC_DATAW
 ''''''''''''''
-.. class:: DNS_NSEC_DATAW
-
-    Alias for :class:`DNS_NSEC_DATAW`
-
 .. class:: PDNS_NSEC_DATAW
 
     Pointer to :class:`DNS_NSEC_DATAW`
@@ -3715,10 +3554,6 @@ DNS_NSEC_DATAW
 
 DNS_NSEC_DATAA
 ''''''''''''''
-.. class:: DNS_NSEC_DATAA
-
-    Alias for :class:`DNS_NSEC_DATAA`
-
 .. class:: PDNS_NSEC_DATAA
 
     Pointer to :class:`DNS_NSEC_DATAA`
@@ -3746,10 +3581,6 @@ DNS_NSEC_DATAA
 
 DNS_NSEC3_DATA
 ''''''''''''''
-.. class:: DNS_NSEC3_DATA
-
-    Alias for :class:`DNS_NSEC3_DATA`
-
 .. class:: PDNS_NSEC3_DATA
 
     Pointer to :class:`DNS_NSEC3_DATA`
@@ -3792,10 +3623,6 @@ DNS_NSEC3_DATA
 
 DNS_NSEC3PARAM_DATA
 '''''''''''''''''''
-.. class:: DNS_NSEC3PARAM_DATA
-
-    Alias for :class:`DNS_NSEC3PARAM_DATA`
-
 .. class:: PDNS_NSEC3PARAM_DATA
 
     Pointer to :class:`DNS_NSEC3PARAM_DATA`
@@ -3833,10 +3660,6 @@ DNS_NSEC3PARAM_DATA
 
 DNS_DS_DATA
 '''''''''''
-.. class:: DNS_DS_DATA
-
-    Alias for :class:`DNS_DS_DATA`
-
 .. class:: PDNS_DS_DATA
 
     Pointer to :class:`DNS_DS_DATA`
@@ -3874,10 +3697,6 @@ DNS_DS_DATA
 
 DNS_OPT_DATA
 ''''''''''''
-.. class:: DNS_OPT_DATA
-
-    Alias for :class:`DNS_OPT_DATA`
-
 .. class:: PDNS_OPT_DATA
 
     Pointer to :class:`DNS_OPT_DATA`
@@ -3900,10 +3719,6 @@ DNS_OPT_DATA
 
 DNS_LOC_DATA
 ''''''''''''
-.. class:: DNS_LOC_DATA
-
-    Alias for :class:`DNS_LOC_DATA`
-
 .. class:: PDNS_LOC_DATA
 
     Pointer to :class:`DNS_LOC_DATA`
@@ -3946,10 +3761,6 @@ DNS_LOC_DATA
 
 DNS_NXT_DATAW
 '''''''''''''
-.. class:: DNS_NXT_DATAW
-
-    Alias for :class:`DNS_NXT_DATAW`
-
 .. class:: PDNS_NXT_DATAW
 
     Pointer to :class:`DNS_NXT_DATAW`
@@ -3972,10 +3783,6 @@ DNS_NXT_DATAW
 
 DNS_NXT_DATAA
 '''''''''''''
-.. class:: DNS_NXT_DATAA
-
-    Alias for :class:`DNS_NXT_DATAA`
-
 .. class:: PDNS_NXT_DATAA
 
     Pointer to :class:`DNS_NXT_DATAA`
@@ -3998,10 +3805,6 @@ DNS_NXT_DATAA
 
 DNS_SRV_DATAW
 '''''''''''''
-.. class:: DNS_SRV_DATAW
-
-    Alias for :class:`DNS_SRV_DATAW`
-
 .. class:: PDNS_SRV_DATAW
 
     Pointer to :class:`DNS_SRV_DATAW`
@@ -4034,10 +3837,6 @@ DNS_SRV_DATAW
 
 DNS_SRV_DATAA
 '''''''''''''
-.. class:: DNS_SRV_DATAA
-
-    Alias for :class:`DNS_SRV_DATAA`
-
 .. class:: PDNS_SRV_DATAA
 
     Pointer to :class:`DNS_SRV_DATAA`
@@ -4070,10 +3869,6 @@ DNS_SRV_DATAA
 
 DNS_NAPTR_DATAW
 '''''''''''''''
-.. class:: DNS_NAPTR_DATAW
-
-    Alias for :class:`DNS_NAPTR_DATAW`
-
 .. class:: PDNS_NAPTR_DATAW
 
     Pointer to :class:`DNS_NAPTR_DATAW`
@@ -4111,10 +3906,6 @@ DNS_NAPTR_DATAW
 
 DNS_NAPTR_DATAA
 '''''''''''''''
-.. class:: DNS_NAPTR_DATAA
-
-    Alias for :class:`DNS_NAPTR_DATAA`
-
 .. class:: PDNS_NAPTR_DATAA
 
     Pointer to :class:`DNS_NAPTR_DATAA`
@@ -4152,10 +3943,6 @@ DNS_NAPTR_DATAA
 
 DNS_ATMA_DATA
 '''''''''''''
-.. class:: DNS_ATMA_DATA
-
-    Alias for :class:`DNS_ATMA_DATA`
-
 .. class:: PDNS_ATMA_DATA
 
     Pointer to :class:`DNS_ATMA_DATA`
@@ -4173,10 +3960,6 @@ DNS_ATMA_DATA
 
 DNS_TKEY_DATAW
 ''''''''''''''
-.. class:: DNS_TKEY_DATAW
-
-    Alias for :class:`DNS_TKEY_DATAW`
-
 .. class:: PDNS_TKEY_DATAW
 
     Pointer to :class:`DNS_TKEY_DATAW`
@@ -4244,10 +4027,6 @@ DNS_TKEY_DATAW
 
 DNS_TKEY_DATAA
 ''''''''''''''
-.. class:: DNS_TKEY_DATAA
-
-    Alias for :class:`DNS_TKEY_DATAA`
-
 .. class:: PDNS_TKEY_DATAA
 
     Pointer to :class:`DNS_TKEY_DATAA`
@@ -4315,10 +4094,6 @@ DNS_TKEY_DATAA
 
 DNS_TSIG_DATAW
 ''''''''''''''
-.. class:: DNS_TSIG_DATAW
-
-    Alias for :class:`DNS_TSIG_DATAW`
-
 .. class:: PDNS_TSIG_DATAW
 
     Pointer to :class:`DNS_TSIG_DATAW`
@@ -4386,10 +4161,6 @@ DNS_TSIG_DATAW
 
 DNS_TSIG_DATAA
 ''''''''''''''
-.. class:: DNS_TSIG_DATAA
-
-    Alias for :class:`DNS_TSIG_DATAA`
-
 .. class:: PDNS_TSIG_DATAA
 
     Pointer to :class:`DNS_TSIG_DATAA`
@@ -4457,10 +4228,6 @@ DNS_TSIG_DATAA
 
 DNS_WINS_DATA
 '''''''''''''
-.. class:: DNS_WINS_DATA
-
-    Alias for :class:`DNS_WINS_DATA`
-
 .. class:: PDNS_WINS_DATA
 
     Pointer to :class:`DNS_WINS_DATA`
@@ -4493,10 +4260,6 @@ DNS_WINS_DATA
 
 DNS_WINSR_DATAW
 '''''''''''''''
-.. class:: DNS_WINSR_DATAW
-
-    Alias for :class:`DNS_WINSR_DATAW`
-
 .. class:: PDNS_WINSR_DATAW
 
     Pointer to :class:`DNS_WINSR_DATAW`
@@ -4524,10 +4287,6 @@ DNS_WINSR_DATAW
 
 DNS_WINSR_DATAA
 '''''''''''''''
-.. class:: DNS_WINSR_DATAA
-
-    Alias for :class:`DNS_WINSR_DATAA`
-
 .. class:: PDNS_WINSR_DATAA
 
     Pointer to :class:`DNS_WINSR_DATAA`
@@ -4555,10 +4314,6 @@ DNS_WINSR_DATAA
 
 DNS_TLSA_DATA
 '''''''''''''
-.. class:: DNS_TLSA_DATA
-
-    Alias for :class:`DNS_TLSA_DATA`
-
 .. class:: PDNS_TLSA_DATA
 
     Pointer to :class:`DNS_TLSA_DATA`
@@ -4596,10 +4351,6 @@ DNS_TLSA_DATA
 
 DNS_UNKNOWN_DATA
 ''''''''''''''''
-.. class:: DNS_UNKNOWN_DATA
-
-    Alias for :class:`DNS_UNKNOWN_DATA`
-
 .. class:: PDNS_UNKNOWN_DATA
 
     Pointer to :class:`DNS_UNKNOWN_DATA`
@@ -4936,10 +4687,6 @@ _DNS_QUERY_RESULT
 
 IP_ADDRESS_STRING
 '''''''''''''''''
-.. class:: IP_ADDRESS_STRING
-
-    Alias for :class:`IP_ADDRESS_STRING`
-
 .. class:: IP_MASK_STRING
 
     Alias for :class:`IP_ADDRESS_STRING`
@@ -7429,10 +7176,6 @@ SYMSRV_INDEX_INFOW
 
 .. class:: SYMSRV_INDEX_INFOW
 
-    Alias for :class:`SYMSRV_INDEX_INFOW`
-
-.. class:: SYMSRV_INDEX_INFOW
-
     .. attribute:: sizeofstruct
 
         :class:`DWORD`
@@ -7487,10 +7230,6 @@ SYMSRV_INDEX_INFO
 .. class:: PSYMSRV_INDEX_INFO
 
     Pointer to :class:`SYMSRV_INDEX_INFO`
-
-.. class:: SYMSRV_INDEX_INFO
-
-    Alias for :class:`SYMSRV_INDEX_INFO`
 
 .. class:: SYMSRV_INDEX_INFO
 
@@ -14525,32 +14264,6 @@ _FILE_FS_DRIVER_PATH_INFORMATION
 
         :class:`WCHAR`
 
-_FILE_FS_DRIVER_PATH_INFORMATION
-''''''''''''''''''''''''''''''''
-.. class:: FILE_FS_DRIVER_PATH_INFORMATION
-
-    Alias for :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
-
-.. class:: PFILE_FS_DRIVER_PATH_INFORMATION
-
-    Pointer to :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
-
-.. class:: _FILE_FS_DRIVER_PATH_INFORMATION
-
-    .. attribute:: DriverInPath
-
-        :class:`BOOLEAN`
-
-
-    .. attribute:: DriverNameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: DriverName
-
-        :class:`WCHAR`
-
 _FILE_FS_VOLUME_INFORMATION
 '''''''''''''''''''''''''''
 .. class:: FILE_FS_VOLUME_INFORMATION
@@ -14994,7 +14707,7 @@ _ALPC_MESSAGE_ATTRIBUTES
 
 _PORT_MESSAGE32_TMP_UNION
 '''''''''''''''''''''''''
-.. class:: PORT_MESSAGE_TMP_UNION
+.. class:: PORT_MESSAGE32_TMP_UNION
 
     Alias for :class:`_PORT_MESSAGE32_TMP_UNION`
 
@@ -15011,7 +14724,7 @@ _PORT_MESSAGE32_TMP_UNION
 
 _PORT_MESSAGE64_TMP_UNION
 '''''''''''''''''''''''''
-.. class:: PORT_MESSAGE_TMP_UNION
+.. class:: PORT_MESSAGE64_TMP_UNION
 
     Alias for :class:`_PORT_MESSAGE64_TMP_UNION`
 
@@ -15030,10 +14743,6 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S1
 ''''''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
 
-    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
-
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
-
     .. attribute:: DataLength
 
         :class:`CSHORT`
@@ -15045,10 +14754,6 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S1
 
 _PORT_MESSAGE_TMP_UNION_U1
 ''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_UNION_U1
-
-    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U1`
-
 .. class:: _PORT_MESSAGE_TMP_UNION_U1
 
     .. attribute:: Length
@@ -15064,10 +14769,6 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S2
 ''''''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
 
-    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
-
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
-
     .. attribute:: Type
 
         :class:`CSHORT`
@@ -15079,10 +14780,6 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S2
 
 _PORT_MESSAGE_TMP_UNION_U2
 ''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_UNION_U2
-
-    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U2`
-
 .. class:: _PORT_MESSAGE_TMP_UNION_U2
 
     .. attribute:: ZeroInit
@@ -15202,10 +14899,6 @@ _ALPC_SERVER_INFORMATION_TMP_OUT
 
 ALPC_SERVER_INFORMATION
 '''''''''''''''''''''''
-.. class:: ALPC_SERVER_INFORMATION
-
-    Alias for :class:`ALPC_SERVER_INFORMATION`
-
 .. class:: ALPC_SERVER_INFORMATION
 
     .. attribute:: In
@@ -16890,32 +16583,6 @@ _CTL_ENTRY
     .. attribute:: rgAttribute
 
         :class:`PCRYPT_ATTRIBUTE`
-
-_CRYPT_ATTRIBUTE
-''''''''''''''''
-.. class:: CRYPT_ATTRIBUTE
-
-    Alias for :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: PCRYPT_ATTRIBUTE
-
-    Pointer to :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: _CRYPT_ATTRIBUTE
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: cValue
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgValue
-
-        :class:`PCRYPT_ATTR_BLOB`
 
 _CRYPT_ATTRIBUTES
 '''''''''''''''''
@@ -18871,47 +18538,6 @@ _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
     .. attribute:: pOtherAttr
 
         :class:`PCRYPT_ATTRIBUTE_TYPE_VALUE`
-
-_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
-'''''''''''''''''''''''''''''''''''''
-.. class:: CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
-
-    Alias for :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
-
-.. class:: PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
-
-    Pointer to :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
-
-.. class:: _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: KeyEncryptionAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: pvKeyEncryptionAuxInfo
-
-        :class:`PVOID`
-
-
-    .. attribute:: hCryptProv
-
-        :class:`HCRYPTPROV_LEGACY`
-
-
-    .. attribute:: RecipientPublicKey
-
-        :class:`CRYPT_BIT_BLOB`
-
-
-    .. attribute:: RecipientId
-
-        :class:`CERT_ID`
 
 _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
 '''''''''''''''''''''''''''''''''''''
@@ -21583,27 +21209,6 @@ _POLICY_ACCOUNT_DOMAIN_INFO
 
 
     .. attribute:: DomainSid
-
-        :class:`PSID`
-
-_POLICY_PRIMARY_DOMAIN_INFO
-'''''''''''''''''''''''''''
-.. class:: POLICY_PRIMARY_DOMAIN_INFO
-
-    Alias for :class:`_POLICY_PRIMARY_DOMAIN_INFO`
-
-.. class:: PPOLICY_PRIMARY_DOMAIN_INFO
-
-    Pointer to :class:`_POLICY_PRIMARY_DOMAIN_INFO`
-
-.. class:: _POLICY_PRIMARY_DOMAIN_INFO
-
-    .. attribute:: Name
-
-        :class:`LSA_UNICODE_STRING`
-
-
-    .. attribute:: Sid
 
         :class:`PSID`
 
@@ -26144,7 +25749,7 @@ _API_SET_VALUE_ARRAY_V4
 
     Alias for :class:`_API_SET_VALUE_ARRAY_V4`
 
-.. class:: PAPI_SET_VALUE_ARRAY_V2
+.. class:: PAPI_SET_VALUE_ARRAY_V4
 
     Pointer to :class:`_API_SET_VALUE_ARRAY_V4`
 
@@ -26893,11 +26498,6 @@ WinEnums
 --------
 NDR_FORMAT_CHARACTER
 ''''''''''''''''''''
-.. class:: NDR_FORMAT_CHARACTER
-
-    Alias for :class:`NDR_FORMAT_CHARACTER`
-
-
 .. class:: NDR_FORMAT_CHARACTER
 
 
@@ -27674,11 +27274,6 @@ DNS_FREE_TYPE
 '''''''''''''
 .. class:: DNS_FREE_TYPE
 
-    Alias for :class:`DNS_FREE_TYPE`
-
-
-.. class:: DNS_FREE_TYPE
-
 
     .. attribute:: DnsFreeFlat(0)
 
@@ -27788,11 +27383,6 @@ ACTIVATEOPTIONS
 '''''''''''''''
 .. class:: ACTIVATEOPTIONS
 
-    Alias for :class:`ACTIVATEOPTIONS`
-
-
-.. class:: ACTIVATEOPTIONS
-
 
     .. attribute:: AO_NONE(0)
 
@@ -27812,11 +27402,6 @@ PACKAGE_EXECUTION_STATE
 '''''''''''''''''''''''
 .. class:: PACKAGE_EXECUTION_STATE
 
-    Alias for :class:`PACKAGE_EXECUTION_STATE`
-
-
-.. class:: PACKAGE_EXECUTION_STATE
-
 
     .. attribute:: PES_UNKNOWN(0)
 
@@ -27834,11 +27419,6 @@ PACKAGE_EXECUTION_STATE
 
 SYM_TYPE
 ''''''''
-.. class:: SYM_TYPE
-
-    Alias for :class:`SYM_TYPE`
-
-
 .. class:: SYM_TYPE
 
 
@@ -28235,11 +27815,6 @@ ADDRESS_MODE
 ''''''''''''
 .. class:: ADDRESS_MODE
 
-    Alias for :class:`ADDRESS_MODE`
-
-
-.. class:: ADDRESS_MODE
-
 
     .. attribute:: AddrMode1616(0)
 
@@ -28467,11 +28042,6 @@ _TASK_CREATION
 
 TASK_RUN_FLAGS
 ''''''''''''''
-.. class:: TASK_RUN_FLAGS
-
-    Alias for :class:`TASK_RUN_FLAGS`
-
-
 .. class:: TASK_RUN_FLAGS
 
 
@@ -30369,21 +29939,6 @@ _SE_OBJECT_TYPE
 
     .. attribute:: SE_REGISTRY_WOW64_32KEY(12)
 
-_SECTION_INHERIT
-''''''''''''''''
-.. class:: SECTION_INHERIT
-
-    Alias for :class:`_SECTION_INHERIT`
-
-
-.. class:: _SECTION_INHERIT
-
-
-    .. attribute:: ViewShare(1)
-
-
-    .. attribute:: ViewUnmap(2)
-
 tagCOINIT
 '''''''''
 .. class:: COINIT
@@ -30697,11 +30252,6 @@ SICHINTF
 
 GETPROPERTYSTOREFLAGS
 '''''''''''''''''''''
-.. class:: GETPROPERTYSTOREFLAGS
-
-    Alias for :class:`GETPROPERTYSTOREFLAGS`
-
-
 .. class:: GETPROPERTYSTOREFLAGS
 
 
@@ -32023,11 +31573,6 @@ _COMPUTER_NAME_FORMAT
 
 TRACE_INFO_CLASS
 ''''''''''''''''
-.. class:: TRACE_INFO_CLASS
-
-    Alias for :class:`TRACE_INFO_CLASS`
-
-
 .. class:: TRACE_QUERY_INFO_CLASS
 
     Alias for :class:`TRACE_INFO_CLASS`
@@ -33151,11 +32696,6 @@ tag_WBEM_QUERY_FLAG_TYPE
 
 WMIDPREQUESTCODE
 ''''''''''''''''
-.. class:: WMIDPREQUESTCODE
-
-    Alias for :class:`WMIDPREQUESTCODE`
-
-
 .. class:: WMIDPREQUESTCODE
 
 

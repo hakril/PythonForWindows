@@ -150,13 +150,6 @@ HANDLE WINAPI CreateRemoteThread(
   _Out_  LPDWORD lpThreadId
 );
 
-BOOL WINAPI VirtualProtect(
-  _In_   LPVOID lpAddress,
-  _In_   SIZE_T dwSize,
-  _In_   DWORD flNewProtect,
-  _Out_  PDWORD lpflOldProtect
-);
-
 BOOL WINAPI CreateProcessA(
     __in_opt    LPCSTR lpApplicationName,
     __inout_opt LPSTR lpCommandLine,
@@ -300,15 +293,6 @@ HANDLE WINAPI CreateFileW(
     );
 
 
-
-
-
-BOOL WINAPI OpenProcessToken(
-  _In_   HANDLE ProcessHandle,
-  _In_   DWORD DesiredAccess,
-  _Out_  PHANDLE TokenHandle
-);
-
 BOOL WINAPI DuplicateToken(
   _In_  HANDLE                       ExistingTokenHandle,
   _In_  SECURITY_IMPERSONATION_LEVEL ImpersonationLevel,
@@ -325,13 +309,6 @@ BOOL WINAPI DuplicateTokenEx(
   _Out_    PHANDLE                      phNewToken
 );
 
-
-BOOL WINAPI OpenThreadToken(
-  _In_  HANDLE  ThreadHandle,
-  _In_  DWORD   DesiredAccess,
-  _In_  BOOL    OpenAsSelf,
-  _Out_ PHANDLE TokenHandle
-);
 
 BOOL WINAPI SetThreadToken(
   _In_opt_ PHANDLE Thread,
@@ -540,14 +517,6 @@ BOOL WINAPI DeviceIoControl(
   _Inout_opt_ LPOVERLAPPED lpOverlapped
 );
 
-BOOL WINAPI GetTokenInformation(
-  _In_      HANDLE                  TokenHandle,
-  _In_      TOKEN_INFORMATION_CLASS TokenInformationClass,
-  _Out_opt_ LPVOID                  TokenInformation,
-  _In_      DWORD                   TokenInformationLength,
-  _Out_     PDWORD                  ReturnLength
-);
-
 
 BOOL WINAPI Wow64DisableWow64FsRedirection(
   _Out_ PVOID *OldValue
@@ -569,12 +538,6 @@ BOOL WINAPI Wow64GetThreadContext(
 BOOL WINAPI SetConsoleCtrlHandler(
   _In_opt_ PHANDLER_ROUTINE HandlerRoutine,
   _In_     BOOL             Add
-);
-
-LONG WINAPI WinVerifyTrust(
-    _In_opt_ HWND hwnd,
-    _In_ GUID *pgActionID,
-    _Inout_ LPVOID pWVTData
 );
 
 HGLOBAL WINAPI GlobalAlloc(

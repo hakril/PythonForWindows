@@ -18,6 +18,8 @@ div.body {
 
 div.bodywrapper { margin-right: 20px; }
 
+.sphinxsidebarwrapper {  overflow-y: scroll; }
+
 div.admonition-todo {
     border-top: 2px solid red;
     border-bottom: 2px solid red;

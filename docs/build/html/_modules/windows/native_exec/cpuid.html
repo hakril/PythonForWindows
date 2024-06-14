@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.native_exec.cpuid &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.native_exec.cpuid &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.native_exec.cpuid</a></li> 
       </ul>
     </div>  
 
@@ -43,36 +40,44 @@
 <span></span><span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 
-<span class="kn">import</span> <span class="nn">native_function</span>
-<span class="kn">import</span> <span class="nn">simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
-<span class="kn">import</span> <span class="nn">simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
+<span class="kn">from</span> <span class="nn">windows.native_exec</span> <span class="kn">import</span> <span class="n">native_function</span>
+<span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
+<span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <span class="k">def</span> <span class="nf">_bitness</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns 32 or 64&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns 32 or 64&quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">platform</span>
     <span class="n">bits</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">architecture</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">bits</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="X86CpuidResult"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86CpuidResult">[docs]</a><span class="k">class</span> <span class="nc">X86CpuidResult</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raw result of the CPUID instruction&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="X86CpuidResult">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86CpuidResult">[docs]</a>
+<span class="k">class</span> <span class="nc">X86CpuidResult</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raw result of the CPUID instruction&quot;&quot;&quot;</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;EBX&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;ECX&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;EDX&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">)]</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="X64CpuidResult"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X64CpuidResult">[docs]</a><span class="k">class</span> <span class="nc">X64CpuidResult</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+
+<div class="viewcode-block" id="X64CpuidResult">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X64CpuidResult">[docs]</a>
+<span class="k">class</span> <span class="nc">X64CpuidResult</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;RAX&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;RBX&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;RCX&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;RDX&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="X86IntelCpuidFamilly"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86IntelCpuidFamilly">[docs]</a><span class="k">class</span> <span class="nc">X86IntelCpuidFamilly</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+
+<div class="viewcode-block" id="X86IntelCpuidFamilly">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86IntelCpuidFamilly">[docs]</a>
+<span class="k">class</span> <span class="nc">X86IntelCpuidFamilly</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;SteppingID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;ModelID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;FamilyID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
@@ -82,10 +87,13 @@
                 <span class="p">(</span><span class="s2">&quot;ExtendedFamily&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;Reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="X86AmdCpuidFamilly"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86AmdCpuidFamilly">[docs]</a><span class="k">class</span> <span class="nc">X86AmdCpuidFamilly</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+
+<div class="viewcode-block" id="X86AmdCpuidFamilly">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.X86AmdCpuidFamilly">[docs]</a>
+<span class="k">class</span> <span class="nc">X86AmdCpuidFamilly</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;SteppingID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;ModelID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;FamilyID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
@@ -94,7 +102,8 @@
                 <span class="p">(</span><span class="s2">&quot;ExtendedFamily&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
                 <span class="p">(</span><span class="s2">&quot;Reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fields of the Structure&quot;&quot;&quot;</span></div>
+
 
 <span class="n">cpuid32_code</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
 <span class="n">cpuid32_code</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="s1">&#39;EDI&#39;</span><span class="p">)</span>
@@ -123,8 +132,10 @@
 <span class="n">do_cpuid64</span> <span class="o">=</span> <span class="n">native_function</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="n">cpuid64_code</span><span class="o">.</span><span class="n">get_code</span><span class="p">(),</span> <span class="p">[</span><span class="n">DWORD</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="x86_cpuid"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.x86_cpuid">[docs]</a><span class="k">def</span> <span class="nf">x86_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs a CPUID in 32bits mode</span>
+<div class="viewcode-block" id="x86_cpuid">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.x86_cpuid">[docs]</a>
+<span class="k">def</span> <span class="nf">x86_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a CPUID in 32bits mode</span>
 
 <span class="sd">        :rtype: :class:`X86CpuidResult`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -133,8 +144,11 @@
     <span class="k">return</span> <span class="n">cpuid_res</span></div>
 
 
-<div class="viewcode-block" id="x64_cpuid"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.x64_cpuid">[docs]</a><span class="k">def</span> <span class="nf">x64_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs a CPUID in 64bits mode</span>
+
+<div class="viewcode-block" id="x64_cpuid">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.x64_cpuid">[docs]</a>
+<span class="k">def</span> <span class="nf">x64_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a CPUID in 64bits mode</span>
 
 <span class="sd">        :rtype: :class:`X86CpuidResult`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -144,21 +158,27 @@
     <span class="k">return</span> <span class="n">X86CpuidResult</span><span class="p">(</span><span class="n">cpuid_res</span><span class="o">.</span><span class="n">RAX</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">RBX</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">RCX</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">RDX</span><span class="p">)</span></div>
 
 
+
 <span class="k">if</span> <span class="n">_bitness</span><span class="p">()</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
     <span class="n">_do_cpuid</span> <span class="o">=</span> <span class="n">x86_cpuid</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">_do_cpuid</span> <span class="o">=</span> <span class="n">x64_cpuid</span>
 
-<div class="viewcode-block" id="do_cpuid"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.do_cpuid">[docs]</a><span class="k">def</span> <span class="nf">do_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs a CPUID for the current process bitness</span>
+<div class="viewcode-block" id="do_cpuid">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.do_cpuid">[docs]</a>
+<span class="k">def</span> <span class="nf">do_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a CPUID for the current process bitness</span>
 
 <span class="sd">        :rtype: :class:`X86CpuidResult`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_do_cpuid</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_vendor_id"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.get_vendor_id">[docs]</a><span class="k">def</span> <span class="nf">get_vendor_id</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Extracts the VendorId string from CPUID</span>
+
+<div class="viewcode-block" id="get_vendor_id">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.get_vendor_id">[docs]</a>
+<span class="k">def</span> <span class="nf">get_vendor_id</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the VendorId string from CPUID</span>
 
 <span class="sd">        :rtype: :class:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -166,19 +186,28 @@
     <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;III&quot;</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">EBX</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">EDX</span><span class="p">,</span> <span class="n">cpuid_res</span><span class="o">.</span><span class="n">ECX</span><span class="p">)</span></div>
 
 
+
 <span class="c1"># platform.processor() could do the trick</span>
-<div class="viewcode-block" id="is_intel_proc"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.is_intel_proc">[docs]</a><span class="k">def</span> <span class="nf">is_intel_proc</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;get_vendor_id() == &#39;GenuineIntel&#39;&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">get_vendor_id</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;GenuineIntel&quot;</span></div>
+<div class="viewcode-block" id="is_intel_proc">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.is_intel_proc">[docs]</a>
+<span class="k">def</span> <span class="nf">is_intel_proc</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;get_vendor_id() == b&#39;GenuineIntel&#39;&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_vendor_id</span><span class="p">()</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;GenuineIntel&quot;</span></div>
 
 
-<div class="viewcode-block" id="is_amd_proc"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.is_amd_proc">[docs]</a><span class="k">def</span> <span class="nf">is_amd_proc</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;get_vendor_id() == &#39;AuthenticAMD&#39;&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">get_vendor_id</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;AuthenticAMD&quot;</span></div>
+
+<div class="viewcode-block" id="is_amd_proc">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.is_amd_proc">[docs]</a>
+<span class="k">def</span> <span class="nf">is_amd_proc</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;get_vendor_id() == b&#39;AuthenticAMD&#39;&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_vendor_id</span><span class="p">()</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;AuthenticAMD&quot;</span></div>
 
 
-<div class="viewcode-block" id="get_proc_family_model"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.get_proc_family_model">[docs]</a><span class="k">def</span> <span class="nf">get_proc_family_model</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Extracts the family and model based on vendorId</span>
+
+<div class="viewcode-block" id="get_proc_family_model">
+<a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.cpuid.get_proc_family_model">[docs]</a>
+<span class="k">def</span> <span class="nf">get_proc_family_model</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the family and model based on vendorId</span>
 
 <span class="sd">        :rtype: (ComputedFamily, ComputedModel)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -199,25 +228,25 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ComputedFamily</span> <span class="o">=</span> <span class="n">infos</span><span class="o">.</span><span class="n">FamilyID</span>
     <span class="k">return</span> <span class="n">ComputedFamily</span><span class="p">,</span> <span class="n">ComputedModel</span></div>
+
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -231,13 +260,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.native_exec.cpuid</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

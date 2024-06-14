@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.pe_parse &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.pe_parse &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>
     </div>  
 
@@ -94,8 +91,10 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="n">CtypesStructureTransformers</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;CtypesStructureTransformers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;ctypes_structure_transformer&quot;</span><span class="p">,</span> <span class="s2">&quot;create_structure_at&quot;</span><span class="p">])</span>
 
-<div class="viewcode-block" id="GetPEFile"><a class="viewcode-back" href="../../process.html#windows.pe_parse.GetPEFile">[docs]</a><span class="k">def</span> <span class="nf">GetPEFile</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_bitness</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.</span>
+<div class="viewcode-block" id="GetPEFile">
+<a class="viewcode-back" href="../../process.html#windows.pe_parse.GetPEFile">[docs]</a>
+<span class="k">def</span> <span class="nf">GetPEFile</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_bitness</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.</span>
 
 <span class="sd">    :rtype: :class:`PEFile`</span>
 
@@ -114,6 +113,7 @@
     <span class="c1">#ctypes_structure_transformer, create_structure_at = transformers</span>
     <span class="n">transfor_funcs</span> <span class="o">=</span> <span class="n">CtypesStructureTransformers</span><span class="p">(</span><span class="o">*</span><span class="n">transformers</span><span class="p">)</span>  <span class="c1"># TODO: rename</span>
     <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">THUNK_DATA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Union</span><span class="p">):</span>
@@ -182,8 +182,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nonhookvalue</span> <span class="o">=</span> <span class="n">iat_entry</span><span class="o">.</span><span class="n">nonhookvalue</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-<div class="viewcode-block" id="IATEntry"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry">[docs]</a><span class="k">class</span> <span class="nc">IATEntry</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent an entry in the IAT of a module</span>
+<div class="viewcode-block" id="IATEntry">
+<a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry">[docs]</a>
+<span class="k">class</span> <span class="nc">IATEntry</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent an entry in the IAT of a module</span>
 <span class="sd">    Can be used to get resolved value and setup hook</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
@@ -203,8 +205,10 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; ordinal </span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ord</span><span class="p">)</span>
 
-<div class="viewcode-block" id="IATEntry.set_hook"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.set_hook">[docs]</a>    <span class="k">def</span> <span class="nf">set_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Setup a hook on the entry and return it.</span>
+<div class="viewcode-block" id="IATEntry.set_hook">
+<a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.set_hook">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup a hook on the entry and return it.</span>
 <span class="sd">        You MUST keep a reference to the hook while the hook is enabled.</span>
 
 <span class="sd">        :param callback: the hook</span>
@@ -229,18 +233,23 @@
         <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">hook</span></div>
 
+
     <span class="k">def</span> <span class="nf">on_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="c1"># We cannot know if the hook was enabled here..</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DESTROY: </span><span class="si">{0}</span><span class="s2"> -&gt; &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">))</span>
         <span class="c1"># print(args[0]())</span>
 
-<div class="viewcode-block" id="IATEntry.remove_hook"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.remove_hook">[docs]</a>    <span class="k">def</span> <span class="nf">remove_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove the hook on the entry&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="IATEntry.remove_hook">
+<a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.remove_hook">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the hook on the entry&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="kc">True</span></div></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+
 
     <span class="c1"># def __del__(self):</span>
         <span class="c1"># print(self.hook)</span>
@@ -346,8 +355,10 @@
         <span class="p">(</span><span class="s2">&quot;e_lfanew&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
     <span class="p">]</span>
 
-<div class="viewcode-block" id="PEFile"><a class="viewcode-back" href="../../process.html#windows.pe_parse.PEFile">[docs]</a><span class="k">class</span> <span class="nc">PEFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a PE loaded in a process (current or remote)&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PEFile">
+<a class="viewcode-back" href="../../process.html#windows.pe_parse.PEFile">[docs]</a>
+<span class="k">class</span> <span class="nc">PEFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent a PE loaded in a process (current or remote)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transformers</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
@@ -440,7 +451,7 @@
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The exports of the PE in a dict. Keys are ordinal (:class:`int`) and name (:class:`str`).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The exports of the PE in a dict. Keys are ordinal (:class:`int`) and name (:class:`str`).</span>
 <span class="sd">         The values are the addresses of the exports.</span>
 
 <span class="sd">            :type: {(:class:`int` or :class:`str`) : :class:`int`}&quot;&quot;&quot;</span>
@@ -465,7 +476,7 @@
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">export_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The Name attribute of the ``EXPORT_DIRECTORY``&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Name attribute of the ``EXPORT_DIRECTORY``&quot;&quot;&quot;</span>
         <span class="n">exp_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_EXPORT_DIRECTORY</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">exp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -476,7 +487,7 @@
     <span class="c1"># TODO: get imports by parsing other modules exports if no INT</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">imports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The imports of the PE in a dict.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The imports of the PE in a dict.</span>
 <span class="sd">        Keys are the names of DLL to import from and values are :class:`list`</span>
 <span class="sd">        of :class:`IATEntry`</span>
 
@@ -493,25 +504,25 @@
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
             <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
+
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -525,13 +536,14 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

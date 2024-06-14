@@ -1,21 +1,18 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,7 +34,8 @@
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></li> 
       </ul>
     </div>  
 
@@ -46,79 +44,72 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.rpc">
-<span id="windows-rpc-alpc-based-windows-rpc"></span><h1>13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC<a class="headerlink" href="#module-windows.rpc" title="Permalink to this headline">¶</a></h1>
+  <section id="module-windows.rpc">
+<span id="windows-rpc-alpc-based-windows-rpc"></span><h1><span class="section-number">13. </span><code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC<a class="headerlink" href="#module-windows.rpc" title="Link to this heading">¶</a></h1>
 <p>The <a class="reference internal" href="#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a> allows to perform the basic for MS-RPC:</p>
 <blockquote>
 <div><ul class="simple">
-<li>find interface endpoints</li>
-<li>connect to it</li>
-<li>bind to interfaces</li>
-<li>perform call</li>
-<li>Marshall/Unmarshall NDR</li>
+<li><p>find interface endpoints</p></li>
+<li><p>connect to it</p></li>
+<li><p>bind to interfaces</p></li>
+<li><p>perform call</p></li>
+<li><p>Marshall/Unmarshall NDR</p></li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>See samples:</p>
-<blockquote class="last">
+<blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="sample.html#sample-rpc-uac"><span class="std std-ref">Manual UAC</span></a></li>
-<li><a class="reference internal" href="sample.html#sample-rpc-lsass"><span class="std std-ref">Manual LsarEnumeratePrivileges</span></a></li>
+<li><p><a class="reference internal" href="sample.html#sample-rpc-uac"><span class="std std-ref">Manual UAC</span></a></p></li>
+<li><p><a class="reference internal" href="sample.html#sample-rpc-lsass"><span class="std std-ref">Manual LsarEnumeratePrivileges</span></a></p></li>
 </ul>
 </div></blockquote>
 </div>
-<div class="section" id="rpcclient">
-<h2>13.1. RPCClient<a class="headerlink" href="#rpcclient" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.rpc.RPCClient">
-<em class="property">class </em><code class="descclassname">windows.rpc.</code><code class="descname">RPCClient</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient" title="Permalink to this definition">¶</a></dt>
+<section id="rpcclient">
+<h2><span class="section-number">13.1. </span>RPCClient<a class="headerlink" href="#rpcclient" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.RPCClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.</span></span><span class="sig-name descname"><span class="pre">RPCClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient" title="Link to this definition">¶</a></dt>
 <dd><p>A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling</p>
-<dl class="attribute">
-<dt id="windows.rpc.RPCClient.alpc_client">
-<code class="descname">alpc_client</code><em class="property"> = None</em><a class="headerlink" href="#windows.rpc.RPCClient.alpc_client" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.RPCClient.alpc_client">
+<span class="sig-name descname"><span class="pre">alpc_client</span></span><a class="headerlink" href="#windows.rpc.RPCClient.alpc_client" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="alpc.html#windows.alpc.AlpcClient" title="windows.alpc.AlpcClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.alpc.AlpcClient</span></code></a> used to communicate with the server</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.rpc.RPCClient.bind">
-<code class="descname">bind</code><span class="sig-paren">(</span><em>IID_str</em>, <em>version=(1</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.bind" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.RPCClient.bind">
+<span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IID_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.bind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.bind" title="Link to this definition">¶</a></dt>
 <dd><p>Bind to the <code class="docutils literal notranslate"><span class="pre">IID_str</span></code> with the given <code class="docutils literal notranslate"><span class="pre">version</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.IID</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.IID</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.rpc.RPCClient.call">
-<code class="descname">call</code><span class="sig-paren">(</span><em>IID</em>, <em>method_offset</em>, <em>params</em>, <em>ipid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.call" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.RPCClient.call">
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.call" title="Link to this definition">¶</a></dt>
 <dd><p>Call method number <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID</span></code> with mashalled <code class="docutils literal notranslate"><span class="pre">params</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>IID</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.IID" title="windows.generated_def.winstructs.IID"><em>IID</em></a>) – An IID previously returned by <a class="reference internal" href="#windows.rpc.RPCClient.bind" title="windows.rpc.RPCClient.bind"><code class="xref py py-func docutils literal notranslate"><span class="pre">bind()</span></code></a></li>
-<li><strong>method_offset</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – </li>
-<li><strong>params</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The mashalled parameters (NDR32)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IID</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.IID" title="windows.generated_def.winstructs.IID"><em>IID</em></a>) – An IID previously returned by <a class="reference internal" href="#windows.rpc.RPCClient.bind" title="windows.rpc.RPCClient.bind"><code class="xref py py-func docutils literal notranslate"><span class="pre">bind()</span></code></a></p></li>
+<li><p><strong>method_offset</strong> (<em>int</em>)</p></li>
+<li><p><strong>params</strong> (<em>str</em>) – The mashalled parameters (NDR32)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="windows.rpc.RPCClient.forge_alpc_request">
-<code class="descname">forge_alpc_request</code><span class="sig-paren">(</span><em>IID</em>, <em>method_offset</em>, <em>params</em>, <em>ipid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.forge_alpc_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.forge_alpc_request" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.RPCClient.forge_alpc_request">
+<span class="sig-name descname"><span class="pre">forge_alpc_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.forge_alpc_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.forge_alpc_request" title="Link to this definition">¶</a></dt>
 <dd><p>Craft an ALPC message containing an RPC request to call <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID`</span>
 <span class="pre">with</span> <span class="pre">``params</span></code>.
 Can be used to craft request without directly sending it</p>
@@ -126,67 +117,63 @@ Can be used to craft request without directly sending it</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="epmapper">
-<h2>13.2. Epmapper<a class="headerlink" href="#epmapper" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.rpc.epmapper.UnpackTower">
-<em class="property">class </em><code class="descclassname">windows.rpc.epmapper.</code><code class="descname">UnpackTower</code><span class="sig-paren">(</span><em>protseq</em>, <em>endpoint</em>, <em>address</em>, <em>object</em>, <em>syntax</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="windows.rpc.epmapper.UnpackTower.address">
-<code class="descname">address</code><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.address" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="epmapper">
+<h2><span class="section-number">13.2. </span>Epmapper<a class="headerlink" href="#epmapper" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.epmapper.</span></span><span class="sig-name descname"><span class="pre">UnpackTower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protseq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">syntax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower.address">
+<span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.address" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.rpc.epmapper.UnpackTower.endpoint">
-<code class="descname">endpoint</code><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.endpoint" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower.endpoint">
+<span class="sig-name descname"><span class="pre">endpoint</span></span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.endpoint" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.rpc.epmapper.UnpackTower.object">
-<code class="descname">object</code><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.object" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower.object">
+<span class="sig-name descname"><span class="pre">object</span></span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.object" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 3</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.rpc.epmapper.UnpackTower.protseq">
-<code class="descname">protseq</code><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.protseq" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower.protseq">
+<span class="sig-name descname"><span class="pre">protseq</span></span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.protseq" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.rpc.epmapper.UnpackTower.syntax">
-<code class="descname">syntax</code><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.syntax" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="windows.rpc.epmapper.UnpackTower.syntax">
+<span class="sig-name descname"><span class="pre">syntax</span></span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower.syntax" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 4</p>
 </dd></dl>
 
 </dd></dl>
 
-<div class="section" id="find-alpc-endpoints">
-<h3>13.2.1. <a class="reference internal" href="#windows.rpc.find_alpc_endpoints" title="windows.rpc.find_alpc_endpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a><a class="headerlink" href="#find-alpc-endpoints" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="windows.rpc.find_alpc_endpoints">
-<code class="descclassname">windows.rpc.</code><code class="descname">find_alpc_endpoints</code><span class="sig-paren">(</span><em>targetiid</em>, <em>version=(1</em>, <em>0)</em>, <em>nb_response=1</em>, <em>sid=_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoints" title="Permalink to this definition">¶</a></dt>
+<section id="find-alpc-endpoints">
+<h3><span class="section-number">13.2.1. </span><a class="reference internal" href="#windows.rpc.find_alpc_endpoints" title="windows.rpc.find_alpc_endpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a><a class="headerlink" href="#find-alpc-endpoints" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.rpc.find_alpc_endpoints">
+<span class="sig-prename descclassname"><span class="pre">windows.rpc.</span></span><span class="sig-name descname"><span class="pre">find_alpc_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetiid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_response</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoints" title="Link to this definition">¶</a></dt>
 <dd><p>Ask the EPMapper for ALPC endpoints of <code class="docutils literal notranslate"><span class="pre">targetiid:version</span></code> (maximum of <code class="docutils literal notranslate"><span class="pre">nb_response</span></code>)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>targetiid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The IID of the requested interface</li>
-<li><strong>version</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>)</em>) – The version requested interface</li>
-<li><strong>nb_response</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The maximum number of response</li>
-<li><strong>sid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE" title="windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE"><em>WELL_KNOWN_SID_TYPE</em></a>) – The SID used to request the EPMapper</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>targetiid</strong> (<em>str</em>) – The IID of the requested interface</p></li>
+<li><p><strong>version</strong> (<em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – The version requested interface</p></li>
+<li><p><strong>nb_response</strong> (<em>int</em>) – The maximum number of response</p></li>
+<li><p><strong>sid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE" title="windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE"><em>WELL_KNOWN_SID_TYPE</em></a>) – The SID used to request the EPMapper</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">[<a class="reference internal" href="#windows.rpc.epmapper.UnpackTower" title="windows.rpc.epmapper.UnpackTower"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnpackTower</span></code></a>] – A list of <a class="reference internal" href="#windows.rpc.epmapper.UnpackTower" title="windows.rpc.epmapper.UnpackTower"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnpackTower</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[<a class="reference internal" href="#windows.rpc.epmapper.UnpackTower" title="windows.rpc.epmapper.UnpackTower"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnpackTower</span></code></a>] – A list of <a class="reference internal" href="#windows.rpc.epmapper.UnpackTower" title="windows.rpc.epmapper.UnpackTower"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnpackTower</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>Example:</p>
@@ -200,29 +187,25 @@ Can be used to craft request without directly sending it</p>
 <span class="go">                syntax=&lt;RPC_IF_ID &quot;8A885D04-1CEB-11C9-9FE8-08002B104860&quot; (2, 0)&gt;)]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="find-alpc-endpoint-and-connect">
-<h3>13.2.2. <a class="reference internal" href="#windows.rpc.find_alpc_endpoint_and_connect" title="windows.rpc.find_alpc_endpoint_and_connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a><a class="headerlink" href="#find-alpc-endpoint-and-connect" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="windows.rpc.find_alpc_endpoint_and_connect">
-<code class="descclassname">windows.rpc.</code><code class="descname">find_alpc_endpoint_and_connect</code><span class="sig-paren">(</span><em>targetiid</em>, <em>version=(1</em>, <em>0)</em>, <em>sid=_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoint_and_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoint_and_connect" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="find-alpc-endpoint-and-connect">
+<h3><span class="section-number">13.2.2. </span><a class="reference internal" href="#windows.rpc.find_alpc_endpoint_and_connect" title="windows.rpc.find_alpc_endpoint_and_connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a><a class="headerlink" href="#find-alpc-endpoint-and-connect" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.rpc.find_alpc_endpoint_and_connect">
+<span class="sig-prename descclassname"><span class="pre">windows.rpc.</span></span><span class="sig-name descname"><span class="pre">find_alpc_endpoint_and_connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetiid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoint_and_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoint_and_connect" title="Link to this definition">¶</a></dt>
 <dd><p>Ask the EPMapper for ALPC endpoints of <code class="docutils literal notranslate"><span class="pre">targetiid:version</span></code> and connect to one of them.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>targetiid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The IID of the requested interface</li>
-<li><strong>version</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>)</em>) – The version requested interface</li>
-<li><strong>sid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE" title="windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE"><em>WELL_KNOWN_SID_TYPE</em></a>) – The SID used to request the EPMapper</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>targetiid</strong> (<em>str</em>) – The IID of the requested interface</p></li>
+<li><p><strong>version</strong> (<em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – The version requested interface</p></li>
+<li><p><strong>sid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE" title="windows.generated_def.winstructs.WELL_KNOWN_SID_TYPE"><em>WELL_KNOWN_SID_TYPE</em></a>) – The SID used to request the EPMapper</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A connected <a class="reference internal" href="#windows.rpc.RPCClient" title="windows.rpc.RPCClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">RPCClient</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A connected <a class="reference internal" href="#windows.rpc.RPCClient" title="windows.rpc.RPCClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">RPCClient</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>Example:</p>
@@ -238,37 +221,34 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&lt;IID &quot;201EF99A-7FA0-444C-9399-19BA84F12A1A&quot;&gt;</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="module-windows.rpc.ndr">
-<span id="ndr"></span><h2>13.3. Ndr<a class="headerlink" href="#module-windows.rpc.ndr" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="module-windows.rpc.ndr">
+<span id="ndr"></span><h2><span class="section-number">13.3. </span>Ndr<a class="headerlink" href="#module-windows.rpc.ndr" title="Link to this heading">¶</a></h2>
 <p>The <a class="reference internal" href="#module-windows.rpc.ndr" title="windows.rpc.ndr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc.ndr</span></code></a> module offers some construction to help marshalling types and structures to NDR.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The NDR supported for now is <code class="docutils literal notranslate"><span class="pre">8a885d04-1ceb-11c9-9fe8-08002b104860</span></code> version <code class="docutils literal notranslate"><span class="pre">2.0</span></code></p>
+<p class="admonition-title">Note</p>
+<p>The NDR supported for now is <code class="docutils literal notranslate"><span class="pre">8a885d04-1ceb-11c9-9fe8-08002b104860</span></code> version <code class="docutils literal notranslate"><span class="pre">2.0</span></code></p>
 </div>
 <p>Each NDR class has a function <code class="xref py py-func docutils literal notranslate"><span class="pre">pack()</span></code>.</p>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrSID">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrSID</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrSID.pack">
-<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>psid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID.pack" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrSID">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrSID</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrSID.pack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID.pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID.pack" title="Link to this definition">¶</a></dt>
 <dd><p>Pack a PSID</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>psid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><em>PSID</em></a>) – </td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>psid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><em>PSID</em></a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrSID.unpack">
-<em class="property">classmethod </em><code class="descname">unpack</code><span class="sig-paren">(</span><em>stream</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID.unpack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID.unpack" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack a PSID, partial implementation that returns a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> and not a PSID</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrSID.unpack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unpack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrSID.unpack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrSID.unpack" title="Link to this definition">¶</a></dt>
+<dd><p>Unpack a PSID, partial implementation that returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> and not a PSID</p>
 </dd></dl>
 
 </dd></dl>
@@ -285,12 +265,12 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&#39;\x01\x01\x00\x00\x00\x00\x00\x05\x12\x00\x00\x00&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrWString">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrWString</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrWString.pack">
-<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString.pack" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrWString">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrWString</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrWString.pack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString.pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString.pack" title="Link to this definition">¶</a></dt>
 <dd><p>Pack string <code class="docutils literal notranslate"><span class="pre">data</span></code>. append <code class="docutils literal notranslate"><span class="pre">\x00</span></code> if not present at the end of the string</p>
 </dd></dl>
 
@@ -304,12 +284,12 @@ Can be used to craft request without directly sending it</p>
 <span class="go">u&#39;Test-String\x00&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrCString">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrCString</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrCString.pack">
-<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString.pack" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrCString">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrCString</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrCString.pack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString.pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString.pack" title="Link to this definition">¶</a></dt>
 <dd><p>Pack string <code class="docutils literal notranslate"><span class="pre">data</span></code>. append <code class="docutils literal notranslate"><span class="pre">\x00</span></code> if not present at the end of the string</p>
 </dd></dl>
 
@@ -322,9 +302,9 @@ Can be used to craft request without directly sending it</p>
 <span class="go"># TODO: implem unpack</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrLong">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrLong</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrLong"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrLong" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrLong">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrLong</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrLong"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrLong" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
@@ -335,9 +315,9 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&#39;0x1020304&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrHyper">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrHyper</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrHyper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrHyper" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrHyper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrHyper</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrHyper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrHyper" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
@@ -348,10 +328,10 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&#39;0x102030405060708L&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrShort">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrShort</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrShort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrShort" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrShort">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrShort</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrShort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrShort" title="Link to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrShort</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="mh">0x0102</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
 <span class="go">&#39;\x02\x01&#39;</span>
@@ -361,9 +341,9 @@ Can be used to craft request without directly sending it</p>
 </div>
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrByte">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrByte</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrByte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrByte" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrByte">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrByte</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrByte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrByte" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
@@ -374,9 +354,9 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&#39;0x42&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrUniquePTR">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrUniquePTR</code><span class="sig-paren">(</span><em>subcls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrUniquePTR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrUniquePTR" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrUniquePTR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrUniquePTR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subcls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrUniquePTR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrUniquePTR" title="Link to this definition">¶</a></dt>
 <dd><p>Create a UNIQUE PTR around a given Ndr type</p>
 </dd></dl>
 
@@ -387,48 +367,48 @@ Can be used to craft request without directly sending it</p>
 <span class="go">&#39;\x02\x02\x02\x02\x11\x11\x11\x11&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrConformantArray">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrConformantArray</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrConformantArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrConformantArray" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrConformantArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrConformantArray</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrConformantArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrConformantArray" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrConformantVaryingArrays">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrConformantVaryingArrays</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrConformantVaryingArrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrConformantVaryingArrays" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrConformantVaryingArrays">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrConformantVaryingArrays</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrConformantVaryingArrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrConformantVaryingArrays" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrLongConformantArray">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrLongConformantArray</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrLongConformantArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrLongConformantArray" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrLongConformantArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrLongConformantArray</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrLongConformantArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrLongConformantArray" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLongConformantArray</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
 <span class="go">&#39;\x04\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrByteConformantArray">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrByteConformantArray</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrByteConformantArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrByteConformantArray" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrByteConformantArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrByteConformantArray</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrByteConformantArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrByteConformantArray" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrByteConformantArray</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
 <span class="go">&#39;\x04\x00\x00\x00\x01\x02\x03\x04&#39;</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrStructure">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrStructure</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrStructure</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure" title="Link to this definition">¶</a></dt>
 <dd><p>a NDR structure that tries to respect the rules of pointer packing, this class should be subclassed with
 an attribute <code class="docutils literal notranslate"><span class="pre">MEMBERS</span></code> describing the members of the class</p>
-<dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrStructure.pack">
-<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure.pack" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrStructure.pack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure.pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure.pack" title="Link to this definition">¶</a></dt>
 <dd><p>Pack data into the struct, <code class="docutils literal notranslate"><span class="pre">data</span></code> size must equals the number of members in the structure</p>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="windows.rpc.ndr.NdrStructure.unpack">
-<em class="property">classmethod </em><code class="descname">unpack</code><span class="sig-paren">(</span><em>stream</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure.unpack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure.unpack" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrStructure.unpack">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unpack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStructure.unpack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStructure.unpack" title="Link to this definition">¶</a></dt>
 <dd><p>Unpack the structure from the stream</p>
 </dd></dl>
 
@@ -445,22 +425,22 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
 <span class="go">[1, 2, u&#39;Test\x00&#39;]</span>
 </pre></div>
 </div>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrParameters">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrParameters</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrParameters" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrParameters</span></span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrParameters" title="Link to this definition">¶</a></dt>
 <dd><p>a class to pack NDR parameters together to performs RPC call, this class should be subclassed with
 an attribute <code class="docutils literal notranslate"><span class="pre">MEMBERS</span></code> describing the members of the class</p>
 </dd></dl>
 
-<div class="section" id="ndr-stream">
-<h3>13.3.1. NDR STREAM<a class="headerlink" href="#ndr-stream" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="windows.rpc.ndr.NdrStream">
-<em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrStream</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStream" title="Permalink to this definition">¶</a></dt>
+<section id="ndr-stream">
+<h3><span class="section-number">13.3.1. </span>NDR STREAM<a class="headerlink" href="#ndr-stream" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrStream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.rpc.ndr.</span></span><span class="sig-name descname"><span class="pre">NdrStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStream" title="Link to this definition">¶</a></dt>
 <dd><p>A stream of bytes used for NDR unpacking</p>
-<dl class="method">
-<dt id="windows.rpc.ndr.NdrStream.align">
-<code class="descname">align</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStream.align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStream.align" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.rpc.ndr.NdrStream.align">
+<span class="sig-name descname"><span class="pre">align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStream.align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStream.align" title="Link to this definition">¶</a></dt>
 <dd><p>Discard some bytes to align the remaining stream on <code class="docutils literal notranslate"><span class="pre">size</span></code></p>
 </dd></dl>
 
@@ -483,39 +463,103 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
 <span class="go">&#39;0x43434343&#39;</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a><ul>
-<li><a class="reference internal" href="#rpcclient">13.1. RPCClient</a></li>
+<li><a class="reference internal" href="#rpcclient">13.1. RPCClient</a><ul>
+<li><a class="reference internal" href="#windows.rpc.RPCClient"><code class="docutils literal notranslate"><span class="pre">RPCClient</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.RPCClient.alpc_client"><code class="docutils literal notranslate"><span class="pre">alpc_client</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.RPCClient.bind"><code class="docutils literal notranslate"><span class="pre">bind()</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.RPCClient.call"><code class="docutils literal notranslate"><span class="pre">call()</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.RPCClient.forge_alpc_request"><code class="docutils literal notranslate"><span class="pre">forge_alpc_request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#epmapper">13.2. Epmapper</a><ul>
-<li><a class="reference internal" href="#find-alpc-endpoints">13.2.1. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a></li>
-<li><a class="reference internal" href="#find-alpc-endpoint-and-connect">13.2.2. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower"><code class="docutils literal notranslate"><span class="pre">UnpackTower</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower.address"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower.endpoint"><code class="docutils literal notranslate"><span class="pre">endpoint</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower.object"><code class="docutils literal notranslate"><span class="pre">object</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower.protseq"><code class="docutils literal notranslate"><span class="pre">protseq</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.epmapper.UnpackTower.syntax"><code class="docutils literal notranslate"><span class="pre">syntax</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#find-alpc-endpoints">13.2.1. <code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.find_alpc_endpoints"><code class="docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#find-alpc-endpoint-and-connect">13.2.2. <code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.find_alpc_endpoint_and_connect"><code class="docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-windows.rpc.ndr">13.3. Ndr</a><ul>
-<li><a class="reference internal" href="#ndr-stream">13.3.1. NDR STREAM</a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrSID"><code class="docutils literal notranslate"><span class="pre">NdrSID</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrSID.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrSID.unpack"><code class="docutils literal notranslate"><span class="pre">unpack()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrWString"><code class="docutils literal notranslate"><span class="pre">NdrWString</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrWString.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrCString"><code class="docutils literal notranslate"><span class="pre">NdrCString</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrCString.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrLong"><code class="docutils literal notranslate"><span class="pre">NdrLong</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrHyper"><code class="docutils literal notranslate"><span class="pre">NdrHyper</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrShort"><code class="docutils literal notranslate"><span class="pre">NdrShort</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrByte"><code class="docutils literal notranslate"><span class="pre">NdrByte</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrUniquePTR"><code class="docutils literal notranslate"><span class="pre">NdrUniquePTR</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrConformantArray"><code class="docutils literal notranslate"><span class="pre">NdrConformantArray</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrConformantVaryingArrays"><code class="docutils literal notranslate"><span class="pre">NdrConformantVaryingArrays</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrLongConformantArray"><code class="docutils literal notranslate"><span class="pre">NdrLongConformantArray</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrByteConformantArray"><code class="docutils literal notranslate"><span class="pre">NdrByteConformantArray</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrStructure"><code class="docutils literal notranslate"><span class="pre">NdrStructure</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrStructure.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrStructure.unpack"><code class="docutils literal notranslate"><span class="pre">unpack()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrParameters"><code class="docutils literal notranslate"><span class="pre">NdrParameters</span></code></a></li>
+<li><a class="reference internal" href="#ndr-stream">13.3.1. NDR STREAM</a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrStream"><code class="docutils literal notranslate"><span class="pre">NdrStream</span></code></a><ul>
+<li><a class="reference internal" href="#windows.rpc.ndr.NdrStream.align"><code class="docutils literal notranslate"><span class="pre">align()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="alpc.html"
-                        title="previous chapter">12. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="generated.html"
-                        title="next chapter">14. <code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="alpc.html"
+                          title="previous chapter"><span class="section-number">12. </span><code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="generated.html"
+                          title="next chapter"><span class="section-number">14. </span><code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -523,18 +567,16 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -554,12 +596,13 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

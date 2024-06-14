@@ -103,9 +103,3 @@ All errors raised by winproxy functions are instance of :class:`WinproxyError` (
     .. attribute:: api_name
 
         The name of the API that raised the exception
-
-Functions in :mod:`windows.winproxy`
-""""""""""""""""""""""""""""""""""""
-
-.. include:: winproxy_functions.rst
-

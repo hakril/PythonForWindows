@@ -1,21 +1,17 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.rpc.client &#8212; PythonForWindows 0.6 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>windows.rpc.client &#8212; PythonForWindows 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -29,8 +25,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>
     </div>  
 
@@ -102,16 +99,20 @@
         <span class="p">(</span><span class="s2">&quot;ORPC_IPID&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
     <span class="p">]</span>
 
-<div class="viewcode-block" id="RPCClient"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient">[docs]</a><span class="k">class</span> <span class="nc">RPCClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RPCClient">
+<a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient">[docs]</a>
+<span class="k">class</span> <span class="nc">RPCClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling&quot;&quot;&quot;</span>
     <span class="n">REQUEST_IDENTIFIER</span> <span class="o">=</span> <span class="mh">0x11223344</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span> <span class="o">=</span> <span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="c1">#: The :class:`windows.alpc.AlpcClient` used to communicate with the server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># if -&gt; interface</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="RPCClient.bind"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID_str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;Bind to the ``IID_str`` with the given ``version``</span>
+<div class="viewcode-block" id="RPCClient.bind">
+<a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.bind">[docs]</a>
+    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID_str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Bind to the ``IID_str`` with the given ``version``</span>
 
 <span class="sd">            :returns: :class:`windows.generated_def.IID`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -128,8 +129,11 @@
         <span class="c1">#TODO: attach version information to IID</span>
         <span class="k">return</span> <span class="n">IID</span></div>
 
-<div class="viewcode-block" id="RPCClient.forge_alpc_request"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.forge_alpc_request">[docs]</a>    <span class="k">def</span> <span class="nf">forge_alpc_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Craft an ALPC message containing an RPC request to call ``method_offset`` of interface ``IID`</span>
+
+<div class="viewcode-block" id="RPCClient.forge_alpc_request">
+<a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.forge_alpc_request">[docs]</a>
+    <span class="k">def</span> <span class="nf">forge_alpc_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Craft an ALPC message containing an RPC request to call ``method_offset`` of interface ``IID`</span>
 <span class="sd">        with ``params``.</span>
 <span class="sd">        Can be used to craft request without directly sending it</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -141,8 +145,11 @@
             <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_call_request</span><span class="p">(</span><span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="n">ipid</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">request</span></div>
 
-<div class="viewcode-block" id="RPCClient.call"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
+
+<div class="viewcode-block" id="RPCClient.call">
+<a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
 
 <span class="sd">            :param IID IID: An IID previously returned by :func:`bind`</span>
 <span class="sd">            :param int method_offset:</span>
@@ -160,6 +167,7 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;6I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">4</span><span class="p">])</span>
         <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
         <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
@@ -185,13 +193,12 @@
         <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
 
     <span class="k">def</span> <span class="nf">_forge_call_request_in_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># import pdb;pdb.set_trace()</span>
         <span class="c1"># Version crade qui clean rien pour POC. GROS DOUTES :D</span>
-        <span class="n">raw_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_call_request</span><span class="p">(</span><span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">raw_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_call_request</span><span class="p">(</span><span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x2000</span><span class="p">)</span>
         <span class="n">section</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">create_port_section</span><span class="p">(</span><span class="mh">0x40000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">map_section</span><span class="p">(</span><span class="n">section</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_request</span> <span class="o">+</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x200</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">40</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_request</span> <span class="o">+</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x200</span><span class="p">)</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">40</span>
         <span class="n">p</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span>
         <span class="n">p</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="mh">0x40000</span>
         <span class="n">p</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">ViewBase</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ViewBase</span>
@@ -220,25 +227,25 @@
             <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">request_type</span></div>
+
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -252,13 +259,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.6 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015-2020, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    &#169; Copyright 2015-2020, Clement Rouault.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>
