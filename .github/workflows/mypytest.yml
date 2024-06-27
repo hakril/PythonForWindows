@@ -64,7 +64,7 @@ jobs:
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -s -k "not known_to_fail" -v tests/
 
       - name: Publish PyTest Results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
           files: junit/test-results.xml
