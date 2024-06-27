@@ -698,7 +698,6 @@ class JmpImm8(JmpImm):
 class JmpImm32(JmpImm):
     accept_as_Ximmediat = staticmethod(accept_as_32immediat)
 
-
 # Instructions
 
 class Call(JmpType):
@@ -709,6 +708,7 @@ class Call(JmpType):
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
                 (RawBits.from_int(8, 0xe9), JmpImm32(5)),
+                (RawBits.from_int(8, 0xff), Slash(4)),
                 (RawBits.from_int(8, 0xea), SegmentSelectorAbsoluteAddr())]
 
 

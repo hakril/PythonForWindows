@@ -222,6 +222,7 @@ def test_assembler():
 
 
     CheckInstr(Push)('RAX')
+    CheckInstr(Push, must_fail=True)('EAX')
     assert len(Push("RAX").get_code()) == 1
     CheckInstr(Push)('R15')
     CheckInstr(Push)(0x42)
@@ -231,10 +232,16 @@ def test_assembler():
 
 
     CheckInstr(Pop)('RAX')
+    CheckInstr(Push, must_fail=True)('EAX')
+    CheckInstr(Pop)('R15')
+    CheckInstr(Pop)(mem("[ECX]"))
+    CheckInstr(Pop)(mem("[RCX]"))
     assert len(Pop("RAX").get_code()) == 1
 
 
+    CheckInstr(Call, must_fail=True)('EAX')
     CheckInstr(Call)('RAX')
+    CheckInstr(Call)('R14')
     CheckInstr(Call)(mem('[RAX + RCX * 8]'))
     CheckInstr(Cpuid)()
     CheckInstr(Xchg)('RAX', 'RSP')
@@ -294,6 +301,15 @@ def test_assembler():
     CheckInstr(Mov, must_fail=True)('ECX', mem('[ECX + RCX]'))
     CheckInstr(Mov, must_fail=True)('ECX', mem('[RBX + ECX]'))
     CheckInstr(Add, must_fail=True)('RAX', 0xffffffff)
+
+
+    CheckInstr(Jmp, must_fail=True)('EAX')
+    CheckInstr(Jmp)('RAX')
+    CheckInstr(Jmp)('R12')
+    CheckInstr(Jmp)(mem('[RAX]'))
+    CheckInstr(Jmp)(mem('[RAX + 2]'))
+    CheckInstr(Jmp)(mem('[0x12345678]'))
+    CheckInstr(Jmp)(mem('[R15 + 0x12345678]'))
 
 
     # Test some prefix / REP

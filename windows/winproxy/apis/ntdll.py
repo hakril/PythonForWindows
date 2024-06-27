@@ -80,6 +80,22 @@ def NtQueryEaFile(FileHandle, IoStatusBlock, Buffer, Length, ReturnSingleEntry, 
 def NtSetEaFile(FileHandle, IoStatusBlock, Buffer, Length):
     return NtSetEaFile.ctypes_function(FileHandle, IoStatusBlock, Buffer, Length)
 
+@NtdllProxy()
+def NtReadFile(FileHandle, Event=None, ApcRoutine=None, ApcContext=None, IoStatusBlock=None, Buffer=NeededParameter, Length=None, ByteOffset=None, Key=None):
+    if Length is None:
+        Length = ctypes.sizeof(Buffer)
+    if IoStatusBlock is None:
+        IoStatusBlock = gdef.IO_STATUS_BLOCK()
+    return NtReadFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key)
+
+@NtdllProxy()
+def NtWriteFile(FileHandle, Event=None, ApcRoutine=None, ApcContext=None, IoStatusBlock=None, Buffer=NeededParameter, Length=None, ByteOffset=None, Key=None):
+    if Length is None:
+        Length = ctypes.sizeof(Buffer)
+    if IoStatusBlock is None:
+        IoStatusBlock = gdef.IO_STATUS_BLOCK()
+    return NtWriteFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key)
+
 
 # Process
 

@@ -230,6 +230,12 @@ def test_assembler():
     CheckInstr(x86.Test, immediat_accepted=-1)('EAX', 0xffffffff)
     CheckInstr(x86.Test)('ECX', 0x42)
 
+    CheckInstr(Jmp)('EAX')
+    CheckInstr(Jmp)('EDX')
+    CheckInstr(Jmp)('EDI')
+    CheckInstr(Jmp)(mem('[EAX]'))
+    CheckInstr(Jmp)(mem('[EAX + 2]'))
+    CheckInstr(Jmp)(mem('[0x12345678]'))
 
     assert x86.Test(mem('[ECX + 0x100]'), 'ECX').get_code() == x86.Test('ECX', mem('[ECX + 0x100]')).get_code()
     assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()

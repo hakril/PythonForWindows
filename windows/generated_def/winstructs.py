@@ -2836,6 +2836,53 @@ class _IMAGE_LOAD_CONFIG_DIRECTORY64(Structure):
 IMAGE_LOAD_CONFIG_DIRECTORY64 = _IMAGE_LOAD_CONFIG_DIRECTORY64
 PIMAGE_LOAD_CONFIG_DIRECTORY64 = POINTER(_IMAGE_LOAD_CONFIG_DIRECTORY64)
 
+MemExtendedParameterInvalidType = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterInvalidType", 0x0)
+MemExtendedParameterAddressRequirements = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterAddressRequirements", 0x1)
+MemExtendedParameterNumaNode = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterNumaNode", 0x2)
+MemExtendedParameterPartitionHandle = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterPartitionHandle", 0x3)
+MemExtendedParameterUserPhysicalHandle = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterUserPhysicalHandle", 0x4)
+MemExtendedParameterAttributeFlags = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterAttributeFlags", 0x5)
+MemExtendedParameterImageMachine = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterImageMachine", 0x6)
+MemExtendedParameterMax = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterMax", 0x7)
+class MEM_EXTENDED_PARAMETER_TYPE(EnumType):
+    values = [MemExtendedParameterInvalidType, MemExtendedParameterAddressRequirements, MemExtendedParameterNumaNode, MemExtendedParameterPartitionHandle, MemExtendedParameterUserPhysicalHandle, MemExtendedParameterAttributeFlags, MemExtendedParameterImageMachine, MemExtendedParameterMax]
+    mapper = FlagMapper(*values)
+PMEM_EXTENDED_PARAMETER_TYPE = POINTER(MEM_EXTENDED_PARAMETER_TYPE)
+
+
+class _MEM_ADDRESS_REQUIREMENTS(Structure):
+    _fields_ = [
+        ("LowestStartingAddress", PVOID),
+        ("HighestEndingAddress", PVOID),
+        ("Alignment", SIZE_T),
+    ]
+MEM_ADDRESS_REQUIREMENTS = _MEM_ADDRESS_REQUIREMENTS
+PMEM_ADDRESS_REQUIREMENTS = POINTER(_MEM_ADDRESS_REQUIREMENTS)
+
+class _ANON_MEM_EXTENDED_PARAMETER_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+    ("Type", ULONG64, 8),
+    ("Reserved", ULONG64, 56),
+    ]
+
+
+class _ANON_MEM_EXTENDED_PARAMETER_SUB_UNION_2(Union):
+    _fields_ = [
+        ("ULong64", ULONG64),
+        ("Pointer", PVOID),
+        ("Size", SIZE_T),
+        ("Handle", HANDLE),
+        ("ULong", ULONG),
+    ]
+
+class MEM_EXTENDED_PARAMETER(Structure):
+    _anonymous_ = ("DUMMYSTRUCTNAME","DUMMYUNIONNAME")
+    _fields_ = [
+        ("DUMMYSTRUCTNAME", _ANON_MEM_EXTENDED_PARAMETER_SUB_STRUCTURE_1),
+        ("DUMMYUNIONNAME", _ANON_MEM_EXTENDED_PARAMETER_SUB_UNION_2),
+    ]
+PMEM_EXTENDED_PARAMETER = POINTER(MEM_EXTENDED_PARAMETER)
+
 SC_STATUS_PROCESS_INFO = EnumValue("_SC_STATUS_TYPE", "SC_STATUS_PROCESS_INFO", 0x0)
 class _SC_STATUS_TYPE(EnumType):
     values = [SC_STATUS_PROCESS_INFO]

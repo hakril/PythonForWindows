@@ -31,6 +31,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version}}
           architecture: x86
+          update-environment: false
       ## Install the 64bits version of python3 asked
       - name: Set up Python3 ${{ matrix.python-version }} x64
         if: ${{ matrix.python-version != '2.7' }}
@@ -38,6 +39,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version}}
           architecture: x64
+          update-environment: false
 
       # Manually install python2.7 (both version at once)
       - name: Set up Python2.7 ${{ matrix.python-version }} x86 & x64
@@ -64,7 +66,7 @@ jobs:
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest --junitxml=junit/test-results.xml -s -k "not known_to_fail" -v tests/
 
       - name: Publish PyTest Results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
           files: junit/test-results.xml

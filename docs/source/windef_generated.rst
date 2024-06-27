@@ -1127,6 +1127,7 @@ WinDef
 .. autodata:: REG_STANDARD_FORMAT
 .. autodata:: REG_LATEST_FORMAT
 .. autodata:: REG_NO_COMPRESSION
+.. autodata:: MEM_EXTENDED_PARAMETER_TYPE_BITS
 .. autodata:: ACCESS_MIN_MS_ACE_TYPE
 .. autodata:: ACCESS_ALLOWED_ACE_TYPE
 .. autodata:: ACCESS_DENIED_ACE_TYPE

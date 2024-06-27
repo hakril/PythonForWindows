@@ -2905,6 +2905,16 @@ NtDelayExecutionParams = ((1, 'Alertable'), (1, 'DelayInterval'))
 NtTerminateProcessPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, NTSTATUS)
 NtTerminateProcessParams = ((1, 'ProcessHandle'), (1, 'ExitStatus'))
 
+#def NtReadFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key):
+#    return NtReadFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key)
+NtReadFilePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID, PIO_STATUS_BLOCK, PVOID, ULONG, PLARGE_INTEGER, PULONG)
+NtReadFileParams = ((1, 'FileHandle'), (1, 'Event'), (1, 'ApcRoutine'), (1, 'ApcContext'), (1, 'IoStatusBlock'), (1, 'Buffer'), (1, 'Length'), (1, 'ByteOffset'), (1, 'Key'))
+
+#def NtWriteFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key):
+#    return NtWriteFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key)
+NtWriteFilePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID, PIO_STATUS_BLOCK, PVOID, ULONG, PLARGE_INTEGER, PULONG)
+NtWriteFileParams = ((1, 'FileHandle'), (1, 'Event'), (1, 'ApcRoutine'), (1, 'ApcContext'), (1, 'IoStatusBlock'), (1, 'Buffer'), (1, 'Length'), (1, 'ByteOffset'), (1, 'Key'))
+
 #def GetComputerNameExA(NameType, lpBuffer, nSize):
 #    return GetComputerNameExA.ctypes_function(NameType, lpBuffer, nSize)
 GetComputerNameExAPrototype = WINFUNCTYPE(BOOL, COMPUTER_NAME_FORMAT, LPSTR, LPDWORD)
