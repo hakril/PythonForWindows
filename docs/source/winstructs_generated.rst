@@ -6224,6 +6224,49 @@ _IMAGE_LOAD_CONFIG_DIRECTORY64
 
         :class:`ULONGLONG`
 
+_MEM_ADDRESS_REQUIREMENTS
+'''''''''''''''''''''''''
+.. class:: MEM_ADDRESS_REQUIREMENTS
+
+    Alias for :class:`_MEM_ADDRESS_REQUIREMENTS`
+
+.. class:: PMEM_ADDRESS_REQUIREMENTS
+
+    Pointer to :class:`_MEM_ADDRESS_REQUIREMENTS`
+
+.. class:: _MEM_ADDRESS_REQUIREMENTS
+
+    .. attribute:: LowestStartingAddress
+
+        :class:`PVOID`
+
+
+    .. attribute:: HighestEndingAddress
+
+        :class:`PVOID`
+
+
+    .. attribute:: Alignment
+
+        :class:`SIZE_T`
+
+MEM_EXTENDED_PARAMETER
+''''''''''''''''''''''
+.. class:: PMEM_EXTENDED_PARAMETER
+
+    Pointer to :class:`MEM_EXTENDED_PARAMETER`
+
+.. class:: MEM_EXTENDED_PARAMETER
+
+    .. attribute:: DUMMYSTRUCTNAME
+
+        :class:`_ANON_MEM_EXTENDED_PARAMETER_SUB_STRUCTURE_1`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON_MEM_EXTENDED_PARAMETER_SUB_UNION_2`
+
 _SERVICE_STATUS
 '''''''''''''''
 .. class:: LPSERVICE_STATUS
@@ -27354,6 +27397,39 @@ _KEY_INFORMATION_CLASS
 
 
     .. attribute:: MaxKeyInfoClass(10)
+
+MEM_EXTENDED_PARAMETER_TYPE
+'''''''''''''''''''''''''''
+.. class:: PMEM_EXTENDED_PARAMETER_TYPE
+
+    Pointer to :class:`MEM_EXTENDED_PARAMETER_TYPE`
+
+
+.. class:: MEM_EXTENDED_PARAMETER_TYPE
+
+
+    .. attribute:: MemExtendedParameterInvalidType(0)
+
+
+    .. attribute:: MemExtendedParameterAddressRequirements(1)
+
+
+    .. attribute:: MemExtendedParameterNumaNode(2)
+
+
+    .. attribute:: MemExtendedParameterPartitionHandle(3)
+
+
+    .. attribute:: MemExtendedParameterUserPhysicalHandle(4)
+
+
+    .. attribute:: MemExtendedParameterAttributeFlags(5)
+
+
+    .. attribute:: MemExtendedParameterImageMachine(6)
+
+
+    .. attribute:: MemExtendedParameterMax(7)
 
 _SC_STATUS_TYPE
 '''''''''''''''
