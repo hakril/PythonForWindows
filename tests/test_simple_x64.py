@@ -232,6 +232,10 @@ def test_assembler():
 
 
     CheckInstr(Pop)('RAX')
+    CheckInstr(Push, must_fail=True)('EAX')
+    CheckInstr(Pop)('R15')
+    CheckInstr(Pop)(mem("[ECX]"))
+    CheckInstr(Pop)(mem("[RCX]"))
     assert len(Pop("RAX").get_code()) == 1
 
 
