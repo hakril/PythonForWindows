@@ -608,7 +608,7 @@ class NdrWriteStream(object):
         if self.data_size % alignement == 0:
             return
         topadsize = (alignement) - (self.data_size  % alignement)
-        self.write(b"P" * topadsize)
+        self.write(b"\x00" * topadsize)
         return
 
 def make_parameters(types, name=None):
