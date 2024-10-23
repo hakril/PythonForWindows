@@ -892,16 +892,19 @@ class CmpsB(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0xa6),)]
 
+cmpsw = CmpsB # Allow use in assemble (use Capitalize) : todo cleaner
 
 class CmpsW(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(16, 0x66A7),)]
 
+Cmpsw = CmpsW # Allow use in assemble (use Capitalize) : todo cleaner
 
 class CmpsD(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0xa7),)]
 
+Cmpsd = CmpsD # Allow use in assemble (use Capitalize) : todo cleaner
 
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]
