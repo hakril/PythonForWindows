@@ -1,0 +1,47 @@
+    typedef struct IClassClassicInfoVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IClassClassicInfo * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IClassClassicInfo * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IClassClassicInfo * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetThreadingModel )(
+            IClassClassicInfo * This,
+            /* [out] */ ThreadingModel *pthreadmodel);
+
+        HRESULT ( STDMETHODCALLTYPE *GetModulePath )(
+            IClassClassicInfo * This,
+            /* [in] */ CLSCTX clsctx,
+            /* [string][out] */ WCHAR **pwszDllName);
+
+        HRESULT ( STDMETHODCALLTYPE *GetImplementedClsid )(
+            IClassClassicInfo * This,
+            /* [out] */ GUID **ppguidClsid);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProcess )(
+            IClassClassicInfo * This,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteServerName )(
+            IClassClassicInfo * This,
+            /* [out] */ WCHAR **pwszServerName);
+
+        HRESULT ( STDMETHODCALLTYPE *GetLocalServerType )(
+            IClassClassicInfo * This,
+            /* [out] */ LocalServerType *pType);
+
+        HRESULT ( STDMETHODCALLTYPE *GetSurrogateCommandLine )(
+            IClassClassicInfo * This,
+            /* [out] */ WCHAR **pwszSurrogateCommandLine);
+
+        END_INTERFACE
+    } IClassClassicInfoVtbl;

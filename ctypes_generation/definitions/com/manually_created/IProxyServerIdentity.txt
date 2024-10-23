@@ -1,0 +1,28 @@
+typedef struct IProxyServerIdentityVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IProxyServerIdentity * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IProxyServerIdentity * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IProxyServerIdentity * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetServerProcessId )(
+        IProxyServerIdentity * This,
+        UINT *processId);
+
+    HRESULT ( STDMETHODCALLTYPE *GetServerProcessHandle )(
+        IProxyServerIdentity * This,
+        DWORD dwDesiredAccess,
+        INT bInheritHandle,
+        PVOID *phProcess)   ;
+
+    END_INTERFACE
+} IProxyServerIdentityVtbl;

@@ -1,0 +1,39 @@
+    typedef struct IRpcChannelBufferVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IRpcChannelBuffer * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IRpcChannelBuffer * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IRpcChannelBuffer * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetBuffer )(
+            IRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
+            /* [in] */ REFIID riid);
+
+        HRESULT ( STDMETHODCALLTYPE *SendReceive )(
+            IRpcChannelBuffer * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus);
+
+        HRESULT ( STDMETHODCALLTYPE *FreeBuffer )(
+            IRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage);
+
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )(
+            IRpcChannelBuffer * This,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
+
+        HRESULT ( STDMETHODCALLTYPE *IsConnected )(
+            IRpcChannelBuffer * This);
+
+        END_INTERFACE
+    } IRpcChannelBufferVtbl;

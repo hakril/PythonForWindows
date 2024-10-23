@@ -1,0 +1,36 @@
+    typedef struct IRemUnknownVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IRemUnknown * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IRemUnknown * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IRemUnknown * This);
+
+        HRESULT ( STDMETHODCALLTYPE *RemQueryInterface )(
+            IRemUnknown * This,
+            /* [in] */ REFIPID ripid,
+            /* [in] */ ULONG cRefs,
+            /* [in] */ USHORT cIids,
+            /* [size_is][in] */ IID *iids,
+            /* [size_is][size_is][out] */ REMQIRESULT **ppQIResults);
+
+        HRESULT ( STDMETHODCALLTYPE *RemAddRef )(
+            IRemUnknown * This,
+            /* [in] */ USHORT cInterfaceRefs,
+            /* [size_is][in] */ REMINTERFACEREF *InterfaceRefs,
+            /* [size_is][out] */ HRESULT *pResults);
+
+        HRESULT ( STDMETHODCALLTYPE *RemRelease )(
+            IRemUnknown * This,
+            /* [in] */ USHORT cInterfaceRefs,
+            /* [size_is][in] */ REMINTERFACEREF *InterfaceRefs);
+
+        END_INTERFACE
+    } IRemUnknownVtbl;

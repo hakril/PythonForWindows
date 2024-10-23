@@ -109,28 +109,6 @@ BOOL WINAPI SymEnumSymbolsEx(
   _In_ DWORD                          Options
 );
 
-BOOL WINAPI SymEnumTypes(
-  _In_ HANDLE                         hProcess,
-  _In_ ULONG64                        BaseOfDll,
-  _In_ PVOID                          EnumSymbolsCallback,
-  _In_ PVOID                          UserContext
-);
-
-BOOL WINAPI SymEnumTypesByName(
-  _In_ HANDLE                         hProcess,
-  _In_ ULONG64                        BaseOfDll,
-  _In_ PCSTR                          mask,
-  _In_ PVOID                          EnumSymbolsCallback,
-  _In_ PVOID                          UserContext
-);
-
-BOOL WINAPI SymEnumTypesByNameW(
-  [in]           HANDLE                          hProcess,
-  [in]           ULONG64                         BaseOfDll,
-  [in, optional] PCWSTR                          mask,
-  [in]           PVOID							 EnumSymbolsCallback,
-  [in]           PVOID                           UserContext
-);
 
 BOOL WINAPI SymEnumerateModules64(
   _In_ HANDLE                      hProcess,
@@ -438,4 +416,35 @@ BOOL SymSetSearchPath(
 BOOL SymSetSearchPathW(
   HANDLE hProcess,
   PCWSTR SearchPath
+);
+
+BOOL SymEnumTypes(
+  [in]           HANDLE                         hProcess,
+  [in]           ULONG64                        BaseOfDll,
+  [in]           PSYM_ENUMERATESYMBOLS_CALLBACK EnumSymbolsCallback,
+  [in, optional] PVOID                          UserContext
+);
+
+BOOL SymEnumTypesW(
+  [in]           HANDLE                          hProcess,
+  [in]           ULONG64                         BaseOfDll,
+  [in]           PSYM_ENUMERATESYMBOLS_CALLBACKW EnumSymbolsCallback,
+  [in, optional] PVOID                           UserContext
+);
+
+BOOL SymEnumTypesByName(
+  [in]           HANDLE                         hProcess,
+  [in]           ULONG64                        BaseOfDll,
+  [in, optional] PCSTR                          mask,
+  [in]           PSYM_ENUMERATESYMBOLS_CALLBACK EnumSymbolsCallback,
+  [in]           PVOID                          UserContext
+);
+
+
+BOOL SymEnumTypesByNameW(
+  [in]           HANDLE                          hProcess,
+  [in]           ULONG64                         BaseOfDll,
+  [in, optional] PCWSTR                          mask,
+  [in]           PSYM_ENUMERATESYMBOLS_CALLBACKW EnumSymbolsCallback,
+  [in]           PVOID                           UserContext
 );

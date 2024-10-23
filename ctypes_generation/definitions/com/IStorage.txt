@@ -1,0 +1,108 @@
+    typedef struct IStorageVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IStorage * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IStorage * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IStorage * This);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateStream )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [in] */ DWORD grfMode,
+            /* [in] */ DWORD reserved1,
+            /* [in] */ DWORD reserved2,
+            /* [out] */ IStream **ppstm);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenStream )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ void *reserved1,
+            /* [in] */ DWORD grfMode,
+            /* [in] */ DWORD reserved2,
+            /* [out] */ IStream **ppstm);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateStorage )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [in] */ DWORD grfMode,
+            /* [in] */ DWORD reserved1,
+            /* [in] */ DWORD reserved2,
+            /* [out] */ IStorage **ppstg);
+
+        HRESULT ( STDMETHODCALLTYPE *OpenStorage )(
+            IStorage * This,
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgPriority,
+            /* [in] */ DWORD grfMode,
+            /* [unique][in] */ SNB snbExclude,
+            /* [in] */ DWORD reserved,
+            /* [out] */ IStorage **ppstg);
+
+        HRESULT ( STDMETHODCALLTYPE *CopyTo )(
+            IStorage * This,
+            /* [in] */ DWORD ciidExclude,
+            /* [size_is][unique][in] */ const IID *rgiidExclude,
+            /* [unique][in] */ SNB snbExclude,
+            /* [unique][in] */ IStorage *pstgDest);
+
+        HRESULT ( STDMETHODCALLTYPE *MoveElementTo )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgDest,
+            /* [string][in] */ const OLECHAR *pwcsNewName,
+            /* [in] */ DWORD grfFlags);
+
+        HRESULT ( STDMETHODCALLTYPE *Commit )(
+            IStorage * This,
+            /* [in] */ DWORD grfCommitFlags);
+
+        HRESULT ( STDMETHODCALLTYPE *Revert )(
+            IStorage * This);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *EnumElements )(
+            IStorage * This,
+            /* [in] */ DWORD reserved1,
+            /* [size_is][unique][in] */ void *reserved2,
+            /* [in] */ DWORD reserved3,
+            /* [out] */ IEnumSTATSTG **ppenum);
+
+        HRESULT ( STDMETHODCALLTYPE *DestroyElement )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName);
+
+        HRESULT ( STDMETHODCALLTYPE *RenameElement )(
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsOldName,
+            /* [string][in] */ const OLECHAR *pwcsNewName);
+
+        HRESULT ( STDMETHODCALLTYPE *SetElementTimes )(
+            IStorage * This,
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ const FILETIME *pctime,
+            /* [unique][in] */ const FILETIME *patime,
+            /* [unique][in] */ const FILETIME *pmtime);
+
+        HRESULT ( STDMETHODCALLTYPE *SetClass )(
+            IStorage * This,
+            /* [in] */ REFCLSID clsid);
+
+        HRESULT ( STDMETHODCALLTYPE *SetStateBits )(
+            IStorage * This,
+            /* [in] */ DWORD grfStateBits,
+            /* [in] */ DWORD grfMask);
+
+        HRESULT ( STDMETHODCALLTYPE *Stat )(
+            IStorage * This,
+            /* [out] */ STATSTG *pstatstg,
+            /* [in] */ DWORD grfStatFlag);
+
+        END_INTERFACE
+    } IStorageVtbl;

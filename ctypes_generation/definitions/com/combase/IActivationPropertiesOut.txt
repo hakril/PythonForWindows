@@ -1,0 +1,38 @@
+typedef struct IActivationPropertiesOutVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IActivationPropertiesOut * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IActivationPropertiesOut * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IActivationPropertiesOut * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetActivationID )(
+        IActivationPropertiesOut * This,
+        /* [out] */ GUID *pActivationID);
+
+    HRESULT ( STDMETHODCALLTYPE *GetObjectInterface )(
+        IActivationPropertiesOut * This,
+        /* [in] */ REFIID riid,
+        /* [in] */ DWORD actvflags,
+        /* [iid_is][out] */ void **ppv);
+
+    HRESULT ( STDMETHODCALLTYPE *GetObjectInterfaces )(
+        IActivationPropertiesOut * This,
+        /* [in] */ DWORD cIfs,
+        /* [in] */ DWORD actvflags,
+        /* [size_is][in] */ MULTI_QI *multiQi);
+
+    HRESULT ( STDMETHODCALLTYPE *RemoveRequestedIIDs )(
+        IActivationPropertiesOut * This,
+        /* [in] */ DWORD cIfs,
+        /* [size_is][in] */ IID *rgIID);
+
+    END_INTERFACE
+} IActivationPropertiesOutVtbl;

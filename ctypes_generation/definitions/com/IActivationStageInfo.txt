@@ -1,0 +1,30 @@
+typedef struct IActivationStageInfoVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IActivationStageInfo * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IActivationStageInfo * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IActivationStageInfo * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetStageAndIndex )(
+        IActivationStageInfo * This,
+        /* [in] */ ACTIVATION_STAGE stage,
+        /* [in] */ int index);
+
+    HRESULT ( STDMETHODCALLTYPE *GetStage )(
+        IActivationStageInfo * This,
+        /* [out] */ ACTIVATION_STAGE *pstage);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIndex )(
+        IActivationStageInfo * This,
+        /* [out] */ int *pindex);
+
+    END_INTERFACE
+} IActivationStageInfoVtbl;

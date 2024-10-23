@@ -399,6 +399,10 @@ class NtStatusDocGenerator(NoTemplatedGenerator):
         for value, name, descr in file.data:
             self.emitline(".. autodata:: {name}".format(name=name))
 
+EXTENDED_INTERFACE_FILE = glob.glob(pjoin(SCRIPT_DIR, "extended_interfaces", "*.py"))
+EXTENDED_INTERFACE = [os.path.basename(filename)[:-len(".py")] for filename in EXTENDED_INTERFACE_FILE]
+
+
 class COMCtypesGenerator(CtypesGenerator):
     IGNORED_INTERFACE = set(COMParsedFile.IGNORED_INTERFACE)
     def __init__(self, *args, **kwargs):
@@ -412,12 +416,15 @@ class COMCtypesGenerator(CtypesGenerator):
     def parse_iid_file(self, filename):
         data = open(filename).read()
         for line in data.split("\n"):
+            if line.strip().startswith("//"):
+                continue # Commentaires du pauvre
             name, iid = line.split("|")
             self.iids_def[name] = self.parse_iid(iid), iid
 
     def generate_files(self, files):
+        self.generate_known_iid_list()
         # We generate COM interface in 2 step
-        # 1) The Class intself with the IDD
+        # 1) The Class itself with the IDD
         # 2) The function list after all class we generated
         #    - This allow COM function to refer the interface in their def :)
         for file in files:
@@ -425,19 +432,34 @@ class COMCtypesGenerator(CtypesGenerator):
         for file in files:
             self.generate_com_interface_functions(file.data)
 
+    def generate_known_iid_list(self):
+        # Generate list of known IID at the start of the file
+        # This take quite some memory/time when starting PFW
+        # for interface_name, (iid_python, iid_str) in self.iids_def.items():
+        #     cls_format_param = {"name": interface_name, "iid_python" : iid_python, "iid_str": iid_str}
+        #     self.emitline('IID_{name} = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
+        pass
+
     def generate_com_interface_class_iid(self, cominterface):
-        name = cominterface.name
         if cominterface.iid is not None:
             iid_str = cominterface.iid
             iid_python = self.parse_iid(iid_str)
         else:
             print("Lookup of IID for <{0}>".format(cominterface.name))
             iid_python, iid_str = self.iids_def[cominterface.name]
-        cls_format_param = {"name": name, "iid_python" : iid_python, "iid_str": iid_str}
+
+        cls_format_param = {"name": cominterface.name, "iid_python" : iid_python, "iid_str": iid_str}
 
         self.emitline("class {name}(COMInterface):".format(**cls_format_param))
         self.emitline('    IID = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
+        # self.emitline('    IID = IID_{name}'.format(name=cominterface.name)) # If we accept to have generate_known_iid_list()
         self.emitline('')
+        # Emit the extended interface definition if existing
+        if cominterface.name in EXTENDED_INTERFACE:
+            extended_interface_filename = from_here(os.path.join("extended_interfaces", "{0}.py".format(cominterface.name)))
+            print("Including extended COM Interface definition for <{0}>".format(cominterface.name))
+            with open(extended_interface_filename) as f:
+                self.emitline(f.read())
 
     def generate_com_interface_functions(self, cominterface):
         name = cominterface.name

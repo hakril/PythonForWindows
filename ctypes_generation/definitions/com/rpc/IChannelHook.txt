@@ -1,0 +1,62 @@
+    typedef struct IChannelHookVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IChannelHook * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IChannelHook * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IChannelHook * This);
+
+        PVOID ( STDMETHODCALLTYPE *ClientGetSize )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [out] */ ULONG *pDataSize);
+
+        PVOID ( STDMETHODCALLTYPE *ClientFillBuffer )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer);
+
+        PVOID ( STDMETHODCALLTYPE *ClientNotify )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [in] */ ULONG cbDataSize,
+            /* [in] */ void *pDataBuffer,
+            /* [in] */ DWORD lDataRep,
+            /* [in] */ HRESULT hrFault);
+
+        PVOID ( STDMETHODCALLTYPE *ServerNotify )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [in] */ ULONG cbDataSize,
+            /* [in] */ void *pDataBuffer,
+            /* [in] */ DWORD lDataRep);
+
+        PVOID ( STDMETHODCALLTYPE *ServerGetSize )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [in] */ HRESULT hrFault,
+            /* [out] */ ULONG *pDataSize);
+
+        PVOID ( STDMETHODCALLTYPE *ServerFillBuffer )(
+            IChannelHook * This,
+            /* [in] */ REFGUID uExtent,
+            /* [in] */ REFIID riid,
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer,
+            /* [in] */ HRESULT hrFault);
+
+        END_INTERFACE
+    } IChannelHookVtbl;

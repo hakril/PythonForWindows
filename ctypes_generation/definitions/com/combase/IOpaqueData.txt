@@ -1,0 +1,38 @@
+typedef struct IOpaqueDataInfoVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IOpaqueDataInfo * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IOpaqueDataInfo * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IOpaqueDataInfo * This);
+
+    HRESULT ( STDMETHODCALLTYPE *AddOpaqueData )(
+        IOpaqueDataInfo * This,
+        /* [in] */ OpaqueData *pData);
+
+    HRESULT ( STDMETHODCALLTYPE *GetOpaqueData )(
+        IOpaqueDataInfo * This,
+        /* [in] */ REFGUID guid,
+        /* [out] */ OpaqueData **pData);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteOpaqueData )(
+        IOpaqueDataInfo * This,
+        /* [in] */ REFGUID guid);
+
+    HRESULT ( STDMETHODCALLTYPE *GetOpaqueDataCount )(
+        IOpaqueDataInfo * This,
+        /* [out] */ ULONG *pulCount);
+
+    HRESULT ( STDMETHODCALLTYPE *GetAllOpaqueData )(
+        IOpaqueDataInfo * This,
+        /* [out] */ OpaqueData **prgData);
+
+    END_INTERFACE
+} IOpaqueDataInfoVtbl;

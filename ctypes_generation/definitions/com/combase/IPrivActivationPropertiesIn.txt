@@ -1,0 +1,84 @@
+    typedef struct IPrivActivationPropertiesInVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IPrivActivationPropertiesIn * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IPrivActivationPropertiesIn * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetActivationID )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ GUID *pActivationID);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassInfo )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClsctx )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ DWORD *pclsctx);
+
+        HRESULT ( STDMETHODCALLTYPE *GetActivationFlags )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ DWORD *pactvflags);
+
+        HRESULT ( STDMETHODCALLTYPE *AddRequestedIIDs )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ DWORD cIfs,
+            /* [size_is][in] */ IID *rgIID);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRequestedIIDs )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ ULONG *pulCount,
+            /* [out] */ IID **prgIID);
+
+        HRESULT ( STDMETHODCALLTYPE *DelegateGetClassObject )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ IActivationPropertiesOut **pActPropsOut);
+
+        HRESULT ( STDMETHODCALLTYPE *DelegateCreateInstance )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ IUnknown *pUnkOuter,
+            /* [out] */ IActivationPropertiesOut **pActPropsOut);
+
+        HRESULT ( STDMETHODCALLTYPE *DelegateCIAndGetCF )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ IUnknown *pUnkOuter,
+            /* [out] */ IActivationPropertiesOut **pActPropsOut,
+            /* [out] */ IClassFactory **ppCf);
+
+        HRESULT ( STDMETHODCALLTYPE *GetReturnActivationProperties )(
+            IPrivActivationPropertiesIn * This,
+            /* [in] */ IUnknown *pUnk,
+            /* [out] */ IActivationPropertiesOut **ppActOut);
+
+        HRESULT ( STDMETHODCALLTYPE *PrivGetReturnActivationProperties )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ IPrivActivationPropertiesOut **ppActOut);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCOMVersion )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ COMVERSION *pVersion);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClsid )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ CLSID *pClsid);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClientToken )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ HANDLE *pHandle);
+
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )(
+            IPrivActivationPropertiesIn * This,
+            /* [out] */ DWORD *pdwDestCtx);
+
+        END_INTERFACE
+    } IPrivActivationPropertiesInVtbl;

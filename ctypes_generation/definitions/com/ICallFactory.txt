@@ -1,0 +1,29 @@
+typedef struct ICallFactoryVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            ICallFactory * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            ICallFactory * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            ICallFactory * This);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateCall )(
+            ICallFactory * This,
+            /* [annotation][in] */
+            __in  REFIID riid,
+            /* [annotation][in] */
+            __in_opt  IUnknown *pCtrlUnk,
+            /* [annotation][in] */
+            __in  REFIID riid2,
+            /* [annotation][iid_is][out] */
+            __deref_out  IUnknown **ppv);
+
+        END_INTERFACE
+    } ICallFactoryVtbl;

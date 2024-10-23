@@ -1,0 +1,58 @@
+typedef struct IMarshalVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMarshal * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMarshal * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMarshal * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetUnmarshalClass )(
+        IMarshal * This,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags,
+        /* [out] */ CLSID *pCid);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )(
+        IMarshal * This,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags,
+        /* [out] */ DWORD *pSize);
+
+    HRESULT ( STDMETHODCALLTYPE *MarshalInterface )(
+        IMarshal * This,
+        /* [unique][in] */ IStream *pStm,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags);
+
+    HRESULT ( STDMETHODCALLTYPE *UnmarshalInterface )(
+        IMarshal * This,
+        /* [unique][in] */ IStream *pStm,
+        /* [in] */ REFIID riid,
+        /* [out] */ void **ppv);
+
+    HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )(
+        IMarshal * This,
+        /* [unique][in] */ IStream *pStm);
+
+    HRESULT ( STDMETHODCALLTYPE *DisconnectObject )(
+        IMarshal * This,
+        /* [in] */ DWORD dwReserved);
+
+    END_INTERFACE
+} IMarshalVtbl;

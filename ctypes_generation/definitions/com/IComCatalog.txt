@@ -1,0 +1,74 @@
+    typedef struct IComCatalogVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IComCatalog * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IComCatalog * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IComCatalog * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassInfo )(
+            IComCatalog * This,
+            /* [in] */ REFGUID guidConfiguredClsid,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetApplicationInfo )(
+            IComCatalog * This,
+            /* [in] */ REFGUID guidApplId,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProcessInfo )(
+            IComCatalog * This,
+            /* [in] */ REFGUID guidProcess,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetServerGroupInfo )(
+            IComCatalog * This,
+            /* [in] */ REFGUID guidServerGroup,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRetQueueInfo )(
+            IComCatalog * This,
+            /* [string][in] */ WCHAR *wszFormatName,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetApplicationInfoForExe )(
+            IComCatalog * This,
+            /* [string][in] */ WCHAR *pwszExeName,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeLibrary )(
+            IComCatalog * This,
+            /* [in] */ REFGUID guidTypeLib,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetInterfaceInfo )(
+            IComCatalog * This,
+            /* [in] */ REFIID iidInterface,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *FlushCache )(
+            IComCatalog * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassInfoFromProgId )(
+            IComCatalog * This,
+            /* [in] */ WCHAR *pwszProgID,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        END_INTERFACE
+    } IComCatalogVtbl;

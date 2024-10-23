@@ -1,0 +1,64 @@
+typedef struct IActivationPropertiesInVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IActivationPropertiesIn * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IActivationPropertiesIn * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IActivationPropertiesIn * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetActivationID )(
+        IActivationPropertiesIn * This,
+        /* [out] */ GUID *pActivationID);
+
+    HRESULT ( STDMETHODCALLTYPE *GetClassInfo )(
+        IActivationPropertiesIn * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppv);
+
+    HRESULT ( STDMETHODCALLTYPE *GetClsctx )(
+        IActivationPropertiesIn * This,
+        /* [out] */ DWORD *pclsctx);
+
+    HRESULT ( STDMETHODCALLTYPE *GetActivationFlags )(
+        IActivationPropertiesIn * This,
+        /* [out] */ DWORD *pactvflags);
+
+    HRESULT ( STDMETHODCALLTYPE *AddRequestedIIDs )(
+        IActivationPropertiesIn * This,
+        /* [in] */ DWORD cIfs,
+        /* [size_is][in] */ IID *rgIID);
+
+    HRESULT ( STDMETHODCALLTYPE *GetRequestedIIDs )(
+        IActivationPropertiesIn * This,
+        /* [out] */ ULONG *pulCount,
+        /* [out] */ IID **prgIID);
+
+    HRESULT ( STDMETHODCALLTYPE *DelegateGetClassObject )(
+        IActivationPropertiesIn * This,
+        /* [out] */ IActivationPropertiesOut **pActPropsOut);
+
+    HRESULT ( STDMETHODCALLTYPE *DelegateCreateInstance )(
+        IActivationPropertiesIn * This,
+        /* [in] */ IUnknown *pUnkOuter,
+        /* [out] */ IActivationPropertiesOut **pActPropsOut);
+
+    HRESULT ( STDMETHODCALLTYPE *DelegateCIAndGetCF )(
+        IActivationPropertiesIn * This,
+        /* [in] */ IUnknown *pUnkOuter,
+        /* [out] */ IActivationPropertiesOut **pActPropsOut,
+        /* [out] */ IClassFactory **ppCf);
+
+    HRESULT ( STDMETHODCALLTYPE *GetReturnActivationProperties )(
+        IActivationPropertiesIn * This,
+        /* [in] */ IUnknown *pUnk,
+        /* [out] */ IActivationPropertiesOut **ppActOut);
+
+    END_INTERFACE
+} IActivationPropertiesInVtbl;

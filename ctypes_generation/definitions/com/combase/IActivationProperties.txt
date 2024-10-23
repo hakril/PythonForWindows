@@ -1,0 +1,74 @@
+typedef struct IActivationPropertiesVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IActivationProperties * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IActivationProperties * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IActivationProperties * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetUnmarshalClass )(
+        IActivationProperties * This,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags,
+        /* [out] */ CLSID *pCid);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )(
+        IActivationProperties * This,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags,
+        /* [out] */ DWORD *pSize);
+
+    HRESULT ( STDMETHODCALLTYPE *MarshalInterface )(
+        IActivationProperties * This,
+        /* [unique][in] */ IStream *pStm,
+        /* [in] */ REFIID riid,
+        /* [unique][in] */ void *pv,
+        /* [in] */ DWORD dwDestContext,
+        /* [unique][in] */ void *pvDestContext,
+        /* [in] */ DWORD mshlflags);
+
+    HRESULT ( STDMETHODCALLTYPE *UnmarshalInterface )(
+        IActivationProperties * This,
+        /* [unique][in] */ IStream *pStm,
+        /* [in] */ REFIID riid,
+        /* [out] */ void **ppv);
+
+    HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )(
+        IActivationProperties * This,
+        /* [unique][in] */ IStream *pStm);
+
+    HRESULT ( STDMETHODCALLTYPE *DisconnectObject )(
+        IActivationProperties * This,
+        /* [in] */ DWORD dwReserved);
+
+    HRESULT ( STDMETHODCALLTYPE *SetDestCtx )(
+        IActivationProperties * This,
+        /* [in] */ DWORD dwDestCtx);
+
+    HRESULT ( STDMETHODCALLTYPE *SetMarshalFlags )(
+        IActivationProperties * This,
+        /* [in] */ DWORD dwMarshalFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *SetLocalBlob )(
+        IActivationProperties * This,
+        /* [in] */ void *blob);
+
+    HRESULT ( STDMETHODCALLTYPE *GetLocalBlob )(
+        IActivationProperties * This,
+        /* [out] */ void **blob);
+
+    END_INTERFACE
+} IActivationPropertiesVtbl;
