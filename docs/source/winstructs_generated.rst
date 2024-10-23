@@ -131,6 +131,10 @@ Simple types
 
 .. autoclass:: OLECHAR
 
+.. class:: SNB
+
+    Pointer to :class:`POINTER(OLECHAR)`
+
 .. autoclass:: POLECHAR
 
 .. autoclass:: PZZWSTR
@@ -221,9 +225,7 @@ Simple types
 
 .. autoclass:: LRESULT
 
-.. class:: LPUNKNOWN
-
-    Pointer to :class:`PVOID`
+.. autoclass:: LPUNKNOWN
 
 .. class:: LPPOINT
 
@@ -244,6 +246,10 @@ Simple types
 .. autoclass:: FILEOP_FLAGS
 
 .. autoclass:: NET_API_STATUS
+
+.. autoclass:: PVOID32
+
+.. autoclass:: PVOID64
 
 .. autoclass:: NCRYPT_HANDLE
 
@@ -414,6 +420,18 @@ Simple types
 .. autoclass:: HREFTYPE
 
 .. autoclass:: SFGAOF
+
+.. autoclass:: ID
+
+.. autoclass:: MID
+
+.. autoclass:: OXID
+
+.. autoclass:: OID
+
+.. autoclass:: SETID
+
+.. autoclass:: LPSTREAM
 
 .. autoclass:: GROUP
 
@@ -588,6 +606,10 @@ _BG_FILE_RANGE
 
 _GUID
 '''''
+.. class:: CID
+
+    Alias for :class:`_GUID`
+
 .. class:: CLSID
 
     Alias for :class:`_GUID`
@@ -597,6 +619,10 @@ _GUID
     Alias for :class:`_GUID`
 
 .. class:: IID
+
+    Alias for :class:`_GUID`
+
+.. class:: IPID
 
     Alias for :class:`_GUID`
 
@@ -621,6 +647,10 @@ _GUID
     Pointer to :class:`_GUID`
 
 .. class:: REFIID
+
+    Pointer to :class:`_GUID`
+
+.. class:: REFIPID
 
     Pointer to :class:`_GUID`
 
@@ -2015,6 +2045,1196 @@ __tagVARIANT
 
         :class:`_ANON_TMP_variant_sub_union`
 
+tagOpaqueData
+'''''''''''''
+.. class:: OpaqueData
+
+    Alias for :class:`tagOpaqueData`
+
+.. class:: tagOpaqueData
+
+    .. attribute:: guid
+
+        :class:`GUID`
+
+
+    .. attribute:: dataLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved2
+
+        :class:`ULONG`
+
+
+    .. attribute:: data
+
+        :class:`BYTE`
+
+tagSTDOBJREF
+''''''''''''
+.. class:: STDOBJREF
+
+    Alias for :class:`tagSTDOBJREF`
+
+.. class:: tagSTDOBJREF
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: cPublicRefs
+
+        :class:`ULONG`
+
+
+    .. attribute:: oxid
+
+        :class:`OXID`
+
+
+    .. attribute:: oid
+
+        :class:`OID`
+
+
+    .. attribute:: ipid
+
+        :class:`IPID`
+
+tagDATAELEMENT
+''''''''''''''
+.. class:: DATAELEMENT
+
+    Alias for :class:`tagDATAELEMENT`
+
+.. class:: PDATAELEMENT
+
+    Pointer to :class:`tagDATAELEMENT`
+
+.. class:: tagDATAELEMENT
+
+    .. attribute:: dataID
+
+        :class:`GUID`
+
+
+    .. attribute:: cbSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: cbRounded
+
+        :class:`ULONG`
+
+
+    .. attribute:: Data
+
+        :class:`BYTE`
+
+tagOBJREFDATA
+'''''''''''''
+.. class:: OBJREFDATA
+
+    Alias for :class:`tagOBJREFDATA`
+
+.. class:: tagOBJREFDATA
+
+    .. attribute:: nElms
+
+        :class:`ULONG`
+
+
+    .. attribute:: ppElmArray
+
+        :class:`PDATAELEMENT`
+
+tagDUALSTRINGARRAY
+''''''''''''''''''
+.. class:: DUALSTRINGARRAY
+
+    Alias for :class:`tagDUALSTRINGARRAY`
+
+.. class:: tagDUALSTRINGARRAY
+
+    .. attribute:: wNumEntries
+
+        :class:`USHORT`
+
+
+    .. attribute:: wSecurityOffset
+
+        :class:`USHORT`
+
+
+    .. attribute:: aStringArray
+
+        :class:`USHORT`
+
+tagOBJREF
+'''''''''
+.. class:: OBJREF
+
+    Alias for :class:`tagOBJREF`
+
+.. class:: tagOBJREF
+
+    .. attribute:: signature
+
+        :class:`ULONG`
+
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: iid
+
+        :class:`GUID`
+
+
+    .. attribute:: u_objref
+
+        :class:`_ANON_TAGOBJREF_SUB_UNION_1`
+
+tagCOMVERSION
+'''''''''''''
+.. class:: COMVERSION
+
+    Alias for :class:`tagCOMVERSION`
+
+.. class:: tagCOMVERSION
+
+    .. attribute:: MajorVersion
+
+        :class:`USHORT`
+
+
+    .. attribute:: MinorVersion
+
+        :class:`USHORT`
+
+tagORPC_EXTENT
+''''''''''''''
+.. class:: ORPC_EXTENT
+
+    Alias for :class:`tagORPC_EXTENT`
+
+.. class:: PORPC_EXTENT
+
+    Alias for :class:`tagORPC_EXTENT`
+
+.. class:: tagORPC_EXTENT
+
+    .. attribute:: id
+
+        :class:`_GUID`
+
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+
+    .. attribute:: data
+
+        :class:`BYTE`
+
+tagORPC_EXTENT_ARRAY
+''''''''''''''''''''
+.. class:: ORPC_EXTENT_ARRAY
+
+    Alias for :class:`tagORPC_EXTENT_ARRAY`
+
+.. class:: tagORPC_EXTENT_ARRAY
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: extent
+
+        :class:`PORPC_EXTENT`
+
+tagORPCTHIS
+'''''''''''
+.. class:: ORPCTHIS
+
+    Alias for :class:`tagORPCTHIS`
+
+.. class:: tagORPCTHIS
+
+    .. attribute:: version
+
+        :class:`COMVERSION`
+
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: cid
+
+        :class:`GUID`
+
+
+    .. attribute:: extensions
+
+        :class:`PVOID`
+
+tagORPCTHIS32
+'''''''''''''
+.. class:: ORPCTHIS32
+
+    Alias for :class:`tagORPCTHIS32`
+
+.. class:: tagORPCTHIS32
+
+    .. attribute:: version
+
+        :class:`COMVERSION`
+
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: cid
+
+        :class:`GUID`
+
+
+    .. attribute:: extensions
+
+        :class:`PVOID32`
+
+tagOXID_INFO
+''''''''''''
+.. class:: OXID_INFO
+
+    Alias for :class:`tagOXID_INFO`
+
+.. class:: tagOXID_INFO
+
+    .. attribute:: dwTid
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwPid
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwAuthnHint
+
+        :class:`DWORD`
+
+
+    .. attribute:: version
+
+        :class:`COMVERSION`
+
+
+    .. attribute:: ipidRemUnknown
+
+        :class:`IPID`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: psa
+
+        :class:`DUALSTRINGARRAY`
+
+tagContextProperty
+''''''''''''''''''
+.. class:: ContextProperty
+
+    Alias for :class:`tagContextProperty`
+
+.. class:: tagContextProperty
+
+    .. attribute:: policyId
+
+        :class:`GUID`
+
+
+    .. attribute:: flags
+
+        :class:`CPFLAGS`
+
+
+    .. attribute:: pUnk
+
+        :class:`PVOID`
+
+_PRIV_SCM_INFO
+''''''''''''''
+.. class:: PRIV_SCM_INFO
+
+    Alias for :class:`_PRIV_SCM_INFO`
+
+.. class:: _PRIV_SCM_INFO
+
+    .. attribute:: Apartment
+
+        :class:`LONG`
+
+
+    .. attribute:: pwszWinstaDesktop
+
+        :class:`WCHAR`
+
+
+    .. attribute:: ProcessSignature
+
+        :class:`ULONG64`
+
+
+    .. attribute:: pEnvBlock
+
+        :class:`WCHAR`
+
+
+    .. attribute:: EnvBlockLength
+
+        :class:`DWORD`
+
+_REMOTE_REQUEST_SCM_INFO
+''''''''''''''''''''''''
+.. class:: REMOTE_REQUEST_SCM_INFO
+
+    Alias for :class:`_REMOTE_REQUEST_SCM_INFO`
+
+.. class:: _REMOTE_REQUEST_SCM_INFO
+
+    .. attribute:: ClientImpLevel
+
+        :class:`DWORD`
+
+
+    .. attribute:: cRequestedProtseqs
+
+        :class:`USHORT`
+
+
+    .. attribute:: pRequestedProtseqs
+
+        :class:`USHORT`
+
+tagMInterfacePointer
+''''''''''''''''''''
+.. class:: MInterfacePointer
+
+    Alias for :class:`tagMInterfacePointer`
+
+.. class:: PMInterfacePointer
+
+    Pointer to :class:`tagMInterfacePointer`
+
+.. class:: tagMInterfacePointer
+
+    .. attribute:: ulCntData
+
+        :class:`ULONG`
+
+
+    .. attribute:: abData
+
+        :class:`BYTE`
+
+tagRPCOLEMESSAGE
+''''''''''''''''
+.. class:: PRPCOLEMESSAGE
+
+    Pointer to :class:`tagRPCOLEMESSAGE`
+
+.. class:: RPCOLEMESSAGE
+
+    Alias for :class:`tagRPCOLEMESSAGE`
+
+.. class:: tagRPCOLEMESSAGE
+
+    .. attribute:: reserved1
+
+        :class:`PVOID`
+
+
+    .. attribute:: dataRepresentation
+
+        :class:`RPCOLEDATAREP`
+
+
+    .. attribute:: Buffer
+
+        :class:`PVOID`
+
+
+    .. attribute:: cbBuffer
+
+        :class:`ULONG`
+
+
+    .. attribute:: iMethod
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved2
+
+        :class:`PVOID` ``[5]``
+
+
+    .. attribute:: rpcFlags
+
+        :class:`ULONG`
+
+tagREMQIRESULT
+''''''''''''''
+.. class:: PREMQIRESULT
+
+    Pointer to :class:`tagREMQIRESULT`
+
+.. class:: REMQIRESULT
+
+    Alias for :class:`tagREMQIRESULT`
+
+.. class:: tagREMQIRESULT
+
+    .. attribute:: hResult
+
+        :class:`HRESULT`
+
+
+    .. attribute:: std
+
+        :class:`STDOBJREF`
+
+tagREMINTERFACEREF
+''''''''''''''''''
+.. class:: REMINTERFACEREF
+
+    Alias for :class:`tagREMINTERFACEREF`
+
+.. class:: tagREMINTERFACEREF
+
+    .. attribute:: ipid
+
+        :class:`IPID`
+
+
+    .. attribute:: cPublicRefs
+
+        :class:`ULONG`
+
+
+    .. attribute:: cPrivateRefs
+
+        :class:`ULONG`
+
+_PRIV_RESOLVER_INFO_LEGACY
+''''''''''''''''''''''''''
+.. class:: PPRIV_RESOLVER_INFO_LEGACY
+
+    Pointer to :class:`_PRIV_RESOLVER_INFO_LEGACY`
+
+.. class:: PRIV_RESOLVER_INFO_LEGACY
+
+    Alias for :class:`_PRIV_RESOLVER_INFO_LEGACY`
+
+.. class:: _PRIV_RESOLVER_INFO_LEGACY
+
+    .. attribute:: OxidServer
+
+        :class:`OXID`
+
+
+    .. attribute:: pServerORBindings
+
+        :class:`DUALSTRINGARRAY`
+
+
+    .. attribute:: OxidInfo
+
+        :class:`OXID_INFO`
+
+
+    .. attribute:: LocalMidOfRemote
+
+        :class:`MID`
+
+
+    .. attribute:: DllServerModel
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszDllServer
+
+        :class:`WCHAR`
+
+
+    .. attribute:: FoundInROT
+
+        :class:`BOOL`
+
+_REMOTE_REPLY_SCM_INFO
+''''''''''''''''''''''
+.. class:: PREMOTE_REPLY_SCM_INFO
+
+    Pointer to :class:`_REMOTE_REPLY_SCM_INFO`
+
+.. class:: REMOTE_REPLY_SCM_INFO
+
+    Alias for :class:`_REMOTE_REPLY_SCM_INFO`
+
+.. class:: _REMOTE_REPLY_SCM_INFO
+
+    .. attribute:: Oxid
+
+        :class:`OXID`
+
+
+    .. attribute:: pdsaOxidBindings
+
+        :class:`DUALSTRINGARRAY`
+
+
+    .. attribute:: ipidRemUnknown
+
+        :class:`IPID`
+
+
+    .. attribute:: authnHint
+
+        :class:`DWORD`
+
+
+    .. attribute:: serverVersion
+
+        :class:`COMVERSION`
+
+CONTAINER_EXTENT
+''''''''''''''''
+.. class:: CONTAINER_EXTENT
+
+    .. attribute:: id
+
+        :class:`UINT`
+
+
+    .. attribute:: version
+
+        :class:`UINT`
+
+
+    .. attribute:: size
+
+        :class:`UINT`
+
+
+    .. attribute:: data
+
+        :class:`BYTE`
+
+CONTAINER_EXTENT_ARRAY
+''''''''''''''''''''''
+.. class:: CONTAINER_EXTENT_ARRAY
+
+    .. attribute:: size
+
+        :class:`UINT`
+
+
+    .. attribute:: reserved
+
+        :class:`UINT`
+
+
+    .. attribute:: extent
+
+        :class:`CONTAINER_EXTENT`
+
+HSTRING__
+'''''''''
+.. class:: HSTRING__
+
+    .. attribute:: unused
+
+        :class:`INT`
+
+CONTAINERVERSION
+''''''''''''''''
+.. class:: CONTAINERVERSION
+
+    .. attribute:: version
+
+        :class:`UINT`
+
+
+    .. attribute:: capabilityFlags
+
+        :class:`UINT64`
+
+
+    .. attribute:: extensions
+
+        :class:`CONTAINER_EXTENT_ARRAY`
+
+_MIDL_ILocalObjectExporter_0007
+'''''''''''''''''''''''''''''''
+.. class:: MIDL_ILocalObjectExporter_0007
+
+    Alias for :class:`_MIDL_ILocalObjectExporter_0007`
+
+.. class:: _MIDL_ILocalObjectExporter_0007
+
+    .. attribute:: dwTid
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwPid
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwAuthnHint
+
+        :class:`ULONG`
+
+
+    .. attribute:: dcomVersion
+
+        :class:`tagCOMVERSION`
+
+
+    .. attribute:: containerVersion
+
+        :class:`CONTAINERVERSION`
+
+
+    .. attribute:: ipidRemUnknown
+
+        :class:`_GUID`
+
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: psa
+
+        :class:`tagDUALSTRINGARRAY`
+
+
+    .. attribute:: guidProcessIdentifier
+
+        :class:`_GUID`
+
+
+    .. attribute:: processHostId
+
+        :class:`UINT64`
+
+
+    .. attribute:: clientDependencyBehavior
+
+        :class:`INT`
+
+
+    .. attribute:: packageFullName
+
+        :class:`HSTRING__`
+
+
+    .. attribute:: userSid
+
+        :class:`HSTRING__`
+
+
+    .. attribute:: appcontainerSid
+
+        :class:`HSTRING__`
+
+
+    .. attribute:: primaryOxid
+
+        :class:`UINT64`
+
+
+    .. attribute:: primaryIpidRemUnknown
+
+        :class:`_GUID`
+
+_PRIV_RESOLVER_INFO
+'''''''''''''''''''
+.. class:: PPRIV_RESOLVER_INFO
+
+    Pointer to :class:`_PRIV_RESOLVER_INFO`
+
+.. class:: PRIV_RESOLVER_INFO
+
+    Alias for :class:`_PRIV_RESOLVER_INFO`
+
+.. class:: _PRIV_RESOLVER_INFO
+
+    .. attribute:: OxidServer
+
+        :class:`UINT64`
+
+
+    .. attribute:: pServerORBindings
+
+        :class:`tagDUALSTRINGARRAY`
+
+
+    .. attribute:: OxidInfo
+
+        :class:`MIDL_ILocalObjectExporter_0007`
+
+
+    .. attribute:: LocalMidOfRemote
+
+        :class:`UINT64`
+
+
+    .. attribute:: FoundInROT
+
+        :class:`INT`
+
+_MIDL_XmitDefs_0001
+'''''''''''''''''''
+.. class:: MIDL_XmitDefs_0001
+
+    Alias for :class:`_MIDL_XmitDefs_0001`
+
+.. class:: _MIDL_XmitDefs_0001
+
+    .. attribute:: asyncOperationId
+
+        :class:`GUID`
+
+
+    .. attribute:: oxidClientProcessNA
+
+        :class:`ULONG64`
+
+
+    .. attribute:: originalClientLogicalThreadId
+
+        :class:`GUID`
+
+
+    .. attribute:: uClientCausalityTraceId
+
+        :class:`ULONG64`
+
+_LOCALTHIS
+''''''''''
+.. class:: LOCALTHIS
+
+    Alias for :class:`_LOCALTHIS`
+
+.. class:: _LOCALTHIS
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`DWORD`
+
+
+    .. attribute:: passthroughTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: callTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: asyncRequestBlock
+
+        :class:`MIDL_XmitDefs_0001`
+
+
+    .. attribute:: reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID`
+
+_LOCALTHIS32
+''''''''''''
+.. class:: LOCALTHIS32
+
+    Alias for :class:`_LOCALTHIS32`
+
+.. class:: _LOCALTHIS32
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`DWORD`
+
+
+    .. attribute:: passthroughTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: callTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: asyncRequestBlock
+
+        :class:`MIDL_XmitDefs_0001`
+
+
+    .. attribute:: reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID32`
+
+_MIDL_XmitDefs_0007
+'''''''''''''''''''
+.. class:: _MIDL_XmitDefs_0007
+
+    .. attribute:: pointOfFailure
+
+        :class:`INT`
+
+
+    .. attribute:: hrFailure
+
+        :class:`HRESULT`
+
+
+    .. attribute:: sizeOfMarshaledErrorInfo
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pMarshaledErrorInfo
+
+        :class:`BYTE`
+
+_MIDL_XmitDefs_0005
+'''''''''''''''''''
+.. class:: _MIDL_XmitDefs_0005
+
+    .. attribute:: sizeOfMarshaledResults
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pMarshaledResults
+
+        :class:`BYTE`
+
+_MIDL_XmitDefs_0008
+'''''''''''''''''''
+.. class:: _MIDL_XmitDefs_0008
+
+    .. attribute:: outcome
+
+        :class:`INT`
+
+
+    .. attribute:: successDetails
+
+        :class:`_MIDL_XmitDefs_0005`
+
+
+    .. attribute:: failureDetails
+
+        :class:`_MIDL_XmitDefs_0007`
+
+_MIDL_XmitDefs_0010
+'''''''''''''''''''
+.. class:: _MIDL_XmitDefs_0010
+
+    .. attribute:: asyncStatus
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: uServerCausalityTraceId
+
+        :class:`UINT64`
+
+
+    .. attribute:: completionTraceActivity
+
+        :class:`_GUID`
+
+
+    .. attribute:: reserved2
+
+        :class:`ULONG`
+
+
+    .. attribute:: pOutcomeDetails
+
+        :class:`_MIDL_XmitDefs_0008`
+
+CONTAINERTHAT
+'''''''''''''
+.. class:: CONTAINERTHAT
+
+    .. attribute:: responseFlags
+
+        :class:`UINT64`
+
+
+    .. attribute:: unassignedPassthroughGuid_1
+
+        :class:`_GUID`
+
+
+    .. attribute:: unassignedPassthroughGuid_2
+
+        :class:`_GUID`
+
+
+    .. attribute:: unassignedPassthroughGuid_3
+
+        :class:`_GUID`
+
+
+    .. attribute:: unassignedPassthroughGuid_4
+
+        :class:`_GUID`
+
+
+    .. attribute:: reservedGuid_1
+
+        :class:`_GUID`
+
+
+    .. attribute:: reservedGuid_2
+
+        :class:`_GUID`
+
+
+    .. attribute:: reservedGuid_3
+
+        :class:`_GUID`
+
+
+    .. attribute:: reservedGuid_4
+
+        :class:`_GUID`
+
+
+    .. attribute:: unassignedPassthroughUint64_1
+
+        :class:`UINT64`
+
+
+    .. attribute:: unassignedPassthroughUint64_2
+
+        :class:`UINT64`
+
+
+    .. attribute:: unassignedPassthroughUint64_3
+
+        :class:`UINT64`
+
+
+    .. attribute:: unassignedPassthroughUint64_4
+
+        :class:`UINT64`
+
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+
+    .. attribute:: reservedUint64_2
+
+        :class:`UINT64`
+
+
+    .. attribute:: reservedUint64_3
+
+        :class:`UINT64`
+
+
+    .. attribute:: reservedUint64_4
+
+        :class:`UINT64`
+
+
+    .. attribute:: reservedUint32
+
+        :class:`UINT`
+
+
+    .. attribute:: extensions
+
+        :class:`CONTAINER_EXTENT_ARRAY`
+
+_LOCALTHAT
+''''''''''
+.. class:: LOCALTHAT
+
+    Alias for :class:`_LOCALTHAT`
+
+.. class:: _LOCALTHAT
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pAsyncResponseBlock
+
+        :class:`_MIDL_XmitDefs_0010`
+
+
+    .. attribute:: containerErrorInformation
+
+        :class:`CONTAINER_EXTENT`
+
+
+    .. attribute:: containerPassthroughData
+
+        :class:`CONTAINERTHAT`
+
+_LOCALTHAT32
+''''''''''''
+.. class:: LOCALTHAT32
+
+    Alias for :class:`_LOCALTHAT32`
+
+.. class:: _LOCALTHAT32
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pAsyncResponseBlock
+
+        :class:`PVOID32`
+
+
+    .. attribute:: containerErrorInformation
+
+        :class:`PVOID32`
+
+
+    .. attribute:: containerPassthroughData
+
+        :class:`PVOID32`
+
+tagORPCTHAT
+'''''''''''
+.. class:: ORPCTHAT
+
+    Alias for :class:`tagORPCTHAT`
+
+.. class:: tagORPCTHAT
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: extensions
+
+        :class:`tagORPC_EXTENT_ARRAY`
+
+ORPCTHAT32
+''''''''''
+.. class:: ORPCTHAT32
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: extensions
+
+        :class:`PVOID32`
+
 _VIRTUAL_STORAGE_TYPE
 '''''''''''''''''''''
 .. class:: PVIRTUAL_STORAGE_TYPE
@@ -2410,6 +3630,32 @@ _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
     .. attribute:: anon_01
 
         :class:`_ANON__PROCESS_MITIGATION_IMAGE_LOAD_POLICY_SUB_UNION_1`
+
+TagTestStructV1
+'''''''''''''''
+.. class:: PTestStructV1
+
+    Pointer to :class:`TagTestStructV1`
+
+.. class:: TestStructV1
+
+    Alias for :class:`TagTestStructV1`
+
+.. class:: TagTestStructV1
+
+    .. attribute:: Type
+
+        :class:`DWORD`
+
+
+    .. attribute:: Name
+
+        :class:`LPCH`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON_TAGTESTSTRUCTV1_SUB_UNION_1`
 
 _MIB_IPNETROW_LH
 ''''''''''''''''
@@ -13144,23 +14390,6 @@ _OBJECT_ATTRIBUTES
 
         :class:`PVOID`
 
-_TMP_UNION_IO_STATUS_BLOCK
-''''''''''''''''''''''''''
-.. class:: TMP_UNION_IO_STATUS_BLOCK
-
-    Alias for :class:`_TMP_UNION_IO_STATUS_BLOCK`
-
-.. class:: _TMP_UNION_IO_STATUS_BLOCK
-
-    .. attribute:: Status
-
-        :class:`NTSTATUS`
-
-
-    .. attribute:: Pointer
-
-        :class:`PVOID`
-
 _IO_STATUS_BLOCK
 ''''''''''''''''
 .. class:: IO_STATUS_BLOCK
@@ -13173,9 +14402,9 @@ _IO_STATUS_BLOCK
 
 .. class:: _IO_STATUS_BLOCK
 
-    .. attribute:: DUMMYUNIONNAME
+    .. attribute:: anon_01
 
-        :class:`TMP_UNION_IO_STATUS_BLOCK`
+        :class:`_ANON__IO_STATUS_BLOCK_SUB_UNION_1`
 
 
     .. attribute:: Information
@@ -15501,124 +16730,6 @@ _REMOTE_PORT_VIEW
 
 
     .. attribute:: ViewBase
-
-        :class:`PVOID`
-
-tagCOMVERSION
-'''''''''''''
-.. class:: COMVERSION
-
-    Alias for :class:`tagCOMVERSION`
-
-.. class:: tagCOMVERSION
-
-    .. attribute:: MajorVersion
-
-        :class:`USHORT`
-
-
-    .. attribute:: MinorVersion
-
-        :class:`USHORT`
-
-tagORPCTHIS
-'''''''''''
-.. class:: ORPCTHIS
-
-    Alias for :class:`tagORPCTHIS`
-
-.. class:: tagORPCTHIS
-
-    .. attribute:: version
-
-        :class:`COMVERSION`
-
-
-    .. attribute:: flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: reserved1
-
-        :class:`ULONG`
-
-
-    .. attribute:: cid
-
-        :class:`GUID`
-
-
-    .. attribute:: extensions
-
-        :class:`PVOID`
-
-__MIDL_XmitDefs_0001
-''''''''''''''''''''
-.. class:: MIDL_XmitDefs_0001
-
-    Alias for :class:`__MIDL_XmitDefs_0001`
-
-.. class:: __MIDL_XmitDefs_0001
-
-    .. attribute:: asyncOperationId
-
-        :class:`GUID`
-
-
-    .. attribute:: oxidClientProcessNA
-
-        :class:`ULONG64`
-
-
-    .. attribute:: originalClientLogicalThreadId
-
-        :class:`GUID`
-
-
-    .. attribute:: uClientCausalityTraceId
-
-        :class:`ULONG64`
-
-_LOCALTHIS
-''''''''''
-.. class:: LOCALTHIS
-
-    Alias for :class:`_LOCALTHIS`
-
-.. class:: _LOCALTHIS
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwClientThread
-
-        :class:`DWORD`
-
-
-    .. attribute:: passthroughTraceActivity
-
-        :class:`GUID`
-
-
-    .. attribute:: callTraceActivity
-
-        :class:`GUID`
-
-
-    .. attribute:: asyncRequestBlock
-
-        :class:`MIDL_XmitDefs_0001`
-
-
-    .. attribute:: reserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: pTouchedAstaArray
 
         :class:`PVOID`
 
@@ -26983,6 +28094,144 @@ tagCOMSD
 
 
     .. attribute:: SD_ACCESSRESTRICTIONS(3)
+
+tagCPFLAGS
+''''''''''
+.. class:: CPFLAGS
+
+    Alias for :class:`tagCPFLAGS`
+
+
+.. class:: tagCPFLAGS
+
+
+    .. attribute:: CPFLAG_NONE(0)
+
+
+    .. attribute:: CPFLAG_PROPAGATE(1)
+
+
+    .. attribute:: CPFLAG_EXPOSE(2)
+
+
+    .. attribute:: CPFLAG_ENVOY(4)
+
+
+    .. attribute:: CPFLAG_MONITORSTUB(8)
+
+
+    .. attribute:: CPFLAG_MONITORPROXY(16)
+
+
+    .. attribute:: CPFLAG_DONTCOMPARE(32)
+
+tagACTIVATION_STAGE
+'''''''''''''''''''
+.. class:: ACTIVATION_STAGE
+
+    Alias for :class:`tagACTIVATION_STAGE`
+
+
+.. class:: tagACTIVATION_STAGE
+
+
+    .. attribute:: CLIENT_CONTEXT_STAGE(1)
+
+
+    .. attribute:: CLIENT_MACHINE_STAGE(2)
+
+
+    .. attribute:: SERVER_MACHINE_STAGE(3)
+
+
+    .. attribute:: SERVER_PROCESS_STAGE(4)
+
+
+    .. attribute:: SERVER_CONTEXT_STAGE(5)
+
+tagThreadingModel
+'''''''''''''''''
+.. class:: ThreadingModel
+
+    Alias for :class:`tagThreadingModel`
+
+
+.. class:: tagThreadingModel
+
+
+    .. attribute:: ApartmentThreaded(0)
+
+
+    .. attribute:: FreeThreaded(1)
+
+
+    .. attribute:: SingleThreaded(2)
+
+
+    .. attribute:: BothThreaded(3)
+
+
+    .. attribute:: NeutralThreaded(4)
+
+tagLocalServerType
+''''''''''''''''''
+.. class:: LocalServerType
+
+    Alias for :class:`tagLocalServerType`
+
+
+.. class:: tagLocalServerType
+
+
+    .. attribute:: LocalServerType16(0)
+
+
+    .. attribute:: LocalServerType32(1)
+
+tagSTREAM_SEEK
+''''''''''''''
+.. class:: STREAM_SEEK
+
+    Alias for :class:`tagSTREAM_SEEK`
+
+
+.. class:: tagSTREAM_SEEK
+
+
+    .. attribute:: STREAM_SEEK_SET(0)
+
+
+    .. attribute:: STREAM_SEEK_CUR(1)
+
+
+    .. attribute:: STREAM_SEEK_END(2)
+
+tagMSHCTX
+'''''''''
+.. class:: MSHCTX
+
+    Alias for :class:`tagMSHCTX`
+
+
+.. class:: tagMSHCTX
+
+
+    .. attribute:: MSHCTX_LOCAL(0)
+
+
+    .. attribute:: MSHCTX_NOSHAREDMEM(1)
+
+
+    .. attribute:: MSHCTX_DIFFERENTMACHINE(2)
+
+
+    .. attribute:: MSHCTX_INPROC(3)
+
+
+    .. attribute:: MSHCTX_CROSSCTX(4)
+
+
+    .. attribute:: MSHCTX_CONTAINER(5)
 
 _VIRTUAL_DISK_ACCESS_MASK
 '''''''''''''''''''''''''

@@ -164,6 +164,14 @@ Functions
 
 .. function:: SysFreeString(bstrString)
 
+.. function:: CreateStreamOnHGlobal(hGlobal, fDeleteOnRelease, ppstm)
+
+.. function:: GetHGlobalFromStream(pstm, phglobal)
+
+.. function:: CoMarshalInterface(pStm, riid, pUnk, dwDestContext, pvDestContext, mshlflags)
+
+.. function:: CoUnmarshalInterface(pStm, riid, ppv)
+
 .. function:: CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags)
 
 .. function:: CryptCATAdminCalcHashFromFileHandle2(hCatAdmin, hFile, pcbHash, pbHash, dwFlags)
@@ -978,12 +986,6 @@ Functions
 
 .. function:: SymEnumSymbolsEx(hProcess, BaseOfDll, Mask, EnumSymbolsCallback, UserContext, Options)
 
-.. function:: SymEnumTypes(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
-
-.. function:: SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
-
-.. function:: SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
-
 .. function:: SymEnumerateModules64(hProcess, EnumModulesCallback, UserContext)
 
 .. function:: SymEnumerateModulesW64(hProcess, EnumModulesCallback, UserContext)
@@ -1071,6 +1073,14 @@ Functions
 .. function:: SymSetSearchPath(hProcess, SearchPath)
 
 .. function:: SymSetSearchPathW(hProcess, SearchPath)
+
+.. function:: SymEnumTypes(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
+
+.. function:: SymEnumTypesW(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
+
+.. function:: SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
+
+.. function:: SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
 
 .. function:: CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpName)
 
