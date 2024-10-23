@@ -69,12 +69,22 @@ class TypeInfo(interfaces.ITypeInfo):
         self.GetDocumentation(id, res, None, None, None)
         return res
 
+
+class MemoryIStream(gdef.IStream):
+    @classmethod
+    def create(cls):
+        self = cls()
+        windows.winproxy.CreateStreamOnHGlobal(ppstm=self)
+        return self
+
 def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
     """A simple wrapper around ``CoCreateInstance <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx>``"""
     if custom_iid is None:
         custom_iid = targetinterface.IID
     if isinstance(clsiid, basestring):
         clsiid = IID.from_string(clsiid)
+    if isinstance(custom_iid, basestring):
+        custom_iid = IID.from_string(custom_iid)
     winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
     return targetinterface
 

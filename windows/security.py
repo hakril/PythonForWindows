@@ -218,6 +218,7 @@ SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     "callback": CALLBACK_ACCESS_RIGHT,
     "mutant": MUTANT_ACCESS_RIGHT,
     "event": EVENT_ACCESS_RIGHT,
+    "section": SECTION_ACCESS_RIGHT,
     "semaphore": SEMAPHORE_ACCESS_RIGHT,
     "io_completion": IO_COMPLETION_ACCESS_RIGHT,
     "port": PORT_ACCESS_RIGHT,
