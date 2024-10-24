@@ -1,7 +1,6 @@
 import pytest
 import time
 import zlib
-import base64
 import ctypes
 import windows
 
@@ -26,7 +25,7 @@ PE_DOTNET32_DLL_NAME = "test_pe_dotnet32.dll"
 @pytest.fixture(scope="session")
 def pe_dotnet32(tmpdir_factory):
     tmpdir = tmpdir_factory.mktemp("pe_dotnet32_test_dir")
-    pe_dotnet32_data = zlib.decompress(base64.decodebytes(PE_DOTNET32_DLL_BASE64))
+    pe_dotnet32_data = zlib.decompress(b64decode(PE_DOTNET32_DLL_BASE64))
     fullpath = str(tmpdir.join(PE_DOTNET32_DLL_NAME))
     with open(fullpath, "wb") as f:
         f.write(pe_dotnet32_data)
