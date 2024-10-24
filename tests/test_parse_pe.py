@@ -1,6 +1,7 @@
 import pytest
 import time
 import zlib
+import base64
 import ctypes
 import windows
 
@@ -20,6 +21,23 @@ def pe(request):
     yield proc.peb.modules[2].pe
     proc.exit(0)
 
+PE_DOTNET32_DLL_NAME = "test_pe_dotnet32.dll"
+
+@pytest.fixture(scope="session")
+def pe_dotnet32(tmpdir_factory):
+    tmpdir = tmpdir_factory.mktemp("pe_dotnet32_test_dir")
+    pe_dotnet32_data = zlib.decompress(base64.decodebytes(PE_DOTNET32_DLL_BASE64))
+    fullpath = str(tmpdir.join(PE_DOTNET32_DLL_NAME))
+    with open(fullpath, "wb") as f:
+        f.write(pe_dotnet32_data)
+
+    try:
+        yield fullpath
+    finally:
+        try:
+            os.unlink(fullpath)
+        except WindowsError as e:
+            pass # Ignore delete fail, may happend if injected process is cleaned after the dll..
 
 def test_pe_imports(pe):
     imports = pe.imports
@@ -66,10 +84,13 @@ def test_pe_parsing_strange_optional_header_size(tmp_path, proc32):
     # Also check that section retrieval works (as its position is based on OptionalHeader Size)
     assert set(s.name for s in mod.pe.sections) == {".text", ".data", ".l1"}
 
+
+
+
 #  Make a test from current_process parsing ?
-def test_pe_parsing_dotnet_32_process_64(proc64):
+def test_pe_parsing_dotnet32_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
-    mod = proc64.load_library(r"C:\Windows\System32\stordiag.exe")
+    mod = proc64.load_library(pe_dotnet32)
     # It was a PE32
     assert mod.pe.get_NT_HEADER().FileHeader.Machine == gdef.IMAGE_FILE_MACHINE_I386
     # Now Optional Header should be 64b
@@ -83,17 +104,54 @@ def test_pe_parsing_dotnet_32_process_64(proc64):
     assert mod.pe.sections
     assert ".text" in  set(s.name for s in mod.pe.sections)
 
-def test_pe_parsing_dotnet_32_current_process_64(proc64):
+def test_pe_parsing_dotnet32_current_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     # So we injecte python code in a the remote proc64 to test the parsing from itself
     PIPE_NAME = "PFW_TEST_Pipe"
-    mod = proc64.load_library(r"C:\Windows\System32\stordiag.exe")
-    assert proc64.peb.modules[-1].name == "stordiag.exe"
+    mod = proc64.load_library(pe_dotnet32)
+    assert proc64.peb.modules[-1].name == PE_DOTNET32_DLL_NAME
     proc64.execute_python("import sys; import windows; import windows.pipe")
-    proc64.execute_python("""pemod = [x for x in windows.current_process.peb.modules if x.name == 'stordiag.exe'][0].pe""")
+    proc64.execute_python("""pemod = [x for x in windows.current_process.peb.modules if x.name == '{0}'][0].pe""".format(PE_DOTNET32_DLL_NAME))
     with windows.pipe.create(PIPE_NAME) as np:
         rcode = """windows.pipe.send_object("{pipe}", (list(pemod.imports), [sec.name for sec in pemod.sections]))"""
         proc64.execute_python(rcode.format(pipe=PIPE_NAME))
         imported_dlls, sections_names = np.recv()
         assert imported_dlls == ['mscoree.dll']
         assert ".text" in  sections_names
+
+# A "Portable Executable 32 .NET Assembly" DLL
+# Result of compiling a simple hello-world
+# Can be loaded into a 64b process to witness 32 -> 64b PE conversion at load time
+PE_DOTNET32_DLL_BASE64 = b"""
+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
+"""
