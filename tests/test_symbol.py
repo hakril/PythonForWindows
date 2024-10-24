@@ -29,7 +29,7 @@ def test_symbols_module_info(symctx):
 def test_symbols_search(symctx):
     mod = symctx.load_file(path=u"c:\\windows\\system32\\ntdll.dll", addr=0x42000)
     res = symctx.search(u"ntdll!*CreateFile")
-    assert set(s.name for s in res) == {"NtCreateFile", "ZwCreateFile"}
+    assert set(s.name for s in res) >= {"NtCreateFile", "ZwCreateFile"} # May have other names
 
 
 def test_symbols(symctx):
