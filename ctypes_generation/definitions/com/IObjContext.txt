@@ -1,0 +1,67 @@
+typedef struct IObjContextVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IObjContext * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */
+             void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IObjContext * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IObjContext * This);
+
+        HRESULT ( STDMETHODCALLTYPE *SetProperty )(
+            IObjContext * This,
+            /* [annotation][in] */
+            __in  REFGUID rpolicyId,
+            /* [annotation][in] */
+            __in  CPFLAGS flags,
+            /* [annotation][in] */
+            __in  IUnknown *pUnk);
+
+        HRESULT ( STDMETHODCALLTYPE *RemoveProperty )(
+            IObjContext * This,
+            /* [annotation][in] */
+            __in  REFGUID rPolicyId);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProperty )(
+            IObjContext * This,
+            /* [annotation][in] */
+            __in  REFGUID rGuid,
+            /* [annotation][out] */
+            __out  CPFLAGS *pFlags,
+            /* [annotation][out] */
+            __deref_out  IUnknown **ppUnk);
+
+        HRESULT ( STDMETHODCALLTYPE *EnumContextProps )(
+            IObjContext * This,
+            /* [annotation][out] */
+            __deref_out  IEnumContextProps **ppEnumContextProps);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved1 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved2 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved3 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved4 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved5 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved6 )(
+            IObjContext * This);
+
+        PVOID ( STDMETHODCALLTYPE *Reserved7 )(
+            IObjContext * This);
+
+        END_INTERFACE
+    } IObjContextVtbl;

@@ -1,0 +1,33 @@
+typedef struct IScmRequestInfoVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IScmRequestInfo * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IScmRequestInfo * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IScmRequestInfo * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetScmInfo )(
+        IScmRequestInfo * This,
+        /* [in] */ PRIV_SCM_INFO *pScmInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetScmInfo )(
+        IScmRequestInfo * This,
+        /* [out] */ PRIV_SCM_INFO **ppScmInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *SetRemoteRequestInfo )(
+        IScmRequestInfo * This,
+        /* [in] */ REMOTE_REQUEST_SCM_INFO *pRemoteReq);
+
+    HRESULT ( STDMETHODCALLTYPE *GetRemoteRequestInfo )(
+        IScmRequestInfo * This,
+        /* [out] */ REMOTE_REQUEST_SCM_INFO **ppRemoteReq);
+
+    END_INTERFACE
+} IScmRequestInfoVtbl;

@@ -1,0 +1,28 @@
+    typedef struct ISystemActivatorVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            ISystemActivator * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            ISystemActivator * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            ISystemActivator * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassObject )(
+            ISystemActivator * This,
+            /* [unique][in] */ IActivationPropertiesIn *pActProperties,
+            /* [out] */ IActivationPropertiesOut **ppActProperties);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateInstance )(
+            ISystemActivator * This,
+            /* [unique][in] */ IUnknown *pUnkOuter,
+            /* [unique][in] */ IActivationPropertiesIn *pActProperties,
+            /* [out] */ IActivationPropertiesOut **ppActProperties);
+
+        END_INTERFACE
+    } ISystemActivatorVtbl;

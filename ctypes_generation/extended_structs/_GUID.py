@@ -22,7 +22,7 @@ class _GUID(INITIAL_GUID):
             self.name = None
         if self.name is None:
             return '<GUID "{0}">'.format(self.strid.upper())
-        return '<GUID "{0}({1})">'.format(self.strid.upper(), self.name)
+        return '<GUID "{0}" ({1})>'.format(self.strid.upper(), self.name)
 
     __sprint__ = __repr__
 

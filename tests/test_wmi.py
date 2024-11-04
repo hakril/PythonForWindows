@@ -75,7 +75,7 @@ def test_get_object(name, cls):
 # Todo: test
 #   - put_instance
 
-@pytest.mark.parametrize("cmdline", [r"c:\windows\notepad.exe trolol.exe"])
+@pytest.mark.parametrize("cmdline", [r"winver.exe test_string_pfw"])
 def test_exec_method_Win32_Process_create(cmdline):
     namespace = windows.system.wmi["root\\cimv2"]
     win32_process_cls = namespace.get_object("Win32_Process")

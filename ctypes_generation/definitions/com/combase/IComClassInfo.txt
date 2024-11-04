@@ -1,0 +1,78 @@
+    typedef struct IComClassInfoVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IComClassInfo * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IComClassInfo * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IComClassInfo * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetConfiguredClsid )(
+            IComClassInfo * This,
+            /* [out] */ GUID **ppguidClsid);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProgId )(
+            IComClassInfo * This,
+            /* [out] */ WCHAR **pwszProgid);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassName )(
+            IComClassInfo * This,
+            /* [out] */ WCHAR **pwszClassName);
+
+        HRESULT ( STDMETHODCALLTYPE *GetApplication )(
+            IComClassInfo * This,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetClassContext )(
+            IComClassInfo * This,
+            /* [in] */ CLSCTX clsctxFilter,
+            /* [out] */ CLSCTX *pclsctx);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorCount )(
+            IComClassInfo * This,
+            /* [in] */ ACTIVATION_STAGE activationStage,
+            /* [out] */ ULONG *pulCount);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorClsids )(
+            IComClassInfo * This,
+            /* [in] */ ACTIVATION_STAGE activationStage,
+            /* [out] */ GUID **prgguidClsid);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCustomActivators )(
+            IComClassInfo * This,
+            /* [in] */ ACTIVATION_STAGE activationStage,
+            /* [out] */ ISystemActivator ***prgpActivator);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+            IComClassInfo * This,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *IsComPlusConfiguredClass )(
+            IComClassInfo * This,
+            /* [out] */ BOOL *pfComPlusConfiguredClass);
+
+        HRESULT ( STDMETHODCALLTYPE *MustRunInClientContext )(
+            IComClassInfo * This,
+            /* [out] */ BOOL *pbMustRunInClientContext);
+
+        HRESULT ( STDMETHODCALLTYPE *GetVersionNumber )(
+            IComClassInfo * This,
+            /* [out] */ DWORD *pdwVersionMS,
+            /* [out] */ DWORD *pdwVersionLS);
+
+        HRESULT ( STDMETHODCALLTYPE *Lock )(
+            IComClassInfo * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Unlock )(
+            IComClassInfo * This);
+
+        END_INTERFACE
+    } IComClassInfoVtbl;

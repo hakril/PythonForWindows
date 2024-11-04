@@ -130,7 +130,7 @@ typedef struct _IMAGEHLP_MODULEW64 {
   WCHAR    LoadedImageName[256];
   WCHAR    LoadedPdbName[256];
   DWORD    CVSig;
-  WCHAR    *CVData[MAX_PATH * 3];
+  WCHAR    CVData[MAX_PATH * 3]; // Typo in the documentation which says WCHAR    *CVData[MAX_PATH * 3];
   DWORD    PdbSig;
   GUID     PdbSig70;
   DWORD    PdbAge;

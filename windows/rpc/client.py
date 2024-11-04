@@ -14,6 +14,8 @@ KNOW_RESPONSE_TYPE = gdef.FlagMapper(gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPO
 KNOWN_RPC_ERROR_CODE = gdef.FlagMapper(
         gdef.ERROR_INVALID_HANDLE,
         gdef.RPC_X_BAD_STUB_DATA,
+        gdef.RPC_E_INVALID_HEADER,
+        gdef.RPC_E_DISCONNECTED,
         gdef.RPC_S_UNKNOWN_IF,
         gdef.RPC_S_PROTOCOL_ERROR,
         gdef.RPC_S_UNSUPPORTED_TRANS_SYN,
@@ -57,34 +59,36 @@ class ALPC_RPC_CALL(ctypes.Structure):
         ("UNK5", gdef.DWORD),
         ("UNK6", gdef.DWORD),
         ("UNK7", gdef.DWORD),
-        ("ORPC_IPID", gdef.GUID)
+        ("orpc_ipid", gdef.GUID)
     ]
 
 class RPCClient(object):
     """A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling"""
     REQUEST_IDENTIFIER = 0x11223344
+
     def __init__(self, port):
         self.alpc_client = alpc.AlpcClient(port) #: The :class:`windows.alpc.AlpcClient` used to communicate with the server
         self.number_of_bind_if = 0 # if -> interface
         self.if_bind_number = {}
 
-    def bind(self, IID_str, version=(1,0)):
-        """Bind to the ``IID_str`` with the given ``version``
+    def bind(self, iid, version=(1,0)):
+        """Bind to the ``IID`` with the given ``version``
 
             :returns: :class:`windows.generated_def.IID`
         """
-        IID = windows.com.IID.from_string(IID_str)
-        request = self._forge_bind_request(IID, version, self.number_of_bind_if)
+        if not isinstance(iid, gdef.GUID):
+            iid = windows.com.IID.from_string(iid)
+        request = self._forge_bind_request(iid, version, self.number_of_bind_if)
         response = self._send_request(request)
         # Parse reponse
         request_type = self._get_request_type(response)
         if request_type != gdef.RPC_RESPONSE_TYPE_BIND_OK:
             raise ValueError("Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got {0}".format(KNOW_RESPONSE_TYPE[request_type]))
-        iid_hash = hash(buffer(IID)[:]) # TODO: add __hash__ to IID
+        iid_hash = hash(buffer(iid)[:]) # TODO: add __hash__ to IID
         self.if_bind_number[iid_hash] = self.number_of_bind_if
         self.number_of_bind_if += 1
         #TODO: attach version information to IID
-        return IID
+        return iid
 
     def forge_alpc_request(self, IID, method_offset, params, ipid=None):
         """Craft an ALPC message containing an RPC request to call ``method_offset`` of interface ``IID`
@@ -113,18 +117,17 @@ class RPCClient(object):
         request_type = self._get_request_type(response)
         if request_type != gdef.RPC_RESPONSE_TYPE_SUCCESS:
             raise ValueError("Unexpected reponse type. Expected RESPONSE_SUCCESS got {0}".format(KNOW_RESPONSE_TYPE[request_type]))
-
+        return self._get_response_effective_data(response)
         # windows.utils.sprint(ALPC_RPC_CALL.from_buffer_copy(response + "\x00" * 12))
-        data = struct.unpack("<6I", response[:6 * 4])
-        assert data[3] == self.REQUEST_IDENTIFIER
-        return response[4 * 6:] # Should be the return value (not completly verified)
+        # data = struct.unpack("<6I", response[:6 * 4])
+        # assert data[3] == self.REQUEST_IDENTIFIER
+        # return response[4 * 6:] # Should be the return value (not completly verified)
 
     def _send_request(self, request):
-        response = self.alpc_client.send_receive(request)
-        return response.data
+        return self.alpc_client.send_receive(request)
 
     def _forge_call_request(self, interface_nb, method_offset, params, ipid=None):
-        # TODO: differents REQUEST_IDENTIFIER for each req ?
+        # TODO: differents REQUEST_IDENTIFIER for each req ? Use REQUEST_IDENTIFIER to identify ORPC calls ?
         # TODO: what is this '0' ? (1 is also accepted) (flags ?)
         # request = struct.pack("<16I", gdef.RPC_REQUEST_TYPE_CALL, NOT_USED, 1, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)
         req = ALPC_RPC_CALL()
@@ -134,16 +137,24 @@ class RPCClient(object):
         req.if_nb = interface_nb
         req.method_offset = method_offset
         if ipid:
-            req.ORPC_IPID = ipid
-            this = gdef.ORPCTHIS()
+            req.flags = 1 # We have a IPID
+            req.orpc_ipid = ipid
+            this = gdef.ORPCTHIS32() # we use NDR32
             this.version = (5,7)
-            this.flags = 1
-            lthis = gdef.LOCALTHIS()
+            this.flags = gdef.ORPCF_LOCAL
+            # Not mandatory
+            # this.cid = gdef.GUID.from_string("42424242-4242-4242-4242-424242424242")
+            lthis = gdef.LOCALTHIS32() # we use NDR32
+            # RPC_E_INVALID_HEADER is NULL
+            lthis.callTraceActivity = gdef.GUID.from_string("42424242-4242-4242-4242-424242424242")
+            lthis.dwClientThread = windows.current_thread.tid
             return buffer(req)[:] + buffer(this)[:] + buffer(lthis)[:] + params
         return buffer(req)[:] + params
 
     def _forge_call_request_in_view(self, interface_nb, method_offset, params, ipid=None):
         # Version crade qui clean rien pour POC. GROS DOUTES :D
+        if ipid:
+            raise NotImplementedError("RpcClient._forge_call_request_in_view() with ipid")
         raw_request = self._forge_call_request(interface_nb, method_offset, b"")
         p = windows.alpc.AlpcMessage(0x2000)
         section = self.alpc_client.create_port_section(0x40000, 0, len(params))
@@ -171,9 +182,22 @@ class RPCClient(object):
         return buffer(req)[:]
 
     def _get_request_type(self, response):
+        """Response is a `AlpcMessage`"""
         "raise if request_type == RESPONSE_TYPE_FAIL"
-        request_type = struct.unpack("<I", response[:4])[0]
+        request_type = struct.unpack("<I", response.data[:4])[0]
         if request_type == gdef.RPC_RESPONSE_TYPE_FAIL:
-            error_code = struct.unpack("<5I", response)[2]
+            error_code = struct.unpack("<5I", response.data)[2]
             raise ValueError("RPC Response error {0} ({1})".format(error_code, KNOWN_RPC_ERROR_CODE.get(error_code, error_code)))
         return request_type
+
+    def _get_response_effective_data(self, response):
+        """Response is a `AlpcMessage` needed to handle response in message vs response in view"""
+        if not response.view_is_valid:
+            # Reponse directly in PORT_MESSAGE
+            return response.data[0x18:] # 4 * 6
+        # Response in view M extract size from PORT_MESSAGE & read data from view
+        assert response.port_message.u1.s1.TotalLength >= 0x48 # At least 0x20 of data
+        rpcdatasize = struct.unpack("<I", response.data[0x18:0x1c])[0]
+        viewattr = response.view_attribute
+        assert viewattr.ViewSize >= rpcdatasize
+        return windows.current_process.read_memory(viewattr.ViewBase, rpcdatasize)

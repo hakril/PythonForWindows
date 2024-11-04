@@ -47,3 +47,19 @@ def CLSIDFromProgID(lpszProgID, lpclsid):
 @Ole32Proxy()
 def CoTaskMemFree(pv):
     return CoTaskMemFree.ctypes_function(pv)
+
+@Ole32Proxy()
+def CreateStreamOnHGlobal(hGlobal=None, fDeleteOnRelease=True, ppstm=NeededParameter):
+    return CreateStreamOnHGlobal.ctypes_function(hGlobal, fDeleteOnRelease, ppstm)
+
+@Ole32Proxy()
+def GetHGlobalFromStream(pstm, phglobal):
+    return GetHGlobalFromStream.ctypes_function(pstm, phglobal)
+
+@Ole32Proxy()
+def CoMarshalInterface(pStm, riid, pUnk, dwDestContext, pvDestContext, mshlflags):
+    return CoMarshalInterface.ctypes_function(pStm, riid, pUnk, dwDestContext, pvDestContext, mshlflags)
+
+@Ole32Proxy()
+def CoUnmarshalInterface(pStm, riid, ppv):
+    return CoUnmarshalInterface.ctypes_function(pStm, riid, ppv)

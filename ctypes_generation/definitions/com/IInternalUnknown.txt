@@ -1,0 +1,22 @@
+    typedef struct IInternalUnknownVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IInternalUnknown * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IInternalUnknown * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IInternalUnknown * This);
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInternalInterface )(
+            IInternalUnknown * This,
+            /* [in] */ REFIID riid,
+            /* [out] */ void **ppv);
+
+        END_INTERFACE
+    } IInternalUnknownVtbl;

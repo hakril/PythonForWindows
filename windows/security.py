@@ -175,11 +175,11 @@ SECTION_ACCESS_RIGHT = gdef.FlagMapper(
 )
 
 COM_ACCESS_RIGHT = gdef.FlagMapper(
-    gdef.COM_EXECUTE,
-    gdef.COM_EXECUTE_LOCAL,
-    gdef.COM_EXECUTE_REMOTE,
-    gdef.COM_ACTIVATE_LOCAL,
-    gdef.COM_ACTIVATE_REMOTE,
+    gdef.COM_RIGHTS_EXECUTE,
+    gdef.COM_RIGHTS_EXECUTE_LOCAL,
+    gdef.COM_RIGHTS_EXECUTE_REMOTE,
+    gdef.COM_RIGHTS_ACTIVATE_LOCAL,
+    gdef.COM_RIGHTS_ACTIVATE_REMOTE,
 )
 
 SERVICE_ACCESS_RIGHT = gdef.FlagMapper(
@@ -206,7 +206,6 @@ ADS_ACCESS_RIGHT = gdef.FlagMapper(
     gdef.ADS_RIGHT_DS_CONTROL_ACCESS,
 )
 
-
 SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     None: gdef.FlagMapper(),
     "file": FILE_ACCESS_RIGHT,
@@ -218,6 +217,7 @@ SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     "callback": CALLBACK_ACCESS_RIGHT,
     "mutant": MUTANT_ACCESS_RIGHT,
     "event": EVENT_ACCESS_RIGHT,
+    "section": SECTION_ACCESS_RIGHT,
     "semaphore": SEMAPHORE_ACCESS_RIGHT,
     "io_completion": IO_COMPLETION_ACCESS_RIGHT,
     "port": PORT_ACCESS_RIGHT,

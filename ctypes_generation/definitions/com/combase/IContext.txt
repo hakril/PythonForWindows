@@ -1,0 +1,37 @@
+typedef struct IContextVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IContext * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IContext * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IContext * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetProperty )(
+        IContext * This,
+        /* [in] */ REFGUID rpolicyId,
+        /* [in] */ CPFLAGS flags,
+        /* [in] */ IUnknown *pUnk);
+
+    HRESULT ( STDMETHODCALLTYPE *RemoveProperty )(
+        IContext * This,
+        /* [in] */ REFGUID rPolicyId);
+
+    HRESULT ( STDMETHODCALLTYPE *GetProperty )(
+        IContext * This,
+        /* [in] */ REFGUID rGuid,
+        /* [out] */ CPFLAGS *pFlags,
+        /* [out] */ IUnknown **ppUnk);
+
+    HRESULT ( STDMETHODCALLTYPE *EnumContextProps )(
+        IContext * This,
+        /* [out] */ IEnumContextProps **ppEnumContextProps);
+
+    END_INTERFACE
+} IContextVtbl;

@@ -405,6 +405,26 @@ SysAllocStringParams = ((1, 'psz'),)
 SysFreeStringPrototype = WINFUNCTYPE(VOID, BSTR)
 SysFreeStringParams = ((1, 'bstrString'),)
 
+#def CreateStreamOnHGlobal(hGlobal, fDeleteOnRelease, ppstm):
+#    return CreateStreamOnHGlobal.ctypes_function(hGlobal, fDeleteOnRelease, ppstm)
+CreateStreamOnHGlobalPrototype = WINFUNCTYPE(HRESULT, HGLOBAL, BOOL, POINTER(LPSTREAM))
+CreateStreamOnHGlobalParams = ((1, 'hGlobal'), (1, 'fDeleteOnRelease'), (1, 'ppstm'))
+
+#def GetHGlobalFromStream(pstm, phglobal):
+#    return GetHGlobalFromStream.ctypes_function(pstm, phglobal)
+GetHGlobalFromStreamPrototype = WINFUNCTYPE(HRESULT, LPUNKNOWN, POINTER(HGLOBAL))
+GetHGlobalFromStreamParams = ((1, 'pstm'), (1, 'phglobal'))
+
+#def CoMarshalInterface(pStm, riid, pUnk, dwDestContext, pvDestContext, mshlflags):
+#    return CoMarshalInterface.ctypes_function(pStm, riid, pUnk, dwDestContext, pvDestContext, mshlflags)
+CoMarshalInterfacePrototype = WINFUNCTYPE(HRESULT, LPUNKNOWN, REFIID, LPUNKNOWN, DWORD, LPVOID, DWORD)
+CoMarshalInterfaceParams = ((1, 'pStm'), (1, 'riid'), (1, 'pUnk'), (1, 'dwDestContext'), (1, 'pvDestContext'), (1, 'mshlflags'))
+
+#def CoUnmarshalInterface(pStm, riid, ppv):
+#    return CoUnmarshalInterface.ctypes_function(pStm, riid, ppv)
+CoUnmarshalInterfacePrototype = WINFUNCTYPE(HRESULT, PVOID, REFIID, POINTER(LPVOID))
+CoUnmarshalInterfaceParams = ((1, 'pStm'), (1, 'riid'), (1, 'ppv'))
+
 #def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
 #    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
 CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
@@ -2440,21 +2460,6 @@ SymEnumSymbolsParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Mask'), (1, 'Enu
 SymEnumSymbolsExPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PVOID, PVOID, DWORD)
 SymEnumSymbolsExParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'Mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'), (1, 'Options'))
 
-#def SymEnumTypes(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext):
-#    return SymEnumTypes.ctypes_function(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
-SymEnumTypesPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PVOID, PVOID)
-SymEnumTypesParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
-
-#def SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
-#    return SymEnumTypesByName.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
-SymEnumTypesByNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PVOID, PVOID)
-SymEnumTypesByNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
-
-#def SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
-#    return SymEnumTypesByNameW.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
-SymEnumTypesByNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PVOID, PVOID)
-SymEnumTypesByNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
-
 #def SymEnumerateModules64(hProcess, EnumModulesCallback, UserContext):
 #    return SymEnumerateModules64.ctypes_function(hProcess, EnumModulesCallback, UserContext)
 SymEnumerateModules64Prototype = WINFUNCTYPE(BOOL, HANDLE, PVOID, PVOID)
@@ -2674,6 +2679,26 @@ SymSetSearchPathParams = ((1, 'hProcess'), (1, 'SearchPath'))
 #    return SymSetSearchPathW.ctypes_function(hProcess, SearchPath)
 SymSetSearchPathWPrototype = WINFUNCTYPE(BOOL, HANDLE, PCWSTR)
 SymSetSearchPathWParams = ((1, 'hProcess'), (1, 'SearchPath'))
+
+#def SymEnumTypes(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypes.ctypes_function(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
+SymEnumTypesPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PSYM_ENUMERATESYMBOLS_CALLBACK, PVOID)
+SymEnumTypesParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
+
+#def SymEnumTypesW(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypesW.ctypes_function(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
+SymEnumTypesWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PSYM_ENUMERATESYMBOLS_CALLBACKW, PVOID)
+SymEnumTypesWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
+
+#def SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypesByName.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
+SymEnumTypesByNamePrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCSTR, PSYM_ENUMERATESYMBOLS_CALLBACK, PVOID)
+SymEnumTypesByNameParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
+
+#def SymEnumTypesByNameW(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext):
+#    return SymEnumTypesByNameW.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)
+SymEnumTypesByNameWPrototype = WINFUNCTYPE(BOOL, HANDLE, ULONG64, PCWSTR, PSYM_ENUMERATESYMBOLS_CALLBACKW, PVOID)
+SymEnumTypesByNameWParams = ((1, 'hProcess'), (1, 'BaseOfDll'), (1, 'mask'), (1, 'EnumSymbolsCallback'), (1, 'UserContext'))
 
 #def CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpName):
 #    return CreateEventA.ctypes_function(lpEventAttributes, bManualReset, bInitialState, lpName)

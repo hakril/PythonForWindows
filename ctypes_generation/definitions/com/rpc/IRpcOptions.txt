@@ -1,0 +1,29 @@
+    typedef struct IRpcOptionsVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IRpcOptions * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IRpcOptions * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IRpcOptions * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Set )(
+            IRpcOptions * This,
+            /* [in] */ IUnknown *pPrx,
+            /* [in] */ DWORD dwProperty,
+            /* [in] */ ULONG_PTR dwValue);
+
+        HRESULT ( STDMETHODCALLTYPE *Query )(
+            IRpcOptions * This,
+            /* [in] */ IUnknown *pPrx,
+            /* [in] */ DWORD dwProperty,
+            /* [out] */ ULONG_PTR *pdwValue);
+
+        END_INTERFACE
+    } IRpcOptionsVtbl;

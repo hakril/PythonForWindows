@@ -1,0 +1,38 @@
+typedef struct IEnumContextPropsVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IEnumContextProps * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IEnumContextProps * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IEnumContextProps * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Next )(
+        IEnumContextProps * This,
+        /* [in] */ ULONG celt,
+        /* [length_is][size_is][out] */ ContextProperty *pContextProperties,
+        /* [out] */ ULONG *pceltFetched);
+
+    HRESULT ( STDMETHODCALLTYPE *Skip )(
+        IEnumContextProps * This,
+        /* [in] */ ULONG celt);
+
+    HRESULT ( STDMETHODCALLTYPE *Reset )(
+        IEnumContextProps * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Clone )(
+        IEnumContextProps * This,
+        /* [out] */ IEnumContextProps **ppEnumContextProps);
+
+    HRESULT ( STDMETHODCALLTYPE *Count )(
+        IEnumContextProps * This,
+        /* [out] */ ULONG *pcelt);
+
+    END_INTERFACE
+} IEnumContextPropsVtbl;

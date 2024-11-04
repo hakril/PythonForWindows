@@ -1,0 +1,45 @@
+    typedef struct IRpcStubBufferVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IRpcStubBuffer * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ PVOID *ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IRpcStubBuffer * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IRpcStubBuffer * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Connect )(
+            IRpcStubBuffer * This,
+            /* [in] */ IUnknown *pUnkServer);
+
+        PVOID ( STDMETHODCALLTYPE *Disconnect )(
+            IRpcStubBuffer * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Invoke )(
+            IRpcStubBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *_prpcmsg,
+            /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer);
+
+        // IRpcStubBuffer *
+        PVOID ( STDMETHODCALLTYPE *IsIIDSupported )(
+            IRpcStubBuffer * This,
+            /* [in] */ REFIID riid);
+
+        ULONG ( STDMETHODCALLTYPE *CountRefs )(
+            IRpcStubBuffer * This);
+
+        HRESULT ( STDMETHODCALLTYPE *DebugServerQueryInterface )(
+            IRpcStubBuffer * This,
+            PVOID *ppv);
+
+        PVOID ( STDMETHODCALLTYPE *DebugServerRelease )(
+            IRpcStubBuffer * This,
+            PVOID pv);
+
+        END_INTERFACE
+    } IRpcStubBufferVtbl;

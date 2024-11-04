@@ -554,6 +554,7 @@ class NdrStream(object):
     def __init__(self, data):
         self.fulldata = data
         self.data = data
+        # self.data = memoryview(data) # FAST but need some code rewrite at some places
 
     def partial_unpack(self, format):
         size = struct.calcsize(format)

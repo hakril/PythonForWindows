@@ -1,0 +1,427 @@
+
+typedef enum tagCOMSD {
+  SD_LAUNCHPERMISSIONS = 0,
+  SD_ACCESSPERMISSIONS = 1,
+  SD_LAUNCHRESTRICTIONS = 2,
+  SD_ACCESSRESTRICTIONS = 3
+} COMSD;
+
+typedef struct tagOpaqueData
+{
+    GUID guid;
+    ULONG dataLength;
+    ULONG reserved1;
+    ULONG reserved2;
+    /*[size_is((dataLength+7)&~7)]*/ BYTE *data;
+} OpaqueData;
+
+
+typedef struct tagSTDOBJREF
+{
+    ULONG  flags;              // STDOBJREF flags (see above)
+    ULONG  cPublicRefs;        // count of references passed
+    OXID           oxid;               // oxid of server with this oid
+    OID            oid;                // oid of object with this ipid
+    IPID           ipid;               // ipid of Interface
+} STDOBJREF;
+
+
+typedef struct tagDATAELEMENT
+    {
+    GUID dataID;
+    ULONG cbSize;
+    ULONG cbRounded;
+    BYTE Data[ 1 ];
+    } 	DATAELEMENT, *PDATAELEMENT;
+
+typedef struct tagOBJREFDATA
+    {
+    ULONG nElms;
+    PDATAELEMENT *ppElmArray;
+    } 	OBJREFDATA;
+
+typedef struct tagDUALSTRINGARRAY
+{
+    USHORT wNumEntries;     // Number of entries in array.
+    USHORT wSecurityOffset; // Offset of security info.
+    // The array contains two parts, a set of STRINGBINDINGs
+    // and a set of SECURITYBINDINGs.  Each set is terminated by an
+    // extra zero.  The shortest array contains four zeros.
+    /*[size_is(wNumEntries)]*/ USHORT aStringArray[1];
+} DUALSTRINGARRAY;
+
+typedef struct tagOBJREF
+    {
+    ULONG signature;
+    ULONG flags;
+    GUID iid;
+    union
+        {
+        struct
+            {
+            STDOBJREF std;
+            DUALSTRINGARRAY saResAddr;
+            } 	u_standard;
+        struct
+            {
+            STDOBJREF std;
+            CLSID clsid;
+            DUALSTRINGARRAY saResAddr;
+            } 	u_handler;
+        struct
+            {
+            CLSID clsid;
+            ULONG cbExtension;
+            ULONG size;
+            BYTE *pData;
+            } 	u_custom;
+        struct
+            {
+            STDOBJREF std;
+            OBJREFDATA *pORData;
+            DUALSTRINGARRAY saResAddr;
+            } 	u_extended;
+        } 	u_objref;
+    } 	OBJREF;
+
+
+
+
+typedef struct tagCOMVERSION
+{
+    USHORT MajorVersion;
+    USHORT MinorVersion;
+} COMVERSION;
+
+typedef struct tagORPC_EXTENT {
+    _GUID               id;
+    ULONG               size;
+    BYTE                data[1];
+} ORPC_EXTENT, PORPC_EXTENT;
+
+typedef struct tagORPC_EXTENT_ARRAY {
+    ULONG               size;
+    ULONG               reserved;
+    PORPC_EXTENT        *extent;
+} ORPC_EXTENT_ARRAY;
+
+typedef struct tagORPCTHIS {
+   COMVERSION version;
+   ULONG flags;
+   ULONG reserved1;
+   GUID cid;
+   PVOID extensions; // [unique] ORPC_EXTENT_ARRAY *extensions;
+ } ORPCTHIS;
+
+typedef struct tagORPCTHIS32 {
+   COMVERSION version;
+   ULONG flags;
+   ULONG reserved1;
+   GUID cid;
+   PVOID32 extensions; // [unique] ORPC_EXTENT_ARRAY *extensions;
+ } ORPCTHIS32;
+
+typedef struct tagOXID_INFO
+{
+    DWORD       dwTid;              // thread id of object exporter
+    DWORD       dwPid;              // process id of object exporter
+    DWORD       dwAuthnHint;        // authentication hint
+    COMVERSION  version;            // COM Version of server
+    IPID        ipidRemUnknown;     // IRemUnknown IPID for object exporter
+    DWORD       dwFlags;            // miscellaneous flags
+    /*[unique]*/ DUALSTRINGARRAY *psa;  // protocol and security info
+} OXID_INFO;
+
+enum tagCPFLAGS
+{
+    CPFLAG_NONE	= 0,
+	CPFLAG_PROPAGATE	= 0x1,
+	CPFLAG_EXPOSE	= 0x2,
+	CPFLAG_ENVOY	= 0x4,
+	CPFLAG_MONITORSTUB	= 0x8,
+	CPFLAG_MONITORPROXY	= 0x10,
+	CPFLAG_DONTCOMPARE	= 0x20
+} CPFLAGS;
+
+typedef struct tagContextProperty
+{
+    GUID policyId;
+    CPFLAGS flags;
+    PVOID pUnk; // IUnknown
+} 	ContextProperty;
+
+typedef struct _PRIV_SCM_INFO
+{
+    LONG Apartment;
+    WCHAR *pwszWinstaDesktop;
+    ULONG64 ProcessSignature;
+    WCHAR *pEnvBlock;
+    DWORD EnvBlockLength;
+} 	PRIV_SCM_INFO;
+
+typedef struct _REMOTE_REQUEST_SCM_INFO
+{
+    DWORD ClientImpLevel;
+    USHORT cRequestedProtseqs;
+    USHORT *pRequestedProtseqs;
+} 	REMOTE_REQUEST_SCM_INFO;
+
+// From: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/21781a97-cb45-4655-82b0-02c4a1584603
+ typedef struct tagMInterfacePointer {
+   ULONG ulCntData;
+   /*[size_is(ulCntData)]*/ BYTE abData[1];
+ } MInterfacePointer, *PMInterfacePointer;
+
+
+typedef enum tagACTIVATION_STAGE
+{
+    CLIENT_CONTEXT_STAGE	= 1,
+	CLIENT_MACHINE_STAGE	= 2,
+	SERVER_MACHINE_STAGE	= 3,
+	SERVER_PROCESS_STAGE	= 4,
+	SERVER_CONTEXT_STAGE	= 5
+} 	ACTIVATION_STAGE;
+
+typedef enum tagThreadingModel
+    {
+    ApartmentThreaded	= 0,
+	FreeThreaded	= 1 ,
+	SingleThreaded	= 2 ,
+	BothThreaded	= 3 ,
+	NeutralThreaded	= 4
+} 	ThreadingModel;
+
+typedef enum tagLocalServerType
+    {
+    LocalServerType16	= 0,
+	LocalServerType32	= 1
+    } 	LocalServerType;
+
+
+
+
+typedef struct tagRPCOLEMESSAGE
+{
+    PVOID             reserved1;
+    RPCOLEDATAREP     dataRepresentation;
+    PVOID             Buffer;
+    ULONG             cbBuffer;
+    ULONG             iMethod;
+    PVOID             reserved2[5];
+    ULONG             rpcFlags;
+} RPCOLEMESSAGE, *PRPCOLEMESSAGE;
+
+// https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/1d6a8a54-b115-4148-815a-af0258931948
+typedef struct tagREMQIRESULT
+{
+    HRESULT hResult;
+    STDOBJREF std;
+} 	REMQIRESULT, *PREMQIRESULT;
+
+typedef struct tagREMINTERFACEREF
+{
+    IPID ipid;
+    ULONG cPublicRefs;
+    ULONG cPrivateRefs;
+} REMINTERFACEREF;
+
+
+typedef enum tagSTREAM_SEEK {
+  STREAM_SEEK_SET = 0,
+  STREAM_SEEK_CUR = 1,
+  STREAM_SEEK_END = 2
+} STREAM_SEEK;
+
+typedef enum tagMSHCTX {
+  MSHCTX_LOCAL = 0,
+  MSHCTX_NOSHAREDMEM = 1,
+  MSHCTX_DIFFERENTMACHINE = 2,
+  MSHCTX_INPROC = 3,
+  MSHCTX_CROSSCTX = 4,
+  MSHCTX_CONTAINER
+} MSHCTX;
+
+
+typedef struct _PRIV_RESOLVER_INFO_LEGACY
+    {
+        OXID OxidServer;
+        DUALSTRINGARRAY *pServerORBindings;
+        OXID_INFO OxidInfo;
+        MID LocalMidOfRemote;
+        DWORD DllServerModel;
+        WCHAR *pwszDllServer;
+        BOOL FoundInROT;
+} PRIV_RESOLVER_INFO_LEGACY, *PPRIV_RESOLVER_INFO_LEGACY;
+
+typedef struct _REMOTE_REPLY_SCM_INFO
+    {
+    OXID Oxid;
+    DUALSTRINGARRAY *pdsaOxidBindings;
+    IPID ipidRemUnknown;
+    DWORD authnHint;
+    COMVERSION serverVersion;
+    } 	REMOTE_REPLY_SCM_INFO, *PREMOTE_REPLY_SCM_INFO;
+
+
+typedef struct CONTAINER_EXTENT {
+    UINT                id;
+    UINT                version;
+    UINT                size;
+    BYTE                data[1];
+};
+
+typedef struct CONTAINER_EXTENT_ARRAY {
+    UINT                size;
+    UINT                reserved;
+    CONTAINER_EXTENT    *extent;
+};
+
+typedef struct HSTRING__ {
+    INT                 unused;
+};
+
+
+typedef struct CONTAINERVERSION {
+    UINT                version;
+    UINT64              capabilityFlags;
+    CONTAINER_EXTENT_ARRAY *extensions;
+};
+
+
+typedef struct _MIDL_ILocalObjectExporter_0007 {
+    ULONG               dwTid;
+    ULONG               dwPid;
+    ULONG               dwAuthnHint;
+    tagCOMVERSION       dcomVersion;
+    CONTAINERVERSION    containerVersion;
+    _GUID               ipidRemUnknown;
+    ULONG               dwFlags;
+    tagDUALSTRINGARRAY  *psa;
+    _GUID               guidProcessIdentifier;
+    UINT64              processHostId;
+    INT                 clientDependencyBehavior;
+    HSTRING__           *packageFullName;
+    HSTRING__           *userSid;
+    HSTRING__           *appcontainerSid;
+    UINT64              primaryOxid;
+    _GUID               primaryIpidRemUnknown;
+} MIDL_ILocalObjectExporter_0007;
+
+
+typedef struct _PRIV_RESOLVER_INFO {
+    UINT64              OxidServer;
+    tagDUALSTRINGARRAY  *pServerORBindings;
+    MIDL_ILocalObjectExporter_0007 OxidInfo;
+    UINT64              LocalMidOfRemote;
+    INT                 FoundInROT;
+} PRIV_RESOLVER_INFO, *PPRIV_RESOLVER_INFO;
+
+
+typedef struct _MIDL_XmitDefs_0001 {
+    GUID asyncOperationId;
+    ULONG64 oxidClientProcessNA;
+    GUID originalClientLogicalThreadId;
+    ULONG64 uClientCausalityTraceId;
+} MIDL_XmitDefs_0001;
+
+typedef struct _LOCALTHIS {
+    DWORD dwFlags;
+    DWORD dwClientThread;
+    GUID passthroughTraceActivity;
+    GUID callTraceActivity;
+    MIDL_XmitDefs_0001 asyncRequestBlock;
+    DWORD reserved;
+    PVOID pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
+} LOCALTHIS;
+
+typedef struct _LOCALTHIS32 {
+    DWORD dwFlags;
+    DWORD dwClientThread;
+    GUID passthroughTraceActivity;
+    GUID callTraceActivity;
+    MIDL_XmitDefs_0001 asyncRequestBlock;
+    DWORD reserved;
+    PVOID32 pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
+} LOCALTHIS32;
+
+/* LOCALTHAT & sub structures */
+
+typedef struct _MIDL_XmitDefs_0007 {
+    INT                 pointOfFailure;
+    HRESULT             hrFailure;
+    ULONG               sizeOfMarshaledErrorInfo;
+    ULONG               reserved;
+    BYTE                *pMarshaledErrorInfo;
+};
+
+typedef struct _MIDL_XmitDefs_0005 {
+    ULONG               sizeOfMarshaledResults;
+    ULONG               reserved;
+    BYTE                *pMarshaledResults;
+};
+
+typedef struct _MIDL_XmitDefs_0008 {
+    INT                 outcome;
+    _MIDL_XmitDefs_0005 successDetails;
+    _MIDL_XmitDefs_0007 failureDetails;
+};
+
+typedef struct _MIDL_XmitDefs_0010 {
+    ULONG               asyncStatus;
+    ULONG               reserved1;
+    UINT64              uServerCausalityTraceId;
+    _GUID               completionTraceActivity;
+    ULONG               reserved2;
+    _MIDL_XmitDefs_0008 *pOutcomeDetails;
+};
+
+typedef struct CONTAINERTHAT {
+    UINT64              responseFlags;
+    _GUID               unassignedPassthroughGuid_1;
+    _GUID               unassignedPassthroughGuid_2;
+    _GUID               unassignedPassthroughGuid_3;
+    _GUID               unassignedPassthroughGuid_4;
+    _GUID               reservedGuid_1;
+    _GUID               reservedGuid_2;
+    _GUID               reservedGuid_3;
+    _GUID               reservedGuid_4;
+    UINT64              unassignedPassthroughUint64_1;
+    UINT64              unassignedPassthroughUint64_2;
+    UINT64              unassignedPassthroughUint64_3;
+    UINT64              unassignedPassthroughUint64_4;
+    UINT64              marshalingSetId;
+    UINT64              reservedUint64_2;
+    UINT64              reservedUint64_3;
+    UINT64              reservedUint64_4;
+    UINT                reservedUint32;
+    CONTAINER_EXTENT_ARRAY *extensions;
+};
+
+typedef struct _LOCALTHAT {
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    _MIDL_XmitDefs_0010 *pAsyncResponseBlock;
+    CONTAINER_EXTENT    *containerErrorInformation;
+    CONTAINERTHAT       *containerPassthroughData;
+} LOCALTHAT;
+
+
+typedef struct _LOCALTHAT32 {
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    PVOID32             pAsyncResponseBlock;
+    PVOID32             containerErrorInformation;
+    PVOID32             containerPassthroughData;
+} LOCALTHAT32;
+
+
+typedef struct tagORPCTHAT {
+    ULONG               flags;
+    tagORPC_EXTENT_ARRAY *extensions;
+} ORPCTHAT;
+
+
+typedef struct ORPCTHAT32 {
+    ULONG               flags;
+    PVOID32             extensions; // tagORPC_EXTENT_ARRAY tagORPC_EXTENT_ARRAY
+} ORPCTHAT32;

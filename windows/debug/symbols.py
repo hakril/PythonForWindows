@@ -238,6 +238,8 @@ class SymbolType(object):
     @property
     def children(self):
         count = self.nb_children
+        if count is None:
+            return None
         class res_struct(ctypes.Structure):
             _fields_ = [("Count", gdef.ULONG), ("Start", gdef.ULONG), ("Types", (gdef.ULONG * count))]
         x = res_struct()
@@ -520,7 +522,7 @@ class SymbolHandler(object):
         else:
             callback = ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)(callback)
 
-        addr = getattr(mod, "addr", mod) # Retrieve mod.addr, else us the value directly
+        addr = getattr(mod, "addr", mod) # Retrieve mod.addr, else use the value directly
         windows.winproxy.SymSearchW(self.handle, gdef.DWORD64(addr), 0, tag, mask, 0, callback, res, options)
         for sym in res:
             sym.resolver = self

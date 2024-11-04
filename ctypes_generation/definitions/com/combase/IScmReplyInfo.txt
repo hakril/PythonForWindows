@@ -1,0 +1,33 @@
+    typedef struct IScmReplyInfoVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IScmReplyInfo * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IScmReplyInfo * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IScmReplyInfo * This);
+
+        HRESULT ( STDMETHODCALLTYPE *SetResolverInfo )(
+            IScmReplyInfo * This,
+            /* [in] */ PRIV_RESOLVER_INFO *pResolverInfo); /* Need to be cast to PRIV_RESOLVER_INFO_LEGACY on old windows */
+
+        HRESULT ( STDMETHODCALLTYPE *GetResolverInfo )(
+            IScmReplyInfo * This,
+            /* [out] */ PRIV_RESOLVER_INFO **ppResolverInfo); /* Need to be cast to PRIV_RESOLVER_INFO_LEGACY on old windows */
+
+        HRESULT ( STDMETHODCALLTYPE *SetRemoteReplyInfo )(
+            IScmReplyInfo * This,
+            /* [in] */ REMOTE_REPLY_SCM_INFO *pRemoteReply);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteReplyInfo )(
+            IScmReplyInfo * This,
+            /* [out] */ REMOTE_REPLY_SCM_INFO **ppRemoteReply);
+
+        END_INTERFACE
+    } IScmReplyInfoVtbl;

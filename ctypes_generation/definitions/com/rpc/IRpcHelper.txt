@@ -1,0 +1,26 @@
+    typedef struct IRpcHelperVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IRpcHelper * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IRpcHelper * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IRpcHelper * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetDCOMProtocolVersion )(
+            IRpcHelper * This,
+            /* [out] */ DWORD *pComVersion);
+
+        HRESULT ( STDMETHODCALLTYPE *GetIIDFromOBJREF )(
+            IRpcHelper * This,
+            /* [in] */ void *pObjRef,
+            /* [out] */ IID **piid);
+
+        END_INTERFACE
+    } IRpcHelperVtbl;

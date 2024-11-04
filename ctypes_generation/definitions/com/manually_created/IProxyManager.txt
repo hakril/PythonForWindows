@@ -1,0 +1,57 @@
+// Manually crafted from windows 10
+typedef struct IProxyManagerVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IProxyManager * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            _COM_Outptr_  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IProxyManager * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateServer )(
+            IProxyManager * This,
+            REFCLSID * rclsid,
+            DWORD * clsctx,
+            PVOID *pv);
+
+        BOOL ( STDMETHODCALLTYPE *IsConnected )(
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *LockConnection )(
+            IProxyManager * This,
+            BOOL fLock,
+            BOOL fLastUnlockReleases);
+
+        HRESULT ( STDMETHODCALLTYPE *Disconnect )(
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetConnectionStatus )(
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *ScalarDeletingDestructor )( // CPP code ? is this the real end of the Interface ?
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *SetMapping )(
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetMapping )(
+            IProxyManager * This);
+
+        IObjContext ( STDMETHODCALLTYPE *GetServerObjectContext )(
+            IProxyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetWrapperForContex )(
+            IProxyManager   * This,
+            IObjContext  *pCtx,
+            IID              *riid,
+            void            **ppv);
+
+        END_INTERFACE
+    } IProxyManagerVtbl;

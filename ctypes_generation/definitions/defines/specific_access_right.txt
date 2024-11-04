@@ -258,15 +258,15 @@
 #define FAX_JOB_MANAGE          (0x0040)
 
 
-// COM Specific Access Rights (Custom NAME)
-// Based on internet search for "COM Access Mask"
+// COM Specific Access Rights
+// Based on https://learn.microsoft.com/en-us/windows/win32/com/access-control-lists-for-com
 
 
-#define COM_EXECUTE              (0x0001)
-#define COM_EXECUTE_LOCAL        (0x0002)
-#define COM_EXECUTE_REMOTE       (0x0004)
-#define COM_ACTIVATE_LOCAL       (0x0008)
-#define COM_ACTIVATE_REMOTE      (0x0010)
+#define COM_RIGHTS_EXECUTE              (0x0001)
+#define COM_RIGHTS_EXECUTE_LOCAL        (0x0002)
+#define COM_RIGHTS_EXECUTE_REMOTE       (0x0004)
+#define COM_RIGHTS_ACTIVATE_LOCAL       (0x0008)
+#define COM_RIGHTS_ACTIVATE_REMOTE      (0x0010)
 
 //
 // Section Access Rights.

@@ -1,0 +1,63 @@
+typedef struct IClientSecurityVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IClientSecurity * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IClientSecurity * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IClientSecurity * This);
+
+        HRESULT ( STDMETHODCALLTYPE *QueryBlanket )(
+            IClientSecurity * This,
+            /* [annotation][in] */
+            __in  IUnknown *pProxy,
+            /* [annotation][out] */
+            __out  DWORD *pAuthnSvc,
+            /* [annotation][out] */
+            __out_opt  DWORD *pAuthzSvc,
+            /* [annotation][out] */
+            __RPC__deref_out_opt  OLECHAR **pServerPrincName,
+            /* [annotation][out] */
+            __out_opt  DWORD *pAuthnLevel,
+            /* [annotation][out] */
+            __out_opt  DWORD *pImpLevel,
+            /* [annotation][out] */
+            __deref_out_opt  void **pAuthInfo,
+            /* [annotation][out] */
+            __out_opt  DWORD *pCapabilites);
+
+        HRESULT ( STDMETHODCALLTYPE *SetBlanket )(
+            IClientSecurity * This,
+            /* [annotation][in] */
+            __in  IUnknown *pProxy,
+            /* [annotation][in] */
+            __in  DWORD dwAuthnSvc,
+            /* [annotation][in] */
+            __in  DWORD dwAuthzSvc,
+            /* [annotation][in] */
+            __RPC__in_opt  OLECHAR *pServerPrincName,
+            /* [annotation][in] */
+            __in  DWORD dwAuthnLevel,
+            /* [annotation][in] */
+            __in  DWORD dwImpLevel,
+            /* [annotation][in] */
+            __in_opt  void *pAuthInfo,
+            /* [annotation][in] */
+            __in  DWORD dwCapabilities);
+
+        HRESULT ( STDMETHODCALLTYPE *CopyProxy )(
+            IClientSecurity * This,
+            /* [annotation][in] */
+            __in  IUnknown *pProxy,
+            /* [annotation][out] */
+            __deref_out  IUnknown **ppCopy);
+
+        END_INTERFACE
+    } IClientSecurityVtbl;

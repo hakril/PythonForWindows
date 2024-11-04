@@ -1,0 +1,58 @@
+    typedef struct IPrivActivationPropertiesOutVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IPrivActivationPropertiesOut * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IPrivActivationPropertiesOut * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetActivationID )(
+            IPrivActivationPropertiesOut * This,
+            /* [out] */ GUID *pActivationID);
+
+        HRESULT ( STDMETHODCALLTYPE *GetObjectInterface )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ REFIID riid,
+            /* [in] */ DWORD actvflags,
+            /* [iid_is][out] */ void **ppv);
+
+        HRESULT ( STDMETHODCALLTYPE *GetObjectInterfaces )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ DWORD cIfs,
+            /* [in] */ DWORD actvflags,
+            /* [size_is][in] */ MULTI_QI *multiQi);
+
+        HRESULT ( STDMETHODCALLTYPE *RemoveRequestedIIDs )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ DWORD cIfs,
+            /* [size_is][in] */ IID *rgIID);
+
+        HRESULT ( STDMETHODCALLTYPE *SetObjectInterfaces )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ DWORD cIfs,
+            /* [in] */ IID *pIID,
+            /* [in] */ IUnknown *pUnk);
+
+        HRESULT ( STDMETHODCALLTYPE *SetMarshalledResults )(
+            IPrivActivationPropertiesOut * This,
+            /* [in] */ DWORD cIfs,
+            /* [in] */ IID *pIID,
+            /* [in] */ HRESULT *pHr,
+            /* [in] */ MInterfacePointer **pIntfData);
+
+        HRESULT ( STDMETHODCALLTYPE *GetMarshalledResults )(
+            IPrivActivationPropertiesOut * This,
+            /* [out] */ DWORD *pcIfs,
+            /* [out] */ IID **pIID,
+            /* [out] */ HRESULT **pHr,
+            /* [out] */ MInterfacePointer ***pIntfData);
+
+        END_INTERFACE
+    } IPrivActivationPropertiesOutVtbl;

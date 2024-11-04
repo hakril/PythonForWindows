@@ -134,6 +134,10 @@ def SymEnumTypes(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext=None):
     return SymEnumTypes.ctypes_function(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
 
 @DbgHelpProxy()
+def SymEnumTypesW(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext=None):
+   return SymEnumTypesW.ctypes_function(hProcess, BaseOfDll, EnumSymbolsCallback, UserContext)
+
+@DbgHelpProxy()
 def SymEnumTypesByName(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext=None):
     UserContext = transform_pyobject_to_pvoid(UserContext)
     return SymEnumTypesByName.ctypes_function(hProcess, BaseOfDll, mask, EnumSymbolsCallback, UserContext)

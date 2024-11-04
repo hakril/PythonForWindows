@@ -36,7 +36,7 @@ def test_token_user(curtok):
     user_sid = curtok.user
     assert user_sid
     computername, username = windows.utils.lookup_sid(user_sid)
-    assert computername == windows.system.computer_name
+    assert computername.upper() == windows.system.computer_name.upper()
     assert username == os.environ["USERNAME"]
 
 def test_token_id(curtok):

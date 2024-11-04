@@ -93,6 +93,7 @@ LPCH = c_char_p
 LPWCH = c_wchar
 BSTR = c_wchar_p
 OLECHAR = c_wchar
+SNB = POINTER(POINTER(OLECHAR))
 POLECHAR = c_wchar_p
 PZZWSTR = c_wchar_p
 PUCHAR = POINTER(UCHAR)
@@ -128,7 +129,7 @@ ALG_ID = UINT
 DISPID = LONG
 MEMBERID = DISPID
 LRESULT = LONG_PTR
-LPUNKNOWN = POINTER(PVOID)
+LPUNKNOWN = PVOID
 LPPOINT = POINTER(POINT)
 LPRECT = POINTER(RECT)
 SPC_UUID = BYTE*16
@@ -137,6 +138,8 @@ PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
 FILEOP_FLAGS = WORD
 NET_API_STATUS = DWORD
+PVOID32 = DWORD
+PVOID64 = DWORD64
 NCRYPT_HANDLE = ULONG_PTR
 NCRYPT_PROV_HANDLE = ULONG_PTR
 NCRYPT_KEY_HANDLE = ULONG_PTR
@@ -253,6 +256,12 @@ DEVINSTID_W = LPWSTR
 RPCOLEDATAREP = ULONG
 HREFTYPE = DWORD
 SFGAOF = ULONG
+ID = ULONG64
+MID = ID
+OXID = ID
+OID = ID
+SETID = ID
+LPSTREAM = PVOID#Istream*
 GROUP = UINT
 SOCKET = HANDLE
 WNDPROC = PVOID
@@ -473,15 +482,18 @@ class _GUID(Structure):
         ("Data3", USHORT),
         ("Data4", BYTE * (8)),
     ]
+CID = _GUID
 CLSID = _GUID
 GUID = _GUID
 IID = _GUID
+IPID = _GUID
 LPCGUID = POINTER(_GUID)
 LPCLSID = POINTER(_GUID)
 LPGUID = POINTER(_GUID)
 REFCLSID = POINTER(_GUID)
 REFGUID = POINTER(_GUID)
 REFIID = POINTER(_GUID)
+REFIPID = POINTER(_GUID)
 
 INITIAL_GUID = _GUID
 class _GUID(INITIAL_GUID):
@@ -507,7 +519,7 @@ class _GUID(INITIAL_GUID):
             self.name = None
         if self.name is None:
             return '<GUID "{0}">'.format(self.strid.upper())
-        return '<GUID "{0}({1})">'.format(self.strid.upper(), self.name)
+        return '<GUID "{0}" ({1})>'.format(self.strid.upper(), self.name)
 
     __sprint__ = __repr__
 
@@ -543,15 +555,18 @@ class _GUID(INITIAL_GUID):
             return NotImplemented
         return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
 
+CID = _GUID
 CLSID = _GUID
 GUID = _GUID
 IID = _GUID
+IPID = _GUID
 LPCGUID = POINTER(_GUID)
 LPCLSID = POINTER(_GUID)
 LPGUID = POINTER(_GUID)
 REFCLSID = POINTER(_GUID)
 REFGUID = POINTER(_GUID)
 REFIID = POINTER(_GUID)
+REFIPID = POINTER(_GUID)
 class IO_Des_s(Structure):
     _fields_ = [
         ("IOD_Count", DWORD),
@@ -839,16 +854,6 @@ class tagCALLFRAME_WALK(EnumType):
 CALLFRAME_WALK = tagCALLFRAME_WALK
 
 
-SD_LAUNCHPERMISSIONS = EnumValue("tagCOMSD", "SD_LAUNCHPERMISSIONS", 0x0)
-SD_ACCESSPERMISSIONS = EnumValue("tagCOMSD", "SD_ACCESSPERMISSIONS", 0x1)
-SD_LAUNCHRESTRICTIONS = EnumValue("tagCOMSD", "SD_LAUNCHRESTRICTIONS", 0x2)
-SD_ACCESSRESTRICTIONS = EnumValue("tagCOMSD", "SD_ACCESSRESTRICTIONS", 0x3)
-class tagCOMSD(EnumType):
-    values = [SD_LAUNCHPERMISSIONS, SD_ACCESSPERMISSIONS, SD_LAUNCHRESTRICTIONS, SD_ACCESSRESTRICTIONS]
-    mapper = FlagMapper(*values)
-COMSD = tagCOMSD
-
-
 class tagMULTI_QI(Structure):
     _fields_ = [
         ("pIID", POINTER(IID)),
@@ -1007,6 +1012,576 @@ LPVARIANTARG = POINTER(__tagVARIANT)
 VARIANT = __tagVARIANT
 VARIANTARG = __tagVARIANT
 _tagVARIANT = __tagVARIANT
+
+SD_LAUNCHPERMISSIONS = EnumValue("tagCOMSD", "SD_LAUNCHPERMISSIONS", 0x0)
+SD_ACCESSPERMISSIONS = EnumValue("tagCOMSD", "SD_ACCESSPERMISSIONS", 0x1)
+SD_LAUNCHRESTRICTIONS = EnumValue("tagCOMSD", "SD_LAUNCHRESTRICTIONS", 0x2)
+SD_ACCESSRESTRICTIONS = EnumValue("tagCOMSD", "SD_ACCESSRESTRICTIONS", 0x3)
+class tagCOMSD(EnumType):
+    values = [SD_LAUNCHPERMISSIONS, SD_ACCESSPERMISSIONS, SD_LAUNCHRESTRICTIONS, SD_ACCESSRESTRICTIONS]
+    mapper = FlagMapper(*values)
+COMSD = tagCOMSD
+
+
+CPFLAG_NONE = EnumValue("tagCPFLAGS", "CPFLAG_NONE", 0x0)
+CPFLAG_PROPAGATE = EnumValue("tagCPFLAGS", "CPFLAG_PROPAGATE", 0x1)
+CPFLAG_EXPOSE = EnumValue("tagCPFLAGS", "CPFLAG_EXPOSE", 0x2)
+CPFLAG_ENVOY = EnumValue("tagCPFLAGS", "CPFLAG_ENVOY", 0x4)
+CPFLAG_MONITORSTUB = EnumValue("tagCPFLAGS", "CPFLAG_MONITORSTUB", 0x8)
+CPFLAG_MONITORPROXY = EnumValue("tagCPFLAGS", "CPFLAG_MONITORPROXY", 0x10)
+CPFLAG_DONTCOMPARE = EnumValue("tagCPFLAGS", "CPFLAG_DONTCOMPARE", 0x20)
+class tagCPFLAGS(EnumType):
+    values = [CPFLAG_NONE, CPFLAG_PROPAGATE, CPFLAG_EXPOSE, CPFLAG_ENVOY, CPFLAG_MONITORSTUB, CPFLAG_MONITORPROXY, CPFLAG_DONTCOMPARE]
+    mapper = FlagMapper(*values)
+CPFLAGS = tagCPFLAGS
+
+
+CLIENT_CONTEXT_STAGE = EnumValue("tagACTIVATION_STAGE", "CLIENT_CONTEXT_STAGE", 0x1)
+CLIENT_MACHINE_STAGE = EnumValue("tagACTIVATION_STAGE", "CLIENT_MACHINE_STAGE", 0x2)
+SERVER_MACHINE_STAGE = EnumValue("tagACTIVATION_STAGE", "SERVER_MACHINE_STAGE", 0x3)
+SERVER_PROCESS_STAGE = EnumValue("tagACTIVATION_STAGE", "SERVER_PROCESS_STAGE", 0x4)
+SERVER_CONTEXT_STAGE = EnumValue("tagACTIVATION_STAGE", "SERVER_CONTEXT_STAGE", 0x5)
+class tagACTIVATION_STAGE(EnumType):
+    values = [CLIENT_CONTEXT_STAGE, CLIENT_MACHINE_STAGE, SERVER_MACHINE_STAGE, SERVER_PROCESS_STAGE, SERVER_CONTEXT_STAGE]
+    mapper = FlagMapper(*values)
+ACTIVATION_STAGE = tagACTIVATION_STAGE
+
+
+ApartmentThreaded = EnumValue("tagThreadingModel", "ApartmentThreaded", 0x0)
+FreeThreaded = EnumValue("tagThreadingModel", "FreeThreaded", 0x1)
+SingleThreaded = EnumValue("tagThreadingModel", "SingleThreaded", 0x2)
+BothThreaded = EnumValue("tagThreadingModel", "BothThreaded", 0x3)
+NeutralThreaded = EnumValue("tagThreadingModel", "NeutralThreaded", 0x4)
+class tagThreadingModel(EnumType):
+    values = [ApartmentThreaded, FreeThreaded, SingleThreaded, BothThreaded, NeutralThreaded]
+    mapper = FlagMapper(*values)
+ThreadingModel = tagThreadingModel
+
+
+LocalServerType16 = EnumValue("tagLocalServerType", "LocalServerType16", 0x0)
+LocalServerType32 = EnumValue("tagLocalServerType", "LocalServerType32", 0x1)
+class tagLocalServerType(EnumType):
+    values = [LocalServerType16, LocalServerType32]
+    mapper = FlagMapper(*values)
+LocalServerType = tagLocalServerType
+
+
+STREAM_SEEK_SET = EnumValue("tagSTREAM_SEEK", "STREAM_SEEK_SET", 0x0)
+STREAM_SEEK_CUR = EnumValue("tagSTREAM_SEEK", "STREAM_SEEK_CUR", 0x1)
+STREAM_SEEK_END = EnumValue("tagSTREAM_SEEK", "STREAM_SEEK_END", 0x2)
+class tagSTREAM_SEEK(EnumType):
+    values = [STREAM_SEEK_SET, STREAM_SEEK_CUR, STREAM_SEEK_END]
+    mapper = FlagMapper(*values)
+STREAM_SEEK = tagSTREAM_SEEK
+
+
+MSHCTX_LOCAL = EnumValue("tagMSHCTX", "MSHCTX_LOCAL", 0x0)
+MSHCTX_NOSHAREDMEM = EnumValue("tagMSHCTX", "MSHCTX_NOSHAREDMEM", 0x1)
+MSHCTX_DIFFERENTMACHINE = EnumValue("tagMSHCTX", "MSHCTX_DIFFERENTMACHINE", 0x2)
+MSHCTX_INPROC = EnumValue("tagMSHCTX", "MSHCTX_INPROC", 0x3)
+MSHCTX_CROSSCTX = EnumValue("tagMSHCTX", "MSHCTX_CROSSCTX", 0x4)
+MSHCTX_CONTAINER = EnumValue("tagMSHCTX", "MSHCTX_CONTAINER", 0x5)
+class tagMSHCTX(EnumType):
+    values = [MSHCTX_LOCAL, MSHCTX_NOSHAREDMEM, MSHCTX_DIFFERENTMACHINE, MSHCTX_INPROC, MSHCTX_CROSSCTX, MSHCTX_CONTAINER]
+    mapper = FlagMapper(*values)
+MSHCTX = tagMSHCTX
+
+
+class tagOpaqueData(Structure):
+    _fields_ = [
+        ("guid", GUID),
+        ("dataLength", ULONG),
+        ("reserved1", ULONG),
+        ("reserved2", ULONG),
+        ("data", POINTER(BYTE)),
+    ]
+OpaqueData = tagOpaqueData
+
+class tagSTDOBJREF(Structure):
+    _fields_ = [
+        ("flags", ULONG),
+        ("cPublicRefs", ULONG),
+        ("oxid", OXID),
+        ("oid", OID),
+        ("ipid", IPID),
+    ]
+STDOBJREF = tagSTDOBJREF
+
+class tagDATAELEMENT(Structure):
+    _fields_ = [
+        ("dataID", GUID),
+        ("cbSize", ULONG),
+        ("cbRounded", ULONG),
+        ("Data", BYTE * (1)),
+    ]
+DATAELEMENT = tagDATAELEMENT
+PDATAELEMENT = POINTER(tagDATAELEMENT)
+
+class tagOBJREFDATA(Structure):
+    _fields_ = [
+        ("nElms", ULONG),
+        ("ppElmArray", POINTER(PDATAELEMENT)),
+    ]
+OBJREFDATA = tagOBJREFDATA
+
+class tagDUALSTRINGARRAY(Structure):
+    _fields_ = [
+        ("wNumEntries", USHORT),
+        ("wSecurityOffset", USHORT),
+        ("aStringArray", USHORT * (1)),
+    ]
+DUALSTRINGARRAY = tagDUALSTRINGARRAY
+
+INITIAL_tagDUALSTRINGARRAY = tagDUALSTRINGARRAY
+
+class tagDUALSTRINGARRAY(INITIAL_tagDUALSTRINGARRAY):
+    @property
+    def rawbuffer(self):
+        array_size = self.wNumEntries
+        array_type = self.aStringArray._type_
+        new_buffer_type = (array_type * array_size)
+        buffer = new_buffer_type.from_address(ctypes.addressof(self.aStringArray))
+        return buffer
+
+
+
+    @property
+    def bidings(self):
+        rawbuffer = self.rawbuffer
+        rawarray = rawbuffer[:] # Allow to find 0 in USHORT without overlap
+        rawbytes = bytearray(rawbuffer) # Allow to access to bytes to utf-16-le decode
+        results = []
+        next_start = 0
+
+        # STRINGBINDING documentation says that it starts with a USHORT wTowerId
+        # But i don't see it in our response.. (local response ?)
+        # So ignore it for now
+        for i in range(100):
+            current_index = rawarray.index(0, next_start)
+            new_entry = rawbytes[next_start * 2: current_index * 2]
+            if not new_entry:
+                return results
+            results.append(new_entry.decode("utf-16-le")) # Does not handle full unicode I think but..
+            next_start = current_index + 1
+        # Should not happen
+        raise ValueError("Could not parse DUALSTRINGARRAY")
+
+    @property
+    def security_bidings(self):
+        rawbuffer = self.rawbuffer
+        rawarray = rawbuffer[self.wSecurityOffset:]
+        rawbytes = bytearray(rawbuffer)[self.wSecurityOffset * 2:]
+        results = []
+        next_start = 0
+
+        for i in range(100):
+            wAuthnSvc = rawarray[next_start]
+            if wAuthnSvc == 0:
+                return results
+            reserved = rawarray[next_start + 1]
+            current_index = rawarray.index(0, next_start + 2)
+            new_entry = rawbytes[(next_start + 2) * 2:current_index * 2]
+            results.append((wAuthnSvc, reserved, new_entry.decode("utf-16-le"))) # Does not handle full unicode I think but..
+            next_start = current_index + 1
+        # Should not happen
+        raise ValueError("Could not parse DUALSTRINGARRAY security bidings")
+
+
+
+
+
+DUALSTRINGARRAY = tagDUALSTRINGARRAY
+class _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("std", STDOBJREF),
+        ("saResAddr", DUALSTRINGARRAY),
+    ]
+
+
+class _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
+    _fields_ = [
+        ("std", STDOBJREF),
+        ("clsid", CLSID),
+        ("saResAddr", DUALSTRINGARRAY),
+    ]
+
+
+class _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_3(Structure):
+    _fields_ = [
+        ("clsid", CLSID),
+        ("cbExtension", ULONG),
+        ("size", ULONG),
+        ("pData", POINTER(BYTE)),
+    ]
+
+
+class _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_4(Structure):
+    _fields_ = [
+        ("std", STDOBJREF),
+        ("pORData", POINTER(OBJREFDATA)),
+        ("saResAddr", DUALSTRINGARRAY),
+    ]
+
+class _ANON_TAGOBJREF_SUB_UNION_1(Union):
+    _anonymous_ = ("u_standard","u_handler","u_custom","u_extended")
+    _fields_ = [
+        ("u_standard", _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("u_handler", _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_2),
+        ("u_custom", _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_3),
+        ("u_extended", _ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_4),
+    ]
+
+class tagOBJREF(Structure):
+    _anonymous_ = ("u_objref",)
+    _fields_ = [
+        ("signature", ULONG),
+        ("flags", ULONG),
+        ("iid", GUID),
+        ("u_objref", _ANON_TAGOBJREF_SUB_UNION_1),
+    ]
+OBJREF = tagOBJREF
+
+class tagCOMVERSION(Structure):
+    _fields_ = [
+        ("MajorVersion", USHORT),
+        ("MinorVersion", USHORT),
+    ]
+COMVERSION = tagCOMVERSION
+
+class tagORPC_EXTENT(Structure):
+    _fields_ = [
+        ("id", _GUID),
+        ("size", ULONG),
+        ("data", BYTE * (1)),
+    ]
+ORPC_EXTENT = tagORPC_EXTENT
+PORPC_EXTENT = tagORPC_EXTENT
+
+class tagORPC_EXTENT_ARRAY(Structure):
+    _fields_ = [
+        ("size", ULONG),
+        ("reserved", ULONG),
+        ("extent", POINTER(PORPC_EXTENT)),
+    ]
+ORPC_EXTENT_ARRAY = tagORPC_EXTENT_ARRAY
+
+class tagORPCTHIS(Structure):
+    _fields_ = [
+        ("version", COMVERSION),
+        ("flags", ULONG),
+        ("reserved1", ULONG),
+        ("cid", GUID),
+        ("extensions", PVOID),
+    ]
+ORPCTHIS = tagORPCTHIS
+
+class tagORPCTHIS32(Structure):
+    _fields_ = [
+        ("version", COMVERSION),
+        ("flags", ULONG),
+        ("reserved1", ULONG),
+        ("cid", GUID),
+        ("extensions", PVOID32),
+    ]
+ORPCTHIS32 = tagORPCTHIS32
+
+class tagOXID_INFO(Structure):
+    _fields_ = [
+        ("dwTid", DWORD),
+        ("dwPid", DWORD),
+        ("dwAuthnHint", DWORD),
+        ("version", COMVERSION),
+        ("ipidRemUnknown", IPID),
+        ("dwFlags", DWORD),
+        ("psa", POINTER(DUALSTRINGARRAY)),
+    ]
+OXID_INFO = tagOXID_INFO
+
+class tagContextProperty(Structure):
+    _fields_ = [
+        ("policyId", GUID),
+        ("flags", CPFLAGS),
+        ("pUnk", PVOID),
+    ]
+ContextProperty = tagContextProperty
+
+class _PRIV_SCM_INFO(Structure):
+    _fields_ = [
+        ("Apartment", LONG),
+        ("pwszWinstaDesktop", POINTER(WCHAR)),
+        ("ProcessSignature", ULONG64),
+        ("pEnvBlock", POINTER(WCHAR)),
+        ("EnvBlockLength", DWORD),
+    ]
+PRIV_SCM_INFO = _PRIV_SCM_INFO
+
+class _REMOTE_REQUEST_SCM_INFO(Structure):
+    _fields_ = [
+        ("ClientImpLevel", DWORD),
+        ("cRequestedProtseqs", USHORT),
+        ("pRequestedProtseqs", POINTER(USHORT)),
+    ]
+REMOTE_REQUEST_SCM_INFO = _REMOTE_REQUEST_SCM_INFO
+
+class tagMInterfacePointer(Structure):
+    _fields_ = [
+        ("ulCntData", ULONG),
+        ("abData", BYTE * (1)),
+    ]
+MInterfacePointer = tagMInterfacePointer
+PMInterfacePointer = POINTER(tagMInterfacePointer)
+
+INITIAL_tagMInterfacePointer = tagMInterfacePointer
+
+class tagMInterfacePointer(INITIAL_tagMInterfacePointer):
+    @property
+    def objref(self):
+        return OBJREF.from_address(ctypes.addressof(self.abData))
+MInterfacePointer = tagMInterfacePointer
+PMInterfacePointer = POINTER(tagMInterfacePointer)
+class tagRPCOLEMESSAGE(Structure):
+    _fields_ = [
+        ("reserved1", PVOID),
+        ("dataRepresentation", RPCOLEDATAREP),
+        ("Buffer", PVOID),
+        ("cbBuffer", ULONG),
+        ("iMethod", ULONG),
+        ("reserved2", PVOID * (5)),
+        ("rpcFlags", ULONG),
+    ]
+PRPCOLEMESSAGE = POINTER(tagRPCOLEMESSAGE)
+RPCOLEMESSAGE = tagRPCOLEMESSAGE
+
+class tagREMQIRESULT(Structure):
+    _fields_ = [
+        ("hResult", HRESULT),
+        ("std", STDOBJREF),
+    ]
+PREMQIRESULT = POINTER(tagREMQIRESULT)
+REMQIRESULT = tagREMQIRESULT
+
+class tagREMINTERFACEREF(Structure):
+    _fields_ = [
+        ("ipid", IPID),
+        ("cPublicRefs", ULONG),
+        ("cPrivateRefs", ULONG),
+    ]
+REMINTERFACEREF = tagREMINTERFACEREF
+
+class _PRIV_RESOLVER_INFO_LEGACY(Structure):
+    _fields_ = [
+        ("OxidServer", OXID),
+        ("pServerORBindings", POINTER(DUALSTRINGARRAY)),
+        ("OxidInfo", OXID_INFO),
+        ("LocalMidOfRemote", MID),
+        ("DllServerModel", DWORD),
+        ("pwszDllServer", POINTER(WCHAR)),
+        ("FoundInROT", BOOL),
+    ]
+PPRIV_RESOLVER_INFO_LEGACY = POINTER(_PRIV_RESOLVER_INFO_LEGACY)
+PRIV_RESOLVER_INFO_LEGACY = _PRIV_RESOLVER_INFO_LEGACY
+
+class _REMOTE_REPLY_SCM_INFO(Structure):
+    _fields_ = [
+        ("Oxid", OXID),
+        ("pdsaOxidBindings", POINTER(DUALSTRINGARRAY)),
+        ("ipidRemUnknown", IPID),
+        ("authnHint", DWORD),
+        ("serverVersion", COMVERSION),
+    ]
+PREMOTE_REPLY_SCM_INFO = POINTER(_REMOTE_REPLY_SCM_INFO)
+REMOTE_REPLY_SCM_INFO = _REMOTE_REPLY_SCM_INFO
+
+class CONTAINER_EXTENT(Structure):
+    _fields_ = [
+        ("id", UINT),
+        ("version", UINT),
+        ("size", UINT),
+        ("data", BYTE * (1)),
+    ]
+
+
+class CONTAINER_EXTENT_ARRAY(Structure):
+    _fields_ = [
+        ("size", UINT),
+        ("reserved", UINT),
+        ("extent", POINTER(CONTAINER_EXTENT)),
+    ]
+
+
+class HSTRING__(Structure):
+    _fields_ = [
+        ("unused", INT),
+    ]
+
+
+class CONTAINERVERSION(Structure):
+    _fields_ = [
+        ("version", UINT),
+        ("capabilityFlags", UINT64),
+        ("extensions", POINTER(CONTAINER_EXTENT_ARRAY)),
+    ]
+
+
+class _MIDL_ILocalObjectExporter_0007(Structure):
+    _fields_ = [
+        ("dwTid", ULONG),
+        ("dwPid", ULONG),
+        ("dwAuthnHint", ULONG),
+        ("dcomVersion", tagCOMVERSION),
+        ("containerVersion", CONTAINERVERSION),
+        ("ipidRemUnknown", _GUID),
+        ("dwFlags", ULONG),
+        ("psa", POINTER(tagDUALSTRINGARRAY)),
+        ("guidProcessIdentifier", _GUID),
+        ("processHostId", UINT64),
+        ("clientDependencyBehavior", INT),
+        ("packageFullName", POINTER(HSTRING__)),
+        ("userSid", POINTER(HSTRING__)),
+        ("appcontainerSid", POINTER(HSTRING__)),
+        ("primaryOxid", UINT64),
+        ("primaryIpidRemUnknown", _GUID),
+    ]
+MIDL_ILocalObjectExporter_0007 = _MIDL_ILocalObjectExporter_0007
+
+class _PRIV_RESOLVER_INFO(Structure):
+    _fields_ = [
+        ("OxidServer", UINT64),
+        ("pServerORBindings", POINTER(tagDUALSTRINGARRAY)),
+        ("OxidInfo", MIDL_ILocalObjectExporter_0007),
+        ("LocalMidOfRemote", UINT64),
+        ("FoundInROT", INT),
+    ]
+PPRIV_RESOLVER_INFO = POINTER(_PRIV_RESOLVER_INFO)
+PRIV_RESOLVER_INFO = _PRIV_RESOLVER_INFO
+
+class _MIDL_XmitDefs_0001(Structure):
+    _fields_ = [
+        ("asyncOperationId", GUID),
+        ("oxidClientProcessNA", ULONG64),
+        ("originalClientLogicalThreadId", GUID),
+        ("uClientCausalityTraceId", ULONG64),
+    ]
+MIDL_XmitDefs_0001 = _MIDL_XmitDefs_0001
+
+class _LOCALTHIS(Structure):
+    _fields_ = [
+        ("dwFlags", DWORD),
+        ("dwClientThread", DWORD),
+        ("passthroughTraceActivity", GUID),
+        ("callTraceActivity", GUID),
+        ("asyncRequestBlock", MIDL_XmitDefs_0001),
+        ("reserved", DWORD),
+        ("pTouchedAstaArray", PVOID),
+    ]
+LOCALTHIS = _LOCALTHIS
+
+class _LOCALTHIS32(Structure):
+    _fields_ = [
+        ("dwFlags", DWORD),
+        ("dwClientThread", DWORD),
+        ("passthroughTraceActivity", GUID),
+        ("callTraceActivity", GUID),
+        ("asyncRequestBlock", MIDL_XmitDefs_0001),
+        ("reserved", DWORD),
+        ("pTouchedAstaArray", PVOID32),
+    ]
+LOCALTHIS32 = _LOCALTHIS32
+
+class _MIDL_XmitDefs_0007(Structure):
+    _fields_ = [
+        ("pointOfFailure", INT),
+        ("hrFailure", HRESULT),
+        ("sizeOfMarshaledErrorInfo", ULONG),
+        ("reserved", ULONG),
+        ("pMarshaledErrorInfo", POINTER(BYTE)),
+    ]
+
+
+class _MIDL_XmitDefs_0005(Structure):
+    _fields_ = [
+        ("sizeOfMarshaledResults", ULONG),
+        ("reserved", ULONG),
+        ("pMarshaledResults", POINTER(BYTE)),
+    ]
+
+
+class _MIDL_XmitDefs_0008(Structure):
+    _fields_ = [
+        ("outcome", INT),
+        ("successDetails", _MIDL_XmitDefs_0005),
+        ("failureDetails", _MIDL_XmitDefs_0007),
+    ]
+
+
+class _MIDL_XmitDefs_0010(Structure):
+    _fields_ = [
+        ("asyncStatus", ULONG),
+        ("reserved1", ULONG),
+        ("uServerCausalityTraceId", UINT64),
+        ("completionTraceActivity", _GUID),
+        ("reserved2", ULONG),
+        ("pOutcomeDetails", POINTER(_MIDL_XmitDefs_0008)),
+    ]
+
+
+class CONTAINERTHAT(Structure):
+    _fields_ = [
+        ("responseFlags", UINT64),
+        ("unassignedPassthroughGuid_1", _GUID),
+        ("unassignedPassthroughGuid_2", _GUID),
+        ("unassignedPassthroughGuid_3", _GUID),
+        ("unassignedPassthroughGuid_4", _GUID),
+        ("reservedGuid_1", _GUID),
+        ("reservedGuid_2", _GUID),
+        ("reservedGuid_3", _GUID),
+        ("reservedGuid_4", _GUID),
+        ("unassignedPassthroughUint64_1", UINT64),
+        ("unassignedPassthroughUint64_2", UINT64),
+        ("unassignedPassthroughUint64_3", UINT64),
+        ("unassignedPassthroughUint64_4", UINT64),
+        ("marshalingSetId", UINT64),
+        ("reservedUint64_2", UINT64),
+        ("reservedUint64_3", UINT64),
+        ("reservedUint64_4", UINT64),
+        ("reservedUint32", UINT),
+        ("extensions", POINTER(CONTAINER_EXTENT_ARRAY)),
+    ]
+
+
+class _LOCALTHAT(Structure):
+    _fields_ = [
+        ("marshalingSetId", UINT64),
+        ("reserved", ULONG),
+        ("pAsyncResponseBlock", POINTER(_MIDL_XmitDefs_0010)),
+        ("containerErrorInformation", POINTER(CONTAINER_EXTENT)),
+        ("containerPassthroughData", POINTER(CONTAINERTHAT)),
+    ]
+LOCALTHAT = _LOCALTHAT
+
+class _LOCALTHAT32(Structure):
+    _fields_ = [
+        ("marshalingSetId", UINT64),
+        ("reserved", ULONG),
+        ("pAsyncResponseBlock", PVOID32),
+        ("containerErrorInformation", PVOID32),
+        ("containerPassthroughData", PVOID32),
+    ]
+LOCALTHAT32 = _LOCALTHAT32
+
+class tagORPCTHAT(Structure):
+    _fields_ = [
+        ("flags", ULONG),
+        ("extensions", POINTER(tagORPC_EXTENT_ARRAY)),
+    ]
+ORPCTHAT = tagORPCTHAT
+
+class ORPCTHAT32(Structure):
+    _fields_ = [
+        ("flags", ULONG),
+        ("extensions", PVOID32),
+    ]
+
 
 VIRTUAL_DISK_ACCESS_NONE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_NONE", 0x0)
 VIRTUAL_DISK_ACCESS_ATTACH_RO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RO", 0x1)
@@ -3336,7 +3911,7 @@ class _IMAGEHLP_MODULEW64(Structure):
         ("LoadedImageName", WCHAR * (256)),
         ("LoadedPdbName", WCHAR * (256)),
         ("CVSig", DWORD),
-        ("CVData", POINTER(WCHAR) * (MAX_PATH * 3)),
+        ("CVData", WCHAR * (MAX_PATH * 3)),
         ("PdbSig", DWORD),
         ("PdbSig70", GUID),
         ("PdbAge", DWORD),
@@ -6109,16 +6684,16 @@ class _OBJECT_ATTRIBUTES(_OBJECT_ATTRIBUTES):
         return """<{0} ObjectName="{1}">""".format(type(self).__name__, self.ObjectName.contents.str)
 OBJECT_ATTRIBUTES = _OBJECT_ATTRIBUTES
 POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
-class _TMP_UNION_IO_STATUS_BLOCK(Union):
+class _ANON__IO_STATUS_BLOCK_SUB_UNION_1(Union):
     _fields_ = [
         ("Status", NTSTATUS),
         ("Pointer", PVOID),
     ]
-TMP_UNION_IO_STATUS_BLOCK = _TMP_UNION_IO_STATUS_BLOCK
 
 class _IO_STATUS_BLOCK(Structure):
+    _anonymous_ = ("anon_01",)
     _fields_ = [
-        ("DUMMYUNIONNAME", TMP_UNION_IO_STATUS_BLOCK),
+        ("anon_01", _ANON__IO_STATUS_BLOCK_SUB_UNION_1),
         ("Information", ULONG_PTR),
     ]
 IO_STATUS_BLOCK = _IO_STATUS_BLOCK
@@ -6917,44 +7492,6 @@ class _REMOTE_PORT_VIEW(Structure):
     ]
 PREMOTE_PORT_VIEW = POINTER(_REMOTE_PORT_VIEW)
 REMOTE_PORT_VIEW = _REMOTE_PORT_VIEW
-
-class tagCOMVERSION(Structure):
-    _fields_ = [
-        ("MajorVersion", USHORT),
-        ("MinorVersion", USHORT),
-    ]
-COMVERSION = tagCOMVERSION
-
-class tagORPCTHIS(Structure):
-    _fields_ = [
-        ("version", COMVERSION),
-        ("flags", ULONG),
-        ("reserved1", ULONG),
-        ("cid", GUID),
-        ("extensions", PVOID),
-    ]
-ORPCTHIS = tagORPCTHIS
-
-class __MIDL_XmitDefs_0001(Structure):
-    _fields_ = [
-        ("asyncOperationId", GUID),
-        ("oxidClientProcessNA", ULONG64),
-        ("originalClientLogicalThreadId", GUID),
-        ("uClientCausalityTraceId", ULONG64),
-    ]
-MIDL_XmitDefs_0001 = __MIDL_XmitDefs_0001
-
-class _LOCALTHIS(Structure):
-    _fields_ = [
-        ("dwFlags", DWORD),
-        ("dwClientThread", DWORD),
-        ("passthroughTraceActivity", GUID),
-        ("callTraceActivity", GUID),
-        ("asyncRequestBlock", MIDL_XmitDefs_0001),
-        ("reserved", DWORD),
-        ("pTouchedAstaArray", PVOID),
-    ]
-LOCALTHIS = _LOCALTHIS
 
 ECS_ENABLED = EnumValue("_EXPCMDSTATE", "ECS_ENABLED", 0x0)
 ECS_DISABLED = EnumValue("_EXPCMDSTATE", "ECS_DISABLED", 0x1)

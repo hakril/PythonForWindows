@@ -10,7 +10,7 @@ class WinComParser(Parser):
     PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt",
         "__RPC__deref_opt_inout_opt", "__in", "__out", "__out_opt", "__in_opt", "__inout",
         "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string", "__deref_out_opt", "__RPC__inout",
-        "__RPC__deref_out_opt_string", "_COM_Outptr_", "_In_", "_In_opt_", "_Out_"]
+        "__RPC__deref_out_opt_string", "_COM_Outptr_", "_In_", "_In_opt_", "_Out_", "__deref_out"]
     PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full",
             "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
             "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string",

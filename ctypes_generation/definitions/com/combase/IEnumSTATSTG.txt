@@ -1,0 +1,34 @@
+    typedef struct IEnumSTATSTGVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IEnumSTATSTG * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IEnumSTATSTG * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IEnumSTATSTG * This);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )(
+            IEnumSTATSTG * This,
+            /* [in] */ ULONG celt,
+            /* [length_is][size_is][out] */ STATSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched);
+
+        HRESULT ( STDMETHODCALLTYPE *Skip )(
+            IEnumSTATSTG * This,
+            /* [in] */ ULONG celt);
+
+        HRESULT ( STDMETHODCALLTYPE *Reset )(
+            IEnumSTATSTG * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Clone )(
+            IEnumSTATSTG * This,
+            /* [out] */ IEnumSTATSTG **ppenum);
+
+        END_INTERFACE
+    } IEnumSTATSTGVtbl;

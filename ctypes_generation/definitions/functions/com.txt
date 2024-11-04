@@ -136,3 +136,30 @@ PVOID SysAllocString(
 VOID SysFreeString(
   [in, optional] BSTR bstrString
 );
+
+
+HRESULT CreateStreamOnHGlobal(
+  [in]  HGLOBAL  hGlobal,
+  [in]  BOOL     fDeleteOnRelease,
+  [out] LPSTREAM *ppstm
+);
+
+HRESULT GetHGlobalFromStream(
+  [in]  LPUNKNOWN    pstm,
+  [out] HGLOBAL  *phglobal
+);
+
+HRESULT CoMarshalInterface(
+  [in]           LPUNKNOWN pStm,
+  [in]           REFIID    riid,
+  [in]           LPUNKNOWN pUnk,
+  [in]           DWORD     dwDestContext,
+  [in, optional] LPVOID    pvDestContext,
+  [in]           DWORD     mshlflags
+);
+
+HRESULT CoUnmarshalInterface(
+  [in]  PVOID    pStm,
+  [in]  REFIID   riid,
+  [out] LPVOID   *ppv
+);

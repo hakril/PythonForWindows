@@ -1,0 +1,43 @@
+typedef struct IInitActivationPropertiesInVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IInitActivationPropertiesIn * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IInitActivationPropertiesIn * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IInitActivationPropertiesIn * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetClsctx )(
+        IInitActivationPropertiesIn * This,
+        /* [in] */ DWORD clsctx);
+
+    HRESULT ( STDMETHODCALLTYPE *SetActivationFlags )(
+        IInitActivationPropertiesIn * This,
+        /* [in] */ DWORD actvflags);
+
+    HRESULT ( STDMETHODCALLTYPE *SetClassInfo )(
+        IInitActivationPropertiesIn * This,
+        /* [unique][in] */ IUnknown *pUnkClassInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *SetContextInfo )(
+        IInitActivationPropertiesIn * This,
+        /* [unique][in] */ IContext *pClientContext,
+        /* [in] */ IContext *pPrototypeContext);
+
+    HRESULT ( STDMETHODCALLTYPE *SetConstructFromStorage )(
+        IInitActivationPropertiesIn * This,
+        /* [unique][in] */ IStorage *pStorage);
+
+    HRESULT ( STDMETHODCALLTYPE *SetConstructFromFile )(
+        IInitActivationPropertiesIn * This,
+        /* [in] */ WCHAR *wszFileName,
+        /* [in] */ DWORD dwMode);
+
+    END_INTERFACE
+} IInitActivationPropertiesInVtbl;

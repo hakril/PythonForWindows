@@ -1,0 +1,27 @@
+typedef struct IClassFactoryVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IClassFactory * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IClassFactory * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IClassFactory * This);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )(
+        IClassFactory * This,
+        /* [unique][in] */ IUnknown *pUnkOuter,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *LockServer )(
+        IClassFactory * This,
+        /* [in] */ BOOL fLock);
+
+    END_INTERFACE
+} IClassFactoryVtbl;

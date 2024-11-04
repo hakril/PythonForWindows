@@ -1,0 +1,29 @@
+#define	ORPCF_NULL	( 0 )
+#define	ORPCF_LOCAL	( 1 )
+#define	ORPCF_RESERVED1	( 2 )
+#define	ORPCF_RESERVED2	( 4 )
+#define	ORPCF_RESERVED3	( 8 )
+#define	ORPCF_RESERVED4	( 16 )
+
+#define ORPCF_INPUT_SYNC        ORPCF_RESERVED1
+#define ORPCF_ASYNC             ORPCF_RESERVED2
+#define ORPCF_DYNAMIC_CLOAKING  ORPCF_RESERVED3
+
+#define ORPCF_REJECTED          ORPCF_RESERVED1
+#define ORPCF_RETRY_LATER       ORPCF_RESERVED2
+
+#define	OBJREF_SIGNATURE	( 0x574f454d )
+#define	OBJREF_STANDARD	( 0x1 )
+#define	OBJREF_HANDLER	( 0x2 )
+#define	OBJREF_CUSTOM	( 0x4 )
+#define	OBJREF_EXTENDED	( 0x8 )
+#define	SORF_OXRES1	( 0x1 )
+#define	SORF_OXRES2	( 0x20 )
+#define	SORF_OXRES3	( 0x40 )
+#define	SORF_OXRES4	( 0x80 )
+#define	SORF_OXRES5	( 0x100 )
+#define	SORF_OXRES6	( 0x200 )
+#define	SORF_OXRES7	( 0x400 )
+#define	SORF_OXRES8	( 0x800 )
+#define	SORF_NULL	( 0 )
+#define	SORF_NOPING	( 0x1000 )
