@@ -397,6 +397,28 @@ Interfaces
     .. method:: Release
 
 
+.. class:: IStorage
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: CreateStream
+    .. method:: OpenStream
+    .. method:: CreateStorage
+    .. method:: OpenStorage
+    .. method:: CopyTo
+    .. method:: MoveElementTo
+    .. method:: Commit
+    .. method:: Revert
+    .. method:: EnumElements
+    .. method:: DestroyElement
+    .. method:: RenameElement
+    .. method:: SetElementTimes
+    .. method:: SetClass
+    .. method:: SetStateBits
+    .. method:: Stat
+
+
 .. class:: IStream
 
     .. method:: QueryInterface
@@ -472,16 +494,6 @@ Interfaces
     .. method:: QueryInterface
     .. method:: AddRef
     .. method:: Release
-
-
-.. class:: MyCls
-
-    .. method:: QueryInterface
-    .. method:: AddRef
-    .. method:: Release
-    .. method:: add
-    .. method:: dprint
-    .. method:: tstvalue
 
 
 .. class:: IBackgroundCopyCallback
@@ -872,28 +884,6 @@ Interfaces
     .. method:: StandardGetInstanceFromFile
     .. method:: StandardGetInstanceFromIStorage
     .. method:: Reset
-
-
-.. class:: IStorage
-
-    .. method:: QueryInterface
-    .. method:: AddRef
-    .. method:: Release
-    .. method:: CreateStream
-    .. method:: OpenStream
-    .. method:: CreateStorage
-    .. method:: OpenStorage
-    .. method:: CopyTo
-    .. method:: MoveElementTo
-    .. method:: Commit
-    .. method:: Revert
-    .. method:: EnumElements
-    .. method:: DestroyElement
-    .. method:: RenameElement
-    .. method:: SetElementTimes
-    .. method:: SetClass
-    .. method:: SetStateBits
-    .. method:: Stat
 
 
 .. class:: ISystemActivator

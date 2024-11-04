@@ -3631,32 +3631,6 @@ _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
         :class:`_ANON__PROCESS_MITIGATION_IMAGE_LOAD_POLICY_SUB_UNION_1`
 
-TagTestStructV1
-'''''''''''''''
-.. class:: PTestStructV1
-
-    Pointer to :class:`TagTestStructV1`
-
-.. class:: TestStructV1
-
-    Alias for :class:`TagTestStructV1`
-
-.. class:: TagTestStructV1
-
-    .. attribute:: Type
-
-        :class:`DWORD`
-
-
-    .. attribute:: Name
-
-        :class:`LPCH`
-
-
-    .. attribute:: anon_01
-
-        :class:`_ANON_TAGTESTSTRUCTV1_SUB_UNION_1`
-
 _MIB_IPNETROW_LH
 ''''''''''''''''
 .. class:: MIB_IPNETROW

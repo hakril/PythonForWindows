@@ -2020,24 +2020,6 @@ class _PROCESS_MITIGATION_IMAGE_LOAD_POLICY(Structure):
 PPROCESS_MITIGATION_IMAGE_LOAD_POLICY = POINTER(_PROCESS_MITIGATION_IMAGE_LOAD_POLICY)
 PROCESS_MITIGATION_IMAGE_LOAD_POLICY = _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
-class _ANON_TAGTESTSTRUCTV1_SUB_UNION_1(Union):
-    _fields_ = [
-        ("Byte", BYTE),
-        ("Short", USHORT),
-        ("Dword", DWORD),
-        ("Qword", ULONG64),
-    ]
-
-class TagTestStructV1(Structure):
-    _anonymous_ = ("anon_01",)
-    _fields_ = [
-        ("Type", DWORD),
-        ("Name", LPCH),
-        ("anon_01", _ANON_TAGTESTSTRUCTV1_SUB_UNION_1),
-    ]
-PTestStructV1 = POINTER(TagTestStructV1)
-TestStructV1 = TagTestStructV1
-
 class _ANON__MIB_IPNETROW_LH_SUB_UNION_1(Union):
     _fields_ = [
         ("dwType", DWORD),

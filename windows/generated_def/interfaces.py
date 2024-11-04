@@ -153,6 +153,9 @@ class IShellLinkW(COMInterface):
 class IStdIdentity(COMInterface):
     IID = generate_IID(0x0000001b, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStdIdentity", strid="0000001b-0000-0000-c000-000000000046")
 
+class IStorage(COMInterface):
+    IID = generate_IID(0x0000000B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStorage", strid="0000000B-0000-0000-C000-000000000046")
+
 class IStream(COMInterface):
     IID = generate_IID(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStream", strid="0000000C-0000-0000-C000-000000000046")
 
@@ -191,9 +194,6 @@ class ITypeLib(COMInterface):
 
 class IUnknown(COMInterface):
     IID = generate_IID(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IUnknown", strid="00000000-0000-0000-C000-000000000046")
-
-class MyCls(COMInterface):
-    IID = generate_IID(0x11223344, 0x5555, 0x6666, 0x77, 0x77, 0x88, 0x99, 0x00, 0x00, 0x00, 0x02, name="MyCls", strid="11223344-5555-6666-7777-889900000002")
 
 class IBackgroundCopyCallback(COMInterface):
     IID = generate_IID(0x97EA99C7, 0x0186, 0x4AD4, 0x8D, 0xF9, 0xC5, 0xB4, 0xE0, 0xED, 0x6B, 0x22, name="IBackgroundCopyCallback", strid="97EA99C7-0186-4AD4-8DF9-C5B4E0ED6B22")
@@ -269,9 +269,6 @@ class IScmRequestInfo(COMInterface):
 
 class IStandardActivator(COMInterface):
     IID = generate_IID(0x000001B8, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStandardActivator", strid="000001B8-0000-0000-C000-000000000046")
-
-class IStorage(COMInterface):
-    IID = generate_IID(0x0000000B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStorage", strid="0000000B-0000-0000-C000-000000000046")
 
 class ISystemActivator(COMInterface):
     IID = generate_IID(0x000001A0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ISystemActivator", strid="000001A0-0000-0000-C000-000000000046")
@@ -1100,6 +1097,45 @@ IStdIdentity._functions_ = {
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
     }
 
+IStorage._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # CreateStream -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstm:**IStream
+        "CreateStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStream))(3, "CreateStream"),
+        # OpenStream -> pwcsName:*OLECHAR, reserved1:*void, grfMode:DWORD, reserved2:DWORD, ppstm:**IStream
+        "OpenStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), PVOID, DWORD, DWORD, POINTER(IStream))(4, "OpenStream"),
+        # CreateStorage -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstg:**IStorage
+        "CreateStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStorage))(5, "CreateStorage"),
+        # OpenStorage -> pwcsName:*OLECHAR, pstgPriority:*IStorage, grfMode:DWORD, snbExclude:SNB, reserved:DWORD, ppstg:**IStorage
+        "OpenStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, DWORD, SNB, DWORD, POINTER(IStorage))(6, "OpenStorage"),
+        # CopyTo -> ciidExclude:DWORD, rgiidExclude:*IID, snbExclude:SNB, pstgDest:*IStorage
+        "CopyTo": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), SNB, IStorage)(7, "CopyTo"),
+        # MoveElementTo -> pwcsName:*OLECHAR, pstgDest:*IStorage, pwcsNewName:*OLECHAR, grfFlags:DWORD
+        "MoveElementTo": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, POINTER(OLECHAR), DWORD)(8, "MoveElementTo"),
+        # Commit -> grfCommitFlags:DWORD
+        "Commit": ctypes.WINFUNCTYPE(HRESULT, DWORD)(9, "Commit"),
+        # Revert -> 
+        "Revert": ctypes.WINFUNCTYPE(HRESULT)(10, "Revert"),
+        # EnumElements -> reserved1:DWORD, reserved2:*void, reserved3:DWORD, ppenum:**IEnumSTATSTG
+        "EnumElements": ctypes.WINFUNCTYPE(HRESULT, DWORD, PVOID, DWORD, POINTER(IEnumSTATSTG))(11, "EnumElements"),
+        # DestroyElement -> pwcsName:*OLECHAR
+        "DestroyElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR))(12, "DestroyElement"),
+        # RenameElement -> pwcsOldName:*OLECHAR, pwcsNewName:*OLECHAR
+        "RenameElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(OLECHAR))(13, "RenameElement"),
+        # SetElementTimes -> pwcsName:*OLECHAR, pctime:*FILETIME, patime:*FILETIME, pmtime:*FILETIME
+        "SetElementTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(FILETIME), POINTER(FILETIME), POINTER(FILETIME))(14, "SetElementTimes"),
+        # SetClass -> clsid:REFCLSID
+        "SetClass": ctypes.WINFUNCTYPE(HRESULT, REFCLSID)(15, "SetClass"),
+        # SetStateBits -> grfStateBits:DWORD, grfMask:DWORD
+        "SetStateBits": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD)(16, "SetStateBits"),
+        # Stat -> pstatstg:*STATSTG, grfStatFlag:DWORD
+        "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(17, "Stat"),
+    }
+
 IStream._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1227,21 +1263,6 @@ IUnknown._functions_ = {
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-    }
-
-MyCls._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:*PVOID
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # add -> x:UINT, y:UINT, res:*UINT
-        "add": ctypes.WINFUNCTYPE(HRESULT, UINT, UINT, POINTER(UINT))(3, "add"),
-        # dprint -> msg:*WCHAR
-        "dprint": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR))(4, "dprint"),
-        # tstvalue -> rettype:DWORD, out:**TestStructV1
-        "tstvalue": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(POINTER(TestStructV1)))(5, "tstvalue"),
     }
 
 IBackgroundCopyCallback._functions_ = {
@@ -1897,45 +1918,6 @@ IStandardActivator._functions_ = {
         "StandardGetInstanceFromIStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, IStorage, DWORD, POINTER(MULTI_QI))(6, "StandardGetInstanceFromIStorage"),
         # Reset -> 
         "Reset": ctypes.WINFUNCTYPE(HRESULT)(7, "Reset"),
-    }
-
-IStorage._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # CreateStream -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstm:**IStream
-        "CreateStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStream))(3, "CreateStream"),
-        # OpenStream -> pwcsName:*OLECHAR, reserved1:*void, grfMode:DWORD, reserved2:DWORD, ppstm:**IStream
-        "OpenStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), PVOID, DWORD, DWORD, POINTER(IStream))(4, "OpenStream"),
-        # CreateStorage -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstg:**IStorage
-        "CreateStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStorage))(5, "CreateStorage"),
-        # OpenStorage -> pwcsName:*OLECHAR, pstgPriority:*IStorage, grfMode:DWORD, snbExclude:SNB, reserved:DWORD, ppstg:**IStorage
-        "OpenStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, DWORD, SNB, DWORD, POINTER(IStorage))(6, "OpenStorage"),
-        # CopyTo -> ciidExclude:DWORD, rgiidExclude:*IID, snbExclude:SNB, pstgDest:*IStorage
-        "CopyTo": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), SNB, IStorage)(7, "CopyTo"),
-        # MoveElementTo -> pwcsName:*OLECHAR, pstgDest:*IStorage, pwcsNewName:*OLECHAR, grfFlags:DWORD
-        "MoveElementTo": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, POINTER(OLECHAR), DWORD)(8, "MoveElementTo"),
-        # Commit -> grfCommitFlags:DWORD
-        "Commit": ctypes.WINFUNCTYPE(HRESULT, DWORD)(9, "Commit"),
-        # Revert -> 
-        "Revert": ctypes.WINFUNCTYPE(HRESULT)(10, "Revert"),
-        # EnumElements -> reserved1:DWORD, reserved2:*void, reserved3:DWORD, ppenum:**IEnumSTATSTG
-        "EnumElements": ctypes.WINFUNCTYPE(HRESULT, DWORD, PVOID, DWORD, POINTER(IEnumSTATSTG))(11, "EnumElements"),
-        # DestroyElement -> pwcsName:*OLECHAR
-        "DestroyElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR))(12, "DestroyElement"),
-        # RenameElement -> pwcsOldName:*OLECHAR, pwcsNewName:*OLECHAR
-        "RenameElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(OLECHAR))(13, "RenameElement"),
-        # SetElementTimes -> pwcsName:*OLECHAR, pctime:*FILETIME, patime:*FILETIME, pmtime:*FILETIME
-        "SetElementTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(FILETIME), POINTER(FILETIME), POINTER(FILETIME))(14, "SetElementTimes"),
-        # SetClass -> clsid:REFCLSID
-        "SetClass": ctypes.WINFUNCTYPE(HRESULT, REFCLSID)(15, "SetClass"),
-        # SetStateBits -> grfStateBits:DWORD, grfMask:DWORD
-        "SetStateBits": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD)(16, "SetStateBits"),
-        # Stat -> pstatstg:*STATSTG, grfStatFlag:DWORD
-        "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(17, "Stat"),
     }
 
 ISystemActivator._functions_ = {
