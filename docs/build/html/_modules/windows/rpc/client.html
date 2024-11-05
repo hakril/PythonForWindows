@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.rpc.client &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.rpc.client &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>
@@ -53,6 +53,8 @@
 <span class="n">KNOWN_RPC_ERROR_CODE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_HANDLE</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_X_BAD_STUB_DATA</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_E_INVALID_HEADER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_E_DISCONNECTED</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNKNOWN_IF</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROTOCOL_ERROR</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNSUPPORTED_TRANS_SYN</span><span class="p">,</span>
@@ -96,7 +98,7 @@
         <span class="p">(</span><span class="s2">&quot;UNK5&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;UNK6&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;UNK7&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;ORPC_IPID&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
+        <span class="p">(</span><span class="s2">&quot;orpc_ipid&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
     <span class="p">]</span>
 
 <div class="viewcode-block" id="RPCClient">
@@ -104,6 +106,7 @@
 <span class="k">class</span> <span class="nc">RPCClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling&quot;&quot;&quot;</span>
     <span class="n">REQUEST_IDENTIFIER</span> <span class="o">=</span> <span class="mh">0x11223344</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span> <span class="o">=</span> <span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="c1">#: The :class:`windows.alpc.AlpcClient` used to communicate with the server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># if -&gt; interface</span>
@@ -111,23 +114,24 @@
 
 <div class="viewcode-block" id="RPCClient.bind">
 <a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.bind">[docs]</a>
-    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID_str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Bind to the ``IID_str`` with the given ``version``</span>
+    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Bind to the ``IID`` with the given ``version``</span>
 
 <span class="sd">            :returns: :class:`windows.generated_def.IID`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">IID</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">IID_str</span><span class="p">)</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_bind_request</span><span class="p">(</span><span class="n">IID</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">):</span>
+            <span class="n">iid</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_bind_request</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
         <span class="c1"># Parse reponse</span>
         <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="p">[</span><span class="n">request_type</span><span class="p">]))</span>
-        <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">IID</span><span class="p">)[:])</span> <span class="c1"># TODO: add __hash__ to IID</span>
+        <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">iid</span><span class="p">)[:])</span> <span class="c1"># TODO: add __hash__ to IID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span><span class="p">[</span><span class="n">iid_hash</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="c1">#TODO: attach version information to IID</span>
-        <span class="k">return</span> <span class="n">IID</span></div>
+        <span class="k">return</span> <span class="n">iid</span></div>
 
 
 <div class="viewcode-block" id="RPCClient.forge_alpc_request">
@@ -149,11 +153,12 @@
 <div class="viewcode-block" id="RPCClient.call">
 <a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>
     <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``.</span>
+<span class="sd">        Handle `ORPC calls &lt;https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb&gt;`_ via the `ipid` parameter.</span>
 <span class="sd">            :param IID IID: An IID previously returned by :func:`bind`</span>
 <span class="sd">            :param int method_offset:</span>
 <span class="sd">            :param str params: The mashalled parameters (NDR32)</span>
+<span class="sd">            :param GUID ipid: The IPID for `ORPC calls &lt;https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb&gt;`_</span>
 <span class="sd">            :returns: :class:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forge_alpc_request</span><span class="p">(</span><span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="n">ipid</span><span class="p">)</span>
@@ -162,19 +167,18 @@
         <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCCESS</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_SUCCESS got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="p">[</span><span class="n">request_type</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response_effective_data</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
 
         <span class="c1"># windows.utils.sprint(ALPC_RPC_CALL.from_buffer_copy(response + &quot;\x00&quot; * 12))</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;6I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">4</span><span class="p">])</span>
-        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
-        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span></div>
-
+        <span class="c1"># data = struct.unpack(&quot;&lt;6I&quot;, response[:6 * 4])</span>
+        <span class="c1"># assert data[3] == self.REQUEST_IDENTIFIER</span>
+        <span class="c1"># return response[4 * 6:] # Should be the return value (not completly verified)</span>
 
     <span class="k">def</span> <span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_forge_call_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># TODO: differents REQUEST_IDENTIFIER for each req ?</span>
+        <span class="c1"># TODO: differents REQUEST_IDENTIFIER for each req ? Use REQUEST_IDENTIFIER to identify ORPC calls ?</span>
         <span class="c1"># TODO: what is this &#39;0&#39; ? (1 is also accepted) (flags ?)</span>
         <span class="c1"># request = struct.pack(&quot;&lt;16I&quot;, gdef.RPC_REQUEST_TYPE_CALL, NOT_USED, 1, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">ALPC_RPC_CALL</span><span class="p">()</span>
@@ -184,16 +188,24 @@
         <span class="n">req</span><span class="o">.</span><span class="n">if_nb</span> <span class="o">=</span> <span class="n">interface_nb</span>
         <span class="n">req</span><span class="o">.</span><span class="n">method_offset</span> <span class="o">=</span> <span class="n">method_offset</span>
         <span class="k">if</span> <span class="n">ipid</span><span class="p">:</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">ORPC_IPID</span> <span class="o">=</span> <span class="n">ipid</span>
-            <span class="n">this</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCTHIS</span><span class="p">()</span>
+            <span class="n">req</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># We have a IPID</span>
+            <span class="n">req</span><span class="o">.</span><span class="n">orpc_ipid</span> <span class="o">=</span> <span class="n">ipid</span>
+            <span class="n">this</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCTHIS32</span><span class="p">()</span> <span class="c1"># we use NDR32</span>
             <span class="n">this</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
-            <span class="n">this</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">lthis</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS</span><span class="p">()</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCF_LOCAL</span>
+            <span class="c1"># Not mandatory</span>
+            <span class="c1"># this.cid = gdef.GUID.from_string(&quot;42424242-4242-4242-4242-424242424242&quot;)</span>
+            <span class="n">lthis</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32</span><span class="p">()</span> <span class="c1"># we use NDR32</span>
+            <span class="c1"># RPC_E_INVALID_HEADER is NULL</span>
+            <span class="n">lthis</span><span class="o">.</span><span class="n">callTraceActivity</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;42424242-4242-4242-4242-424242424242&quot;</span><span class="p">)</span>
+            <span class="n">lthis</span><span class="o">.</span><span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span>
             <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">buffer</span><span class="p">(</span><span class="n">this</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">buffer</span><span class="p">(</span><span class="n">lthis</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
         <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
 
     <span class="k">def</span> <span class="nf">_forge_call_request_in_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Version crade qui clean rien pour POC. GROS DOUTES :D</span>
+        <span class="k">if</span> <span class="n">ipid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;RpcClient._forge_call_request_in_view() with ipid&quot;</span><span class="p">)</span>
         <span class="n">raw_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_call_request</span><span class="p">(</span><span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x2000</span><span class="p">)</span>
         <span class="n">section</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">create_port_section</span><span class="p">(</span><span class="mh">0x40000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
@@ -221,12 +233,25 @@
         <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span>
 
     <span class="k">def</span> <span class="nf">_get_request_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Response is a `AlpcMessage`&quot;&quot;&quot;</span>
         <span class="s2">&quot;raise if request_type == RESPONSE_TYPE_FAIL&quot;</span>
-        <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">:</span>
-            <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
-        <span class="k">return</span> <span class="n">request_type</span></div>
+        <span class="k">return</span> <span class="n">request_type</span>
+
+    <span class="k">def</span> <span class="nf">_get_response_effective_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Response is a `AlpcMessage` needed to handle response in message vs response in view&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">view_is_valid</span><span class="p">:</span>
+            <span class="c1"># Reponse directly in PORT_MESSAGE</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mh">0x18</span><span class="p">:]</span> <span class="c1"># 4 * 6</span>
+        <span class="c1"># Response in view M extract size from PORT_MESSAGE &amp; read data from view</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">TotalLength</span> <span class="o">&gt;=</span> <span class="mh">0x48</span> <span class="c1"># At least 0x20 of data</span>
+        <span class="n">rpcdatasize</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mh">0x18</span><span class="p">:</span><span class="mh">0x1c</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">viewattr</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">view_attribute</span>
+        <span class="k">assert</span> <span class="n">viewattr</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">&gt;=</span> <span class="n">rpcdatasize</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">viewattr</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">,</span> <span class="n">rpcdatasize</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -259,7 +284,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>

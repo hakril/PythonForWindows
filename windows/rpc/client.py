@@ -104,11 +104,12 @@ class RPCClient(object):
         return request
 
     def call(self, IID, method_offset, params, ipid=None):
-        """Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``
-
+        """Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``.
+        Handle `ORPC calls <https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb>`_ via the `ipid` parameter.
             :param IID IID: An IID previously returned by :func:`bind`
             :param int method_offset:
             :param str params: The mashalled parameters (NDR32)
+            :param GUID ipid: The IPID for `ORPC calls <https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb>`_
             :returns: :class:`str`
         """
         request = self.forge_alpc_request(IID, method_offset, params, ipid=ipid)

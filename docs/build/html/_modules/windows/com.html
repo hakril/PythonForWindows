@@ -111,6 +111,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GetDocumentation</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
+
+<span class="k">class</span> <span class="nc">MemoryIStream</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IStream</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateStreamOnHGlobal</span><span class="p">(</span><span class="n">ppstm</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
 <div class="viewcode-block" id="create_instance">
 <a class="viewcode-back" href="../../com.html#windows.com.create_instance">[docs]</a>
 <span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">targetinterface</span><span class="p">,</span> <span class="n">custom_iid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span> <span class="o">|</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">):</span>
@@ -119,6 +127,8 @@
         <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">targetinterface</span><span class="o">.</span><span class="n">IID</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
         <span class="n">clsiid</span> <span class="o">=</span> <span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">clsiid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">)</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">targetinterface</span></div>
 

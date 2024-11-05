@@ -135,6 +135,7 @@
 <span class="n">LPWCH</span> <span class="o">=</span> <span class="n">c_wchar</span>
 <span class="n">BSTR</span> <span class="o">=</span> <span class="n">c_wchar_p</span>
 <span class="n">OLECHAR</span> <span class="o">=</span> <span class="n">c_wchar</span>
+<span class="n">SNB</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">OLECHAR</span><span class="p">))</span>
 <span class="n">POLECHAR</span> <span class="o">=</span> <span class="n">c_wchar_p</span>
 <span class="n">PZZWSTR</span> <span class="o">=</span> <span class="n">c_wchar_p</span>
 <span class="n">PUCHAR</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">UCHAR</span><span class="p">)</span>
@@ -170,7 +171,7 @@
 <span class="n">DISPID</span> <span class="o">=</span> <span class="n">LONG</span>
 <span class="n">MEMBERID</span> <span class="o">=</span> <span class="n">DISPID</span>
 <span class="n">LRESULT</span> <span class="o">=</span> <span class="n">LONG_PTR</span>
-<span class="n">LPUNKNOWN</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PVOID</span><span class="p">)</span>
+<span class="n">LPUNKNOWN</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">LPPOINT</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">POINT</span><span class="p">)</span>
 <span class="n">LPRECT</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">RECT</span><span class="p">)</span>
 <span class="n">SPC_UUID</span> <span class="o">=</span> <span class="n">BYTE</span><span class="o">*</span><span class="mi">16</span>
@@ -179,6 +180,8 @@
 <span class="n">PWINDBG_EXTENSION_APIS64</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">FILEOP_FLAGS</span> <span class="o">=</span> <span class="n">WORD</span>
 <span class="n">NET_API_STATUS</span> <span class="o">=</span> <span class="n">DWORD</span>
+<span class="n">PVOID32</span> <span class="o">=</span> <span class="n">DWORD</span>
+<span class="n">PVOID64</span> <span class="o">=</span> <span class="n">DWORD64</span>
 <span class="n">NCRYPT_HANDLE</span> <span class="o">=</span> <span class="n">ULONG_PTR</span>
 <span class="n">NCRYPT_PROV_HANDLE</span> <span class="o">=</span> <span class="n">ULONG_PTR</span>
 <span class="n">NCRYPT_KEY_HANDLE</span> <span class="o">=</span> <span class="n">ULONG_PTR</span>
@@ -298,6 +301,12 @@
 <span class="n">RPCOLEDATAREP</span> <span class="o">=</span> <span class="n">ULONG</span>
 <span class="n">HREFTYPE</span> <span class="o">=</span> <span class="n">DWORD</span>
 <span class="n">SFGAOF</span> <span class="o">=</span> <span class="n">ULONG</span>
+<span class="n">ID</span> <span class="o">=</span> <span class="n">ULONG64</span>
+<span class="n">MID</span> <span class="o">=</span> <span class="n">ID</span>
+<span class="n">OXID</span> <span class="o">=</span> <span class="n">ID</span>
+<span class="n">OID</span> <span class="o">=</span> <span class="n">ID</span>
+<span class="n">SETID</span> <span class="o">=</span> <span class="n">ID</span>
+<span class="n">LPSTREAM</span> <span class="o">=</span> <span class="n">PVOID</span><span class="c1">#Istream*</span>
 <span class="n">GROUP</span> <span class="o">=</span> <span class="n">UINT</span>
 <span class="n">SOCKET</span> <span class="o">=</span> <span class="n">HANDLE</span>
 <span class="n">WNDPROC</span> <span class="o">=</span> <span class="n">PVOID</span>
@@ -542,15 +551,18 @@
         <span class="p">(</span><span class="s2">&quot;Data3&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Data4&quot;</span><span class="p">,</span> <span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span><span class="p">)),</span>
     <span class="p">]</span>
+<span class="n">CID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">CLSID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">GUID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">IID</span> <span class="o">=</span> <span class="n">_GUID</span>
+<span class="n">IPID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">LPCGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">LPCLSID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">LPGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFCLSID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFIID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
+<span class="n">REFIPID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 
 <span class="n">INITIAL_GUID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <div class="viewcode-block" id="_GUID">
@@ -578,7 +590,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;&lt;GUID &quot;</span><span class="si">{0}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strid</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;GUID &quot;</span><span class="si">{0}</span><span class="s1">(</span><span class="si">{1}</span><span class="s1">)&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strid</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;GUID &quot;</span><span class="si">{0}</span><span class="s1">&quot; (</span><span class="si">{1}</span><span class="s1">)&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strid</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="n">__sprint__</span> <span class="o">=</span> <span class="fm">__repr__</span>
 
@@ -615,15 +627,18 @@
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Data1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Data2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Data3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Data4</span><span class="p">[:])</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">Data1</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">Data2</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">Data3</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">Data4</span><span class="p">[:])</span></div>
 
 
+<span class="n">CID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">CLSID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">GUID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">IID</span> <span class="o">=</span> <span class="n">_GUID</span>
+<span class="n">IPID</span> <span class="o">=</span> <span class="n">_GUID</span>
 <span class="n">LPCGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">LPCLSID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">LPGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFCLSID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFGUID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <span class="n">REFIID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
+<span class="n">REFIPID</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_GUID</span><span class="p">)</span>
 <div class="viewcode-block" id="IO_Des_s">
 <a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.IO_Des_s">[docs]</a>
 <span class="k">class</span> <span class="nc">IO_Des_s</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
@@ -998,19 +1013,6 @@
 <span class="n">CALLFRAME_WALK</span> <span class="o">=</span> <span class="n">tagCALLFRAME_WALK</span>
 
 
-<span class="n">SD_LAUNCHPERMISSIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_LAUNCHPERMISSIONS&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
-<span class="n">SD_ACCESSPERMISSIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_ACCESSPERMISSIONS&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
-<span class="n">SD_LAUNCHRESTRICTIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_LAUNCHRESTRICTIONS&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
-<span class="n">SD_ACCESSRESTRICTIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_ACCESSRESTRICTIONS&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
-<div class="viewcode-block" id="tagCOMSD">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagCOMSD">[docs]</a>
-<span class="k">class</span> <span class="nc">tagCOMSD</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">SD_LAUNCHPERMISSIONS</span><span class="p">,</span> <span class="n">SD_ACCESSPERMISSIONS</span><span class="p">,</span> <span class="n">SD_LAUNCHRESTRICTIONS</span><span class="p">,</span> <span class="n">SD_ACCESSRESTRICTIONS</span><span class="p">]</span>
-    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
-
-<span class="n">COMSD</span> <span class="o">=</span> <span class="n">tagCOMSD</span>
-
-
 <div class="viewcode-block" id="tagMULTI_QI">
 <a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagMULTI_QI">[docs]</a>
 <span class="k">class</span> <span class="nc">tagMULTI_QI</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
@@ -1205,6 +1207,714 @@
 <span class="n">VARIANT</span> <span class="o">=</span> <span class="n">__tagVARIANT</span>
 <span class="n">VARIANTARG</span> <span class="o">=</span> <span class="n">__tagVARIANT</span>
 <span class="n">_tagVARIANT</span> <span class="o">=</span> <span class="n">__tagVARIANT</span>
+
+<span class="n">SD_LAUNCHPERMISSIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_LAUNCHPERMISSIONS&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">SD_ACCESSPERMISSIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_ACCESSPERMISSIONS&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">SD_LAUNCHRESTRICTIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_LAUNCHRESTRICTIONS&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">SD_ACCESSRESTRICTIONS</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCOMSD&quot;</span><span class="p">,</span> <span class="s2">&quot;SD_ACCESSRESTRICTIONS&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<div class="viewcode-block" id="tagCOMSD">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagCOMSD">[docs]</a>
+<span class="k">class</span> <span class="nc">tagCOMSD</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">SD_LAUNCHPERMISSIONS</span><span class="p">,</span> <span class="n">SD_ACCESSPERMISSIONS</span><span class="p">,</span> <span class="n">SD_LAUNCHRESTRICTIONS</span><span class="p">,</span> <span class="n">SD_ACCESSRESTRICTIONS</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">COMSD</span> <span class="o">=</span> <span class="n">tagCOMSD</span>
+
+
+<span class="n">CPFLAG_NONE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_NONE&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">CPFLAG_PROPAGATE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_PROPAGATE&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">CPFLAG_EXPOSE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_EXPOSE&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">CPFLAG_ENVOY</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_ENVOY&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<span class="n">CPFLAG_MONITORSTUB</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_MONITORSTUB&quot;</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">)</span>
+<span class="n">CPFLAG_MONITORPROXY</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_MONITORPROXY&quot;</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">)</span>
+<span class="n">CPFLAG_DONTCOMPARE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagCPFLAGS&quot;</span><span class="p">,</span> <span class="s2">&quot;CPFLAG_DONTCOMPARE&quot;</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+<div class="viewcode-block" id="tagCPFLAGS">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagCPFLAGS">[docs]</a>
+<span class="k">class</span> <span class="nc">tagCPFLAGS</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">CPFLAG_NONE</span><span class="p">,</span> <span class="n">CPFLAG_PROPAGATE</span><span class="p">,</span> <span class="n">CPFLAG_EXPOSE</span><span class="p">,</span> <span class="n">CPFLAG_ENVOY</span><span class="p">,</span> <span class="n">CPFLAG_MONITORSTUB</span><span class="p">,</span> <span class="n">CPFLAG_MONITORPROXY</span><span class="p">,</span> <span class="n">CPFLAG_DONTCOMPARE</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">CPFLAGS</span> <span class="o">=</span> <span class="n">tagCPFLAGS</span>
+
+
+<span class="n">CLIENT_CONTEXT_STAGE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagACTIVATION_STAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;CLIENT_CONTEXT_STAGE&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">CLIENT_MACHINE_STAGE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagACTIVATION_STAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;CLIENT_MACHINE_STAGE&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">SERVER_MACHINE_STAGE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagACTIVATION_STAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;SERVER_MACHINE_STAGE&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<span class="n">SERVER_PROCESS_STAGE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagACTIVATION_STAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;SERVER_PROCESS_STAGE&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<span class="n">SERVER_CONTEXT_STAGE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagACTIVATION_STAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;SERVER_CONTEXT_STAGE&quot;</span><span class="p">,</span> <span class="mh">0x5</span><span class="p">)</span>
+<div class="viewcode-block" id="tagACTIVATION_STAGE">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagACTIVATION_STAGE">[docs]</a>
+<span class="k">class</span> <span class="nc">tagACTIVATION_STAGE</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">CLIENT_CONTEXT_STAGE</span><span class="p">,</span> <span class="n">CLIENT_MACHINE_STAGE</span><span class="p">,</span> <span class="n">SERVER_MACHINE_STAGE</span><span class="p">,</span> <span class="n">SERVER_PROCESS_STAGE</span><span class="p">,</span> <span class="n">SERVER_CONTEXT_STAGE</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">ACTIVATION_STAGE</span> <span class="o">=</span> <span class="n">tagACTIVATION_STAGE</span>
+
+
+<span class="n">ApartmentThreaded</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagThreadingModel&quot;</span><span class="p">,</span> <span class="s2">&quot;ApartmentThreaded&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">FreeThreaded</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagThreadingModel&quot;</span><span class="p">,</span> <span class="s2">&quot;FreeThreaded&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">SingleThreaded</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagThreadingModel&quot;</span><span class="p">,</span> <span class="s2">&quot;SingleThreaded&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">BothThreaded</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagThreadingModel&quot;</span><span class="p">,</span> <span class="s2">&quot;BothThreaded&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<span class="n">NeutralThreaded</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagThreadingModel&quot;</span><span class="p">,</span> <span class="s2">&quot;NeutralThreaded&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<div class="viewcode-block" id="tagThreadingModel">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagThreadingModel">[docs]</a>
+<span class="k">class</span> <span class="nc">tagThreadingModel</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">ApartmentThreaded</span><span class="p">,</span> <span class="n">FreeThreaded</span><span class="p">,</span> <span class="n">SingleThreaded</span><span class="p">,</span> <span class="n">BothThreaded</span><span class="p">,</span> <span class="n">NeutralThreaded</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">ThreadingModel</span> <span class="o">=</span> <span class="n">tagThreadingModel</span>
+
+
+<span class="n">LocalServerType16</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagLocalServerType&quot;</span><span class="p">,</span> <span class="s2">&quot;LocalServerType16&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">LocalServerType32</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagLocalServerType&quot;</span><span class="p">,</span> <span class="s2">&quot;LocalServerType32&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<div class="viewcode-block" id="tagLocalServerType">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagLocalServerType">[docs]</a>
+<span class="k">class</span> <span class="nc">tagLocalServerType</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">LocalServerType16</span><span class="p">,</span> <span class="n">LocalServerType32</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">LocalServerType</span> <span class="o">=</span> <span class="n">tagLocalServerType</span>
+
+
+<span class="n">STREAM_SEEK_SET</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagSTREAM_SEEK&quot;</span><span class="p">,</span> <span class="s2">&quot;STREAM_SEEK_SET&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">STREAM_SEEK_CUR</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagSTREAM_SEEK&quot;</span><span class="p">,</span> <span class="s2">&quot;STREAM_SEEK_CUR&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">STREAM_SEEK_END</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagSTREAM_SEEK&quot;</span><span class="p">,</span> <span class="s2">&quot;STREAM_SEEK_END&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<div class="viewcode-block" id="tagSTREAM_SEEK">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagSTREAM_SEEK">[docs]</a>
+<span class="k">class</span> <span class="nc">tagSTREAM_SEEK</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">STREAM_SEEK_SET</span><span class="p">,</span> <span class="n">STREAM_SEEK_CUR</span><span class="p">,</span> <span class="n">STREAM_SEEK_END</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">STREAM_SEEK</span> <span class="o">=</span> <span class="n">tagSTREAM_SEEK</span>
+
+
+<span class="n">MSHCTX_LOCAL</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_LOCAL&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">MSHCTX_NOSHAREDMEM</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_NOSHAREDMEM&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">MSHCTX_DIFFERENTMACHINE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_DIFFERENTMACHINE&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">MSHCTX_INPROC</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_INPROC&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<span class="n">MSHCTX_CROSSCTX</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_CROSSCTX&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<span class="n">MSHCTX_CONTAINER</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;tagMSHCTX&quot;</span><span class="p">,</span> <span class="s2">&quot;MSHCTX_CONTAINER&quot;</span><span class="p">,</span> <span class="mh">0x5</span><span class="p">)</span>
+<div class="viewcode-block" id="tagMSHCTX">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagMSHCTX">[docs]</a>
+<span class="k">class</span> <span class="nc">tagMSHCTX</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">MSHCTX_LOCAL</span><span class="p">,</span> <span class="n">MSHCTX_NOSHAREDMEM</span><span class="p">,</span> <span class="n">MSHCTX_DIFFERENTMACHINE</span><span class="p">,</span> <span class="n">MSHCTX_INPROC</span><span class="p">,</span> <span class="n">MSHCTX_CROSSCTX</span><span class="p">,</span> <span class="n">MSHCTX_CONTAINER</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">MSHCTX</span> <span class="o">=</span> <span class="n">tagMSHCTX</span>
+
+
+<div class="viewcode-block" id="tagOpaqueData">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagOpaqueData">[docs]</a>
+<span class="k">class</span> <span class="nc">tagOpaqueData</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;guid&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dataLength&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved2&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">BYTE</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">OpaqueData</span> <span class="o">=</span> <span class="n">tagOpaqueData</span>
+
+<div class="viewcode-block" id="tagSTDOBJREF">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagSTDOBJREF">[docs]</a>
+<span class="k">class</span> <span class="nc">tagSTDOBJREF</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cPublicRefs&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;oxid&quot;</span><span class="p">,</span> <span class="n">OXID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;oid&quot;</span><span class="p">,</span> <span class="n">OID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ipid&quot;</span><span class="p">,</span> <span class="n">IPID</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">STDOBJREF</span> <span class="o">=</span> <span class="n">tagSTDOBJREF</span>
+
+<div class="viewcode-block" id="tagDATAELEMENT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagDATAELEMENT">[docs]</a>
+<span class="k">class</span> <span class="nc">tagDATAELEMENT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dataID&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cbSize&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cbRounded&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">DATAELEMENT</span> <span class="o">=</span> <span class="n">tagDATAELEMENT</span>
+<span class="n">PDATAELEMENT</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagDATAELEMENT</span><span class="p">)</span>
+
+<div class="viewcode-block" id="tagOBJREFDATA">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagOBJREFDATA">[docs]</a>
+<span class="k">class</span> <span class="nc">tagOBJREFDATA</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;nElms&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ppElmArray&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PDATAELEMENT</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">OBJREFDATA</span> <span class="o">=</span> <span class="n">tagOBJREFDATA</span>
+
+<span class="k">class</span> <span class="nc">tagDUALSTRINGARRAY</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;wNumEntries&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;wSecurityOffset&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;aStringArray&quot;</span><span class="p">,</span> <span class="n">USHORT</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">]</span>
+<span class="n">DUALSTRINGARRAY</span> <span class="o">=</span> <span class="n">tagDUALSTRINGARRAY</span>
+
+<span class="n">INITIAL_tagDUALSTRINGARRAY</span> <span class="o">=</span> <span class="n">tagDUALSTRINGARRAY</span>
+
+<div class="viewcode-block" id="tagDUALSTRINGARRAY">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagDUALSTRINGARRAY">[docs]</a>
+<span class="k">class</span> <span class="nc">tagDUALSTRINGARRAY</span><span class="p">(</span><span class="n">INITIAL_tagDUALSTRINGARRAY</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rawbuffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">array_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wNumEntries</span>
+        <span class="n">array_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aStringArray</span><span class="o">.</span><span class="n">_type_</span>
+        <span class="n">new_buffer_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">array_type</span> <span class="o">*</span> <span class="n">array_size</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">new_buffer_type</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aStringArray</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">buffer</span>
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bidings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rawbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawbuffer</span>
+        <span class="n">rawarray</span> <span class="o">=</span> <span class="n">rawbuffer</span><span class="p">[:]</span> <span class="c1"># Allow to find 0 in USHORT without overlap</span>
+        <span class="n">rawbytes</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">rawbuffer</span><span class="p">)</span> <span class="c1"># Allow to access to bytes to utf-16-le decode</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">next_start</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># STRINGBINDING documentation says that it starts with a USHORT wTowerId</span>
+        <span class="c1"># But i don&#39;t see it in our response.. (local response ?)</span>
+        <span class="c1"># So ignore it for now</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+            <span class="n">current_index</span> <span class="o">=</span> <span class="n">rawarray</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">next_start</span><span class="p">)</span>
+            <span class="n">new_entry</span> <span class="o">=</span> <span class="n">rawbytes</span><span class="p">[</span><span class="n">next_start</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span> <span class="n">current_index</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_entry</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">results</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_entry</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16-le&quot;</span><span class="p">))</span> <span class="c1"># Does not handle full unicode I think but..</span>
+            <span class="n">next_start</span> <span class="o">=</span> <span class="n">current_index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># Should not happen</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not parse DUALSTRINGARRAY&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">security_bidings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rawbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawbuffer</span>
+        <span class="n">rawarray</span> <span class="o">=</span> <span class="n">rawbuffer</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">wSecurityOffset</span><span class="p">:]</span>
+        <span class="n">rawbytes</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">rawbuffer</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">wSecurityOffset</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">next_start</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+            <span class="n">wAuthnSvc</span> <span class="o">=</span> <span class="n">rawarray</span><span class="p">[</span><span class="n">next_start</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">wAuthnSvc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">results</span>
+            <span class="n">reserved</span> <span class="o">=</span> <span class="n">rawarray</span><span class="p">[</span><span class="n">next_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">current_index</span> <span class="o">=</span> <span class="n">rawarray</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">next_start</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">new_entry</span> <span class="o">=</span> <span class="n">rawbytes</span><span class="p">[(</span><span class="n">next_start</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span><span class="n">current_index</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">wAuthnSvc</span><span class="p">,</span> <span class="n">reserved</span><span class="p">,</span> <span class="n">new_entry</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16-le&quot;</span><span class="p">)))</span> <span class="c1"># Does not handle full unicode I think but..</span>
+            <span class="n">next_start</span> <span class="o">=</span> <span class="n">current_index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># Should not happen</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not parse DUALSTRINGARRAY security bidings&quot;</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="n">DUALSTRINGARRAY</span> <span class="o">=</span> <span class="n">tagDUALSTRINGARRAY</span>
+<span class="k">class</span> <span class="nc">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_1</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">STDOBJREF</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;saResAddr&quot;</span><span class="p">,</span> <span class="n">DUALSTRINGARRAY</span><span class="p">),</span>
+    <span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_2</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">STDOBJREF</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;clsid&quot;</span><span class="p">,</span> <span class="n">CLSID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;saResAddr&quot;</span><span class="p">,</span> <span class="n">DUALSTRINGARRAY</span><span class="p">),</span>
+    <span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_3</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;clsid&quot;</span><span class="p">,</span> <span class="n">CLSID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cbExtension&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pData&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">BYTE</span><span class="p">)),</span>
+    <span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_4</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">STDOBJREF</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pORData&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">OBJREFDATA</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;saResAddr&quot;</span><span class="p">,</span> <span class="n">DUALSTRINGARRAY</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">_ANON_TAGOBJREF_SUB_UNION_1</span><span class="p">(</span><span class="n">Union</span><span class="p">):</span>
+    <span class="n">_anonymous_</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;u_standard&quot;</span><span class="p">,</span><span class="s2">&quot;u_handler&quot;</span><span class="p">,</span><span class="s2">&quot;u_custom&quot;</span><span class="p">,</span><span class="s2">&quot;u_extended&quot;</span><span class="p">)</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;u_standard&quot;</span><span class="p">,</span> <span class="n">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_1</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;u_handler&quot;</span><span class="p">,</span> <span class="n">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_2</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;u_custom&quot;</span><span class="p">,</span> <span class="n">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_3</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;u_extended&quot;</span><span class="p">,</span> <span class="n">_ANON__ANON_TAGOBJREF_SUB_UNION_1_SUB_STRUCTURE_4</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="tagOBJREF">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagOBJREF">[docs]</a>
+<span class="k">class</span> <span class="nc">tagOBJREF</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_anonymous_</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;u_objref&quot;</span><span class="p">,)</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;signature&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;iid&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;u_objref&quot;</span><span class="p">,</span> <span class="n">_ANON_TAGOBJREF_SUB_UNION_1</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">OBJREF</span> <span class="o">=</span> <span class="n">tagOBJREF</span>
+
+<div class="viewcode-block" id="tagCOMVERSION">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagCOMVERSION">[docs]</a>
+<span class="k">class</span> <span class="nc">tagCOMVERSION</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;MajorVersion&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;MinorVersion&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">COMVERSION</span> <span class="o">=</span> <span class="n">tagCOMVERSION</span>
+
+<div class="viewcode-block" id="tagORPC_EXTENT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPC_EXTENT">[docs]</a>
+<span class="k">class</span> <span class="nc">tagORPC_EXTENT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ORPC_EXTENT</span> <span class="o">=</span> <span class="n">tagORPC_EXTENT</span>
+<span class="n">PORPC_EXTENT</span> <span class="o">=</span> <span class="n">tagORPC_EXTENT</span>
+
+<div class="viewcode-block" id="tagORPC_EXTENT_ARRAY">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPC_EXTENT_ARRAY">[docs]</a>
+<span class="k">class</span> <span class="nc">tagORPC_EXTENT_ARRAY</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extent&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PORPC_EXTENT</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ORPC_EXTENT_ARRAY</span> <span class="o">=</span> <span class="n">tagORPC_EXTENT_ARRAY</span>
+
+<div class="viewcode-block" id="tagORPCTHIS">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPCTHIS">[docs]</a>
+<span class="k">class</span> <span class="nc">tagORPCTHIS</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">COMVERSION</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ORPCTHIS</span> <span class="o">=</span> <span class="n">tagORPCTHIS</span>
+
+<div class="viewcode-block" id="tagORPCTHIS32">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPCTHIS32">[docs]</a>
+<span class="k">class</span> <span class="nc">tagORPCTHIS32</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">COMVERSION</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ORPCTHIS32</span> <span class="o">=</span> <span class="n">tagORPCTHIS32</span>
+
+<div class="viewcode-block" id="tagOXID_INFO">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagOXID_INFO">[docs]</a>
+<span class="k">class</span> <span class="nc">tagOXID_INFO</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dwTid&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwPid&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwAuthnHint&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">COMVERSION</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ipidRemUnknown&quot;</span><span class="p">,</span> <span class="n">IPID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwFlags&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;psa&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">DUALSTRINGARRAY</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">OXID_INFO</span> <span class="o">=</span> <span class="n">tagOXID_INFO</span>
+
+<div class="viewcode-block" id="tagContextProperty">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagContextProperty">[docs]</a>
+<span class="k">class</span> <span class="nc">tagContextProperty</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;policyId&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">CPFLAGS</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pUnk&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ContextProperty</span> <span class="o">=</span> <span class="n">tagContextProperty</span>
+
+<div class="viewcode-block" id="_PRIV_SCM_INFO">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._PRIV_SCM_INFO">[docs]</a>
+<span class="k">class</span> <span class="nc">_PRIV_SCM_INFO</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;Apartment&quot;</span><span class="p">,</span> <span class="n">LONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pwszWinstaDesktop&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">WCHAR</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;ProcessSignature&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pEnvBlock&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">WCHAR</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;EnvBlockLength&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PRIV_SCM_INFO</span> <span class="o">=</span> <span class="n">_PRIV_SCM_INFO</span>
+
+<div class="viewcode-block" id="_REMOTE_REQUEST_SCM_INFO">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._REMOTE_REQUEST_SCM_INFO">[docs]</a>
+<span class="k">class</span> <span class="nc">_REMOTE_REQUEST_SCM_INFO</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;ClientImpLevel&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cRequestedProtseqs&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pRequestedProtseqs&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">USHORT</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">REMOTE_REQUEST_SCM_INFO</span> <span class="o">=</span> <span class="n">_REMOTE_REQUEST_SCM_INFO</span>
+
+<span class="k">class</span> <span class="nc">tagMInterfacePointer</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;ulCntData&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;abData&quot;</span><span class="p">,</span> <span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">]</span>
+<span class="n">MInterfacePointer</span> <span class="o">=</span> <span class="n">tagMInterfacePointer</span>
+<span class="n">PMInterfacePointer</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagMInterfacePointer</span><span class="p">)</span>
+
+<span class="n">INITIAL_tagMInterfacePointer</span> <span class="o">=</span> <span class="n">tagMInterfacePointer</span>
+
+<div class="viewcode-block" id="tagMInterfacePointer">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagMInterfacePointer">[docs]</a>
+<span class="k">class</span> <span class="nc">tagMInterfacePointer</span><span class="p">(</span><span class="n">INITIAL_tagMInterfacePointer</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">objref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">OBJREF</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abData</span><span class="p">))</span></div>
+
+<span class="n">MInterfacePointer</span> <span class="o">=</span> <span class="n">tagMInterfacePointer</span>
+<span class="n">PMInterfacePointer</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagMInterfacePointer</span><span class="p">)</span>
+<div class="viewcode-block" id="tagRPCOLEMESSAGE">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagRPCOLEMESSAGE">[docs]</a>
+<span class="k">class</span> <span class="nc">tagRPCOLEMESSAGE</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dataRepresentation&quot;</span><span class="p">,</span> <span class="n">RPCOLEDATAREP</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Buffer&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cbBuffer&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;iMethod&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved2&quot;</span><span class="p">,</span> <span class="n">PVOID</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;rpcFlags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PRPCOLEMESSAGE</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagRPCOLEMESSAGE</span><span class="p">)</span>
+<span class="n">RPCOLEMESSAGE</span> <span class="o">=</span> <span class="n">tagRPCOLEMESSAGE</span>
+
+<div class="viewcode-block" id="tagREMQIRESULT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagREMQIRESULT">[docs]</a>
+<span class="k">class</span> <span class="nc">tagREMQIRESULT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;hResult&quot;</span><span class="p">,</span> <span class="n">HRESULT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">STDOBJREF</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PREMQIRESULT</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagREMQIRESULT</span><span class="p">)</span>
+<span class="n">REMQIRESULT</span> <span class="o">=</span> <span class="n">tagREMQIRESULT</span>
+
+<div class="viewcode-block" id="tagREMINTERFACEREF">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagREMINTERFACEREF">[docs]</a>
+<span class="k">class</span> <span class="nc">tagREMINTERFACEREF</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;ipid&quot;</span><span class="p">,</span> <span class="n">IPID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cPublicRefs&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cPrivateRefs&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">REMINTERFACEREF</span> <span class="o">=</span> <span class="n">tagREMINTERFACEREF</span>
+
+<div class="viewcode-block" id="_PRIV_RESOLVER_INFO_LEGACY">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._PRIV_RESOLVER_INFO_LEGACY">[docs]</a>
+<span class="k">class</span> <span class="nc">_PRIV_RESOLVER_INFO_LEGACY</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;OxidServer&quot;</span><span class="p">,</span> <span class="n">OXID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pServerORBindings&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">DUALSTRINGARRAY</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;OxidInfo&quot;</span><span class="p">,</span> <span class="n">OXID_INFO</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;LocalMidOfRemote&quot;</span><span class="p">,</span> <span class="n">MID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;DllServerModel&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pwszDllServer&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">WCHAR</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;FoundInROT&quot;</span><span class="p">,</span> <span class="n">BOOL</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PPRIV_RESOLVER_INFO_LEGACY</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_PRIV_RESOLVER_INFO_LEGACY</span><span class="p">)</span>
+<span class="n">PRIV_RESOLVER_INFO_LEGACY</span> <span class="o">=</span> <span class="n">_PRIV_RESOLVER_INFO_LEGACY</span>
+
+<div class="viewcode-block" id="_REMOTE_REPLY_SCM_INFO">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._REMOTE_REPLY_SCM_INFO">[docs]</a>
+<span class="k">class</span> <span class="nc">_REMOTE_REPLY_SCM_INFO</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;Oxid&quot;</span><span class="p">,</span> <span class="n">OXID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pdsaOxidBindings&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">DUALSTRINGARRAY</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;ipidRemUnknown&quot;</span><span class="p">,</span> <span class="n">IPID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;authnHint&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;serverVersion&quot;</span><span class="p">,</span> <span class="n">COMVERSION</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PREMOTE_REPLY_SCM_INFO</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_REMOTE_REPLY_SCM_INFO</span><span class="p">)</span>
+<span class="n">REMOTE_REPLY_SCM_INFO</span> <span class="o">=</span> <span class="n">_REMOTE_REPLY_SCM_INFO</span>
+
+<div class="viewcode-block" id="CONTAINER_EXTENT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.CONTAINER_EXTENT">[docs]</a>
+<span class="k">class</span> <span class="nc">CONTAINER_EXTENT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="CONTAINER_EXTENT_ARRAY">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.CONTAINER_EXTENT_ARRAY">[docs]</a>
+<span class="k">class</span> <span class="nc">CONTAINER_EXTENT_ARRAY</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extent&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">CONTAINER_EXTENT</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="HSTRING__">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.HSTRING__">[docs]</a>
+<span class="k">class</span> <span class="nc">HSTRING__</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;unused&quot;</span><span class="p">,</span> <span class="n">INT</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="CONTAINERVERSION">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.CONTAINERVERSION">[docs]</a>
+<span class="k">class</span> <span class="nc">CONTAINERVERSION</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;capabilityFlags&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">CONTAINER_EXTENT_ARRAY</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="_MIDL_ILocalObjectExporter_0007">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_ILocalObjectExporter_0007">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_ILocalObjectExporter_0007</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dwTid&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwPid&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwAuthnHint&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dcomVersion&quot;</span><span class="p">,</span> <span class="n">tagCOMVERSION</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;containerVersion&quot;</span><span class="p">,</span> <span class="n">CONTAINERVERSION</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ipidRemUnknown&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwFlags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;psa&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagDUALSTRINGARRAY</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;guidProcessIdentifier&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;processHostId&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;clientDependencyBehavior&quot;</span><span class="p">,</span> <span class="n">INT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;packageFullName&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">HSTRING__</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;userSid&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">HSTRING__</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;appcontainerSid&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">HSTRING__</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;primaryOxid&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;primaryIpidRemUnknown&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">MIDL_ILocalObjectExporter_0007</span> <span class="o">=</span> <span class="n">_MIDL_ILocalObjectExporter_0007</span>
+
+<div class="viewcode-block" id="_PRIV_RESOLVER_INFO">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._PRIV_RESOLVER_INFO">[docs]</a>
+<span class="k">class</span> <span class="nc">_PRIV_RESOLVER_INFO</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;OxidServer&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pServerORBindings&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagDUALSTRINGARRAY</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;OxidInfo&quot;</span><span class="p">,</span> <span class="n">MIDL_ILocalObjectExporter_0007</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;LocalMidOfRemote&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;FoundInROT&quot;</span><span class="p">,</span> <span class="n">INT</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PPRIV_RESOLVER_INFO</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_PRIV_RESOLVER_INFO</span><span class="p">)</span>
+<span class="n">PRIV_RESOLVER_INFO</span> <span class="o">=</span> <span class="n">_PRIV_RESOLVER_INFO</span>
+
+<div class="viewcode-block" id="_MIDL_XmitDefs_0001">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_XmitDefs_0001">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_XmitDefs_0001</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;asyncOperationId&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;oxidClientProcessNA&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;originalClientLogicalThreadId&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;uClientCausalityTraceId&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">MIDL_XmitDefs_0001</span> <span class="o">=</span> <span class="n">_MIDL_XmitDefs_0001</span>
+
+<div class="viewcode-block" id="_LOCALTHIS">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._LOCALTHIS">[docs]</a>
+<span class="k">class</span> <span class="nc">_LOCALTHIS</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dwFlags&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwClientThread&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;passthroughTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;callTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;asyncRequestBlock&quot;</span><span class="p">,</span> <span class="n">MIDL_XmitDefs_0001</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pTouchedAstaArray&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">LOCALTHIS</span> <span class="o">=</span> <span class="n">_LOCALTHIS</span>
+
+<div class="viewcode-block" id="_LOCALTHIS32">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._LOCALTHIS32">[docs]</a>
+<span class="k">class</span> <span class="nc">_LOCALTHIS32</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dwFlags&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwClientThread&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;passthroughTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;callTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;asyncRequestBlock&quot;</span><span class="p">,</span> <span class="n">MIDL_XmitDefs_0001</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pTouchedAstaArray&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">LOCALTHIS32</span> <span class="o">=</span> <span class="n">_LOCALTHIS32</span>
+
+<div class="viewcode-block" id="_MIDL_XmitDefs_0007">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_XmitDefs_0007">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_XmitDefs_0007</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;pointOfFailure&quot;</span><span class="p">,</span> <span class="n">INT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;hrFailure&quot;</span><span class="p">,</span> <span class="n">HRESULT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;sizeOfMarshaledErrorInfo&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pMarshaledErrorInfo&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">BYTE</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="_MIDL_XmitDefs_0005">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_XmitDefs_0005">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_XmitDefs_0005</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;sizeOfMarshaledResults&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pMarshaledResults&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">BYTE</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="_MIDL_XmitDefs_0008">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_XmitDefs_0008">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_XmitDefs_0008</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="n">INT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;successDetails&quot;</span><span class="p">,</span> <span class="n">_MIDL_XmitDefs_0005</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;failureDetails&quot;</span><span class="p">,</span> <span class="n">_MIDL_XmitDefs_0007</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="_MIDL_XmitDefs_0010">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MIDL_XmitDefs_0010">[docs]</a>
+<span class="k">class</span> <span class="nc">_MIDL_XmitDefs_0010</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;asyncStatus&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;uServerCausalityTraceId&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;completionTraceActivity&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved2&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pOutcomeDetails&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_MIDL_XmitDefs_0008</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="CONTAINERTHAT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.CONTAINERTHAT">[docs]</a>
+<span class="k">class</span> <span class="nc">CONTAINERTHAT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;responseFlags&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughGuid_1&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughGuid_2&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughGuid_3&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughGuid_4&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedGuid_1&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedGuid_2&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedGuid_3&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedGuid_4&quot;</span><span class="p">,</span> <span class="n">_GUID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughUint64_1&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughUint64_2&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughUint64_3&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;unassignedPassthroughUint64_4&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;marshalingSetId&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedUint64_2&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedUint64_3&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedUint64_4&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reservedUint32&quot;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">CONTAINER_EXTENT_ARRAY</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="_LOCALTHAT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._LOCALTHAT">[docs]</a>
+<span class="k">class</span> <span class="nc">_LOCALTHAT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;marshalingSetId&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pAsyncResponseBlock&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_MIDL_XmitDefs_0010</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;containerErrorInformation&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">CONTAINER_EXTENT</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;containerPassthroughData&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">CONTAINERTHAT</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">LOCALTHAT</span> <span class="o">=</span> <span class="n">_LOCALTHAT</span>
+
+<div class="viewcode-block" id="_LOCALTHAT32">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._LOCALTHAT32">[docs]</a>
+<span class="k">class</span> <span class="nc">_LOCALTHAT32</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;marshalingSetId&quot;</span><span class="p">,</span> <span class="n">UINT64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pAsyncResponseBlock&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;containerErrorInformation&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;containerPassthroughData&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">LOCALTHAT32</span> <span class="o">=</span> <span class="n">_LOCALTHAT32</span>
+
+<div class="viewcode-block" id="tagORPCTHAT">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPCTHAT">[docs]</a>
+<span class="k">class</span> <span class="nc">tagORPCTHAT</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">tagORPC_EXTENT_ARRAY</span><span class="p">)),</span>
+    <span class="p">]</span></div>
+
+<span class="n">ORPCTHAT</span> <span class="o">=</span> <span class="n">tagORPCTHAT</span>
+
+<div class="viewcode-block" id="ORPCTHAT32">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.ORPCTHAT32">[docs]</a>
+<span class="k">class</span> <span class="nc">ORPCTHAT32</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">PVOID32</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+
 
 <span class="n">VIRTUAL_DISK_ACCESS_NONE</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_VIRTUAL_DISK_ACCESS_MASK&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRTUAL_DISK_ACCESS_NONE&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
 <span class="n">VIRTUAL_DISK_ACCESS_ATTACH_RO</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_VIRTUAL_DISK_ACCESS_MASK&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRTUAL_DISK_ACCESS_ATTACH_RO&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
@@ -3391,6 +4101,62 @@
 <span class="n">IMAGE_LOAD_CONFIG_DIRECTORY64</span> <span class="o">=</span> <span class="n">_IMAGE_LOAD_CONFIG_DIRECTORY64</span>
 <span class="n">PIMAGE_LOAD_CONFIG_DIRECTORY64</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_IMAGE_LOAD_CONFIG_DIRECTORY64</span><span class="p">)</span>
 
+<span class="n">MemExtendedParameterInvalidType</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterInvalidType&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">MemExtendedParameterAddressRequirements</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterAddressRequirements&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">MemExtendedParameterNumaNode</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterNumaNode&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">MemExtendedParameterPartitionHandle</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterPartitionHandle&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<span class="n">MemExtendedParameterUserPhysicalHandle</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterUserPhysicalHandle&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<span class="n">MemExtendedParameterAttributeFlags</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterAttributeFlags&quot;</span><span class="p">,</span> <span class="mh">0x5</span><span class="p">)</span>
+<span class="n">MemExtendedParameterImageMachine</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterImageMachine&quot;</span><span class="p">,</span> <span class="mh">0x6</span><span class="p">)</span>
+<span class="n">MemExtendedParameterMax</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;MEM_EXTENDED_PARAMETER_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemExtendedParameterMax&quot;</span><span class="p">,</span> <span class="mh">0x7</span><span class="p">)</span>
+<div class="viewcode-block" id="MEM_EXTENDED_PARAMETER_TYPE">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.MEM_EXTENDED_PARAMETER_TYPE">[docs]</a>
+<span class="k">class</span> <span class="nc">MEM_EXTENDED_PARAMETER_TYPE</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">MemExtendedParameterInvalidType</span><span class="p">,</span> <span class="n">MemExtendedParameterAddressRequirements</span><span class="p">,</span> <span class="n">MemExtendedParameterNumaNode</span><span class="p">,</span> <span class="n">MemExtendedParameterPartitionHandle</span><span class="p">,</span> <span class="n">MemExtendedParameterUserPhysicalHandle</span><span class="p">,</span> <span class="n">MemExtendedParameterAttributeFlags</span><span class="p">,</span> <span class="n">MemExtendedParameterImageMachine</span><span class="p">,</span> <span class="n">MemExtendedParameterMax</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">PMEM_EXTENDED_PARAMETER_TYPE</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">MEM_EXTENDED_PARAMETER_TYPE</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="_MEM_ADDRESS_REQUIREMENTS">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._MEM_ADDRESS_REQUIREMENTS">[docs]</a>
+<span class="k">class</span> <span class="nc">_MEM_ADDRESS_REQUIREMENTS</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;LowestStartingAddress&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;HighestEndingAddress&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Alignment&quot;</span><span class="p">,</span> <span class="n">SIZE_T</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">MEM_ADDRESS_REQUIREMENTS</span> <span class="o">=</span> <span class="n">_MEM_ADDRESS_REQUIREMENTS</span>
+<span class="n">PMEM_ADDRESS_REQUIREMENTS</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_MEM_ADDRESS_REQUIREMENTS</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">_ANON_MEM_EXTENDED_PARAMETER_SUB_STRUCTURE_1</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Reserved&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">,</span> <span class="mi">56</span><span class="p">),</span>
+    <span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_ANON_MEM_EXTENDED_PARAMETER_SUB_UNION_2</span><span class="p">(</span><span class="n">Union</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;ULong64&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Pointer&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Size&quot;</span><span class="p">,</span> <span class="n">SIZE_T</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Handle&quot;</span><span class="p">,</span> <span class="n">HANDLE</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ULong&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="MEM_EXTENDED_PARAMETER">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.MEM_EXTENDED_PARAMETER">[docs]</a>
+<span class="k">class</span> <span class="nc">MEM_EXTENDED_PARAMETER</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_anonymous_</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;DUMMYSTRUCTNAME&quot;</span><span class="p">,</span><span class="s2">&quot;DUMMYUNIONNAME&quot;</span><span class="p">)</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;DUMMYSTRUCTNAME&quot;</span><span class="p">,</span> <span class="n">_ANON_MEM_EXTENDED_PARAMETER_SUB_STRUCTURE_1</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;DUMMYUNIONNAME&quot;</span><span class="p">,</span> <span class="n">_ANON_MEM_EXTENDED_PARAMETER_SUB_UNION_2</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">PMEM_EXTENDED_PARAMETER</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">MEM_EXTENDED_PARAMETER</span><span class="p">)</span>
+
 <span class="n">SC_STATUS_PROCESS_INFO</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_SC_STATUS_TYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;SC_STATUS_PROCESS_INFO&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
 <div class="viewcode-block" id="_SC_STATUS_TYPE">
 <a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._SC_STATUS_TYPE">[docs]</a>
@@ -3933,7 +4699,7 @@
         <span class="p">(</span><span class="s2">&quot;LoadedImageName&quot;</span><span class="p">,</span> <span class="n">WCHAR</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="p">)),</span>
         <span class="p">(</span><span class="s2">&quot;LoadedPdbName&quot;</span><span class="p">,</span> <span class="n">WCHAR</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="p">)),</span>
         <span class="p">(</span><span class="s2">&quot;CVSig&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;CVData&quot;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">WCHAR</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">MAX_PATH</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;CVData&quot;</span><span class="p">,</span> <span class="n">WCHAR</span> <span class="o">*</span> <span class="p">(</span><span class="n">MAX_PATH</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)),</span>
         <span class="p">(</span><span class="s2">&quot;PdbSig&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;PdbSig70&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;PdbAge&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
@@ -7211,21 +7977,18 @@
 
 <span class="n">OBJECT_ATTRIBUTES</span> <span class="o">=</span> <span class="n">_OBJECT_ATTRIBUTES</span>
 <span class="n">POBJECT_ATTRIBUTES</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_OBJECT_ATTRIBUTES</span><span class="p">)</span>
-<div class="viewcode-block" id="_TMP_UNION_IO_STATUS_BLOCK">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._TMP_UNION_IO_STATUS_BLOCK">[docs]</a>
-<span class="k">class</span> <span class="nc">_TMP_UNION_IO_STATUS_BLOCK</span><span class="p">(</span><span class="n">Union</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_ANON__IO_STATUS_BLOCK_SUB_UNION_1</span><span class="p">(</span><span class="n">Union</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="n">NTSTATUS</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Pointer&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
-    <span class="p">]</span></div>
-
-<span class="n">TMP_UNION_IO_STATUS_BLOCK</span> <span class="o">=</span> <span class="n">_TMP_UNION_IO_STATUS_BLOCK</span>
+    <span class="p">]</span>
 
 <div class="viewcode-block" id="_IO_STATUS_BLOCK">
 <a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._IO_STATUS_BLOCK">[docs]</a>
 <span class="k">class</span> <span class="nc">_IO_STATUS_BLOCK</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_anonymous_</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;anon_01&quot;</span><span class="p">,)</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;DUMMYUNIONNAME&quot;</span><span class="p">,</span> <span class="n">TMP_UNION_IO_STATUS_BLOCK</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;anon_01&quot;</span><span class="p">,</span> <span class="n">_ANON__IO_STATUS_BLOCK_SUB_UNION_1</span><span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Information&quot;</span><span class="p">,</span> <span class="n">ULONG_PTR</span><span class="p">),</span>
     <span class="p">]</span></div>
 
@@ -8256,56 +9019,6 @@
 
 <span class="n">PREMOTE_PORT_VIEW</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_REMOTE_PORT_VIEW</span><span class="p">)</span>
 <span class="n">REMOTE_PORT_VIEW</span> <span class="o">=</span> <span class="n">_REMOTE_PORT_VIEW</span>
-
-<div class="viewcode-block" id="tagCOMVERSION">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagCOMVERSION">[docs]</a>
-<span class="k">class</span> <span class="nc">tagCOMVERSION</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;MajorVersion&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;MinorVersion&quot;</span><span class="p">,</span> <span class="n">USHORT</span><span class="p">),</span>
-    <span class="p">]</span></div>
-
-<span class="n">COMVERSION</span> <span class="o">=</span> <span class="n">tagCOMVERSION</span>
-
-<div class="viewcode-block" id="tagORPCTHIS">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagORPCTHIS">[docs]</a>
-<span class="k">class</span> <span class="nc">tagORPCTHIS</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">COMVERSION</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;reserved1&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
-    <span class="p">]</span></div>
-
-<span class="n">ORPCTHIS</span> <span class="o">=</span> <span class="n">tagORPCTHIS</span>
-
-<div class="viewcode-block" id="__MIDL_XmitDefs_0001">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.__MIDL_XmitDefs_0001">[docs]</a>
-<span class="k">class</span> <span class="nc">__MIDL_XmitDefs_0001</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;asyncOperationId&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;oxidClientProcessNA&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;originalClientLogicalThreadId&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;uClientCausalityTraceId&quot;</span><span class="p">,</span> <span class="n">ULONG64</span><span class="p">),</span>
-    <span class="p">]</span></div>
-
-<span class="n">MIDL_XmitDefs_0001</span> <span class="o">=</span> <span class="n">__MIDL_XmitDefs_0001</span>
-
-<div class="viewcode-block" id="_LOCALTHIS">
-<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._LOCALTHIS">[docs]</a>
-<span class="k">class</span> <span class="nc">_LOCALTHIS</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;dwFlags&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;dwClientThread&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;passthroughTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;callTraceActivity&quot;</span><span class="p">,</span> <span class="n">GUID</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;asyncRequestBlock&quot;</span><span class="p">,</span> <span class="n">MIDL_XmitDefs_0001</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;pTouchedAstaArray&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">),</span>
-    <span class="p">]</span></div>
-
-<span class="n">LOCALTHIS</span> <span class="o">=</span> <span class="n">_LOCALTHIS</span>
 
 <span class="n">ECS_ENABLED</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_EXPCMDSTATE&quot;</span><span class="p">,</span> <span class="s2">&quot;ECS_ENABLED&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
 <span class="n">ECS_DISABLED</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_EXPCMDSTATE&quot;</span><span class="p">,</span> <span class="s2">&quot;ECS_DISABLED&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>

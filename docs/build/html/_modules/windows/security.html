@@ -214,11 +214,11 @@
 <span class="p">)</span>
 
 <span class="n">COM_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE</span><span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE_LOCAL</span><span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE_REMOTE</span><span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_ACTIVATE_LOCAL</span><span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_ACTIVATE_REMOTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_RIGHTS_EXECUTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_RIGHTS_EXECUTE_LOCAL</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_RIGHTS_EXECUTE_REMOTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_RIGHTS_ACTIVATE_LOCAL</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_RIGHTS_ACTIVATE_REMOTE</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">SERVICE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
@@ -245,7 +245,6 @@
     <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_CONTROL_ACCESS</span><span class="p">,</span>
 <span class="p">)</span>
 
-
 <span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
     <span class="kc">None</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(),</span>
     <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">FILE_ACCESS_RIGHT</span><span class="p">,</span>
@@ -257,6 +256,7 @@
     <span class="s2">&quot;callback&quot;</span><span class="p">:</span> <span class="n">CALLBACK_ACCESS_RIGHT</span><span class="p">,</span>
     <span class="s2">&quot;mutant&quot;</span><span class="p">:</span> <span class="n">MUTANT_ACCESS_RIGHT</span><span class="p">,</span>
     <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="n">EVENT_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="n">SECTION_ACCESS_RIGHT</span><span class="p">,</span>
     <span class="s2">&quot;semaphore&quot;</span><span class="p">:</span> <span class="n">SEMAPHORE_ACCESS_RIGHT</span><span class="p">,</span>
     <span class="s2">&quot;io_completion&quot;</span><span class="p">:</span> <span class="n">IO_COMPLETION_ACCESS_RIGHT</span><span class="p">,</span>
     <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="n">PORT_ACCESS_RIGHT</span><span class="p">,</span>
