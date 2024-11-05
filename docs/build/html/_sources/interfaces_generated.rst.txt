@@ -2,6 +2,24 @@
 
 Interfaces
 ----------
+.. class:: IActivationStageInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetStageAndIndex
+    .. method:: GetStage
+    .. method:: GetIndex
+
+
+.. class:: ICallFactory
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: CreateCall
+
+
 .. class:: ICallFrame
 
     .. method:: QueryInterface
@@ -57,6 +75,42 @@ Interfaces
     .. method:: GetRegisteredSink
 
 
+.. class:: IClassFactory
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: CreateInstance
+    .. method:: LockServer
+
+
+.. class:: IClientSecurity
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: QueryBlanket
+    .. method:: SetBlanket
+    .. method:: CopyProxy
+
+
+.. class:: IComCatalog
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetClassInfo
+    .. method:: GetApplicationInfo
+    .. method:: GetProcessInfo
+    .. method:: GetServerGroupInfo
+    .. method:: GetRetQueueInfo
+    .. method:: GetApplicationInfoForExe
+    .. method:: GetTypeLibrary
+    .. method:: GetInterfaceInfo
+    .. method:: FlushCache
+    .. method:: GetClassInfoFromProgId
+
+
 .. class:: IDispatch
 
     .. method:: QueryInterface
@@ -77,6 +131,54 @@ Interfaces
     .. method:: Skip
     .. method:: Reset
     .. method:: Clone
+
+
+.. class:: IInternalUnknown
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: QueryInternalInterface
+
+
+.. class:: IMarshal
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetUnmarshalClass
+    .. method:: GetMarshalSizeMax
+    .. method:: MarshalInterface
+    .. method:: UnmarshalInterface
+    .. method:: ReleaseMarshalData
+    .. method:: DisconnectObject
+
+
+.. class:: IMoniker
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetClassID
+    .. method:: IsDirty
+    .. method:: Load
+    .. method:: Save
+    .. method:: GetSizeMax
+    .. method:: BindToObject
+    .. method:: BindToStorage
+    .. method:: Reduce
+    .. method:: ComposeWith
+    .. method:: Enum
+    .. method:: IsEqual
+    .. method:: Hash
+    .. method:: IsRunning
+    .. method:: GetTimeOfLastChange
+    .. method:: Inverse
+    .. method:: CommonPrefixWith
+    .. method:: RelativePathTo
+    .. method:: GetDisplayName
+    .. method:: ParseDisplayName
+    .. method:: IsSystemMoniker
 
 
 .. class:: INetFwPolicy2
@@ -110,22 +212,6 @@ Interfaces
     .. method:: put_DefaultOutboundAction
     .. method:: get_IsRuleGroupCurrentlyEnabled
     .. method:: get_LocalPolicyModifyState
-
-
-.. class:: INetFwRules
-
-    .. method:: QueryInterface
-    .. method:: AddRef
-    .. method:: Release
-    .. method:: GetTypeInfoCount
-    .. method:: GetTypeInfo
-    .. method:: GetIDsOfNames
-    .. method:: Invoke
-    .. method:: get_Count
-    .. method:: Add
-    .. method:: Remove
-    .. method:: Item
-    .. method:: get__NewEnum
 
 
 .. class:: INetFwRule
@@ -175,6 +261,22 @@ Interfaces
     .. method:: put_Action
 
 
+.. class:: INetFwRules
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetTypeInfoCount
+    .. method:: GetTypeInfo
+    .. method:: GetIDsOfNames
+    .. method:: Invoke
+    .. method:: get_Count
+    .. method:: Add
+    .. method:: Remove
+    .. method:: Item
+    .. method:: get__NewEnum
+
+
 .. class:: INetFwServiceRestriction
 
     .. method:: QueryInterface
@@ -187,6 +289,24 @@ Interfaces
     .. method:: RestrictService
     .. method:: ServiceRestricted
     .. method:: get_Rules
+
+
+.. class:: IObjContext
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetProperty
+    .. method:: RemoveProperty
+    .. method:: GetProperty
+    .. method:: EnumContextProps
+    .. method:: Reserved1
+    .. method:: Reserved2
+    .. method:: Reserved3
+    .. method:: Reserved4
+    .. method:: Reserved5
+    .. method:: Reserved6
+    .. method:: Reserved7
 
 
 .. class:: IPersist
@@ -208,6 +328,16 @@ Interfaces
     .. method:: Save
     .. method:: SaveCompleted
     .. method:: GetCurFile
+
+
+.. class:: IRemUnknown
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: RemQueryInterface
+    .. method:: RemAddRef
+    .. method:: RemRelease
 
 
 .. class:: IShellLinkA
@@ -258,6 +388,53 @@ Interfaces
     .. method:: SetRelativePath
     .. method:: Resolve
     .. method:: SetPath
+
+
+.. class:: IStdIdentity
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+
+
+.. class:: IStorage
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: CreateStream
+    .. method:: OpenStream
+    .. method:: CreateStorage
+    .. method:: OpenStorage
+    .. method:: CopyTo
+    .. method:: MoveElementTo
+    .. method:: Commit
+    .. method:: Revert
+    .. method:: EnumElements
+    .. method:: DestroyElement
+    .. method:: RenameElement
+    .. method:: SetElementTimes
+    .. method:: SetClass
+    .. method:: SetStateBits
+    .. method:: Stat
+
+
+.. class:: IStream
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: Read
+    .. method:: Write
+    .. method:: Seek
+    .. method:: SetSize
+    .. method:: CopyTo
+    .. method:: Commit
+    .. method:: Revert
+    .. method:: LockRegion
+    .. method:: UnlockRegion
+    .. method:: Stat
+    .. method:: Clone
 
 
 .. class:: ITypeComp
@@ -500,6 +677,224 @@ Interfaces
     .. method:: GetCount
 
 
+.. class:: IActivationProperties
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetUnmarshalClass
+    .. method:: GetMarshalSizeMax
+    .. method:: MarshalInterface
+    .. method:: UnmarshalInterface
+    .. method:: ReleaseMarshalData
+    .. method:: DisconnectObject
+    .. method:: SetDestCtx
+    .. method:: SetMarshalFlags
+    .. method:: SetLocalBlob
+    .. method:: GetLocalBlob
+
+
+.. class:: IActivationPropertiesOut
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetActivationID
+    .. method:: GetObjectInterface
+    .. method:: GetObjectInterfaces
+    .. method:: RemoveRequestedIIDs
+
+
+.. class:: IActivationPropertiesIn
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetActivationID
+    .. method:: GetClassInfo
+    .. method:: GetClsctx
+    .. method:: GetActivationFlags
+    .. method:: AddRequestedIIDs
+    .. method:: GetRequestedIIDs
+    .. method:: DelegateGetClassObject
+    .. method:: DelegateCreateInstance
+    .. method:: DelegateCIAndGetCF
+    .. method:: GetReturnActivationProperties
+
+
+.. class:: IClassClassicInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetThreadingModel
+    .. method:: GetModulePath
+    .. method:: GetImplementedClsid
+    .. method:: GetProcess
+    .. method:: GetRemoteServerName
+    .. method:: GetLocalServerType
+    .. method:: GetSurrogateCommandLine
+
+
+.. class:: IComClassInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetConfiguredClsid
+    .. method:: GetProgId
+    .. method:: GetClassName
+    .. method:: GetApplication
+    .. method:: GetClassContext
+    .. method:: GetCustomActivatorCount
+    .. method:: GetCustomActivatorClsids
+    .. method:: GetCustomActivators
+    .. method:: GetTypeInfo
+    .. method:: IsComPlusConfiguredClass
+    .. method:: MustRunInClientContext
+    .. method:: GetVersionNumber
+    .. method:: Lock
+    .. method:: Unlock
+
+
+.. class:: IContext
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetProperty
+    .. method:: RemoveProperty
+    .. method:: GetProperty
+    .. method:: EnumContextProps
+
+
+.. class:: IEnumContextProps
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: Next
+    .. method:: Skip
+    .. method:: Reset
+    .. method:: Clone
+    .. method:: Count
+
+
+.. class:: IEnumSTATSTG
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: Next
+    .. method:: Skip
+    .. method:: Reset
+    .. method:: Clone
+
+
+.. class:: IInitActivationPropertiesIn
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetClsctx
+    .. method:: SetActivationFlags
+    .. method:: SetClassInfo
+    .. method:: SetContextInfo
+    .. method:: SetConstructFromStorage
+    .. method:: SetConstructFromFile
+
+
+.. class:: IOpaqueDataInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: AddOpaqueData
+    .. method:: GetOpaqueData
+    .. method:: DeleteOpaqueData
+    .. method:: GetOpaqueDataCount
+    .. method:: GetAllOpaqueData
+
+
+.. class:: IPrivActivationPropertiesIn
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetActivationID
+    .. method:: GetClassInfo
+    .. method:: GetClsctx
+    .. method:: GetActivationFlags
+    .. method:: AddRequestedIIDs
+    .. method:: GetRequestedIIDs
+    .. method:: DelegateGetClassObject
+    .. method:: DelegateCreateInstance
+    .. method:: DelegateCIAndGetCF
+    .. method:: GetReturnActivationProperties
+    .. method:: PrivGetReturnActivationProperties
+    .. method:: GetCOMVersion
+    .. method:: GetClsid
+    .. method:: GetClientToken
+    .. method:: GetDestCtx
+
+
+.. class:: IPrivActivationPropertiesOut
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetActivationID
+    .. method:: GetObjectInterface
+    .. method:: GetObjectInterfaces
+    .. method:: RemoveRequestedIIDs
+    .. method:: SetObjectInterfaces
+    .. method:: SetMarshalledResults
+    .. method:: GetMarshalledResults
+
+
+.. class:: IScmReplyInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetResolverInfo
+    .. method:: GetResolverInfo
+    .. method:: SetRemoteReplyInfo
+    .. method:: GetRemoteReplyInfo
+
+
+.. class:: IScmRequestInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetScmInfo
+    .. method:: GetScmInfo
+    .. method:: SetRemoteRequestInfo
+    .. method:: GetRemoteRequestInfo
+
+
+.. class:: IStandardActivator
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: StandardGetClassObject
+    .. method:: StandardCreateInstance
+    .. method:: StandardGetInstanceFromFile
+    .. method:: StandardGetInstanceFromIStorage
+    .. method:: Reset
+
+
+.. class:: ISystemActivator
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetClassObject
+    .. method:: CreateInstance
+
+
 .. class:: IBindCtx
 
     .. method:: QueryInterface
@@ -576,33 +971,6 @@ Interfaces
     .. method:: EnumSubCommands
 
 
-.. class:: IMoniker
-
-    .. method:: QueryInterface
-    .. method:: AddRef
-    .. method:: Release
-    .. method:: GetClassID
-    .. method:: IsDirty
-    .. method:: Load
-    .. method:: Save
-    .. method:: GetSizeMax
-    .. method:: BindToObject
-    .. method:: BindToStorage
-    .. method:: Reduce
-    .. method:: ComposeWith
-    .. method:: Enum
-    .. method:: IsEqual
-    .. method:: Hash
-    .. method:: IsRunning
-    .. method:: GetTimeOfLastChange
-    .. method:: Inverse
-    .. method:: CommonPrefixWith
-    .. method:: RelativePathTo
-    .. method:: GetDisplayName
-    .. method:: ParseDisplayName
-    .. method:: IsSystemMoniker
-
-
 .. class:: IRunningObjectTable
 
     .. method:: QueryInterface
@@ -643,22 +1011,30 @@ Interfaces
     .. method:: EnumItems
 
 
-.. class:: IStream
+.. class:: IProxyManager
 
     .. method:: QueryInterface
     .. method:: AddRef
     .. method:: Release
-    .. method:: Read
-    .. method:: Write
-    .. method:: Seek
-    .. method:: SetSize
-    .. method:: CopyTo
-    .. method:: Commit
-    .. method:: Revert
-    .. method:: LockRegion
-    .. method:: UnlockRegion
-    .. method:: Stat
-    .. method:: Clone
+    .. method:: CreateServer
+    .. method:: IsConnected
+    .. method:: LockConnection
+    .. method:: Disconnect
+    .. method:: GetConnectionStatus
+    .. method:: ScalarDeletingDestructor
+    .. method:: SetMapping
+    .. method:: GetMapping
+    .. method:: GetServerObjectContext
+    .. method:: GetWrapperForContex
+
+
+.. class:: IProxyServerIdentity
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetServerProcessId
+    .. method:: GetServerProcessHandle
 
 
 .. class:: IApplicationActivationManager
@@ -699,6 +1075,63 @@ Interfaces
     .. method:: AddRef
     .. method:: Release
     .. method:: OnStateChanged
+
+
+.. class:: IChannelHook
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: ClientGetSize
+    .. method:: ClientFillBuffer
+    .. method:: ClientNotify
+    .. method:: ServerNotify
+    .. method:: ServerGetSize
+    .. method:: ServerFillBuffer
+
+
+.. class:: IRpcChannelBuffer
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetBuffer
+    .. method:: SendReceive
+    .. method:: FreeBuffer
+    .. method:: GetDestCtx
+    .. method:: IsConnected
+
+
+.. class:: IRpcHelper
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: GetDCOMProtocolVersion
+    .. method:: GetIIDFromOBJREF
+
+
+.. class:: IRpcOptions
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: Set
+    .. method:: Query
+
+
+.. class:: IRpcStubBuffer
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: Connect
+    .. method:: Disconnect
+    .. method:: Invoke
+    .. method:: IsIIDSupported
+    .. method:: CountRefs
+    .. method:: DebugServerQueryInterface
+    .. method:: DebugServerRelease
 
 
 .. class:: IAction

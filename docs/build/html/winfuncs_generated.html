@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>14.5. Functions &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>14.5. Functions &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/documentation_options.js?v=292eb321"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="winstructs_generated.html" title="14.3. Winstructs"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="generated.html" accesskey="U"><span class="section-number">14. </span><code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">14.5. </span>Functions</a></li> 
       </ul>
@@ -450,6 +450,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.SysFreeString">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SysFreeString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bstrString</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SysFreeString" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.CreateStreamOnHGlobal">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">CreateStreamOnHGlobal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hGlobal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fDeleteOnRelease</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppstm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.CreateStreamOnHGlobal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.GetHGlobalFromStream">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">GetHGlobalFromStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pstm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phglobal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.GetHGlobalFromStream" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.CoMarshalInterface">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">CoMarshalInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pStm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pUnk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwDestContext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvDestContext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mshlflags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.CoMarshalInterface" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.CoUnmarshalInterface">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">CoUnmarshalInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pStm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.CoUnmarshalInterface" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2488,21 +2508,6 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypes">
-<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypes" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypesByName">
-<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypesByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypesByName" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypesByNameW">
-<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypesByNameW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypesByNameW" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumerateModules64">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumerateModules64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumModulesCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumerateModules64" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -2720,6 +2725,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymSetSearchPathW">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymSetSearchPathW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SearchPath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymSetSearchPathW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypes">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypesW">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypesW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypesW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypesByName">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypesByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypesByName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SymEnumTypesByNameW">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SymEnumTypesByNameW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hProcess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BaseOfDll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EnumSymbolsCallback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UserContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SymEnumTypesByNameW" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2950,6 +2975,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.NtTerminateProcess">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">NtTerminateProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ProcessHandle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExitStatus</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.NtTerminateProcess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.NtReadFile">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">NtReadFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FileHandle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ApcRoutine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ApcContext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IoStatusBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ByteOffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.NtReadFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.NtWriteFile">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">NtWriteFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FileHandle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ApcRoutine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ApcContext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IoStatusBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ByteOffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.NtWriteFile" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -4316,6 +4351,10 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SafeArrayCopyData"><code class="docutils literal notranslate"><span class="pre">SafeArrayCopyData()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SysAllocString"><code class="docutils literal notranslate"><span class="pre">SysAllocString()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SysFreeString"><code class="docutils literal notranslate"><span class="pre">SysFreeString()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.CreateStreamOnHGlobal"><code class="docutils literal notranslate"><span class="pre">CreateStreamOnHGlobal()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.GetHGlobalFromStream"><code class="docutils literal notranslate"><span class="pre">GetHGlobalFromStream()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.CoMarshalInterface"><code class="docutils literal notranslate"><span class="pre">CoMarshalInterface()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.CoUnmarshalInterface"><code class="docutils literal notranslate"><span class="pre">CoUnmarshalInterface()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CryptCATAdminCalcHashFromFileHandle"><code class="docutils literal notranslate"><span class="pre">CryptCATAdminCalcHashFromFileHandle()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CryptCATAdminCalcHashFromFileHandle2"><code class="docutils literal notranslate"><span class="pre">CryptCATAdminCalcHashFromFileHandle2()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CryptCATAdminEnumCatalogFromHash"><code class="docutils literal notranslate"><span class="pre">CryptCATAdminEnumCatalogFromHash()</span></code></a></li>
@@ -4723,9 +4762,6 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymGetOptions"><code class="docutils literal notranslate"><span class="pre">SymGetOptions()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumSymbols"><code class="docutils literal notranslate"><span class="pre">SymEnumSymbols()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumSymbolsEx"><code class="docutils literal notranslate"><span class="pre">SymEnumSymbolsEx()</span></code></a></li>
-<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypes"><code class="docutils literal notranslate"><span class="pre">SymEnumTypes()</span></code></a></li>
-<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypesByName"><code class="docutils literal notranslate"><span class="pre">SymEnumTypesByName()</span></code></a></li>
-<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypesByNameW"><code class="docutils literal notranslate"><span class="pre">SymEnumTypesByNameW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumerateModules64"><code class="docutils literal notranslate"><span class="pre">SymEnumerateModules64()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumerateModulesW64"><code class="docutils literal notranslate"><span class="pre">SymEnumerateModulesW64()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymNext"><code class="docutils literal notranslate"><span class="pre">SymNext()</span></code></a></li>
@@ -4770,6 +4806,10 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymGetSearchPathW"><code class="docutils literal notranslate"><span class="pre">SymGetSearchPathW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymSetSearchPath"><code class="docutils literal notranslate"><span class="pre">SymSetSearchPath()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SymSetSearchPathW"><code class="docutils literal notranslate"><span class="pre">SymSetSearchPathW()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypes"><code class="docutils literal notranslate"><span class="pre">SymEnumTypes()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypesW"><code class="docutils literal notranslate"><span class="pre">SymEnumTypesW()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypesByName"><code class="docutils literal notranslate"><span class="pre">SymEnumTypesByName()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SymEnumTypesByNameW"><code class="docutils literal notranslate"><span class="pre">SymEnumTypesByNameW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CreateEventA"><code class="docutils literal notranslate"><span class="pre">CreateEventA()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CreateEventW"><code class="docutils literal notranslate"><span class="pre">CreateEventW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.CreateEventExA"><code class="docutils literal notranslate"><span class="pre">CreateEventExA()</span></code></a></li>
@@ -4816,6 +4856,8 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.NtOpenProcess"><code class="docutils literal notranslate"><span class="pre">NtOpenProcess()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.NtDelayExecution"><code class="docutils literal notranslate"><span class="pre">NtDelayExecution()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.NtTerminateProcess"><code class="docutils literal notranslate"><span class="pre">NtTerminateProcess()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.NtReadFile"><code class="docutils literal notranslate"><span class="pre">NtReadFile()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.NtWriteFile"><code class="docutils literal notranslate"><span class="pre">NtWriteFile()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.GetComputerNameExA"><code class="docutils literal notranslate"><span class="pre">GetComputerNameExA()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.GetComputerNameExW"><code class="docutils literal notranslate"><span class="pre">GetComputerNameExW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.GetComputerNameA"><code class="docutils literal notranslate"><span class="pre">GetComputerNameA()</span></code></a></li>
@@ -5121,7 +5163,7 @@
         <li class="right" >
           <a href="winstructs_generated.html" title="14.3. Winstructs"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="generated.html" ><span class="section-number">14. </span><code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">14.5. </span>Functions</a></li> 
       </ul>

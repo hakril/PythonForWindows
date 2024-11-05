@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/documentation_options.js?v=292eb321"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></li> 
       </ul>
     </div>  
@@ -80,8 +80,8 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.rpc.RPCClient.bind">
-<span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IID_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.bind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.bind" title="Link to this definition">¶</a></dt>
-<dd><p>Bind to the <code class="docutils literal notranslate"><span class="pre">IID_str</span></code> with the given <code class="docutils literal notranslate"><span class="pre">version</span></code></p>
+<span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.bind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.bind" title="Link to this definition">¶</a></dt>
+<dd><p>Bind to the <code class="docutils literal notranslate"><span class="pre">IID</span></code> with the given <code class="docutils literal notranslate"><span class="pre">version</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.IID</span></code></p>
@@ -92,19 +92,26 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.rpc.RPCClient.call">
 <span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.rpc.RPCClient.call" title="Link to this definition">¶</a></dt>
-<dd><p>Call method number <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID</span></code> with mashalled <code class="docutils literal notranslate"><span class="pre">params</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>IID</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.IID" title="windows.generated_def.winstructs.IID"><em>IID</em></a>) – An IID previously returned by <a class="reference internal" href="#windows.rpc.RPCClient.bind" title="windows.rpc.RPCClient.bind"><code class="xref py py-func docutils literal notranslate"><span class="pre">bind()</span></code></a></p></li>
-<li><p><strong>method_offset</strong> (<em>int</em>)</p></li>
-<li><p><strong>params</strong> (<em>str</em>) – The mashalled parameters (NDR32)</p></li>
-</ul>
+<dd><p>Call method number <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID</span></code> with mashalled <code class="docutils literal notranslate"><span class="pre">params</span></code>.
+Handle <a class="reference external" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb">ORPC calls</a> via the <cite>ipid</cite> parameter.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param IID IID<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An IID previously returned by <a class="reference internal" href="#windows.rpc.RPCClient.bind" title="windows.rpc.RPCClient.bind"><code class="xref py py-func docutils literal notranslate"><span class="pre">bind()</span></code></a></p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<dt class="field-even">param int method_offset<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">param str params<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The mashalled parameters (NDR32)</p>
+</dd>
+<dt class="field-even">param GUID ipid<span class="colon">:</span></dt>
+<dd class="field-even"><p>The IPID for <a class="reference external" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb">ORPC calls</a></p>
+</dd>
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -596,7 +603,7 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
         <li class="right" >
           <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></li> 
       </ul>
     </div>
