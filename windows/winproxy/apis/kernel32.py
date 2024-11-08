@@ -628,6 +628,23 @@ def LockFile(hFile, dwFileOffsetLow, dwFileOffsetHigh, nNumberOfBytesToLockLow, 
 def LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped):
     return LockFileEx.ctypes_function(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
 
+@Kernel32Proxy()
+def SetFileInformationByHandle(hFile, FileInformationClass, lpFileInformation, dwBufferSize=None):
+    if dwBufferSize is None and lpFileInformation is not None:
+        dwBufferSize = len(lpFileInformation)
+    return SetFileInformationByHandle.ctypes_function(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
+@Kernel32Proxy()
+def GetFileInformationByHandleEx(hFile, FileInformationClass, lpFileInformation, dwBufferSize=None):
+    if dwBufferSize is None and lpFileInformation is not None:
+        dwBufferSize = len(lpFileInformation)
+    return GetFileInformationByHandleEx.ctypes_function(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
+@Kernel32Proxy()
+def GetFileInformationByHandle(hFile, lpFileInformation):
+    return GetFileInformationByHandle.ctypes_function(hFile, lpFileInformation)
+
+
 ## Tlhelp (snapshoot)
 
 @Kernel32Proxy()

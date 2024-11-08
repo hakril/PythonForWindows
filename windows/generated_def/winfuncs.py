@@ -1215,6 +1215,21 @@ LockFileParams = ((1, 'hFile'), (1, 'dwFileOffsetLow'), (1, 'dwFileOffsetHigh'),
 LockFileExPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD, LPOVERLAPPED)
 LockFileExParams = ((1, 'hFile'), (1, 'dwFlags'), (1, 'dwReserved'), (1, 'nNumberOfBytesToLockLow'), (1, 'nNumberOfBytesToLockHigh'), (1, 'lpOverlapped'))
 
+#def SetFileInformationByHandle(hFile, FileInformationClass, lpFileInformation, dwBufferSize):
+#    return SetFileInformationByHandle.ctypes_function(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+SetFileInformationByHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, FILE_INFO_BY_HANDLE_CLASS, LPVOID, DWORD)
+SetFileInformationByHandleParams = ((1, 'hFile'), (1, 'FileInformationClass'), (1, 'lpFileInformation'), (1, 'dwBufferSize'))
+
+#def GetFileInformationByHandle(hFile, lpFileInformation):
+#    return GetFileInformationByHandle.ctypes_function(hFile, lpFileInformation)
+GetFileInformationByHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, LPBY_HANDLE_FILE_INFORMATION)
+GetFileInformationByHandleParams = ((1, 'hFile'), (1, 'lpFileInformation'))
+
+#def GetFileInformationByHandleEx(hFile, FileInformationClass, lpFileInformation, dwBufferSize):
+#    return GetFileInformationByHandleEx.ctypes_function(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+GetFileInformationByHandleExPrototype = WINFUNCTYPE(BOOL, HANDLE, FILE_INFO_BY_HANDLE_CLASS, LPVOID, DWORD)
+GetFileInformationByHandleExParams = ((1, 'hFile'), (1, 'FileInformationClass'), (1, 'lpFileInformation'), (1, 'dwBufferSize'))
+
 #def HeapAlloc(hHeap, dwFlags, dwBytes):
 #    return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
 HeapAllocPrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, SIZE_T)

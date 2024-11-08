@@ -9299,6 +9299,39 @@ FILE_INFORMATION_CLASS = _FILE_INFORMATION_CLASS
 PFILE_INFORMATION_CLASS = POINTER(_FILE_INFORMATION_CLASS)
 
 
+FileBasicInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileBasicInfo", 0x0)
+FileStandardInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileStandardInfo", 0x1)
+FileNameInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileNameInfo", 0x2)
+FileRenameInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileRenameInfo", 0x3)
+FileDispositionInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileDispositionInfo", 0x4)
+FileAllocationInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileAllocationInfo", 0x5)
+FileEndOfFileInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileEndOfFileInfo", 0x6)
+FileStreamInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileStreamInfo", 0x7)
+FileCompressionInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileCompressionInfo", 0x8)
+FileAttributeTagInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileAttributeTagInfo", 0x9)
+FileIdBothDirectoryInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIdBothDirectoryInfo", 0xa)
+FileIdBothDirectoryRestartInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIdBothDirectoryRestartInfo", 0xb)
+FileIoPriorityHintInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIoPriorityHintInfo", 0xc)
+FileRemoteProtocolInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileRemoteProtocolInfo", 0xd)
+FileFullDirectoryInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileFullDirectoryInfo", 0xe)
+FileFullDirectoryRestartInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileFullDirectoryRestartInfo", 0xf)
+FileStorageInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileStorageInfo", 0x10)
+FileAlignmentInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileAlignmentInfo", 0x11)
+FileIdInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIdInfo", 0x12)
+FileIdExtdDirectoryInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIdExtdDirectoryInfo", 0x13)
+FileIdExtdDirectoryRestartInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileIdExtdDirectoryRestartInfo", 0x14)
+FileDispositionInfoEx = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileDispositionInfoEx", 0x15)
+FileRenameInfoEx = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileRenameInfoEx", 0x16)
+FileCaseSensitiveInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileCaseSensitiveInfo", 0x17)
+FileNormalizedNameInfo = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "FileNormalizedNameInfo", 0x18)
+MaximumFileInfoByHandleClass = EnumValue("_FILE_INFO_BY_HANDLE_CLASS", "MaximumFileInfoByHandleClass", 0x19)
+class _FILE_INFO_BY_HANDLE_CLASS(EnumType):
+    values = [FileBasicInfo, FileStandardInfo, FileNameInfo, FileRenameInfo, FileDispositionInfo, FileAllocationInfo, FileEndOfFileInfo, FileStreamInfo, FileCompressionInfo, FileAttributeTagInfo, FileIdBothDirectoryInfo, FileIdBothDirectoryRestartInfo, FileIoPriorityHintInfo, FileRemoteProtocolInfo, FileFullDirectoryInfo, FileFullDirectoryRestartInfo, FileStorageInfo, FileAlignmentInfo, FileIdInfo, FileIdExtdDirectoryInfo, FileIdExtdDirectoryRestartInfo, FileDispositionInfoEx, FileRenameInfoEx, FileCaseSensitiveInfo, FileNormalizedNameInfo, MaximumFileInfoByHandleClass]
+    mapper = FlagMapper(*values)
+FILE_INFO_BY_HANDLE_CLASS = _FILE_INFO_BY_HANDLE_CLASS
+PFILE_INFO_BY_HANDLE_CLASS = POINTER(_FILE_INFO_BY_HANDLE_CLASS)
+
+
 IoPriorityVeryLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityVeryLow", 0x0)
 IoPriorityLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityLow", 0x1)
 IoPriorityNormal = EnumValue("_IO_PRIORITY_HINT", "IoPriorityNormal", 0x2)
@@ -9479,6 +9512,23 @@ class _FILE_GET_EA_INFORMATION(Structure):
     ]
 FILE_GET_EA_INFORMATION = _FILE_GET_EA_INFORMATION
 PFILE_GET_EA_INFORMATION = POINTER(_FILE_GET_EA_INFORMATION)
+
+class _BY_HANDLE_FILE_INFORMATION(Structure):
+    _fields_ = [
+        ("dwFileAttributes", DWORD),
+        ("ftCreationTime", FILETIME),
+        ("ftLastAccessTime", FILETIME),
+        ("ftLastWriteTime", FILETIME),
+        ("dwVolumeSerialNumber", DWORD),
+        ("nFileSizeHigh", DWORD),
+        ("nFileSizeLow", DWORD),
+        ("nNumberOfLinks", DWORD),
+        ("nFileIndexHigh", DWORD),
+        ("nFileIndexLow", DWORD),
+    ]
+BY_HANDLE_FILE_INFORMATION = _BY_HANDLE_FILE_INFORMATION
+LPBY_HANDLE_FILE_INFORMATION = POINTER(_BY_HANDLE_FILE_INFORMATION)
+PBY_HANDLE_FILE_INFORMATION = POINTER(_BY_HANDLE_FILE_INFORMATION)
 
 class tagVS_FIXEDFILEINFO(Structure):
     _fields_ = [

@@ -488,6 +488,12 @@ Functions
 
 .. function:: LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
 
+.. function:: SetFileInformationByHandle(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
+.. function:: GetFileInformationByHandle(hFile, lpFileInformation)
+
+.. function:: GetFileInformationByHandleEx(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
 .. function:: HeapAlloc(hHeap, dwFlags, dwBytes)
 
 .. function:: InternetCheckConnectionA(lpszUrl, dwFlags, dwReserved)
