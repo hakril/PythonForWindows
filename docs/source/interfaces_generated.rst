@@ -2,16 +2,6 @@
 
 Interfaces
 ----------
-.. class:: IActivationStageInfo
-
-    .. method:: QueryInterface
-    .. method:: AddRef
-    .. method:: Release
-    .. method:: SetStageAndIndex
-    .. method:: GetStage
-    .. method:: GetIndex
-
-
 .. class:: ICallFactory
 
     .. method:: QueryInterface
@@ -720,6 +710,16 @@ Interfaces
     .. method:: DelegateCreateInstance
     .. method:: DelegateCIAndGetCF
     .. method:: GetReturnActivationProperties
+
+
+.. class:: IActivationStageInfo
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: SetStageAndIndex
+    .. method:: GetStage
+    .. method:: GetIndex
 
 
 .. class:: IClassClassicInfo

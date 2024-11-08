@@ -78,9 +78,6 @@ class COMInterface(ctypes.c_void_p):
 
 
 
-class IActivationStageInfo(COMInterface):
-    IID = generate_IID(0x000001A8, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationStageInfo", strid="000001A8-0000-0000-C000-000000000046")
-
 class ICallFactory(COMInterface):
     IID = generate_IID(0x1C733A30, 0x2A1C, 0x11CE, 0xAD, 0xE5, 0x00, 0xAA, 0x00, 0x44, 0x77, 0x3D, name="ICallFactory", strid="1C733A30-2A1C-11CE-ADE5-00AA0044773D")
 
@@ -233,6 +230,9 @@ class IActivationPropertiesOut(COMInterface):
 
 class IActivationPropertiesIn(COMInterface):
     IID = generate_IID(0x000001A2, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationPropertiesIn", strid="000001A2-0000-0000-C000-000000000046")
+
+class IActivationStageInfo(COMInterface):
+    IID = generate_IID(0x000001A8, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationStageInfo", strid="000001A8-0000-0000-C000-000000000046")
 
 class IClassClassicInfo(COMInterface):
     IID = generate_IID(0x000001E2, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IClassClassicInfo", strid="000001E2-0000-0000-C000-000000000046")
@@ -431,21 +431,6 @@ class IWbemQualifierSet(COMInterface):
 
 class IWbemServices(COMInterface):
     IID = generate_IID(0x0EFA6E54, 0xF313, 0x405D, 0xB5, 0xD8, 0x83, 0x0A, 0x91, 0x4F, 0x64, 0x96, name="IWbemServices", strid="0EFA6E54-F313-405D-B5D8-830A914F6496")
-
-IActivationStageInfo._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # SetStageAndIndex -> stage:ACTIVATION_STAGE, index:INT
-        "SetStageAndIndex": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, INT)(3, "SetStageAndIndex"),
-        # GetStage -> pstage:*ACTIVATION_STAGE
-        "GetStage": ctypes.WINFUNCTYPE(HRESULT, POINTER(ACTIVATION_STAGE))(4, "GetStage"),
-        # GetIndex -> pindex:*INT
-        "GetIndex": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(5, "GetIndex"),
-    }
 
 ICallFactory._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
@@ -1650,6 +1635,21 @@ IActivationPropertiesIn._functions_ = {
         "DelegateCIAndGetCF": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut), POINTER(IClassFactory))(11, "DelegateCIAndGetCF"),
         # GetReturnActivationProperties -> pUnk:*IUnknown, ppActOut:**IActivationPropertiesOut
         "GetReturnActivationProperties": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(12, "GetReturnActivationProperties"),
+    }
+
+IActivationStageInfo._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # SetStageAndIndex -> stage:ACTIVATION_STAGE, index:INT
+        "SetStageAndIndex": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, INT)(3, "SetStageAndIndex"),
+        # GetStage -> pstage:*ACTIVATION_STAGE
+        "GetStage": ctypes.WINFUNCTYPE(HRESULT, POINTER(ACTIVATION_STAGE))(4, "GetStage"),
+        # GetIndex -> pindex:*INT
+        "GetIndex": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(5, "GetIndex"),
     }
 
 IClassClassicInfo._functions_ = {

@@ -85,3 +85,22 @@ BOOL LockFileEx(
   [in]      DWORD        nNumberOfBytesToLockHigh,
   [in, out] LPOVERLAPPED lpOverlapped
 );
+
+BOOL SetFileInformationByHandle(
+  [in] HANDLE                    hFile,
+  [in] FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+  [in] LPVOID                    lpFileInformation,
+  [in] DWORD                     dwBufferSize
+);
+
+BOOL GetFileInformationByHandle(
+  [in]  HANDLE                       hFile,
+  [out] LPBY_HANDLE_FILE_INFORMATION lpFileInformation
+);
+
+BOOL GetFileInformationByHandleEx(
+  [in]  HANDLE                    hFile,
+  [in]  FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+  [out] LPVOID                    lpFileInformation,
+  [in]  DWORD                     dwBufferSize
+);

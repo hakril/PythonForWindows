@@ -69,6 +69,35 @@ typedef enum _FILE_INFORMATION_CLASS {
   FileMaximumInformation
 } FILE_INFORMATION_CLASS, *PFILE_INFORMATION_CLASS;
 
+typedef enum _FILE_INFO_BY_HANDLE_CLASS {
+  FileBasicInfo,
+  FileStandardInfo,
+  FileNameInfo,
+  FileRenameInfo,
+  FileDispositionInfo,
+  FileAllocationInfo,
+  FileEndOfFileInfo,
+  FileStreamInfo,
+  FileCompressionInfo,
+  FileAttributeTagInfo,
+  FileIdBothDirectoryInfo,
+  FileIdBothDirectoryRestartInfo,
+  FileIoPriorityHintInfo,
+  FileRemoteProtocolInfo,
+  FileFullDirectoryInfo,
+  FileFullDirectoryRestartInfo,
+  FileStorageInfo,
+  FileAlignmentInfo,
+  FileIdInfo,
+  FileIdExtdDirectoryInfo,
+  FileIdExtdDirectoryRestartInfo,
+  FileDispositionInfoEx,
+  FileRenameInfoEx,
+  FileCaseSensitiveInfo,
+  FileNormalizedNameInfo,
+  MaximumFileInfoByHandleClass
+} FILE_INFO_BY_HANDLE_CLASS, *PFILE_INFO_BY_HANDLE_CLASS;
+
 typedef enum _IO_PRIORITY_HINT {
   IoPriorityVeryLow   = 0,
   IoPriorityLow       = 1,
@@ -193,6 +222,18 @@ typedef struct _FILE_GET_EA_INFORMATION
     CHAR EaName[1];
 } FILE_GET_EA_INFORMATION, *PFILE_GET_EA_INFORMATION;
 
+typedef struct _BY_HANDLE_FILE_INFORMATION {
+  DWORD    dwFileAttributes;
+  FILETIME ftCreationTime;
+  FILETIME ftLastAccessTime;
+  FILETIME ftLastWriteTime;
+  DWORD    dwVolumeSerialNumber;
+  DWORD    nFileSizeHigh;
+  DWORD    nFileSizeLow;
+  DWORD    nNumberOfLinks;
+  DWORD    nFileIndexHigh;
+  DWORD    nFileIndexLow;
+} BY_HANDLE_FILE_INFORMATION, *PBY_HANDLE_FILE_INFORMATION, *LPBY_HANDLE_FILE_INFORMATION;
 
 typedef struct tagVS_FIXEDFILEINFO {
   DWORD dwSignature;

@@ -21089,6 +21089,71 @@ _FILE_GET_EA_INFORMATION
 
         :class:`CHAR`
 
+_BY_HANDLE_FILE_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: BY_HANDLE_FILE_INFORMATION
+
+    Alias for :class:`_BY_HANDLE_FILE_INFORMATION`
+
+.. class:: LPBY_HANDLE_FILE_INFORMATION
+
+    Pointer to :class:`_BY_HANDLE_FILE_INFORMATION`
+
+.. class:: PBY_HANDLE_FILE_INFORMATION
+
+    Pointer to :class:`_BY_HANDLE_FILE_INFORMATION`
+
+.. class:: _BY_HANDLE_FILE_INFORMATION
+
+    .. attribute:: dwFileAttributes
+
+        :class:`DWORD`
+
+
+    .. attribute:: ftCreationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastAccessTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastWriteTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: dwVolumeSerialNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileSizeHigh
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileSizeLow
+
+        :class:`DWORD`
+
+
+    .. attribute:: nNumberOfLinks
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileIndexHigh
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileIndexLow
+
+        :class:`DWORD`
+
 tagVS_FIXEDFILEINFO
 '''''''''''''''''''
 .. class:: VS_FIXEDFILEINFO
@@ -32566,6 +32631,98 @@ _FILE_INFORMATION_CLASS
 
 
     .. attribute:: FileMaximumInformation(67)
+
+_FILE_INFO_BY_HANDLE_CLASS
+''''''''''''''''''''''''''
+.. class:: FILE_INFO_BY_HANDLE_CLASS
+
+    Alias for :class:`_FILE_INFO_BY_HANDLE_CLASS`
+
+
+.. class:: PFILE_INFO_BY_HANDLE_CLASS
+
+    Pointer to :class:`_FILE_INFO_BY_HANDLE_CLASS`
+
+
+.. class:: _FILE_INFO_BY_HANDLE_CLASS
+
+
+    .. attribute:: FileBasicInfo(0)
+
+
+    .. attribute:: FileStandardInfo(1)
+
+
+    .. attribute:: FileNameInfo(2)
+
+
+    .. attribute:: FileRenameInfo(3)
+
+
+    .. attribute:: FileDispositionInfo(4)
+
+
+    .. attribute:: FileAllocationInfo(5)
+
+
+    .. attribute:: FileEndOfFileInfo(6)
+
+
+    .. attribute:: FileStreamInfo(7)
+
+
+    .. attribute:: FileCompressionInfo(8)
+
+
+    .. attribute:: FileAttributeTagInfo(9)
+
+
+    .. attribute:: FileIdBothDirectoryInfo(10)
+
+
+    .. attribute:: FileIdBothDirectoryRestartInfo(11)
+
+
+    .. attribute:: FileIoPriorityHintInfo(12)
+
+
+    .. attribute:: FileRemoteProtocolInfo(13)
+
+
+    .. attribute:: FileFullDirectoryInfo(14)
+
+
+    .. attribute:: FileFullDirectoryRestartInfo(15)
+
+
+    .. attribute:: FileStorageInfo(16)
+
+
+    .. attribute:: FileAlignmentInfo(17)
+
+
+    .. attribute:: FileIdInfo(18)
+
+
+    .. attribute:: FileIdExtdDirectoryInfo(19)
+
+
+    .. attribute:: FileIdExtdDirectoryRestartInfo(20)
+
+
+    .. attribute:: FileDispositionInfoEx(21)
+
+
+    .. attribute:: FileRenameInfoEx(22)
+
+
+    .. attribute:: FileCaseSensitiveInfo(23)
+
+
+    .. attribute:: FileNormalizedNameInfo(24)
+
+
+    .. attribute:: MaximumFileInfoByHandleClass(25)
 
 _IO_PRIORITY_HINT
 '''''''''''''''''
