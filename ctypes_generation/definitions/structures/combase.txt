@@ -334,16 +334,6 @@ typedef struct _LOCALTHIS {
     PVOID pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
 } LOCALTHIS;
 
-typedef struct _LOCALTHIS32 {
-    DWORD dwFlags;
-    DWORD dwClientThread;
-    GUID passthroughTraceActivity;
-    GUID callTraceActivity;
-    MIDL_XmitDefs_0001 asyncRequestBlock;
-    DWORD reserved;
-    PVOID32 pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
-} LOCALTHIS32;
-
 /* LOCALTHAT & sub structures */
 
 typedef struct _MIDL_XmitDefs_0007 {
@@ -404,15 +394,6 @@ typedef struct _LOCALTHAT {
     CONTAINER_EXTENT    *containerErrorInformation;
     CONTAINERTHAT       *containerPassthroughData;
 } LOCALTHAT;
-
-
-typedef struct _LOCALTHAT32 {
-    UINT64              marshalingSetId;
-    ULONG               reserved;
-    PVOID32             pAsyncResponseBlock;
-    PVOID32             containerErrorInformation;
-    PVOID32             containerPassthroughData;
-} LOCALTHAT32;
 
 
 typedef struct tagORPCTHAT {

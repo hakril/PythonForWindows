@@ -1,0 +1,110 @@
+/* Seen on 6.2.9200.22376 (win8_ldr_escrow.180222-0941) */
+/* also seen on previous version : XP / Win7 / Server 2012 */
+
+typedef struct LOCALTHIS32_NT_62 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+};
+
+// NO LOCALTHAT for these previous version as far as 1 now
+
+/* Seen on 6.3.9600.17031 (winblue_gdr.140221-1952) */
+
+typedef struct __MIDL_XmitDefs_0001_NT_63 {
+    ULONG               size;
+    ULONG               reserved;
+    UINT64              *pAstaOxids;
+};
+
+typedef struct LOCALTHIS32_NT_63 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+    ULONG               reserved;
+    PVOID32             pTouchedAstaArray;
+};
+
+
+typedef struct LOCALTHAT32_NT_63 {
+    UINT64              marshalingSetAcknowledgmentOxid;
+    UINT64              marshalingSetId;
+};
+
+/* NT_1607 : combase 10.0.14393.576  from a WS2016 ISO*/
+
+typedef struct __MIDL_XmitDefs_0002_NT_1607 {
+    ULONG               size;
+    ULONG               reserved;
+    PVOID32             pAstaOxids;
+};
+
+typedef struct __MIDL_XmitDefs_0001_NT_1607 {
+    _GUID               asyncOperationId;
+    UINT32              oxidClientProcessNA;
+    _GUID               originalClientLogicalThreadId;
+    UINT              uClientCausalityTraceId;
+};
+
+typedef struct LOCALTHIS32_NT_1607 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+    __MIDL_XmitDefs_0001_NT_1607 asyncRequestBlock;
+    ULONG               reserved;
+    PVOID32 *pTouchedAstaArray;
+};
+
+typedef struct __MIDL_XmitDefs_0007 {
+    INT                 pointOfFailure;
+    HRESULT             hrFailure;
+    ULONG               sizeOfMarshaledErrorInfo;
+    ULONG               reserved;
+    BYTE                *pMarshaledErrorInfo;
+};
+
+typedef struct __MIDL_XmitDefs_0005 {
+    ULONG               sizeOfMarshaledResults;
+    ULONG               reserved;
+    BYTE                *pMarshaledResults;
+};
+
+typedef struct __MIDL_XmitDefs_0008 {
+    INT                 outcome;
+    __MIDL_XmitDefs_0005 successDetails;
+    __MIDL_XmitDefs_0007 failureDetails;
+};
+
+typedef struct __MIDL_XmitDefs_0010 {
+    ULONG               asyncStatus;
+    ULONG               reserved1;
+    UINT64              uServerCausalityTraceId;
+    ULONG               reserved2;
+    PVOID32 *pOutcomeDetails; //__MIDL_XmitDefs_0008
+};
+
+typedef struct LOCALTHAT32_NT_1607 {
+    UINT64              marshalingSetAcknowledgmentOxid;
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    PVOID32               *pAsyncResponseBlock;
+};
+
+/* ! NT_1607: combase 10.0.14393.576 */
+
+/* NT 10.22 ? seen on 10.0.22621.1 */
+
+typedef struct _LOCALTHIS32 {
+    DWORD dwFlags;
+    DWORD dwClientThread;
+    GUID passthroughTraceActivity;
+    GUID callTraceActivity;
+    MIDL_XmitDefs_0001 asyncRequestBlock;
+    DWORD reserved;
+    PVOID32 pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
+} LOCALTHIS32;
+
+typedef struct _LOCALTHAT32 {
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    PVOID32             pAsyncResponseBlock;
+    PVOID32             containerErrorInformation;
+    PVOID32             containerPassthroughData;
+} LOCALTHAT32;

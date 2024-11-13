@@ -1478,18 +1478,6 @@ class _LOCALTHIS(Structure):
     ]
 LOCALTHIS = _LOCALTHIS
 
-class _LOCALTHIS32(Structure):
-    _fields_ = [
-        ("dwFlags", DWORD),
-        ("dwClientThread", DWORD),
-        ("passthroughTraceActivity", GUID),
-        ("callTraceActivity", GUID),
-        ("asyncRequestBlock", MIDL_XmitDefs_0001),
-        ("reserved", DWORD),
-        ("pTouchedAstaArray", PVOID32),
-    ]
-LOCALTHIS32 = _LOCALTHIS32
-
 class _MIDL_XmitDefs_0007(Structure):
     _fields_ = [
         ("pointOfFailure", INT),
@@ -1561,16 +1549,6 @@ class _LOCALTHAT(Structure):
     ]
 LOCALTHAT = _LOCALTHAT
 
-class _LOCALTHAT32(Structure):
-    _fields_ = [
-        ("marshalingSetId", UINT64),
-        ("reserved", ULONG),
-        ("pAsyncResponseBlock", PVOID32),
-        ("containerErrorInformation", PVOID32),
-        ("containerPassthroughData", PVOID32),
-    ]
-LOCALTHAT32 = _LOCALTHAT32
-
 class tagORPCTHAT(Structure):
     _fields_ = [
         ("flags", ULONG),
@@ -1584,6 +1562,131 @@ class ORPCTHAT32(Structure):
         ("extensions", PVOID32),
     ]
 
+
+class LOCALTHIS32_NT_62(Structure):
+    _fields_ = [
+        ("dwFlags", ULONG),
+        ("dwClientThread", ULONG),
+    ]
+
+
+class __MIDL_XmitDefs_0001_NT_63(Structure):
+    _fields_ = [
+        ("size", ULONG),
+        ("reserved", ULONG),
+        ("pAstaOxids", POINTER(UINT64)),
+    ]
+
+
+class LOCALTHIS32_NT_63(Structure):
+    _fields_ = [
+        ("dwFlags", ULONG),
+        ("dwClientThread", ULONG),
+        ("reserved", ULONG),
+        ("pTouchedAstaArray", PVOID32),
+    ]
+
+
+class LOCALTHAT32_NT_63(Structure):
+    _fields_ = [
+        ("marshalingSetAcknowledgmentOxid", UINT64),
+        ("marshalingSetId", UINT64),
+    ]
+
+
+class __MIDL_XmitDefs_0002_NT_1607(Structure):
+    _fields_ = [
+        ("size", ULONG),
+        ("reserved", ULONG),
+        ("pAstaOxids", PVOID32),
+    ]
+
+
+class __MIDL_XmitDefs_0001_NT_1607(Structure):
+    _fields_ = [
+        ("asyncOperationId", _GUID),
+        ("oxidClientProcessNA", UINT32),
+        ("originalClientLogicalThreadId", _GUID),
+        ("uClientCausalityTraceId", UINT),
+    ]
+
+
+class LOCALTHIS32_NT_1607(Structure):
+    _fields_ = [
+        ("dwFlags", ULONG),
+        ("dwClientThread", ULONG),
+        ("asyncRequestBlock", __MIDL_XmitDefs_0001_NT_1607),
+        ("reserved", ULONG),
+        ("pTouchedAstaArray", POINTER(PVOID32)),
+    ]
+
+
+class __MIDL_XmitDefs_0007(Structure):
+    _fields_ = [
+        ("pointOfFailure", INT),
+        ("hrFailure", HRESULT),
+        ("sizeOfMarshaledErrorInfo", ULONG),
+        ("reserved", ULONG),
+        ("pMarshaledErrorInfo", POINTER(BYTE)),
+    ]
+
+
+class __MIDL_XmitDefs_0005(Structure):
+    _fields_ = [
+        ("sizeOfMarshaledResults", ULONG),
+        ("reserved", ULONG),
+        ("pMarshaledResults", POINTER(BYTE)),
+    ]
+
+
+class __MIDL_XmitDefs_0008(Structure):
+    _fields_ = [
+        ("outcome", INT),
+        ("successDetails", __MIDL_XmitDefs_0005),
+        ("failureDetails", __MIDL_XmitDefs_0007),
+    ]
+
+
+class __MIDL_XmitDefs_0010(Structure):
+    _fields_ = [
+        ("asyncStatus", ULONG),
+        ("reserved1", ULONG),
+        ("uServerCausalityTraceId", UINT64),
+        ("reserved2", ULONG),
+        ("pOutcomeDetails", POINTER(PVOID32)),
+    ]
+
+
+class LOCALTHAT32_NT_1607(Structure):
+    _fields_ = [
+        ("marshalingSetAcknowledgmentOxid", UINT64),
+        ("marshalingSetId", UINT64),
+        ("reserved", ULONG),
+        ("pAsyncResponseBlock", POINTER(PVOID32)),
+    ]
+
+
+class _LOCALTHIS32(Structure):
+    _fields_ = [
+        ("dwFlags", DWORD),
+        ("dwClientThread", DWORD),
+        ("passthroughTraceActivity", GUID),
+        ("callTraceActivity", GUID),
+        ("asyncRequestBlock", MIDL_XmitDefs_0001),
+        ("reserved", DWORD),
+        ("pTouchedAstaArray", PVOID32),
+    ]
+LOCALTHIS32 = _LOCALTHIS32
+
+class _LOCALTHAT32(Structure):
+    _fields_ = [
+        ("marshalingSetId", UINT64),
+        ("reserved", ULONG),
+        ("pAsyncResponseBlock", PVOID32),
+        ("containerErrorInformation", PVOID32),
+        ("containerPassthroughData", PVOID32),
+    ]
+LOCALTHAT32 = _LOCALTHAT32
 
 VIRTUAL_DISK_ACCESS_NONE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_NONE", 0x0)
 VIRTUAL_DISK_ACCESS_ATTACH_RO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RO", 0x1)
