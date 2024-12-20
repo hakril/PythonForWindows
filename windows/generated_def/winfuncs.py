@@ -2300,6 +2300,36 @@ StartServiceCtrlDispatcherAParams = ((1, 'lpServiceStartTable'),)
 StartServiceCtrlDispatcherWPrototype = WINFUNCTYPE(BOOL, POINTER(SERVICE_TABLE_ENTRYW))
 StartServiceCtrlDispatcherWParams = ((1, 'lpServiceStartTable'),)
 
+#def RegisterServiceCtrlHandlerExA(lpServiceName, lpHandlerProc, lpContext):
+#    return RegisterServiceCtrlHandlerExA.ctypes_function(lpServiceName, lpHandlerProc, lpContext)
+RegisterServiceCtrlHandlerExAPrototype = WINFUNCTYPE(SERVICE_STATUS_HANDLE, LPCSTR, LPHANDLER_FUNCTION_EX, LPVOID)
+RegisterServiceCtrlHandlerExAParams = ((1, 'lpServiceName'), (1, 'lpHandlerProc'), (1, 'lpContext'))
+
+#def RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext):
+#    return RegisterServiceCtrlHandlerExW.ctypes_function(lpServiceName, lpHandlerProc, lpContext)
+RegisterServiceCtrlHandlerExWPrototype = WINFUNCTYPE(SERVICE_STATUS_HANDLE, LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID)
+RegisterServiceCtrlHandlerExWParams = ((1, 'lpServiceName'), (1, 'lpHandlerProc'), (1, 'lpContext'))
+
+#def RegisterServiceCtrlHandlerA(lpServiceName, lpHandlerProc):
+#    return RegisterServiceCtrlHandlerA.ctypes_function(lpServiceName, lpHandlerProc)
+RegisterServiceCtrlHandlerAPrototype = WINFUNCTYPE(SERVICE_STATUS_HANDLE, LPCSTR, LPHANDLER_FUNCTION)
+RegisterServiceCtrlHandlerAParams = ((1, 'lpServiceName'), (1, 'lpHandlerProc'))
+
+#def RegisterServiceCtrlHandlerW(lpServiceName, lpHandlerProc):
+#    return RegisterServiceCtrlHandlerW.ctypes_function(lpServiceName, lpHandlerProc)
+RegisterServiceCtrlHandlerWPrototype = WINFUNCTYPE(SERVICE_STATUS_HANDLE, LPCWSTR, LPHANDLER_FUNCTION)
+RegisterServiceCtrlHandlerWParams = ((1, 'lpServiceName'), (1, 'lpHandlerProc'))
+
+#def SetServiceStatus(hServiceStatus, lpServiceStatus):
+#    return SetServiceStatus.ctypes_function(hServiceStatus, lpServiceStatus)
+SetServiceStatusPrototype = WINFUNCTYPE(BOOL, SERVICE_STATUS_HANDLE, LPSERVICE_STATUS)
+SetServiceStatusParams = ((1, 'hServiceStatus'), (1, 'lpServiceStatus'))
+
+#def SetServiceBits(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately):
+#    return SetServiceBits.ctypes_function(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately)
+SetServiceBitsPrototype = WINFUNCTYPE(BOOL, SERVICE_STATUS_HANDLE, DWORD, BOOL, BOOL)
+SetServiceBitsParams = ((1, 'hServiceStatus'), (1, 'dwServiceBits'), (1, 'bSetBitsOn'), (1, 'bUpdateImmediately'))
+
 #def SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize, RequiredSize):
 #    return SetupDiClassNameFromGuidA.ctypes_function(ClassGuid, ClassName, ClassNameSize, RequiredSize)
 SetupDiClassNameFromGuidAPrototype = WINFUNCTYPE(BOOL, POINTER(GUID), PSTR, DWORD, PDWORD)

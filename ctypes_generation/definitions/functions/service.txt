@@ -268,3 +268,37 @@ BOOL StartServiceCtrlDispatcherA(
 BOOL StartServiceCtrlDispatcherW(
   SERVICE_TABLE_ENTRYW *lpServiceStartTable
 );
+
+SERVICE_STATUS_HANDLE RegisterServiceCtrlHandlerExA(
+  [in]           LPCSTR                lpServiceName,
+  [in]           LPHANDLER_FUNCTION_EX lpHandlerProc,
+  [in, optional] LPVOID                lpContext
+);
+
+SERVICE_STATUS_HANDLE RegisterServiceCtrlHandlerExW(
+  [in]           LPCWSTR               lpServiceName,
+  [in]           LPHANDLER_FUNCTION_EX lpHandlerProc,
+  [in, optional] LPVOID                lpContext
+);
+
+SERVICE_STATUS_HANDLE RegisterServiceCtrlHandlerA(
+  [in] LPCSTR             lpServiceName,
+  [in] LPHANDLER_FUNCTION lpHandlerProc
+);
+
+SERVICE_STATUS_HANDLE RegisterServiceCtrlHandlerW(
+  [in] LPCWSTR            lpServiceName,
+  [in] LPHANDLER_FUNCTION lpHandlerProc
+);
+
+BOOL SetServiceStatus(
+  [in] SERVICE_STATUS_HANDLE hServiceStatus,
+  [in] LPSERVICE_STATUS      lpServiceStatus
+);
+
+BOOL SetServiceBits(
+  [in] SERVICE_STATUS_HANDLE hServiceStatus,
+  [in] DWORD                 dwServiceBits,
+  [in] BOOL                  bSetBitsOn,
+  [in] BOOL                  bUpdateImmediately
+);

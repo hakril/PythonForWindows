@@ -493,6 +493,40 @@ def CreateServiceW(hSCManager, lpServiceName, lpDisplayName, dwDesiredAccess, dw
 def DeleteService(hService):
     return DeleteService.ctypes_function(hService)
 
+## Service : functions implemented by services.
+@Advapi32Proxy()
+def StartServiceCtrlDispatcherA(lpServiceStartTable):
+    return StartServiceCtrlDispatcherA.ctypes_function(lpServiceStartTable)
+
+@Advapi32Proxy()
+def StartServiceCtrlDispatcherW(lpServiceStartTable):
+    return StartServiceCtrlDispatcherW.ctypes_function(lpServiceStartTable)
+
+@Advapi32Proxy()
+def RegisterServiceCtrlHandlerExA(lpServiceName, lpHandlerProc, lpContext):
+    return RegisterServiceCtrlHandlerExA.ctypes_function(lpServiceName, lpHandlerProc, lpContext)
+
+@Advapi32Proxy()
+def RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext):
+    return RegisterServiceCtrlHandlerExW.ctypes_function(lpServiceName, lpHandlerProc, lpContext)
+
+@Advapi32Proxy()
+def RegisterServiceCtrlHandlerA(lpServiceName, lpHandlerProc):
+    return RegisterServiceCtrlHandlerA.ctypes_function(lpServiceName, lpHandlerProc)
+
+@Advapi32Proxy()
+def RegisterServiceCtrlHandlerW(lpServiceName, lpHandlerProc):
+    return RegisterServiceCtrlHandlerW.ctypes_function(lpServiceName, lpHandlerProc)
+
+@Advapi32Proxy()
+def SetServiceStatus(hServiceStatus, lpServiceStatus):
+    return SetServiceStatus.ctypes_function(hServiceStatus, lpServiceStatus)
+
+@Advapi32Proxy()
+def SetServiceBits(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately):
+    return SetServiceBits.ctypes_function(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately)
+
+
 # Event log
 
 @Advapi32Proxy()
