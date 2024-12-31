@@ -922,6 +922,18 @@ Functions
 
 .. function:: StartServiceCtrlDispatcherW(lpServiceStartTable)
 
+.. function:: RegisterServiceCtrlHandlerExA(lpServiceName, lpHandlerProc, lpContext)
+
+.. function:: RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext)
+
+.. function:: RegisterServiceCtrlHandlerA(lpServiceName, lpHandlerProc)
+
+.. function:: RegisterServiceCtrlHandlerW(lpServiceName, lpHandlerProc)
+
+.. function:: SetServiceStatus(hServiceStatus, lpServiceStatus)
+
+.. function:: SetServiceBits(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately)
+
 .. function:: SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize, RequiredSize)
 
 .. function:: SetupDiClassNameFromGuidW(ClassGuid, ClassName, ClassNameSize, RequiredSize)

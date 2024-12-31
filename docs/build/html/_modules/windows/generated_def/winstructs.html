@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.generated_def.winstructs &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.generated_def.winstructs &#8212; PythonForWindows 1.0.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.generated_def.winstructs</a></li> 
       </ul>
@@ -346,6 +346,8 @@
 <span class="n">LPSERVICE_MAIN_FUNCTIONW</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">LPOVERLAPPED_COMPLETION_ROUTINE</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">PDNS_QUERY_COMPLETION_ROUTINE</span> <span class="o">=</span> <span class="n">PVOID</span>
+<span class="n">LPHANDLER_FUNCTION</span> <span class="o">=</span> <span class="n">PVOID</span>
+<span class="n">LPHANDLER_FUNCTION_EX</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">LPCONTEXT</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">HCERTSTORE</span> <span class="o">=</span> <span class="n">PVOID</span>
 <span class="n">HCRYPTMSG</span> <span class="o">=</span> <span class="n">PVOID</span>
@@ -11231,6 +11233,42 @@
 <span class="n">PFILE_INFORMATION_CLASS</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_FILE_INFORMATION_CLASS</span><span class="p">)</span>
 
 
+<span class="n">FileBasicInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileBasicInfo&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
+<span class="n">FileStandardInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileStandardInfo&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">FileNameInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileNameInfo&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">FileRenameInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileRenameInfo&quot;</span><span class="p">,</span> <span class="mh">0x3</span><span class="p">)</span>
+<span class="n">FileDispositionInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileDispositionInfo&quot;</span><span class="p">,</span> <span class="mh">0x4</span><span class="p">)</span>
+<span class="n">FileAllocationInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileAllocationInfo&quot;</span><span class="p">,</span> <span class="mh">0x5</span><span class="p">)</span>
+<span class="n">FileEndOfFileInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileEndOfFileInfo&quot;</span><span class="p">,</span> <span class="mh">0x6</span><span class="p">)</span>
+<span class="n">FileStreamInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileStreamInfo&quot;</span><span class="p">,</span> <span class="mh">0x7</span><span class="p">)</span>
+<span class="n">FileCompressionInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileCompressionInfo&quot;</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">)</span>
+<span class="n">FileAttributeTagInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileAttributeTagInfo&quot;</span><span class="p">,</span> <span class="mh">0x9</span><span class="p">)</span>
+<span class="n">FileIdBothDirectoryInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIdBothDirectoryInfo&quot;</span><span class="p">,</span> <span class="mh">0xa</span><span class="p">)</span>
+<span class="n">FileIdBothDirectoryRestartInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIdBothDirectoryRestartInfo&quot;</span><span class="p">,</span> <span class="mh">0xb</span><span class="p">)</span>
+<span class="n">FileIoPriorityHintInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIoPriorityHintInfo&quot;</span><span class="p">,</span> <span class="mh">0xc</span><span class="p">)</span>
+<span class="n">FileRemoteProtocolInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileRemoteProtocolInfo&quot;</span><span class="p">,</span> <span class="mh">0xd</span><span class="p">)</span>
+<span class="n">FileFullDirectoryInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileFullDirectoryInfo&quot;</span><span class="p">,</span> <span class="mh">0xe</span><span class="p">)</span>
+<span class="n">FileFullDirectoryRestartInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileFullDirectoryRestartInfo&quot;</span><span class="p">,</span> <span class="mh">0xf</span><span class="p">)</span>
+<span class="n">FileStorageInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileStorageInfo&quot;</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">)</span>
+<span class="n">FileAlignmentInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileAlignmentInfo&quot;</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">)</span>
+<span class="n">FileIdInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIdInfo&quot;</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">)</span>
+<span class="n">FileIdExtdDirectoryInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIdExtdDirectoryInfo&quot;</span><span class="p">,</span> <span class="mh">0x13</span><span class="p">)</span>
+<span class="n">FileIdExtdDirectoryRestartInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileIdExtdDirectoryRestartInfo&quot;</span><span class="p">,</span> <span class="mh">0x14</span><span class="p">)</span>
+<span class="n">FileDispositionInfoEx</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileDispositionInfoEx&quot;</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">)</span>
+<span class="n">FileRenameInfoEx</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileRenameInfoEx&quot;</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">)</span>
+<span class="n">FileCaseSensitiveInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileCaseSensitiveInfo&quot;</span><span class="p">,</span> <span class="mh">0x17</span><span class="p">)</span>
+<span class="n">FileNormalizedNameInfo</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;FileNormalizedNameInfo&quot;</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">)</span>
+<span class="n">MaximumFileInfoByHandleClass</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_FILE_INFO_BY_HANDLE_CLASS&quot;</span><span class="p">,</span> <span class="s2">&quot;MaximumFileInfoByHandleClass&quot;</span><span class="p">,</span> <span class="mh">0x19</span><span class="p">)</span>
+<div class="viewcode-block" id="_FILE_INFO_BY_HANDLE_CLASS">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._FILE_INFO_BY_HANDLE_CLASS">[docs]</a>
+<span class="k">class</span> <span class="nc">_FILE_INFO_BY_HANDLE_CLASS</span><span class="p">(</span><span class="n">EnumType</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileBasicInfo</span><span class="p">,</span> <span class="n">FileStandardInfo</span><span class="p">,</span> <span class="n">FileNameInfo</span><span class="p">,</span> <span class="n">FileRenameInfo</span><span class="p">,</span> <span class="n">FileDispositionInfo</span><span class="p">,</span> <span class="n">FileAllocationInfo</span><span class="p">,</span> <span class="n">FileEndOfFileInfo</span><span class="p">,</span> <span class="n">FileStreamInfo</span><span class="p">,</span> <span class="n">FileCompressionInfo</span><span class="p">,</span> <span class="n">FileAttributeTagInfo</span><span class="p">,</span> <span class="n">FileIdBothDirectoryInfo</span><span class="p">,</span> <span class="n">FileIdBothDirectoryRestartInfo</span><span class="p">,</span> <span class="n">FileIoPriorityHintInfo</span><span class="p">,</span> <span class="n">FileRemoteProtocolInfo</span><span class="p">,</span> <span class="n">FileFullDirectoryInfo</span><span class="p">,</span> <span class="n">FileFullDirectoryRestartInfo</span><span class="p">,</span> <span class="n">FileStorageInfo</span><span class="p">,</span> <span class="n">FileAlignmentInfo</span><span class="p">,</span> <span class="n">FileIdInfo</span><span class="p">,</span> <span class="n">FileIdExtdDirectoryInfo</span><span class="p">,</span> <span class="n">FileIdExtdDirectoryRestartInfo</span><span class="p">,</span> <span class="n">FileDispositionInfoEx</span><span class="p">,</span> <span class="n">FileRenameInfoEx</span><span class="p">,</span> <span class="n">FileCaseSensitiveInfo</span><span class="p">,</span> <span class="n">FileNormalizedNameInfo</span><span class="p">,</span> <span class="n">MaximumFileInfoByHandleClass</span><span class="p">]</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span></div>
+
+<span class="n">FILE_INFO_BY_HANDLE_CLASS</span> <span class="o">=</span> <span class="n">_FILE_INFO_BY_HANDLE_CLASS</span>
+<span class="n">PFILE_INFO_BY_HANDLE_CLASS</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_FILE_INFO_BY_HANDLE_CLASS</span><span class="p">)</span>
+
+
 <span class="n">IoPriorityVeryLow</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_IO_PRIORITY_HINT&quot;</span><span class="p">,</span> <span class="s2">&quot;IoPriorityVeryLow&quot;</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
 <span class="n">IoPriorityLow</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_IO_PRIORITY_HINT&quot;</span><span class="p">,</span> <span class="s2">&quot;IoPriorityLow&quot;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
 <span class="n">IoPriorityNormal</span> <span class="o">=</span> <span class="n">EnumValue</span><span class="p">(</span><span class="s2">&quot;_IO_PRIORITY_HINT&quot;</span><span class="p">,</span> <span class="s2">&quot;IoPriorityNormal&quot;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
@@ -11471,6 +11509,26 @@
 
 <span class="n">FILE_GET_EA_INFORMATION</span> <span class="o">=</span> <span class="n">_FILE_GET_EA_INFORMATION</span>
 <span class="n">PFILE_GET_EA_INFORMATION</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_FILE_GET_EA_INFORMATION</span><span class="p">)</span>
+
+<div class="viewcode-block" id="_BY_HANDLE_FILE_INFORMATION">
+<a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs._BY_HANDLE_FILE_INFORMATION">[docs]</a>
+<span class="k">class</span> <span class="nc">_BY_HANDLE_FILE_INFORMATION</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;dwFileAttributes&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ftCreationTime&quot;</span><span class="p">,</span> <span class="n">FILETIME</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ftLastAccessTime&quot;</span><span class="p">,</span> <span class="n">FILETIME</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ftLastWriteTime&quot;</span><span class="p">,</span> <span class="n">FILETIME</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;dwVolumeSerialNumber&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;nFileSizeHigh&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;nFileSizeLow&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;nNumberOfLinks&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;nFileIndexHigh&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;nFileIndexLow&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+<span class="n">BY_HANDLE_FILE_INFORMATION</span> <span class="o">=</span> <span class="n">_BY_HANDLE_FILE_INFORMATION</span>
+<span class="n">LPBY_HANDLE_FILE_INFORMATION</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_BY_HANDLE_FILE_INFORMATION</span><span class="p">)</span>
+<span class="n">PBY_HANDLE_FILE_INFORMATION</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">_BY_HANDLE_FILE_INFORMATION</span><span class="p">)</span>
 
 <div class="viewcode-block" id="tagVS_FIXEDFILEINFO">
 <a class="viewcode-back" href="../../../winstructs_generated.html#windows.generated_def.winstructs.tagVS_FIXEDFILEINFO">[docs]</a>
@@ -14964,7 +15022,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.generated_def.winstructs</a></li> 
       </ul>

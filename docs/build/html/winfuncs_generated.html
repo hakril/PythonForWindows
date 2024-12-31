@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>14.5. Functions &#8212; PythonForWindows 1.0.1 documentation</title>
+    <title>14.5. Functions &#8212; PythonForWindows 1.0.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=292eb321"></script>
+    <script src="_static/documentation_options.js?v=1ed6394b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="winstructs_generated.html" title="14.3. Winstructs"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="generated.html" accesskey="U"><span class="section-number">14. </span><code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">14.5. </span>Functions</a></li> 
       </ul>
@@ -1263,6 +1263,21 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SetFileInformationByHandle">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SetFileInformationByHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FileInformationClass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpFileInformation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwBufferSize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SetFileInformationByHandle" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.GetFileInformationByHandle">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">GetFileInformationByHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpFileInformation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.GetFileInformationByHandle" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.GetFileInformationByHandleEx">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">GetFileInformationByHandleEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FileInformationClass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpFileInformation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwBufferSize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.GetFileInformationByHandleEx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.HeapAlloc">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">HeapAlloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hHeap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwFlags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwBytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.HeapAlloc" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -2330,6 +2345,36 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="windows.generated_def.winfuncs.StartServiceCtrlDispatcherW">
 <span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">StartServiceCtrlDispatcherW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lpServiceStartTable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.StartServiceCtrlDispatcherW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExA">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">RegisterServiceCtrlHandlerExA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lpServiceName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpHandlerProc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExA" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExW">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">RegisterServiceCtrlHandlerExW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lpServiceName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpHandlerProc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.RegisterServiceCtrlHandlerA">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">RegisterServiceCtrlHandlerA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lpServiceName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpHandlerProc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerA" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.RegisterServiceCtrlHandlerW">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">RegisterServiceCtrlHandlerW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lpServiceName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpHandlerProc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SetServiceStatus">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SetServiceStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hServiceStatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpServiceStatus</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SetServiceStatus" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="windows.generated_def.winfuncs.SetServiceBits">
+<span class="sig-prename descclassname"><span class="pre">windows.generated_def.winfuncs.</span></span><span class="sig-name descname"><span class="pre">SetServiceBits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hServiceStatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwServiceBits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bSetBitsOn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bUpdateImmediately</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.generated_def.winfuncs.SetServiceBits" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -4513,6 +4558,9 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.ReadDirectoryChangesExW"><code class="docutils literal notranslate"><span class="pre">ReadDirectoryChangesExW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.LockFile"><code class="docutils literal notranslate"><span class="pre">LockFile()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.LockFileEx"><code class="docutils literal notranslate"><span class="pre">LockFileEx()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SetFileInformationByHandle"><code class="docutils literal notranslate"><span class="pre">SetFileInformationByHandle()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.GetFileInformationByHandle"><code class="docutils literal notranslate"><span class="pre">GetFileInformationByHandle()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.GetFileInformationByHandleEx"><code class="docutils literal notranslate"><span class="pre">GetFileInformationByHandleEx()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.HeapAlloc"><code class="docutils literal notranslate"><span class="pre">HeapAlloc()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.InternetCheckConnectionA"><code class="docutils literal notranslate"><span class="pre">InternetCheckConnectionA()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.InternetCheckConnectionW"><code class="docutils literal notranslate"><span class="pre">InternetCheckConnectionW()</span></code></a></li>
@@ -4727,6 +4775,12 @@
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.DeleteService"><code class="docutils literal notranslate"><span class="pre">DeleteService()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.StartServiceCtrlDispatcherA"><code class="docutils literal notranslate"><span class="pre">StartServiceCtrlDispatcherA()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.StartServiceCtrlDispatcherW"><code class="docutils literal notranslate"><span class="pre">StartServiceCtrlDispatcherW()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExA"><code class="docutils literal notranslate"><span class="pre">RegisterServiceCtrlHandlerExA()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerExW"><code class="docutils literal notranslate"><span class="pre">RegisterServiceCtrlHandlerExW()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerA"><code class="docutils literal notranslate"><span class="pre">RegisterServiceCtrlHandlerA()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.RegisterServiceCtrlHandlerW"><code class="docutils literal notranslate"><span class="pre">RegisterServiceCtrlHandlerW()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SetServiceStatus"><code class="docutils literal notranslate"><span class="pre">SetServiceStatus()</span></code></a></li>
+<li><a class="reference internal" href="#windows.generated_def.winfuncs.SetServiceBits"><code class="docutils literal notranslate"><span class="pre">SetServiceBits()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SetupDiClassNameFromGuidA"><code class="docutils literal notranslate"><span class="pre">SetupDiClassNameFromGuidA()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SetupDiClassNameFromGuidW"><code class="docutils literal notranslate"><span class="pre">SetupDiClassNameFromGuidW()</span></code></a></li>
 <li><a class="reference internal" href="#windows.generated_def.winfuncs.SetupDiClassNameFromGuidExA"><code class="docutils literal notranslate"><span class="pre">SetupDiClassNameFromGuidExA()</span></code></a></li>
@@ -5163,7 +5217,7 @@
         <li class="right" >
           <a href="winstructs_generated.html" title="14.3. Winstructs"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="generated.html" ><span class="section-number">14. </span><code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">14.5. </span>Functions</a></li> 
       </ul>

@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>18. Samples of code &#8212; PythonForWindows 1.0.1 documentation</title>
+    <title>18. Samples of code &#8212; PythonForWindows 1.0.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=292eb321"></script>
+    <script src="_static/documentation_options.js?v=1ed6394b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="internals.html" title="17. Internals"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">18. </span>Samples of code</a></li> 
       </ul>
     </div>  
@@ -713,6 +713,211 @@ Service started !
  - process: &lt;WinProcess &quot;!cannot-retrieve-name&quot; pid 14700 at 0x4a2c4f0&gt;
 </pre></div>
 </div>
+<section id="windows-service-in-python">
+<h3><span class="section-number">18.4.1. </span>Windows Service in Python<a class="headerlink" href="#windows-service-in-python" title="Link to this heading">¶</a></h3>
+<p>This script can register itself as a service and act on <cite>stop</cite> request.
+It also can delete its own service.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A python script able to install itself as a service</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">SERVICE_NAME</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;PFW_SERVICE_DEMO&quot;</span>
+<span class="n">SERVICE_DESCRIPTION</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;PythonForWindows demo service&quot;</span>
+
+<span class="n">SERVICE_LOGFILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;pfw_service_logs.txt&quot;</span><span class="p">)</span>
+
+<span class="n">SERVICE_HANDLE</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">install_demo_service</span><span class="p">():</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{executable}</span><span class="s2"> </span><span class="si">{pyfile}</span><span class="s2"> --run&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">pyfile</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Registering service &lt;</span><span class="si">{0}</span><span class="s2">&gt; as : &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SERVICE_NAME</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+    <span class="n">newservice</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">SERVICE_NAME</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">SERVICE_DESCRIPTION</span><span class="p">,</span>
+        <span class="n">access</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_ALL_ACCESS</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_WIN32_OWN_PROCESS</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_DEMAND_START</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">newservice</span><span class="p">)</span>
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">uninstall_demo_service</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Deleting service&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">services</span><span class="p">[</span><span class="n">SERVICE_NAME</span><span class="p">]</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span>
+
+
+
+<span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SERVICE_LOGFILE</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">{time}</span><span class="s2">] </span><span class="si">{s}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">))</span>
+
+
+<span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">service_handlerex</span><span class="p">(</span><span class="n">dwControl</span><span class="p">,</span> <span class="n">dwEventType</span><span class="p">,</span> <span class="n">lpEventData</span><span class="p">,</span> <span class="n">lpContext</span><span class="p">):</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;in service_handlerex&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;service_handlerex: called with </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dwControl</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">dwControl</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_CONTROL_STOP</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Stopping the service&quot;</span><span class="p">)</span>
+        <span class="n">running_status</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_STATUS</span><span class="p">(</span>
+            <span class="n">dwServiceSpecificExitCode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">dwServiceType</span> <span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_WIN32_OWN_PROCESS</span><span class="p">,</span>
+            <span class="n">dwCurrentState</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_STOPPED</span><span class="p">,</span>
+            <span class="n">dwWin32ExitCode</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">NO_ERROR</span><span class="p">,</span>
+            <span class="n">dwControlsAccepted</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SetServiceStatus</span><span class="p">(</span><span class="n">SERVICE_HANDLE</span><span class="p">,</span> <span class="n">running_status</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="nd">@ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">service_main</span><span class="p">(</span><span class="n">dwNumServicesArgs</span><span class="p">,</span> <span class="n">lpServiceArgVectors</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">SERVICE_HANDLE</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;In service_main&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;service_main: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dwNumServicesArgs</span><span class="p">))</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;service_main: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpServiceArgVectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Calling RegisterServiceCtrlHandlerExW&quot;</span><span class="p">)</span>
+        <span class="n">SERVICE_HANDLE</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RegisterServiceCtrlHandlerExW</span><span class="p">(</span><span class="n">SERVICE_NAME</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">service_handlerex</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;RegisterServiceCtrlHandlerExW handle: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SERVICE_HANDLE</span><span class="p">))</span>
+
+        <span class="n">running_status</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_STATUS</span><span class="p">(</span>
+            <span class="n">dwServiceSpecificExitCode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">dwServiceType</span> <span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_WIN32_OWN_PROCESS</span><span class="p">,</span>
+            <span class="n">dwCurrentState</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_RUNNING</span><span class="p">,</span>
+            <span class="n">dwWin32ExitCode</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">NO_ERROR</span><span class="p">,</span>
+            <span class="n">dwControlsAccepted</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_ACCEPT_STOP</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_ACCEPT_PAUSE_CONTINUE</span>
+        <span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SetServiceStatus</span><span class="p">(</span><span class="n">SERVICE_HANDLE</span><span class="p">,</span> <span class="n">running_status</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Service is running : </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">raise</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">run_demo_service</span><span class="p">():</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;start of run_demo_service()&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">SERVICE_TABLE</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_TABLE_ENTRYW</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)(</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_TABLE_ENTRYW</span><span class="p">(</span><span class="n">SERVICE_NAME</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">service_main</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)),</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_TABLE_ENTRYW</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Calling: StartServiceCtrlDispatcherW()&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartServiceCtrlDispatcherW</span><span class="p">(</span><span class="n">SERVICE_TABLE</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;StartServiceCtrlDispatcherW returned: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Quitting&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">raise</span>
+
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--install&quot;</span><span class="p">,</span>   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Install the service in registry&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--uninstall&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;UnInstall the service in registry&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--run&quot;</span><span class="p">,</span>     <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Called by the services.exe to run the service&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">install</span><span class="p">:</span>
+        <span class="n">install_demo_service</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">uninstall</span><span class="p">:</span>
+        <span class="n">uninstall_demo_service</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">run</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;calling run_demo_service()&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">run_demo_service</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown argument&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">sc</span><span class="o">.</span><span class="n">exe</span> <span class="n">query</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="p">[</span><span class="n">SC</span><span class="p">]</span> <span class="n">EnumQueryServicesStatus</span><span class="p">:</span><span class="n">OpenService</span> <span class="n">FAILED</span> <span class="mi">1060</span><span class="p">:</span>
+
+<span class="n">The</span> <span class="n">specified</span> <span class="n">service</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span> <span class="k">as</span> <span class="n">an</span> <span class="n">installed</span> <span class="n">service</span><span class="o">.</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">py</span> <span class="o">.</span>\<span class="n">service</span>\<span class="n">python_service</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">install</span>
+<span class="n">Registering</span> <span class="n">service</span> <span class="o">&lt;</span><span class="n">PFW_SERVICE_DEMO</span><span class="o">&gt;</span> <span class="k">as</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">cleme</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Programs</span>\<span class="n">Python</span>\<span class="n">Python311</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">cleme</span>\<span class="n">Documents</span>\<span class="n">projets</span>\<span class="n">PythonForWindows</span>\<span class="n">samples</span>\<span class="n">service</span>\<span class="n">python_service</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">run</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Service</span> <span class="s2">&quot;PFW_SERVICE_DEMO&quot;</span> <span class="n">SERVICE_STOPPED</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">sc</span><span class="o">.</span><span class="n">exe</span> <span class="n">start</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="n">SERVICE_NAME</span><span class="p">:</span> <span class="n">PFW_SERVICE_DEMO</span>
+        <span class="n">TYPE</span>               <span class="p">:</span> <span class="mi">10</span>  <span class="n">WIN32_OWN_PROCESS</span>
+        <span class="n">STATE</span>              <span class="p">:</span> <span class="mi">2</span>  <span class="n">START_PENDING</span>
+                                <span class="p">(</span><span class="n">NOT_STOPPABLE</span><span class="p">,</span> <span class="n">NOT_PAUSABLE</span><span class="p">,</span> <span class="n">IGNORES_SHUTDOWN</span><span class="p">)</span>
+        <span class="n">WIN32_EXIT_CODE</span>    <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">SERVICE_EXIT_CODE</span>  <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">CHECKPOINT</span>         <span class="p">:</span> <span class="mh">0x0</span>
+        <span class="n">WAIT_HINT</span>          <span class="p">:</span> <span class="mh">0x7d0</span>
+        <span class="n">PID</span>                <span class="p">:</span> <span class="mi">21132</span>
+        <span class="n">FLAGS</span>              <span class="p">:</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">sc</span><span class="o">.</span><span class="n">exe</span> <span class="n">query</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="n">SERVICE_NAME</span><span class="p">:</span> <span class="n">PFW_SERVICE_DEMO</span>
+        <span class="n">TYPE</span>               <span class="p">:</span> <span class="mi">10</span>  <span class="n">WIN32_OWN_PROCESS</span>
+        <span class="n">STATE</span>              <span class="p">:</span> <span class="mi">4</span>  <span class="n">RUNNING</span>
+                                <span class="p">(</span><span class="n">STOPPABLE</span><span class="p">,</span> <span class="n">PAUSABLE</span><span class="p">,</span> <span class="n">IGNORES_SHUTDOWN</span><span class="p">)</span>
+        <span class="n">WIN32_EXIT_CODE</span>    <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">SERVICE_EXIT_CODE</span>  <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">CHECKPOINT</span>         <span class="p">:</span> <span class="mh">0x0</span>
+        <span class="n">WAIT_HINT</span>          <span class="p">:</span> <span class="mh">0x0</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">cat</span> <span class="o">.</span>\<span class="n">service</span>\<span class="n">pfw_service_logs</span><span class="o">.</span><span class="n">txt</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">calling</span> <span class="n">run_demo_service</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="p">[</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">XXX</span><span class="se">\\</span><span class="s1">PythonForWindows</span><span class="se">\\</span><span class="s1">samples</span><span class="se">\\</span><span class="s1">service</span><span class="se">\\</span><span class="s1">python_service.py&#39;</span><span class="p">,</span> <span class="s1">&#39;--run&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">start</span> <span class="n">of</span> <span class="n">run_demo_service</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">Calling</span><span class="p">:</span> <span class="n">StartServiceCtrlDispatcherW</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">In</span> <span class="n">service_main</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">service_main</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">service_main</span><span class="p">:</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">Calling</span> <span class="n">RegisterServiceCtrlHandlerExW</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.033158</span><span class="p">]</span> <span class="n">RegisterServiceCtrlHandlerExW</span> <span class="n">handle</span><span class="p">:</span> <span class="mi">2591650953424</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.038274</span><span class="p">]</span> <span class="n">Service</span> <span class="ow">is</span> <span class="n">running</span> <span class="p">:</span> <span class="mi">1</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">sc</span><span class="o">.</span><span class="n">exe</span> <span class="n">stop</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="n">SERVICE_NAME</span><span class="p">:</span> <span class="n">PFW_SERVICE_DEMO</span>
+        <span class="n">TYPE</span>               <span class="p">:</span> <span class="mi">10</span>  <span class="n">WIN32_OWN_PROCESS</span>
+        <span class="n">STATE</span>              <span class="p">:</span> <span class="mi">1</span>  <span class="n">STOPPED</span>
+        <span class="n">WIN32_EXIT_CODE</span>    <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">SERVICE_EXIT_CODE</span>  <span class="p">:</span> <span class="mi">0</span>  <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="n">CHECKPOINT</span>         <span class="p">:</span> <span class="mh">0x0</span>
+        <span class="n">WAIT_HINT</span>          <span class="p">:</span> <span class="mh">0x0</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">cat</span> <span class="o">.</span>\<span class="n">service</span>\<span class="n">pfw_service_logs</span><span class="o">.</span><span class="n">txt</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">36.038274</span><span class="p">]</span> <span class="n">Service</span> <span class="ow">is</span> <span class="n">running</span> <span class="p">:</span> <span class="mi">1</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">53.422375</span><span class="p">]</span> <span class="ow">in</span> <span class="n">service_handlerex</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">53.422375</span><span class="p">]</span> <span class="n">service_handlerex</span><span class="p">:</span> <span class="n">called</span> <span class="k">with</span> <span class="mi">1</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">53.432530</span><span class="p">]</span> <span class="n">Stopping</span> <span class="n">the</span> <span class="n">service</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">53.433035</span><span class="p">]</span> <span class="n">StartServiceCtrlDispatcherW</span> <span class="n">returned</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">10</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">53.433035</span><span class="p">]</span> <span class="n">Quitting</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">py</span> <span class="o">.</span>\<span class="n">service</span>\<span class="n">python_service</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">uninstall</span>
+<span class="n">Deleting</span> <span class="n">service</span>
+<span class="mi">1</span>
+
+<span class="p">(</span><span class="n">cmd</span><span class="o">-</span><span class="n">admin</span><span class="p">)</span> <span class="n">sc</span><span class="o">.</span><span class="n">exe</span> <span class="n">query</span> <span class="n">PFW_SERVICE_DEMO</span>
+<span class="p">[</span><span class="n">SC</span><span class="p">]</span> <span class="n">EnumQueryServicesStatus</span><span class="p">:</span><span class="n">OpenService</span> <span class="n">FAILED</span> <span class="mi">1060</span><span class="p">:</span>
+
+<span class="n">The</span> <span class="n">specified</span> <span class="n">service</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span> <span class="k">as</span> <span class="n">an</span> <span class="n">installed</span> <span class="n">service</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="network-socket-exploration">
 <span id="sample-network-exploration"></span><h2><span class="section-number">18.5. </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Link to this heading">¶</a></h2>
@@ -4356,7 +4561,10 @@ BYE
 </li>
 <li><a class="reference internal" href="#token">18.2. Token</a></li>
 <li><a class="reference internal" href="#windows-system">18.3. <code class="docutils literal notranslate"><span class="pre">windows.system</span></code></a></li>
-<li><a class="reference internal" href="#services">18.4. Services</a></li>
+<li><a class="reference internal" href="#services">18.4. Services</a><ul>
+<li><a class="reference internal" href="#windows-service-in-python">18.4.1. Windows Service in Python</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#network-socket-exploration">18.5. <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration</a></li>
 <li><a class="reference internal" href="#registry">18.6. <code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
 <li><a class="reference internal" href="#scheduled-tasks">18.7. Scheduled tasks</a></li>
@@ -4489,7 +4697,7 @@ BYE
         <li class="right" >
           <a href="internals.html" title="17. Internals"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">18. </span>Samples of code</a></li> 
       </ul>
     </div>

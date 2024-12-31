@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2.8. Service &#8212; PythonForWindows 1.0.1 documentation</title>
+    <title>2.8. Service &#8212; PythonForWindows 1.0.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=292eb321"></script>
+    <script src="_static/documentation_options.js?v=1ed6394b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="network.html" title="2.7. Network"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U"><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.8. </span>Service</a></li> 
       </ul>
@@ -77,6 +77,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Yield<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.service.ServiceManager.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#ServiceManager.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.service.ServiceManager.create" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new service</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#windows.winobject.service.Service" title="windows.winobject.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></a> – The newly created service</p>
 </dd>
 </dl>
 </dd></dl>
@@ -128,6 +139,12 @@
 <dt class="sig sig-object py" id="windows.winobject.service.Service">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.winobject.service.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#Service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.service.Service" title="Link to this definition">¶</a></dt>
 <dd><p>Represent a service on the system</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="windows.winobject.service.Service.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/service.html#Service.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.service.Service.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Delete the service</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="windows.winobject.service.Service.description">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#windows.winobject.service.Service.description" title="Link to this definition">¶</a></dt>
@@ -232,6 +249,7 @@
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager"><code class="docutils literal notranslate"><span class="pre">ServiceManager</span></code></a><ul>
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager.__getitem__"><code class="docutils literal notranslate"><span class="pre">__getitem__()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager.__iter__"><code class="docutils literal notranslate"><span class="pre">__iter__()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.service.ServiceManager.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager.enum_flags"><code class="docutils literal notranslate"><span class="pre">enum_flags</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager.get_service"><code class="docutils literal notranslate"><span class="pre">get_service()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.ServiceManager.handle"><code class="docutils literal notranslate"><span class="pre">handle</span></code></a></li>
@@ -242,6 +260,7 @@
 </li>
 <li><a class="reference internal" href="#id1">2.8.2. Service</a><ul>
 <li><a class="reference internal" href="#windows.winobject.service.Service"><code class="docutils literal notranslate"><span class="pre">Service</span></code></a><ul>
+<li><a class="reference internal" href="#windows.winobject.service.Service.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.Service.description"><code class="docutils literal notranslate"><span class="pre">description</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.Service.from_param"><code class="docutils literal notranslate"><span class="pre">from_param()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.service.Service.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
@@ -306,7 +325,7 @@
         <li class="right" >
           <a href="network.html" title="2.7. Network"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" ><span class="section-number">2. </span>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.8. </span>Service</a></li> 
       </ul>

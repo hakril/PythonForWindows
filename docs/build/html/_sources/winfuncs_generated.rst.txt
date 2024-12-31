@@ -488,6 +488,12 @@ Functions
 
 .. function:: LockFileEx(hFile, dwFlags, dwReserved, nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh, lpOverlapped)
 
+.. function:: SetFileInformationByHandle(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
+.. function:: GetFileInformationByHandle(hFile, lpFileInformation)
+
+.. function:: GetFileInformationByHandleEx(hFile, FileInformationClass, lpFileInformation, dwBufferSize)
+
 .. function:: HeapAlloc(hHeap, dwFlags, dwBytes)
 
 .. function:: InternetCheckConnectionA(lpszUrl, dwFlags, dwReserved)
@@ -915,6 +921,18 @@ Functions
 .. function:: StartServiceCtrlDispatcherA(lpServiceStartTable)
 
 .. function:: StartServiceCtrlDispatcherW(lpServiceStartTable)
+
+.. function:: RegisterServiceCtrlHandlerExA(lpServiceName, lpHandlerProc, lpContext)
+
+.. function:: RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext)
+
+.. function:: RegisterServiceCtrlHandlerA(lpServiceName, lpHandlerProc)
+
+.. function:: RegisterServiceCtrlHandlerW(lpServiceName, lpHandlerProc)
+
+.. function:: SetServiceStatus(hServiceStatus, lpServiceStatus)
+
+.. function:: SetServiceBits(hServiceStatus, dwServiceBits, bSetBitsOn, bUpdateImmediately)
 
 .. function:: SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize, RequiredSize)
 

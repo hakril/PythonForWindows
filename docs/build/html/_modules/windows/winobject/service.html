@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.winobject.service &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.winobject.service &#8212; PythonForWindows 1.0.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.winobject.service</a></li> 
       </ul>
@@ -193,7 +193,13 @@
     <span class="k">def</span> <span class="nf">enumerate_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_enumerate_services_generator</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="ServiceManager.create">
+<a class="viewcode-back" href="../../../service.html#windows.winobject.service.ServiceManager.create">[docs]</a>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new service</span>
+
+<span class="sd">        :return: :class:`Service` -- The newly created service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newservice_handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateServiceW</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="c1"># hSCManager</span>
             <span class="n">name</span><span class="p">,</span> <span class="c1"># lpServiceName</span>
@@ -206,10 +212,11 @@
             <span class="kc">None</span><span class="p">,</span> <span class="c1"># lpLoadOrderGroup</span>
             <span class="kc">None</span><span class="p">,</span> <span class="c1"># lpdwTagId</span>
             <span class="kc">None</span><span class="p">,</span> <span class="c1"># lpDependencies</span>
-            <span class="kc">None</span><span class="p">,</span> <span class="c1"># lpServiceStartName</span>
+            <span class="n">user</span><span class="p">,</span> <span class="c1"># lpServiceStartName</span>
             <span class="kc">None</span><span class="p">)</span> <span class="c1"># lpPassword</span>
 
         <span class="k">return</span> <span class="n">Service</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">newservice_handle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span></div>
+</div>
 
 
 
@@ -291,6 +298,13 @@
         <span class="k">return</span> <span class="n">status</span></div>
 
 
+<div class="viewcode-block" id="Service.delete">
+<a class="viewcode-back" href="../../../service.html#windows.winobject.service.Service.delete">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete the service&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DeleteService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">urepr_encode</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; </span><span class="si">{2!r}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
 
@@ -328,7 +342,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.winobject.service</a></li> 
       </ul>

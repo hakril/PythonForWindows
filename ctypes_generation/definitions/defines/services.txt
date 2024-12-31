@@ -117,3 +117,27 @@ SERVICE_WIN32_OWN_PROCESS)
 #define SERVICE_ACCEPT_PRESHUTDOWN             0x00000100
 #define SERVICE_ACCEPT_TIMECHANGE              0x00000200
 #define SERVICE_ACCEPT_TRIGGEREVENT            0x00000400
+
+//
+// Service object specific access type
+//
+#define SERVICE_QUERY_CONFIG           0x0001
+#define SERVICE_CHANGE_CONFIG          0x0002
+#define SERVICE_QUERY_STATUS           0x0004
+#define SERVICE_ENUMERATE_DEPENDENTS   0x0008
+#define SERVICE_START                  0x0010
+#define SERVICE_STOP                   0x0020
+#define SERVICE_PAUSE_CONTINUE         0x0040
+#define SERVICE_INTERROGATE            0x0080
+#define SERVICE_USER_DEFINED_CONTROL   0x0100
+
+#define SERVICE_ALL_ACCESS             (STANDARD_RIGHTS_REQUIRED     | \
+                                        SERVICE_QUERY_CONFIG         | \
+                                        SERVICE_CHANGE_CONFIG        | \
+                                        SERVICE_QUERY_STATUS         | \
+                                        SERVICE_ENUMERATE_DEPENDENTS | \
+                                        SERVICE_START                | \
+                                        SERVICE_STOP                 | \
+                                        SERVICE_PAUSE_CONTINUE       | \
+                                        SERVICE_INTERROGATE          | \
+                                        SERVICE_USER_DEFINED_CONTROL)
