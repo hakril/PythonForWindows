@@ -149,7 +149,7 @@ class ServiceManager(utils.AutoHandle):
     def enumerate_services(self):
         return list(self._enumerate_services_generator())
 
-    def create(self, name, description, access, type, start, path):
+    def create(self, name, description, access, type, start, path, user=None):
         newservice_handle = windows.winproxy.CreateServiceW(
             self.handle, # hSCManager
             name, # lpServiceName
@@ -162,7 +162,7 @@ class ServiceManager(utils.AutoHandle):
             None, # lpLoadOrderGroup
             None, # lpdwTagId
             None, # lpDependencies
-            None, # lpServiceStartName
+            user, # lpServiceStartName
             None) # lpPassword
 
         return Service(handle=newservice_handle, name=name, description=description)
@@ -237,6 +237,9 @@ class Service(gdef.SC_HANDLE):
         status = SERVICE_STATUS()
         windows.winproxy.ControlService(self, gdef.SERVICE_CONTROL_STOP, status)
         return status
+
+    def delete(self):
+        return windows.winproxy.DeleteService(self)
 
     def __repr__(self):
         return urepr_encode(u"""<{0} "{1}" {2!r}>""".format(type(self).__name__, self.name, self.status.state))

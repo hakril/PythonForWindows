@@ -511,6 +511,10 @@ Simple types
 
 .. autoclass:: PDNS_QUERY_COMPLETION_ROUTINE
 
+.. autoclass:: LPHANDLER_FUNCTION
+
+.. autoclass:: LPHANDLER_FUNCTION_EX
+
 .. autoclass:: LPCONTEXT
 
 .. autoclass:: HCERTSTORE
