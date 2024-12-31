@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.pe_parse &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.pe_parse &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>
@@ -503,7 +503,20 @@
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
             <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">binid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the hex-string {TimeStamp}{SizeOfCode} used by PDB to identify a PE.</span>
+
+<span class="sd">        I do not know the official name of this value...</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">nth</span><span class="o">.</span><span class="n">FileHeader</span><span class="o">.</span><span class="n">TimeDateStamp</span>
+        <span class="n">image_size</span> <span class="o">=</span> <span class="n">nth</span><span class="o">.</span><span class="n">OptionalHeader</span><span class="o">.</span><span class="n">SizeOfImage</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{timestamp:08x}{image_size:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">image_size</span><span class="o">=</span><span class="n">image_size</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -536,7 +549,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>

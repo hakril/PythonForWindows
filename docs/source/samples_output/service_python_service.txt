@@ -1,0 +1,69 @@
+(cmd-admin) sc.exe query PFW_SERVICE_DEMO
+[SC] EnumQueryServicesStatus:OpenService FAILED 1060:
+
+The specified service does not exist as an installed service.
+
+(cmd-admin) py .\service\python_service.py --install
+Registering service <PFW_SERVICE_DEMO> as : <C:\Users\cleme\AppData\Local\Programs\Python\Python311\python.exe C:\Users\cleme\Documents\projets\PythonForWindows\samples\service\python_service.py --run>
+<Service "PFW_SERVICE_DEMO" SERVICE_STOPPED(0x1)>
+
+(cmd-admin) sc.exe start PFW_SERVICE_DEMO
+SERVICE_NAME: PFW_SERVICE_DEMO
+        TYPE               : 10  WIN32_OWN_PROCESS
+        STATE              : 2  START_PENDING
+                                (NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x7d0
+        PID                : 21132
+        FLAGS              :
+
+(cmd-admin) sc.exe query PFW_SERVICE_DEMO
+SERVICE_NAME: PFW_SERVICE_DEMO
+        TYPE               : 10  WIN32_OWN_PROCESS
+        STATE              : 4  RUNNING
+                                (STOPPABLE, PAUSABLE, IGNORES_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+
+(cmd-admin) cat .\service\pfw_service_logs.txt
+[2024-12-31 10:34:36.033158] calling run_demo_service()
+[2024-12-31 10:34:36.033158] ['C:\\Users\\XXX\\PythonForWindows\\samples\\service\\python_service.py', '--run']
+[2024-12-31 10:34:36.033158] start of run_demo_service()
+[2024-12-31 10:34:36.033158] Calling: StartServiceCtrlDispatcherW()
+[2024-12-31 10:34:36.033158] In service_main
+[2024-12-31 10:34:36.033158] service_main: 1
+[2024-12-31 10:34:36.033158] service_main: PFW_SERVICE_DEMO
+[2024-12-31 10:34:36.033158] Calling RegisterServiceCtrlHandlerExW
+[2024-12-31 10:34:36.033158] RegisterServiceCtrlHandlerExW handle: 2591650953424
+[2024-12-31 10:34:36.038274] Service is running : 1
+
+(cmd-admin) sc.exe stop PFW_SERVICE_DEMO
+SERVICE_NAME: PFW_SERVICE_DEMO
+        TYPE               : 10  WIN32_OWN_PROCESS
+        STATE              : 1  STOPPED
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+
+(cmd-admin) cat .\service\pfw_service_logs.txt
+[...]
+[2024-12-31 10:34:36.038274] Service is running : 1
+[2024-12-31 10:34:53.422375] in service_handlerex
+[2024-12-31 10:34:53.422375] service_handlerex: called with 1
+[2024-12-31 10:34:53.432530] Stopping the service
+[2024-12-31 10:34:53.433035] StartServiceCtrlDispatcherW returned: 1
+[2024-12-31 10:34:53.433035] Quitting
+
+(cmd-admin) py .\service\python_service.py --uninstall
+Deleting service
+1
+
+(cmd-admin) sc.exe query PFW_SERVICE_DEMO
+[SC] EnumQueryServicesStatus:OpenService FAILED 1060:
+
+The specified service does not exist as an installed service.

@@ -150,6 +150,10 @@ class ServiceManager(utils.AutoHandle):
         return list(self._enumerate_services_generator())
 
     def create(self, name, description, access, type, start, path, user=None):
+        """Create a new service
+
+        :return: :class:`Service` -- The newly created service
+        """
         newservice_handle = windows.winproxy.CreateServiceW(
             self.handle, # hSCManager
             name, # lpServiceName
@@ -239,6 +243,7 @@ class Service(gdef.SC_HANDLE):
         return status
 
     def delete(self):
+        """Delete the service"""
         return windows.winproxy.DeleteService(self)
 
     def __repr__(self):

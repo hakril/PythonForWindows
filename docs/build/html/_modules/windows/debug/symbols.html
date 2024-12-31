@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.debug.symbols &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.debug.symbols &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.debug.symbols</a></li> 
       </ul>
@@ -605,6 +605,12 @@
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymGetTypeFromNameW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">buff</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SymbolType</span><span class="o">.</span><span class="n">from_symbol_info</span><span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">typeslist</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Iter on types of all modules if None provided ?</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">SymEnumTypes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_aggregator</span><span class="p">,</span> <span class="n">typeslist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">SymbolType</span><span class="o">.</span><span class="n">from_symbol_info</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">typeslist</span><span class="p">]</span>
+
 
 <span class="c1"># TODO: mets de l&#39;huile pour w4kfu</span>
 <span class="k">class</span> <span class="nc">StackWalker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -863,7 +869,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.debug.symbols</a></li> 
       </ul>

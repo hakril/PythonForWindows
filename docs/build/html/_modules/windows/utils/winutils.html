@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.utils.winutils &#8212; PythonForWindows 1.0.0 documentation</title>
+    <title>windows.utils.winutils &#8212; PythonForWindows 1.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.utils.winutils</a></li> 
       </ul>
@@ -620,11 +620,11 @@
 <span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_READ</span><span class="p">,</span> <span class="n">share</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">FILE_SHARE_READ</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">creation</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE_NORMAL</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateFileW</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="n">share</span><span class="p">,</span> <span class="n">security</span><span class="p">,</span> <span class="n">creation</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">mapfile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-   <span class="n">fhandle</span> <span class="o">=</span> <span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-   <span class="n">h</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateFileMappingA</span><span class="p">(</span><span class="n">fhandle</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">PAGE_READONLY</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-   <span class="n">addr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">MapViewOfFile</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="o">=</span><span class="n">FILE_MAP_READ</span><span class="p">,</span> <span class="n">dwNumberOfBytesToMap</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-   <span class="k">return</span> <span class="n">addr</span>
+<span class="c1">#def mapfile(file):</span>
+<span class="c1">#    fhandle = get_handle_from_file(file)</span>
+<span class="c1">#    h = windows.winproxy.CreateFileMappingA(fhandle, None, PAGE_READONLY, 0, 1, None)</span>
+<span class="c1">#    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)</span>
+<span class="c1">#    return addr</span>
 
 <span class="k">def</span> <span class="nf">decompress_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">comptype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">COMPRESSION_FORMAT_LZNT1</span><span class="p">,</span> <span class="n">uncompress_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">uncompress_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -752,7 +752,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.utils.winutils</a></li> 
       </ul>

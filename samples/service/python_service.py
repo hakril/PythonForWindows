@@ -1,3 +1,5 @@
+# A python script able to install itself as a service
+
 import sys
 import os.path
 import argparse
@@ -10,7 +12,7 @@ import windows.generated_def as gdef
 SERVICE_NAME = u"PFW_SERVICE_DEMO"
 SERVICE_DESCRIPTION = u"PythonForWindows demo service"
 
-SERVICE_LOGFILE = os.path.join(os.path.dirname(__file__), "logs.txt")
+SERVICE_LOGFILE = os.path.join(os.path.dirname(__file__), "pfw_service_logs.txt")
 
 SERVICE_HANDLE = None
 

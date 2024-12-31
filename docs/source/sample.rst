@@ -103,7 +103,17 @@ Output
 
 .. literalinclude:: samples_output\service_service_demo.txt
 
+Windows Service in Python
+'''''''''''''''''''''''''
 
+This script can register itself as a service and act on `stop` request.
+It also can delete its own service.
+
+.. literalinclude:: ..\..\samples\service\python_service.py
+
+Output
+
+.. literalinclude:: samples_output\service_python_service.txt
 
 
 .. _sample_network_exploration:

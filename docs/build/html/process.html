@@ -1443,6 +1443,18 @@ The behavior should match the non-exported function <code class="docutils litera
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.pe_parse.</span></span><span class="sig-name descname"><span class="pre">PEFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseaddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetedbitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pe_parse.html#PEFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.pe_parse.PEFile" title="Link to this definition">¶</a></dt>
 <dd><p>Represent a PE loaded in a process (current or remote)</p>
 <dl class="py property">
+<dt class="sig sig-object py" id="windows.pe_parse.PEFile.binid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">binid</span></span><a class="headerlink" href="#windows.pe_parse.PEFile.binid" title="Link to this definition">¶</a></dt>
+<dd><p>Return the hex-string {TimeStamp}{SizeOfCode} used by PDB to identify a PE.</p>
+<p>I do not know the official name of this value…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="windows.pe_parse.PEFile.export_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">export_name</span></span><a class="headerlink" href="#windows.pe_parse.PEFile.export_name" title="Link to this definition">¶</a></dt>
 <dd><p>The Name attribute of the <code class="docutils literal notranslate"><span class="pre">EXPORT_DIRECTORY</span></code></p>
@@ -1764,6 +1776,7 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
 <li><a class="reference internal" href="#windows.pe_parse.GetPEFile"><code class="docutils literal notranslate"><span class="pre">GetPEFile()</span></code></a></li>
 <li><a class="reference internal" href="#pefile">2.3.1.1. PEFile</a><ul>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile"><code class="docutils literal notranslate"><span class="pre">PEFile</span></code></a><ul>
+<li><a class="reference internal" href="#windows.pe_parse.PEFile.binid"><code class="docutils literal notranslate"><span class="pre">binid</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.export_name"><code class="docutils literal notranslate"><span class="pre">export_name</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.exports"><code class="docutils literal notranslate"><span class="pre">exports</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.imports"><code class="docutils literal notranslate"><span class="pre">imports</span></code></a></li>
