@@ -1563,6 +1563,37 @@ class ORPCTHAT32(Structure):
     ]
 
 
+class WireExtentArray(Structure):
+    _fields_ = [
+        ("size", ULONG),
+        ("reserved", ULONG),
+        ("unique", ULONG),
+        ("rounded_size", ULONG),
+        ("unique_flag", ULONG * (UNIQUE_FLAG_PADDING)),
+    ]
+
+
+class WireExtent(Structure):
+    _fields_ = [
+        ("rounded_size", ULONG),
+        ("id", GUID),
+        ("size", ULONG),
+    ]
+
+
+class tagMainHeader(Structure):
+    _fields_ = [
+        ("Signature", ULONG),
+        ("Version", ULONG),
+        ("cPolicies", ULONG),
+        ("cbBuffer", ULONG),
+        ("cbSize", ULONG),
+        ("hr", LONG),
+        ("hrServer", LONG),
+        ("reserved", LONG),
+    ]
+MainHeader = tagMainHeader
+
 class LOCALTHIS32_NT_62(Structure):
     _fields_ = [
         ("dwFlags", ULONG),
@@ -1605,21 +1636,21 @@ class __MIDL_XmitDefs_0002_NT_1607(Structure):
 class __MIDL_XmitDefs_0001_NT_1607(Structure):
     _fields_ = [
         ("asyncOperationId", _GUID),
-        ("oxidClientProcessNA", UINT32),
+        ("oxidClientProcessNA", UINT64),
         ("originalClientLogicalThreadId", _GUID),
-        ("uClientCausalityTraceId", UINT),
+        ("uClientCausalityTraceId", UINT64),
     ]
+MIDL_XmitDefs_0001_NT_1607 = __MIDL_XmitDefs_0001_NT_1607
 
-
-class LOCALTHIS32_NT_1607(Structure):
+class _LOCALTHIS32_NT_1607(Structure):
     _fields_ = [
         ("dwFlags", ULONG),
         ("dwClientThread", ULONG),
-        ("asyncRequestBlock", __MIDL_XmitDefs_0001_NT_1607),
+        ("asyncRequestBlock", MIDL_XmitDefs_0001_NT_1607),
         ("reserved", ULONG),
-        ("pTouchedAstaArray", POINTER(PVOID32)),
+        ("pTouchedAstaArray", PVOID32),
     ]
-
+LOCALTHIS32_NT_1607 = _LOCALTHIS32_NT_1607
 
 class __MIDL_XmitDefs_0007(Structure):
     _fields_ = [
@@ -1629,7 +1660,7 @@ class __MIDL_XmitDefs_0007(Structure):
         ("reserved", ULONG),
         ("pMarshaledErrorInfo", POINTER(BYTE)),
     ]
-
+MIDL_XmitDefs_0007 = __MIDL_XmitDefs_0007
 
 class __MIDL_XmitDefs_0005(Structure):
     _fields_ = [
@@ -1637,15 +1668,15 @@ class __MIDL_XmitDefs_0005(Structure):
         ("reserved", ULONG),
         ("pMarshaledResults", POINTER(BYTE)),
     ]
-
+MIDL_XmitDefs_0005 = __MIDL_XmitDefs_0005
 
 class __MIDL_XmitDefs_0008(Structure):
     _fields_ = [
         ("outcome", INT),
-        ("successDetails", __MIDL_XmitDefs_0005),
-        ("failureDetails", __MIDL_XmitDefs_0007),
+        ("successDetails", MIDL_XmitDefs_0005),
+        ("failureDetails", MIDL_XmitDefs_0007),
     ]
-
+MIDL_XmitDefs_0008 = __MIDL_XmitDefs_0008
 
 class __MIDL_XmitDefs_0010(Structure):
     _fields_ = [
@@ -1655,16 +1686,24 @@ class __MIDL_XmitDefs_0010(Structure):
         ("reserved2", ULONG),
         ("pOutcomeDetails", POINTER(PVOID32)),
     ]
-
+MIDL_XmitDefs_0010 = __MIDL_XmitDefs_0010
 
 class LOCALTHAT32_NT_1607(Structure):
     _fields_ = [
         ("marshalingSetAcknowledgmentOxid", UINT64),
         ("marshalingSetId", UINT64),
         ("reserved", ULONG),
-        ("pAsyncResponseBlock", POINTER(PVOID32)),
+        ("pAsyncResponseBlock", PVOID32),
     ]
 
+
+class _LOCALTHAT32_10_1903(Structure):
+    _fields_ = [
+        ("marshalingSetId", UINT64),
+        ("pAsyncResponseBlock", PVOID32),
+        ("containerPassthroughData", PVOID32),
+    ]
+LOCALTHAT32_10_1903 = _LOCALTHAT32_10_1903
 
 class _LOCALTHIS32(Structure):
     _fields_ = [

@@ -27,3 +27,7 @@
 #define	SORF_OXRES8	( 0x800 )
 #define	SORF_NULL	( 0 )
 #define	SORF_NOPING	( 0x1000 )
+
+#define UNIQUE_FLAG_PADDING 2
+#define MAINHDRSIG     0x414E554B
+#define ENTRYHDRSIG   0x494E414E

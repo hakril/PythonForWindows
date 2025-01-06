@@ -62,9 +62,26 @@ class ALPC_RPC_CALL(ctypes.Structure):
         ("orpc_ipid", gdef.GUID)
     ]
 
+# Was an array of 6 DWORD, new class inspired by :
+# https://github.com/googleprojectzero/sandbox-attacksurface-analysis-tools/blob/main/NtCoreLib/Win32/Rpc/Transport/Alpc/LRPC_IMMEDIATE_RESPONSE_MESSAGE.cs#L22
+
+class ALPC_RPC_RESPONSE(ctypes.Structure):
+    _pack_ = 1
+    _fields_ = [
+        ("request_type", gdef.DWORD),
+        ("UNK1", gdef.DWORD),
+        ("flags",gdef.DWORD),
+        ("request_id", gdef.DWORD),
+        ("UNK2", gdef.DWORD),
+        ("UNK3", gdef.DWORD),
+    ]
+
 class RPCClient(object):
     """A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling"""
-    REQUEST_IDENTIFIER = 0x11223344
+    REQUEST_IDENTIFIER = 0x42424242
+    # Used to recognize ORPC call we made
+    # thus we know the response contains a orpcthat & localthat
+    REQUEST_IDENTIFIER_ORPC = 0x43434343
 
     def __init__(self, port):
         self.alpc_client = alpc.AlpcClient(port) #: The :class:`windows.alpc.AlpcClient` used to communicate with the server
@@ -138,17 +155,15 @@ class RPCClient(object):
         req.if_nb = interface_nb
         req.method_offset = method_offset
         if ipid:
+            req.request_id = self.REQUEST_IDENTIFIER_ORPC
             req.flags = 1 # We have a IPID
             req.orpc_ipid = ipid
             this = gdef.ORPCTHIS32() # we use NDR32
             this.version = (5,7)
             this.flags = gdef.ORPCF_LOCAL
-            # Not mandatory
-            # this.cid = gdef.GUID.from_string("42424242-4242-4242-4242-424242424242")
-            lthis = gdef.LOCALTHIS32() # we use NDR32
-            # RPC_E_INVALID_HEADER is NULL
-            lthis.callTraceActivity = gdef.GUID.from_string("42424242-4242-4242-4242-424242424242")
-            lthis.dwClientThread = windows.current_thread.tid
+            # Returned correct type with mandatory fields filed
+            lthis = find_correct_localthis_for_version()
+            print("lthis is : {0}".format(lthis))
             return buffer(req)[:] + buffer(this)[:] + buffer(lthis)[:] + params
         return buffer(req)[:] + params
 
@@ -188,17 +203,150 @@ class RPCClient(object):
         request_type = struct.unpack("<I", response.data[:4])[0]
         if request_type == gdef.RPC_RESPONSE_TYPE_FAIL:
             error_code = struct.unpack("<5I", response.data)[2]
-            raise ValueError("RPC Response error {0} ({1})".format(error_code, KNOWN_RPC_ERROR_CODE.get(error_code, error_code)))
+            raise ValueError("RPC Response error {0} ({1!r})".format(error_code, KNOWN_RPC_ERROR_CODE.get(error_code, error_code)))
         return request_type
 
     def _get_response_effective_data(self, response):
         """Response is a `AlpcMessage` needed to handle response in message vs response in view"""
+        response_header = ALPC_RPC_RESPONSE.from_buffer_copy(response.data)
         if not response.view_is_valid:
             # Reponse directly in PORT_MESSAGE
-            return response.data[0x18:] # 4 * 6
-        # Response in view M extract size from PORT_MESSAGE & read data from view
-        assert response.port_message.u1.s1.TotalLength >= 0x48 # At least 0x20 of data
-        rpcdatasize = struct.unpack("<I", response.data[0x18:0x1c])[0]
-        viewattr = response.view_attribute
-        assert viewattr.ViewSize >= rpcdatasize
-        return windows.current_process.read_memory(viewattr.ViewBase, rpcdatasize)
+            data = response.data[ctypes.sizeof(ALPC_RPC_RESPONSE):]
+        else:
+            # Response in view M extract size from PORT_MESSAGE & read data from view
+            assert response.port_message.u1.s1.TotalLength >= 0x48 # At least 0x20 of data
+            rpcdatasize = struct.unpack("<I", response.data[0x18:0x1c])[0] # ctypes.sizeof(ALPC_RPC_RESPONSE)
+            viewattr = response.view_attribute
+            assert viewattr.ViewSize >= rpcdatasize
+            data = windows.current_process.read_memory(viewattr.ViewBase, rpcdatasize)
+        if response_header.request_id == self.REQUEST_IDENTIFIER_ORPC:
+            # Parse & remove ORPC headers (orpcthat + LocalThat)
+            orpcthat = gdef.ORPCTHAT32.from_buffer_copy(data)
+            data = data[ctypes.sizeof(orpcthat):]
+            if orpcthat.extensions != 0:
+                print("Parsing extension !")
+                # Parse extension : code have not been tested a lot
+                write_array_extend = gdef.WireExtentArray.from_buffer_copy(data)
+                data = data[ctypes.sizeof(gdef.WireExtentArray):]
+                if write_array_extend.rounded_size != 2:
+                    raise NotImplementedError("orpcthat.extensions: WireExtentArray.rounded_size != 2")
+                for value in write_array_extend.unique_flag:
+                    if value != 0:
+                        data = self._pass_wire_extend(data)
+            localthat_type = find_correct_localthat_for_version()
+            if localthat_type is not None:
+                localthat = localthat_type.from_buffer_copy(data)
+                # Check localthat pointers are empty
+                for field in ("pAsyncResponseBlock", "containerErrorInformation", "containerPassthroughData"):
+                    if getattr(localthat, field, 0) != 0:
+                        raise NotImplementedError("ORPC Response with localthat.{0} != 0".format(field))
+                data = data[ctypes.sizeof(localthat):]
+        return data
+
+    def _pass_wire_extend(self, data):
+        wire_extend = gdef.WireExtent.from_buffer_copy(data)
+        # We don't care -> jump over the size only
+        return data[ctypes.sizeof(gdef.WireExtent) + wire_extend.rounded_size:]
+
+# Based on combase.dll analysis
+
+# LOCALTHIS
+# Nb fields:  2
+# 6.1.7601.17514 -> 6.2.9200.22376
+#  * 6.1.7601.17514
+#  * 6.1.7601.17514
+#  * 6.2.9200.22376
+# Nb fields:  4
+# 6.3.9600.17031 -> 6.3.9600.20772
+#  * 6.3.9600.17031
+#  * 6.3.9600.20772
+# Nb fields:  5
+# 10.0.10240.16384 -> 10.0.15063.2679
+# Nb fields:  7
+# 10.0.16299.1 -> 10.0.26100.2454
+
+def find_correct_localthis_for_version():
+    vmaj, vmin = windows.system.version
+    if (vmaj, vmin) < (6, 1):
+        return None
+    if (vmaj, vmin) in ((6, 1), (6, 2)):
+        return gdef.LOCALTHIS32_NT_62(dwClientThread = windows.current_thread.tid)
+    elif (vmaj, vmin) == (6,3):
+        return gdef.LOCALTHIS32_NT_63(dwClientThread = windows.current_thread.tid)
+    assert vmaj == 10
+    vnumber = windows.system.get_file_version(r"C:\windows\system32\combase.dll")
+    # Extract version number from combase
+    # as it was used to find the struct per version
+    build_number = int(vnumber.split(".")[2])
+    if build_number <= 15063:
+        return gdef.LOCALTHIS32_NT_1607(dwClientThread = windows.current_thread.tid)
+    return gdef.LOCALTHIS32(callTraceActivity=gdef.GUID.from_string("42424242-4242-4242-4242-424242424242"),
+                        dwClientThread = windows.current_thread.tid)
+
+
+# LOCALTHAT
+# Nb fields:  2
+# 6.3.9600.17031 -> 6.3.9600.20772
+#  * 6.3.9600.17031
+#  * 6.3.9600.17031
+#  * 6.3.9600.17031
+#  * 6.3.9600.20772
+# Nb fields:  3
+# 10.0.18362.900 -> 10.0.18362.1916
+#  * 10.0.18362.900
+#  * 10.0.18362.900
+#  * 10.0.18362.1016
+#  * 10.0.18362.1916
+# Nb fields:  4
+# 10.0.10240.16384 -> 10.0.17763.6040
+#  * 10.0.10240.16384
+#  * 10.0.10240.16384
+#  * 10.0.10240.20747
+#  * 10.0.10586.0
+#  * 10.0.14393.576
+#  * 10.0.14393.6451
+#  * 10.0.14393.7426
+#  * 10.0.15063.251
+#  * 10.0.15063.1563
+#  * 10.0.15063.2500
+#  * 10.0.15063.2679
+#  * 10.0.16299.1
+#  * 10.0.16299.15
+#  * 10.0.17134.1
+#  * 10.0.17134.48
+#  * 10.0.17134.2145
+#  * 10.0.17134.2145
+#  * 10.0.17763.1
+#  * 10.0.17763.2931
+#  * 10.0.17763.6040
+# Nb fields:  5
+# 10.0.19039.1 -> 10.0.26100.2454
+#  * 10.0.19039.1
+#  * 10.0.19041.84
+#  * 10.0.19041.4894
+#  * 10.0.22000.65
+#  * 10.0.22621.2792
+#  * 10.0.22621.3958
+#  * 10.0.22621.4111
+#  * 10.0.22621.4541
+#  * 10.0.26100.2454
+#  * 10.0.26100.2454
+
+def find_correct_localthat_for_version():
+    vmaj, vmin = windows.system.version
+    if (vmaj, vmin) < (6, 3):
+        return None
+    elif (vmaj, vmin) == (6,3):
+        return gdef.LOCALTHAT32_NT_63
+    assert vmaj == 10
+    vnumber = windows.system.get_file_version(r"C:\windows\system32\combase.dll")
+    # Extract version number from combase
+    # as it was used to find the struct per version
+    build_number = int(vnumber.split(".")[2])
+    if build_number <= 17763:
+        return gdef.LOCALTHAT32_NT_1607
+    elif build_number == 18362:
+        return gdef.LOCALTHAT32_10_1903
+    elif build_number >= 19039:
+        return gdef.LOCALTHAT32
+    raise NotImplementedError("Unknown LOCALTHAT32 structure for version {0}, please share me your combase.dll file".format(windows.system.versionstr))
