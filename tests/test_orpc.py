@@ -24,6 +24,5 @@ def test_orpc_network_manager():
     iid = gdef.GUID.from_string("D0074FFD-570F-4A9B-8D69-199FDBA5723B")
     client, ipid = windows.rpc.stubborn.stubborn_create_instance("A47979D2-C419-11D9-A5B4-001185AD2B89", iid)
     response = client.call(iid, 17, b"", ipid=ipid)
-    import pdb;pdb.set_trace()
     assert response[0] not in (b"\x00", 0)
 
