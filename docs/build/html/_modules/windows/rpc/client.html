@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.rpc.client &#8212; PythonForWindows 1.0.2 documentation</title>
+    <title>windows.rpc.client &#8212; PythonForWindows 1.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=baaebd52"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>
@@ -101,11 +101,28 @@
         <span class="p">(</span><span class="s2">&quot;orpc_ipid&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
     <span class="p">]</span>
 
+<span class="c1"># Was an array of 6 DWORD, new class inspired by :</span>
+<span class="c1"># https://github.com/googleprojectzero/sandbox-attacksurface-analysis-tools/blob/main/NtCoreLib/Win32/Rpc/Transport/Alpc/LRPC_IMMEDIATE_RESPONSE_MESSAGE.cs#L22</span>
+
+<span class="k">class</span> <span class="nc">ALPC_RPC_RESPONSE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_pack_</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;request_type&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK1&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span><span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;request_id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK2&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK3&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+    <span class="p">]</span>
+
 <div class="viewcode-block" id="RPCClient">
 <a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient">[docs]</a>
 <span class="k">class</span> <span class="nc">RPCClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling&quot;&quot;&quot;</span>
-    <span class="n">REQUEST_IDENTIFIER</span> <span class="o">=</span> <span class="mh">0x11223344</span>
+    <span class="n">REQUEST_IDENTIFIER</span> <span class="o">=</span> <span class="mh">0x42424242</span>
+    <span class="c1"># Used to recognize ORPC call we made</span>
+    <span class="c1"># thus we know the response contains a orpcthat &amp; localthat</span>
+    <span class="n">REQUEST_IDENTIFIER_ORPC</span> <span class="o">=</span> <span class="mh">0x43434343</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span> <span class="o">=</span> <span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="c1">#: The :class:`windows.alpc.AlpcClient` used to communicate with the server</span>
@@ -160,6 +177,10 @@
 <span class="sd">            :param str params: The mashalled parameters (NDR32)</span>
 <span class="sd">            :param GUID ipid: The IPID for `ORPC calls &lt;https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb&gt;`_</span>
 <span class="sd">            :returns: :class:`str`</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Since `1.0.3` if the call is an ORPC call, the `ORPCTHAT` &amp; `LOCALTHAT` present in the response are parsed and striped from the result.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forge_alpc_request</span><span class="p">(</span><span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">ipid</span><span class="o">=</span><span class="n">ipid</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
@@ -188,17 +209,14 @@
         <span class="n">req</span><span class="o">.</span><span class="n">if_nb</span> <span class="o">=</span> <span class="n">interface_nb</span>
         <span class="n">req</span><span class="o">.</span><span class="n">method_offset</span> <span class="o">=</span> <span class="n">method_offset</span>
         <span class="k">if</span> <span class="n">ipid</span><span class="p">:</span>
+            <span class="n">req</span><span class="o">.</span><span class="n">request_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER_ORPC</span>
             <span class="n">req</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># We have a IPID</span>
             <span class="n">req</span><span class="o">.</span><span class="n">orpc_ipid</span> <span class="o">=</span> <span class="n">ipid</span>
             <span class="n">this</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCTHIS32</span><span class="p">()</span> <span class="c1"># we use NDR32</span>
             <span class="n">this</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
             <span class="n">this</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCF_LOCAL</span>
-            <span class="c1"># Not mandatory</span>
-            <span class="c1"># this.cid = gdef.GUID.from_string(&quot;42424242-4242-4242-4242-424242424242&quot;)</span>
-            <span class="n">lthis</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32</span><span class="p">()</span> <span class="c1"># we use NDR32</span>
-            <span class="c1"># RPC_E_INVALID_HEADER is NULL</span>
-            <span class="n">lthis</span><span class="o">.</span><span class="n">callTraceActivity</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;42424242-4242-4242-4242-424242424242&quot;</span><span class="p">)</span>
-            <span class="n">lthis</span><span class="o">.</span><span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span>
+            <span class="c1"># Returned correct type with mandatory fields filed</span>
+            <span class="n">lthis</span> <span class="o">=</span> <span class="n">find_correct_localthis_for_version</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">buffer</span><span class="p">(</span><span class="n">this</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">buffer</span><span class="p">(</span><span class="n">lthis</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
         <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
 
@@ -238,21 +256,154 @@
         <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">:</span>
             <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1!r}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">request_type</span>
 
     <span class="k">def</span> <span class="nf">_get_response_effective_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Response is a `AlpcMessage` needed to handle response in message vs response in view&quot;&quot;&quot;</span>
+        <span class="n">response_header</span> <span class="o">=</span> <span class="n">ALPC_RPC_RESPONSE</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">view_is_valid</span><span class="p">:</span>
             <span class="c1"># Reponse directly in PORT_MESSAGE</span>
-            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mh">0x18</span><span class="p">:]</span> <span class="c1"># 4 * 6</span>
-        <span class="c1"># Response in view M extract size from PORT_MESSAGE &amp; read data from view</span>
-        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">TotalLength</span> <span class="o">&gt;=</span> <span class="mh">0x48</span> <span class="c1"># At least 0x20 of data</span>
-        <span class="n">rpcdatasize</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mh">0x18</span><span class="p">:</span><span class="mh">0x1c</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">viewattr</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">view_attribute</span>
-        <span class="k">assert</span> <span class="n">viewattr</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">&gt;=</span> <span class="n">rpcdatasize</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">viewattr</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">,</span> <span class="n">rpcdatasize</span><span class="p">)</span></div>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ALPC_RPC_RESPONSE</span><span class="p">):]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Response in view M extract size from PORT_MESSAGE &amp; read data from view</span>
+            <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">TotalLength</span> <span class="o">&gt;=</span> <span class="mh">0x48</span> <span class="c1"># At least 0x20 of data</span>
+            <span class="n">rpcdatasize</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mh">0x18</span><span class="p">:</span><span class="mh">0x1c</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># ctypes.sizeof(ALPC_RPC_RESPONSE)</span>
+            <span class="n">viewattr</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">view_attribute</span>
+            <span class="k">assert</span> <span class="n">viewattr</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">&gt;=</span> <span class="n">rpcdatasize</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">viewattr</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">,</span> <span class="n">rpcdatasize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response_header</span><span class="o">.</span><span class="n">request_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER_ORPC</span><span class="p">:</span>
+            <span class="c1"># Parse &amp; remove ORPC headers (orpcthat + LocalThat)</span>
+            <span class="n">orpcthat</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ORPCTHAT32</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">orpcthat</span><span class="p">):]</span>
+            <span class="k">if</span> <span class="n">orpcthat</span><span class="o">.</span><span class="n">extensions</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parsing extension !&quot;</span><span class="p">)</span>
+                <span class="c1"># Parse extension : code have not been tested a lot</span>
+                <span class="n">write_array_extend</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WireExtentArray</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WireExtentArray</span><span class="p">):]</span>
+                <span class="k">if</span> <span class="n">write_array_extend</span><span class="o">.</span><span class="n">rounded_size</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;orpcthat.extensions: WireExtentArray.rounded_size != 2&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">write_array_extend</span><span class="o">.</span><span class="n">unique_flag</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pass_wire_extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">localthat_type</span> <span class="o">=</span> <span class="n">find_correct_localthat_for_version</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">localthat_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">localthat</span> <span class="o">=</span> <span class="n">localthat_type</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="c1"># Check localthat pointers are empty</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pAsyncResponseBlock&quot;</span><span class="p">,</span> <span class="s2">&quot;containerErrorInformation&quot;</span><span class="p">,</span> <span class="s2">&quot;containerPassthroughData&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">localthat</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ORPC Response with localthat.</span><span class="si">{0}</span><span class="s2"> != 0&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">localthat</span><span class="p">):]</span>
+        <span class="k">return</span> <span class="n">data</span>
 
+    <span class="k">def</span> <span class="nf">_pass_wire_extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">wire_extend</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WireExtent</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># We don&#39;t care -&gt; jump over the size only</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WireExtent</span><span class="p">)</span> <span class="o">+</span> <span class="n">wire_extend</span><span class="o">.</span><span class="n">rounded_size</span><span class="p">:]</span></div>
+
+
+<span class="c1"># Based on combase.dll analysis</span>
+
+<span class="c1"># LOCALTHIS</span>
+<span class="c1"># Nb fields:  2</span>
+<span class="c1"># 6.1.7601.17514 -&gt; 6.2.9200.22376</span>
+<span class="c1">#  * 6.1.7601.17514</span>
+<span class="c1">#  * 6.1.7601.17514</span>
+<span class="c1">#  * 6.2.9200.22376</span>
+<span class="c1"># Nb fields:  4</span>
+<span class="c1"># 6.3.9600.17031 -&gt; 6.3.9600.20772</span>
+<span class="c1">#  * 6.3.9600.17031</span>
+<span class="c1">#  * 6.3.9600.20772</span>
+<span class="c1"># Nb fields:  5</span>
+<span class="c1"># 10.0.10240.16384 -&gt; 10.0.15063.2679</span>
+<span class="c1"># Nb fields:  7</span>
+<span class="c1"># 10.0.16299.1 -&gt; 10.0.26100.2454</span>
+
+<span class="k">def</span> <span class="nf">find_correct_localthis_for_version</span><span class="p">():</span>
+    <span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">version</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span><span class="p">)</span> <span class="ow">in</span> <span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32_NT_62</span><span class="p">(</span><span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32_NT_63</span><span class="p">(</span><span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">vmaj</span> <span class="o">==</span> <span class="mi">10</span>
+    <span class="n">vnumber</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\windows\system32\combase.dll&quot;</span><span class="p">)</span>
+    <span class="c1"># Extract version number from combase</span>
+    <span class="c1"># as it was used to find the struct per version</span>
+    <span class="n">build_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">vnumber</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">build_number</span> <span class="o">&lt;=</span> <span class="mi">15063</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32_NT_1607</span><span class="p">(</span><span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHIS32</span><span class="p">(</span><span class="n">callTraceActivity</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;42424242-4242-4242-4242-424242424242&quot;</span><span class="p">),</span>
+                        <span class="n">dwClientThread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
+
+
+<span class="c1"># LOCALTHAT</span>
+<span class="c1"># Nb fields:  2</span>
+<span class="c1"># 6.3.9600.17031 -&gt; 6.3.9600.20772</span>
+<span class="c1">#  * 6.3.9600.17031</span>
+<span class="c1">#  * 6.3.9600.17031</span>
+<span class="c1">#  * 6.3.9600.17031</span>
+<span class="c1">#  * 6.3.9600.20772</span>
+<span class="c1"># Nb fields:  3</span>
+<span class="c1"># 10.0.18362.900 -&gt; 10.0.18362.1916</span>
+<span class="c1">#  * 10.0.18362.900</span>
+<span class="c1">#  * 10.0.18362.900</span>
+<span class="c1">#  * 10.0.18362.1016</span>
+<span class="c1">#  * 10.0.18362.1916</span>
+<span class="c1"># Nb fields:  4</span>
+<span class="c1"># 10.0.10240.16384 -&gt; 10.0.17763.6040</span>
+<span class="c1">#  * 10.0.10240.16384</span>
+<span class="c1">#  * 10.0.10240.16384</span>
+<span class="c1">#  * 10.0.10240.20747</span>
+<span class="c1">#  * 10.0.10586.0</span>
+<span class="c1">#  * 10.0.14393.576</span>
+<span class="c1">#  * 10.0.14393.6451</span>
+<span class="c1">#  * 10.0.14393.7426</span>
+<span class="c1">#  * 10.0.15063.251</span>
+<span class="c1">#  * 10.0.15063.1563</span>
+<span class="c1">#  * 10.0.15063.2500</span>
+<span class="c1">#  * 10.0.15063.2679</span>
+<span class="c1">#  * 10.0.16299.1</span>
+<span class="c1">#  * 10.0.16299.15</span>
+<span class="c1">#  * 10.0.17134.1</span>
+<span class="c1">#  * 10.0.17134.48</span>
+<span class="c1">#  * 10.0.17134.2145</span>
+<span class="c1">#  * 10.0.17134.2145</span>
+<span class="c1">#  * 10.0.17763.1</span>
+<span class="c1">#  * 10.0.17763.2931</span>
+<span class="c1">#  * 10.0.17763.6040</span>
+<span class="c1"># Nb fields:  5</span>
+<span class="c1"># 10.0.19039.1 -&gt; 10.0.26100.2454</span>
+<span class="c1">#  * 10.0.19039.1</span>
+<span class="c1">#  * 10.0.19041.84</span>
+<span class="c1">#  * 10.0.19041.4894</span>
+<span class="c1">#  * 10.0.22000.65</span>
+<span class="c1">#  * 10.0.22621.2792</span>
+<span class="c1">#  * 10.0.22621.3958</span>
+<span class="c1">#  * 10.0.22621.4111</span>
+<span class="c1">#  * 10.0.22621.4541</span>
+<span class="c1">#  * 10.0.26100.2454</span>
+<span class="c1">#  * 10.0.26100.2454</span>
+
+<span class="k">def</span> <span class="nf">find_correct_localthat_for_version</span><span class="p">():</span>
+    <span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">version</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">vmaj</span><span class="p">,</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHAT32_NT_63</span>
+    <span class="k">assert</span> <span class="n">vmaj</span> <span class="o">==</span> <span class="mi">10</span>
+    <span class="n">vnumber</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\windows\system32\combase.dll&quot;</span><span class="p">)</span>
+    <span class="c1"># Extract version number from combase</span>
+    <span class="c1"># as it was used to find the struct per version</span>
+    <span class="n">build_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">vnumber</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">build_number</span> <span class="o">&lt;=</span> <span class="mi">17763</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHAT32_NT_1607</span>
+    <span class="k">elif</span> <span class="n">build_number</span> <span class="o">==</span> <span class="mi">18362</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHAT32_10_1903</span>
+    <span class="k">elif</span> <span class="n">build_number</span> <span class="o">&gt;=</span> <span class="mi">19039</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LOCALTHAT32</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown LOCALTHAT32 structure for version </span><span class="si">{0}</span><span class="s2">, please share me your combase.dll file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">versionstr</span><span class="p">))</span>
 </pre></div>
 
             <div class="clearer"></div>
@@ -284,7 +435,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.rpc.client</a></li> 
       </ul>
