@@ -437,6 +437,8 @@ class AlpcClient(AlpcTransportBase):
     def disconnect(self):
         if self.handle:
             self._close_port(self.handle)
+            self.handle = None
+
 
     def __del__(self):
         if sys.path is not None:
@@ -531,8 +533,10 @@ class AlpcServer(AlpcTransportBase):
     def disconnect(self):
         if self.handle:
             self._close_port(self.handle)
+            self.handle = None
         for com_port_handle in self.communication_port_list:
             self._close_port(com_port_handle)
+            del self.communication_port_list[:]
 
     # TODO: add an API to close a communication port ?
 

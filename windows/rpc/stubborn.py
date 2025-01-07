@@ -60,13 +60,13 @@ def stubborn_create_instance(clsid, iid):
 
     resolver_info = rpiv_infoptr[0]
     if resolver_info.OxidInfo.containerVersion.version > 3:
-        print("resolver_info.OxidInfo.containerVersion.version == {0}".format(resolver_info.OxidInfo.containerVersion.version))
+        # print("resolver_info.OxidInfo.containerVersion.version == {0}".format(resolver_info.OxidInfo.containerVersion.version))
         print("Probable bad structure ! -> cast to legacy !")
         resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_LEGACY)[0]
 
-    print("")
+    # print("")
     psa = resolver_info.OxidInfo.psa[0] # Retrieve the bidings to our COM server
-    print("psa.bidings: {0}".format(psa.bidings))
+    # print("psa.bidings: {0}".format(psa.bidings))
     # ipidRemUnknown = resolver_info.OxidInfo.ipidRemUnknown # Useful for IRemQueryInterface
 
     # Retrieve info about the IPID from GetMarshalledResults
