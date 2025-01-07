@@ -166,7 +166,7 @@ class RPCClient(object):
             this.version = (5,7)
             this.flags = gdef.ORPCF_LOCAL
             # Returned correct type with mandatory fields filed
-            lthis = find_correct_localthis_for_version()
+            lthis = fill_correct_localthis_for_version()
             return buffer(req)[:] + buffer(this)[:] + buffer(lthis)[:] + params
         return buffer(req)[:] + params
 
@@ -224,26 +224,29 @@ class RPCClient(object):
             data = windows.current_process.read_memory(viewattr.ViewBase, rpcdatasize)
         if response_header.request_id == self.REQUEST_IDENTIFIER_ORPC:
             # Parse & remove ORPC headers (orpcthat + LocalThat)
-            orpcthat = gdef.ORPCTHAT32.from_buffer_copy(data)
-            data = data[ctypes.sizeof(orpcthat):]
-            if orpcthat.extensions != 0:
-                print("Parsing extension !")
-                # Parse extension : code have not been tested a lot
-                write_array_extend = gdef.WireExtentArray.from_buffer_copy(data)
-                data = data[ctypes.sizeof(gdef.WireExtentArray):]
-                if write_array_extend.rounded_size != 2:
-                    raise NotImplementedError("orpcthat.extensions: WireExtentArray.rounded_size != 2")
-                for value in write_array_extend.unique_flag:
-                    if value != 0:
-                        data = self._pass_wire_extend(data)
-            localthat_type = find_correct_localthat_for_version()
-            if localthat_type is not None:
-                localthat = localthat_type.from_buffer_copy(data)
-                # Check localthat pointers are empty
-                for field in ("pAsyncResponseBlock", "containerErrorInformation", "containerPassthroughData"):
-                    if getattr(localthat, field, 0) != 0:
-                        raise NotImplementedError("ORPC Response with localthat.{0} != 0".format(field))
-                data = data[ctypes.sizeof(localthat):]
+            data = self._pass_orpc_response_structures(data)
+        return data
+
+    def _pass_orpc_response_structures(self, data):
+        orpcthat = gdef.ORPCTHAT32.from_buffer_copy(data)
+        data = data[ctypes.sizeof(orpcthat):]
+        if orpcthat.extensions != 0:
+            # Parse extension : code have not been tested a lot
+            write_array_extend = gdef.WireExtentArray.from_buffer_copy(data)
+            data = data[ctypes.sizeof(gdef.WireExtentArray):]
+            if write_array_extend.rounded_size != 2:
+                raise NotImplementedError("orpcthat.extensions: WireExtentArray.rounded_size != 2")
+            for value in write_array_extend.unique_flag:
+                if value != 0:
+                    data = self._pass_wire_extend(data)
+        localthat_type = find_correct_localthat_for_version()
+        if localthat_type is not None:
+            localthat = localthat_type.from_buffer_copy(data)
+            # Check localthat pointers are empty
+            for field in ("pAsyncResponseBlock", "containerErrorInformation", "containerPassthroughData"):
+                if getattr(localthat, field, 0) != 0:
+                    raise NotImplementedError("ORPC Response with localthat.{0} != 0".format(field))
+            data = data[ctypes.sizeof(localthat):]
         return data
 
     def _pass_wire_extend(self, data):
@@ -268,7 +271,7 @@ class RPCClient(object):
 # Nb fields:  7
 # 10.0.16299.1 -> 10.0.26100.2454
 
-def find_correct_localthis_for_version():
+def fill_correct_localthis_for_version():
     vmaj, vmin = windows.system.version
     if (vmaj, vmin) < (6, 1):
         return None
