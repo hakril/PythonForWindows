@@ -54,14 +54,17 @@ def stubborn_create_instance(clsid, iid):
 
     # TODO: a real analysis of which combase version change this structure ?
     # 6.1.7601.17514 -> 10.0.19041.4894 -> PPRIV_RESOLVER_INFO_LEGACY
-    # 10.0.22000.65 -> 10.0.26100.2454 -> PPRIV_RESOLVER
+    # 10.0.22000.65 -> 10.0.26100.2454 -> PPRIV_RESOLVER_INFO (Windows 11 & +)
     rpiv_infoptr = gdef.PPRIV_RESOLVER_INFO() # Structure may change on older windows and be PPRIV_RESOLVER_INFO_LEGACY
     propout_as_scmreply.GetResolverInfo(rpiv_infoptr)
 
     resolver_info = rpiv_infoptr[0]
+    # resolver_info.OxidInfo.containerVersion.version is part of OxidInfo.ipidRemUnknown on PPRIV_RESOLVER_INFO_LEGACY
+    # And this part of ipidRemUnknown is a PID
+    # So a good value to check for > 3 :)
     if resolver_info.OxidInfo.containerVersion.version > 3:
         # print("resolver_info.OxidInfo.containerVersion.version == {0}".format(resolver_info.OxidInfo.containerVersion.version))
-        print("Probable bad structure ! -> cast to legacy !")
+        # print("Probable bad structure ! -> cast to legacy !")
         resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_LEGACY)[0]
 
     # print("")

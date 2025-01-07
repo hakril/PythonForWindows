@@ -465,8 +465,9 @@ class System(object):
         bufstr = ctypes.cast(bufptr, gdef.LPWSTR)
         return bufstr.value
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def build_number(self):
+        """Return the `CurrentBuildNumber`"""
         # Will only work on Windows 10 ?
         build = self.kuser_shared_data.NtBuildNumber
         if build: # 0 before windows 10
@@ -474,6 +475,17 @@ class System(object):
 
         key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
         return int(key["CurrentBuildNumber"].value)
+
+    @utils.fixedproperty
+    def display_version(self):
+        """Return the `DisplayVersion` (22H2, 23H2, ...) is it exists, else None"""
+        key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+        try:
+            return key["DisplayVersion"].value
+        except WindowsError as e:
+            if not e.winerror == gdef.ERROR_FILE_NOT_FOUND:
+                raise
+            return None
 
     @utils.fixedproperty
     def versionstr(self):

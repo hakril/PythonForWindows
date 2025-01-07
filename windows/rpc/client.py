@@ -128,6 +128,10 @@ class RPCClient(object):
             :param str params: The mashalled parameters (NDR32)
             :param GUID ipid: The IPID for `ORPC calls <https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dcom/db1d5ce1-a783-4f3d-854c-dc44308e78fb>`_
             :returns: :class:`str`
+
+        .. note::
+
+            Since `1.0.3` if the call is an ORPC call, the `ORPCTHAT` & `LOCALTHAT` present in the response are parsed and striped from the result.
         """
         request = self.forge_alpc_request(IID, method_offset, params, ipid=ipid)
         response = self._send_request(request)
