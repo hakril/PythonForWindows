@@ -163,7 +163,6 @@ class RPCClient(object):
             this.flags = gdef.ORPCF_LOCAL
             # Returned correct type with mandatory fields filed
             lthis = find_correct_localthis_for_version()
-            print("lthis is : {0}".format(lthis))
             return buffer(req)[:] + buffer(this)[:] + buffer(lthis)[:] + params
         return buffer(req)[:] + params
 
