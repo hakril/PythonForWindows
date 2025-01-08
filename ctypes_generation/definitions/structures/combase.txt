@@ -334,16 +334,6 @@ typedef struct _LOCALTHIS {
     PVOID pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
 } LOCALTHIS;
 
-typedef struct _LOCALTHIS32 {
-    DWORD dwFlags;
-    DWORD dwClientThread;
-    GUID passthroughTraceActivity;
-    GUID callTraceActivity;
-    MIDL_XmitDefs_0001 asyncRequestBlock;
-    DWORD reserved;
-    PVOID32 pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
-} LOCALTHIS32;
-
 /* LOCALTHAT & sub structures */
 
 typedef struct _MIDL_XmitDefs_0007 {
@@ -406,15 +396,6 @@ typedef struct _LOCALTHAT {
 } LOCALTHAT;
 
 
-typedef struct _LOCALTHAT32 {
-    UINT64              marshalingSetId;
-    ULONG               reserved;
-    PVOID32             pAsyncResponseBlock;
-    PVOID32             containerErrorInformation;
-    PVOID32             containerPassthroughData;
-} LOCALTHAT32;
-
-
 typedef struct tagORPCTHAT {
     ULONG               flags;
     tagORPC_EXTENT_ARRAY *extensions;
@@ -425,3 +406,34 @@ typedef struct ORPCTHAT32 {
     ULONG               flags;
     PVOID32             extensions; // tagORPC_EXTENT_ARRAY tagORPC_EXTENT_ARRAY
 } ORPCTHAT32;
+
+// From: com\ole32\com\dcomrem\chock.hxx
+typedef struct
+{
+  ULONG  size;           // Number of extents.
+  ULONG  reserved;       // Must be zero.
+  ULONG  unique;         // Flag to indicate presence of unique_flag array.
+  ULONG  rounded_size;   // Actual number of extents.
+  ULONG  unique_flag[UNIQUE_FLAG_PADDING];  // Flags to indicate presense of ORPC_EXTENTs
+} WireExtentArray;
+
+typedef struct
+{
+    ULONG        rounded_size;   // Actual number of extents.
+    GUID         id;             // Extension identifier.
+    ULONG        size;           // Extension size.
+
+    // byte           data[];         // Extension data.
+} WireExtent;
+
+typedef struct tagMainHeader
+{
+    ULONG Signature;
+    ULONG Version;
+    ULONG cPolicies;
+    ULONG cbBuffer;
+    ULONG cbSize;
+    LONG          hr;
+    LONG          hrServer;
+    LONG         reserved;
+} MainHeader;

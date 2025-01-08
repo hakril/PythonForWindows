@@ -157,3 +157,13 @@ def test_psid_from_to_string():
     sid = gdef.PSID.from_string(initial_str)
     assert str(sid) == initial_str
     assert gdef.PSID.from_string(str(sid)) == sid
+
+def test_MIDL_XmitDefs_0001_NT_1607():
+    # First definition was broken
+    # 0:000> dt combase_32!__MIDL_XmitDefs_0001
+    # +0x000 asyncOperationId : _GUID
+    # +0x010 oxidClientProcessNA : Uint8B
+    # +0x018 originalClientLogicalThreadId : _GUID
+    # +0x028 uClientCausalityTraceId : Uint8B
+    assert gdef.MIDL_XmitDefs_0001_NT_1607.originalClientLogicalThreadId.offset == 0x018
+    assert gdef.MIDL_XmitDefs_0001_NT_1607.uClientCausalityTraceId.offset == 0x028

@@ -1,0 +1,212 @@
+/* Summary of seen version on combase symbols for LOCALTHIS:
+
+Nb fields:  2
+6.1.7601.17514 -> 6.2.9200.22376
+ * 6.1.7601.17514
+ * 6.1.7601.17514
+ * 6.2.9200.22376
+Nb fields:  4
+6.3.9600.17031 -> 6.3.9600.20772
+ * 6.3.9600.17031
+ * 6.3.9600.20772
+Nb fields:  5
+10.0.10240.16384 -> 10.0.15063.2679
+ * 10.0.10240.16384
+ * 10.0.10240.20747
+ * 10.0.10586.0
+ * 10.0.14393.576
+ * 10.0.14393.6451
+ * 10.0.14393.7426
+ * 10.0.15063.251
+ * 10.0.15063.1563
+ * 10.0.15063.2500
+ * 10.0.15063.2679
+Nb fields:  7
+10.0.16299.1 -> 10.0.26100.2454
+ * 10.0.16299.1
+ * 10.0.16299.15
+ * 10.0.17134.1
+ * 10.0.17134.48
+ * 10.0.17134.2145
+ * 10.0.17134.2145
+ * 10.0.17763.1
+ * 10.0.17763.2931
+ * 10.0.22621.2792
+ * 10.0.22621.3958
+ * 10.0.22621.4111
+ * 10.0.22621.4541
+ * 10.0.26100.2454
+*/
+
+/* Summary of seen version on combase symbols for LOCALTHAT:
+
+Nb fields:  2
+6.3.9600.17031 -> 6.3.9600.20772
+ * 6.3.9600.17031
+ * 6.3.9600.17031
+ * 6.3.9600.17031
+ * 6.3.9600.20772
+Nb fields:  3
+10.0.18362.900 -> 10.0.18362.1916
+ * 10.0.18362.900
+ * 10.0.18362.900
+ * 10.0.18362.1016
+ * 10.0.18362.1916
+Nb fields:  4
+10.0.10240.16384 -> 10.0.17763.6040
+ * 10.0.10240.16384
+ * 10.0.10240.16384
+ * 10.0.10240.20747
+ * 10.0.10586.0
+ * 10.0.14393.576
+ * 10.0.14393.6451
+ * 10.0.14393.7426
+ * 10.0.15063.251
+ * 10.0.15063.1563
+ * 10.0.15063.2500
+ * 10.0.15063.2679
+ * 10.0.16299.1
+ * 10.0.16299.15
+ * 10.0.17134.1
+ * 10.0.17134.48
+ * 10.0.17134.2145
+ * 10.0.17134.2145
+ * 10.0.17763.1
+ * 10.0.17763.2931
+ * 10.0.17763.6040
+Nb fields:  5
+10.0.19039.1 -> 10.0.26100.2454
+ * 10.0.19039.1
+ * 10.0.19041.84
+ * 10.0.19041.4894
+ * 10.0.22000.65
+ * 10.0.22621.2792
+ * 10.0.22621.3958
+ * 10.0.22621.4111
+ * 10.0.22621.4541
+ * 10.0.26100.2454
+ * 10.0.26100.2454
+*/
+
+
+/* Seen on 6.2.9200.22376 (win8_ldr_escrow.180222-0941) */
+/* also seen on previous version : XP / Win7 / Server 2012 */
+
+typedef struct LOCALTHIS32_NT_62 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+};
+
+// NO LOCALTHAT for these previous version as far as I now
+
+/* Seen on 6.3.9600.17031 (winblue_gdr.140221-1952) */
+
+typedef struct __MIDL_XmitDefs_0001_NT_63 {
+    ULONG               size;
+    ULONG               reserved;
+    UINT64              *pAstaOxids;
+};
+
+typedef struct LOCALTHIS32_NT_63 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+    ULONG               reserved;
+    PVOID32             pTouchedAstaArray;
+};
+
+
+typedef struct LOCALTHAT32_NT_63 {
+    UINT64              marshalingSetAcknowledgmentOxid;
+    UINT64              marshalingSetId;
+};
+
+/* NT_1607 : combase 10.0.14393.576  from a WS2016 ISO*/
+
+typedef struct __MIDL_XmitDefs_0002_NT_1607 {
+    ULONG               size;
+    ULONG               reserved;
+    PVOID32             pAstaOxids;
+};
+
+typedef struct __MIDL_XmitDefs_0001_NT_1607 {
+    _GUID               asyncOperationId;
+    UINT64              oxidClientProcessNA;
+    _GUID               originalClientLogicalThreadId;
+    UINT64              uClientCausalityTraceId;
+} MIDL_XmitDefs_0001_NT_1607;
+
+typedef struct _LOCALTHIS32_NT_1607 {
+    ULONG               dwFlags;
+    ULONG               dwClientThread;
+    MIDL_XmitDefs_0001_NT_1607 asyncRequestBlock;
+    ULONG               reserved;
+    PVOID32             pTouchedAstaArray;
+} LOCALTHIS32_NT_1607;
+
+typedef struct __MIDL_XmitDefs_0007 {
+    INT                 pointOfFailure;
+    HRESULT             hrFailure;
+    ULONG               sizeOfMarshaledErrorInfo;
+    ULONG               reserved;
+    BYTE                *pMarshaledErrorInfo;
+} MIDL_XmitDefs_0007;
+
+typedef struct __MIDL_XmitDefs_0005 {
+    ULONG               sizeOfMarshaledResults;
+    ULONG               reserved;
+    BYTE                *pMarshaledResults;
+} MIDL_XmitDefs_0005;
+
+typedef struct __MIDL_XmitDefs_0008 {
+    INT                 outcome;
+    MIDL_XmitDefs_0005 successDetails;
+    MIDL_XmitDefs_0007 failureDetails;
+} MIDL_XmitDefs_0008;
+
+typedef struct __MIDL_XmitDefs_0010 {
+    ULONG               asyncStatus;
+    ULONG               reserved1;
+    UINT64              uServerCausalityTraceId;
+    ULONG               reserved2;
+    PVOID32 *pOutcomeDetails; //__MIDL_XmitDefs_0008
+} MIDL_XmitDefs_0010;
+
+typedef struct LOCALTHAT32_NT_1607 {
+    UINT64              marshalingSetAcknowledgmentOxid;
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    PVOID32             pAsyncResponseBlock;
+};
+
+/* ! NT_1607: combase 10.0.14393.576 */
+
+
+/* */
+
+/* Seen only in 10.0.18362 versions of combase */
+
+typedef struct _LOCALTHAT32_10_1903 {
+    UINT64              marshalingSetId;
+    PVOID32             pAsyncResponseBlock;
+    PVOID32             containerPassthroughData;
+} LOCALTHAT32_10_1903;
+
+/* NT 10.22 ? seen on 10.0.22621.1 */
+
+typedef struct _LOCALTHIS32 {
+    DWORD dwFlags;
+    DWORD dwClientThread;
+    GUID passthroughTraceActivity;
+    GUID callTraceActivity;
+    MIDL_XmitDefs_0001 asyncRequestBlock;
+    DWORD reserved;
+    PVOID32 pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
+} LOCALTHIS32;
+
+typedef struct _LOCALTHAT32 {
+    UINT64              marshalingSetId;
+    ULONG               reserved;
+    PVOID32             pAsyncResponseBlock;
+    PVOID32             containerErrorInformation;
+    PVOID32             containerPassthroughData;
+} LOCALTHAT32;

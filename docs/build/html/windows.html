@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>1. The windows module &#8212; PythonForWindows 1.0.2 documentation</title>
+    <title>1. The windows module &#8212; PythonForWindows 1.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="_static/documentation_options.js?v=baaebd52"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>The <code class="docutils literal notranslate"><span class="pre">windows</span></code> module</a></li> 
       </ul>
     </div>  
@@ -95,6 +95,12 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.system.System.build_number">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_number</span></span><a class="headerlink" href="#windows.winobject.system.System.build_number" title="Link to this definition">¶</a></dt>
+<dd><p>Return the <cite>CurrentBuildNumber</cite></p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="windows.winobject.system.System.computer_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computer_name</span></span><a class="headerlink" href="#windows.winobject.system.System.computer_name" title="Link to this definition">¶</a></dt>
 <dd><p>The name of the computer</p>
@@ -114,6 +120,12 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 <dd class="field-odd"><p><a class="reference internal" href="device_manager.html#windows.winobject.device_manager.DeviceManager" title="windows.winobject.device_manager.DeviceManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceManager</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.system.System.display_version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">display_version</span></span><a class="headerlink" href="#windows.winobject.system.System.display_version" title="Link to this definition">¶</a></dt>
+<dd><p>Return the <cite>DisplayVersion</cite> (22H2, 23H2, …) is it exists, else None</p>
 </dd></dl>
 
 <dl class="py property">
@@ -342,8 +354,10 @@ Custom dict built on GetEnvironmentStringsW() on py2</p>
 <li><a class="reference internal" href="#the-system-object">1.1. The <code class="docutils literal notranslate"><span class="pre">system</span></code> object</a><ul>
 <li><a class="reference internal" href="#windows.winobject.system.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a><ul>
 <li><a class="reference internal" href="#windows.winobject.system.System.bitness"><code class="docutils literal notranslate"><span class="pre">bitness</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.system.System.build_number"><code class="docutils literal notranslate"><span class="pre">build_number</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.system.System.computer_name"><code class="docutils literal notranslate"><span class="pre">computer_name</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.system.System.device_manager"><code class="docutils literal notranslate"><span class="pre">device_manager</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.system.System.display_version"><code class="docutils literal notranslate"><span class="pre">display_version</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.system.System.environ"><code class="docutils literal notranslate"><span class="pre">environ</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.system.System.etw"><code class="docutils literal notranslate"><span class="pre">etw</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.system.System.event_log"><code class="docutils literal notranslate"><span class="pre">event_log</span></code></a></li>
@@ -416,7 +430,7 @@ Custom dict built on GetEnvironmentStringsW() on py2</p>
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>The <code class="docutils literal notranslate"><span class="pre">windows</span></code> module</a></li> 
       </ul>
     </div>
