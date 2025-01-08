@@ -24,3 +24,6 @@ def CTL_CODE(DeviceType, Function, Method, Access):
 
 def HRESULT_FACILITY(hr):
     return (((hr) >> 16) & 0x1fff)
+
+
+BROKEN
