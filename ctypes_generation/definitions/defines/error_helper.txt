@@ -3,3 +3,21 @@
 #define ERROR_SEVERITY_INFORMATIONAL 0x40000000
 #define ERROR_SEVERITY_WARNING       0x80000000
 #define ERROR_SEVERITY_ERROR         0xC0000000
+
+// https://learn.microsoft.com/en-us/windows/win32/com/structure-of-com-error-codes
+// Define the facility codes
+//
+#define FACILITY_WINDOWS                 0x8
+#define FACILITY_WIN32                   0x7
+#define FACILITY_STORAGE                 0x3
+#define FACILITY_RPC                     0x1
+#define FACILITY_NULL                    0x0
+#define FACILITY_ITF                     0x4
+#define FACILITY_DISPATCH                0x2
+
+
+//
+// Define the severity codes
+//
+#define STATUS_SEVERITY_SUCCESS          0x0
+#define STATUS_SEVERITY_COERROR          0x2
