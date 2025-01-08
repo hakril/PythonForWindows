@@ -17,3 +17,10 @@ NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
 
 def CTL_CODE(DeviceType, Function, Method, Access):
     return (((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method))
+
+# https://learn.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-hresult_facility
+# Original MACRO:
+#   #define HRESULT_FACILITY(hr)  (((hr) >> 16) & 0x1fff)
+
+def HRESULT_FACILITY(hr):
+    return (((hr) >> 16) & 0x1fff)

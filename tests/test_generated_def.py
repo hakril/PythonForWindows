@@ -113,6 +113,12 @@ def test_CTL_CODE_macro():
     assert gdef.IOCTL_MOUNTMGR_CREATE_POINT == 0x006DC000
     assert gdef.IOCTL_MOUNTMGR_QUERY_POINTS == 0x006D0008
 
+def test_HRESULT_FACILITY_macro():
+    """Test that the HRESULT_FACILITY() macro, (reimplemented in python in windef.py) returns the correct values"""
+    assert gdef.HRESULT_FACILITY(0x800706d1) == gdef.FACILITY_WIN32 == 7
+    # RPC_E_INVALID_HEADER(0x80010111)
+    assert gdef.HRESULT_FACILITY(gdef.RPC_E_INVALID_HEADER) == gdef.FACILITY_RPC == 1
+
 
 # typedef struct _DnsRecordFlags
 # {

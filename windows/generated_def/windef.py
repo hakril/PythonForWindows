@@ -17,6 +17,13 @@ NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
 
 def CTL_CODE(DeviceType, Function, Method, Access):
     return (((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method))
+
+# https://learn.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-hresult_facility
+# Original MACRO:
+#   #define HRESULT_FACILITY(hr)  (((hr) >> 16) & 0x1fff)
+
+def HRESULT_FACILITY(hr):
+    return (((hr) >> 16) & 0x1fff)
 from .ntstatus import *
 from .winerror import *
 BG_JOB_ENUM_ALL_USERS = make_flag("BG_JOB_ENUM_ALL_USERS", 0x0001)
@@ -516,6 +523,15 @@ ERROR_SEVERITY_SUCCESS = make_flag("ERROR_SEVERITY_SUCCESS", 0x00000000)
 ERROR_SEVERITY_INFORMATIONAL = make_flag("ERROR_SEVERITY_INFORMATIONAL", 0x40000000)
 ERROR_SEVERITY_WARNING = make_flag("ERROR_SEVERITY_WARNING", 0x80000000)
 ERROR_SEVERITY_ERROR = make_flag("ERROR_SEVERITY_ERROR", 0xC0000000)
+FACILITY_WINDOWS = make_flag("FACILITY_WINDOWS", 0x8)
+FACILITY_WIN32 = make_flag("FACILITY_WIN32", 0x7)
+FACILITY_STORAGE = make_flag("FACILITY_STORAGE", 0x3)
+FACILITY_RPC = make_flag("FACILITY_RPC", 0x1)
+FACILITY_NULL = make_flag("FACILITY_NULL", 0x0)
+FACILITY_ITF = make_flag("FACILITY_ITF", 0x4)
+FACILITY_DISPATCH = make_flag("FACILITY_DISPATCH", 0x2)
+STATUS_SEVERITY_SUCCESS = make_flag("STATUS_SEVERITY_SUCCESS", 0x0)
+STATUS_SEVERITY_COERROR = make_flag("STATUS_SEVERITY_COERROR", 0x2)
 EVENT_TRACE_FLAG_DISPATCHER = make_flag("EVENT_TRACE_FLAG_DISPATCHER", 0x00000800)
 EVENT_TRACE_FLAG_VIRTUAL_ALLOC = make_flag("EVENT_TRACE_FLAG_VIRTUAL_ALLOC", 0x00004000)
 EVENT_TRACE_FLAG_VAMAP = make_flag("EVENT_TRACE_FLAG_VAMAP", 0x00008000)
