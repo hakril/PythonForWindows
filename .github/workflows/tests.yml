@@ -17,7 +17,7 @@ jobs:
         - run:
             py .\ctypes_generation\generate.py
         - name: Check generated code can execute
-            py -c "import windows.generated_def"
+          run: py -c "import windows.generated_def"
   tests:
     # Not a real dependency : but starting tests when ctypes generation is broken is not useful
     needs: generate_ctypes
