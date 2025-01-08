@@ -205,8 +205,11 @@ class RPCClient(object):
         "raise if request_type == RESPONSE_TYPE_FAIL"
         request_type = struct.unpack("<I", response.data[:4])[0]
         if request_type == gdef.RPC_RESPONSE_TYPE_FAIL:
-            error_code = struct.unpack("<5I", response.data)[2]
-            raise ValueError("RPC Response error {0} ({1!r})".format(error_code, KNOWN_RPC_ERROR_CODE.get(error_code, error_code)))
+            effective_error_code = error_code = struct.unpack("<5I", response.data)[2]
+            # https://learn.microsoft.com/en-us/windows/win32/com/structure-of-com-error-codes
+            if gdef.HRESULT_FACILITY(error_code) == gdef.FACILITY_WIN32:
+                effective_error_code = effective_error_code & 0xffff
+            raise ValueError("RPC Response error {0:#x} ({1!r})".format(error_code, KNOWN_RPC_ERROR_CODE[effective_error_code]))
         return request_type
 
     def _get_response_effective_data(self, response):
