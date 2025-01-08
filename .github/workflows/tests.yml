@@ -5,7 +5,20 @@ on: [push, workflow_dispatch]
   # Allows you to run this workflow manually from the Actions tab
 
 jobs:
-  build:
+  generate_ctypes:
+    runs-on: windows-latest
+    timeout-minutes: 5
+
+    steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+        - run:
+            py .\ctypes_generation\generate.py
+  tests:
+    # Not a real dependency : but starting tests when ctypes generation is broken is not useful
+    needs: generate_ctypes
     runs-on: windows-latest
     timeout-minutes: 15
     strategy:
