@@ -1,6 +1,6 @@
 # PythonForWindows
 
-[![Pytest](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml/badge.svg?branch=master)](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
+[![Pytest](https://github.com/hakril/PythonForWindows/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/hakril/PythonForWindows/actions/workflows/tests.yml)
 
 PythonForWindows (PFW) is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
@@ -39,7 +39,7 @@ python setup.py install
 
 ## Encoding & unicode
 
-PythonForWindows support `python2.7` & `python3` and is currently tested for `Python2.7`, `3.6` & `3.11` via [Github Workflow](https://github.com/hakril/PythonForWindows/actions/workflows/mypytest.yml)
+PythonForWindows support `python2.7` & `python3` and is currently tested for `Python2.7`, `3.6` & `3.11` via [Github Workflow](https://github.com/hakril/PythonForWindows/actions/workflows/tests.yml)
 
 Since 1.0.0, the code uses "wide APIs" whenever possible and accept/returns python3 `str` (py2.7 `unicode` type) almost everywhere. Any functions/APIs not accepting unicode string can be  considered a bug if its not stated explicitly in the documentation.
 
