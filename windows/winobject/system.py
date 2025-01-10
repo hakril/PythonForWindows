@@ -260,7 +260,9 @@ class System(object):
             result = tuple(result_tup[:2])
         return result
 
-
+    # Based on:
+    #   https://jrsoftware.org/ishelp/index.php?topic=winvernotes
+    #   https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions
 
     WINDOWS_10_BUILD_NUMBER_VERSION = {
         # (build_number, is_workstation): "version_name"
@@ -284,8 +286,17 @@ class System(object):
         (26100, True): u"Windows 11 Version 24H2",
 
         (14393, False): u"Windows Server 2016",
+        # 16299 : Windows Server, version 1709 ?
+        # 17134 : Windows Server, version 1803 ?
+        # 17134 : Windows Server, version 1803 ?
         (17763, False): u"Windows Server 2019",
+        # 18362 : Windows Server, version 1903 ?
+        # 18363 : Windows Server, version 1909 ?
+        # 19041 : Windows Server, version 2004 ?
+        # 19042 : Windows Server, version 20H2 ?
         (20348, False): u"Windows Server 2022",
+        # 25398 : Windows Server, version 23H2 ?
+        (26100, False): u"Windows Server 2025",
     }
 
     def _get_version_name_for_10_build(self, build_number, is_workstation):
@@ -298,8 +309,28 @@ class System(object):
     def version_name(self):
         """The name of the system version,  values are:
 
+            * Windows Server 2025
+            * Windows 11 Version 24H2
+            * Windows 11 Version 23H2
+            * Windows 11 Version 22H2
+            * Windows 11 Version 21H2
+            * Windows 10 Version 22H2
+            * Windows 10 Version 21H2
+            * Windows Server 2022
+            * Windows 10 Version 21H1
+            * Windows 10 Version 20H2
+            * Windows 10 Version 2004
+            * Windows 10 Version 1909
+            * Windows 10 Version 1903
+            * Windows Server 2019
+            * Windows 10 Version 1809
+            * Windows 10 Version 1803
+            * Windows 10 Version 1709
+            * Windows 10 Version 1703
+            * Windows 10 Version 1607
+            * Windows 10 Version 1511
+            * Windows 10 Version 1507
             * Windows Server 2016
-            * Windows 10
             * Windows Server 2012 R2
             * Windows 8.1
             * Windows Server 2012
@@ -309,20 +340,20 @@ class System(object):
             * Windows Server 2008
             * Windows Vista
             * Windows XP Professional x64 Edition
-            * TODO: version (5.2) + is_workstation + bitness == 32 (don't even know if possible..)
+            * Unknown: version (5.2) + is_workstation + bitness == 32 (don't even know if possible..)
             * Windows Server 2003 R2
             * Windows Server 2003
             * Windows XP
             * Windows 2000
+            * "Unknown Windows 10+ <versionstr={0} | is_workstation={1}>".format(self.versionstr, is_workstation)
             * "Unknown Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
-        :type: :class:`str`
+        :type: :class:`unicode`
         """
         version = self.version
         is_workstation = self.product_type == gdef.VER_NT_WORKSTATION
         if version == (10, 0):
             return self._get_version_name_for_10_build(self.build_number, is_workstation)
-            # return [u"Windows Server 2016", u"Windows 10"][is_workstation]
         elif version == (6, 3):
             return  [u"Windows Server 2012 R2", u"Windows 8.1"][is_workstation]
         elif version == (6, 2):
@@ -337,7 +368,7 @@ class System(object):
                 if self.bitness == 64:
                     return u"Windows XP Professional x64 Edition"
                 else:
-                    return u"TODO: version (5.2) + is_workstation + bitness == 32"
+                    return u"Unknown: version (5.2) + is_workstation + bitness == 32"
             elif metric != 0:
                 return u"Windows Server 2003 R2"
             else:
