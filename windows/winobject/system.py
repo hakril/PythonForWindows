@@ -260,6 +260,40 @@ class System(object):
             result = tuple(result_tup[:2])
         return result
 
+
+
+    WINDOWS_10_BUILD_NUMBER_VERSION = {
+        # (build_number, is_workstation): "version_name"
+        (10240, True): "Windows 10 Version 1507",
+        (10586, True): "Windows 10 Version 1511",
+        (14393, True): "Windows 10 Version 1607",
+        (15063, True): "Windows 10 Version 1703",
+        (16299, True): "Windows 10 Version 1709",
+        (17134, True): "Windows 10 Version 1803",
+        (17763, True): "Windows 10 Version 1809",
+        (18362, True): "Windows 10 Version 1903",
+        (18363, True): "Windows 10 Version 1909",
+        (19041, True): "Windows 10 Version 2004",
+        (19042, True): "Windows 10 Version 20H2",
+        (19043, True): "Windows 10 Version 21H1",
+        (19044, True): "Windows 10 Version 21H2",
+        (19045, True): "Windows 10 Version 22H2",
+        (22000, True): "Windows 11 Version 21H2",
+        (22621, True): "Windows 11 Version 22H2",
+        (22631, True): "Windows 11 Version 23H2",
+        (26100, True): "Windows 11 Version 24H2",
+
+        (14393, False): "Windows Server 2016",
+        (17763, False): "Windows Server 2019",
+        (20348, False): "Windows Server 2022",
+    }
+
+    def _get_version_name_for_10_build(self, build_number, is_workstation):
+        try:
+            return self.WINDOWS_10_BUILD_NUMBER_VERSION[(build_number, is_workstation)]
+        except KeyError as e:
+            return u"Unknown Windows 10+ <versionstr={0} | is_workstation={1}>".format(self.versionstr, is_workstation)
+
     @utils.fixedpropety
     def version_name(self):
         """The name of the system version,  values are:
@@ -280,14 +314,15 @@ class System(object):
             * Windows Server 2003
             * Windows XP
             * Windows 2000
-            * "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+            * "Unknown Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
         :type: :class:`str`
         """
         version = self.version
         is_workstation = self.product_type == gdef.VER_NT_WORKSTATION
         if version == (10, 0):
-            return [u"Windows Server 2016", u"Windows 10"][is_workstation]
+            return self._get_version_name_for_10_build(self.build_number, is_workstation)
+            # return [u"Windows Server 2016", u"Windows 10"][is_workstation]
         elif version == (6, 3):
             return  [u"Windows Server 2012 R2", u"Windows 8.1"][is_workstation]
         elif version == (6, 2):
@@ -312,7 +347,7 @@ class System(object):
         elif version == (5, 0):
             return u"Windows 2000"
         else:
-            return u"Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+            return u"Unknown Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
     VERSION_MAPPER = gdef.FlagMapper(gdef.VER_NT_WORKSTATION, gdef.VER_NT_DOMAIN_CONTROLLER, gdef.VER_NT_SERVER)
     @utils.fixedpropety

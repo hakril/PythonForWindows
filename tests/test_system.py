@@ -13,6 +13,7 @@ class TestSystemWithCheckGarbage(object):
 
     def test_version_name(self):
         assert is_unicode(windows.system.version_name)
+        assert u"unknown" not in windows.system.version_name.lower()
 
     def test_version_product_type(self):
         assert windows.system.product_type
@@ -25,7 +26,6 @@ class TestSystemWithCheckGarbage(object):
 
     def test_version_versionstr(self):
         assert is_unicode(windows.system.windir)
-
 
     def test_computer_name(self):
         computer_name = windows.system.computer_name
