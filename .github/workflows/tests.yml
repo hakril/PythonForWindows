@@ -23,6 +23,8 @@ jobs:
         - name: Check generated code can execute
           run: py -c "import windows.generated_def"
   tests:
+    # Not a real dependency : but starting tests when ctypes generation is broken is not useful
+    if: false # Disable during ARM64 CI tests
     strategy:
       fail-fast: false
       matrix:
@@ -94,3 +96,14 @@ jobs:
           secondary_rate_limit_wait_seconds: 90
           seconds_between_github_writes: 10
           seconds_between_github_reads: 1
+
+  tests_arm64:
+    needs: generate_ctypes
+    timeout-minutes: 15
+    runs-on: windows-ARM64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Listing python versions availables
+        run: py -0
