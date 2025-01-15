@@ -62,12 +62,17 @@ def stubborn_create_instance(clsid, iid):
     # resolver_info.OxidInfo.containerVersion.version is part of OxidInfo.ipidRemUnknown on PPRIV_RESOLVER_INFO_LEGACY
     # And this part of ipidRemUnknown is a PID
     # So a good value to check for > 3 :)
+    # Bad alignemetn of containerVersion -> its an older version
     if resolver_info.OxidInfo.containerVersion.version > 3:
-        # print("resolver_info.OxidInfo.containerVersion.version == {0}".format(resolver_info.OxidInfo.containerVersion.version))
-        # print("Probable bad structure ! -> cast to legacy !")
-        resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_LEGACY)[0]
+        dcomversionstruct = resolver_info.OxidInfo.dcomVersion
+        # If 5,7 -> good alignement of dcomversion so we know its PRIV_RESOLVER_INFO_17763
+        dcomversion = (dcomversionstruct.MajorVersion, dcomversionstruct.MinorVersion)
+        if dcomversion == (5, 7):
+            resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_17763)[0]
+        else:
+            # Bad alignement for everythin -> Legacy
+            resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_LEGACY)[0]
 
-    # print("")
     psa = resolver_info.OxidInfo.psa[0] # Retrieve the bidings to our COM server
     # print("psa.bidings: {0}".format(psa.bidings))
     # ipidRemUnknown = resolver_info.OxidInfo.ipidRemUnknown # Useful for IRemQueryInterface
@@ -85,6 +90,8 @@ def stubborn_create_instance(clsid, iid):
     target_alpc_endpoint = psa.bidings[0]
     assert target_alpc_endpoint.startswith("ncalrpc:[")
     target_alpc_server = "\\RPC Control\\" + target_alpc_endpoint[len("ncalrpc:["):-1]
+    # Does not works on Windows XP at this point -> ALPC did not exists back then
+    # I won't implement a LRPC Client :')
     client = windows.rpc.RPCClient(target_alpc_server)
 
     # RPC: Bind to the IID on ou server

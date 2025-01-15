@@ -21,7 +21,7 @@ jobs:
   tests:
     # Not a real dependency : but starting tests when ctypes generation is broken is not useful
     needs: generate_ctypes
-    runs-on: windows-latest
+    runs-on: windows-2019
     timeout-minutes: 15
     strategy:
       fail-fast: false

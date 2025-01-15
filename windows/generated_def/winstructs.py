@@ -1425,6 +1425,37 @@ class CONTAINERVERSION(Structure):
     ]
 
 
+class __MIDL_ILocalObjectExporter_0006(Structure):
+    _fields_ = [
+        ("dwTid", ULONG),
+        ("dwPid", ULONG),
+        ("dwAuthnHint", ULONG),
+        ("version", tagCOMVERSION),
+        ("ipidRemUnknown", _GUID),
+        ("dwFlags", ULONG),
+        ("psa", POINTER(tagDUALSTRINGARRAY)),
+        ("guidProcessIdentifier", _GUID),
+        ("processHostId", UINT64),
+        ("clientDependencyBehavior", INT),
+        ("packageFullName", POINTER(HSTRING__)),
+        ("userSid", POINTER(HSTRING__)),
+        ("appcontainerSid", POINTER(HSTRING__)),
+    ]
+MIDL_ILocalObjectExporter_0006 = __MIDL_ILocalObjectExporter_0006
+
+class _PRIV_RESOLVER_INFO_17763(Structure):
+    _fields_ = [
+        ("OxidServer", UINT64),
+        ("pServerORBindings", POINTER(tagDUALSTRINGARRAY)),
+        ("OxidInfo", MIDL_ILocalObjectExporter_0006),
+        ("LocalMidOfRemote", UINT64),
+        ("DllServerModel", ULONG),
+        ("pwszDllServer", POINTER(WCHAR)),
+        ("FoundInROT", INT),
+    ]
+PPRIV_RESOLVER_INFO_17763 = POINTER(_PRIV_RESOLVER_INFO_17763)
+PRIV_RESOLVER_INFO_17763 = _PRIV_RESOLVER_INFO_17763
+
 class _MIDL_ILocalObjectExporter_0007(Structure):
     _fields_ = [
         ("dwTid", ULONG),

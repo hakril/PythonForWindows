@@ -2716,6 +2716,124 @@ CONTAINERVERSION
 
         :class:`CONTAINER_EXTENT_ARRAY`
 
+__MIDL_ILocalObjectExporter_0006
+''''''''''''''''''''''''''''''''
+.. class:: MIDL_ILocalObjectExporter_0006
+
+    Alias for :class:`__MIDL_ILocalObjectExporter_0006`
+
+.. class:: __MIDL_ILocalObjectExporter_0006
+
+    .. attribute:: dwTid
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwPid
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwAuthnHint
+
+        :class:`ULONG`
+
+
+    .. attribute:: version
+
+        :class:`tagCOMVERSION`
+
+
+    .. attribute:: ipidRemUnknown
+
+        :class:`_GUID`
+
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: psa
+
+        :class:`tagDUALSTRINGARRAY`
+
+
+    .. attribute:: guidProcessIdentifier
+
+        :class:`_GUID`
+
+
+    .. attribute:: processHostId
+
+        :class:`UINT64`
+
+
+    .. attribute:: clientDependencyBehavior
+
+        :class:`INT`
+
+
+    .. attribute:: packageFullName
+
+        :class:`HSTRING__`
+
+
+    .. attribute:: userSid
+
+        :class:`HSTRING__`
+
+
+    .. attribute:: appcontainerSid
+
+        :class:`HSTRING__`
+
+_PRIV_RESOLVER_INFO_17763
+'''''''''''''''''''''''''
+.. class:: PPRIV_RESOLVER_INFO_17763
+
+    Pointer to :class:`_PRIV_RESOLVER_INFO_17763`
+
+.. class:: PRIV_RESOLVER_INFO_17763
+
+    Alias for :class:`_PRIV_RESOLVER_INFO_17763`
+
+.. class:: _PRIV_RESOLVER_INFO_17763
+
+    .. attribute:: OxidServer
+
+        :class:`UINT64`
+
+
+    .. attribute:: pServerORBindings
+
+        :class:`tagDUALSTRINGARRAY`
+
+
+    .. attribute:: OxidInfo
+
+        :class:`MIDL_ILocalObjectExporter_0006`
+
+
+    .. attribute:: LocalMidOfRemote
+
+        :class:`UINT64`
+
+
+    .. attribute:: DllServerModel
+
+        :class:`ULONG`
+
+
+    .. attribute:: pwszDllServer
+
+        :class:`WCHAR`
+
+
+    .. attribute:: FoundInROT
+
+        :class:`INT`
+
 _MIDL_ILocalObjectExporter_0007
 '''''''''''''''''''''''''''''''
 .. class:: MIDL_ILocalObjectExporter_0007
@@ -2907,48 +3025,6 @@ _LOCALTHIS
     .. attribute:: pTouchedAstaArray
 
         :class:`PVOID`
-
-_LOCALTHIS32
-''''''''''''
-.. class:: LOCALTHIS32
-
-    Alias for :class:`_LOCALTHIS32`
-
-.. class:: _LOCALTHIS32
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwClientThread
-
-        :class:`DWORD`
-
-
-    .. attribute:: passthroughTraceActivity
-
-        :class:`GUID`
-
-
-    .. attribute:: callTraceActivity
-
-        :class:`GUID`
-
-
-    .. attribute:: asyncRequestBlock
-
-        :class:`MIDL_XmitDefs_0001`
-
-
-    .. attribute:: reserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: pTouchedAstaArray
-
-        :class:`PVOID32`
 
 _MIDL_XmitDefs_0007
 '''''''''''''''''''
@@ -3177,6 +3253,468 @@ _LOCALTHAT
 
         :class:`CONTAINERTHAT`
 
+tagORPCTHAT
+'''''''''''
+.. class:: ORPCTHAT
+
+    Alias for :class:`tagORPCTHAT`
+
+.. class:: tagORPCTHAT
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: extensions
+
+        :class:`tagORPC_EXTENT_ARRAY`
+
+ORPCTHAT32
+''''''''''
+.. class:: ORPCTHAT32
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: extensions
+
+        :class:`PVOID32`
+
+WireExtentArray
+'''''''''''''''
+.. class:: WireExtentArray
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: unique
+
+        :class:`ULONG`
+
+
+    .. attribute:: rounded_size
+
+        :class:`ULONG`
+
+
+    .. attribute:: unique_flag
+
+        :class:`ULONG` ``[UNIQUE_FLAG_PADDING]``
+
+WireExtent
+''''''''''
+.. class:: WireExtent
+
+    .. attribute:: rounded_size
+
+        :class:`ULONG`
+
+
+    .. attribute:: id
+
+        :class:`GUID`
+
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+tagMainHeader
+'''''''''''''
+.. class:: MainHeader
+
+    Alias for :class:`tagMainHeader`
+
+.. class:: tagMainHeader
+
+    .. attribute:: Signature
+
+        :class:`ULONG`
+
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: cPolicies
+
+        :class:`ULONG`
+
+
+    .. attribute:: cbBuffer
+
+        :class:`ULONG`
+
+
+    .. attribute:: cbSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: hr
+
+        :class:`LONG`
+
+
+    .. attribute:: hrServer
+
+        :class:`LONG`
+
+
+    .. attribute:: reserved
+
+        :class:`LONG`
+
+LOCALTHIS32_NT_62
+'''''''''''''''''
+.. class:: LOCALTHIS32_NT_62
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`ULONG`
+
+__MIDL_XmitDefs_0001_NT_63
+''''''''''''''''''''''''''
+.. class:: __MIDL_XmitDefs_0001_NT_63
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pAstaOxids
+
+        :class:`UINT64`
+
+LOCALTHIS32_NT_63
+'''''''''''''''''
+.. class:: LOCALTHIS32_NT_63
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID32`
+
+LOCALTHAT32_NT_63
+'''''''''''''''''
+.. class:: LOCALTHAT32_NT_63
+
+    .. attribute:: marshalingSetAcknowledgmentOxid
+
+        :class:`UINT64`
+
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+__MIDL_XmitDefs_0002_NT_1607
+''''''''''''''''''''''''''''
+.. class:: __MIDL_XmitDefs_0002_NT_1607
+
+    .. attribute:: size
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pAstaOxids
+
+        :class:`PVOID32`
+
+__MIDL_XmitDefs_0001_NT_1607
+''''''''''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0001_NT_1607
+
+    Alias for :class:`__MIDL_XmitDefs_0001_NT_1607`
+
+.. class:: __MIDL_XmitDefs_0001_NT_1607
+
+    .. attribute:: asyncOperationId
+
+        :class:`_GUID`
+
+
+    .. attribute:: oxidClientProcessNA
+
+        :class:`UINT64`
+
+
+    .. attribute:: originalClientLogicalThreadId
+
+        :class:`_GUID`
+
+
+    .. attribute:: uClientCausalityTraceId
+
+        :class:`UINT64`
+
+_LOCALTHIS32_NT_1607
+''''''''''''''''''''
+.. class:: LOCALTHIS32_NT_1607
+
+    Alias for :class:`_LOCALTHIS32_NT_1607`
+
+.. class:: _LOCALTHIS32_NT_1607
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`ULONG`
+
+
+    .. attribute:: asyncRequestBlock
+
+        :class:`MIDL_XmitDefs_0001_NT_1607`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID32`
+
+__MIDL_XmitDefs_0007
+''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0007
+
+    Alias for :class:`__MIDL_XmitDefs_0007`
+
+.. class:: __MIDL_XmitDefs_0007
+
+    .. attribute:: pointOfFailure
+
+        :class:`INT`
+
+
+    .. attribute:: hrFailure
+
+        :class:`HRESULT`
+
+
+    .. attribute:: sizeOfMarshaledErrorInfo
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pMarshaledErrorInfo
+
+        :class:`BYTE`
+
+__MIDL_XmitDefs_0005
+''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0005
+
+    Alias for :class:`__MIDL_XmitDefs_0005`
+
+.. class:: __MIDL_XmitDefs_0005
+
+    .. attribute:: sizeOfMarshaledResults
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pMarshaledResults
+
+        :class:`BYTE`
+
+__MIDL_XmitDefs_0008
+''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0008
+
+    Alias for :class:`__MIDL_XmitDefs_0008`
+
+.. class:: __MIDL_XmitDefs_0008
+
+    .. attribute:: outcome
+
+        :class:`INT`
+
+
+    .. attribute:: successDetails
+
+        :class:`MIDL_XmitDefs_0005`
+
+
+    .. attribute:: failureDetails
+
+        :class:`MIDL_XmitDefs_0007`
+
+__MIDL_XmitDefs_0010
+''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0010
+
+    Alias for :class:`__MIDL_XmitDefs_0010`
+
+.. class:: __MIDL_XmitDefs_0010
+
+    .. attribute:: asyncStatus
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: uServerCausalityTraceId
+
+        :class:`UINT64`
+
+
+    .. attribute:: reserved2
+
+        :class:`ULONG`
+
+
+    .. attribute:: pOutcomeDetails
+
+        :class:`PVOID32`
+
+LOCALTHAT32_NT_1607
+'''''''''''''''''''
+.. class:: LOCALTHAT32_NT_1607
+
+    .. attribute:: marshalingSetAcknowledgmentOxid
+
+        :class:`UINT64`
+
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+
+    .. attribute:: reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: pAsyncResponseBlock
+
+        :class:`PVOID32`
+
+_LOCALTHAT32_10_1903
+''''''''''''''''''''
+.. class:: LOCALTHAT32_10_1903
+
+    Alias for :class:`_LOCALTHAT32_10_1903`
+
+.. class:: _LOCALTHAT32_10_1903
+
+    .. attribute:: marshalingSetId
+
+        :class:`UINT64`
+
+
+    .. attribute:: pAsyncResponseBlock
+
+        :class:`PVOID32`
+
+
+    .. attribute:: containerPassthroughData
+
+        :class:`PVOID32`
+
+_LOCALTHIS32
+''''''''''''
+.. class:: LOCALTHIS32
+
+    Alias for :class:`_LOCALTHIS32`
+
+.. class:: _LOCALTHIS32
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`DWORD`
+
+
+    .. attribute:: passthroughTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: callTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: asyncRequestBlock
+
+        :class:`MIDL_XmitDefs_0001`
+
+
+    .. attribute:: reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID32`
+
 _LOCALTHAT32
 ''''''''''''
 .. class:: LOCALTHAT32
@@ -3206,36 +3744,6 @@ _LOCALTHAT32
 
 
     .. attribute:: containerPassthroughData
-
-        :class:`PVOID32`
-
-tagORPCTHAT
-'''''''''''
-.. class:: ORPCTHAT
-
-    Alias for :class:`tagORPCTHAT`
-
-.. class:: tagORPCTHAT
-
-    .. attribute:: flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: extensions
-
-        :class:`tagORPC_EXTENT_ARRAY`
-
-ORPCTHAT32
-''''''''''
-.. class:: ORPCTHAT32
-
-    .. attribute:: flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: extensions
 
         :class:`PVOID32`
 

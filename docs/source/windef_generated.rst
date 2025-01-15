@@ -152,6 +152,9 @@ WinDef
 .. autodata:: SORF_OXRES8
 .. autodata:: SORF_NULL
 .. autodata:: SORF_NOPING
+.. autodata:: UNIQUE_FLAG_PADDING
+.. autodata:: MAINHDRSIG
+.. autodata:: ENTRYHDRSIG
 .. autodata:: CWCSTORAGENAME
 .. autodata:: STGM_DIRECT
 .. autodata:: STGM_TRANSACTED
@@ -496,6 +499,15 @@ WinDef
 .. autodata:: ERROR_SEVERITY_INFORMATIONAL
 .. autodata:: ERROR_SEVERITY_WARNING
 .. autodata:: ERROR_SEVERITY_ERROR
+.. autodata:: FACILITY_WINDOWS
+.. autodata:: FACILITY_WIN32
+.. autodata:: FACILITY_STORAGE
+.. autodata:: FACILITY_RPC
+.. autodata:: FACILITY_NULL
+.. autodata:: FACILITY_ITF
+.. autodata:: FACILITY_DISPATCH
+.. autodata:: STATUS_SEVERITY_SUCCESS
+.. autodata:: STATUS_SEVERITY_COERROR
 .. autodata:: EVENT_TRACE_FLAG_DISPATCHER
 .. autodata:: EVENT_TRACE_FLAG_VIRTUAL_ALLOC
 .. autodata:: EVENT_TRACE_FLAG_VAMAP
