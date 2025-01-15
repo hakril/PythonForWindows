@@ -21,11 +21,11 @@ jobs:
   tests:
     # Not a real dependency : but starting tests when ctypes generation is broken is not useful
     needs: generate_ctypes
-    runs-on: windows-2019
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        runs-on: [windows-2019, windows-latest]
         python-version: [2.7, 3.6, 3.11]
         python-architecture: [x86, x64]
         include:
