@@ -20,8 +20,6 @@ jobs:
           run: py -c "import windows.generated_def"
   tests:
     # Not a real dependency : but starting tests when ctypes generation is broken is not useful
-    needs: generate_ctypes
-    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -34,6 +32,10 @@ jobs:
               python-architecture: x86
             - python-bitness-to-test: 64
               python-architecture: x64
+
+    needs: generate_ctypes
+    timeout-minutes: 15
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       - uses: actions/checkout@v4
