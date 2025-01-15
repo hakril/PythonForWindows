@@ -253,6 +253,7 @@ typedef struct _PRIV_RESOLVER_INFO_LEGACY
         BOOL FoundInROT;
 } PRIV_RESOLVER_INFO_LEGACY, *PPRIV_RESOLVER_INFO_LEGACY;
 
+
 typedef struct _REMOTE_REPLY_SCM_INFO
     {
     OXID Oxid;
@@ -287,6 +288,31 @@ typedef struct CONTAINERVERSION {
     CONTAINER_EXTENT_ARRAY *extensions;
 };
 
+typedef struct __MIDL_ILocalObjectExporter_0006 {
+    ULONG               dwTid;
+    ULONG               dwPid;
+    ULONG               dwAuthnHint;
+    tagCOMVERSION       version;
+    _GUID               ipidRemUnknown;
+    ULONG               dwFlags;
+    tagDUALSTRINGARRAY  *psa;
+    _GUID               guidProcessIdentifier;
+    UINT64              processHostId;
+    INT                 clientDependencyBehavior;
+    HSTRING__           *packageFullName;
+    HSTRING__           *userSid;
+    HSTRING__           *appcontainerSid;
+} MIDL_ILocalObjectExporter_0006;
+
+typedef struct _PRIV_RESOLVER_INFO_17763 {
+    UINT64              OxidServer;
+    tagDUALSTRINGARRAY  *pServerORBindings;
+    MIDL_ILocalObjectExporter_0006 OxidInfo;
+    UINT64              LocalMidOfRemote;
+    ULONG               DllServerModel;
+    WCHAR               *pwszDllServer;
+    INT                 FoundInROT;
+} PRIV_RESOLVER_INFO_17763, *PPRIV_RESOLVER_INFO_17763;
 
 typedef struct _MIDL_ILocalObjectExporter_0007 {
     ULONG               dwTid;
