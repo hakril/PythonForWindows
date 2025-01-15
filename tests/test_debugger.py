@@ -3,6 +3,7 @@ import textwrap
 import ctypes
 import os
 import time
+import traceback
 
 import windows
 import windows.debug
@@ -426,24 +427,34 @@ class MyMetaDbgDebuger(windows.debug.Debugger):
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = set()
-
+    thread_exception = []
     def do_check():
         time.sleep(1)
-        print("[==================] LOADING PYTHON")
-        proc32_64_debug.execute_python_unsafe("1").wait()
-        print("[==================] OPEN FILENAME1")
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
-        time.sleep(0.1)
-        print("[==================] OPEN FILENAME2")
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
-        time.sleep(0.1)
-        print("[==================] RM BP")
-        d.del_bp(the_bp)
-        print("[==================] OPEN FILENAME3")
-        proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
-        time.sleep(0.1)
-        print("[==================] KILLING TARGET")
-        proc32_64_debug.exit()
+        try:
+            print("[==================] LOADING PYTHON")
+            assert list(d.breakpoints.values())[0]
+            proc32_64_debug.execute_python_unsafe("1").wait()
+            print("[==================] OPEN FILENAME1")
+            assert list(d.breakpoints.values())[0]
+            proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
+            time.sleep(0.1)
+            print("[==================] OPEN FILENAME2")
+            assert list(d.breakpoints.values())[0]
+            proc32_64_debug.execute_python_unsafe("open(u'FILENAME2')").wait()
+            time.sleep(0.1)
+            print("[==================] RM BP")
+            assert list(d.breakpoints.values())[0]
+            d.del_bp(the_bp)
+            assert not list(d.breakpoints.values())[0]
+            print("[==================] OPEN FILENAME3")
+            proc32_64_debug.execute_python_unsafe("open(u'FILENAME3')").wait()
+            time.sleep(0.1)
+            print("[==================] KILLING TARGET")
+        except Exception as e:
+            traceback.print_exc()
+            thread_exception.append(e)
+        finally:
+            proc32_64_debug.exit()
 
     class TSTBP(bptype):
         TARGET = windows.winproxy.CreateFileW
@@ -460,8 +471,12 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
     time.sleep(0.1)
-    threading.Thread(target=do_check).start()
+    t = threading.Thread(target=do_check)
+    t.start()
     d.loop()
+    assert not t.is_alive()
+    if thread_exception:
+        raise thread_exception[0]
     assert data >= set([u"FILENAME1", u"FILENAME2"])
     assert u"FILENAME3" not in data
 
