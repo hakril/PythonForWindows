@@ -102,8 +102,31 @@ jobs:
     timeout-minutes: 15
     runs-on: windows-ARM64
 
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: 3.11
+        python-architecture: [x86, x64, arm64]
+        include:
+            # Translate architecture to bitness for py.exe commandline
+            - python-bitness-to-test: 32
+              python-architecture: x86
+            - python-bitness-to-test: 64
+              python-architecture: x64
+            - python-bitness-to-test: arm64
+              python-architecture: arm64
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Listing python versions availables
         run: py -0
+
+      - name: Installing pytest
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest
+
+      - name: Printing version
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -VV
+
+      - name: Testing PFW execute
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
