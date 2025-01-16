@@ -105,7 +105,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: '3.11'
+        python-version: [3.11]
         python-architecture: [x86, x64, arm64]
         include:
             # Translate architecture to bitness for py.exe commandline
