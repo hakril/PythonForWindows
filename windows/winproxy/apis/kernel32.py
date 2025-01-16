@@ -503,6 +503,41 @@ def Wow64GetThreadContext(hThread, lpContext):
 def Wow64SetThreadContext(hThread, lpContext):
     return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
 
+@Kernel32Proxy()
+def IsWow64Process(hProcess, Wow64Process):
+    return IsWow64Process.ctypes_function(hProcess, Wow64Process)
+
+@Kernel32Proxy()
+def IsWow64Process2(hProcess, pProcessMachine, pNativeMachine):
+    return IsWow64Process2.ctypes_function(hProcess, pProcessMachine, pNativeMachine)
+
+@Kernel32Proxy()
+def IsWow64GuestMachineSupported(WowGuestMachine, MachineIsSupported):
+    return IsWow64GuestMachineSupported.ctypes_function(WowGuestMachine, MachineIsSupported)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryA(lpBuffer, uSize):
+    return GetSystemWow64DirectoryA.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryW(lpBuffer, uSize):
+    return GetSystemWow64DirectoryW.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2A(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2A.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2W(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2W.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def Wow64SetThreadDefaultGuestMachine(Machine):
+    return Wow64SetThreadDefaultGuestMachine.ctypes_function(Machine)
+
+@Kernel32Proxy()
+def Wow64SuspendThread(hThread):
+    return Wow64SuspendThread.ctypes_function(hThread)
 
 
 ## File
