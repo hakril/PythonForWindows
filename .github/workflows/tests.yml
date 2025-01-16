@@ -122,9 +122,6 @@ jobs:
       - name: Listing python versions availables
         run: py -0
 
-      - name: Installing pytest
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest
-
       - name: Printing version
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -VV
 

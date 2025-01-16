@@ -11,6 +11,17 @@ from .pfwtest import *
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
 
+def test_print_syswow_state():
+    import platform
+    print("")
+    env = windows.system.environ
+    print(f"{platform.machine()=}")
+    print(f"{platform.architecture()=}")
+    print(f"{windows.system.bitness=}")
+    print(f"{windows.current_process.bitness=}")
+    print(f"{windows.current_process.is_wow_64=}")
+    print(f"{env['PROCESSOR_ARCHITECTURE']=}")
+    print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
 
 @process_syswow_only
 class TestSyswowCurrentProcess(object):
