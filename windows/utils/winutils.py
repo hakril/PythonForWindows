@@ -37,7 +37,6 @@ def get_remote_func_addr(target, dll_name, func_name):
 
 
 def is_wow_64(handle):
-    import pdb;pdb.set_trace()
     if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
         return False
     Wow64Process = gdef.BOOL()
