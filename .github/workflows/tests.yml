@@ -116,6 +116,9 @@ jobs:
             - python-bitness-to-test: arm64
               python-architecture: arm64
 
+    env:
+        pyver_str: -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -123,7 +126,10 @@ jobs:
         run: py -0
 
       - name: Printing version
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -VV
+        run: py ${{pyver_str}} -VV
 
       - name: Testing PFW execute
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
+
+      - name: Testing PFW execute
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k test_print_syswow_state -v -x -s
