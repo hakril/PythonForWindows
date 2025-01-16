@@ -242,13 +242,6 @@ BOOL WINAPI ReadProcessMemory(
   _Out_  SIZE_T     *lpNumberOfBytesRead
 );
 
-NTSTATUS WINAPI NtWow64ReadVirtualMemory64(
-  _In_   HANDLE     hProcess,
-  _In_   ULONG64    lpBaseAddress,
-  _Out_  LPVOID     lpBuffer,
-  _In_   ULONG64    nSize,
-  _Out_  PULONG64   lpNumberOfBytesRead
-);
 
 
 BOOL WINAPI WriteProcessMemory(
@@ -260,13 +253,7 @@ BOOL WINAPI WriteProcessMemory(
 );
 
 
-NTSTATUS WINAPI NtWow64WriteVirtualMemory64(
-  _In_   HANDLE     hProcess,
-  _In_   ULONG64    lpBaseAddress,
-  _Out_  LPVOID     lpBuffer,
-  _In_   ULONG64    nSize,
-  _Out_  PULONG64   lpNumberOfBytesWritten
-);
+
 
 
 
@@ -518,23 +505,6 @@ BOOL WINAPI DeviceIoControl(
 );
 
 
-BOOL WINAPI Wow64DisableWow64FsRedirection(
-  _Out_ PVOID *OldValue
-);
-
-BOOL WINAPI Wow64RevertWow64FsRedirection(
-  _In_ PVOID OldValue
-);
-
-BOOLEAN WINAPI Wow64EnableWow64FsRedirection(
-  _In_ BOOLEAN Wow64FsEnableRedirection
-);
-
-BOOL WINAPI Wow64GetThreadContext(
-    _In_    HANDLE hThread,
-    _Inout_ PWOW64_CONTEXT lpContext
-);
-
 BOOL WINAPI SetConsoleCtrlHandler(
   _In_opt_ PHANDLER_ROUTINE HandlerRoutine,
   _In_     BOOL             Add
@@ -669,10 +639,6 @@ DWORD WINAPI GetProcessId(
   _In_ HANDLE Process
 );
 
-BOOL WINAPI Wow64SetThreadContext(
-    __in HANDLE hThread,
-    __in CONST WOW64_CONTEXT *lpContext
-);
 
 DWORD WINAPI GetMappedFileNameW (
     __in HANDLE hProcess,

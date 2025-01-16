@@ -3030,6 +3030,86 @@ LookupAccountNameAParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'
 LookupAccountNameWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR, PSID, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
 LookupAccountNameWParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
 
+#def IsWow64Process(hProcess, Wow64Process):
+#    return IsWow64Process.ctypes_function(hProcess, Wow64Process)
+IsWow64ProcessPrototype = WINFUNCTYPE(BOOL, HANDLE, PBOOL)
+IsWow64ProcessParams = ((1, 'hProcess'), (1, 'Wow64Process'))
+
+#def IsWow64Process2(hProcess, pProcessMachine, pNativeMachine):
+#    return IsWow64Process2.ctypes_function(hProcess, pProcessMachine, pNativeMachine)
+IsWow64Process2Prototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(USHORT), POINTER(USHORT))
+IsWow64Process2Params = ((1, 'hProcess'), (1, 'pProcessMachine'), (1, 'pNativeMachine'))
+
+#def IsWow64GuestMachineSupported(WowGuestMachine, MachineIsSupported):
+#    return IsWow64GuestMachineSupported.ctypes_function(WowGuestMachine, MachineIsSupported)
+IsWow64GuestMachineSupportedPrototype = WINFUNCTYPE(HRESULT, USHORT, POINTER(BOOL))
+IsWow64GuestMachineSupportedParams = ((1, 'WowGuestMachine'), (1, 'MachineIsSupported'))
+
+#def GetSystemWow64DirectoryA(lpBuffer, uSize):
+#    return GetSystemWow64DirectoryA.ctypes_function(lpBuffer, uSize)
+GetSystemWow64DirectoryAPrototype = WINFUNCTYPE(UINT, LPSTR, UINT)
+GetSystemWow64DirectoryAParams = ((1, 'lpBuffer'), (1, 'uSize'))
+
+#def GetSystemWow64DirectoryW(lpBuffer, uSize):
+#    return GetSystemWow64DirectoryW.ctypes_function(lpBuffer, uSize)
+GetSystemWow64DirectoryWPrototype = WINFUNCTYPE(UINT, LPWSTR, UINT)
+GetSystemWow64DirectoryWParams = ((1, 'lpBuffer'), (1, 'uSize'))
+
+#def GetSystemWow64Directory2A(lpBuffer, uSize, ImageFileMachineType):
+#    return GetSystemWow64Directory2A.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+GetSystemWow64Directory2APrototype = WINFUNCTYPE(UINT, LPSTR, UINT, WORD)
+GetSystemWow64Directory2AParams = ((1, 'lpBuffer'), (1, 'uSize'), (1, 'ImageFileMachineType'))
+
+#def GetSystemWow64Directory2W(lpBuffer, uSize, ImageFileMachineType):
+#    return GetSystemWow64Directory2W.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+GetSystemWow64Directory2WPrototype = WINFUNCTYPE(UINT, LPWSTR, UINT, WORD)
+GetSystemWow64Directory2WParams = ((1, 'lpBuffer'), (1, 'uSize'), (1, 'ImageFileMachineType'))
+
+#def Wow64DisableWow64FsRedirection(OldValue):
+#    return Wow64DisableWow64FsRedirection.ctypes_function(OldValue)
+Wow64DisableWow64FsRedirectionPrototype = WINFUNCTYPE(BOOL, POINTER(PVOID))
+Wow64DisableWow64FsRedirectionParams = ((1, 'OldValue'),)
+
+#def Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection):
+#    return Wow64EnableWow64FsRedirection.ctypes_function(Wow64FsEnableRedirection)
+Wow64EnableWow64FsRedirectionPrototype = WINFUNCTYPE(BOOLEAN, BOOLEAN)
+Wow64EnableWow64FsRedirectionParams = ((1, 'Wow64FsEnableRedirection'),)
+
+#def Wow64RevertWow64FsRedirection(OlValue):
+#    return Wow64RevertWow64FsRedirection.ctypes_function(OlValue)
+Wow64RevertWow64FsRedirectionPrototype = WINFUNCTYPE(BOOL, PVOID)
+Wow64RevertWow64FsRedirectionParams = ((1, 'OlValue'),)
+
+#def Wow64GetThreadContext(hThread, lpContext):
+#    return Wow64GetThreadContext.ctypes_function(hThread, lpContext)
+Wow64GetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, PWOW64_CONTEXT)
+Wow64GetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
+
+#def Wow64SetThreadContext(hThread, lpContext):
+#    return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
+Wow64SetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(WOW64_CONTEXT))
+Wow64SetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
+
+#def Wow64SetThreadDefaultGuestMachine(Machine):
+#    return Wow64SetThreadDefaultGuestMachine.ctypes_function(Machine)
+Wow64SetThreadDefaultGuestMachinePrototype = WINFUNCTYPE(USHORT, USHORT)
+Wow64SetThreadDefaultGuestMachineParams = ((1, 'Machine'),)
+
+#def Wow64SuspendThread(hThread):
+#    return Wow64SuspendThread.ctypes_function(hThread)
+Wow64SuspendThreadPrototype = WINFUNCTYPE(DWORD, HANDLE)
+Wow64SuspendThreadParams = ((1, 'hThread'),)
+
+#def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead):
+#    return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+NtWow64ReadVirtualMemory64Prototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG64, LPVOID, ULONG64, PULONG64)
+NtWow64ReadVirtualMemory64Params = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesRead'))
+
+#def NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten):
+#    return NtWow64WriteVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
+NtWow64WriteVirtualMemory64Prototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG64, LPVOID, ULONG64, PULONG64)
+NtWow64WriteVirtualMemory64Params = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesWritten'))
+
 #def FileTimeToSystemTime(lpFileTime, lpSystemTime):
 #    return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
 FileTimeToSystemTimePrototype = WINFUNCTYPE(BOOL, POINTER(FILETIME), LPSYSTEMTIME)
@@ -3420,20 +3500,10 @@ CloseHandleParams = ((1, 'hObject'),)
 ReadProcessMemoryPrototype = WINFUNCTYPE(BOOL, HANDLE, LPCVOID, LPVOID, SIZE_T, POINTER(SIZE_T))
 ReadProcessMemoryParams = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesRead'))
 
-#def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead):
-#    return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
-NtWow64ReadVirtualMemory64Prototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG64, LPVOID, ULONG64, PULONG64)
-NtWow64ReadVirtualMemory64Params = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesRead'))
-
 #def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten):
 #    return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 WriteProcessMemoryPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, LPCVOID, SIZE_T, POINTER(SIZE_T))
 WriteProcessMemoryParams = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesWritten'))
-
-#def NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten):
-#    return NtWow64WriteVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
-NtWow64WriteVirtualMemory64Prototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG64, LPVOID, ULONG64, PULONG64)
-NtWow64WriteVirtualMemory64Params = ((1, 'hProcess'), (1, 'lpBaseAddress'), (1, 'lpBuffer'), (1, 'nSize'), (1, 'lpNumberOfBytesWritten'))
 
 #def GetCurrentProcess():
 #    return GetCurrentProcess.ctypes_function()
@@ -3665,26 +3735,6 @@ GetThreadIdParams = ((1, 'Thread'),)
 DeviceIoControlPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPVOID, DWORD, LPDWORD, LPOVERLAPPED)
 DeviceIoControlParams = ((1, 'hDevice'), (1, 'dwIoControlCode'), (1, 'lpInBuffer'), (1, 'nInBufferSize'), (1, 'lpOutBuffer'), (1, 'nOutBufferSize'), (1, 'lpBytesReturned'), (1, 'lpOverlapped'))
 
-#def Wow64DisableWow64FsRedirection(OldValue):
-#    return Wow64DisableWow64FsRedirection.ctypes_function(OldValue)
-Wow64DisableWow64FsRedirectionPrototype = WINFUNCTYPE(BOOL, POINTER(PVOID))
-Wow64DisableWow64FsRedirectionParams = ((1, 'OldValue'),)
-
-#def Wow64RevertWow64FsRedirection(OldValue):
-#    return Wow64RevertWow64FsRedirection.ctypes_function(OldValue)
-Wow64RevertWow64FsRedirectionPrototype = WINFUNCTYPE(BOOL, PVOID)
-Wow64RevertWow64FsRedirectionParams = ((1, 'OldValue'),)
-
-#def Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection):
-#    return Wow64EnableWow64FsRedirection.ctypes_function(Wow64FsEnableRedirection)
-Wow64EnableWow64FsRedirectionPrototype = WINFUNCTYPE(BOOLEAN, BOOLEAN)
-Wow64EnableWow64FsRedirectionParams = ((1, 'Wow64FsEnableRedirection'),)
-
-#def Wow64GetThreadContext(hThread, lpContext):
-#    return Wow64GetThreadContext.ctypes_function(hThread, lpContext)
-Wow64GetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, PWOW64_CONTEXT)
-Wow64GetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
-
 #def SetConsoleCtrlHandler(HandlerRoutine, Add):
 #    return SetConsoleCtrlHandler.ctypes_function(HandlerRoutine, Add)
 SetConsoleCtrlHandlerPrototype = WINFUNCTYPE(BOOL, PHANDLER_ROUTINE, BOOL)
@@ -3819,11 +3869,6 @@ DebugBreakProcessParams = ((1, 'Process'),)
 #    return GetProcessId.ctypes_function(Process)
 GetProcessIdPrototype = WINFUNCTYPE(DWORD, HANDLE)
 GetProcessIdParams = ((1, 'Process'),)
-
-#def Wow64SetThreadContext(hThread, lpContext):
-#    return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
-Wow64SetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(WOW64_CONTEXT))
-Wow64SetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
 
 #def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize):
 #    return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
