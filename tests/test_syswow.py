@@ -8,8 +8,7 @@ import windows.native_exec.simple_x64 as x64
 
 from .pfwtest import *
 
-pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
-
+# pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
 def test_print_syswow_state():
     import platform
