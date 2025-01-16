@@ -103,16 +103,14 @@ class HandleDebugger(object):
         print(self.handles_types(self.get_new_handle()))
 
 
-current_process_hdebugger = HandleDebugger(windows.current_process.pid)
-current_process_hdebugger.refresh_handles()
 
 class NoLeakAssert(AssertionError):
     pass
 
 
-
 @pytest.fixture()
 def check_for_handle_leak(request):
+    current_process_hdebugger = HandleDebugger(windows.current_process.pid)
     x = current_process_hdebugger.refresh_handles()
     yield None
     leaked_handles = current_process_hdebugger.get_new_handle(x)
