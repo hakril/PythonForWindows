@@ -36,17 +36,13 @@ def get_remote_func_addr(target, dll_name, func_name):
         return mod.pe.exports[func_name]
 
 
-def is_wow_64(hProcess):
-    try:
-        fnIsWow64Process = get_func_addr("kernel32.dll", "IsWow64Process")
-    except winproxy.WinproxyError:
+def is_wow_64(handle):
+    import pdb;pdb.set_trace()
+    if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
         return False
-    IsWow64Process = ctypes.WINFUNCTYPE(BOOL, HANDLE, ctypes.POINTER(BOOL))(fnIsWow64Process)
-    Wow64Process = BOOL()
-    res = IsWow64Process(hProcess, ctypes.byref(Wow64Process))
-    if res:
-        return bool(Wow64Process)
-    raise ctypes.WinError()
+    Wow64Process = gdef.BOOL()
+    windows.winproxy.IsWow64Process(handle, Wow64Process)
+    return bool(Wow64Process)
 
 
 def create_file_from_handle(handle, mode="r"):
