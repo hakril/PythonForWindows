@@ -114,7 +114,7 @@ class Process(utils.AutoHandle):
                 # ProcessMachineTypeInfo is from build 22000
                 # What if not implemented ? parse target main binary PE ?
                 machine_archi = gdef.PROCESS_MACHINE_INFORMATION()
-                windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, machine_archi)
+                windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, ctypes.byref(machine_archi), ctypes.sizeof(machine_archi))
                 return machine_archi.ProcessMachine
 
         # No IsWow64Process2 -> No ARM
