@@ -106,23 +106,22 @@ class Process(utils.AutoHandle):
         # Syswow2 will exactly tell us the architecture
         if windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
             process_machine, native_machine = self.is_wow_64_2
-            if process_machine != gdef.PROCESSOR_ARCHITECTURE_UNKNOWN:
-                try:
-                    return utils.image_file_machine_to_processor_architecture(process_machine)
-                except KeyError as e:
-                    raise ValueError("Unknown IsWow64Process2(process_machine:#x) -> {0}".format(process_machine))
+            if process_machine != gdef.IMAGE_FILE_MACHINE_UNKNOWN:
+                return process_machine
 
             if windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64:
                 # May be ARM64 or AMD64 as X64TA64 is not considered WOW64
+                # ProcessMachineTypeInfo is from build 22000
+                # What if not implemented ? parse target main binary PE ?
                 machine_archi = gdef.PROCESS_MACHINE_INFORMATION()
                 windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, machine_archi)
-                return utils.image_file_machine_to_processor_architecture(machine_archi.ProcessMachine)
+                return machine_archi.ProcessMachine
 
         # No IsWow64Process2 -> No ARM
         # So its up on x86 -> x64 based on process bitness
         if self.bitness == 32:
-            return gdef.PROCESSOR_ARCHITECTURE_INTEL
-        return gdef.PROCESSOR_ARCHITECTURE_AMD64
+            return gdef.IMAGE_FILE_MACHINE_I386
+        return gdef.IMAGE_FILE_MACHINE_AMD64
 
     @utils.fixedpropety
     def limited_handle(self):
