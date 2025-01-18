@@ -81,6 +81,18 @@ def GetPriorityClass(hProcess):
 def SetPriorityClass(hProcess, dwPriorityClass):
     return SetPriorityClass.ctypes_function(hProcess, dwPriorityClass)
 
+@Kernel32Proxy()
+def GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize=None):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return GetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+@Kernel32Proxy()
+def SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return SetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
 
 PROCESS_MITIGATION_STUCTS = (gdef.PROCESS_MITIGATION_ASLR_POLICY,
                                 gdef.PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY,
