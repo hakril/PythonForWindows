@@ -64,14 +64,30 @@ class DeadThread(utils.AutoHandle):
 
 
 class Process(utils.AutoHandle):
-    @utils.fixedpropety
+    @utils.fixedproperty
     def is_wow_64(self):
         """``True`` if the process is a SysWow64 process (32bit process on 64bits system).
 
         :type: :class:`bool`
 		"""
-        # return utils.is_wow_64(self.handle)
-        return utils.is_wow_64(self.limited_handle)
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
+            return False
+        Wow64Process = gdef.BOOL()
+        windows.winproxy.IsWow64Process(self.handle, Wow64Process)
+        return bool(Wow64Process)
+
+
+
+    @utils.fixedproperty
+    def is_wow_64_2(self):
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            return None, None
+        processMachine = gdef.USHORT()
+        nativeMachine = gdef.USHORT()
+        windows.winproxy.IsWow64Process2(self.handle, processMachine, nativeMachine)
+        return (gdef.IMAGE_FILE_MACHINE_MAPPER[processMachine.value],
+                gdef.IMAGE_FILE_MACHINE_MAPPER[nativeMachine.value])
+
 
     @utils.fixedpropety
     def bitness(self):
@@ -84,6 +100,22 @@ class Process(utils.AutoHandle):
         if self.is_wow_64:
             return 32
         return 64
+
+    @utils.fixedproperty
+    def architecture(self):
+        # Syswow2 will exactly tell us the architecture
+        if windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            process_machine, native_machine = self.is_wow_64_2
+            try:
+                return utils.image_file_machine_to_processor_architecture(process_machine)
+            except KeyError as e:
+                raise ValueError("Unknown IsWow64Process2(process_machine:#x) -> {0}".format(process_machine))
+
+        # No IsWow64Process2 -> No ARM64
+        # So its up on x86 -> x64 based on process bitness
+        if self.bitness == 32:
+            return gdef.PROCESSOR_ARCHITECTURE_INTEL
+        return gdef.PROCESSOR_ARCHITECTURE_AMD64
 
     @utils.fixedpropety
     def limited_handle(self):
@@ -648,7 +680,7 @@ class CurrentProcess(Process):
 		"""
         return PEB.from_address(self.get_peb_builtin()())
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def bitness(self):
         """The bitness of the process
 
