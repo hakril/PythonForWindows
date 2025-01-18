@@ -3595,6 +3595,159 @@ class _IMAGE_LOAD_CONFIG_DIRECTORY64(Structure):
 IMAGE_LOAD_CONFIG_DIRECTORY64 = _IMAGE_LOAD_CONFIG_DIRECTORY64
 PIMAGE_LOAD_CONFIG_DIRECTORY64 = POINTER(_IMAGE_LOAD_CONFIG_DIRECTORY64)
 
+MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
+MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
+MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
+MemoryBasicVlmInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicVlmInformation", 0x3)
+MemoryWorkingSetListEx = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetListEx", 0x4)
+class _MEMORY_INFORMATION_CLASS(EnumType):
+    values = [MemoryBasicInformation, MemoryWorkingSetList, MemorySectionName, MemoryBasicVlmInformation, MemoryWorkingSetListEx]
+    mapper = FlagMapper(*values)
+MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
+
+
+ThreadBasicInformation = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasicInformation", 0x0)
+ThreadTimes = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadTimes", 0x1)
+ThreadPriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriority", 0x2)
+ThreadBasePriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasePriority", 0x3)
+ThreadAffinityMask = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAffinityMask", 0x4)
+ThreadImpersonationToken = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadImpersonationToken", 0x5)
+ThreadDescriptorTableEntry = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadDescriptorTableEntry", 0x6)
+ThreadEnableAlignmentFaultFixup = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEnableAlignmentFaultFixup", 0x7)
+ThreadEventPair = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEventPair", 0x8)
+ThreadQuerySetWin32StartAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadQuerySetWin32StartAddress", 0x9)
+ThreadZeroTlsCell = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadZeroTlsCell", 0xa)
+ThreadPerformanceCount = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPerformanceCount", 0xb)
+ThreadAmILastThread = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAmILastThread", 0xc)
+ThreadIdealProcessor = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIdealProcessor", 0xd)
+ThreadPriorityBoost = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriorityBoost", 0xe)
+ThreadSetTlsArrayAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadSetTlsArrayAddress", 0xf)
+ThreadIsIoPending = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIsIoPending", 0x10)
+ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromDebugger", 0x11)
+class _THREAD_INFORMATION_CLASS(EnumType):
+    values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
+    mapper = FlagMapper(*values)
+PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
+THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
+
+
+ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
+ProcessQuotaLimits = EnumValue("_PROCESSINFOCLASS", "ProcessQuotaLimits", 0x1)
+ProcessIoCounters = EnumValue("_PROCESSINFOCLASS", "ProcessIoCounters", 0x2)
+ProcessVmCounters = EnumValue("_PROCESSINFOCLASS", "ProcessVmCounters", 0x3)
+ProcessTimes = EnumValue("_PROCESSINFOCLASS", "ProcessTimes", 0x4)
+ProcessBasePriority = EnumValue("_PROCESSINFOCLASS", "ProcessBasePriority", 0x5)
+ProcessRaisePriority = EnumValue("_PROCESSINFOCLASS", "ProcessRaisePriority", 0x6)
+ProcessDebugPort = EnumValue("_PROCESSINFOCLASS", "ProcessDebugPort", 0x7)
+ProcessExceptionPort = EnumValue("_PROCESSINFOCLASS", "ProcessExceptionPort", 0x8)
+ProcessAccessToken = EnumValue("_PROCESSINFOCLASS", "ProcessAccessToken", 0x9)
+ProcessLdtInformation = EnumValue("_PROCESSINFOCLASS", "ProcessLdtInformation", 0xa)
+ProcessLdtSize = EnumValue("_PROCESSINFOCLASS", "ProcessLdtSize", 0xb)
+ProcessDefaultHardErrorMode = EnumValue("_PROCESSINFOCLASS", "ProcessDefaultHardErrorMode", 0xc)
+ProcessIoPortHandlers = EnumValue("_PROCESSINFOCLASS", "ProcessIoPortHandlers", 0xd)
+ProcessPooledUsageAndLimits = EnumValue("_PROCESSINFOCLASS", "ProcessPooledUsageAndLimits", 0xe)
+ProcessWorkingSetWatch = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatch", 0xf)
+ProcessUserModeIOPL = EnumValue("_PROCESSINFOCLASS", "ProcessUserModeIOPL", 0x10)
+ProcessEnableAlignmentFaultFixup = EnumValue("_PROCESSINFOCLASS", "ProcessEnableAlignmentFaultFixup", 0x11)
+ProcessPriorityClass = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityClass", 0x12)
+ProcessWx86Information = EnumValue("_PROCESSINFOCLASS", "ProcessWx86Information", 0x13)
+ProcessHandleCount = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCount", 0x14)
+ProcessAffinityMask = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityMask", 0x15)
+ProcessPriorityBoost = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityBoost", 0x16)
+ProcessDeviceMap = EnumValue("_PROCESSINFOCLASS", "ProcessDeviceMap", 0x17)
+ProcessSessionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSessionInformation", 0x18)
+ProcessForegroundInformation = EnumValue("_PROCESSINFOCLASS", "ProcessForegroundInformation", 0x19)
+ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
+ProcessImageFileName = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileName", 0x1b)
+ProcessLUIDDeviceMapsEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessLUIDDeviceMapsEnabled", 0x1c)
+ProcessBreakOnTermination = EnumValue("_PROCESSINFOCLASS", "ProcessBreakOnTermination", 0x1d)
+ProcessDebugObjectHandle = EnumValue("_PROCESSINFOCLASS", "ProcessDebugObjectHandle", 0x1e)
+ProcessDebugFlags = EnumValue("_PROCESSINFOCLASS", "ProcessDebugFlags", 0x1f)
+ProcessHandleTracing = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTracing", 0x20)
+ProcessIoPriority = EnumValue("_PROCESSINFOCLASS", "ProcessIoPriority", 0x21)
+ProcessExecuteFlags = EnumValue("_PROCESSINFOCLASS", "ProcessExecuteFlags", 0x22)
+ProcessTlsInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTlsInformation", 0x23)
+ProcessCookie = EnumValue("_PROCESSINFOCLASS", "ProcessCookie", 0x24)
+ProcessImageInformation = EnumValue("_PROCESSINFOCLASS", "ProcessImageInformation", 0x25)
+ProcessCycleTime = EnumValue("_PROCESSINFOCLASS", "ProcessCycleTime", 0x26)
+ProcessPagePriority = EnumValue("_PROCESSINFOCLASS", "ProcessPagePriority", 0x27)
+ProcessInstrumentationCallback = EnumValue("_PROCESSINFOCLASS", "ProcessInstrumentationCallback", 0x28)
+ProcessThreadStackAllocation = EnumValue("_PROCESSINFOCLASS", "ProcessThreadStackAllocation", 0x29)
+ProcessWorkingSetWatchEx = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatchEx", 0x2a)
+ProcessImageFileNameWin32 = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileNameWin32", 0x2b)
+ProcessImageFileMapping = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileMapping", 0x2c)
+ProcessAffinityUpdateMode = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityUpdateMode", 0x2d)
+ProcessMemoryAllocationMode = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryAllocationMode", 0x2e)
+ProcessGroupInformation = EnumValue("_PROCESSINFOCLASS", "ProcessGroupInformation", 0x2f)
+ProcessTokenVirtualizationEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessTokenVirtualizationEnabled", 0x30)
+ProcessOwnerInformation = EnumValue("_PROCESSINFOCLASS", "ProcessOwnerInformation", 0x31)
+ProcessWindowInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWindowInformation", 0x32)
+ProcessHandleInformation = EnumValue("_PROCESSINFOCLASS", "ProcessHandleInformation", 0x33)
+ProcessMitigationPolicy = EnumValue("_PROCESSINFOCLASS", "ProcessMitigationPolicy", 0x34)
+ProcessDynamicFunctionTableInformation = EnumValue("_PROCESSINFOCLASS", "ProcessDynamicFunctionTableInformation", 0x35)
+ProcessHandleCheckingMode = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCheckingMode", 0x36)
+ProcessKeepAliveCount = EnumValue("_PROCESSINFOCLASS", "ProcessKeepAliveCount", 0x37)
+ProcessRevokeFileHandles = EnumValue("_PROCESSINFOCLASS", "ProcessRevokeFileHandles", 0x38)
+ProcessWorkingSetControl = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetControl", 0x39)
+ProcessHandleTable = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTable", 0x3a)
+ProcessCheckStackExtentsMode = EnumValue("_PROCESSINFOCLASS", "ProcessCheckStackExtentsMode", 0x3b)
+ProcessCommandLineInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommandLineInformation", 0x3c)
+ProcessProtectionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessProtectionInformation", 0x3d)
+ProcessMemoryExhaustion = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryExhaustion", 0x3e)
+ProcessFaultInformation = EnumValue("_PROCESSINFOCLASS", "ProcessFaultInformation", 0x3f)
+ProcessTelemetryIdInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTelemetryIdInformation", 0x40)
+ProcessCommitReleaseInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommitReleaseInformation", 0x41)
+ProcessReserved1Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved1Information", 0x42)
+ProcessReserved2Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved2Information", 0x43)
+ProcessSubsystemProcess = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemProcess", 0x44)
+ProcessInPrivate = EnumValue("_PROCESSINFOCLASS", "ProcessInPrivate", 0x46)
+ProcessRaiseUMExceptionOnInvalidHandleClose = EnumValue("_PROCESSINFOCLASS", "ProcessRaiseUMExceptionOnInvalidHandleClose", 0x47)
+ProcessSubsystemInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemInformation", 0x4b)
+ProcessWin32kSyscallFilterInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWin32kSyscallFilterInformation", 0x4f)
+ProcessEnergyTrackingState = EnumValue("_PROCESSINFOCLASS", "ProcessEnergyTrackingState", 0x52)
+MaxProcessInfoClass = EnumValue("_PROCESSINFOCLASS", "MaxProcessInfoClass", 0x53)
+class _PROCESSINFOCLASS(EnumType):
+    values = [ProcessBasicInformation, ProcessQuotaLimits, ProcessIoCounters, ProcessVmCounters, ProcessTimes, ProcessBasePriority, ProcessRaisePriority, ProcessDebugPort, ProcessExceptionPort, ProcessAccessToken, ProcessLdtInformation, ProcessLdtSize, ProcessDefaultHardErrorMode, ProcessIoPortHandlers, ProcessPooledUsageAndLimits, ProcessWorkingSetWatch, ProcessUserModeIOPL, ProcessEnableAlignmentFaultFixup, ProcessPriorityClass, ProcessWx86Information, ProcessHandleCount, ProcessAffinityMask, ProcessPriorityBoost, ProcessDeviceMap, ProcessSessionInformation, ProcessForegroundInformation, ProcessWow64Information, ProcessImageFileName, ProcessLUIDDeviceMapsEnabled, ProcessBreakOnTermination, ProcessDebugObjectHandle, ProcessDebugFlags, ProcessHandleTracing, ProcessIoPriority, ProcessExecuteFlags, ProcessTlsInformation, ProcessCookie, ProcessImageInformation, ProcessCycleTime, ProcessPagePriority, ProcessInstrumentationCallback, ProcessThreadStackAllocation, ProcessWorkingSetWatchEx, ProcessImageFileNameWin32, ProcessImageFileMapping, ProcessAffinityUpdateMode, ProcessMemoryAllocationMode, ProcessGroupInformation, ProcessTokenVirtualizationEnabled, ProcessOwnerInformation, ProcessWindowInformation, ProcessHandleInformation, ProcessMitigationPolicy, ProcessDynamicFunctionTableInformation, ProcessHandleCheckingMode, ProcessKeepAliveCount, ProcessRevokeFileHandles, ProcessWorkingSetControl, ProcessHandleTable, ProcessCheckStackExtentsMode, ProcessCommandLineInformation, ProcessProtectionInformation, ProcessMemoryExhaustion, ProcessFaultInformation, ProcessTelemetryIdInformation, ProcessCommitReleaseInformation, ProcessReserved1Information, ProcessReserved2Information, ProcessSubsystemProcess, ProcessInPrivate, ProcessRaiseUMExceptionOnInvalidHandleClose, ProcessSubsystemInformation, ProcessWin32kSyscallFilterInformation, ProcessEnergyTrackingState, MaxProcessInfoClass]
+    mapper = FlagMapper(*values)
+PROCESSINFOCLASS = _PROCESSINFOCLASS
+
+
+ProcessMemoryPriority = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMemoryPriority", 0x0)
+ProcessMemoryExhaustionInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMemoryExhaustionInfo", 0x1)
+ProcessAppMemoryInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessAppMemoryInfo", 0x2)
+ProcessInPrivateInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessInPrivateInfo", 0x3)
+ProcessPowerThrottling = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessPowerThrottling", 0x4)
+ProcessReservedValue1 = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessReservedValue1", 0x5)
+ProcessTelemetryCoverageInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessTelemetryCoverageInfo", 0x6)
+ProcessProtectionLevelInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessProtectionLevelInfo", 0x7)
+ProcessLeapSecondInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessLeapSecondInfo", 0x8)
+ProcessMachineTypeInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMachineTypeInfo", 0x9)
+ProcessOverrideSubsequentPrefetchParameter = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessOverrideSubsequentPrefetchParameter", 0xa)
+ProcessMaxOverridePrefetchParameter = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMaxOverridePrefetchParameter", 0xb)
+ProcessInformationClassMax = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessInformationClassMax", 0xc)
+class _PROCESS_INFORMATION_CLASS(EnumType):
+    values = [ProcessMemoryPriority, ProcessMemoryExhaustionInfo, ProcessAppMemoryInfo, ProcessInPrivateInfo, ProcessPowerThrottling, ProcessReservedValue1, ProcessTelemetryCoverageInfo, ProcessProtectionLevelInfo, ProcessLeapSecondInfo, ProcessMachineTypeInfo, ProcessOverrideSubsequentPrefetchParameter, ProcessMaxOverridePrefetchParameter, ProcessInformationClassMax]
+    mapper = FlagMapper(*values)
+PROCESS_INFORMATION_CLASS = _PROCESS_INFORMATION_CLASS
+
+
+UserEnabled = EnumValue("_MACHINE_ATTRIBUTES", "UserEnabled", 0x1)
+KernelEnabled = EnumValue("_MACHINE_ATTRIBUTES", "KernelEnabled", 0x2)
+Wow64Container = EnumValue("_MACHINE_ATTRIBUTES", "Wow64Container", 0x4)
+class _MACHINE_ATTRIBUTES(EnumType):
+    values = [UserEnabled, KernelEnabled, Wow64Container]
+    mapper = FlagMapper(*values)
+MACHINE_ATTRIBUTES = _MACHINE_ATTRIBUTES
+
+
+class _PROCESS_MACHINE_INFORMATION(Structure):
+    _fields_ = [
+        ("ProcessMachine", USHORT),
+        ("Res0", USHORT),
+        ("MachineAttributes", MACHINE_ATTRIBUTES),
+    ]
+PROCESS_MACHINE_INFORMATION = _PROCESS_MACHINE_INFORMATION
+
 MemExtendedParameterInvalidType = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterInvalidType", 0x0)
 MemExtendedParameterAddressRequirements = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterAddressRequirements", 0x1)
 MemExtendedParameterNumaNode = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterNumaNode", 0x2)
@@ -5493,123 +5646,6 @@ class _SECTION_INHERIT(EnumType):
     values = [ViewShare, ViewUnmap]
     mapper = FlagMapper(*values)
 SECTION_INHERIT = _SECTION_INHERIT
-
-
-ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
-ProcessQuotaLimits = EnumValue("_PROCESSINFOCLASS", "ProcessQuotaLimits", 0x1)
-ProcessIoCounters = EnumValue("_PROCESSINFOCLASS", "ProcessIoCounters", 0x2)
-ProcessVmCounters = EnumValue("_PROCESSINFOCLASS", "ProcessVmCounters", 0x3)
-ProcessTimes = EnumValue("_PROCESSINFOCLASS", "ProcessTimes", 0x4)
-ProcessBasePriority = EnumValue("_PROCESSINFOCLASS", "ProcessBasePriority", 0x5)
-ProcessRaisePriority = EnumValue("_PROCESSINFOCLASS", "ProcessRaisePriority", 0x6)
-ProcessDebugPort = EnumValue("_PROCESSINFOCLASS", "ProcessDebugPort", 0x7)
-ProcessExceptionPort = EnumValue("_PROCESSINFOCLASS", "ProcessExceptionPort", 0x8)
-ProcessAccessToken = EnumValue("_PROCESSINFOCLASS", "ProcessAccessToken", 0x9)
-ProcessLdtInformation = EnumValue("_PROCESSINFOCLASS", "ProcessLdtInformation", 0xa)
-ProcessLdtSize = EnumValue("_PROCESSINFOCLASS", "ProcessLdtSize", 0xb)
-ProcessDefaultHardErrorMode = EnumValue("_PROCESSINFOCLASS", "ProcessDefaultHardErrorMode", 0xc)
-ProcessIoPortHandlers = EnumValue("_PROCESSINFOCLASS", "ProcessIoPortHandlers", 0xd)
-ProcessPooledUsageAndLimits = EnumValue("_PROCESSINFOCLASS", "ProcessPooledUsageAndLimits", 0xe)
-ProcessWorkingSetWatch = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatch", 0xf)
-ProcessUserModeIOPL = EnumValue("_PROCESSINFOCLASS", "ProcessUserModeIOPL", 0x10)
-ProcessEnableAlignmentFaultFixup = EnumValue("_PROCESSINFOCLASS", "ProcessEnableAlignmentFaultFixup", 0x11)
-ProcessPriorityClass = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityClass", 0x12)
-ProcessWx86Information = EnumValue("_PROCESSINFOCLASS", "ProcessWx86Information", 0x13)
-ProcessHandleCount = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCount", 0x14)
-ProcessAffinityMask = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityMask", 0x15)
-ProcessPriorityBoost = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityBoost", 0x16)
-ProcessDeviceMap = EnumValue("_PROCESSINFOCLASS", "ProcessDeviceMap", 0x17)
-ProcessSessionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSessionInformation", 0x18)
-ProcessForegroundInformation = EnumValue("_PROCESSINFOCLASS", "ProcessForegroundInformation", 0x19)
-ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
-ProcessImageFileName = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileName", 0x1b)
-ProcessLUIDDeviceMapsEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessLUIDDeviceMapsEnabled", 0x1c)
-ProcessBreakOnTermination = EnumValue("_PROCESSINFOCLASS", "ProcessBreakOnTermination", 0x1d)
-ProcessDebugObjectHandle = EnumValue("_PROCESSINFOCLASS", "ProcessDebugObjectHandle", 0x1e)
-ProcessDebugFlags = EnumValue("_PROCESSINFOCLASS", "ProcessDebugFlags", 0x1f)
-ProcessHandleTracing = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTracing", 0x20)
-ProcessIoPriority = EnumValue("_PROCESSINFOCLASS", "ProcessIoPriority", 0x21)
-ProcessExecuteFlags = EnumValue("_PROCESSINFOCLASS", "ProcessExecuteFlags", 0x22)
-ProcessTlsInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTlsInformation", 0x23)
-ProcessCookie = EnumValue("_PROCESSINFOCLASS", "ProcessCookie", 0x24)
-ProcessImageInformation = EnumValue("_PROCESSINFOCLASS", "ProcessImageInformation", 0x25)
-ProcessCycleTime = EnumValue("_PROCESSINFOCLASS", "ProcessCycleTime", 0x26)
-ProcessPagePriority = EnumValue("_PROCESSINFOCLASS", "ProcessPagePriority", 0x27)
-ProcessInstrumentationCallback = EnumValue("_PROCESSINFOCLASS", "ProcessInstrumentationCallback", 0x28)
-ProcessThreadStackAllocation = EnumValue("_PROCESSINFOCLASS", "ProcessThreadStackAllocation", 0x29)
-ProcessWorkingSetWatchEx = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatchEx", 0x2a)
-ProcessImageFileNameWin32 = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileNameWin32", 0x2b)
-ProcessImageFileMapping = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileMapping", 0x2c)
-ProcessAffinityUpdateMode = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityUpdateMode", 0x2d)
-ProcessMemoryAllocationMode = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryAllocationMode", 0x2e)
-ProcessGroupInformation = EnumValue("_PROCESSINFOCLASS", "ProcessGroupInformation", 0x2f)
-ProcessTokenVirtualizationEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessTokenVirtualizationEnabled", 0x30)
-ProcessOwnerInformation = EnumValue("_PROCESSINFOCLASS", "ProcessOwnerInformation", 0x31)
-ProcessWindowInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWindowInformation", 0x32)
-ProcessHandleInformation = EnumValue("_PROCESSINFOCLASS", "ProcessHandleInformation", 0x33)
-ProcessMitigationPolicy = EnumValue("_PROCESSINFOCLASS", "ProcessMitigationPolicy", 0x34)
-ProcessDynamicFunctionTableInformation = EnumValue("_PROCESSINFOCLASS", "ProcessDynamicFunctionTableInformation", 0x35)
-ProcessHandleCheckingMode = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCheckingMode", 0x36)
-ProcessKeepAliveCount = EnumValue("_PROCESSINFOCLASS", "ProcessKeepAliveCount", 0x37)
-ProcessRevokeFileHandles = EnumValue("_PROCESSINFOCLASS", "ProcessRevokeFileHandles", 0x38)
-ProcessWorkingSetControl = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetControl", 0x39)
-ProcessHandleTable = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTable", 0x3a)
-ProcessCheckStackExtentsMode = EnumValue("_PROCESSINFOCLASS", "ProcessCheckStackExtentsMode", 0x3b)
-ProcessCommandLineInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommandLineInformation", 0x3c)
-ProcessProtectionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessProtectionInformation", 0x3d)
-ProcessMemoryExhaustion = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryExhaustion", 0x3e)
-ProcessFaultInformation = EnumValue("_PROCESSINFOCLASS", "ProcessFaultInformation", 0x3f)
-ProcessTelemetryIdInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTelemetryIdInformation", 0x40)
-ProcessCommitReleaseInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommitReleaseInformation", 0x41)
-ProcessReserved1Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved1Information", 0x42)
-ProcessReserved2Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved2Information", 0x43)
-ProcessSubsystemProcess = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemProcess", 0x44)
-ProcessInPrivate = EnumValue("_PROCESSINFOCLASS", "ProcessInPrivate", 0x46)
-ProcessRaiseUMExceptionOnInvalidHandleClose = EnumValue("_PROCESSINFOCLASS", "ProcessRaiseUMExceptionOnInvalidHandleClose", 0x47)
-ProcessSubsystemInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemInformation", 0x4b)
-ProcessWin32kSyscallFilterInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWin32kSyscallFilterInformation", 0x4f)
-ProcessEnergyTrackingState = EnumValue("_PROCESSINFOCLASS", "ProcessEnergyTrackingState", 0x52)
-MaxProcessInfoClass = EnumValue("_PROCESSINFOCLASS", "MaxProcessInfoClass", 0x53)
-class _PROCESSINFOCLASS(EnumType):
-    values = [ProcessBasicInformation, ProcessQuotaLimits, ProcessIoCounters, ProcessVmCounters, ProcessTimes, ProcessBasePriority, ProcessRaisePriority, ProcessDebugPort, ProcessExceptionPort, ProcessAccessToken, ProcessLdtInformation, ProcessLdtSize, ProcessDefaultHardErrorMode, ProcessIoPortHandlers, ProcessPooledUsageAndLimits, ProcessWorkingSetWatch, ProcessUserModeIOPL, ProcessEnableAlignmentFaultFixup, ProcessPriorityClass, ProcessWx86Information, ProcessHandleCount, ProcessAffinityMask, ProcessPriorityBoost, ProcessDeviceMap, ProcessSessionInformation, ProcessForegroundInformation, ProcessWow64Information, ProcessImageFileName, ProcessLUIDDeviceMapsEnabled, ProcessBreakOnTermination, ProcessDebugObjectHandle, ProcessDebugFlags, ProcessHandleTracing, ProcessIoPriority, ProcessExecuteFlags, ProcessTlsInformation, ProcessCookie, ProcessImageInformation, ProcessCycleTime, ProcessPagePriority, ProcessInstrumentationCallback, ProcessThreadStackAllocation, ProcessWorkingSetWatchEx, ProcessImageFileNameWin32, ProcessImageFileMapping, ProcessAffinityUpdateMode, ProcessMemoryAllocationMode, ProcessGroupInformation, ProcessTokenVirtualizationEnabled, ProcessOwnerInformation, ProcessWindowInformation, ProcessHandleInformation, ProcessMitigationPolicy, ProcessDynamicFunctionTableInformation, ProcessHandleCheckingMode, ProcessKeepAliveCount, ProcessRevokeFileHandles, ProcessWorkingSetControl, ProcessHandleTable, ProcessCheckStackExtentsMode, ProcessCommandLineInformation, ProcessProtectionInformation, ProcessMemoryExhaustion, ProcessFaultInformation, ProcessTelemetryIdInformation, ProcessCommitReleaseInformation, ProcessReserved1Information, ProcessReserved2Information, ProcessSubsystemProcess, ProcessInPrivate, ProcessRaiseUMExceptionOnInvalidHandleClose, ProcessSubsystemInformation, ProcessWin32kSyscallFilterInformation, ProcessEnergyTrackingState, MaxProcessInfoClass]
-    mapper = FlagMapper(*values)
-PROCESSINFOCLASS = _PROCESSINFOCLASS
-
-
-MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
-MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
-MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
-MemoryBasicVlmInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicVlmInformation", 0x3)
-MemoryWorkingSetListEx = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetListEx", 0x4)
-class _MEMORY_INFORMATION_CLASS(EnumType):
-    values = [MemoryBasicInformation, MemoryWorkingSetList, MemorySectionName, MemoryBasicVlmInformation, MemoryWorkingSetListEx]
-    mapper = FlagMapper(*values)
-MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
-
-
-ThreadBasicInformation = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasicInformation", 0x0)
-ThreadTimes = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadTimes", 0x1)
-ThreadPriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriority", 0x2)
-ThreadBasePriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasePriority", 0x3)
-ThreadAffinityMask = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAffinityMask", 0x4)
-ThreadImpersonationToken = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadImpersonationToken", 0x5)
-ThreadDescriptorTableEntry = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadDescriptorTableEntry", 0x6)
-ThreadEnableAlignmentFaultFixup = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEnableAlignmentFaultFixup", 0x7)
-ThreadEventPair = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEventPair", 0x8)
-ThreadQuerySetWin32StartAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadQuerySetWin32StartAddress", 0x9)
-ThreadZeroTlsCell = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadZeroTlsCell", 0xa)
-ThreadPerformanceCount = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPerformanceCount", 0xb)
-ThreadAmILastThread = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAmILastThread", 0xc)
-ThreadIdealProcessor = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIdealProcessor", 0xd)
-ThreadPriorityBoost = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriorityBoost", 0xe)
-ThreadSetTlsArrayAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadSetTlsArrayAddress", 0xf)
-ThreadIsIoPending = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIsIoPending", 0x10)
-ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromDebugger", 0x11)
-class _THREAD_INFORMATION_CLASS(EnumType):
-    values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
-    mapper = FlagMapper(*values)
-PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
-THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
 
 
 VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)

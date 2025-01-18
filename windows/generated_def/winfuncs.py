@@ -1735,10 +1735,15 @@ LoadLibraryExWParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
 FreeLibraryPrototype = WINFUNCTYPE(BOOL, HMODULE)
 FreeLibraryParams = ((1, 'hLibModule'),)
 
-#def RtlGetCurrentPeb():
-#    return RtlGetCurrentPeb.ctypes_function()
-RtlGetCurrentPebPrototype = WINFUNCTYPE(PVOID)
-RtlGetCurrentPebParams = ()
+#def GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize):
+#    return GetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+GetProcessInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, PROCESS_INFORMATION_CLASS, LPVOID, DWORD)
+GetProcessInformationParams = ((1, 'hProcess'), (1, 'ProcessInformationClass'), (1, 'ProcessInformation'), (1, 'ProcessInformationSize'))
+
+#def SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize):
+#    return SetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+SetProcessInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, PROCESS_INFORMATION_CLASS, LPVOID, DWORD)
+SetProcessInformationParams = ((1, 'hProcess'), (1, 'ProcessInformationClass'), (1, 'ProcessInformation'), (1, 'ProcessInformationSize'))
 
 #def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
 #    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
