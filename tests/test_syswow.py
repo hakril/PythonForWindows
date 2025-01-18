@@ -23,6 +23,14 @@ def test_print_syswow_state():
     print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
 
     print("")
+    print("IsWow64Process2")
+    processMachine = gdef.USHORT()
+    nativeMachine = gdef.USHORT()
+    windows.winproxy.IsWow64Process2(windows.current_process.handle, processMachine, nativeMachine)
+    print(f"{hex(processMachine.value)=}")
+    print(f"{hex(nativeMachine.value)=}")
+
+    print("")
     print("GetSystemInfo")
     windows.utils.sprint(windows.utils.get_system_info(native=False), name="SystemInfo")
     print("")
