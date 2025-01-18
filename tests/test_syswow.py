@@ -17,8 +17,9 @@ def test_print_syswow_state():
     print(f"{platform.machine()=}")
     print(f"{platform.architecture()=}")
     print(f"{windows.system.bitness=}")
+    print(f"{windows.system.architecture=}")
     print(f"{windows.current_process.bitness=}")
-    print(f"{windows.current_process.is_wow_64=}")
+    print(f"{windows.current_process.architecture=}")
     print(f"{env['PROCESSOR_ARCHITECTURE']=}")
     print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
 
@@ -30,12 +31,6 @@ def test_print_syswow_state():
     print(f"{hex(processMachine.value)=}")
     print(f"{hex(nativeMachine.value)=}")
 
-    print("")
-    print("GetSystemInfo")
-    windows.utils.sprint(windows.utils.get_system_info(native=False), name="SystemInfo")
-    print("")
-    print("GetNativeSystemInfo")
-    windows.utils.sprint(windows.utils.get_system_info(native=True), name="NativeSystemInfo")
 
 @process_syswow_only
 class TestSyswowCurrentProcess(object):
