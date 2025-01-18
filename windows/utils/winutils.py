@@ -552,6 +552,14 @@ def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, secu
 #    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)
 #    return addr
 
+def get_system_info(native=False):
+    res = gdef.SYSTEM_INFO()
+    if native:
+        windows.winproxy.GetNativeSystemInfo(res)
+    else:
+        windows.winproxy.GetSystemInfo(res)
+    return res
+
 def decompress_buffer(buffer, comptype=gdef.COMPRESSION_FORMAT_LZNT1, uncompress_size=None):
     if uncompress_size is None:
         uncompress_size = len(buffer) * 10

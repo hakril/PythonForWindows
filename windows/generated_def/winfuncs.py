@@ -3030,6 +3030,16 @@ LookupAccountNameAParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'
 LookupAccountNameWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, LPCWSTR, PSID, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
 LookupAccountNameWParams = ((1, 'lpSystemName'), (1, 'lpAccountName'), (1, 'Sid'), (1, 'cbSid'), (1, 'ReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
 
+#def GetNativeSystemInfo(lpSystemInfo):
+#    return GetNativeSystemInfo.ctypes_function(lpSystemInfo)
+GetNativeSystemInfoPrototype = WINFUNCTYPE(PVOID, LPSYSTEM_INFO)
+GetNativeSystemInfoParams = ((1, 'lpSystemInfo'),)
+
+#def GetSystemInfo(lpSystemInfo):
+#    return GetSystemInfo.ctypes_function(lpSystemInfo)
+GetSystemInfoPrototype = WINFUNCTYPE(PVOID, LPSYSTEM_INFO)
+GetSystemInfoParams = ((1, 'lpSystemInfo'),)
+
 #def IsWow64Process(hProcess, Wow64Process):
 #    return IsWow64Process.ctypes_function(hProcess, Wow64Process)
 IsWow64ProcessPrototype = WINFUNCTYPE(BOOL, HANDLE, PBOOL)

@@ -22,6 +22,13 @@ def test_print_syswow_state():
     print(f"{env['PROCESSOR_ARCHITECTURE']=}")
     print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
 
+    print("")
+    print("GetSystemInfo")
+    windows.utils.sprint(windows.utils.get_system_info(native=False), name="SystemInfo")
+    print("")
+    print("GetNativeSystemInfo")
+    windows.utils.sprint(windows.utils.get_system_info(native=True), name="NativeSystemInfo")
+
 @process_syswow_only
 class TestSyswowCurrentProcess(object):
     def test_exec_syswow(self):
