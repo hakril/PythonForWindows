@@ -407,6 +407,14 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
    return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
 
+@Kernel32Proxy(error_check=no_error_check)
+def GetNativeSystemInfo(lpSystemInfo):
+    return GetNativeSystemInfo.ctypes_function(lpSystemInfo)
+
+@Kernel32Proxy(error_check=no_error_check)
+def GetSystemInfo(lpSystemInfo):
+    return GetSystemInfo.ctypes_function(lpSystemInfo)
+
 ## Io
 
 @Kernel32Proxy()

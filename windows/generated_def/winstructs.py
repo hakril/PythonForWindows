@@ -11136,6 +11136,36 @@ class _SYSTEM_BASIC_INFORMATION(Structure):
 PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
 SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
 
+class _ANON__ANON__SYSTEM_INFO_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("wProcessorArchitecture", WORD),
+        ("wReserved", WORD),
+    ]
+
+class _ANON__SYSTEM_INFO_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("dwOemId", DWORD),
+        ("DUMMYSTRUCTNAME", _ANON__ANON__SYSTEM_INFO_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+class _SYSTEM_INFO(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("DUMMYUNIONNAME", _ANON__SYSTEM_INFO_SUB_UNION_1),
+        ("dwPageSize", DWORD),
+        ("lpMinimumApplicationAddress", LPVOID),
+        ("lpMaximumApplicationAddress", LPVOID),
+        ("dwActiveProcessorMask", DWORD_PTR),
+        ("dwNumberOfProcessors", DWORD),
+        ("dwProcessorType", DWORD),
+        ("dwAllocationGranularity", DWORD),
+        ("wProcessorLevel", WORD),
+        ("wProcessorRevision", WORD),
+    ]
+LPSYSTEM_INFO = POINTER(_SYSTEM_INFO)
+SYSTEM_INFO = _SYSTEM_INFO
+
 class _TIME_ZONE_INFORMATION(Structure):
     _fields_ = [
         ("Bias", LONG),
