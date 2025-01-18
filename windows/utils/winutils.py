@@ -36,14 +36,6 @@ def get_remote_func_addr(target, dll_name, func_name):
         return mod.pe.exports[func_name]
 
 
-def is_wow_64(handle):
-    if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
-        return False
-    Wow64Process = gdef.BOOL()
-    windows.winproxy.IsWow64Process(handle, Wow64Process)
-    return bool(Wow64Process)
-
-
 def create_file_from_handle(handle, mode="r"):
     """Return a Python :class:`file` around a ``Windows`` HANDLE"""
     flags = os.O_BINARY if "b" in mode else os.O_TEXT
@@ -294,6 +286,16 @@ def datetime_from_systemtime(systime):
             second=systime.wSecond,
             microsecond=systime.wMilliseconds * 1000,
     )
+
+IMAGE_FILE_MACHINE_TO_PROC_ARCH = {
+    gdef.IMAGE_FILE_MACHINE_I386: gdef.PROCESSOR_ARCHITECTURE_INTEL,
+    gdef.IMAGE_FILE_MACHINE_AMD64: gdef.PROCESSOR_ARCHITECTURE_AMD64,
+    gdef.IMAGE_FILE_MACHINE_ARM64: gdef.PROCESSOR_ARCHITECTURE_ARM64,
+    gdef:IMAGE_FILE_MACHINE_UNKNOWN: gdef.PROCESSOR_ARCHITECTURE_UNKNOWN
+}
+
+def image_file_machine_to_processor_architecture(image_file_machine):
+    return IMAGE_FILE_MACHINE_TO_PROC_ARCH[image_file_machine]
 
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
