@@ -115,7 +115,7 @@ class Process(utils.AutoHandle):
                 # What if not implemented ? parse target main binary PE ?
                 machine_archi = gdef.PROCESS_MACHINE_INFORMATION()
                 windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, ctypes.byref(machine_archi), ctypes.sizeof(machine_archi))
-                return machine_archi.ProcessMachine
+                return gdef.IMAGE_FILE_MACHINE_MAPPER[machine_archi.ProcessMachine]
 
         # No IsWow64Process2 -> No ARM
         # So its up on x86 -> x64 based on process bitness
