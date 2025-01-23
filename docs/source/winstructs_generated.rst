@@ -7956,6 +7956,28 @@ _IMAGE_LOAD_CONFIG_DIRECTORY64
 
         :class:`ULONGLONG`
 
+_PROCESS_MACHINE_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: PROCESS_MACHINE_INFORMATION
+
+    Alias for :class:`_PROCESS_MACHINE_INFORMATION`
+
+.. class:: _PROCESS_MACHINE_INFORMATION
+
+    .. attribute:: ProcessMachine
+
+        :class:`USHORT`
+
+
+    .. attribute:: Res0
+
+        :class:`USHORT`
+
+
+    .. attribute:: MachineAttributes
+
+        :class:`MACHINE_ATTRIBUTES`
+
 _MEM_ADDRESS_REQUIREMENTS
 '''''''''''''''''''''''''
 .. class:: MEM_ADDRESS_REQUIREMENTS
@@ -29416,6 +29438,398 @@ _KEY_INFORMATION_CLASS
 
     .. attribute:: MaxKeyInfoClass(10)
 
+_MEMORY_INFORMATION_CLASS
+'''''''''''''''''''''''''
+.. class:: MEMORY_INFORMATION_CLASS
+
+    Alias for :class:`_MEMORY_INFORMATION_CLASS`
+
+
+.. class:: _MEMORY_INFORMATION_CLASS
+
+
+    .. attribute:: MemoryBasicInformation(0)
+
+
+    .. attribute:: MemoryWorkingSetList(1)
+
+
+    .. attribute:: MemorySectionName(2)
+
+
+    .. attribute:: MemoryBasicVlmInformation(3)
+
+
+    .. attribute:: MemoryWorkingSetListEx(4)
+
+_THREAD_INFORMATION_CLASS
+'''''''''''''''''''''''''
+.. class:: PTHREAD_INFORMATION_CLASS
+
+    Pointer to :class:`_THREAD_INFORMATION_CLASS`
+
+
+.. class:: THREAD_INFORMATION_CLASS
+
+    Alias for :class:`_THREAD_INFORMATION_CLASS`
+
+
+.. class:: _THREAD_INFORMATION_CLASS
+
+
+    .. attribute:: ThreadBasicInformation(0)
+
+
+    .. attribute:: ThreadTimes(1)
+
+
+    .. attribute:: ThreadPriority(2)
+
+
+    .. attribute:: ThreadBasePriority(3)
+
+
+    .. attribute:: ThreadAffinityMask(4)
+
+
+    .. attribute:: ThreadImpersonationToken(5)
+
+
+    .. attribute:: ThreadDescriptorTableEntry(6)
+
+
+    .. attribute:: ThreadEnableAlignmentFaultFixup(7)
+
+
+    .. attribute:: ThreadEventPair(8)
+
+
+    .. attribute:: ThreadQuerySetWin32StartAddress(9)
+
+
+    .. attribute:: ThreadZeroTlsCell(10)
+
+
+    .. attribute:: ThreadPerformanceCount(11)
+
+
+    .. attribute:: ThreadAmILastThread(12)
+
+
+    .. attribute:: ThreadIdealProcessor(13)
+
+
+    .. attribute:: ThreadPriorityBoost(14)
+
+
+    .. attribute:: ThreadSetTlsArrayAddress(15)
+
+
+    .. attribute:: ThreadIsIoPending(16)
+
+
+    .. attribute:: ThreadHideFromDebugger(17)
+
+_PROCESSINFOCLASS
+'''''''''''''''''
+.. class:: PROCESSINFOCLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+
+.. class:: _PROCESSINFOCLASS
+
+
+    .. attribute:: ProcessBasicInformation(0)
+
+
+    .. attribute:: ProcessQuotaLimits(1)
+
+
+    .. attribute:: ProcessIoCounters(2)
+
+
+    .. attribute:: ProcessVmCounters(3)
+
+
+    .. attribute:: ProcessTimes(4)
+
+
+    .. attribute:: ProcessBasePriority(5)
+
+
+    .. attribute:: ProcessRaisePriority(6)
+
+
+    .. attribute:: ProcessDebugPort(7)
+
+
+    .. attribute:: ProcessExceptionPort(8)
+
+
+    .. attribute:: ProcessAccessToken(9)
+
+
+    .. attribute:: ProcessLdtInformation(10)
+
+
+    .. attribute:: ProcessLdtSize(11)
+
+
+    .. attribute:: ProcessDefaultHardErrorMode(12)
+
+
+    .. attribute:: ProcessIoPortHandlers(13)
+
+
+    .. attribute:: ProcessPooledUsageAndLimits(14)
+
+
+    .. attribute:: ProcessWorkingSetWatch(15)
+
+
+    .. attribute:: ProcessUserModeIOPL(16)
+
+
+    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
+
+
+    .. attribute:: ProcessPriorityClass(18)
+
+
+    .. attribute:: ProcessWx86Information(19)
+
+
+    .. attribute:: ProcessHandleCount(20)
+
+
+    .. attribute:: ProcessAffinityMask(21)
+
+
+    .. attribute:: ProcessPriorityBoost(22)
+
+
+    .. attribute:: ProcessDeviceMap(23)
+
+
+    .. attribute:: ProcessSessionInformation(24)
+
+
+    .. attribute:: ProcessForegroundInformation(25)
+
+
+    .. attribute:: ProcessWow64Information(26)
+
+
+    .. attribute:: ProcessImageFileName(27)
+
+
+    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
+
+
+    .. attribute:: ProcessBreakOnTermination(29)
+
+
+    .. attribute:: ProcessDebugObjectHandle(30)
+
+
+    .. attribute:: ProcessDebugFlags(31)
+
+
+    .. attribute:: ProcessHandleTracing(32)
+
+
+    .. attribute:: ProcessIoPriority(33)
+
+
+    .. attribute:: ProcessExecuteFlags(34)
+
+
+    .. attribute:: ProcessTlsInformation(35)
+
+
+    .. attribute:: ProcessCookie(36)
+
+
+    .. attribute:: ProcessImageInformation(37)
+
+
+    .. attribute:: ProcessCycleTime(38)
+
+
+    .. attribute:: ProcessPagePriority(39)
+
+
+    .. attribute:: ProcessInstrumentationCallback(40)
+
+
+    .. attribute:: ProcessThreadStackAllocation(41)
+
+
+    .. attribute:: ProcessWorkingSetWatchEx(42)
+
+
+    .. attribute:: ProcessImageFileNameWin32(43)
+
+
+    .. attribute:: ProcessImageFileMapping(44)
+
+
+    .. attribute:: ProcessAffinityUpdateMode(45)
+
+
+    .. attribute:: ProcessMemoryAllocationMode(46)
+
+
+    .. attribute:: ProcessGroupInformation(47)
+
+
+    .. attribute:: ProcessTokenVirtualizationEnabled(48)
+
+
+    .. attribute:: ProcessOwnerInformation(49)
+
+
+    .. attribute:: ProcessWindowInformation(50)
+
+
+    .. attribute:: ProcessHandleInformation(51)
+
+
+    .. attribute:: ProcessMitigationPolicy(52)
+
+
+    .. attribute:: ProcessDynamicFunctionTableInformation(53)
+
+
+    .. attribute:: ProcessHandleCheckingMode(54)
+
+
+    .. attribute:: ProcessKeepAliveCount(55)
+
+
+    .. attribute:: ProcessRevokeFileHandles(56)
+
+
+    .. attribute:: ProcessWorkingSetControl(57)
+
+
+    .. attribute:: ProcessHandleTable(58)
+
+
+    .. attribute:: ProcessCheckStackExtentsMode(59)
+
+
+    .. attribute:: ProcessCommandLineInformation(60)
+
+
+    .. attribute:: ProcessProtectionInformation(61)
+
+
+    .. attribute:: ProcessMemoryExhaustion(62)
+
+
+    .. attribute:: ProcessFaultInformation(63)
+
+
+    .. attribute:: ProcessTelemetryIdInformation(64)
+
+
+    .. attribute:: ProcessCommitReleaseInformation(65)
+
+
+    .. attribute:: ProcessReserved1Information(66)
+
+
+    .. attribute:: ProcessReserved2Information(67)
+
+
+    .. attribute:: ProcessSubsystemProcess(68)
+
+
+    .. attribute:: ProcessInPrivate(70)
+
+
+    .. attribute:: ProcessRaiseUMExceptionOnInvalidHandleClose(71)
+
+
+    .. attribute:: ProcessSubsystemInformation(75)
+
+
+    .. attribute:: ProcessWin32kSyscallFilterInformation(79)
+
+
+    .. attribute:: ProcessEnergyTrackingState(82)
+
+
+    .. attribute:: MaxProcessInfoClass(83)
+
+_PROCESS_INFORMATION_CLASS
+''''''''''''''''''''''''''
+.. class:: PROCESS_INFORMATION_CLASS
+
+    Alias for :class:`_PROCESS_INFORMATION_CLASS`
+
+
+.. class:: _PROCESS_INFORMATION_CLASS
+
+
+    .. attribute:: ProcessMemoryPriority(0)
+
+
+    .. attribute:: ProcessMemoryExhaustionInfo(1)
+
+
+    .. attribute:: ProcessAppMemoryInfo(2)
+
+
+    .. attribute:: ProcessInPrivateInfo(3)
+
+
+    .. attribute:: ProcessPowerThrottling(4)
+
+
+    .. attribute:: ProcessReservedValue1(5)
+
+
+    .. attribute:: ProcessTelemetryCoverageInfo(6)
+
+
+    .. attribute:: ProcessProtectionLevelInfo(7)
+
+
+    .. attribute:: ProcessLeapSecondInfo(8)
+
+
+    .. attribute:: ProcessMachineTypeInfo(9)
+
+
+    .. attribute:: ProcessOverrideSubsequentPrefetchParameter(10)
+
+
+    .. attribute:: ProcessMaxOverridePrefetchParameter(11)
+
+
+    .. attribute:: ProcessInformationClassMax(12)
+
+_MACHINE_ATTRIBUTES
+'''''''''''''''''''
+.. class:: MACHINE_ATTRIBUTES
+
+    Alias for :class:`_MACHINE_ATTRIBUTES`
+
+
+.. class:: _MACHINE_ATTRIBUTES
+
+
+    .. attribute:: UserEnabled(1)
+
+
+    .. attribute:: KernelEnabled(2)
+
+
+    .. attribute:: Wow64Container(4)
+
 MEM_EXTENDED_PARAMETER_TYPE
 '''''''''''''''''''''''''''
 .. class:: PMEM_EXTENDED_PARAMETER_TYPE
@@ -31190,332 +31604,6 @@ _SECTION_INHERIT
 
 
     .. attribute:: ViewUnmap(2)
-
-_PROCESSINFOCLASS
-'''''''''''''''''
-.. class:: PROCESSINFOCLASS
-
-    Alias for :class:`_PROCESSINFOCLASS`
-
-
-.. class:: _PROCESSINFOCLASS
-
-
-    .. attribute:: ProcessBasicInformation(0)
-
-
-    .. attribute:: ProcessQuotaLimits(1)
-
-
-    .. attribute:: ProcessIoCounters(2)
-
-
-    .. attribute:: ProcessVmCounters(3)
-
-
-    .. attribute:: ProcessTimes(4)
-
-
-    .. attribute:: ProcessBasePriority(5)
-
-
-    .. attribute:: ProcessRaisePriority(6)
-
-
-    .. attribute:: ProcessDebugPort(7)
-
-
-    .. attribute:: ProcessExceptionPort(8)
-
-
-    .. attribute:: ProcessAccessToken(9)
-
-
-    .. attribute:: ProcessLdtInformation(10)
-
-
-    .. attribute:: ProcessLdtSize(11)
-
-
-    .. attribute:: ProcessDefaultHardErrorMode(12)
-
-
-    .. attribute:: ProcessIoPortHandlers(13)
-
-
-    .. attribute:: ProcessPooledUsageAndLimits(14)
-
-
-    .. attribute:: ProcessWorkingSetWatch(15)
-
-
-    .. attribute:: ProcessUserModeIOPL(16)
-
-
-    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
-
-
-    .. attribute:: ProcessPriorityClass(18)
-
-
-    .. attribute:: ProcessWx86Information(19)
-
-
-    .. attribute:: ProcessHandleCount(20)
-
-
-    .. attribute:: ProcessAffinityMask(21)
-
-
-    .. attribute:: ProcessPriorityBoost(22)
-
-
-    .. attribute:: ProcessDeviceMap(23)
-
-
-    .. attribute:: ProcessSessionInformation(24)
-
-
-    .. attribute:: ProcessForegroundInformation(25)
-
-
-    .. attribute:: ProcessWow64Information(26)
-
-
-    .. attribute:: ProcessImageFileName(27)
-
-
-    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
-
-
-    .. attribute:: ProcessBreakOnTermination(29)
-
-
-    .. attribute:: ProcessDebugObjectHandle(30)
-
-
-    .. attribute:: ProcessDebugFlags(31)
-
-
-    .. attribute:: ProcessHandleTracing(32)
-
-
-    .. attribute:: ProcessIoPriority(33)
-
-
-    .. attribute:: ProcessExecuteFlags(34)
-
-
-    .. attribute:: ProcessTlsInformation(35)
-
-
-    .. attribute:: ProcessCookie(36)
-
-
-    .. attribute:: ProcessImageInformation(37)
-
-
-    .. attribute:: ProcessCycleTime(38)
-
-
-    .. attribute:: ProcessPagePriority(39)
-
-
-    .. attribute:: ProcessInstrumentationCallback(40)
-
-
-    .. attribute:: ProcessThreadStackAllocation(41)
-
-
-    .. attribute:: ProcessWorkingSetWatchEx(42)
-
-
-    .. attribute:: ProcessImageFileNameWin32(43)
-
-
-    .. attribute:: ProcessImageFileMapping(44)
-
-
-    .. attribute:: ProcessAffinityUpdateMode(45)
-
-
-    .. attribute:: ProcessMemoryAllocationMode(46)
-
-
-    .. attribute:: ProcessGroupInformation(47)
-
-
-    .. attribute:: ProcessTokenVirtualizationEnabled(48)
-
-
-    .. attribute:: ProcessOwnerInformation(49)
-
-
-    .. attribute:: ProcessWindowInformation(50)
-
-
-    .. attribute:: ProcessHandleInformation(51)
-
-
-    .. attribute:: ProcessMitigationPolicy(52)
-
-
-    .. attribute:: ProcessDynamicFunctionTableInformation(53)
-
-
-    .. attribute:: ProcessHandleCheckingMode(54)
-
-
-    .. attribute:: ProcessKeepAliveCount(55)
-
-
-    .. attribute:: ProcessRevokeFileHandles(56)
-
-
-    .. attribute:: ProcessWorkingSetControl(57)
-
-
-    .. attribute:: ProcessHandleTable(58)
-
-
-    .. attribute:: ProcessCheckStackExtentsMode(59)
-
-
-    .. attribute:: ProcessCommandLineInformation(60)
-
-
-    .. attribute:: ProcessProtectionInformation(61)
-
-
-    .. attribute:: ProcessMemoryExhaustion(62)
-
-
-    .. attribute:: ProcessFaultInformation(63)
-
-
-    .. attribute:: ProcessTelemetryIdInformation(64)
-
-
-    .. attribute:: ProcessCommitReleaseInformation(65)
-
-
-    .. attribute:: ProcessReserved1Information(66)
-
-
-    .. attribute:: ProcessReserved2Information(67)
-
-
-    .. attribute:: ProcessSubsystemProcess(68)
-
-
-    .. attribute:: ProcessInPrivate(70)
-
-
-    .. attribute:: ProcessRaiseUMExceptionOnInvalidHandleClose(71)
-
-
-    .. attribute:: ProcessSubsystemInformation(75)
-
-
-    .. attribute:: ProcessWin32kSyscallFilterInformation(79)
-
-
-    .. attribute:: ProcessEnergyTrackingState(82)
-
-
-    .. attribute:: MaxProcessInfoClass(83)
-
-_MEMORY_INFORMATION_CLASS
-'''''''''''''''''''''''''
-.. class:: MEMORY_INFORMATION_CLASS
-
-    Alias for :class:`_MEMORY_INFORMATION_CLASS`
-
-
-.. class:: _MEMORY_INFORMATION_CLASS
-
-
-    .. attribute:: MemoryBasicInformation(0)
-
-
-    .. attribute:: MemoryWorkingSetList(1)
-
-
-    .. attribute:: MemorySectionName(2)
-
-
-    .. attribute:: MemoryBasicVlmInformation(3)
-
-
-    .. attribute:: MemoryWorkingSetListEx(4)
-
-_THREAD_INFORMATION_CLASS
-'''''''''''''''''''''''''
-.. class:: PTHREAD_INFORMATION_CLASS
-
-    Pointer to :class:`_THREAD_INFORMATION_CLASS`
-
-
-.. class:: THREAD_INFORMATION_CLASS
-
-    Alias for :class:`_THREAD_INFORMATION_CLASS`
-
-
-.. class:: _THREAD_INFORMATION_CLASS
-
-
-    .. attribute:: ThreadBasicInformation(0)
-
-
-    .. attribute:: ThreadTimes(1)
-
-
-    .. attribute:: ThreadPriority(2)
-
-
-    .. attribute:: ThreadBasePriority(3)
-
-
-    .. attribute:: ThreadAffinityMask(4)
-
-
-    .. attribute:: ThreadImpersonationToken(5)
-
-
-    .. attribute:: ThreadDescriptorTableEntry(6)
-
-
-    .. attribute:: ThreadEnableAlignmentFaultFixup(7)
-
-
-    .. attribute:: ThreadEventPair(8)
-
-
-    .. attribute:: ThreadQuerySetWin32StartAddress(9)
-
-
-    .. attribute:: ThreadZeroTlsCell(10)
-
-
-    .. attribute:: ThreadPerformanceCount(11)
-
-
-    .. attribute:: ThreadAmILastThread(12)
-
-
-    .. attribute:: ThreadIdealProcessor(13)
-
-
-    .. attribute:: ThreadPriorityBoost(14)
-
-
-    .. attribute:: ThreadSetTlsArrayAddress(15)
-
-
-    .. attribute:: ThreadIsIoPending(16)
-
-
-    .. attribute:: ThreadHideFromDebugger(17)
 
 _VARENUM
 ''''''''

@@ -696,7 +696,9 @@ Functions
 
 .. function:: FreeLibrary(hLibModule)
 
-.. function:: RtlGetCurrentPeb()
+.. function:: GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+.. function:: SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
 
 .. function:: RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
