@@ -696,6 +696,10 @@ Functions
 
 .. function:: FreeLibrary(hLibModule)
 
+.. function:: GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+.. function:: SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
 .. function:: RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
 .. function:: RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
