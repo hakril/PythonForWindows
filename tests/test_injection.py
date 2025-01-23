@@ -4,6 +4,7 @@ import pytest
 import weakref
 import shutil
 import time
+import os
 
 import windows
 import windows.generated_def as gdef
@@ -35,8 +36,9 @@ def proc_3264_runsus(request):
 # Its really the same test as test_process.test_load_library but with suspended process as well
 def test_dll_injection(proc_3264_runsus):
     assert (not proc_3264_runsus.peb.Ldr) or ("wintrust.dll" not in [mod.name for mod in proc_3264_runsus.peb.modules])
-    windows.injection.load_dll_in_remote_process(proc_3264_runsus, "wintrust.dll")
-    assert "wintrust.dll" in [mod.name for mod in proc_3264_runsus.peb.modules]
+    modaddr = windows.injection.load_dll_in_remote_process(proc_3264_runsus, "wintrust.dll")
+    wintrustmod = [mod for mod in proc_3264_runsus.peb.modules if mod.name == "wintrust.dll"][0]
+    assert wintrustmod.baseaddr == modaddr
 
 def test_dll_injection_error_reporting(proc_3264_runsus):
     with pytest.raises(windows.injection.InjectionFailedError) as excinfo:

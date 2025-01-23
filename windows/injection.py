@@ -128,13 +128,20 @@ def generate_simple_LoadLibraryW_32_with_error(k32):
     code += x86.Ret()
     return code.get_code()
 
-def generate_simple_LoadLibraryW_64(load_libraryW, GetLastError, remote_store):
+def generate_simple_LoadLibraryW_64_with_error(k32, remote_store):
+    """A shellcode that execute LoadLibraryW(param) and store the value at a fixed address.
+    This allow a 32b process to inject and retrieve a 64bit module address
+
+    Thread return value is the result of GetLastError()
+    """
+    load_libraryW = k32.pe.exports["LoadLibraryW"]
+    GetLastError = k32.pe.exports["GetLastError"]
     code = RemoteLoadLibrayStub = x64.MultipleInstr()
     code += x64.Mov("RAX", load_libraryW)
     code += (x64.Push("RDI") * 5) # Prepare stack
     code += x64.Call("RAX")
     code += x64.Mov(x64.deref(remote_store), "RAX")
-    code += x64.Mov("RAX", GetLastError)
+    code += x64.Mov("RAX", GetLastError) # Add a jump ?
     code += x64.Call("RAX")
     code += (x64.Pop("RDI") * 5) # Clean stack
     code += x64.Ret()
@@ -161,12 +168,6 @@ def load_dll_in_remote_process(target, dll_path):
         if k32:
             # We have kernel32 \o/
             k32 = k32[0]
-            try:
-                load_libraryW = k32.pe.exports["LoadLibraryW"]
-                GetLastError = k32.pe.exports["GetLastError"]
-            except KeyError:
-                raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
-
             with target.allocated_memory(0x1000) as addr:
                 if target.bitness == 32:
                     shellcode32 = generate_simple_LoadLibraryW_32_with_error(k32)
@@ -193,7 +194,7 @@ def load_dll_in_remote_process(target, dll_path):
                     param_addr = addr
                     addr += len(full_dll_name)
                     shellcode_addr = addr
-                    shellcode = generate_simple_LoadLibraryW_64(load_libraryW, GetLastError, retval_addr)
+                    shellcode = generate_simple_LoadLibraryW_64_with_error(k32, retval_addr)
                     target.write_memory(shellcode_addr, shellcode)
                     t = target.create_thread(shellcode_addr, param_addr)
                     t.wait()
