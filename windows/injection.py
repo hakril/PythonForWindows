@@ -105,13 +105,38 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
             raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
     return True
 
-def generate_simple_LoadLibraryW_64(load_libraryW, remote_store):
+def generate_simple_LoadLibraryW_32_with_error(k32):
+    """A shellcode that execute LoadLibraryW(param) and returns the value.
+    If LoadLibraryW fails -> returns (GetLastError | 0x10000000)
+
+    As a valid 32b modules will never be in >=0x80000000,
+    this allow to determine if the call was successful of not"""
+    load_libraryW = k32.pe.exports["LoadLibraryW"]
+    GetLastError = k32.pe.exports["GetLastError"]
+
+    code = x86.MultipleInstr()
+    code += x86.Mov("EAX", x86.mem("[ESP + 4]"))
+    code += x86.Push("EAX")
+    code += x86.Mov("EAX", load_libraryW)
+    code += x86.Call("EAX")
+    code += x86.Cmp("EAX", 0)
+    code += x86.Jnz(":end")
+    code += x86.Mov("EAX", GetLastError)
+    code += x86.Call("EAX")
+    code += x86.Add("EAX", 0x80000000)
+    code += x86.Label(":end")
+    code += x86.Ret()
+    return code.get_code()
+
+def generate_simple_LoadLibraryW_64(load_libraryW, GetLastError, remote_store):
     code = RemoteLoadLibrayStub = x64.MultipleInstr()
     code += x64.Mov("RAX", load_libraryW)
     code += (x64.Push("RDI") * 5) # Prepare stack
     code += x64.Call("RAX")
-    code += (x64.Pop("RDI") * 5) # Clean stack
     code += x64.Mov(x64.deref(remote_store), "RAX")
+    code += x64.Mov("RAX", GetLastError)
+    code += x64.Call("RAX")
+    code += (x64.Pop("RDI") * 5) # Clean stack
     code += x64.Ret()
     return RemoteLoadLibrayStub.get_code()
 
@@ -138,15 +163,25 @@ def load_dll_in_remote_process(target, dll_path):
             k32 = k32[0]
             try:
                 load_libraryW = k32.pe.exports["LoadLibraryW"]
+                GetLastError = k32.pe.exports["GetLastError"]
             except KeyError:
                 raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
 
             with target.allocated_memory(0x1000) as addr:
                 if target.bitness == 32:
-                    target.write_memory(addr, (dll_path + "\x00").encode('utf-16le'))
-                    t = target.create_thread(load_libraryW, addr)
+                    shellcode32 = generate_simple_LoadLibraryW_32_with_error(k32)
+                    encoded_dll_name = (dll_path + "\x00").encode('utf-16le')
+                    paramaddr = addr
+                    target.write_memory(addr, encoded_dll_name)
+                    shellcode_addr = addr + len(encoded_dll_name)
+                    target.write_memory(shellcode_addr, shellcode32)
+                    t = target.create_thread(shellcode_addr, paramaddr)
                     t.wait()
-                    module_baseaddr = t.exit_code
+                    exit_code = module_baseaddr = t.exit_code
+                    if module_baseaddr & 0x80000000:
+                        # Not a possible userland addr -> its a GetLastError()
+                        module_baseaddr = None
+                        exit_code = exit_code & 0x7fffffff
                 else:
                     # For 64b target we need a special stub as the return value of
                     # load_libraryW does not fit in t.exit_code (DWORD)
@@ -158,14 +193,18 @@ def load_dll_in_remote_process(target, dll_path):
                     param_addr = addr
                     addr += len(full_dll_name)
                     shellcode_addr = addr
-                    shellcode = generate_simple_LoadLibraryW_64(load_libraryW, retval_addr)
+                    shellcode = generate_simple_LoadLibraryW_64(load_libraryW, GetLastError, retval_addr)
                     target.write_memory(shellcode_addr, shellcode)
                     t = target.create_thread(shellcode_addr, param_addr)
                     t.wait()
+                    exit_code = t.exit_code
                     module_baseaddr = target.read_ptr(retval_addr)
 
             if not module_baseaddr:
-                raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_path))
+                real_error = ctypes.WinError(exit_code)
+                myexc = InjectionFailedError(u"Injection of <{0}> failed due to error <{1}> in injected process".format(dll_path, str(real_error)))
+                myexc.__cause__ = real_error
+                raise myexc
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
             # Cannot return the full return value of load_libraryW in 64b target.. (exit_code is a DWORD)
             return module_baseaddr
