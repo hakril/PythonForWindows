@@ -247,3 +247,146 @@ class Subs(Instruction):
 
 class Ret(Instruction):
     encoding = [RetEncoding]
+
+
+
+class MultipleInstr(object):
+    INSTRUCTION_SIZE = 4
+
+    def __init__(self, init_instrs=()):
+        self.instrs = {}
+        self.labels = {}
+        self.expected_labels = {}
+        # List of all labeled jump already resolved
+        # Will be used for 'relocation'
+        self.computed_jump = []
+        self.size = 0
+        for i in init_instrs:
+            self += i
+
+    def get_code(self):
+        if self.expected_labels:
+            raise ValueError("Unresolved labels: {0}".format(self.expected_labels.keys()))
+        return b"".join([x[1].get_code() for x in sorted(self.instrs.items())])
+
+    def add_instruction(self, instruction):
+        # if isinstance(instruction, Label):
+        #     return self.add_label(instruction)
+        # # Change DelayedJump to LabeledJump ?
+        # if isinstance(instruction, DelayedJump):
+        #     return self.add_delayed_jump(instruction)
+        if isinstance(instruction, Instruction):
+            self.instrs[self.size] = instruction
+            self.size += self.INSTRUCTION_SIZE
+            return
+        raise ValueError("Don't know what to do with {0} of type {1}".format(instruction, type(instruction)))
+
+    def add_label(self, label):
+        if label.name not in self.expected_labels:
+            # Label that have no jump before definition
+            # Just registed the address of the label
+            self.labels[label.name] = self.size
+            return
+        # Label with jmp before definition
+        # Lot of stuff todo:
+            # Find all delayed jump that refer to this jump
+            # Replace them with real jump
+            # If size of jump < JUMP_SIZE: relocate everything we can
+            # Update expected_labels
+        for jump_to_label in self.expected_labels[label.name]:
+            if jump_to_label.offset in self.instrs:
+                raise ValueError("WTF REPLACE EXISTING INSTR...")
+            distance = self.size - jump_to_label.offset
+            real_jump = jump_to_label.type(distance)
+            self.instrs[jump_to_label.offset] = real_jump
+            self.computed_jump.append((jump_to_label.offset, self.size))
+            for i in range(self.JUMP_SIZE - len(real_jump.get_code())):
+                self.instrs[jump_to_label.offset + len(real_jump.get_code()) + i] = _NopArtifact()
+        del self.expected_labels[label.name]
+        self.labels[label.name] = self.size
+        if not self.expected_labels:
+            # No more un-resolved label (for now): time to reduce the shellcode
+            self._reduce_shellcode()
+
+    def add_delayed_jump(self, jump):
+        dst = jump.label
+        if dst in self.labels:
+            # Jump to already defined labels
+            # Nothing fancy: get offset of label and jump to it !
+            distance = self.size - self.labels[dst]
+            jump_instruction = jump.type(-distance)
+            self.computed_jump.append((self.size, self.labels[dst]))
+            return self.add_instruction(jump_instruction)
+        # Jump to undefined label
+        # Add label to expected ones
+        # Add jump info -> offset of jump | type
+        # Reserve space for call !
+        jump.offset = self.size
+        self.expected_labels.setdefault(dst, []).append(jump)
+        self.size += self.JUMP_SIZE
+        return
+
+    def merge_shellcode(self, other):
+        shared_labels = set(self.labels) & set(other.labels)
+        if shared_labels:
+            raise ValueError("Cannot merge shellcode: shared labels {0}".format(shared_labels))
+        for offset, instr in sorted(other.instrs.items()):
+            for label_name in [name for name, label_offset in other.labels.items() if label_offset == offset]:
+                self.add_instruction(Label(label_name))
+            self.add_instruction(instr)
+
+    def __iadd__(self, other):
+        if isinstance(other, MultipleInstr):
+            self.merge_shellcode(other)
+        elif isinstance(other, basestring):
+            self.assemble(other)
+        else:
+            self.add_instruction(other)
+        return self
+
+    def assemble(self, code):
+        for instr in assemble_instructions_generator(code):
+            self.add_instruction(instr)
+
+
+def split_in_instruction(str):
+    for line in str.split("\n"):
+        if not line:
+            continue
+        for instr in line.split(";"):
+            if not instr:
+                continue
+            yield instr.strip()
+
+def assemble_instructions_generator(str):
+    for instr in split_in_instruction(str):
+        data = instr.split(" ", 1)
+        mnemo, args_raw = data[0], data[1:]
+        try:
+            instr_object = globals()[mnemo.capitalize()]
+        except:
+            raise ValueError("Unknow mnemonic <{0}>".format(mnemo))
+
+        # if issubclass(instr_object, Raw):
+        #     # Raw should received the raw buffer as it expect encoded hex
+        #     # The transformation may transform 'raw 9090' (nopnop) as 0n9090
+        #     # If other fake-instr need this : make a class attribute
+        #     yield instr_object(*args_raw)
+        #     continue
+
+        args = []
+        if args_raw:
+            for arg in args_raw[0].split(","):
+                arg = arg.strip()
+                try:
+                    arg = int(arg, 0)
+                except ValueError:
+                    pass
+                args.append(arg)
+        yield instr_object(*args)
+
+def assemble(str):
+    """Play test"""
+    shellcode = MultipleInstr()
+    shellcode += str
+    return shellcode.get_code()
