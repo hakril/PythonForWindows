@@ -5438,9 +5438,13 @@ _LIST_ENTRY._fields_ = [
 
 class _PEB_LDR_DATA(Structure):
     _fields_ = [
-        ("Reserved1", BYTE * (8)),
-        ("Reserved2", PVOID * (3)),
-        ("InMemoryOrderModuleList", LIST_ENTRY),
+        ("Length", ULONG),
+        ("Initialized", BYTE),
+        ("SsHandle", PVOID),
+        ("InLoadOrderModuleList", _LIST_ENTRY),
+        ("InMemoryOrderModuleList", _LIST_ENTRY),
+        ("InInitializationOrderModuleList", _LIST_ENTRY),
+        ("EntryInProgress", PVOID),
     ]
 PEB_LDR_DATA = _PEB_LDR_DATA
 PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)

@@ -4,11 +4,18 @@ typedef struct _LIST_ENTRY {
 } LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
 
 
+/* Definition of WinXP : Still same base in win11 with some extra field */
 typedef struct _PEB_LDR_DATA {
-  BYTE       Reserved1[8];
-  PVOID      Reserved2[3];
-  LIST_ENTRY InMemoryOrderModuleList;
-} PEB_LDR_DATA, *PPEB_LDR_DATA;
+    ULONG               Length;
+    BYTE                Initialized;
+    PVOID               SsHandle;
+    _LIST_ENTRY         InLoadOrderModuleList;
+    _LIST_ENTRY         InMemoryOrderModuleList;
+    _LIST_ENTRY         InInitializationOrderModuleList;
+    PVOID               EntryInProgress;
+    // BYTE                ShutdownInProgress; // New field
+    // PVOID               ShutdownThreadId;   // New field
+}PEB_LDR_DATA, *PPEB_LDR_DATA;
 
 
 typedef struct _LSA_UNICODE_STRING {

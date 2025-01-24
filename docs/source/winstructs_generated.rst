@@ -10521,19 +10521,39 @@ _PEB_LDR_DATA
 
 .. class:: _PEB_LDR_DATA
 
-    .. attribute:: Reserved1
+    .. attribute:: Length
 
-        :class:`BYTE` ``[8]``
+        :class:`ULONG`
 
 
-    .. attribute:: Reserved2
+    .. attribute:: Initialized
 
-        :class:`PVOID` ``[3]``
+        :class:`BYTE`
+
+
+    .. attribute:: SsHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: InLoadOrderModuleList
+
+        :class:`_LIST_ENTRY`
 
 
     .. attribute:: InMemoryOrderModuleList
 
-        :class:`LIST_ENTRY`
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: InInitializationOrderModuleList
+
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: EntryInProgress
+
+        :class:`PVOID`
 
 _LSA_UNICODE_STRING
 '''''''''''''''''''
