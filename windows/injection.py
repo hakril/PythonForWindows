@@ -389,6 +389,13 @@ def execute_python_code(process, code):
     # Cache the value ?
     py_dll_name = get_dll_name_from_python_version()
     pydll_path = find_python_dll_to_inject(process.bitness)
+
+    # NB: Sandboxing on Windows Store apps prevents remote loading DLLs stored under "C:\Program Files*\WindowsApps\*"
+    # This is relevant for remote python execution, as the sandboxed python process is the _only_ one that can 
+    # access its CRT and shared libraries.
+    if '\\windowsapps\\' in pydll_path.lower():
+        raise ValueError('Cannot execute remote python code from a sandboxed python interpreter. Install python outside of the Microsoft Store to resolve.')
+
     if sys.version_info.major == 3:
         # FOr py3, we may have a per-user install.
         # Meaning that the vcruntime140.dll will not be in the injected process path

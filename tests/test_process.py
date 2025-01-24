@@ -4,9 +4,11 @@ import pytest
 import os
 import sys
 import time
-import struct
+import ctypes
+
 import textwrap
 import shutil
+import re
 
 import windows
 import windows.pipe
@@ -26,8 +28,12 @@ class TestCurrentProcessWithCheckGarbage(object):
         return windows.current_process.peb
 
     def test_get_current_process_modules(self):
-        # Use sys.executable because executable can be a PyInstaller exe
-        assert os.path.basename(sys.executable) in windows.current_process.peb.modules[0].name
+        # Use module filename because this executable can be: 
+        # 1. A PyInstaller exe
+        # 2. A Windows App execution alias (Microsoft Store builds)
+        current_proc_filename = ctypes.create_string_buffer(1000)
+        windows.winproxy.GetModuleFileNameA(None, current_proc_filename, 1000)
+        assert os.path.basename(current_proc_filename.value.decode()) in windows.current_process.peb.modules[0].name
 
     def test_get_current_process_exe(self):
         exe = windows.current_process.peb.exe
@@ -38,10 +44,13 @@ class TestCurrentProcessWithCheckGarbage(object):
     def test_current_process_pe_imports(self):
         python_module = windows.current_process.peb.modules[0]
         imp = python_module.pe.imports
-        assert "kernel32.dll" in imp.keys(), 'Kernel32.dll not in python imports'
-        current_proc_id_iat = [f for f in imp["kernel32.dll"] if f.name == "GetCurrentProcessId"][0]
-        k32_base = windows.winproxy.LoadLibraryA(b"kernel32.dll")
-        assert windows.winproxy.GetProcAddress(k32_base, b"GetCurrentProcessId") == current_proc_id_iat.value
+        python_dll_regex = re.compile(r'python[0-9.]+dll', re.IGNORECASE)
+        python_dll_imp = next((i for i in imp.keys() if python_dll_regex.match(i)), None)
+        assert python_dll_imp is not None, 'Python dll not in python imports'
+
+        imp_id_iat = imp[python_dll_imp][0]
+        mod_base = windows.winproxy.LoadLibraryA(python_dll_imp.encode())
+        assert windows.winproxy.GetProcAddress(mod_base, imp_id_iat.name.encode()) == imp_id_iat.value
 
     def test_current_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
