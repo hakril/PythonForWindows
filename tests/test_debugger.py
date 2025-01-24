@@ -376,22 +376,28 @@ import threading
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
-
+    thread_exception = []
     def do_check():
         time.sleep(1)
-        print("[==================] LOADING PYTHON")
-        proc32_64_debug.execute_python_unsafe("1").wait()
-        print("[==================] OPEN SELF_FILENAME1")
-        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
-        time.sleep(0.1)
-        print("[==================] OPEN SELF_FILENAME2")
-        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
-        time.sleep(0.1)
-        print("[==================] OPEN SELF_FILENAME3")
-        proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
-        time.sleep(0.1)
-        print("[==================] KILLING TARGET")
-        proc32_64_debug.exit()
+        try:
+            assert proc32_64_debug.peb.Ldr[0].Initialized, "peb.Ldr not yet Initialized"
+            print("[==================] LOADING PYTHON")
+            proc32_64_debug.execute_python_unsafe("1").wait()
+            print("[==================] OPEN SELF_FILENAME1")
+            proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME1')").wait()
+            time.sleep(0.1)
+            print("[==================] OPEN SELF_FILENAME2")
+            proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME2')").wait()
+            time.sleep(0.1)
+            print("[==================] OPEN SELF_FILENAME3")
+            proc32_64_debug.execute_python_unsafe("open(u'SELF_FILENAME3')").wait()
+            time.sleep(0.1)
+            print("[==================] KILLING TARGET")
+        except Exception as e:
+            traceback.print_exc()
+            thread_exception.append(e)
+        finally:
+            proc32_64_debug.exit()
 
     class TSTBP(bptype):
         TARGET = windows.winproxy.CreateFileW
@@ -407,8 +413,13 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
 
     d = windows.debug.Debugger(proc32_64_debug)
     d.add_bp(TSTBP("kernelbase!CreateFileW"))
-    threading.Thread(target=do_check).start()
+    t = threading.Thread(target=do_check)
+    t.start()
     d.loop()
+    assert not t.is_alive()
+    if thread_exception:
+        raise thread_exception[0]
+
     assert data >= set([u"SELF_FILENAME1", u"SELF_FILENAME2"])
     assert u"SELF_FILENAME3" not in data
 
@@ -431,6 +442,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     def do_check():
         time.sleep(1)
         try:
+            assert proc32_64_debug.peb.Ldr[0].Initialized, "peb.Ldr not yet Initialized"
             print("[==================] LOADING PYTHON")
             assert list(d.breakpoints.values())[0]
             proc32_64_debug.execute_python_unsafe("1").wait()
