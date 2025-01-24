@@ -37,6 +37,13 @@ else:
 
 # Make a special memoryview that match what is show in the ARM Chapter C4 ?
 
+# A lot of hardcoded bits are filled this way:
+
+## self.bits[24:32] = reversed(bytearray(XXX))
+
+# This allow to write the bits in the same order as the ARM manual which is describe with most significant bit first
+# Whereas our internal structure is reverse for simplicity of mapping it on list index
+
 XREGISTER = {'X0', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19', 'X20', 'X21', 'X22', 'X23', 'X24', 'X25', 'X26', 'X27', 'X28', 'X29', 'X30'}
 WREGISTER = {'W0', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16', 'W17', 'W18', 'W19', 'W20', 'W21', 'W22', 'W23', 'W24', 'W25', 'W26', 'W27', 'W28', 'W29', 'W30'}
 ALL_REGISTER = XREGISTER | WREGISTER
@@ -45,6 +52,9 @@ WSP = "WSP"
 
 
 class InstructionEncoding(object):
+    # Sub classes can force 32/64 only instrs by setting this to 32 or 64
+    BITNESS = None
+
     def __init__(self):
         super(InstructionEncoding, self).__init__()
         # Bits are in
@@ -53,8 +63,7 @@ class InstructionEncoding(object):
         self.bytearray = bytearray(32)
         self.bits = memoryview(self.bytearray)
 
-        # Disable with SF = FALSE ?
-        self.bitness = None
+        self.bitness = self.BITNESS
 
     @classmethod
     def is_register(self, arg, accept_sp):
@@ -81,9 +90,17 @@ class InstructionEncoding(object):
 
     # Instruction filing at instanciation
 
+    def setup_fixed_values(self):
+        # Setup the values registered by InstructionEncoding.gen(x=1, y=2)
+        for name, value in self.ENCODING_VALUES.items():
+            assert isinstance(value, int)
+            self.setup_immediat(getattr(self, name), value)
+
     def binencode_imm(self, immediat, outsize):
         binstr = "{:0{outsize}b}".format(immediat, outsize=outsize)
-        assert len(binstr) == outsize, "Could not encode immediat {0} in {1} bits. Value take {2} bits".format(immediat, outsize, len(binstr))
+        if len(binstr) != outsize:
+            raise ValueError("Could not encode immediat {0} in {1} bits. Value take {2} bits".format(immediat, outsize, len(binstr)))
+
         binlist = [int(c) for c in reversed(binstr)]
         return bytearray(binlist)
 
@@ -95,7 +112,8 @@ class InstructionEncoding(object):
                 self.sf[:] = b"\x00"
             else: # bitness == 64:
                 self.sf[:] = b"\x01"
-        assert self.bitness == bitness, "bitness mismatch in instruction"
+        if self.bitness != bitness:
+            raise ValueError("Bitness mismatch on <{0}> encoding, instruction is alredy {1} cannot set as {2}".format(type(self).__name__, self.bitness, bitness))
 
     def encode_register(self, register, outsize=5):
         register = register.upper()
@@ -128,12 +146,6 @@ class DataProcessingImmediate(InstructionEncoding):
         self.op1 = self.bits[22:26]
 
 class AddSubtractImmediate(DataProcessingImmediate):
-    SF = True
-    RD = True
-    RN = True
-    IMM12 = True
-    SH = True
-
     def __init__(self, argsdict):
         super(AddSubtractImmediate, self).__init__()
         self.sf = self.bits[31:32] # Keep it a memoryview
@@ -145,20 +157,14 @@ class AddSubtractImmediate(DataProcessingImmediate):
         self.rn = self.bits[5:10]
         self.rd = self.bits[0:5]
 
-        for name, value in self.ENCODING_VALUES.items():
-            print("{0} setting {1} to {2}".format(type(self).__name__, name, value))
-            if isinstance(value, int):
-                value = bytearray((value,))
-            # self.x[:] = value
-            getattr(self, name)[:] = value
 
+        self.setup_fixed_values()
         # Change instruction based of parameter
         self.setup_register(self.rd, argsdict[0])
         self.setup_register(self.rn, argsdict[1])
         self.setup_immediat(self.imm12, argsdict[2])
 
-
-
+        assert argsdict.get(3) is None, "SHIFT NOT IMPLEMENTED YET"
 
 
     @classmethod
@@ -167,6 +173,41 @@ class AddSubtractImmediate(DataProcessingImmediate):
                 cls.is_register(argsdict[1], accept_sp=True) and
                 cls.is_imm12(argsdict[2]) and
                 cls.is_shift(argsdict.get(3)))
+
+
+### C4.1.94.13 Unconditional branch (register)
+
+class UnconditionalBranchRegister(InstructionEncoding):
+    BITNESS = 64
+
+    def __init__(self, argsdict):
+        super(UnconditionalBranchRegister, self).__init__()
+        # Allow to fill it in the same order as the ARM manual
+        self.bits[25:32] = bytearray(reversed((1, 1, 0, 1, 0, 1, 1)))
+        self.opc = self.bits[21:25]
+        self.op2 = self.bits[16:21]
+        self.op3 = self.bits[10:16]
+        self.rn = self.bits[5:10]
+        self.op4 = self.bits[0:5]
+
+        self.setup_fixed_values()
+        self.setup_register(self.rn, argsdict[0])
+
+    @classmethod
+    def accept_arg(cls, argsdict):
+        return (cls.is_register(argsdict[0], accept_sp=True))
+
+
+class RetEncoding(UnconditionalBranchRegister.gen(opc=0b10, op2=0b11111, op3=0, op4=0)):
+    # Ret can accept no register and default to X30
+    def __init__(self, argsdict):
+        if not argsdict:
+            argsdict[0] = "X30"
+        super(RetEncoding, self).__init__(argsdict)
+
+    @classmethod
+    def accept_arg(cls, argsdict):
+        return not argsdict or cls.is_register(argsdict[0], accept_sp=True)
 
 class Instruction(object):
     encoding = []
@@ -201,3 +242,8 @@ class Add(Instruction):
 
 class Subs(Instruction):
     encoding = [AddSubtractImmediate.gen(op=1, S=1)]
+
+### C6.2.307 RET (page 2203) (11010110010111110000000000000000)
+
+class Ret(Instruction):
+    encoding = [RetEncoding]

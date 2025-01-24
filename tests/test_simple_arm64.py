@@ -54,8 +54,10 @@ class CheckInstr(object):
             if self.must_fail:
                 raise ValueError("Instruction did not failed as expected")
         capres_list = disas(res)
+        if not capres_list:
+            raise AssertionError("Trying to disas an instruction resulted no disassembled instr")
         if len(capres_list) != 1:
-            raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs")
+            raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs: {0}".format(capres_list))
         capres = capres_list[0]
         print("{0} {1}".format(capres.mnemonic, capres.op_str))
         if self.expected_result is not None:
@@ -105,4 +107,15 @@ def test_assembler():
 
     # Error test todo
     # CheckInstr(Add)('X11', 'W12', 0x123)
-    CheckInstr(Add)('X11', 'X12', 0x12345678)
+    with pytest.raises(ValueError):
+        CheckInstr(Add)('BADREG', 'X12', 0)
+
+    with pytest.raises(ValueError):
+        # Immediat too big for encoding
+        CheckInstr(Add)('X11', 'X12', 0x12345678)
+
+    CheckInstr(Ret)("X0")
+    CheckInstr(Ret, expected_result="ret ")("X30")
+    CheckInstr(Ret)()
+    with pytest.raises(ValueError):
+        CheckInstr(Ret)("W0")
