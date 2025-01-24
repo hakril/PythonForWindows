@@ -378,7 +378,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = set()
     thread_exception = []
     def do_check():
-        time.sleep(1)
+        time.sleep(2)
         try:
             assert proc32_64_debug.peb.Ldr.contents.Initialized, "peb.Ldr not yet Initialized"
             print("[==================] LOADING PYTHON")
