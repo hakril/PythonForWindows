@@ -40,6 +40,14 @@ def perform_manual_getproc_loadlib_32(target, dll_name):
     code += x86.Call(":FUNC_GETPROCADDRESS32")
     code += x86.Push(x86.mem("[ECX + 8]"))
     code += x86.Call("EAX") # LoadLibrary
+    code += x86.Cmp("EAX", 0)
+    code += x86.Jnz(":end")
+    # GetLastError()
+    # I really don't want to resolve another function
+    # For a field that have been the same since XP/Win2003
+    code += x86.Mov('EAX', x86.mem('fs:[0x34]'))
+    code += x86.Add("EAX", 0x80000000)
+    code += x86.Label(":end")
     code += x86.Pop("ECX")
     code += x86.Pop("ECX")
     code += x86.Ret()
@@ -60,9 +68,18 @@ def perform_manual_getproc_loadlib_32(target, dll_name):
 
         t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
         t.wait()
-        if not t.exit_code:
-            raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
-    return True
+        module_baseaddr = t.exit_code
+
+    if module_baseaddr & 0x80000000:
+        # Not a possible userland addr -> its a GetLastError()
+        error_code = module_baseaddr & 0x7fffffff
+        module_baseaddr = None
+        real_error = ctypes.WinError(error_code)
+        myexc = InjectionFailedError(u"Injection of <{0}> failed due to error <{1}> in injected process".format(dll_name, str(real_error)))
+        myexc.__cause__ = real_error
+        raise myexc
+
+    return module_baseaddr
 
 def perform_manual_getproc_loadlib_64(target, dll_name):
     dll = get_kernel32_dll_name()
@@ -76,18 +93,23 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
     code += x64.Mov("RDX", x64.mem("[R15 + 8]"))
     code += x64.Call(":FUNC_GETPROCADDRESS64")
     code += x64.Mov("RCX", x64.mem("[R15 + 0x10]"))
-    code += x64.Push("RCX")
-    code += x64.Push("RCX")
-    code += x64.Push("RCX")
+    code += (x64.Push("RCX") * 3)
     code += x64.Call("RAX") # LoadLibrary
-    code += x64.Pop("RCX")
-    code += x64.Pop("RCX")
-    code += x64.Pop("RCX")
+    code += (x64.Pop("RCX") * 3)
+    code += x64.Mov("RCX", x64.mem("[R15]"))
+    code += x64.Mov(x64.mem("[RCX]"), "RAX")
+    # GetLastError()
+    # I really don't want to resolve another function
+    # For a field that have been the same since XP/Win2003
+    code += x64.Mov('RAX', x64.mem('gs:[0x68]'))
     code += x64.Ret()
 
     RemoteManualLoadLibray += GetProcAddress64
 
     with target.allocated_memory(0x1000) as addr:
+        # Addr contains the name of kernel32
+        # The data at addr are discadable after the call
+        # So, on return it contains the return PVOID64 value of LoadLibraryA
         addr2 = addr + len(dll)
         addr3 = addr2 + len(api)
         addr4 = addr3 + len(dll_to_load)
@@ -101,9 +123,15 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
 
         t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
         t.wait()
-        if not t.exit_code:
-            raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
-    return True
+        module_baseaddr = target.read_ptr(addr)
+        if not module_baseaddr:
+            module_baseaddr = None
+            real_error = ctypes.WinError(t.exit_code)
+            myexc = InjectionFailedError(u"Injection of <{0}> failed due to error <{1}> in injected process".format(dll_name, str(real_error)))
+            myexc.__cause__ = real_error
+            raise myexc
+
+    return module_baseaddr
 
 def generate_simple_LoadLibraryW_32_with_error(k32):
     """A shellcode that execute LoadLibraryW(param) and returns the value.
