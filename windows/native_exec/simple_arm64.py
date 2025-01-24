@@ -113,7 +113,7 @@ class InstructionEncoding(object):
         return (accept_sp and (arg in [SP, WSP])) or arg in ALL_REGISTER
 
     @classmethod
-    def is_imm12(self, arg):
+    def is_imm(self, arg):
         try:
             value = int(arg)
         except (ValueError, TypeError):
@@ -127,9 +127,9 @@ class InstructionEncoding(object):
 
     @classmethod
     def gen(cls, **encoding_array):
-        class GeneratedEncoding(cls):
+        class GeneratedEncodingCls(cls):
             ENCODING_VALUES = encoding_array
-        return GeneratedEncoding
+        return GeneratedEncodingCls
 
     # Instruction filing at instanciation
 
@@ -214,7 +214,6 @@ class AddSubtractImmediate(DataProcessingImmediate):
         if shift not in [("LSL", 0), ("LSL", 12)]:
             raise ValueError("Invalid shift for instruction: {0}".format(shift))
         if shift == ("LSL", 12):
-            import pdb;pdb.set_trace()
             self.sh[:] = bytearray((1,))
 
 
@@ -222,8 +221,43 @@ class AddSubtractImmediate(DataProcessingImmediate):
     def accept_arg(cls, argsdict):
         return (cls.is_register(argsdict[0], accept_sp=True) and
                 cls.is_register(argsdict[1], accept_sp=True) and
-                cls.is_imm12(argsdict[2]) and
+                cls.is_imm(argsdict[2]) and
                 cls.is_shift(argsdict.get(3)))
+
+
+# C4.1.93.6 Logical (immediate)
+# Wtf : https://kddnewton.com/2022/08/11/aarch64-bitmask-immediates.html
+
+class DataProcessingLogicalImmediate(DataProcessingImmediate):
+    def __init__(self, argsdict):
+        super(DataProcessingLogicalImmediate, self).__init__()
+        self.sf = self.bits[31:32]
+        self.opc = self.bits[29:31]
+        self.bits[23:29] = bytearray(reversed((1, 0, 0, 1, 0, 0)))
+        self.N = self.bits[22:23]
+        self.immr = self.bits[16:22]
+        self.imms = self.bits[10:16]
+        self.rn = self.bits[5:10]
+        self.rd = self.bits[0:5]
+
+        self.setup_fixed_values()
+        # Change instruction based of parameter
+        self.setup_register(self.rd, argsdict[0])
+        self.setup_register(self.rn, argsdict[1])
+        self.setup_bitmask_imm(self.imm12, argsdict[2])
+
+    @classmethod
+    def accept_arg(cls, argsdict):
+        return (cls.is_register(argsdict[0], accept_sp=True) and
+                cls.is_register(argsdict[1], accept_sp=True) and
+                cls.is_bitmask_imm(argsdict[2]))
+
+    @classmethod
+    def is_bitmask_imm(*args, **kwargs):
+        raise NotImplementedError("is_bitmask_imm")
+
+    def setup_bitmask_imm(*args, **kwargs):
+        raise NotImplementedError("setup_bitmask_imm")
 
 
 class MovWideImmediat(DataProcessingImmediate):
@@ -242,13 +276,23 @@ class MovWideImmediat(DataProcessingImmediate):
         self.setup_register(self.rd, argsdict[0])
         self.setup_immediat(self.imm16, argsdict[1])
 
-        assert argsdict.get(3) is None, "SHIFT NOT IMPLEMENTED YET"
+        shift = Shift.parse(argsdict.get(2))
+        if not shift:
+            return
+        if shift.type != "LSL":
+            raise ValueError("Invalid shift type for {0} : {1}".format(type(self).__name__, shift.value))
+        if shift.value not in (0, 16 ,32, 48):
+            raise ValueError("Invalid shift value for {0} : {1}".format(type(self).__name__, shift.value))
+        if self.bitness == 32 and shift.value > 16:
+            raise ValueError("Invalid shift value for 32bits encoding of {0} : {1}".format(type(self).__name__, shift.value))
+
+        self.setup_immediat(self.hw, shift.value // 16)
 
 
     @classmethod
     def accept_arg(cls, argsdict):
         return (cls.is_register(argsdict[0], accept_sp=True) and
-                cls.is_imm12(argsdict[1]) and
+                cls.is_imm(argsdict[1]) and
                 cls.is_shift(argsdict.get(2)))
 
 
@@ -293,24 +337,71 @@ class RetEncoding(UnconditionalBranchRegister.gen(opc=0b10, op2=0b11111, op3=0, 
 class DataProcessingRegister(InstructionEncoding):
     def __init__(self):
         super(DataProcessingRegister, self).__init__()
-        self.bits[26:29] = bytearray((0,0,1))
         self.op0 = self.bits[30:31]
         self.op1 = self.bits[28:29]
         self.bits[25:28] = bytearray(reversed((1, 0, 1)))
         self.op2 = self.bits[21:25]
         self.op3 = self.bits[10:16]
 
+class DataProcessingLogicalShiftedRegister(DataProcessingRegister):
+    def __init__(self, argsdict):
+        super(DataProcessingLogicalShiftedRegister, self).__init__()
+        self.sf = self.bits[31:32]
+        self.opc = self.bits[29:31]
+        self.bits[24:29] = bytearray(reversed((0, 1, 0, 1, 0)))
+        self.shift = self.bits[22:24]
+        self.N = self.bits[21:22]
+        self.rm = self.bits[16:21]
+        self.imm6 = self.bits[10:16]
+        self.rn = self.bits[5:10]
+        self.rd = self.bits[0:5]
+
+        self.setup_fixed_values()
+        # Change instruction based of parameter
+        self.setup_register(self.rd, argsdict[0])
+        self.setup_register(self.rn, argsdict[1])
+        self.setup_register(self.rm, argsdict[2])
+
+        shift = Shift.parse(argsdict.get(3))
+        if not shift:
+            return
+        # Is this mapping generic ? Store ir somewhere ?
+        # Is the shift size logic repeatable and factorisable ?
+        if self.bitness == 32 and shift.value > 31:
+            raise ValueError("Invalid shift value for 32bits encoding of {0} : {1}".format(type(self).__name__, shift.value))
+
+        SHIFT_MAPPING = {"LSL": 0b00, "LSR": 0b01, "ASR": 0b10, "ROR": 0b11}
+        self.setup_immediat(self.shift, SHIFT_MAPPING[shift.type])
+        self.setup_immediat(self.imm6, shift.value)
+
+
+    @classmethod
+    def accept_arg(cls, argsdict):
+        return (cls.is_register(argsdict[0]) and
+                cls.is_register(argsdict[1]) and
+                cls.is_register(argsdict[2]) and
+                cls.is_shift(argsdict.get(3)))
+
 # An instruction is a Name that can have multiple encoding
 # It's the class we instanciate to assemble instructions
-# Add X0, X0, IMM
-# Add X0, X0, X0
+# C6.2.270 ORR (immediate)
+# C6.2.271 ORR (shifted register)
+
+# there also seem to exist "alias instructions" like "mov"
+# That just map to others instruction when specific condition are met on the params
+
 
 class Instruction(object):
     encoding = []
 
     def __init__(self, *args):
         argsdict = dict(enumerate(args)) # Like a list but allow arg.get(4)
-        for encodcls in self.encoding:
+        for i, encodcls in enumerate(self.encoding):
+            # Late rewrite of GeneratedEncodingCls classname for better message error
+            if encodcls.__name__ == "GeneratedEncodingCls":
+                encodcls.__name__ = "{0}Encoding{1}".format(type(self).__name__, i)
+
+
             if encodcls.accept_arg(argsdict):
                 self.encoded = encodcls(argsdict)
                 return
@@ -346,10 +437,17 @@ class Ret(Instruction):
 
 #  C6.2.254
 
-class MovZ(Instruction):
+class Movz(Instruction):
     encoding = [MovWideImmediat.gen(opc=0b10)]
 
+class Movk(Instruction):
+    encoding = [MovWideImmediat.gen(opc=0b11)]
 
+# The encoding for "mov reg, reg" :D
+# C6.2.271
+# Todo: Instruction like "mov" that dispatch to other instruction encoding based on more precise condition on param ?
+class Orr(Instruction):
+    encoding = [DataProcessingLogicalShiftedRegister.gen(opc=0b01)]
 
 class MultipleInstr(object):
     INSTRUCTION_SIZE = 4
