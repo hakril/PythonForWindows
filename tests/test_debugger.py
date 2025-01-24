@@ -380,7 +380,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     def do_check():
         time.sleep(1)
         try:
-            assert proc32_64_debug.peb.Ldr[0].Initialized, "peb.Ldr not yet Initialized"
+            assert proc32_64_debug.peb.Ldr.contents.Initialized, "peb.Ldr not yet Initialized"
             print("[==================] LOADING PYTHON")
             proc32_64_debug.execute_python_unsafe("1").wait()
             print("[==================] OPEN SELF_FILENAME1")
@@ -442,7 +442,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     def do_check():
         time.sleep(1)
         try:
-            assert proc32_64_debug.peb.Ldr[0].Initialized, "peb.Ldr not yet Initialized"
+            assert proc32_64_debug.peb.Ldr.contents.Initialized, "peb.Ldr not yet Initialized"
             print("[==================] LOADING PYTHON")
             assert list(d.breakpoints.values())[0]
             proc32_64_debug.execute_python_unsafe("1").wait()
