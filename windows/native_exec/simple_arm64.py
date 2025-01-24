@@ -50,6 +50,48 @@ ALL_REGISTER = XREGISTER | WREGISTER
 SP = "SP"
 WSP = "WSP"
 
+# Argument class
+class Shift(object):
+    """Represent a shift parameter of an instruction.
+    Allow to JIT shift at instruction crafting time without string manipulation for the #XXX"""
+    def __init__(self, type, value):
+        assert isinstance(type, str)
+        assert isinstance(value, int)
+        type = type.upper()
+        assert type in ("LSL", "LSR", "ASR", "ROR")
+        self.type = type
+        self.value = value
+
+    def __eq__(self, other):
+        if not isinstance(other, Shift): # Allow compare to tuple & iterable
+            return ((len(other) == 2) and
+                    (self.type == other[0]) and
+                    (self.value == other[1]))
+        return (self.type == other.type) and (self.value == other.value)
+
+    def __repr__(self):
+        return """{0}(type={1}, value={2})""".format(type(self).__name__, self.type, self.value)
+
+    @classmethod
+    def parse(cls, shiftstr):
+        if not isinstance(shiftstr, str):
+            return None
+        if not shiftstr.count(" ") == 1:
+            return None
+        stype, svalue = shiftstr.split(" ", 1)
+        stype = stype.upper()
+        if stype not in ("LSL", "LSR", "ASR", "ROR"):
+            return None
+        if len(svalue) <= 1:
+            return None
+        if not svalue.startswith("#"):
+            return None
+        try:
+            intvalue = int(svalue[1:])
+        except ValueError:
+            return None
+        return cls(stype, intvalue)
+# instruction Encoding
 
 class InstructionEncoding(object):
     # Sub classes can force 32/64 only instrs by setting this to 32 or 64
@@ -80,7 +122,8 @@ class InstructionEncoding(object):
 
     @classmethod
     def is_shift(self, arg):
-        return True
+        return (arg is None) or isinstance(arg, Shift) or Shift.parse(arg)
+
 
     @classmethod
     def gen(cls, **encoding_array):
@@ -164,7 +207,15 @@ class AddSubtractImmediate(DataProcessingImmediate):
         self.setup_register(self.rn, argsdict[1])
         self.setup_immediat(self.imm12, argsdict[2])
 
-        assert argsdict.get(3) is None, "SHIFT NOT IMPLEMENTED YET"
+        shift = Shift.parse(argsdict.get(3))
+        if not shift:
+            return
+
+        if shift not in [("LSL", 0), ("LSL", 12)]:
+            raise ValueError("Invalid shift for instruction: {0}".format(shift))
+        if shift == ("LSL", 12):
+            import pdb;pdb.set_trace()
+            self.sh[:] = bytearray((1,))
 
 
     @classmethod
@@ -173,6 +224,33 @@ class AddSubtractImmediate(DataProcessingImmediate):
                 cls.is_register(argsdict[1], accept_sp=True) and
                 cls.is_imm12(argsdict[2]) and
                 cls.is_shift(argsdict.get(3)))
+
+
+class MovWideImmediat(DataProcessingImmediate):
+    def __init__(self, argsdict):
+        super(MovWideImmediat, self).__init__()
+        self.sf = self.bits[31:32]
+        self.opc = self.bits[29:31]
+        self.bits[23:29] = bytearray(reversed((1, 0, 0, 1, 0, 1)))
+        self.hw = self.bits[21:23]
+        self.imm16 = self.bits[5:21]
+        self.rd = self.bits[0:5]
+
+
+        self.setup_fixed_values()
+        # Change instruction based of parameter
+        self.setup_register(self.rd, argsdict[0])
+        self.setup_immediat(self.imm16, argsdict[1])
+
+        assert argsdict.get(3) is None, "SHIFT NOT IMPLEMENTED YET"
+
+
+    @classmethod
+    def accept_arg(cls, argsdict):
+        return (cls.is_register(argsdict[0], accept_sp=True) and
+                cls.is_imm12(argsdict[1]) and
+                cls.is_shift(argsdict.get(2)))
+
 
 
 ### C4.1.94.13 Unconditional branch (register)
@@ -208,6 +286,24 @@ class RetEncoding(UnconditionalBranchRegister.gen(opc=0b10, op2=0b11111, op3=0, 
     @classmethod
     def accept_arg(cls, argsdict):
         return not argsdict or cls.is_register(argsdict[0], accept_sp=True)
+
+
+# C4.1.95 Data Processing – Register
+
+class DataProcessingRegister(InstructionEncoding):
+    def __init__(self):
+        super(DataProcessingRegister, self).__init__()
+        self.bits[26:29] = bytearray((0,0,1))
+        self.op0 = self.bits[30:31]
+        self.op1 = self.bits[28:29]
+        self.bits[25:28] = bytearray(reversed((1, 0, 1)))
+        self.op2 = self.bits[21:25]
+        self.op3 = self.bits[10:16]
+
+# An instruction is a Name that can have multiple encoding
+# It's the class we instanciate to assemble instructions
+# Add X0, X0, IMM
+# Add X0, X0, X0
 
 class Instruction(object):
     encoding = []
@@ -247,6 +343,11 @@ class Subs(Instruction):
 
 class Ret(Instruction):
     encoding = [RetEncoding]
+
+#  C6.2.254
+
+class MovZ(Instruction):
+    encoding = [MovWideImmediat.gen(opc=0b10)]
 
 
 

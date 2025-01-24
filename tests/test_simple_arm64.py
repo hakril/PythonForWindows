@@ -94,6 +94,22 @@ class CheckInstr(object):
             else:
                 raise ValueError("Unknow argument {0} of type {1}".format(op_args, type(op_args)))
 
+def test_shift_parsing():
+    assert Shift.parse("LSL #0")
+    assert Shift.parse("LSL #12")
+    assert Shift.parse("LSL #1")
+    assert Shift.parse("LSR #1")
+
+    assert Shift.parse("ROR #0").type == "ROR"
+    assert Shift.parse("LSL #0").type == "LSL"
+    assert Shift.parse("LSL #0").value == 0
+    assert Shift.parse("LSL #1").type == "LSL"
+    assert Shift.parse("LSL #1").value == 1
+
+    assert not Shift.parse("LSX #1")
+    assert not Shift.parse("LSX ##1")
+    assert not Shift.parse("LSX #")
+
 def test_assembler():
     CheckInstr(Add)('W0', 'W0', 0)
     CheckInstr(Add)('W1', 'W0', 0)
@@ -104,11 +120,15 @@ def test_assembler():
     CheckInstr(Add)('X30', 'X12', 0)
     CheckInstr(Add)('X0', 'X0', 1)
     CheckInstr(Add)('X11', 'X12', 0x123)
+    # CheckInstr(Add)('X11', 'X12', 0x123, "LSL #0")
+    CheckInstr(Add)('X11', 'X12', 0x123, "LSL #12")
 
     # Error test todo
     # CheckInstr(Add)('X11', 'W12', 0x123)
     with pytest.raises(ValueError):
         CheckInstr(Add)('BADREG', 'X12', 0)
+    with pytest.raises(ValueError):
+        CheckInstr(Add)('X11', 'X12', 0x123, "LSL #1234")
 
     with pytest.raises(ValueError):
         # Immediat too big for encoding
