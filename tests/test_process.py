@@ -370,6 +370,11 @@ class TestProcessWithCheckGarbage(object):
         proc32_64.load_library(DLL)
         assert DLL in [m.name for m in proc32_64.peb.modules]
 
+    def test_load_library_suspended(self, proc32_64_suspended):
+        DLL = "wintrust.dll"
+        proc32_64_suspended.load_library(DLL)
+        assert DLL in [m.name for m in proc32_64_suspended.peb.modules]
+
     def test_load_library_unicode_name(self, proc32_64, tmpdir):
         mybitness = windows.current_process.bitness
         UNICODE_FILENAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b.dll'
