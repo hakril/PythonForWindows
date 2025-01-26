@@ -1,0 +1,29 @@
+/* Structures that do not depends on anything other that basic type
+    Simplify structure dependancy file graph
+*/
+
+typedef struct _LIST_ENTRY {
+   struct _LIST_ENTRY *Flink;
+   struct _LIST_ENTRY *Blink;
+} LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
+
+typedef struct _LSA_UNICODE_STRING {
+  USHORT Length;
+  USHORT MaximumLength;
+  PVOID  Buffer; // PVOID to prevent ctypes to automatically read the content of the buffer till a \0
+} LSA_UNICODE_STRING, *PLSA_UNICODE_STRING, UNICODE_STRING, *PUNICODE_STRING;
+
+typedef struct _CLIENT_ID{
+   HANDLE UniqueProcess;
+   HANDLE UniqueThread;
+} CLIENT_ID, *PCLIENT_ID;
+
+typedef struct _CLIENT_ID64{
+   ULONG64 UniqueProcess;
+   ULONG64 UniqueThread;
+} CLIENT_ID64, *PCLIENT_ID64;
+
+typedef struct _CLIENT_ID32{
+   ULONG UniqueProcess;
+   ULONG UniqueThread;
+} CLIENT_ID32, *PCLIENT_ID32;
