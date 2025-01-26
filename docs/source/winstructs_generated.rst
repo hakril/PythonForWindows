@@ -11066,6 +11066,10 @@ _EXCEPTION_REGISTRATION_RECORD
 
 _NT_TIB
 '''''''
+.. class:: NT_TIB
+
+    Alias for :class:`_NT_TIB`
+
 .. class:: _NT_TIB
 
     .. attribute:: ExceptionList
@@ -11088,14 +11092,9 @@ _NT_TIB
         :class:`PVOID`
 
 
-    .. attribute:: FiberData
+    .. attribute:: anon_01
 
-        :class:`PVOID`
-
-
-    .. attribute:: Version
-
-        :class:`ULONG`
+        :class:`_ANON__NT_TIB_SUB_UNION_1`
 
 
     .. attribute:: ArbitraryUserPointer

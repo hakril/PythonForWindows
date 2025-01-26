@@ -198,15 +198,17 @@ typedef struct _EXCEPTION_REGISTRATION_RECORD {
 };
 
 typedef struct _NT_TIB {
-    _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
-    PVOID               StackBase;
-    PVOID               StackLimit;
-    PVOID               SubSystemTib;
-    PVOID               FiberData;
-    ULONG               Version;
-    PVOID               ArbitraryUserPointer;
-    _NT_TIB             *Self;
-};
+    struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
+    PVOID StackBase;
+    PVOID StackLimit;
+    PVOID SubSystemTib;
+    union {
+        PVOID FiberData;
+        // ULONG Version; // Sub-union break remotectypes generation for now -> Ignore this field until fixed
+    };
+    PVOID ArbitraryUserPointer;
+    struct _NT_TIB *Self;
+} NT_TIB;
 
 typedef struct _TEB {
     _NT_TIB             NtTib;

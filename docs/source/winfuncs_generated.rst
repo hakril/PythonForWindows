@@ -696,6 +696,8 @@ Functions
 
 .. function:: FreeLibrary(hLibModule)
 
+.. function:: RtlGetCurrentPeb()
+
 .. function:: RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
 .. function:: RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
