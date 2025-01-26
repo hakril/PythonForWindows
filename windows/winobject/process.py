@@ -64,7 +64,7 @@ class DeadThread(utils.AutoHandle):
 
 
 class Process(utils.AutoHandle):
-    @utils.fixedpropety
+    @utils.fixedproperty
     def is_wow_64(self):
         """``True`` if the process is a SysWow64 process (32bit process on 64bits system).
 
@@ -73,7 +73,7 @@ class Process(utils.AutoHandle):
         # return utils.is_wow_64(self.handle)
         return utils.is_wow_64(self.limited_handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def bitness(self):
         """The bitness of the process
 
@@ -85,15 +85,25 @@ class Process(utils.AutoHandle):
             return 32
         return 64
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def limited_handle(self):
         if windows.system.version[0] <= 5:
             # Windows XP | Serveur 2003
             return winproxy.OpenProcess(PROCESS_QUERY_INFORMATION, dwProcessId=self.pid)
         return winproxy.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, dwProcessId=self.pid)
 
+    @utils.fixedproperty
+    def name(self):
+        """Name of the process
 
-    @utils.fixedpropety
+        :type: :class:`str`
+		"""
+        buffer = ctypes.create_unicode_buffer(0x1024)
+        rsize = winproxy.GetProcessImageFileNameW(self.limited_handle, buffer)
+        # GetProcessImageFileNameW returns the fullpath
+        return buffer[:rsize].split("\\")[-1]
+
+    @utils.fixedproperty
     def ppid(self):
         """Parent Process ID
 
@@ -559,13 +569,16 @@ class Thread(utils.AutoHandle):
 
 class CurrentThread(Thread):
     """The current thread"""
-    @property #It's not a fixedpropety because executing thread might change
+
+    @property #It's not a fixedproperty because executing thread might change
     def tid(self):
         """Thread ID
 
         :type: :class:`int`
 		"""
         return winproxy.GetCurrentThreadId()
+
+
 
     @property
     def owner(self):
@@ -585,8 +598,6 @@ class CurrentThread(Thread):
         """Exit the thread"""
         return winproxy.ExitThread(code)
 
-
-
     def wait(self, timeout=INFINITE):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
@@ -594,37 +605,12 @@ class CurrentThread(Thread):
 
 class CurrentProcess(Process):
     """The current process"""
-    get_peb = None
-
-    get_peb_32_code = x86.MultipleInstr()
-    get_peb_32_code += x86.Mov('EAX', x86.mem('fs:[0x30]'))
-    get_peb_32_code += x86.Ret()
-    get_peb_32_code = get_peb_32_code.get_code()
-
-    get_peb_64_code = x64.MultipleInstr()
-    get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
-    get_peb_64_code += x64.Ret()
-    get_peb_64_code = get_peb_64_code.get_code()
-
     allocator = native_exec.native_function.allocator
-
-    name = "CurrentProcess" # Used by Winthread for __repr__
-
-    # Use RtlGetCurrentPeb ?
-    def get_peb_builtin(self):
-        if self.get_peb is not None:
-            return self.get_peb
-        if self.bitness == 32:
-            get_peb = native_exec.create_function(self.get_peb_32_code, [PVOID])
-        else:
-            get_peb = native_exec.create_function(self.get_peb_64_code, [PVOID])
-        self.get_peb = get_peb
-        return get_peb
 
     def _get_handle(self):
         return winproxy.GetCurrentProcess()
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def limited_handle(self):
         return winproxy.GetCurrentProcess()
 
@@ -640,23 +626,21 @@ class CurrentProcess(Process):
 		"""
         return os.getpid()
 
-    @utils.fixedpropety # leave it has fixed property as we don't care if CurrentProcess is never collected
+    @utils.fixedproperty # leave it has fixed property as we don't care if CurrentProcess is never collected
     def peb(self):
         """The Process Environment Block of the current process
 
         :type: :class:`PEB`
 		"""
-        return PEB.from_address(self.get_peb_builtin()())
+        return PEB.from_address(windows.winproxy.RtlGetCurrentPeb())
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def bitness(self):
         """The bitness of the process
 
         :type: :class:`int` -- 32 or 64
 		"""
-        import platform
-        bits = platform.architecture()[0]
-        return int(bits[:2])
+        return ctypes.sizeof(gdef.PVOID) * 8 # byte to bits
 
     def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
         """Allocate memory in the process
@@ -718,7 +702,7 @@ class CurrentProcess(Process):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_syswow(self):
         """The 64bits PEB of a SysWow64 process
 
@@ -761,21 +745,21 @@ class WinThread(Thread):
         # Create a DeadThread if thread is already dead ?
         return WinThread(handle=handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def tid(self):
         """Thread ID
 
         :type: :class:`int`"""
         return self._get_thread_id(self.handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def owner_pid(self):
         res = THREAD_BASIC_INFORMATION()
         windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         owner_id = res.ClientId.UniqueProcess
         return owner_id
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def owner(self):
         """The Process owning the thread
 
@@ -900,8 +884,6 @@ class WinThread(Thread):
         # TebBase->NtTib.ExceptionList = (PVOID)Teb32Base;
         return self.owner.read_dword(main_teb_addr)
 
-
-
     @property
     def teb_syswow_base(self):
         """The address of the thread's TEB64 for a SysWow64 process
@@ -912,6 +894,7 @@ class WinThread(Thread):
             raise ValueError("Not a syswow process")
         # just return the main TEB
         return self._get_principal_teb_addr()
+
 
 
     def exit(self, code=0):
@@ -1006,18 +989,7 @@ class WinProcess(Process):
         return cls(pid=pid, name=name, ppid=ppid)
 
 
-    @utils.fixedpropety
-    def name(self):
-        """Name of the process
-
-        :type: :class:`str`
-		"""
-        buffer = ctypes.create_unicode_buffer(0x1024)
-        rsize = winproxy.GetProcessImageFileNameW(self.limited_handle, buffer)
-        # GetProcessImageFileNameW returns the fullpath
-        return buffer[:rsize].split("\\")[-1]
-
-    @utils.fixedpropety
+    @utils.fixedproperty
     def pid(self):
         """Process ID
 
@@ -1150,9 +1122,7 @@ class WinProcess(Process):
         return injection.execute_python_code(self, pycode)
 
 
-
-
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_addr(self):
         """The address of the PEB
 
@@ -1179,7 +1149,7 @@ class WinProcess(Process):
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
         return peb_addr
 
-    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Not a fixedproperty to prevent ref-cycle and uncollectable WinProcess
     # Try with a weakref ?
     @property
     def peb(self):
@@ -1193,7 +1163,7 @@ class WinProcess(Process):
             return RemotePEB32(self.peb_addr, self)
         return RemotePEB(self.peb_addr, self)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_syswow_addr(self):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
@@ -1212,7 +1182,7 @@ class WinProcess(Process):
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
             return peb_addr
 
-    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Not a fixedproperty to prevent ref-cycle and uncollectable WinProcess
     # Try with a weakref ?
     @property
     def peb_syswow(self):
