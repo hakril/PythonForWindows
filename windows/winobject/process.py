@@ -1127,7 +1127,10 @@ class WinProcess(Process):
         return [m for m in self.peb.modules if m.baseaddr == dllbase][0]
 
     def execute_python(self, pycode):
-        """Execute Python code into the remote process.
+        """Execute Python code in the remote process.
+
+        This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users/*.
+        See: samples/process/msstore_interpreter_remote_python.py for a workaround.
 
         This function waits for the remote process to end and
         raises an exception if the remote thread raised one
@@ -1135,7 +1138,10 @@ class WinProcess(Process):
         return injection.safe_execute_python(self, pycode)
 
     def execute_python_unsafe(self, pycode):
-        """Execute Python code into the remote process.
+        """Execute Python code in the remote process.
+
+        This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users/*.
+        See: samples/process/msstore_interpreter_remote_python.py for a workaround.
 
         :rtype: :rtype: :class:`WinThread` or :class:`DeadThread` : The thread executing the python code
         """

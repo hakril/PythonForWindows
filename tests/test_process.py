@@ -31,9 +31,7 @@ class TestCurrentProcessWithCheckGarbage(object):
         # Use module filename because this executable can be: 
         # 1. A PyInstaller exe
         # 2. A Windows App execution alias (Microsoft Store builds)
-        current_proc_filename = ctypes.create_string_buffer(1000)
-        windows.winproxy.GetModuleFileNameA(None, current_proc_filename, 1000)
-        assert os.path.basename(current_proc_filename.value.decode()) in windows.current_process.peb.modules[0].name
+        assert os.path.basename(windows.current_process.peb.ProcessParameters[0].ImagePathName.str) in windows.current_process.peb.modules[0].name
 
     def test_get_current_process_exe(self):
         exe = windows.current_process.peb.exe
@@ -42,15 +40,12 @@ class TestCurrentProcessWithCheckGarbage(object):
         exe.bitness ==  exe_by_module.bitness
 
     def test_current_process_pe_imports(self):
-        python_module = windows.current_process.peb.modules[0]
-        imp = python_module.pe.imports
-        python_dll_regex = re.compile(r'python[0-9.]+dll', re.IGNORECASE)
-        python_dll_imp = next((i for i in imp.keys() if python_dll_regex.match(i)), None)
-        assert python_dll_imp is not None, 'Python dll not in python imports'
-
-        imp_id_iat = imp[python_dll_imp][0]
-        mod_base = windows.winproxy.LoadLibraryA(python_dll_imp.encode())
-        assert windows.winproxy.GetProcAddress(mod_base, imp_id_iat.name.encode()) == imp_id_iat.value
+        k32_mod = windows.current_process.peb.modules[2]
+        imp = k32_mod.pe.imports
+        assert "ntdll.dll" in imp.keys(), 'ntdll.dll not in python imports'
+        fn_id_iat = [f for f in imp["ntdll.dll"] if f.name == "NtCreateFile"][0]
+        ntdll_base = windows.winproxy.LoadLibraryA(b"ntdll.dll")
+        assert windows.winproxy.GetProcAddress(ntdll_base, b"NtCreateFile") == fn_id_iat.value
 
     def test_current_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
