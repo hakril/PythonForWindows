@@ -1902,7 +1902,8 @@ ATTACH_VIRTUAL_DISK_PARAMETERS = _ATTACH_VIRTUAL_DISK_PARAMETERS
 PATTACH_VIRTUAL_DISK_PARAMETERS = POINTER(_ATTACH_VIRTUAL_DISK_PARAMETERS)
 
 # Self referencing struct tricks
-class _INTERNET_BUFFERSA(Structure): pass
+class _INTERNET_BUFFERSA(Structure):
+    pass
 INTERNET_BUFFERSA = _INTERNET_BUFFERSA
 LPINTERNET_BUFFERSA = POINTER(_INTERNET_BUFFERSA)
 _INTERNET_BUFFERSA._fields_ = [
@@ -1919,7 +1920,8 @@ _INTERNET_BUFFERSA._fields_ = [
 ]
 
 # Self referencing struct tricks
-class _INTERNET_BUFFERSW(Structure): pass
+class _INTERNET_BUFFERSW(Structure):
+    pass
 INTERNET_BUFFERSW = _INTERNET_BUFFERSW
 LPINTERNET_BUFFERSW = POINTER(_INTERNET_BUFFERSW)
 _INTERNET_BUFFERSW._fields_ = [
@@ -2453,7 +2455,8 @@ IP_INTERFACE_INFO = _IP_INTERFACE_INFO
 PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
 
 # Self referencing struct tricks
-class _DNS_CACHE_ENTRY(Structure): pass
+class _DNS_CACHE_ENTRY(Structure):
+    pass
 DNS_CACHE_ENTRY = _DNS_CACHE_ENTRY
 PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
 _DNS_CACHE_ENTRY._fields_ = [
@@ -2982,7 +2985,9 @@ class _ANON__DNSRECORDA_SUB_UNION_2(Union):
     ]
 
 # Self referencing struct tricks
-class _DnsRecordA(Structure): pass
+class _DnsRecordA(Structure):
+    _anonymous_ = ("Flags","Data")
+
 DNS_RECORDA = _DnsRecordA
 PDNS_RECORDA = POINTER(_DnsRecordA)
 _DnsRecordA._fields_ = [
@@ -3092,7 +3097,9 @@ class _ANON__DNSRECORDW_SUB_UNION_2(Union):
     ]
 
 # Self referencing struct tricks
-class _DnsRecordW(Structure): pass
+class _DnsRecordW(Structure):
+    _anonymous_ = ("Flags","Data")
+
 DNS_RECORDW = _DnsRecordW
 PDNS_RECORDW = POINTER(_DnsRecordW)
 _DnsRecordW._fields_ = [
@@ -3171,7 +3178,8 @@ PIP_ADDRESS_STRING = POINTER(IP_ADDRESS_STRING)
 PIP_MASK_STRING = POINTER(IP_ADDRESS_STRING)
 
 # Self referencing struct tricks
-class _IP_ADDR_STRING(Structure): pass
+class _IP_ADDR_STRING(Structure):
+    pass
 IP_ADDR_STRING = _IP_ADDR_STRING
 PIP_ADDR_STRING = POINTER(_IP_ADDR_STRING)
 _IP_ADDR_STRING._fields_ = [
@@ -3182,7 +3190,8 @@ _IP_ADDR_STRING._fields_ = [
 ]
 
 # Self referencing struct tricks
-class _IP_ADAPTER_INFO(Structure): pass
+class _IP_ADAPTER_INFO(Structure):
+    pass
 IP_ADAPTER_INFO = _IP_ADAPTER_INFO
 PIP_ADAPTER_INFO = POINTER(_IP_ADAPTER_INFO)
 _IP_ADAPTER_INFO._fields_ = [
@@ -3877,7 +3886,8 @@ LPSHFILEOPSTRUCTA = POINTER(_SHFILEOPSTRUCTA)
 SHFILEOPSTRUCTA = _SHFILEOPSTRUCTA
 
 # Self referencing struct tricks
-class _LIST_ENTRY(Structure): pass
+class _LIST_ENTRY(Structure):
+    pass
 LIST_ENTRY = _LIST_ENTRY
 PLIST_ENTRY = POINTER(_LIST_ENTRY)
 PRLIST_ENTRY = POINTER(_LIST_ENTRY)
@@ -4917,23 +4927,31 @@ PEB = _PEB
 PPEB = POINTER(_PEB)
 
 # Self referencing struct tricks
-class _EXCEPTION_REGISTRATION_RECORD(Structure): pass
+class _EXCEPTION_REGISTRATION_RECORD(Structure):
+    pass
 
 _EXCEPTION_REGISTRATION_RECORD._fields_ = [
     ("Next", POINTER(_EXCEPTION_REGISTRATION_RECORD)),
     ("Handler", PVOID),
 ]
 
-# Self referencing struct tricks
-class _NT_TIB(Structure): pass
+class _ANON__NT_TIB_SUB_UNION_1(Union):
+    _fields_ = [
+        ("FiberData", PVOID),
+        ("Version", ULONG),
+    ]
 
+# Self referencing struct tricks
+class _NT_TIB(Structure):
+    _anonymous_ = ("anon_01",)
+
+NT_TIB = _NT_TIB
 _NT_TIB._fields_ = [
     ("ExceptionList", POINTER(_EXCEPTION_REGISTRATION_RECORD)),
     ("StackBase", PVOID),
     ("StackLimit", PVOID),
     ("SubSystemTib", PVOID),
-    ("FiberData", PVOID),
-    ("Version", ULONG),
+    ("anon_01", _ANON__NT_TIB_SUB_UNION_1),
     ("ArbitraryUserPointer", PVOID),
     ("Self", POINTER(_NT_TIB)),
 ]
@@ -6555,7 +6573,8 @@ PRTL_OSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 
 # Self referencing struct tricks
-class _EXCEPTION_RECORD(Structure): pass
+class _EXCEPTION_RECORD(Structure):
+    pass
 EXCEPTION_RECORD = _EXCEPTION_RECORD
 PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
 _EXCEPTION_RECORD._fields_ = [
@@ -8753,7 +8772,8 @@ PCCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 PCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 
 # Self referencing struct tricks
-class _CERT_CHAIN_CONTEXT(Structure): pass
+class _CERT_CHAIN_CONTEXT(Structure):
+    pass
 CERT_CHAIN_CONTEXT = _CERT_CHAIN_CONTEXT
 PCCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
 PCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
@@ -11118,7 +11138,9 @@ class _ANON__TRUSTEE_A_SUB_UNION_1(Union):
     ]
 
 # Self referencing struct tricks
-class _TRUSTEE_A(Structure): pass
+class _TRUSTEE_A(Structure):
+    _anonymous_ = ("anon_01",)
+
 PTRUSTEEA = POINTER(_TRUSTEE_A)
 PTRUSTEE_A = POINTER(_TRUSTEE_A)
 TRUSTEEA = _TRUSTEE_A
@@ -11152,7 +11174,9 @@ class _ANON__TRUSTEE_W_SUB_UNION_1(Union):
     ]
 
 # Self referencing struct tricks
-class _TRUSTEE_W(Structure): pass
+class _TRUSTEE_W(Structure):
+    _anonymous_ = ("anon_01",)
+
 PTRUSTEEW = POINTER(_TRUSTEE_W)
 PTRUSTEE_W = POINTER(_TRUSTEE_W)
 TRUSTEEW = _TRUSTEE_W
@@ -12564,7 +12588,8 @@ class sockaddr_in(Structure):
 
 
 # Self referencing struct tricks
-class addrinfoW(Structure): pass
+class addrinfoW(Structure):
+    pass
 ADDRINFOW = addrinfoW
 PADDRINFOW = POINTER(addrinfoW)
 addrinfoW._fields_ = [
@@ -12639,7 +12664,8 @@ LPWSAPROTOCOL_INFOW = POINTER(_WSAPROTOCOL_INFOW)
 WSAPROTOCOL_INFOW = _WSAPROTOCOL_INFOW
 
 # Self referencing struct tricks
-class addrinfo(Structure): pass
+class addrinfo(Structure):
+    pass
 ADDRINFOA = addrinfo
 PADDRINFOA = POINTER(addrinfo)
 addrinfo._fields_ = [

@@ -204,7 +204,7 @@ typedef struct _NT_TIB {
     PVOID SubSystemTib;
     union {
         PVOID FiberData;
-        // ULONG Version; // Sub-union break remotectypes generation for now -> Ignore this field until fixed
+        ULONG Version;
     };
     PVOID ArbitraryUserPointer;
     struct _NT_TIB *Self;
