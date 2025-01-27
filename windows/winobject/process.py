@@ -1129,21 +1129,23 @@ class WinProcess(Process):
     def execute_python(self, pycode):
         """Execute Python code in the remote process.
 
-        This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users/*.
-        See: samples/process/msstore_interpreter_remote_python.py for a workaround.
-
         This function waits for the remote process to end and
         raises an exception if the remote thread raised one
-		"""
+
+        .. note::
+            This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
+            See workaround:  https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py
+        """
         return injection.safe_execute_python(self, pycode)
 
     def execute_python_unsafe(self, pycode):
         """Execute Python code in the remote process.
 
-        This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users/*.
-        See: samples/process/msstore_interpreter_remote_python.py for a workaround.
-
         :rtype: :rtype: :class:`WinThread` or :class:`DeadThread` : The thread executing the python code
+
+        .. note::
+            This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
+            See workaround:  https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py
         """
         return injection.execute_python_code(self, pycode)
 
