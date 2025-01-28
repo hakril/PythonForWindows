@@ -1134,7 +1134,7 @@ class WinProcess(Process):
 
         .. note::
             This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
-            See workaround:  https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py
+            See workaround:  https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection
         """
         return injection.safe_execute_python(self, pycode)
 
@@ -1145,7 +1145,7 @@ class WinProcess(Process):
 
         .. note::
             This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
-            See workaround:  https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py
+            See workaround:  https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection
         """
         return injection.execute_python_code(self, pycode)
 

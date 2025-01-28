@@ -1,0 +1,15 @@
+PS C:\Users\hakril\PythonForWindows> py .\samples\process\msstore_interpreter_remote_python.py
+Executable is: C:\Users\hakril\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe
+Trying normal execute_python()
+    Exception during proc1.execute_python():
+    InjectionFailedError('Injection of <c:\\program files\\windowsapps\\pythonsoftwarefoundation.python.3.13_3.13.496.0_x64__qbz5n2kfra8p0\\vcruntime140.dll> failed')
+Trying mspython workaround:
+    Executing python code!
+Injecting: C:\Users\hakril\AppData\Local\Temp\pfw_dllcache\vcruntime140.dll
+Injecting: C:\Users\hakril\AppData\Local\Temp\pfw_dllcache\python313.dll
+    Executing more python code!
+    Executing an error python code!
+        Expected error during safe_execute_python
+        b'Traceback (most recent call last):\n  File "<string>", line 1, in <module>\nNameError: name \'BAD_VARIABLE\' is not defined\n'
+   Sleeping a little
+   Killing target process !
