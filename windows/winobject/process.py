@@ -570,6 +570,12 @@ class Thread(utils.AutoHandle):
 class CurrentThread(Thread):
     """The current thread"""
 
+    get_teb_code_by_bitness = {
+        32: x86.assemble("mov eax, fs:[0x18]; ret"),
+        64: x64.assemble("mov rax, gs:[0x30]; ret")
+
+    }
+
     @property #It's not a fixedproperty because executing thread might change
     def tid(self):
         """Thread ID
@@ -578,7 +584,14 @@ class CurrentThread(Thread):
 		"""
         return winproxy.GetCurrentThreadId()
 
+    @utils.fixedproperty
+    def teb_base(self):
+        get_teb_base_code = self.get_teb_code_by_bitness[self.owner.bitness]
+        return self.owner.execute(get_teb_base_code)
 
+    @property
+    def teb(self):
+        return TEB.from_address(self.teb_base)
 
     @property
     def owner(self):
@@ -885,6 +898,10 @@ class WinThread(Thread):
         return self.owner.read_dword(main_teb_addr)
 
     @property
+    def teb(self):
+        return RemoteTEB(self.teb_base, target=self.owner)
+
+    @property
     def teb_syswow_base(self):
         """The address of the thread's TEB64 for a SysWow64 process
 
@@ -895,6 +912,9 @@ class WinThread(Thread):
         # just return the main TEB
         return self._get_principal_teb_addr()
 
+    @property
+    def teb_syswow(self):
+        return TEB64.from_address(self.teb_syswow_base)
 
 
     def exit(self, code=0):
@@ -1321,6 +1341,14 @@ class PEB(gdef.PEB):
             raise NotImplementedError("ApiSetMap does not exist prior to Windows 7")
         return apisetmap.get_api_set_map_for_current_process(self.ApiSetMap)
 
+# TEB enhanced, same bitness as PEB (current process)
+class TEB(gdef.TEB):
+    def peb(self):
+        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
+
+class RemoteTEB(rctypes.RemoteStructure.from_structure(TEB)):
+    def peb(self):
+        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
 
 # Memory stuff
 
@@ -1431,6 +1459,7 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
     @property
     def apisetmap(self):
         raise NotImplementedError("ApiSetMap for remote process not implemented yet")
+
 
 
 
