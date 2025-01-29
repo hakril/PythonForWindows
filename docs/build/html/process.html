@@ -577,15 +577,20 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.winobject.process.WinProcess.execute_python">
 <span class="sig-name descname"><span class="pre">execute_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pycode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.execute_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.execute_python" title="Link to this definition">¶</a></dt>
-<dd><p>Execute Python code into the remote process.</p>
+<dd><p>Execute Python code in the remote process.</p>
 <p>This function waits for the remote process to end and
 raises an exception if the remote thread raised one</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
+See workaround:  <a class="reference external" href="https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py">https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py</a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.winobject.process.WinProcess.execute_python_unsafe">
 <span class="sig-name descname"><span class="pre">execute_python_unsafe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pycode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.execute_python_unsafe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.execute_python_unsafe" title="Link to this definition">¶</a></dt>
-<dd><p>Execute Python code into the remote process.</p>
+<dd><p>Execute Python code in the remote process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><dl class="field-list simple">
@@ -596,6 +601,11 @@ raises an exception if the remote thread raised one</p>
 </p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
+See workaround:  <a class="reference external" href="https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py">https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py</a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">

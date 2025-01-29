@@ -4,9 +4,11 @@ import pytest
 import os
 import sys
 import time
-import struct
+import ctypes
+
 import textwrap
 import shutil
+import re
 
 import windows
 import windows.pipe
@@ -26,8 +28,10 @@ class TestCurrentProcessWithCheckGarbage(object):
         return windows.current_process.peb
 
     def test_get_current_process_modules(self):
-        # Use sys.executable because executable can be a PyInstaller exe
-        assert os.path.basename(sys.executable) in windows.current_process.peb.modules[0].name
+        # Use module filename because this executable can be: 
+        # 1. A PyInstaller exe
+        # 2. A Windows App execution alias (Microsoft Store builds)
+        assert os.path.basename(windows.current_process.peb.ProcessParameters[0].ImagePathName.str) in windows.current_process.peb.modules[0].name
 
     def test_get_current_process_exe(self):
         exe = windows.current_process.peb.exe
@@ -36,12 +40,12 @@ class TestCurrentProcessWithCheckGarbage(object):
         exe.bitness ==  exe_by_module.bitness
 
     def test_current_process_pe_imports(self):
-        python_module = windows.current_process.peb.modules[0]
-        imp = python_module.pe.imports
-        assert "kernel32.dll" in imp.keys(), 'Kernel32.dll not in python imports'
-        current_proc_id_iat = [f for f in imp["kernel32.dll"] if f.name == "GetCurrentProcessId"][0]
-        k32_base = windows.winproxy.LoadLibraryA(b"kernel32.dll")
-        assert windows.winproxy.GetProcAddress(k32_base, b"GetCurrentProcessId") == current_proc_id_iat.value
+        k32_mod = windows.current_process.peb.modules[2]
+        imp = k32_mod.pe.imports
+        assert "ntdll.dll" in imp.keys(), 'ntdll.dll not in python imports'
+        fn_id_iat = [f for f in imp["ntdll.dll"] if f.name == "NtCreateFile"][0]
+        ntdll_base = windows.winproxy.LoadLibraryA(b"ntdll.dll")
+        assert windows.winproxy.GetProcAddress(ntdll_base, b"NtCreateFile") == fn_id_iat.value
 
     def test_current_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]

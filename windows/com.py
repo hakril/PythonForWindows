@@ -33,7 +33,13 @@ def init():
     return initsecurity()
 
 def initsecurity(): # Should take some parameters..
-    return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
+    try:
+        winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
+    except OSError as e:
+        if e.winerror & 0xFFFFFFFF != gdef.RPC_E_TOO_LATE:
+            # RPC_E_TOO_LATE can happen when the python environment invokes CoInitializeSecurity before we get to it
+            # mspython builds do this consistently.
+            raise e
 
 
 class Dispatch(interfaces.IDispatch):
