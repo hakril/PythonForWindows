@@ -916,8 +916,10 @@ class WinThread(Thread):
 
     @property
     def teb_syswow(self):
-        return RemoteTEB64(self.teb_syswow_base, self.owner)
-
+        if windows.current_process.bitness == 64:
+            return RemoteTEB64(self.teb_syswow_base, self)
+        else: #current is 32bits
+            return RemoteTEB64(self.teb_syswow_base, windows.syswow64.ReadSyswow64Process(self.owner))
 
     def exit(self, code=0):
         """Exit the thread"""

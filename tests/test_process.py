@@ -474,7 +474,7 @@ class TestProcessWithCheckGarbage(object):
         with proc32_64.allocated_memory(0x1000) as addr:
             assert proc32_64.get_mapped_filename(addr) is None
 
-    def test_current_thread_teb():
+    def test_current_thread_teb(self):
         teb = windows.current_thread.teb
         assert ctypes.addressof(teb) == ctypes.addressof(windows.current_thread.teb.NtTib.Self[0])
         assert ctypes.addressof(windows.current_process.peb) == ctypes.addressof(teb.ProcessEnvironmentBlock[0])
