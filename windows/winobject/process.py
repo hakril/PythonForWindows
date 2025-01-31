@@ -916,7 +916,7 @@ class WinThread(Thread):
 
     @property
     def teb_syswow(self):
-        return RemoteTEB64.from_address(self.teb_syswow_base)
+        return RemoteTEB64(self.teb_syswow_base, self.owner)
 
 
     def exit(self, code=0):

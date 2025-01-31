@@ -511,7 +511,7 @@ class TestProcessWithCheckGarbage(object):
         assert teb_syswow.NtTib.Self.value == teb_syswow._base_addr
         assert teb_syswow.ProcessEnvironmentBlock.value == teb_syswow.peb._base_addr
         # Check type of teb.peb is the correct subclass (with modules & co)
-        assert teb.peb.modules
+        assert teb_syswow.peb.modules
 
     def test_thread_owner_from_tid(self, proc32_64):
         thread = proc32_64.threads[0]
