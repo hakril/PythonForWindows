@@ -899,7 +899,9 @@ class WinThread(Thread):
 
     @property
     def teb(self):
-        return RemoteTEB(self.teb_base, target=self.owner)
+        if self.owner.bitness == 32:
+            return RemoteTEB32(self.teb_base, target=self.owner)
+        return RemoteTEB64(self.teb_base, target=self.owner)
 
     @property
     def teb_syswow_base(self):
@@ -914,7 +916,7 @@ class WinThread(Thread):
 
     @property
     def teb_syswow(self):
-        return TEB64.from_address(self.teb_syswow_base)
+        return RemoteTEB64.from_address(self.teb_syswow_base)
 
 
     def exit(self, code=0):
@@ -1222,8 +1224,6 @@ class WinProcess(Process):
         return winproxy.TerminateProcess(self.handle, code)
 
 
-
-
 def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
@@ -1266,11 +1266,6 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
         return pe_parse.GetPEFile(self.baseaddr)
 
 
-class LIST_ENTRY_PTR(PVOID):
-    def TO_LDR_ENTRY(self):
-        return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) * 2)
-
-
 class PEB(gdef.PEB):
     """The PEB (Process Environment Block) of the current process"""
 
@@ -1305,13 +1300,13 @@ class PEB(gdef.PEB):
         :type: [:class:`LoadedModule`] -- List of loaded modules
 		"""
         res = []
-        list_entry_ptr = ctypes.cast(self.Ldr.contents.InMemoryOrderModuleList.Flink, LIST_ENTRY_PTR)
-        current_dll = list_entry_ptr.TO_LDR_ENTRY()
+        first_flink = self.Ldr.contents.InMemoryOrderModuleList.Flink[0]
+        current_dll = first_flink.get_real_struct(LoadedModule, LoadedModule.InMemoryOrderLinks)
         while current_dll.DllBase:
             res.append(current_dll)
-            list_entry_ptr = ctypes.cast(current_dll.InMemoryOrderLinks.Flink, LIST_ENTRY_PTR)
-            current_dll = list_entry_ptr.TO_LDR_ENTRY()
-        return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
+            next_flink = current_dll.InMemoryOrderLinks.Flink[0]
+            current_dll = next_flink.get_real_struct(LoadedModule, LoadedModule.InMemoryOrderLinks)
+        return res
 
     @staticmethod
     def _extract_environment(env_block_addr, target):
@@ -1340,15 +1335,6 @@ class PEB(gdef.PEB):
         if windows.system.version < (6,2):
             raise NotImplementedError("ApiSetMap does not exist prior to Windows 7")
         return apisetmap.get_api_set_map_for_current_process(self.ApiSetMap)
-
-# TEB enhanced, same bitness as PEB (current process)
-class TEB(gdef.TEB):
-    def peb(self):
-        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
-
-class RemoteTEB(rctypes.RemoteStructure.from_structure(TEB)):
-    def peb(self):
-        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
 
 # Memory stuff
 
@@ -1461,10 +1447,24 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
         raise NotImplementedError("ApiSetMap for remote process not implemented yet")
 
 
+# TEB enhanced, same bitness as PEB (current process)
+class TEB(gdef.TEB):
+    @property
+    def peb(self):
+        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
 
-
+# mote TEB enhanced, same bitness as PEB (current process)
+class RemoteTEB(rctypes.RemoteStructure.from_structure(TEB)):
+    @property
+    def peb(self):
+        ctypes_peb = self.ProcessEnvironmentBlock.value
+        return RemotePEB(ctypes_peb, self._target)
 
 if CurrentProcess().bitness == 32:
+    RemoteLoadedModule32 = RemoteLoadedModule
+    RemotePEB32 = RemotePEB
+    RemoteTEB32 = RemoteTEB
+
     class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
         @property
         def pe(self):
@@ -1478,7 +1478,6 @@ if CurrentProcess().bitness == 32:
 
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) * 2, self._target)
-
 
         @property
         def exe(self):
@@ -1512,7 +1511,17 @@ if CurrentProcess().bitness == 32:
 
         apisetmap = RemotePEB.apisetmap
 
+    class RemoteTEB64(rctypes.transform_type_to_remote64bits(TEB)):
+        @property
+        def peb(self):
+            ctypes_peb = self.ProcessEnvironmentBlock.value
+            return RemotePEB64(ctypes_peb, self._target)
+
+
 if CurrentProcess().bitness == 64:
+    RemoteLoadedModule64 = RemoteLoadedModule
+    RemotePEB64 = RemotePEB
+    RemoteTEB64 = RemoteTEB
 
     class RemoteLoadedModule32(rctypes.transform_type_to_remote32bits(LoadedModule)):
         @property
@@ -1559,3 +1568,9 @@ if CurrentProcess().bitness == 64:
             return self._extract_environment(self.ProcessParameters.contents.Environment, self._target)
 
         apisetmap = RemotePEB.apisetmap
+
+    class RemoteTEB32(rctypes.transform_type_to_remote32bits(TEB)):
+        @property
+        def peb(self):
+            ctypes_peb = self.ProcessEnvironmentBlock.value
+            return RemotePEB32(ctypes_peb, self._target)

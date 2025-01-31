@@ -28,7 +28,7 @@ class TestCurrentProcessWithCheckGarbage(object):
         return windows.current_process.peb
 
     def test_get_current_process_modules(self):
-        # Use module filename because this executable can be: 
+        # Use module filename because this executable can be:
         # 1. A PyInstaller exe
         # 2. A Windows App execution alias (Microsoft Store builds)
         assert os.path.basename(windows.current_process.peb.ProcessParameters[0].ImagePathName.str) in windows.current_process.peb.modules[0].name
@@ -474,10 +474,27 @@ class TestProcessWithCheckGarbage(object):
         with proc32_64.allocated_memory(0x1000) as addr:
             assert proc32_64.get_mapped_filename(addr) is None
 
+    def test_current_thread_teb():
+        teb = windows.current_thread.teb
+        assert ctypes.addressof(teb) == ctypes.addressof(windows.current_thread.teb.NtTib.Self[0])
+        assert ctypes.addressof(windows.current_process.peb) == ctypes.addressof(teb.ProcessEnvironmentBlock[0])
+        # Check type of teb.peb is the correct subclass (with modules & co)
+        assert teb.peb.modules
 
     def test_thread_teb_base(self, proc32_64):
         t = proc32_64.threads[0]
         assert t.teb_base != 0
+
+    def test_teb(self, proc32_64):
+        teb = proc32_64.threads[0].teb
+        if proc32_64.bitness == 32:
+            assert type(teb) == windows.winobject.process.RemoteTEB32
+        else:
+            assert type(teb) == windows.winobject.process.RemoteTEB64
+        assert teb.NtTib.Self.value == teb._base_addr
+        assert teb.ProcessEnvironmentBlock.value == teb.peb._base_addr
+        # Check type of teb.peb is the correct subclass (with modules & co)
+        assert teb.peb.modules
 
     @windows_64bit_only
     def test_thread_teb_syswow_base(self, proc32):
@@ -486,7 +503,15 @@ class TestProcessWithCheckGarbage(object):
         assert t.teb_syswow_base != 0
         assert t.teb_base == t.teb_syswow_base + 0x2000
 
-
+    @windows_64bit_only
+    def test_thread_teb_syswow(self, proc32):
+        teb_syswow = proc32.threads[0].teb_syswow
+        assert type(teb_syswow) == windows.winobject.process.RemoteTEB64
+        assert type(teb_syswow.peb) == windows.winobject.process.RemotePEB64
+        assert teb_syswow.NtTib.Self.value == teb_syswow._base_addr
+        assert teb_syswow.ProcessEnvironmentBlock.value == teb_syswow.peb._base_addr
+        # Check type of teb.peb is the correct subclass (with modules & co)
+        assert teb.peb.modules
 
     def test_thread_owner_from_tid(self, proc32_64):
         thread = proc32_64.threads[0]
