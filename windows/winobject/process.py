@@ -584,7 +584,7 @@ class CurrentThread(Thread):
 		"""
         return winproxy.GetCurrentThreadId()
 
-    @utils.fixedproperty
+    @property #It's not a fixedproperty because executing thread might change
     def teb_base(self):
         get_teb_base_code = self.get_teb_code_by_bitness[self.owner.bitness]
         return self.owner.execute(get_teb_base_code)
