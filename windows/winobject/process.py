@@ -917,7 +917,7 @@ class WinThread(Thread):
     @property
     def teb_syswow(self):
         if windows.current_process.bitness == 64:
-            return RemoteTEB64(self.teb_syswow_base, self)
+            return RemoteTEB64(self.teb_syswow_base, self.owner)
         else: #current is 32bits
             return RemoteTEB64(self.teb_syswow_base, windows.syswow64.ReadSyswow64Process(self.owner))
 
