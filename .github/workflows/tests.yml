@@ -1,16 +1,18 @@
-# V0.1
 name: Pytest
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
   # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 
 jobs:
   generate_ctypes:
-    # Prevent double trigger on my PR: so push for me and PR for forks
-    if: ${{(github.event_name == 'push') || (github.event.pull_request.head.repo.fork)}}
     runs-on: windows-latest
     timeout-minutes: 5
-
     steps:
         - uses: actions/checkout@v4
         - uses: actions/setup-python@v5
@@ -21,8 +23,6 @@ jobs:
         - name: Check generated code can execute
           run: py -c "import windows.generated_def"
   tests:
-    # Prevent double trigger on my PR: so push for me and PR for forks
-    if: ${{(github.event_name == 'push') || (github.event.pull_request.head.repo.fork)}}
     strategy:
       fail-fast: false
       matrix:
