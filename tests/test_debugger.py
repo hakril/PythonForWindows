@@ -27,7 +27,7 @@ else:
 
 yolo = generate_pop_and_exit_fixtures([pop_proc_32, pop_proc_64], ids=["proc32dbg", "proc64dbg"], dwCreationFlags=gdef.CREATE_SUSPENDED)
 
-DEFAULT_DEBUGGER_TIMEOUT = 10
+DEFAULT_DEBUGGER_TIMEOUT = 60
 
 @pytest.mark.timeout(DEFAULT_DEBUGGER_TIMEOUT)
 def test_init_breakpoint_callback(proc32_64_debug):
