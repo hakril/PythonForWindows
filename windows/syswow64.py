@@ -164,19 +164,18 @@ def get_current_process_syswow_peb_addr():
 
 def get_current_process_syswow_peb():
     current_process = windows.current_process
-
-    class CurrentProcessReadSyswow(process.Process):
-        bitness = 64
-        def _get_handle(self):
-            return winproxy.OpenProcess(dwProcessId=current_process.pid)
-
-        def read_memory(self, addr, size):
-            buffer_addr = ctypes.create_string_buffer(size)
-            winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
-            return buffer_addr[:]
     peb_addr = get_current_process_syswow_peb_addr()
     return windows.winobject.process.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
 
+class CurrentProcessReadSyswow(process.Process):
+    bitness = 64
+    def _get_handle(self):
+        return winproxy.OpenProcess(dwProcessId=windows.current_process.pid)
+
+    def read_memory(self, addr, size):
+        buffer_addr = ctypes.create_string_buffer(size)
+        winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
+        return buffer_addr[:]
 
 class ReadSyswow64Process(process.Process):
         def __init__(self, target):
