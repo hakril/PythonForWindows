@@ -76,7 +76,7 @@ jobs:
             py -${{ matrix.python-version}}-64 setup.py install
 
       - name: Installing pytest & capstone-windows
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest capstone-windows
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install pytest pytest-timeout capstone-windows
 
       # Testing
       - name: Testing
