@@ -32,7 +32,7 @@ def test_multiple_access_type(objname):
 
 
 def test_complex_object_path():
-    obj = objmanager["\\KnownDLLs\\kernel32.dll"]
+    obj = objmanager[r"\KnownDLLs\kernel32.dll"]
     assert obj.name == "kernel32.dll"
     assert obj.fullname == "\\KnownDLLs\\kernel32.dll"
     assert obj.path == "\\KnownDLLs"
@@ -41,9 +41,9 @@ def test_complex_object_path():
 
 
 def test_link_object():
-    obj = objmanager["\\KnownDLLs\\KnownDLLPath"]
+    obj = objmanager[r"\KnownDLLs\KnownDLLPath"]
     assert obj.type == "SymbolicLink"
-    assert obj.target.lower() == "c:\windows\system32"
+    assert obj.target.lower() == r"c:\windows\system32"
 
 # Test unicode string in Kernel object using an ALPC port
 

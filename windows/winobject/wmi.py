@@ -474,11 +474,11 @@ class WmiNamespace(gdef.IWbemServices, WmiComInterface):
         return """<{0} "{1}"{2}>""".format(type(self).__name__, self.name, null)
 
 class WmiManager(dict):
-    """The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
+    r"""The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
     :class:`WmiNamespace` by name
 
     Example:
-        >>> windows.system.wmi["root\\SecurityCenter2"]
+        >>> windows.system.wmi[r"root\SecurityCenter2"]
         <WmiNamespace "root\SecurityCenter2">
     """
     DEFAULT_NAMESPACE = "root\\cimv2" #: The default namespace for :func:`select` & :func:`query`

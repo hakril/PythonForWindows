@@ -626,7 +626,7 @@ class VirtualProtected(object):
 
 
 class DisableWow64FsRedirection(object):
-    """
+    r"""
     A context manager that disable the SysWow64 Filesystem Redirection ::
 
         if is_process_32_bits:

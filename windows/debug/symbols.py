@@ -13,7 +13,7 @@ DEFAULT_DBG_OPTION = gdef.SYMOPT_DEFERRED_LOADS + gdef.SYMOPT_UNDNAME
 
 
 def set_dbghelp_path(path):
-    """Set the path of the ``dbghelp.dll`` file to use. It allow to configure a different version of the DLL handling PDB downloading.
+    r"""Set the path of the ``dbghelp.dll`` file to use. It allow to configure a different version of the DLL handling PDB downloading.
 
     If ``path`` is a directory, the final ``dbghelp.dll`` will be computed as
     ``path\<current_process_bitness>\dbghelp.dll``.
@@ -124,7 +124,7 @@ class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
     CHAR_TYPE = gdef.CHAR
 
 class SymbolInfoW(gdef.SYMBOL_INFOW, SymbolInfoBase):
-    """Represent a Symbol.
+    r"""Represent a Symbol.
     This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
     with the handling on displacement embeded into it.s
 
@@ -326,7 +326,7 @@ class SymbolModule(gdef.IMAGEHLP_MODULEW64):
 
     @property
     def pdb(self):
-        """The local path of the loaded PDB if present
+        r"""The local path of the loaded PDB if present
 
         Exemple:
             >>> sh = windows.debug.symbols.VirtualSymbolHandler()
@@ -455,7 +455,7 @@ class SymbolHandler(object):
         return sym
 
     def resolve(self, name_or_addr):
-        """Resolve ``name_or_addr``.
+        r"""Resolve ``name_or_addr``.
 
         If its an int -> Return the :class:`SymbolInfo` at the address.
         If its a string -> Return the :class:`SymbolInfo` corresponding to the symbol name
@@ -504,7 +504,7 @@ class SymbolHandler(object):
         return True
 
     def search(self, mask, mod=0, tag=0, options=gdef.SYMSEARCH_ALLITEMS, callback=None):
-        """Search the symbols matching ``mask`` (``Windbg`` like).
+        r"""Search the symbols matching ``mask`` (``Windbg`` like).
 
         :return: [:class:`SymbolInfo`] -- A list of :class:`SymbolInfo`
 
