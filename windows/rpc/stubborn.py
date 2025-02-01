@@ -73,7 +73,18 @@ def stubborn_create_instance(clsid, iid):
             # Bad alignement for everythin -> Legacy
             resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_LEGACY)[0]
 
-    psa = resolver_info.OxidInfo.psa[0] # Retrieve the bidings to our COM server
+    try:
+        psa = resolver_info.OxidInfo.psa[0] # Retrieve the bidings to our COM server
+    except ValueError as e:
+        # Seen case of NULL DEREF
+        # Embed more value to the except for better debugging
+        e.stubborn_info = {
+            "resolver_info.OxidInfo.containerVersion.version": resolver_info.OxidInfo.containerVersion.version,
+            "dcomversion": (dcomversionstruct.MajorVersion, dcomversionstruct.MinorVersion),
+            "resolver_info": resolver_info,
+        }
+        raise
+
     # print("psa.bidings: {0}".format(psa.bidings))
     # ipidRemUnknown = resolver_info.OxidInfo.ipidRemUnknown # Useful for IRemQueryInterface
 
