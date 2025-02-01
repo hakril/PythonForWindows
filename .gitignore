@@ -3,7 +3,12 @@ doctrees
 *.inv
 *.pickle
 *.ignore
+*.code-workspace
 
 .vscode/
 .cache/
 dist/
+build/
+docs/BuildDocEnv/
+playground/
+*egg-info/
