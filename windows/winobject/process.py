@@ -70,8 +70,24 @@ class Process(utils.AutoHandle):
 
         :type: :class:`bool`
 		"""
-        # return utils.is_wow_64(self.handle)
-        return utils.is_wow_64(self.limited_handle)
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
+            return False
+        Wow64Process = gdef.BOOL()
+        windows.winproxy.IsWow64Process(self.handle, Wow64Process)
+        return bool(Wow64Process)
+
+
+
+    @utils.fixedproperty
+    def is_wow_64_2(self):
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            return None, None
+        processMachine = gdef.USHORT()
+        nativeMachine = gdef.USHORT()
+        windows.winproxy.IsWow64Process2(self.handle, processMachine, nativeMachine)
+        return (gdef.IMAGE_FILE_MACHINE_MAPPER[processMachine.value],
+                gdef.IMAGE_FILE_MACHINE_MAPPER[nativeMachine.value])
+
 
     @utils.fixedproperty
     def bitness(self):
@@ -86,6 +102,28 @@ class Process(utils.AutoHandle):
         return 64
 
     @utils.fixedproperty
+    def architecture(self):
+        # Syswow2 will exactly tell us the architecture
+        if windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            process_machine, native_machine = self.is_wow_64_2
+            if process_machine != gdef.IMAGE_FILE_MACHINE_UNKNOWN:
+                return process_machine
+
+            if windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64:
+                # May be ARM64 or AMD64 as X64TA64 is not considered WOW64
+                # ProcessMachineTypeInfo is from build 22000
+                # What if not implemented ? parse target main binary PE ?
+                machine_archi = gdef.PROCESS_MACHINE_INFORMATION()
+                windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, ctypes.byref(machine_archi), ctypes.sizeof(machine_archi))
+                return gdef.IMAGE_FILE_MACHINE_MAPPER[machine_archi.ProcessMachine]
+
+        # No IsWow64Process2 -> No ARM
+        # So its up on x86 -> x64 based on process bitness
+        if self.bitness == 32:
+            return gdef.IMAGE_FILE_MACHINE_I386
+        return gdef.IMAGE_FILE_MACHINE_AMD64
+
+    @utils.fixedpropety
     def limited_handle(self):
         if windows.system.version[0] <= 5:
             # Windows XP | Serveur 2003

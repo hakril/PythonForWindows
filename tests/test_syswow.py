@@ -8,8 +8,28 @@ import windows.native_exec.simple_x64 as x64
 
 from .pfwtest import *
 
-pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
+# pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
+def test_print_syswow_state():
+    import platform
+    print("")
+    env = windows.system.environ
+    print(f"{platform.machine()=}")
+    print(f"{platform.architecture()=}")
+    print(f"{windows.system.bitness=}")
+    print(f"{windows.system.architecture=}")
+    print(f"{windows.current_process.bitness=}")
+    print(f"{windows.current_process.architecture=}")
+    print(f"{env['PROCESSOR_ARCHITECTURE']=}")
+    print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
+
+    print("")
+    print("IsWow64Process2")
+    processMachine = gdef.USHORT()
+    nativeMachine = gdef.USHORT()
+    windows.winproxy.IsWow64Process2(windows.current_process.handle, processMachine, nativeMachine)
+    print(f"{hex(processMachine.value)=}")
+    print(f"{hex(nativeMachine.value)=}")
 
 
 @process_syswow_only

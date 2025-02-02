@@ -1,0 +1,83 @@
+BOOL IsWow64Process(
+  [in]  HANDLE hProcess,
+  [out] PBOOL  Wow64Process
+);
+
+BOOL IsWow64Process2(
+  [in]            HANDLE hProcess,
+  [out]           USHORT *pProcessMachine,
+  [out, optional] USHORT *pNativeMachine
+);
+
+HRESULT IsWow64GuestMachineSupported(
+  [in]  USHORT WowGuestMachine,
+  [out] BOOL   *MachineIsSupported
+);
+
+UINT GetSystemWow64DirectoryA(
+  [out] LPSTR lpBuffer,
+  [in]  UINT  uSize
+);
+
+UINT GetSystemWow64DirectoryW(
+  [out] LPWSTR lpBuffer,
+  [in]  UINT   uSize
+);
+
+UINT GetSystemWow64Directory2A(
+  [out] LPSTR lpBuffer,
+  [in]  UINT  uSize,
+  [in]  WORD  ImageFileMachineType
+);
+
+UINT GetSystemWow64Directory2W(
+  [out] LPWSTR lpBuffer,
+  [in]  UINT   uSize,
+  [in]  WORD   ImageFileMachineType
+);
+
+BOOL Wow64DisableWow64FsRedirection(
+  [out] PVOID *OldValue
+);
+
+BOOLEAN Wow64EnableWow64FsRedirection(
+  BOOLEAN Wow64FsEnableRedirection
+);
+
+BOOL Wow64RevertWow64FsRedirection(
+  [in] PVOID OlValue
+);
+
+BOOL Wow64GetThreadContext(
+  HANDLE         hThread,
+  PWOW64_CONTEXT lpContext
+);
+
+BOOL Wow64SetThreadContext(
+  HANDLE         hThread,
+  WOW64_CONTEXT *lpContext
+);
+
+USHORT Wow64SetThreadDefaultGuestMachine(
+  USHORT Machine
+);
+
+DWORD Wow64SuspendThread(
+  HANDLE hThread
+);
+
+NTSTATUS WINAPI NtWow64ReadVirtualMemory64(
+  _In_   HANDLE     hProcess,
+  _In_   ULONG64    lpBaseAddress,
+  _Out_  LPVOID     lpBuffer,
+  _In_   ULONG64    nSize,
+  _Out_  PULONG64   lpNumberOfBytesRead
+);
+
+NTSTATUS WINAPI NtWow64WriteVirtualMemory64(
+  _In_   HANDLE     hProcess,
+  _In_   ULONG64    lpBaseAddress,
+  _Out_  LPVOID     lpBuffer,
+  _In_   ULONG64    nSize,
+  _Out_  PULONG64   lpNumberOfBytesWritten
+);

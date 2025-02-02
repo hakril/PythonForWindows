@@ -10,7 +10,6 @@ from windows import utils
 import windows.generated_def as gdef
 
 
-
 from windows.winobject import process
 from windows.winobject import network
 from windows.winobject import registry
@@ -585,6 +584,24 @@ class System(object):
         # 0x300 first bytes.
         # These are the part that do not move much between XP & Win10
         return gdef.PFW_MINIMAL_KUSER_SHARED_DATA.from_address(gdef.MM_SHARED_USER_DATA_VA)
+
+    @utils.fixedproperty
+    def architecture(self):
+        # Retrieve system processor architecture
+        # It's not that easy as x64-on-ARM64 will lie on most API except IsWow64Process2
+        # EX: GetNativeSystemInfo will returns PROCESSOR_ARCHITECTURE_AMD64
+        if windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            process_machine, native_machine = windows.current_process.is_wow_64_2
+            try:
+                return utils.image_file_machine_to_processor_architecture(native_machine)
+            except KeyError as e:
+                raise ValueError("Unknown IsWow64Process2(native_machine:#x) -> {0}".format(native_machine))
+
+        # No IsWow64Process2 -> assert it cannot be ARM64 and thus GetNativeSystemInfo will not lie ?
+        sysinfo = gdef.SYSTEM_INFO()
+        windows.winproxy.GetNativeSystemInfo(sysinfo)
+        return gdef.PROCESSOR_ARCHITECTURE_MAPPER[sysinfo.wProcessorArchitecture]
+
 
 
     @staticmethod

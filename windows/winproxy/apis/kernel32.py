@@ -81,6 +81,18 @@ def GetPriorityClass(hProcess):
 def SetPriorityClass(hProcess, dwPriorityClass):
     return SetPriorityClass.ctypes_function(hProcess, dwPriorityClass)
 
+@Kernel32Proxy()
+def GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize=None):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return GetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+@Kernel32Proxy()
+def SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return SetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
 
 PROCESS_MITIGATION_STUCTS = (gdef.PROCESS_MITIGATION_ASLR_POLICY,
                                 gdef.PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY,
@@ -407,6 +419,14 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
    return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
 
+@Kernel32Proxy(error_check=no_error_check)
+def GetNativeSystemInfo(lpSystemInfo):
+    return GetNativeSystemInfo.ctypes_function(lpSystemInfo)
+
+@Kernel32Proxy(error_check=no_error_check)
+def GetSystemInfo(lpSystemInfo):
+    return GetSystemInfo.ctypes_function(lpSystemInfo)
+
 ## Io
 
 @Kernel32Proxy()
@@ -503,6 +523,41 @@ def Wow64GetThreadContext(hThread, lpContext):
 def Wow64SetThreadContext(hThread, lpContext):
     return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
 
+@Kernel32Proxy()
+def IsWow64Process(hProcess, Wow64Process):
+    return IsWow64Process.ctypes_function(hProcess, Wow64Process)
+
+@Kernel32Proxy()
+def IsWow64Process2(hProcess, pProcessMachine, pNativeMachine):
+    return IsWow64Process2.ctypes_function(hProcess, pProcessMachine, pNativeMachine)
+
+@Kernel32Proxy()
+def IsWow64GuestMachineSupported(WowGuestMachine, MachineIsSupported):
+    return IsWow64GuestMachineSupported.ctypes_function(WowGuestMachine, MachineIsSupported)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryA(lpBuffer, uSize):
+    return GetSystemWow64DirectoryA.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryW(lpBuffer, uSize):
+    return GetSystemWow64DirectoryW.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2A(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2A.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2W(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2W.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def Wow64SetThreadDefaultGuestMachine(Machine):
+    return Wow64SetThreadDefaultGuestMachine.ctypes_function(Machine)
+
+@Kernel32Proxy()
+def Wow64SuspendThread(hThread):
+    return Wow64SuspendThread.ctypes_function(hThread)
 
 
 ## File
