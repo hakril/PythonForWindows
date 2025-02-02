@@ -25,7 +25,7 @@ class TestCurrentProcessWithCheckGarbage(object):
         assert myself.ppid == windows.current_process.ppid
 
     def test_get_current_process_peb(self):
-        return windows.current_process.peb
+        assert windows.current_process.peb
 
     def test_get_current_process_modules(self):
         # Use module filename because this executable can be:
