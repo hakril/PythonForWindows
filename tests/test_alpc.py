@@ -15,7 +15,7 @@ def generate_client_server_test(client_function, server_function):
         time.sleep(0.5)
         client_function()
         th.join()
-        return True
+        return
     return generated_test
 
 PORT_NAME = r"\RPC Control\PythonForWindowsTestPort"

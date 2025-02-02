@@ -520,11 +520,12 @@ class Process(utils.AutoHandle):
         return [h for h in windows.system.handles if h.dwProcessId == pid]
 
     def __del__(self):
-        super(Process, self).__del__()
-        # Same logic that AutoHandle.__del__ for Process.limited_handle
-        # Assert that Process inherit AutoHandle
         # sys.path is not None -> check if python shutdown
         if sys.path is not None and hasattr(self, "_limited_handle") and self._limited_handle:
+            # Same logic that AutoHandle.__del__ for Process.limited_handle
+            # Assert that Process inherit AutoHandle
+            # Call super after check as Process could be None during destruction
+            super(Process, self).__del__()
             # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
             # This line is bad -> it reopens a handle closed by 'super(Process, self).__del__()' ._.
             dbgprint("Closing limited handle {0} for {1}".format(hex(self._limited_handle), self), "HANDLE") if dbgprint is not None else None

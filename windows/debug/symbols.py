@@ -178,6 +178,10 @@ class SymbolType(object):
         return newres
 
     @property
+    def module(self):
+        return self.resolver.get_module(self.modbase)
+
+    @property
     def name(self):
         return self._get_type_info(gdef.TI_GET_SYMNAME)
 
