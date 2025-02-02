@@ -171,11 +171,8 @@ class CurrentProcessReadSyswow(process.Process):
     bitness = 64
 
     def _get_handle(self):
-        # return winproxy.GetCurrentProcess()
-        return 0xffffffffffffffff
-
-    def __del__(self):
-        pass
+        # GetCurrentProcess() is not accepted for NtWow64ReadVirtualMemory64 :(
+        return winproxy.OpenProcess(dwProcessId=windows.current_process.pid)
 
     def read_memory(self, addr, size):
         buffer_addr = ctypes.create_string_buffer(size)
