@@ -169,8 +169,12 @@ def get_current_process_syswow_peb():
 
 class CurrentProcessReadSyswow(process.Process):
     bitness = 64
+
     def _get_handle(self):
-        return winproxy.OpenProcess(dwProcessId=windows.current_process.pid)
+        return winproxy.GetCurrentProcess()
+
+    def __del__(self):
+        pass
 
     def read_memory(self, addr, size):
         buffer_addr = ctypes.create_string_buffer(size)

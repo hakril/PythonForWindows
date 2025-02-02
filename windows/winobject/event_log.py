@@ -377,6 +377,7 @@ class ImprovedEVT_VARIANT(gdef.EVT_VARIANT):
         gdef.EvtVarTypeUInt16 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt16Arr",
         gdef.EvtVarTypeUInt32 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt32Arr",
         gdef.EvtVarTypeUInt64 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt64Arr",
+        gdef.EvtVarTypeHexInt64 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt64Arr",
     }
     NoneValue = None
 
