@@ -10,6 +10,9 @@ class NtdllProxy(ApiProxy):
 
 
 # Process
+@NtdllProxy(error_check=fail_on_zero)
+def RtlGetCurrentPeb():
+   return RtlGetCurrentPeb.ctypes_function()
 
 @NtdllProxy()
 def NtOpenProcess(ProcessHandle, DesiredAccess, ObjectAttributes, ClientId):

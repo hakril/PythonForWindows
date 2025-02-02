@@ -12,11 +12,25 @@ def assert_struct_offset(struct, field, offset):
 if windows.current_process.bitness == 32:
     PEB32 = windows.generated_def.PEB
     PEB64 = rctypes.transform_type_to_remote64bits(windows.generated_def.PEB)
+
+    TEB32 = windows.generated_def.TEB
+    TEB64 = rctypes.transform_type_to_remote64bits(windows.generated_def.TEB)
+
+    NT_TIB32 = windows.generated_def.NT_TIB
+    NT_TIB64 = rctypes.transform_type_to_remote64bits(windows.generated_def.NT_TIB)
+
     SYSTEM_PROCESS_INFORMATION32 = windows.generated_def.SYSTEM_PROCESS_INFORMATION
     SYSTEM_PROCESS_INFORMATION64 = rctypes.transform_type_to_remote64bits(windows.generated_def.SYSTEM_PROCESS_INFORMATION)
 else:
     PEB32 = rctypes.transform_type_to_remote32bits(windows.generated_def.PEB)
     PEB64 = windows.generated_def.PEB
+
+    TEB32 = rctypes.transform_type_to_remote32bits(windows.generated_def.TEB)
+    TEB64 = windows.generated_def.TEB
+
+    NT_TIB32 = rctypes.transform_type_to_remote32bits(windows.generated_def.NT_TIB)
+    NT_TIB64 = windows.generated_def.NT_TIB
+
     SYSTEM_PROCESS_INFORMATION32 = rctypes.transform_type_to_remote32bits(windows.generated_def.SYSTEM_PROCESS_INFORMATION)
     SYSTEM_PROCESS_INFORMATION64 = windows.generated_def.SYSTEM_PROCESS_INFORMATION
 
@@ -52,6 +66,29 @@ def test_peb64_fields():
     assert_peb_offset("SessionId", 0x2c0)
     assert_peb_offset("CSDVersion", 0x02E8)
     assert_peb_offset("MinimumStackCommit", 0x0318)
+
+# Important to the the current TEB via Self
+def test_nt_tib32_fields():
+    assert_nt_tib_offset = lambda field, offset: assert_struct_offset(NT_TIB32, field, offset)
+    assert_nt_tib_offset("ExceptionList", 0)
+    assert_nt_tib_offset("StackBase", 4)
+    assert_nt_tib_offset("StackLimit", 8)
+    assert_nt_tib_offset("SubSystemTib", 0xc)
+    assert_nt_tib_offset("FiberData", 0x10)
+    assert_nt_tib_offset("Version", 0x10)
+    assert_nt_tib_offset("ArbitraryUserPointer",  0x14)
+    assert_nt_tib_offset("Self", 0x18) # Important !
+
+def test_nt_tib64_fields():
+    assert_nt_tib_offset = lambda field, offset: assert_struct_offset(NT_TIB64, field, offset)
+    assert_nt_tib_offset("ExceptionList", 0)
+    assert_nt_tib_offset("StackBase", 8)
+    assert_nt_tib_offset("StackLimit", 0x10)
+    assert_nt_tib_offset("SubSystemTib", 0x18)
+    assert_nt_tib_offset("FiberData", 0x20)
+    assert_nt_tib_offset("Version", 0x20)
+    assert_nt_tib_offset("ArbitraryUserPointer",  0x28)
+    assert_nt_tib_offset("Self", 0x30) # Important !
 
 def test_system_process_information32_fields():
     assert_spi_offset = lambda field, offset: assert_struct_offset(SYSTEM_PROCESS_INFORMATION32, field, offset)

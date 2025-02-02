@@ -29,7 +29,7 @@ def test_remote_struct_same_bitness():
 
 # This test fails for now. (0.6)
 # Should I improve remote ctypes to handel this ?
-@pytest.mark.known_to_fail
+@pytest.mark.xfail
 def test_remote_long_ptr():
     # Bug thatwas in retrieving of NtCreateFile arguments
     target = windows.current_process

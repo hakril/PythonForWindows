@@ -8509,6 +8509,128 @@ _SHFILEOPSTRUCTA
 
         :class:`PCSTR`
 
+_LIST_ENTRY
+'''''''''''
+.. class:: LIST_ENTRY
+
+    Alias for :class:`_LIST_ENTRY`
+
+.. class:: PLIST_ENTRY
+
+    Pointer to :class:`_LIST_ENTRY`
+
+.. class:: PRLIST_ENTRY
+
+    Pointer to :class:`_LIST_ENTRY`
+
+.. class:: _LIST_ENTRY
+
+    .. attribute:: Flink
+
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: Blink
+
+        :class:`_LIST_ENTRY`
+
+_LSA_UNICODE_STRING
+'''''''''''''''''''
+.. class:: LSA_UNICODE_STRING
+
+    Alias for :class:`_LSA_UNICODE_STRING`
+
+.. class:: PLSA_UNICODE_STRING
+
+    Pointer to :class:`_LSA_UNICODE_STRING`
+
+.. class:: PUNICODE_STRING
+
+    Pointer to :class:`_LSA_UNICODE_STRING`
+
+.. class:: UNICODE_STRING
+
+    Alias for :class:`_LSA_UNICODE_STRING`
+
+.. class:: _LSA_UNICODE_STRING
+
+    .. attribute:: Length
+
+        :class:`USHORT`
+
+
+    .. attribute:: MaximumLength
+
+        :class:`USHORT`
+
+
+    .. attribute:: Buffer
+
+        :class:`PVOID`
+
+_CLIENT_ID
+''''''''''
+.. class:: CLIENT_ID
+
+    Alias for :class:`_CLIENT_ID`
+
+.. class:: PCLIENT_ID
+
+    Pointer to :class:`_CLIENT_ID`
+
+.. class:: _CLIENT_ID
+
+    .. attribute:: UniqueProcess
+
+        :class:`HANDLE`
+
+
+    .. attribute:: UniqueThread
+
+        :class:`HANDLE`
+
+_CLIENT_ID64
+''''''''''''
+.. class:: CLIENT_ID64
+
+    Alias for :class:`_CLIENT_ID64`
+
+.. class:: PCLIENT_ID64
+
+    Pointer to :class:`_CLIENT_ID64`
+
+.. class:: _CLIENT_ID64
+
+    .. attribute:: UniqueProcess
+
+        :class:`ULONG64`
+
+
+    .. attribute:: UniqueThread
+
+        :class:`ULONG64`
+
+_CLIENT_ID32
+''''''''''''
+.. class:: CLIENT_ID32
+
+    Alias for :class:`_CLIENT_ID32`
+
+.. class:: PCLIENT_ID32
+
+    Pointer to :class:`_CLIENT_ID32`
+
+.. class:: _CLIENT_ID32
+
+    .. attribute:: UniqueProcess
+
+        :class:`ULONG`
+
+
+    .. attribute:: UniqueThread
+
+        :class:`ULONG`
+
 _IMAGEHLP_MODULE64
 ''''''''''''''''''
 .. class:: IMAGEHLP_MODULE64
@@ -9971,6 +10093,1121 @@ _tagSTACKFRAME_EX
 
         :class:`DWORD`
 
+_SYSTEM_PROCESS_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: PSYSTEM_PROCESS_INFORMATION
+
+    Pointer to :class:`_SYSTEM_PROCESS_INFORMATION`
+
+.. class:: SYSTEM_PROCESS_INFORMATION
+
+    Alias for :class:`_SYSTEM_PROCESS_INFORMATION`
+
+.. class:: _SYSTEM_PROCESS_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NumberOfThreads
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE` ``[24]``
+
+
+    .. attribute:: CreateTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: UserTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: KernelTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ImageName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: BasePriority
+
+        :class:`LONG`
+
+
+    .. attribute:: UniqueProcessId
+
+        :class:`HANDLE`
+
+
+    .. attribute:: InheritedFromUniqueProcessId
+
+        :class:`PVOID`
+
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved4
+
+        :class:`BYTE` ``[4]``
+
+
+    .. attribute:: Reserved5
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakVirtualSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: VirtualSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: PageFaultCount
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakWorkingSetSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: WorkingSetSize
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPeakPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaPeakNonPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: QuotaNonPagedPoolUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: PagefileUsage
+
+        :class:`PVOID`
+
+
+    .. attribute:: PeakPagefileUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PrivatePageCount
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: Reserved6
+
+        :class:`LARGE_INTEGER` ``[6]``
+
+_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+'''''''''''''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    Pointer to :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
+
+.. class:: SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    Alias for :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
+
+.. class:: _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+    .. attribute:: IdleTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: KernelTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: UserTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: Reserved1
+
+        :class:`LARGE_INTEGER` ``[2]``
+
+
+    .. attribute:: Reserved2
+
+        :class:`ULONG`
+
+_SYSTEM_REGISTRY_QUOTA_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    Pointer to :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
+
+.. class:: SYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    Alias for :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
+
+.. class:: _SYSTEM_REGISTRY_QUOTA_INFORMATION
+
+    .. attribute:: RegistryQuotaAllowed
+
+        :class:`ULONG`
+
+
+    .. attribute:: RegistryQuotaUsed
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved1
+
+        :class:`PVOID`
+
+_SYSTEM_BASIC_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PSYSTEM_BASIC_INFORMATION
+
+    Pointer to :class:`_SYSTEM_BASIC_INFORMATION`
+
+.. class:: SYSTEM_BASIC_INFORMATION
+
+    Alias for :class:`_SYSTEM_BASIC_INFORMATION`
+
+.. class:: _SYSTEM_BASIC_INFORMATION
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE` ``[24]``
+
+
+    .. attribute:: Reserved2
+
+        :class:`PVOID` ``[4]``
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`CHAR`
+
+_CURDIR
+'''''''
+.. class:: CURDIR
+
+    Alias for :class:`_CURDIR`
+
+.. class:: PCURDIR
+
+    Pointer to :class:`_CURDIR`
+
+.. class:: _CURDIR
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: Handle
+
+        :class:`PVOID`
+
+_RTL_DRIVE_LETTER_CURDIR
+''''''''''''''''''''''''
+.. class:: PRTL_DRIVE_LETTER_CURDIR
+
+    Pointer to :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: RTL_DRIVE_LETTER_CURDIR
+
+    Alias for :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: _RTL_DRIVE_LETTER_CURDIR
+
+    .. attribute:: Flags
+
+        :class:`WORD`
+
+
+    .. attribute:: Length
+
+        :class:`WORD`
+
+
+    .. attribute:: TimeStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
+
+_RTL_USER_PROCESS_PARAMETERS
+''''''''''''''''''''''''''''
+.. class:: PRTL_USER_PROCESS_PARAMETERS
+
+    Pointer to :class:`_RTL_USER_PROCESS_PARAMETERS`
+
+.. class:: RTL_USER_PROCESS_PARAMETERS
+
+    Alias for :class:`_RTL_USER_PROCESS_PARAMETERS`
+
+.. class:: _RTL_USER_PROCESS_PARAMETERS
+
+    .. attribute:: MaximumLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: DebugFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ConsoleHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: ConsoleFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: StandardInput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardOutput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardError
+
+        :class:`PVOID`
+
+
+    .. attribute:: CurrentDirectory
+
+        :class:`CURDIR`
+
+
+    .. attribute:: DllPath
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ImagePathName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: CommandLine
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: Environment
+
+        :class:`PVOID`
+
+
+    .. attribute:: StartingX
+
+        :class:`ULONG`
+
+
+    .. attribute:: StartingY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsY
+
+        :class:`ULONG`
+
+
+    .. attribute:: FillAttribute
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ShowWindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowTitle
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: DesktopInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ShellInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: RuntimeData
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: CurrentDirectores
+
+        :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
+
+_LDR_DATA_TABLE_ENTRY
+'''''''''''''''''''''
+.. class:: LDR_DATA_TABLE_ENTRY
+
+    Alias for :class:`_LDR_DATA_TABLE_ENTRY`
+
+.. class:: PLDR_DATA_TABLE_ENTRY
+
+    Pointer to :class:`_LDR_DATA_TABLE_ENTRY`
+
+.. class:: _LDR_DATA_TABLE_ENTRY
+
+    .. attribute:: Reserved1
+
+        :class:`PVOID` ``[2]``
+
+
+    .. attribute:: InMemoryOrderLinks
+
+        :class:`LIST_ENTRY`
+
+
+    .. attribute:: Reserved2
+
+        :class:`PVOID` ``[2]``
+
+
+    .. attribute:: DllBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: EntryPoint
+
+        :class:`PVOID`
+
+
+    .. attribute:: SizeOfImage
+
+        :class:`PVOID`
+
+
+    .. attribute:: FullDllName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: BaseDllName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: Reserved5
+
+        :class:`PVOID` ``[3]``
+
+
+    .. attribute:: CheckSum
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`ULONG`
+
+_PEB_LDR_DATA
+'''''''''''''
+.. class:: PEB_LDR_DATA
+
+    Alias for :class:`_PEB_LDR_DATA`
+
+.. class:: PPEB_LDR_DATA
+
+    Pointer to :class:`_PEB_LDR_DATA`
+
+.. class:: _PEB_LDR_DATA
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: Initialized
+
+        :class:`BYTE`
+
+
+    .. attribute:: SsHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: InLoadOrderModuleList
+
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: InMemoryOrderModuleList
+
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: InInitializationOrderModuleList
+
+        :class:`_LIST_ENTRY`
+
+
+    .. attribute:: EntryInProgress
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_02
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_02
+
+    .. attribute:: FastPebLockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr1
+
+        :class:`PVOID`
+
+
+    .. attribute:: AtlThunkSListPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_03
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_03
+
+    .. attribute:: FastPebUnlockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr2
+
+        :class:`PVOID`
+
+
+    .. attribute:: IFEOKey
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_06
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_06
+
+    .. attribute:: FreeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePebPtr0
+
+        :class:`PVOID`
+
+
+    .. attribute:: ApiSetMap
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_07
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_07
+
+    .. attribute:: ReadOnlySharedMemoryHeap
+
+        :class:`PVOID`
+
+
+    .. attribute:: HotpatchInformation
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePvoid0
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_1
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_1
+
+    .. attribute:: KernelCallbackTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: UserSharedInfoPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_2
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_2
+
+    .. attribute:: ImageProcessAffinityMask
+
+        :class:`PVOID`
+
+
+    .. attribute:: ActiveProcessAffinityMask
+
+        :class:`PVOID`
+
+_PEB
+''''
+.. class:: PEB
+
+    Alias for :class:`_PEB`
+
+.. class:: PPEB
+
+    Pointer to :class:`_PEB`
+
+.. class:: _PEB
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE` ``[2]``
+
+
+    .. attribute:: BeingDebugged
+
+        :class:`BYTE`
+
+
+    .. attribute:: Reserved2
+
+        :class:`BYTE`
+
+
+    .. attribute:: Mutant
+
+        :class:`PVOID`
+
+
+    .. attribute:: ImageBaseAddress
+
+        :class:`PVOID`
+
+
+    .. attribute:: Ldr
+
+        :class:`PPEB_LDR_DATA`
+
+
+    .. attribute:: ProcessParameters
+
+        :class:`PRTL_USER_PROCESS_PARAMETERS`
+
+
+    .. attribute:: SubSystemData
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessHeap
+
+        :class:`PVOID`
+
+
+    .. attribute:: FastPebLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_02
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_02`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_03
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_03`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_04
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__PEB_SUB_UNION_1`
+
+
+    .. attribute:: SystemReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_05
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_06
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_06`
+
+
+    .. attribute:: TlsExpansionCounter
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmap
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmapBits
+
+        :class:`DWORD` ``[2]``
+
+
+    .. attribute:: ReadOnlySharedMemoryBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_07
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_07`
+
+
+    .. attribute:: ReadOnlyStaticServerData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AnsiCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: OemCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: UnicodeCaseTableData
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`DWORD`
+
+
+    .. attribute:: NtGlobalFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: CriticalSectionTimeout
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: HeapSegmentReserve
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapSegmentCommit
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitTotalFreeThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitFreeBlockThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaximumNumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProcessHeaps
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiSharedHandleTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessStarterHelper
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiDCAttributeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: LoaderLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: OSMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSMinorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSBuildNumber
+
+        :class:`WORD`
+
+
+    .. attribute:: OSCSDVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: OSPlatformId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystem
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMinorVersion
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_02
+
+        :class:`_ANON__PEB_SUB_UNION_2`
+
+
+    .. attribute:: GdiHandleBuffer
+
+        :class:`PVOID` ``[26]``
+
+
+    .. attribute:: GdiHandleBuffer2
+
+        :class:`BYTE` ``[32]``
+
+
+    .. attribute:: PostProcessInitRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsExpansionBitmap
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsExpansionBitmapBits
+
+        :class:`DWORD` ``[32]``
+
+
+    .. attribute:: SessionId
+
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatFlags
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: AppCompatFlagsUser
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: pShimData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: CSDVersion
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemDefaultActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: MinimumStackCommit
+
+        :class:`PVOID`
+
+_EXCEPTION_REGISTRATION_RECORD
+''''''''''''''''''''''''''''''
+.. class:: _EXCEPTION_REGISTRATION_RECORD
+
+    .. attribute:: Next
+
+        :class:`_EXCEPTION_REGISTRATION_RECORD`
+
+
+    .. attribute:: Handler
+
+        :class:`PVOID`
+
+_NT_TIB
+'''''''
+.. class:: NT_TIB
+
+    Alias for :class:`_NT_TIB`
+
+.. class:: _NT_TIB
+
+    .. attribute:: ExceptionList
+
+        :class:`_EXCEPTION_REGISTRATION_RECORD`
+
+
+    .. attribute:: StackBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: StackLimit
+
+        :class:`PVOID`
+
+
+    .. attribute:: SubSystemTib
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__NT_TIB_SUB_UNION_1`
+
+
+    .. attribute:: ArbitraryUserPointer
+
+        :class:`PVOID`
+
+
+    .. attribute:: Self
+
+        :class:`_NT_TIB`
+
+_TEB
+''''
+.. class:: TEB
+
+    Alias for :class:`_TEB`
+
+.. class:: _TEB
+
+    .. attribute:: NtTib
+
+        :class:`_NT_TIB`
+
+
+    .. attribute:: EnvironmentPointer
+
+        :class:`PVOID`
+
+
+    .. attribute:: ClientId
+
+        :class:`_CLIENT_ID`
+
+
+    .. attribute:: ActiveRpcHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: ThreadLocalStoragePointer
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessEnvironmentBlock
+
+        :class:`_PEB`
+
+
+    .. attribute:: LastErrorValue
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountOfOwnedCriticalSections
+
+        :class:`ULONG`
+
+
+    .. attribute:: CsrClientThread
+
+        :class:`PVOID`
+
+
+    .. attribute:: Win32ThreadInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: User32Reserved
+
+        :class:`ULONG` ``[26]``
+
+
+    .. attribute:: UserReserved
+
+        :class:`ULONG` ``[5]``
+
+
+    .. attribute:: WOW32Reserved
+
+        :class:`PVOID`
+
+
+    .. attribute:: CurrentLocale
+
+        :class:`ULONG`
+
+
+    .. attribute:: FpSoftwareStatusRegister
+
+        :class:`ULONG`
+
 _TRACE_PROVIDER_INFO
 ''''''''''''''''''''
 .. class:: TRACE_PROVIDER_INFO
@@ -10484,748 +11721,6 @@ tagWNDCLASSEXW
 
         :class:`HICON`
 
-_LIST_ENTRY
-'''''''''''
-.. class:: LIST_ENTRY
-
-    Alias for :class:`_LIST_ENTRY`
-
-.. class:: PLIST_ENTRY
-
-    Pointer to :class:`_LIST_ENTRY`
-
-.. class:: PRLIST_ENTRY
-
-    Pointer to :class:`_LIST_ENTRY`
-
-.. class:: _LIST_ENTRY
-
-    .. attribute:: Flink
-
-        :class:`_LIST_ENTRY`
-
-
-    .. attribute:: Blink
-
-        :class:`_LIST_ENTRY`
-
-_PEB_LDR_DATA
-'''''''''''''
-.. class:: PEB_LDR_DATA
-
-    Alias for :class:`_PEB_LDR_DATA`
-
-.. class:: PPEB_LDR_DATA
-
-    Pointer to :class:`_PEB_LDR_DATA`
-
-.. class:: _PEB_LDR_DATA
-
-    .. attribute:: Length
-
-        :class:`ULONG`
-
-
-    .. attribute:: Initialized
-
-        :class:`BYTE`
-
-
-    .. attribute:: SsHandle
-
-        :class:`PVOID`
-
-
-    .. attribute:: InLoadOrderModuleList
-
-        :class:`_LIST_ENTRY`
-
-
-    .. attribute:: InMemoryOrderModuleList
-
-        :class:`_LIST_ENTRY`
-
-
-    .. attribute:: InInitializationOrderModuleList
-
-        :class:`_LIST_ENTRY`
-
-
-    .. attribute:: EntryInProgress
-
-        :class:`PVOID`
-
-_LSA_UNICODE_STRING
-'''''''''''''''''''
-.. class:: LSA_UNICODE_STRING
-
-    Alias for :class:`_LSA_UNICODE_STRING`
-
-.. class:: PLSA_UNICODE_STRING
-
-    Pointer to :class:`_LSA_UNICODE_STRING`
-
-.. class:: PUNICODE_STRING
-
-    Pointer to :class:`_LSA_UNICODE_STRING`
-
-.. class:: UNICODE_STRING
-
-    Alias for :class:`_LSA_UNICODE_STRING`
-
-.. class:: _LSA_UNICODE_STRING
-
-    .. attribute:: Length
-
-        :class:`USHORT`
-
-
-    .. attribute:: MaximumLength
-
-        :class:`USHORT`
-
-
-    .. attribute:: Buffer
-
-        :class:`PVOID`
-
-_CURDIR
-'''''''
-.. class:: CURDIR
-
-    Alias for :class:`_CURDIR`
-
-.. class:: PCURDIR
-
-    Pointer to :class:`_CURDIR`
-
-.. class:: _CURDIR
-
-    .. attribute:: DosPath
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: Handle
-
-        :class:`PVOID`
-
-_RTL_DRIVE_LETTER_CURDIR
-''''''''''''''''''''''''
-.. class:: PRTL_DRIVE_LETTER_CURDIR
-
-    Pointer to :class:`_RTL_DRIVE_LETTER_CURDIR`
-
-.. class:: RTL_DRIVE_LETTER_CURDIR
-
-    Alias for :class:`_RTL_DRIVE_LETTER_CURDIR`
-
-.. class:: _RTL_DRIVE_LETTER_CURDIR
-
-    .. attribute:: Flags
-
-        :class:`WORD`
-
-
-    .. attribute:: Length
-
-        :class:`WORD`
-
-
-    .. attribute:: TimeStamp
-
-        :class:`ULONG`
-
-
-    .. attribute:: DosPath
-
-        :class:`UNICODE_STRING`
-
-_RTL_USER_PROCESS_PARAMETERS
-''''''''''''''''''''''''''''
-.. class:: PRTL_USER_PROCESS_PARAMETERS
-
-    Pointer to :class:`_RTL_USER_PROCESS_PARAMETERS`
-
-.. class:: RTL_USER_PROCESS_PARAMETERS
-
-    Alias for :class:`_RTL_USER_PROCESS_PARAMETERS`
-
-.. class:: _RTL_USER_PROCESS_PARAMETERS
-
-    .. attribute:: MaximumLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: Length
-
-        :class:`ULONG`
-
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: DebugFlags
-
-        :class:`ULONG`
-
-
-    .. attribute:: ConsoleHandle
-
-        :class:`PVOID`
-
-
-    .. attribute:: ConsoleFlags
-
-        :class:`ULONG`
-
-
-    .. attribute:: StandardInput
-
-        :class:`PVOID`
-
-
-    .. attribute:: StandardOutput
-
-        :class:`PVOID`
-
-
-    .. attribute:: StandardError
-
-        :class:`PVOID`
-
-
-    .. attribute:: CurrentDirectory
-
-        :class:`CURDIR`
-
-
-    .. attribute:: DllPath
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: ImagePathName
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: CommandLine
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: Environment
-
-        :class:`PVOID`
-
-
-    .. attribute:: StartingX
-
-        :class:`ULONG`
-
-
-    .. attribute:: StartingY
-
-        :class:`ULONG`
-
-
-    .. attribute:: CountX
-
-        :class:`ULONG`
-
-
-    .. attribute:: CountY
-
-        :class:`ULONG`
-
-
-    .. attribute:: CountCharsX
-
-        :class:`ULONG`
-
-
-    .. attribute:: CountCharsY
-
-        :class:`ULONG`
-
-
-    .. attribute:: FillAttribute
-
-        :class:`ULONG`
-
-
-    .. attribute:: WindowFlags
-
-        :class:`ULONG`
-
-
-    .. attribute:: ShowWindowFlags
-
-        :class:`ULONG`
-
-
-    .. attribute:: WindowTitle
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: DesktopInfo
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: ShellInfo
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: RuntimeData
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: CurrentDirectores
-
-        :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
-
-_ANON_PEB_SYSTEM_DEPENDENT_02
-'''''''''''''''''''''''''''''
-.. class:: _ANON_PEB_SYSTEM_DEPENDENT_02
-
-    .. attribute:: FastPebLockRoutine
-
-        :class:`PVOID`
-
-
-    .. attribute:: SparePtr1
-
-        :class:`PVOID`
-
-
-    .. attribute:: AtlThunkSListPtr
-
-        :class:`PVOID`
-
-_ANON_PEB_SYSTEM_DEPENDENT_03
-'''''''''''''''''''''''''''''
-.. class:: _ANON_PEB_SYSTEM_DEPENDENT_03
-
-    .. attribute:: FastPebUnlockRoutine
-
-        :class:`PVOID`
-
-
-    .. attribute:: SparePtr2
-
-        :class:`PVOID`
-
-
-    .. attribute:: IFEOKey
-
-        :class:`PVOID`
-
-_ANON_PEB_SYSTEM_DEPENDENT_06
-'''''''''''''''''''''''''''''
-.. class:: _ANON_PEB_SYSTEM_DEPENDENT_06
-
-    .. attribute:: FreeList
-
-        :class:`PVOID`
-
-
-    .. attribute:: SparePebPtr0
-
-        :class:`PVOID`
-
-
-    .. attribute:: ApiSetMap
-
-        :class:`PVOID`
-
-_ANON_PEB_SYSTEM_DEPENDENT_07
-'''''''''''''''''''''''''''''
-.. class:: _ANON_PEB_SYSTEM_DEPENDENT_07
-
-    .. attribute:: ReadOnlySharedMemoryHeap
-
-        :class:`PVOID`
-
-
-    .. attribute:: HotpatchInformation
-
-        :class:`PVOID`
-
-
-    .. attribute:: SparePvoid0
-
-        :class:`PVOID`
-
-_ANON_PEB_UNION_1
-'''''''''''''''''
-.. class:: _ANON_PEB_UNION_1
-
-    .. attribute:: KernelCallbackTable
-
-        :class:`PVOID`
-
-
-    .. attribute:: UserSharedInfoPtr
-
-        :class:`PVOID`
-
-_ANON_PEB_UNION_2
-'''''''''''''''''
-.. class:: _ANON_PEB_UNION_2
-
-    .. attribute:: ImageProcessAffinityMask
-
-        :class:`PVOID`
-
-
-    .. attribute:: ActiveProcessAffinityMask
-
-        :class:`PVOID`
-
-_PEB
-''''
-.. class:: PEB
-
-    Alias for :class:`_PEB`
-
-.. class:: PPEB
-
-    Pointer to :class:`_PEB`
-
-.. class:: _PEB
-
-    .. attribute:: Reserved1
-
-        :class:`BYTE` ``[2]``
-
-
-    .. attribute:: BeingDebugged
-
-        :class:`BYTE`
-
-
-    .. attribute:: Reserved2
-
-        :class:`BYTE`
-
-
-    .. attribute:: Mutant
-
-        :class:`PVOID`
-
-
-    .. attribute:: ImageBaseAddress
-
-        :class:`PVOID`
-
-
-    .. attribute:: Ldr
-
-        :class:`PPEB_LDR_DATA`
-
-
-    .. attribute:: ProcessParameters
-
-        :class:`PRTL_USER_PROCESS_PARAMETERS`
-
-
-    .. attribute:: SubSystemData
-
-        :class:`PVOID`
-
-
-    .. attribute:: ProcessHeap
-
-        :class:`PVOID`
-
-
-    .. attribute:: FastPebLock
-
-        :class:`PVOID`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_02
-
-        :class:`_ANON_PEB_SYSTEM_DEPENDENT_02`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_03
-
-        :class:`_ANON_PEB_SYSTEM_DEPENDENT_03`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_04
-
-        :class:`PVOID`
-
-
-    .. attribute:: anon_01
-
-        :class:`_ANON__PEB_SUB_UNION_1`
-
-
-    .. attribute:: SystemReserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_05
-
-        :class:`DWORD`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_06
-
-        :class:`_ANON_PEB_SYSTEM_DEPENDENT_06`
-
-
-    .. attribute:: TlsExpansionCounter
-
-        :class:`PVOID`
-
-
-    .. attribute:: TlsBitmap
-
-        :class:`PVOID`
-
-
-    .. attribute:: TlsBitmapBits
-
-        :class:`DWORD` ``[2]``
-
-
-    .. attribute:: ReadOnlySharedMemoryBase
-
-        :class:`PVOID`
-
-
-    .. attribute:: _SYSTEM_DEPENDENT_07
-
-        :class:`_ANON_PEB_SYSTEM_DEPENDENT_07`
-
-
-    .. attribute:: ReadOnlyStaticServerData
-
-        :class:`PVOID`
-
-
-    .. attribute:: AnsiCodePageData
-
-        :class:`PVOID`
-
-
-    .. attribute:: OemCodePageData
-
-        :class:`PVOID`
-
-
-    .. attribute:: UnicodeCaseTableData
-
-        :class:`PVOID`
-
-
-    .. attribute:: NumberOfProcessors
-
-        :class:`DWORD`
-
-
-    .. attribute:: NtGlobalFlag
-
-        :class:`DWORD`
-
-
-    .. attribute:: CriticalSectionTimeout
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: HeapSegmentReserve
-
-        :class:`PVOID`
-
-
-    .. attribute:: HeapSegmentCommit
-
-        :class:`PVOID`
-
-
-    .. attribute:: HeapDeCommitTotalFreeThreshold
-
-        :class:`PVOID`
-
-
-    .. attribute:: HeapDeCommitFreeBlockThreshold
-
-        :class:`PVOID`
-
-
-    .. attribute:: NumberOfHeaps
-
-        :class:`DWORD`
-
-
-    .. attribute:: MaximumNumberOfHeaps
-
-        :class:`DWORD`
-
-
-    .. attribute:: ProcessHeaps
-
-        :class:`PVOID`
-
-
-    .. attribute:: GdiSharedHandleTable
-
-        :class:`PVOID`
-
-
-    .. attribute:: ProcessStarterHelper
-
-        :class:`PVOID`
-
-
-    .. attribute:: GdiDCAttributeList
-
-        :class:`PVOID`
-
-
-    .. attribute:: LoaderLock
-
-        :class:`PVOID`
-
-
-    .. attribute:: OSMajorVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: OSMinorVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: OSBuildNumber
-
-        :class:`WORD`
-
-
-    .. attribute:: OSCSDVersion
-
-        :class:`WORD`
-
-
-    .. attribute:: OSPlatformId
-
-        :class:`DWORD`
-
-
-    .. attribute:: ImageSubsystem
-
-        :class:`DWORD`
-
-
-    .. attribute:: ImageSubsystemMajorVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: ImageSubsystemMinorVersion
-
-        :class:`PVOID`
-
-
-    .. attribute:: anon_02
-
-        :class:`_ANON__PEB_SUB_UNION_2`
-
-
-    .. attribute:: GdiHandleBuffer
-
-        :class:`PVOID` ``[26]``
-
-
-    .. attribute:: GdiHandleBuffer2
-
-        :class:`BYTE` ``[32]``
-
-
-    .. attribute:: PostProcessInitRoutine
-
-        :class:`PVOID`
-
-
-    .. attribute:: TlsExpansionBitmap
-
-        :class:`PVOID`
-
-
-    .. attribute:: TlsExpansionBitmapBits
-
-        :class:`DWORD` ``[32]``
-
-
-    .. attribute:: SessionId
-
-        :class:`PVOID`
-
-
-    .. attribute:: AppCompatFlags
-
-        :class:`ULARGE_INTEGER`
-
-
-    .. attribute:: AppCompatFlagsUser
-
-        :class:`ULARGE_INTEGER`
-
-
-    .. attribute:: pShimData
-
-        :class:`PVOID`
-
-
-    .. attribute:: AppCompatInfo
-
-        :class:`PVOID`
-
-
-    .. attribute:: CSDVersion
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: ActivationContextData
-
-        :class:`PVOID`
-
-
-    .. attribute:: ProcessAssemblyStorageMap
-
-        :class:`PVOID`
-
-
-    .. attribute:: SystemDefaultActivationContextData
-
-        :class:`PVOID`
-
-
-    .. attribute:: SystemAssemblyStorageMap
-
-        :class:`PVOID`
-
-
-    .. attribute:: MinimumStackCommit
-
-        :class:`PVOID`
-
 _SECURITY_ATTRIBUTES
 ''''''''''''''''''''
 .. class:: LPSECURITY_ATTRIBUTES
@@ -11412,135 +11907,6 @@ _SYSTEM_PROCESS_ID_INFORMATION
     .. attribute:: ImageName
 
         :class:`UNICODE_STRING`
-
-_CLIENT_ID
-''''''''''
-.. class:: CLIENT_ID
-
-    Alias for :class:`_CLIENT_ID`
-
-.. class:: PCLIENT_ID
-
-    Pointer to :class:`_CLIENT_ID`
-
-.. class:: _CLIENT_ID
-
-    .. attribute:: UniqueProcess
-
-        :class:`HANDLE`
-
-
-    .. attribute:: UniqueThread
-
-        :class:`HANDLE`
-
-_CLIENT_ID64
-''''''''''''
-.. class:: CLIENT_ID64
-
-    Alias for :class:`_CLIENT_ID64`
-
-.. class:: PCLIENT_ID64
-
-    Pointer to :class:`_CLIENT_ID64`
-
-.. class:: _CLIENT_ID64
-
-    .. attribute:: UniqueProcess
-
-        :class:`ULONG64`
-
-
-    .. attribute:: UniqueThread
-
-        :class:`ULONG64`
-
-_CLIENT_ID32
-''''''''''''
-.. class:: CLIENT_ID32
-
-    Alias for :class:`_CLIENT_ID32`
-
-.. class:: PCLIENT_ID32
-
-    Pointer to :class:`_CLIENT_ID32`
-
-.. class:: _CLIENT_ID32
-
-    .. attribute:: UniqueProcess
-
-        :class:`ULONG`
-
-
-    .. attribute:: UniqueThread
-
-        :class:`ULONG`
-
-_LDR_DATA_TABLE_ENTRY
-'''''''''''''''''''''
-.. class:: LDR_DATA_TABLE_ENTRY
-
-    Alias for :class:`_LDR_DATA_TABLE_ENTRY`
-
-.. class:: PLDR_DATA_TABLE_ENTRY
-
-    Pointer to :class:`_LDR_DATA_TABLE_ENTRY`
-
-.. class:: _LDR_DATA_TABLE_ENTRY
-
-    .. attribute:: Reserved1
-
-        :class:`PVOID` ``[2]``
-
-
-    .. attribute:: InMemoryOrderLinks
-
-        :class:`LIST_ENTRY`
-
-
-    .. attribute:: Reserved2
-
-        :class:`PVOID` ``[2]``
-
-
-    .. attribute:: DllBase
-
-        :class:`PVOID`
-
-
-    .. attribute:: EntryPoint
-
-        :class:`PVOID`
-
-
-    .. attribute:: SizeOfImage
-
-        :class:`PVOID`
-
-
-    .. attribute:: FullDllName
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: BaseDllName
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: Reserved5
-
-        :class:`PVOID` ``[3]``
-
-
-    .. attribute:: CheckSum
-
-        :class:`ULONG`
-
-
-    .. attribute:: TimeDateStamp
-
-        :class:`ULONG`
 
 _MEMORY_BASIC_INFORMATION
 '''''''''''''''''''''''''
@@ -25403,235 +25769,6 @@ _EXPLICIT_ACCESS_W
 
         :class:`TRUSTEE_W`
 
-_SYSTEM_PROCESS_INFORMATION
-'''''''''''''''''''''''''''
-.. class:: PSYSTEM_PROCESS_INFORMATION
-
-    Pointer to :class:`_SYSTEM_PROCESS_INFORMATION`
-
-.. class:: SYSTEM_PROCESS_INFORMATION
-
-    Alias for :class:`_SYSTEM_PROCESS_INFORMATION`
-
-.. class:: _SYSTEM_PROCESS_INFORMATION
-
-    .. attribute:: NextEntryOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NumberOfThreads
-
-        :class:`ULONG`
-
-
-    .. attribute:: Reserved1
-
-        :class:`BYTE` ``[24]``
-
-
-    .. attribute:: CreateTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: UserTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: KernelTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: ImageName
-
-        :class:`UNICODE_STRING`
-
-
-    .. attribute:: BasePriority
-
-        :class:`LONG`
-
-
-    .. attribute:: UniqueProcessId
-
-        :class:`HANDLE`
-
-
-    .. attribute:: InheritedFromUniqueProcessId
-
-        :class:`PVOID`
-
-
-    .. attribute:: HandleCount
-
-        :class:`ULONG`
-
-
-    .. attribute:: Reserved4
-
-        :class:`BYTE` ``[4]``
-
-
-    .. attribute:: Reserved5
-
-        :class:`PVOID`
-
-
-    .. attribute:: PeakVirtualSize
-
-        :class:`PVOID`
-
-
-    .. attribute:: VirtualSize
-
-        :class:`PVOID`
-
-
-    .. attribute:: PageFaultCount
-
-        :class:`PVOID`
-
-
-    .. attribute:: PeakWorkingSetSize
-
-        :class:`PVOID`
-
-
-    .. attribute:: WorkingSetSize
-
-        :class:`PVOID`
-
-
-    .. attribute:: QuotaPeakPagedPoolUsage
-
-        :class:`PVOID`
-
-
-    .. attribute:: QuotaPagedPoolUsage
-
-        :class:`PVOID`
-
-
-    .. attribute:: QuotaPeakNonPagedPoolUsage
-
-        :class:`PVOID`
-
-
-    .. attribute:: QuotaNonPagedPoolUsage
-
-        :class:`PVOID`
-
-
-    .. attribute:: PagefileUsage
-
-        :class:`PVOID`
-
-
-    .. attribute:: PeakPagefileUsage
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: PrivatePageCount
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: Reserved6
-
-        :class:`LARGE_INTEGER` ``[6]``
-
-_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-'''''''''''''''''''''''''''''''''''''''''
-.. class:: PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-
-    Pointer to :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
-
-.. class:: SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-
-    Alias for :class:`_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION`
-
-.. class:: _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-
-    .. attribute:: IdleTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: KernelTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: UserTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: Reserved1
-
-        :class:`LARGE_INTEGER` ``[2]``
-
-
-    .. attribute:: Reserved2
-
-        :class:`ULONG`
-
-_SYSTEM_REGISTRY_QUOTA_INFORMATION
-''''''''''''''''''''''''''''''''''
-.. class:: PSYSTEM_REGISTRY_QUOTA_INFORMATION
-
-    Pointer to :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
-
-.. class:: SYSTEM_REGISTRY_QUOTA_INFORMATION
-
-    Alias for :class:`_SYSTEM_REGISTRY_QUOTA_INFORMATION`
-
-.. class:: _SYSTEM_REGISTRY_QUOTA_INFORMATION
-
-    .. attribute:: RegistryQuotaAllowed
-
-        :class:`ULONG`
-
-
-    .. attribute:: RegistryQuotaUsed
-
-        :class:`ULONG`
-
-
-    .. attribute:: Reserved1
-
-        :class:`PVOID`
-
-_SYSTEM_BASIC_INFORMATION
-'''''''''''''''''''''''''
-.. class:: PSYSTEM_BASIC_INFORMATION
-
-    Pointer to :class:`_SYSTEM_BASIC_INFORMATION`
-
-.. class:: SYSTEM_BASIC_INFORMATION
-
-    Alias for :class:`_SYSTEM_BASIC_INFORMATION`
-
-.. class:: _SYSTEM_BASIC_INFORMATION
-
-    .. attribute:: Reserved1
-
-        :class:`BYTE` ``[24]``
-
-
-    .. attribute:: Reserved2
-
-        :class:`PVOID` ``[4]``
-
-
-    .. attribute:: NumberOfProcessors
-
-        :class:`CHAR`
-
 _TIME_ZONE_INFORMATION
 ''''''''''''''''''''''
 .. class:: LPTIME_ZONE_INFORMATION
@@ -29723,6 +29860,42 @@ ADDRESS_MODE
 
     .. attribute:: AddrModeFlat(3)
 
+_COMPUTER_NAME_FORMAT
+'''''''''''''''''''''
+.. class:: COMPUTER_NAME_FORMAT
+
+    Alias for :class:`_COMPUTER_NAME_FORMAT`
+
+
+.. class:: _COMPUTER_NAME_FORMAT
+
+
+    .. attribute:: ComputerNameNetBIOS(0)
+
+
+    .. attribute:: ComputerNameDnsHostname(1)
+
+
+    .. attribute:: ComputerNameDnsDomain(2)
+
+
+    .. attribute:: ComputerNameDnsFullyQualified(3)
+
+
+    .. attribute:: ComputerNamePhysicalNetBIOS(4)
+
+
+    .. attribute:: ComputerNamePhysicalDnsHostname(5)
+
+
+    .. attribute:: ComputerNamePhysicalDnsDomain(6)
+
+
+    .. attribute:: ComputerNamePhysicalDnsFullyQualified(7)
+
+
+    .. attribute:: ComputerNameMax(8)
+
 _TASK_ACTION_TYPE
 '''''''''''''''''
 .. class:: TASK_ACTION_TYPE
@@ -33522,42 +33695,6 @@ _ACCESS_MODE
 
 
     .. attribute:: SET_AUDIT_FAILURE(6)
-
-_COMPUTER_NAME_FORMAT
-'''''''''''''''''''''
-.. class:: COMPUTER_NAME_FORMAT
-
-    Alias for :class:`_COMPUTER_NAME_FORMAT`
-
-
-.. class:: _COMPUTER_NAME_FORMAT
-
-
-    .. attribute:: ComputerNameNetBIOS(0)
-
-
-    .. attribute:: ComputerNameDnsHostname(1)
-
-
-    .. attribute:: ComputerNameDnsDomain(2)
-
-
-    .. attribute:: ComputerNameDnsFullyQualified(3)
-
-
-    .. attribute:: ComputerNamePhysicalNetBIOS(4)
-
-
-    .. attribute:: ComputerNamePhysicalDnsHostname(5)
-
-
-    .. attribute:: ComputerNamePhysicalDnsDomain(6)
-
-
-    .. attribute:: ComputerNamePhysicalDnsFullyQualified(7)
-
-
-    .. attribute:: ComputerNameMax(8)
 
 TRACE_INFO_CLASS
 ''''''''''''''''

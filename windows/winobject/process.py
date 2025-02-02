@@ -64,7 +64,7 @@ class DeadThread(utils.AutoHandle):
 
 
 class Process(utils.AutoHandle):
-    @utils.fixedpropety
+    @utils.fixedproperty
     def is_wow_64(self):
         """``True`` if the process is a SysWow64 process (32bit process on 64bits system).
 
@@ -73,7 +73,7 @@ class Process(utils.AutoHandle):
         # return utils.is_wow_64(self.handle)
         return utils.is_wow_64(self.limited_handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def bitness(self):
         """The bitness of the process
 
@@ -85,15 +85,25 @@ class Process(utils.AutoHandle):
             return 32
         return 64
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def limited_handle(self):
         if windows.system.version[0] <= 5:
             # Windows XP | Serveur 2003
             return winproxy.OpenProcess(PROCESS_QUERY_INFORMATION, dwProcessId=self.pid)
         return winproxy.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, dwProcessId=self.pid)
 
+    @utils.fixedproperty
+    def name(self):
+        """Name of the process
 
-    @utils.fixedpropety
+        :type: :class:`str`
+		"""
+        buffer = ctypes.create_unicode_buffer(0x1024)
+        rsize = winproxy.GetProcessImageFileNameW(self.limited_handle, buffer)
+        # GetProcessImageFileNameW returns the fullpath
+        return buffer[:rsize].split("\\")[-1]
+
+    @utils.fixedproperty
     def ppid(self):
         """Parent Process ID
 
@@ -559,13 +569,29 @@ class Thread(utils.AutoHandle):
 
 class CurrentThread(Thread):
     """The current thread"""
-    @property #It's not a fixedpropety because executing thread might change
+
+    get_teb_code_by_bitness = {
+        32: x86.assemble("mov eax, fs:[0x18]; ret"),
+        64: x64.assemble("mov rax, gs:[0x30]; ret")
+
+    }
+
+    @property #It's not a fixedproperty because executing thread might change
     def tid(self):
         """Thread ID
 
         :type: :class:`int`
 		"""
         return winproxy.GetCurrentThreadId()
+
+    @property #It's not a fixedproperty because executing thread might change
+    def teb_base(self):
+        get_teb_base_code = self.get_teb_code_by_bitness[self.owner.bitness]
+        return self.owner.execute(get_teb_base_code)
+
+    @property
+    def teb(self):
+        return TEB.from_address(self.teb_base)
 
     @property
     def owner(self):
@@ -585,8 +611,6 @@ class CurrentThread(Thread):
         """Exit the thread"""
         return winproxy.ExitThread(code)
 
-
-
     def wait(self, timeout=INFINITE):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
@@ -594,37 +618,12 @@ class CurrentThread(Thread):
 
 class CurrentProcess(Process):
     """The current process"""
-    get_peb = None
-
-    get_peb_32_code = x86.MultipleInstr()
-    get_peb_32_code += x86.Mov('EAX', x86.mem('fs:[0x30]'))
-    get_peb_32_code += x86.Ret()
-    get_peb_32_code = get_peb_32_code.get_code()
-
-    get_peb_64_code = x64.MultipleInstr()
-    get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
-    get_peb_64_code += x64.Ret()
-    get_peb_64_code = get_peb_64_code.get_code()
-
     allocator = native_exec.native_function.allocator
-
-    name = "CurrentProcess" # Used by Winthread for __repr__
-
-    # Use RtlGetCurrentPeb ?
-    def get_peb_builtin(self):
-        if self.get_peb is not None:
-            return self.get_peb
-        if self.bitness == 32:
-            get_peb = native_exec.create_function(self.get_peb_32_code, [PVOID])
-        else:
-            get_peb = native_exec.create_function(self.get_peb_64_code, [PVOID])
-        self.get_peb = get_peb
-        return get_peb
 
     def _get_handle(self):
         return winproxy.GetCurrentProcess()
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def limited_handle(self):
         return winproxy.GetCurrentProcess()
 
@@ -640,23 +639,21 @@ class CurrentProcess(Process):
 		"""
         return os.getpid()
 
-    @utils.fixedpropety # leave it has fixed property as we don't care if CurrentProcess is never collected
+    @utils.fixedproperty # leave it has fixed property as we don't care if CurrentProcess is never collected
     def peb(self):
         """The Process Environment Block of the current process
 
         :type: :class:`PEB`
 		"""
-        return PEB.from_address(self.get_peb_builtin()())
+        return PEB.from_address(windows.winproxy.RtlGetCurrentPeb())
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def bitness(self):
         """The bitness of the process
 
         :type: :class:`int` -- 32 or 64
 		"""
-        import platform
-        bits = platform.architecture()[0]
-        return int(bits[:2])
+        return ctypes.sizeof(gdef.PVOID) * 8 # byte to bits
 
     def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
         """Allocate memory in the process
@@ -718,7 +715,7 @@ class CurrentProcess(Process):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_syswow(self):
         """The 64bits PEB of a SysWow64 process
 
@@ -761,21 +758,21 @@ class WinThread(Thread):
         # Create a DeadThread if thread is already dead ?
         return WinThread(handle=handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def tid(self):
         """Thread ID
 
         :type: :class:`int`"""
         return self._get_thread_id(self.handle)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def owner_pid(self):
         res = THREAD_BASIC_INFORMATION()
         windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         owner_id = res.ClientId.UniqueProcess
         return owner_id
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def owner(self):
         """The Process owning the thread
 
@@ -900,7 +897,11 @@ class WinThread(Thread):
         # TebBase->NtTib.ExceptionList = (PVOID)Teb32Base;
         return self.owner.read_dword(main_teb_addr)
 
-
+    @property
+    def teb(self):
+        if self.owner.bitness == 32:
+            return RemoteTEB32(self.teb_base, target=self.owner)
+        return RemoteTEB64(self.teb_base, target=self.owner)
 
     @property
     def teb_syswow_base(self):
@@ -913,6 +914,12 @@ class WinThread(Thread):
         # just return the main TEB
         return self._get_principal_teb_addr()
 
+    @property
+    def teb_syswow(self):
+        if windows.current_process.bitness == 64:
+            return RemoteTEB64(self.teb_syswow_base, self.owner)
+        else: #current is 32bits
+            return RemoteTEB64(self.teb_syswow_base, windows.syswow64.ReadSyswow64Process(self.owner))
 
     def exit(self, code=0):
         """Exit the thread"""
@@ -1006,18 +1013,7 @@ class WinProcess(Process):
         return cls(pid=pid, name=name, ppid=ppid)
 
 
-    @utils.fixedpropety
-    def name(self):
-        """Name of the process
-
-        :type: :class:`str`
-		"""
-        buffer = ctypes.create_unicode_buffer(0x1024)
-        rsize = winproxy.GetProcessImageFileNameW(self.limited_handle, buffer)
-        # GetProcessImageFileNameW returns the fullpath
-        return buffer[:rsize].split("\\")[-1]
-
-    @utils.fixedpropety
+    @utils.fixedproperty
     def pid(self):
         """Process ID
 
@@ -1150,9 +1146,7 @@ class WinProcess(Process):
         return injection.execute_python_code(self, pycode)
 
 
-
-
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_addr(self):
         """The address of the PEB
 
@@ -1179,7 +1173,7 @@ class WinProcess(Process):
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
         return peb_addr
 
-    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Not a fixedproperty to prevent ref-cycle and uncollectable WinProcess
     # Try with a weakref ?
     @property
     def peb(self):
@@ -1193,7 +1187,7 @@ class WinProcess(Process):
             return RemotePEB32(self.peb_addr, self)
         return RemotePEB(self.peb_addr, self)
 
-    @utils.fixedpropety
+    @utils.fixedproperty
     def peb_syswow_addr(self):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
@@ -1212,7 +1206,7 @@ class WinProcess(Process):
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
             return peb_addr
 
-    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Not a fixedproperty to prevent ref-cycle and uncollectable WinProcess
     # Try with a weakref ?
     @property
     def peb_syswow(self):
@@ -1230,8 +1224,6 @@ class WinProcess(Process):
     def exit(self, code=0):
         """Exit the process"""
         return winproxy.TerminateProcess(self.handle, code)
-
-
 
 
 def transform_ctypes_fields(struct, replacement):
@@ -1276,11 +1268,6 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
         return pe_parse.GetPEFile(self.baseaddr)
 
 
-class LIST_ENTRY_PTR(PVOID):
-    def TO_LDR_ENTRY(self):
-        return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) * 2)
-
-
 class PEB(gdef.PEB):
     """The PEB (Process Environment Block) of the current process"""
 
@@ -1315,13 +1302,13 @@ class PEB(gdef.PEB):
         :type: [:class:`LoadedModule`] -- List of loaded modules
 		"""
         res = []
-        list_entry_ptr = ctypes.cast(self.Ldr.contents.InMemoryOrderModuleList.Flink, LIST_ENTRY_PTR)
-        current_dll = list_entry_ptr.TO_LDR_ENTRY()
+        first_flink = self.Ldr.contents.InMemoryOrderModuleList.Flink[0]
+        current_dll = first_flink.get_real_struct(LoadedModule, LoadedModule.InMemoryOrderLinks)
         while current_dll.DllBase:
             res.append(current_dll)
-            list_entry_ptr = ctypes.cast(current_dll.InMemoryOrderLinks.Flink, LIST_ENTRY_PTR)
-            current_dll = list_entry_ptr.TO_LDR_ENTRY()
-        return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
+            next_flink = current_dll.InMemoryOrderLinks.Flink[0]
+            current_dll = next_flink.get_real_struct(LoadedModule, LoadedModule.InMemoryOrderLinks)
+        return res
 
     @staticmethod
     def _extract_environment(env_block_addr, target):
@@ -1350,7 +1337,6 @@ class PEB(gdef.PEB):
         if windows.system.version < (6,2):
             raise NotImplementedError("ApiSetMap does not exist prior to Windows 7")
         return apisetmap.get_api_set_map_for_current_process(self.ApiSetMap)
-
 
 # Memory stuff
 
@@ -1463,9 +1449,24 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
         raise NotImplementedError("ApiSetMap for remote process not implemented yet")
 
 
+# TEB enhanced, same bitness as PEB (current process)
+class TEB(gdef.TEB):
+    @property
+    def peb(self):
+        return ctypes.cast(self.ProcessEnvironmentBlock, ctypes.POINTER(PEB))[0]
 
+# mote TEB enhanced, same bitness as PEB (current process)
+class RemoteTEB(rctypes.RemoteStructure.from_structure(TEB)):
+    @property
+    def peb(self):
+        ctypes_peb = self.ProcessEnvironmentBlock.value
+        return RemotePEB(ctypes_peb, self._target)
 
 if CurrentProcess().bitness == 32:
+    RemoteLoadedModule32 = RemoteLoadedModule
+    RemotePEB32 = RemotePEB
+    RemoteTEB32 = RemoteTEB
+
     class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
         @property
         def pe(self):
@@ -1479,7 +1480,6 @@ if CurrentProcess().bitness == 32:
 
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) * 2, self._target)
-
 
         @property
         def exe(self):
@@ -1513,7 +1513,17 @@ if CurrentProcess().bitness == 32:
 
         apisetmap = RemotePEB.apisetmap
 
+    class RemoteTEB64(rctypes.transform_type_to_remote64bits(TEB)):
+        @property
+        def peb(self):
+            ctypes_peb = self.ProcessEnvironmentBlock.value
+            return RemotePEB64(ctypes_peb, self._target)
+
+
 if CurrentProcess().bitness == 64:
+    RemoteLoadedModule64 = RemoteLoadedModule
+    RemotePEB64 = RemotePEB
+    RemoteTEB64 = RemoteTEB
 
     class RemoteLoadedModule32(rctypes.transform_type_to_remote32bits(LoadedModule)):
         @property
@@ -1560,3 +1570,9 @@ if CurrentProcess().bitness == 64:
             return self._extract_environment(self.ProcessParameters.contents.Environment, self._target)
 
         apisetmap = RemotePEB.apisetmap
+
+    class RemoteTEB32(rctypes.transform_type_to_remote32bits(TEB)):
+        @property
+        def peb(self):
+            ctypes_peb = self.ProcessEnvironmentBlock.value
+            return RemotePEB32(ctypes_peb, self._target)

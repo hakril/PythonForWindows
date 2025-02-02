@@ -64,3 +64,9 @@ HMODULE LoadLibraryExW(
 BOOL FreeLibrary(
   HMODULE hLibModule
 );
+
+
+/* Not documented by seems present since dawn of time (WRK)
+    I Prefere PVOID as a return value to allow simple cast to PEB subclass in process.py*/
+
+PVOID RtlGetCurrentPeb ();

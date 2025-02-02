@@ -123,8 +123,9 @@ class WinStruct(object):
 
     def generate_selfref_ctypes_class(self):
         res = ["# Self referencing struct tricks"]
-        res += ["""class {0}(Structure): pass""".format(self.name)]
-        # res += [self.generate_anonymous_union()]
+        res += ["""class {0}(Structure):""".format(self.name)]
+        # We need some code in the def of anon is empty -> insert path
+        res += [self.generate_anonymous_union() or "    pass"]
         res += [self.generate_typedef_ctypes()]
 
         if self.pack:

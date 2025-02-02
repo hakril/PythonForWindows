@@ -5,7 +5,7 @@ import os.path
 import windows
 import windows.generated_def as gdef
 
-SCHTASKS = "c:\Windows\System32\schtasks.exe"
+SCHTASKS = r"c:\Windows\System32\schtasks.exe"
 
 task_scheduler = windows.system.task_scheduler
 
@@ -28,9 +28,9 @@ def schtasks_task_exists(taskname):
         raise
 
 SCHEDULED_TASK_PARAMS = [
-    {"DIR": "", "NAME": "PFW_TEST1", "PATH": '"c:\windows\system32\notepad.exe"', "ARGS": "PFW_TEST_PARAM.txt"},
+    {"DIR": "", "NAME": "PFW_TEST1", "PATH": r'"c:\windows\system32\notepad.exe"', "ARGS": "PFW_TEST_PARAM.txt"},
     # Test in subdir
-    {"DIR": "PFW_TEST_DIR", "NAME": "PFW_TEST1", "PATH": '"c:\windows\system32\notepad.exe"', "ARGS": "PFW_TEST_PARAM.txt"}
+    {"DIR": "PFW_TEST_DIR", "NAME": "PFW_TEST1", "PATH": r'"c:\windows\system32\notepad.exe"', "ARGS": "PFW_TEST_PARAM.txt"}
 ]
 
 

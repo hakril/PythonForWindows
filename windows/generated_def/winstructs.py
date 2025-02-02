@@ -1902,7 +1902,8 @@ ATTACH_VIRTUAL_DISK_PARAMETERS = _ATTACH_VIRTUAL_DISK_PARAMETERS
 PATTACH_VIRTUAL_DISK_PARAMETERS = POINTER(_ATTACH_VIRTUAL_DISK_PARAMETERS)
 
 # Self referencing struct tricks
-class _INTERNET_BUFFERSA(Structure): pass
+class _INTERNET_BUFFERSA(Structure):
+    pass
 INTERNET_BUFFERSA = _INTERNET_BUFFERSA
 LPINTERNET_BUFFERSA = POINTER(_INTERNET_BUFFERSA)
 _INTERNET_BUFFERSA._fields_ = [
@@ -1919,7 +1920,8 @@ _INTERNET_BUFFERSA._fields_ = [
 ]
 
 # Self referencing struct tricks
-class _INTERNET_BUFFERSW(Structure): pass
+class _INTERNET_BUFFERSW(Structure):
+    pass
 INTERNET_BUFFERSW = _INTERNET_BUFFERSW
 LPINTERNET_BUFFERSW = POINTER(_INTERNET_BUFFERSW)
 _INTERNET_BUFFERSW._fields_ = [
@@ -2453,7 +2455,8 @@ IP_INTERFACE_INFO = _IP_INTERFACE_INFO
 PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
 
 # Self referencing struct tricks
-class _DNS_CACHE_ENTRY(Structure): pass
+class _DNS_CACHE_ENTRY(Structure):
+    pass
 DNS_CACHE_ENTRY = _DNS_CACHE_ENTRY
 PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
 _DNS_CACHE_ENTRY._fields_ = [
@@ -2982,7 +2985,9 @@ class _ANON__DNSRECORDA_SUB_UNION_2(Union):
     ]
 
 # Self referencing struct tricks
-class _DnsRecordA(Structure): pass
+class _DnsRecordA(Structure):
+    _anonymous_ = ("Flags","Data")
+
 DNS_RECORDA = _DnsRecordA
 PDNS_RECORDA = POINTER(_DnsRecordA)
 _DnsRecordA._fields_ = [
@@ -3092,7 +3097,9 @@ class _ANON__DNSRECORDW_SUB_UNION_2(Union):
     ]
 
 # Self referencing struct tricks
-class _DnsRecordW(Structure): pass
+class _DnsRecordW(Structure):
+    _anonymous_ = ("Flags","Data")
+
 DNS_RECORDW = _DnsRecordW
 PDNS_RECORDW = POINTER(_DnsRecordW)
 _DnsRecordW._fields_ = [
@@ -3171,7 +3178,8 @@ PIP_ADDRESS_STRING = POINTER(IP_ADDRESS_STRING)
 PIP_MASK_STRING = POINTER(IP_ADDRESS_STRING)
 
 # Self referencing struct tricks
-class _IP_ADDR_STRING(Structure): pass
+class _IP_ADDR_STRING(Structure):
+    pass
 IP_ADDR_STRING = _IP_ADDR_STRING
 PIP_ADDR_STRING = POINTER(_IP_ADDR_STRING)
 _IP_ADDR_STRING._fields_ = [
@@ -3182,7 +3190,8 @@ _IP_ADDR_STRING._fields_ = [
 ]
 
 # Self referencing struct tricks
-class _IP_ADAPTER_INFO(Structure): pass
+class _IP_ADAPTER_INFO(Structure):
+    pass
 IP_ADAPTER_INFO = _IP_ADAPTER_INFO
 PIP_ADAPTER_INFO = POINTER(_IP_ADAPTER_INFO)
 _IP_ADAPTER_INFO._fields_ = [
@@ -3876,6 +3885,114 @@ class _SHFILEOPSTRUCTA(Structure):
 LPSHFILEOPSTRUCTA = POINTER(_SHFILEOPSTRUCTA)
 SHFILEOPSTRUCTA = _SHFILEOPSTRUCTA
 
+# Self referencing struct tricks
+class _LIST_ENTRY(Structure):
+    pass
+LIST_ENTRY = _LIST_ENTRY
+PLIST_ENTRY = POINTER(_LIST_ENTRY)
+PRLIST_ENTRY = POINTER(_LIST_ENTRY)
+_LIST_ENTRY._fields_ = [
+    ("Flink", POINTER(_LIST_ENTRY)),
+    ("Blink", POINTER(_LIST_ENTRY)),
+]
+
+# From: ctypes_generation\extended_structs\_LIST_ENTRY.py
+# _LIST_ENTRY is a self referencing structure
+# Currently ctypes generation does not support extending self referencing structures
+# Ass the _fields_ assignement should happen after the extended structure definition
+# So we just redefine fully _LIST_ENTRY without inheriting the real one
+
+class _LIST_ENTRY(Structure):
+    def get_real_struct(self, targetcls, target_field):
+        # >>> gdef.LDR_DATA_TABLE_ENTRY.InMemoryOrderLinks
+        # <Field type=_LIST_ENTRY, ofs=16, size=16>
+        # This field object does not allow to retrieve the type..
+        # So we need to basse the target class AND the target field..
+        return targetcls.from_address(ctypes.addressof(self) - target_field.offset)
+
+_LIST_ENTRY._fields_ = [
+    ("Flink", POINTER(_LIST_ENTRY)),
+    ("Blink", POINTER(_LIST_ENTRY)),
+]
+LIST_ENTRY = _LIST_ENTRY
+PLIST_ENTRY = POINTER(_LIST_ENTRY)
+PRLIST_ENTRY = POINTER(_LIST_ENTRY)
+class _LSA_UNICODE_STRING(Structure):
+    _fields_ = [
+        ("Length", USHORT),
+        ("MaximumLength", USHORT),
+        ("Buffer", PVOID),
+    ]
+LSA_UNICODE_STRING = _LSA_UNICODE_STRING
+PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+UNICODE_STRING = _LSA_UNICODE_STRING
+
+INITIAL_LSA_UNICODE_STRING = _LSA_UNICODE_STRING
+
+class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
+    @property
+    def str(self):
+        """The python string of the LSA_UNICODE_STRING object
+
+        :type: :class:`unicode`
+        """
+        if not self.Length:
+            return ""
+        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
+            raw_data = self._target.read_memory(self.Buffer, self.Length)
+            return raw_data.decode("utf16")
+        size = int(self.Length / 2)
+        return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
+
+    @classmethod
+    def from_string(cls, s):
+        utf16_len = len(s) * 2
+        return cls(utf16_len, utf16_len, ctypes.cast(PWSTR(s), PVOID))
+
+    @classmethod
+    def from_size(cls, size):
+        buffer = ctypes.create_string_buffer(size)
+        return cls(size, size, ctypes.cast(buffer, PVOID))
+
+    def __repr__(self):
+        return windows.pycompat.urepr_encode(u"""<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self))))
+
+    def __sprint__(self):
+        try:
+            return self.__repr__()
+        except TypeError as e:
+            # Bad buffer: print raw infos
+            return """<{0} len={1} maxlen={2} buffer={3}>""".format(type(self).__name__, self.Length, self.MaximumLength, self.Buffer)
+
+LSA_UNICODE_STRING = _LSA_UNICODE_STRING
+PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+UNICODE_STRING = _LSA_UNICODE_STRING
+class _CLIENT_ID(Structure):
+    _fields_ = [
+        ("UniqueProcess", HANDLE),
+        ("UniqueThread", HANDLE),
+    ]
+CLIENT_ID = _CLIENT_ID
+PCLIENT_ID = POINTER(_CLIENT_ID)
+
+class _CLIENT_ID64(Structure):
+    _fields_ = [
+        ("UniqueProcess", ULONG64),
+        ("UniqueThread", ULONG64),
+    ]
+CLIENT_ID64 = _CLIENT_ID64
+PCLIENT_ID64 = POINTER(_CLIENT_ID64)
+
+class _CLIENT_ID32(Structure):
+    _fields_ = [
+        ("UniqueProcess", ULONG),
+        ("UniqueThread", ULONG),
+    ]
+CLIENT_ID32 = _CLIENT_ID32
+PCLIENT_ID32 = POINTER(_CLIENT_ID32)
+
 SymNone = EnumValue("SYM_TYPE", "SymNone", 0x0)
 SymCoff = EnumValue("SYM_TYPE", "SymCoff", 0x1)
 SymCv = EnumValue("SYM_TYPE", "SymCv", 0x2)
@@ -4437,6 +4554,82 @@ class _tagSTACKFRAME_EX(Structure):
 LPSTACKFRAME_EX = POINTER(_tagSTACKFRAME_EX)
 STACKFRAME_EX = _tagSTACKFRAME_EX
 
+ComputerNameNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameNetBIOS", 0x0)
+ComputerNameDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsHostname", 0x1)
+ComputerNameDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsDomain", 0x2)
+ComputerNameDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsFullyQualified", 0x3)
+ComputerNamePhysicalNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalNetBIOS", 0x4)
+ComputerNamePhysicalDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsHostname", 0x5)
+ComputerNamePhysicalDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsDomain", 0x6)
+ComputerNamePhysicalDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsFullyQualified", 0x7)
+ComputerNameMax = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameMax", 0x8)
+class _COMPUTER_NAME_FORMAT(EnumType):
+    values = [ComputerNameNetBIOS, ComputerNameDnsHostname, ComputerNameDnsDomain, ComputerNameDnsFullyQualified, ComputerNamePhysicalNetBIOS, ComputerNamePhysicalDnsHostname, ComputerNamePhysicalDnsDomain, ComputerNamePhysicalDnsFullyQualified, ComputerNameMax]
+    mapper = FlagMapper(*values)
+COMPUTER_NAME_FORMAT = _COMPUTER_NAME_FORMAT
+
+
+class _SYSTEM_PROCESS_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("NumberOfThreads", ULONG),
+        ("Reserved1", BYTE * (24)),
+        ("CreateTime", LARGE_INTEGER),
+        ("UserTime", LARGE_INTEGER),
+        ("KernelTime", LARGE_INTEGER),
+        ("ImageName", UNICODE_STRING),
+        ("BasePriority", LONG),
+        ("UniqueProcessId", HANDLE),
+        ("InheritedFromUniqueProcessId", PVOID),
+        ("HandleCount", ULONG),
+        ("Reserved4", BYTE * (4)),
+        ("Reserved5", PVOID * (1)),
+        ("PeakVirtualSize", PVOID),
+        ("VirtualSize", PVOID),
+        ("PageFaultCount", PVOID),
+        ("PeakWorkingSetSize", PVOID),
+        ("WorkingSetSize", PVOID),
+        ("QuotaPeakPagedPoolUsage", PVOID),
+        ("QuotaPagedPoolUsage", PVOID),
+        ("QuotaPeakNonPagedPoolUsage", PVOID),
+        ("QuotaNonPagedPoolUsage", PVOID),
+        ("PagefileUsage", PVOID),
+        ("PeakPagefileUsage", SIZE_T),
+        ("PrivatePageCount", SIZE_T),
+        ("Reserved6", LARGE_INTEGER * (6)),
+    ]
+PSYSTEM_PROCESS_INFORMATION = POINTER(_SYSTEM_PROCESS_INFORMATION)
+SYSTEM_PROCESS_INFORMATION = _SYSTEM_PROCESS_INFORMATION
+
+class _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION(Structure):
+    _fields_ = [
+        ("IdleTime", LARGE_INTEGER),
+        ("KernelTime", LARGE_INTEGER),
+        ("UserTime", LARGE_INTEGER),
+        ("Reserved1", LARGE_INTEGER * (2)),
+        ("Reserved2", ULONG),
+    ]
+PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = POINTER(_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION)
+SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+
+class _SYSTEM_REGISTRY_QUOTA_INFORMATION(Structure):
+    _fields_ = [
+        ("RegistryQuotaAllowed", ULONG),
+        ("RegistryQuotaUsed", ULONG),
+        ("Reserved1", PVOID),
+    ]
+PSYSTEM_REGISTRY_QUOTA_INFORMATION = POINTER(_SYSTEM_REGISTRY_QUOTA_INFORMATION)
+SYSTEM_REGISTRY_QUOTA_INFORMATION = _SYSTEM_REGISTRY_QUOTA_INFORMATION
+
+class _SYSTEM_BASIC_INFORMATION(Structure):
+    _fields_ = [
+        ("Reserved1", BYTE * (24)),
+        ("Reserved2", PVOID * (4)),
+        ("NumberOfProcessors", CHAR),
+    ]
+PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
+SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
+
 TASK_ACTION_EXEC = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_EXEC", 0x0)
 TASK_ACTION_COM_HANDLER = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_COM_HANDLER", 0x5)
 TASK_ACTION_SEND_EMAIL = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SEND_EMAIL", 0x6)
@@ -4544,6 +4737,269 @@ class TASK_RUN_FLAGS(EnumType):
     values = [TASK_RUN_NO_FLAGS, TASK_RUN_AS_SELF, TASK_RUN_IGNORE_CONSTRAINTS, TASK_RUN_USE_SESSION_ID, TASK_RUN_USER_SID]
     mapper = FlagMapper(*values)
 
+
+class _CURDIR(Structure):
+    _fields_ = [
+        ("DosPath", UNICODE_STRING),
+        ("Handle", PVOID),
+    ]
+CURDIR = _CURDIR
+PCURDIR = POINTER(_CURDIR)
+
+class _RTL_DRIVE_LETTER_CURDIR(Structure):
+    _fields_ = [
+        ("Flags", WORD),
+        ("Length", WORD),
+        ("TimeStamp", ULONG),
+        ("DosPath", UNICODE_STRING),
+    ]
+PRTL_DRIVE_LETTER_CURDIR = POINTER(_RTL_DRIVE_LETTER_CURDIR)
+RTL_DRIVE_LETTER_CURDIR = _RTL_DRIVE_LETTER_CURDIR
+
+class _RTL_USER_PROCESS_PARAMETERS(Structure):
+    _fields_ = [
+        ("MaximumLength", ULONG),
+        ("Length", ULONG),
+        ("Flags", ULONG),
+        ("DebugFlags", ULONG),
+        ("ConsoleHandle", PVOID),
+        ("ConsoleFlags", ULONG),
+        ("StandardInput", PVOID),
+        ("StandardOutput", PVOID),
+        ("StandardError", PVOID),
+        ("CurrentDirectory", CURDIR),
+        ("DllPath", UNICODE_STRING),
+        ("ImagePathName", UNICODE_STRING),
+        ("CommandLine", UNICODE_STRING),
+        ("Environment", PVOID),
+        ("StartingX", ULONG),
+        ("StartingY", ULONG),
+        ("CountX", ULONG),
+        ("CountY", ULONG),
+        ("CountCharsX", ULONG),
+        ("CountCharsY", ULONG),
+        ("FillAttribute", ULONG),
+        ("WindowFlags", ULONG),
+        ("ShowWindowFlags", ULONG),
+        ("WindowTitle", UNICODE_STRING),
+        ("DesktopInfo", UNICODE_STRING),
+        ("ShellInfo", UNICODE_STRING),
+        ("RuntimeData", UNICODE_STRING),
+        ("CurrentDirectores", RTL_DRIVE_LETTER_CURDIR * (32)),
+    ]
+PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
+RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS
+
+class _LDR_DATA_TABLE_ENTRY(Structure):
+    _fields_ = [
+        ("Reserved1", PVOID * (2)),
+        ("InMemoryOrderLinks", LIST_ENTRY),
+        ("Reserved2", PVOID * (2)),
+        ("DllBase", PVOID),
+        ("EntryPoint", PVOID),
+        ("SizeOfImage", PVOID),
+        ("FullDllName", UNICODE_STRING),
+        ("BaseDllName", UNICODE_STRING),
+        ("Reserved5", PVOID * (3)),
+        ("CheckSum", ULONG),
+        ("TimeDateStamp", ULONG),
+    ]
+LDR_DATA_TABLE_ENTRY = _LDR_DATA_TABLE_ENTRY
+PLDR_DATA_TABLE_ENTRY = POINTER(_LDR_DATA_TABLE_ENTRY)
+
+class _PEB_LDR_DATA(Structure):
+    _fields_ = [
+        ("Length", ULONG),
+        ("Initialized", BYTE),
+        ("SsHandle", PVOID),
+        ("InLoadOrderModuleList", _LIST_ENTRY),
+        ("InMemoryOrderModuleList", _LIST_ENTRY),
+        ("InInitializationOrderModuleList", _LIST_ENTRY),
+        ("EntryInProgress", PVOID),
+    ]
+PEB_LDR_DATA = _PEB_LDR_DATA
+PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
+
+class _ANON_PEB_SYSTEM_DEPENDENT_02(Union):
+    _fields_ = [
+        ("FastPebLockRoutine", PVOID),
+        ("SparePtr1", PVOID),
+        ("AtlThunkSListPtr", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_03(Union):
+    _fields_ = [
+        ("FastPebUnlockRoutine", PVOID),
+        ("SparePtr2", PVOID),
+        ("IFEOKey", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_06(Union):
+    _fields_ = [
+        ("FreeList", PVOID),
+        ("SparePebPtr0", PVOID),
+        ("ApiSetMap", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_07(Union):
+    _fields_ = [
+        ("ReadOnlySharedMemoryHeap", PVOID),
+        ("HotpatchInformation", PVOID),
+        ("SparePvoid0", PVOID),
+    ]
+
+
+class _ANON_PEB_UNION_1(Union):
+    _fields_ = [
+        ("KernelCallbackTable", PVOID),
+        ("UserSharedInfoPtr", PVOID),
+    ]
+
+
+class _ANON_PEB_UNION_2(Union):
+    _fields_ = [
+        ("ImageProcessAffinityMask", PVOID),
+        ("ActiveProcessAffinityMask", PVOID),
+    ]
+
+
+class _ANON__PEB_SUB_UNION_1(Union):
+    _fields_ = [
+        ("KernelCallbackTable", PVOID),
+        ("UserSharedInfoPtr", PVOID),
+    ]
+
+
+class _ANON__PEB_SUB_UNION_2(Union):
+    _fields_ = [
+        ("ImageProcessAffinityMask", PVOID),
+        ("ActiveProcessAffinityMask", PVOID),
+    ]
+
+class _PEB(Structure):
+    _anonymous_ = ("_SYSTEM_DEPENDENT_02","_SYSTEM_DEPENDENT_03","anon_01","_SYSTEM_DEPENDENT_06","_SYSTEM_DEPENDENT_07","anon_02")
+    _fields_ = [
+        ("Reserved1", BYTE * (2)),
+        ("BeingDebugged", BYTE),
+        ("Reserved2", BYTE * (1)),
+        ("Mutant", PVOID),
+        ("ImageBaseAddress", PVOID),
+        ("Ldr", PPEB_LDR_DATA),
+        ("ProcessParameters", PRTL_USER_PROCESS_PARAMETERS),
+        ("SubSystemData", PVOID),
+        ("ProcessHeap", PVOID),
+        ("FastPebLock", PVOID),
+        ("_SYSTEM_DEPENDENT_02", _ANON_PEB_SYSTEM_DEPENDENT_02),
+        ("_SYSTEM_DEPENDENT_03", _ANON_PEB_SYSTEM_DEPENDENT_03),
+        ("_SYSTEM_DEPENDENT_04", PVOID),
+        ("anon_01", _ANON__PEB_SUB_UNION_1),
+        ("SystemReserved", DWORD),
+        ("_SYSTEM_DEPENDENT_05", DWORD),
+        ("_SYSTEM_DEPENDENT_06", _ANON_PEB_SYSTEM_DEPENDENT_06),
+        ("TlsExpansionCounter", PVOID),
+        ("TlsBitmap", PVOID),
+        ("TlsBitmapBits", DWORD * (2)),
+        ("ReadOnlySharedMemoryBase", PVOID),
+        ("_SYSTEM_DEPENDENT_07", _ANON_PEB_SYSTEM_DEPENDENT_07),
+        ("ReadOnlyStaticServerData", PVOID),
+        ("AnsiCodePageData", PVOID),
+        ("OemCodePageData", PVOID),
+        ("UnicodeCaseTableData", PVOID),
+        ("NumberOfProcessors", DWORD),
+        ("NtGlobalFlag", DWORD),
+        ("CriticalSectionTimeout", LARGE_INTEGER),
+        ("HeapSegmentReserve", PVOID),
+        ("HeapSegmentCommit", PVOID),
+        ("HeapDeCommitTotalFreeThreshold", PVOID),
+        ("HeapDeCommitFreeBlockThreshold", PVOID),
+        ("NumberOfHeaps", DWORD),
+        ("MaximumNumberOfHeaps", DWORD),
+        ("ProcessHeaps", PVOID),
+        ("GdiSharedHandleTable", PVOID),
+        ("ProcessStarterHelper", PVOID),
+        ("GdiDCAttributeList", PVOID),
+        ("LoaderLock", PVOID),
+        ("OSMajorVersion", DWORD),
+        ("OSMinorVersion", DWORD),
+        ("OSBuildNumber", WORD),
+        ("OSCSDVersion", WORD),
+        ("OSPlatformId", DWORD),
+        ("ImageSubsystem", DWORD),
+        ("ImageSubsystemMajorVersion", DWORD),
+        ("ImageSubsystemMinorVersion", PVOID),
+        ("anon_02", _ANON__PEB_SUB_UNION_2),
+        ("GdiHandleBuffer", PVOID * (26)),
+        ("GdiHandleBuffer2", BYTE * (32)),
+        ("PostProcessInitRoutine", PVOID),
+        ("TlsExpansionBitmap", PVOID),
+        ("TlsExpansionBitmapBits", DWORD * (32)),
+        ("SessionId", PVOID),
+        ("AppCompatFlags", ULARGE_INTEGER),
+        ("AppCompatFlagsUser", ULARGE_INTEGER),
+        ("pShimData", PVOID),
+        ("AppCompatInfo", PVOID),
+        ("CSDVersion", UNICODE_STRING),
+        ("ActivationContextData", PVOID),
+        ("ProcessAssemblyStorageMap", PVOID),
+        ("SystemDefaultActivationContextData", PVOID),
+        ("SystemAssemblyStorageMap", PVOID),
+        ("MinimumStackCommit", PVOID),
+    ]
+PEB = _PEB
+PPEB = POINTER(_PEB)
+
+# Self referencing struct tricks
+class _EXCEPTION_REGISTRATION_RECORD(Structure):
+    pass
+
+_EXCEPTION_REGISTRATION_RECORD._fields_ = [
+    ("Next", POINTER(_EXCEPTION_REGISTRATION_RECORD)),
+    ("Handler", PVOID),
+]
+
+class _ANON__NT_TIB_SUB_UNION_1(Union):
+    _fields_ = [
+        ("FiberData", PVOID),
+        ("Version", ULONG),
+    ]
+
+# Self referencing struct tricks
+class _NT_TIB(Structure):
+    _anonymous_ = ("anon_01",)
+
+NT_TIB = _NT_TIB
+_NT_TIB._fields_ = [
+    ("ExceptionList", POINTER(_EXCEPTION_REGISTRATION_RECORD)),
+    ("StackBase", PVOID),
+    ("StackLimit", PVOID),
+    ("SubSystemTib", PVOID),
+    ("anon_01", _ANON__NT_TIB_SUB_UNION_1),
+    ("ArbitraryUserPointer", PVOID),
+    ("Self", POINTER(_NT_TIB)),
+]
+
+class _TEB(Structure):
+    _fields_ = [
+        ("NtTib", _NT_TIB),
+        ("EnvironmentPointer", PVOID),
+        ("ClientId", _CLIENT_ID),
+        ("ActiveRpcHandle", PVOID),
+        ("ThreadLocalStoragePointer", PVOID),
+        ("ProcessEnvironmentBlock", POINTER(_PEB)),
+        ("LastErrorValue", ULONG),
+        ("CountOfOwnedCriticalSections", ULONG),
+        ("CsrClientThread", PVOID),
+        ("Win32ThreadInfo", PVOID),
+        ("User32Reserved", ULONG * (26)),
+        ("UserReserved", ULONG * (5)),
+        ("WOW32Reserved", PVOID),
+        ("CurrentLocale", ULONG),
+        ("FpSoftwareStatusRegister", ULONG),
+    ]
+TEB = _TEB
 
 class _TRACE_PROVIDER_INFO(Structure):
     _fields_ = [
@@ -5426,264 +5882,6 @@ NT_PRODUCT_TYPE = _NT_PRODUCT_TYPE
 PNT_PRODUCT_TYPE = POINTER(_NT_PRODUCT_TYPE)
 
 
-# Self referencing struct tricks
-class _LIST_ENTRY(Structure): pass
-LIST_ENTRY = _LIST_ENTRY
-PLIST_ENTRY = POINTER(_LIST_ENTRY)
-PRLIST_ENTRY = POINTER(_LIST_ENTRY)
-_LIST_ENTRY._fields_ = [
-    ("Flink", POINTER(_LIST_ENTRY)),
-    ("Blink", POINTER(_LIST_ENTRY)),
-]
-
-class _PEB_LDR_DATA(Structure):
-    _fields_ = [
-        ("Length", ULONG),
-        ("Initialized", BYTE),
-        ("SsHandle", PVOID),
-        ("InLoadOrderModuleList", _LIST_ENTRY),
-        ("InMemoryOrderModuleList", _LIST_ENTRY),
-        ("InInitializationOrderModuleList", _LIST_ENTRY),
-        ("EntryInProgress", PVOID),
-    ]
-PEB_LDR_DATA = _PEB_LDR_DATA
-PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
-
-class _LSA_UNICODE_STRING(Structure):
-    _fields_ = [
-        ("Length", USHORT),
-        ("MaximumLength", USHORT),
-        ("Buffer", PVOID),
-    ]
-LSA_UNICODE_STRING = _LSA_UNICODE_STRING
-PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-UNICODE_STRING = _LSA_UNICODE_STRING
-
-INITIAL_LSA_UNICODE_STRING = _LSA_UNICODE_STRING
-
-class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
-    @property
-    def str(self):
-        """The python string of the LSA_UNICODE_STRING object
-
-        :type: :class:`unicode`
-        """
-        if not self.Length:
-            return ""
-        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
-            raw_data = self._target.read_memory(self.Buffer, self.Length)
-            return raw_data.decode("utf16")
-        size = int(self.Length / 2)
-        return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
-
-    @classmethod
-    def from_string(cls, s):
-        utf16_len = len(s) * 2
-        return cls(utf16_len, utf16_len, ctypes.cast(PWSTR(s), PVOID))
-
-    @classmethod
-    def from_size(cls, size):
-        buffer = ctypes.create_string_buffer(size)
-        return cls(size, size, ctypes.cast(buffer, PVOID))
-
-    def __repr__(self):
-        return windows.pycompat.urepr_encode(u"""<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self))))
-
-    def __sprint__(self):
-        try:
-            return self.__repr__()
-        except TypeError as e:
-            # Bad buffer: print raw infos
-            return """<{0} len={1} maxlen={2} buffer={3}>""".format(type(self).__name__, self.Length, self.MaximumLength, self.Buffer)
-
-LSA_UNICODE_STRING = _LSA_UNICODE_STRING
-PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
-UNICODE_STRING = _LSA_UNICODE_STRING
-class _CURDIR(Structure):
-    _fields_ = [
-        ("DosPath", UNICODE_STRING),
-        ("Handle", PVOID),
-    ]
-CURDIR = _CURDIR
-PCURDIR = POINTER(_CURDIR)
-
-class _RTL_DRIVE_LETTER_CURDIR(Structure):
-    _fields_ = [
-        ("Flags", WORD),
-        ("Length", WORD),
-        ("TimeStamp", ULONG),
-        ("DosPath", UNICODE_STRING),
-    ]
-PRTL_DRIVE_LETTER_CURDIR = POINTER(_RTL_DRIVE_LETTER_CURDIR)
-RTL_DRIVE_LETTER_CURDIR = _RTL_DRIVE_LETTER_CURDIR
-
-class _RTL_USER_PROCESS_PARAMETERS(Structure):
-    _fields_ = [
-        ("MaximumLength", ULONG),
-        ("Length", ULONG),
-        ("Flags", ULONG),
-        ("DebugFlags", ULONG),
-        ("ConsoleHandle", PVOID),
-        ("ConsoleFlags", ULONG),
-        ("StandardInput", PVOID),
-        ("StandardOutput", PVOID),
-        ("StandardError", PVOID),
-        ("CurrentDirectory", CURDIR),
-        ("DllPath", UNICODE_STRING),
-        ("ImagePathName", UNICODE_STRING),
-        ("CommandLine", UNICODE_STRING),
-        ("Environment", PVOID),
-        ("StartingX", ULONG),
-        ("StartingY", ULONG),
-        ("CountX", ULONG),
-        ("CountY", ULONG),
-        ("CountCharsX", ULONG),
-        ("CountCharsY", ULONG),
-        ("FillAttribute", ULONG),
-        ("WindowFlags", ULONG),
-        ("ShowWindowFlags", ULONG),
-        ("WindowTitle", UNICODE_STRING),
-        ("DesktopInfo", UNICODE_STRING),
-        ("ShellInfo", UNICODE_STRING),
-        ("RuntimeData", UNICODE_STRING),
-        ("CurrentDirectores", RTL_DRIVE_LETTER_CURDIR * (32)),
-    ]
-PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
-RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS
-
-class _ANON_PEB_SYSTEM_DEPENDENT_02(Union):
-    _fields_ = [
-        ("FastPebLockRoutine", PVOID),
-        ("SparePtr1", PVOID),
-        ("AtlThunkSListPtr", PVOID),
-    ]
-
-
-class _ANON_PEB_SYSTEM_DEPENDENT_03(Union):
-    _fields_ = [
-        ("FastPebUnlockRoutine", PVOID),
-        ("SparePtr2", PVOID),
-        ("IFEOKey", PVOID),
-    ]
-
-
-class _ANON_PEB_SYSTEM_DEPENDENT_06(Union):
-    _fields_ = [
-        ("FreeList", PVOID),
-        ("SparePebPtr0", PVOID),
-        ("ApiSetMap", PVOID),
-    ]
-
-
-class _ANON_PEB_SYSTEM_DEPENDENT_07(Union):
-    _fields_ = [
-        ("ReadOnlySharedMemoryHeap", PVOID),
-        ("HotpatchInformation", PVOID),
-        ("SparePvoid0", PVOID),
-    ]
-
-
-class _ANON_PEB_UNION_1(Union):
-    _fields_ = [
-        ("KernelCallbackTable", PVOID),
-        ("UserSharedInfoPtr", PVOID),
-    ]
-
-
-class _ANON_PEB_UNION_2(Union):
-    _fields_ = [
-        ("ImageProcessAffinityMask", PVOID),
-        ("ActiveProcessAffinityMask", PVOID),
-    ]
-
-
-class _ANON__PEB_SUB_UNION_1(Union):
-    _fields_ = [
-        ("KernelCallbackTable", PVOID),
-        ("UserSharedInfoPtr", PVOID),
-    ]
-
-
-class _ANON__PEB_SUB_UNION_2(Union):
-    _fields_ = [
-        ("ImageProcessAffinityMask", PVOID),
-        ("ActiveProcessAffinityMask", PVOID),
-    ]
-
-class _PEB(Structure):
-    _anonymous_ = ("_SYSTEM_DEPENDENT_02","_SYSTEM_DEPENDENT_03","anon_01","_SYSTEM_DEPENDENT_06","_SYSTEM_DEPENDENT_07","anon_02")
-    _fields_ = [
-        ("Reserved1", BYTE * (2)),
-        ("BeingDebugged", BYTE),
-        ("Reserved2", BYTE * (1)),
-        ("Mutant", PVOID),
-        ("ImageBaseAddress", PVOID),
-        ("Ldr", PPEB_LDR_DATA),
-        ("ProcessParameters", PRTL_USER_PROCESS_PARAMETERS),
-        ("SubSystemData", PVOID),
-        ("ProcessHeap", PVOID),
-        ("FastPebLock", PVOID),
-        ("_SYSTEM_DEPENDENT_02", _ANON_PEB_SYSTEM_DEPENDENT_02),
-        ("_SYSTEM_DEPENDENT_03", _ANON_PEB_SYSTEM_DEPENDENT_03),
-        ("_SYSTEM_DEPENDENT_04", PVOID),
-        ("anon_01", _ANON__PEB_SUB_UNION_1),
-        ("SystemReserved", DWORD),
-        ("_SYSTEM_DEPENDENT_05", DWORD),
-        ("_SYSTEM_DEPENDENT_06", _ANON_PEB_SYSTEM_DEPENDENT_06),
-        ("TlsExpansionCounter", PVOID),
-        ("TlsBitmap", PVOID),
-        ("TlsBitmapBits", DWORD * (2)),
-        ("ReadOnlySharedMemoryBase", PVOID),
-        ("_SYSTEM_DEPENDENT_07", _ANON_PEB_SYSTEM_DEPENDENT_07),
-        ("ReadOnlyStaticServerData", PVOID),
-        ("AnsiCodePageData", PVOID),
-        ("OemCodePageData", PVOID),
-        ("UnicodeCaseTableData", PVOID),
-        ("NumberOfProcessors", DWORD),
-        ("NtGlobalFlag", DWORD),
-        ("CriticalSectionTimeout", LARGE_INTEGER),
-        ("HeapSegmentReserve", PVOID),
-        ("HeapSegmentCommit", PVOID),
-        ("HeapDeCommitTotalFreeThreshold", PVOID),
-        ("HeapDeCommitFreeBlockThreshold", PVOID),
-        ("NumberOfHeaps", DWORD),
-        ("MaximumNumberOfHeaps", DWORD),
-        ("ProcessHeaps", PVOID),
-        ("GdiSharedHandleTable", PVOID),
-        ("ProcessStarterHelper", PVOID),
-        ("GdiDCAttributeList", PVOID),
-        ("LoaderLock", PVOID),
-        ("OSMajorVersion", DWORD),
-        ("OSMinorVersion", DWORD),
-        ("OSBuildNumber", WORD),
-        ("OSCSDVersion", WORD),
-        ("OSPlatformId", DWORD),
-        ("ImageSubsystem", DWORD),
-        ("ImageSubsystemMajorVersion", DWORD),
-        ("ImageSubsystemMinorVersion", PVOID),
-        ("anon_02", _ANON__PEB_SUB_UNION_2),
-        ("GdiHandleBuffer", PVOID * (26)),
-        ("GdiHandleBuffer2", BYTE * (32)),
-        ("PostProcessInitRoutine", PVOID),
-        ("TlsExpansionBitmap", PVOID),
-        ("TlsExpansionBitmapBits", DWORD * (32)),
-        ("SessionId", PVOID),
-        ("AppCompatFlags", ULARGE_INTEGER),
-        ("AppCompatFlagsUser", ULARGE_INTEGER),
-        ("pShimData", PVOID),
-        ("AppCompatInfo", PVOID),
-        ("CSDVersion", UNICODE_STRING),
-        ("ActivationContextData", PVOID),
-        ("ProcessAssemblyStorageMap", PVOID),
-        ("SystemDefaultActivationContextData", PVOID),
-        ("SystemAssemblyStorageMap", PVOID),
-        ("MinimumStackCommit", PVOID),
-    ]
-PEB = _PEB
-PPEB = POINTER(_PEB)
-
 class _SECURITY_ATTRIBUTES(Structure):
     _fields_ = [
         ("nLength", DWORD),
@@ -5732,47 +5930,6 @@ class _SYSTEM_PROCESS_ID_INFORMATION(Structure):
     ]
 PSYSTEM_PROCESS_ID_INFORMATION = POINTER(_SYSTEM_PROCESS_ID_INFORMATION)
 SYSTEM_PROCESS_ID_INFORMATION = _SYSTEM_PROCESS_ID_INFORMATION
-
-class _CLIENT_ID(Structure):
-    _fields_ = [
-        ("UniqueProcess", HANDLE),
-        ("UniqueThread", HANDLE),
-    ]
-CLIENT_ID = _CLIENT_ID
-PCLIENT_ID = POINTER(_CLIENT_ID)
-
-class _CLIENT_ID64(Structure):
-    _fields_ = [
-        ("UniqueProcess", ULONG64),
-        ("UniqueThread", ULONG64),
-    ]
-CLIENT_ID64 = _CLIENT_ID64
-PCLIENT_ID64 = POINTER(_CLIENT_ID64)
-
-class _CLIENT_ID32(Structure):
-    _fields_ = [
-        ("UniqueProcess", ULONG),
-        ("UniqueThread", ULONG),
-    ]
-CLIENT_ID32 = _CLIENT_ID32
-PCLIENT_ID32 = POINTER(_CLIENT_ID32)
-
-class _LDR_DATA_TABLE_ENTRY(Structure):
-    _fields_ = [
-        ("Reserved1", PVOID * (2)),
-        ("InMemoryOrderLinks", LIST_ENTRY),
-        ("Reserved2", PVOID * (2)),
-        ("DllBase", PVOID),
-        ("EntryPoint", PVOID),
-        ("SizeOfImage", PVOID),
-        ("FullDllName", UNICODE_STRING),
-        ("BaseDllName", UNICODE_STRING),
-        ("Reserved5", PVOID * (3)),
-        ("CheckSum", ULONG),
-        ("TimeDateStamp", ULONG),
-    ]
-LDR_DATA_TABLE_ENTRY = _LDR_DATA_TABLE_ENTRY
-PLDR_DATA_TABLE_ENTRY = POINTER(_LDR_DATA_TABLE_ENTRY)
 
 class _MEMORY_BASIC_INFORMATION(Structure):
     _fields_ = [
@@ -6441,7 +6598,8 @@ PRTL_OSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
 RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 
 # Self referencing struct tricks
-class _EXCEPTION_RECORD(Structure): pass
+class _EXCEPTION_RECORD(Structure):
+    pass
 EXCEPTION_RECORD = _EXCEPTION_RECORD
 PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
 _EXCEPTION_RECORD._fields_ = [
@@ -8639,7 +8797,8 @@ PCCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 PCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
 
 # Self referencing struct tricks
-class _CERT_CHAIN_CONTEXT(Structure): pass
+class _CERT_CHAIN_CONTEXT(Structure):
+    pass
 CERT_CHAIN_CONTEXT = _CERT_CHAIN_CONTEXT
 PCCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
 PCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
@@ -11004,7 +11163,9 @@ class _ANON__TRUSTEE_A_SUB_UNION_1(Union):
     ]
 
 # Self referencing struct tricks
-class _TRUSTEE_A(Structure): pass
+class _TRUSTEE_A(Structure):
+    _anonymous_ = ("anon_01",)
+
 PTRUSTEEA = POINTER(_TRUSTEE_A)
 PTRUSTEE_A = POINTER(_TRUSTEE_A)
 TRUSTEEA = _TRUSTEE_A
@@ -11038,7 +11199,9 @@ class _ANON__TRUSTEE_W_SUB_UNION_1(Union):
     ]
 
 # Self referencing struct tricks
-class _TRUSTEE_W(Structure): pass
+class _TRUSTEE_W(Structure):
+    _anonymous_ = ("anon_01",)
+
 PTRUSTEEW = POINTER(_TRUSTEE_W)
 PTRUSTEE_W = POINTER(_TRUSTEE_W)
 TRUSTEEW = _TRUSTEE_W
@@ -11063,82 +11226,6 @@ EXPLICIT_ACCESSW = _EXPLICIT_ACCESS_W
 EXPLICIT_ACCESS_W = _EXPLICIT_ACCESS_W
 PEXPLICIT_ACCESSW = POINTER(_EXPLICIT_ACCESS_W)
 PEXPLICIT_ACCESS_W = POINTER(_EXPLICIT_ACCESS_W)
-
-ComputerNameNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameNetBIOS", 0x0)
-ComputerNameDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsHostname", 0x1)
-ComputerNameDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsDomain", 0x2)
-ComputerNameDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameDnsFullyQualified", 0x3)
-ComputerNamePhysicalNetBIOS = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalNetBIOS", 0x4)
-ComputerNamePhysicalDnsHostname = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsHostname", 0x5)
-ComputerNamePhysicalDnsDomain = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsDomain", 0x6)
-ComputerNamePhysicalDnsFullyQualified = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNamePhysicalDnsFullyQualified", 0x7)
-ComputerNameMax = EnumValue("_COMPUTER_NAME_FORMAT", "ComputerNameMax", 0x8)
-class _COMPUTER_NAME_FORMAT(EnumType):
-    values = [ComputerNameNetBIOS, ComputerNameDnsHostname, ComputerNameDnsDomain, ComputerNameDnsFullyQualified, ComputerNamePhysicalNetBIOS, ComputerNamePhysicalDnsHostname, ComputerNamePhysicalDnsDomain, ComputerNamePhysicalDnsFullyQualified, ComputerNameMax]
-    mapper = FlagMapper(*values)
-COMPUTER_NAME_FORMAT = _COMPUTER_NAME_FORMAT
-
-
-class _SYSTEM_PROCESS_INFORMATION(Structure):
-    _fields_ = [
-        ("NextEntryOffset", ULONG),
-        ("NumberOfThreads", ULONG),
-        ("Reserved1", BYTE * (24)),
-        ("CreateTime", LARGE_INTEGER),
-        ("UserTime", LARGE_INTEGER),
-        ("KernelTime", LARGE_INTEGER),
-        ("ImageName", UNICODE_STRING),
-        ("BasePriority", LONG),
-        ("UniqueProcessId", HANDLE),
-        ("InheritedFromUniqueProcessId", PVOID),
-        ("HandleCount", ULONG),
-        ("Reserved4", BYTE * (4)),
-        ("Reserved5", PVOID * (1)),
-        ("PeakVirtualSize", PVOID),
-        ("VirtualSize", PVOID),
-        ("PageFaultCount", PVOID),
-        ("PeakWorkingSetSize", PVOID),
-        ("WorkingSetSize", PVOID),
-        ("QuotaPeakPagedPoolUsage", PVOID),
-        ("QuotaPagedPoolUsage", PVOID),
-        ("QuotaPeakNonPagedPoolUsage", PVOID),
-        ("QuotaNonPagedPoolUsage", PVOID),
-        ("PagefileUsage", PVOID),
-        ("PeakPagefileUsage", SIZE_T),
-        ("PrivatePageCount", SIZE_T),
-        ("Reserved6", LARGE_INTEGER * (6)),
-    ]
-PSYSTEM_PROCESS_INFORMATION = POINTER(_SYSTEM_PROCESS_INFORMATION)
-SYSTEM_PROCESS_INFORMATION = _SYSTEM_PROCESS_INFORMATION
-
-class _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION(Structure):
-    _fields_ = [
-        ("IdleTime", LARGE_INTEGER),
-        ("KernelTime", LARGE_INTEGER),
-        ("UserTime", LARGE_INTEGER),
-        ("Reserved1", LARGE_INTEGER * (2)),
-        ("Reserved2", ULONG),
-    ]
-PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = POINTER(_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION)
-SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION = _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-
-class _SYSTEM_REGISTRY_QUOTA_INFORMATION(Structure):
-    _fields_ = [
-        ("RegistryQuotaAllowed", ULONG),
-        ("RegistryQuotaUsed", ULONG),
-        ("Reserved1", PVOID),
-    ]
-PSYSTEM_REGISTRY_QUOTA_INFORMATION = POINTER(_SYSTEM_REGISTRY_QUOTA_INFORMATION)
-SYSTEM_REGISTRY_QUOTA_INFORMATION = _SYSTEM_REGISTRY_QUOTA_INFORMATION
-
-class _SYSTEM_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("Reserved1", BYTE * (24)),
-        ("Reserved2", PVOID * (4)),
-        ("NumberOfProcessors", CHAR),
-    ]
-PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
-SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
 
 class _TIME_ZONE_INFORMATION(Structure):
     _fields_ = [
@@ -12526,7 +12613,8 @@ class sockaddr_in(Structure):
 
 
 # Self referencing struct tricks
-class addrinfoW(Structure): pass
+class addrinfoW(Structure):
+    pass
 ADDRINFOW = addrinfoW
 PADDRINFOW = POINTER(addrinfoW)
 addrinfoW._fields_ = [
@@ -12601,7 +12689,8 @@ LPWSAPROTOCOL_INFOW = POINTER(_WSAPROTOCOL_INFOW)
 WSAPROTOCOL_INFOW = _WSAPROTOCOL_INFOW
 
 # Self referencing struct tricks
-class addrinfo(Structure): pass
+class addrinfo(Structure):
+    pass
 ADDRINFOA = addrinfo
 PADDRINFOA = POINTER(addrinfo)
 addrinfo._fields_ = [

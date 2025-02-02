@@ -87,7 +87,7 @@ class System(object):
 
     @property
     def logicaldrives(self):
-        """List of logical drives [C:\, ...]
+        """List of logical drives [C:\\, ...]
 
         :type: [:class:`~windows.winobject.volume.LogicalDrive`] -- A list of LogicalDrive
         """
@@ -621,7 +621,7 @@ class System(object):
 
     @staticmethod
     def enumerate_threads():
-        return [WinThread._from_THREADENTRY32(th) for th in System.enumerate_threads_generator()]
+        return [process.WinThread._from_THREADENTRY32(th) for th in System.enumerate_threads_generator()]
 
 
     def enumerate_threads_setup_owners(self):

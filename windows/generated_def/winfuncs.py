@@ -1735,6 +1735,11 @@ LoadLibraryExWParams = ((1, 'lpLibFileName'), (1, 'hFile'), (1, 'dwFlags'))
 FreeLibraryPrototype = WINFUNCTYPE(BOOL, HMODULE)
 FreeLibraryParams = ((1, 'hLibModule'),)
 
+#def RtlGetCurrentPeb():
+#    return RtlGetCurrentPeb.ctypes_function()
+RtlGetCurrentPebPrototype = WINFUNCTYPE(PVOID)
+RtlGetCurrentPebParams = ()
+
 #def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
 #    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 RegQueryValueExAPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCSTR, LPDWORD, LPDWORD, LPBYTE, LPDWORD)

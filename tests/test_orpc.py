@@ -16,7 +16,14 @@ from .pfwtest import *
 #   A second check about in parameters can be done with put_Left / get_Left or put_Visible
 def test_orpc_iexplore():
     iid = gdef.IWebBrowser2.IID
-    client, ipid = windows.rpc.stubborn.stubborn_create_instance("0002DF01-0000-0000-C000-000000000046", iid)
+    try:
+        client, ipid = windows.rpc.stubborn.stubborn_create_instance("0002DF01-0000-0000-C000-000000000046", iid)
+    except Exception as e:
+        dbginfo = getattr(e, "stubborn_info", None)
+        if dbginfo:
+            for x in dbginfo.items():
+                print(x)
+        raise
 
     # get_FullName
     addrep = client.call(iid, 38, b"", ipid=ipid)
@@ -45,7 +52,14 @@ def test_orpc_iexplore():
 def test_orpc_network_manager():
     """ORPC: Testing ORPCTHAT size using a method that takes no arguments and returns a single bytes"""
     iid = gdef.GUID.from_string("D0074FFD-570F-4A9B-8D69-199FDBA5723B")
-    client, ipid = windows.rpc.stubborn.stubborn_create_instance("A47979D2-C419-11D9-A5B4-001185AD2B89", iid)
+    try:
+        client, ipid = windows.rpc.stubborn.stubborn_create_instance("A47979D2-C419-11D9-A5B4-001185AD2B89", iid)
+    except Exception as e:
+        dbginfo = getattr(e, "stubborn_info", None)
+        if dbginfo:
+            for x in dbginfo.items():
+                print(x)
+        raise
     response = client.call(iid, 17, b"", ipid=ipid)
     assert response[0] not in (b"\x00", 0)
 

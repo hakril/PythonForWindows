@@ -31,6 +31,6 @@ def test_remote_handle_type_and_name(proc32_64):
     remote_handle = [x for x in proc32_64.handles if x.value == file_handle_vlue][0]
     assert remote_handle.pid == proc32_64.pid
     assert remote_handle.type == "File"
-    assert remote_handle.name.startswith("\Device\HarddiskVolume")
+    assert remote_handle.name.startswith(r"\Device\HarddiskVolume")
     assert remote_handle.name.endswith(TEST_FILE_FOR_HANDLE[2:]) # Remove volume letter
     assert remote_handle.infos

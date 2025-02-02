@@ -166,13 +166,13 @@ class KernelObject(object):
         raise KeyError("Could not find WinObject <{0}> under <{1}>".format(name, self.fullname))
 
     def __getitem__(self, name):
-        """Query object ``name`` from the directory, split and subquery on ``\\``::
+        r"""Query object ``name`` from the directory, split and subquery on ``\``::
 
             >>> obj
             <KernelObject "\Windows" (type="Directory")>
             >>> obj["WindowStations"]["WinSta0"]
             <KernelObject "\Windows\WindowStations" (type="Directory")>
-            >>> obj["WindowStations\\WinSta0"]
+            >>> obj[r"WindowStations\\WinSta0"]
             <KernelObject "\Windows\WindowStations" (type="Directory")>
 
         :rtype: :class:`KernelObject`
