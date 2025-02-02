@@ -171,7 +171,8 @@ class CurrentProcessReadSyswow(process.Process):
     bitness = 64
 
     def _get_handle(self):
-        return winproxy.GetCurrentProcess()
+        # return winproxy.GetCurrentProcess()
+        return 0xffffffffffffffff
 
     def __del__(self):
         pass
