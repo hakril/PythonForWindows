@@ -10344,6 +10344,67 @@ _SYSTEM_BASIC_INFORMATION
 
         :class:`CHAR`
 
+_SYSTEM_INFO
+''''''''''''
+.. class:: LPSYSTEM_INFO
+
+    Pointer to :class:`_SYSTEM_INFO`
+
+.. class:: SYSTEM_INFO
+
+    Alias for :class:`_SYSTEM_INFO`
+
+.. class:: _SYSTEM_INFO
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__SYSTEM_INFO_SUB_UNION_1`
+
+
+    .. attribute:: dwPageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpMinimumApplicationAddress
+
+        :class:`LPVOID`
+
+
+    .. attribute:: lpMaximumApplicationAddress
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwActiveProcessorMask
+
+        :class:`DWORD_PTR`
+
+
+    .. attribute:: dwNumberOfProcessors
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProcessorType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwAllocationGranularity
+
+        :class:`DWORD`
+
+
+    .. attribute:: wProcessorLevel
+
+        :class:`WORD`
+
+
+    .. attribute:: wProcessorRevision
+
+        :class:`WORD`
+
 _CURDIR
 '''''''
 .. class:: CURDIR
@@ -25790,67 +25851,6 @@ _EXPLICIT_ACCESS_W
     .. attribute:: Trustee
 
         :class:`TRUSTEE_W`
-
-_SYSTEM_INFO
-''''''''''''
-.. class:: LPSYSTEM_INFO
-
-    Pointer to :class:`_SYSTEM_INFO`
-
-.. class:: SYSTEM_INFO
-
-    Alias for :class:`_SYSTEM_INFO`
-
-.. class:: _SYSTEM_INFO
-
-    .. attribute:: DUMMYUNIONNAME
-
-        :class:`_ANON__SYSTEM_INFO_SUB_UNION_1`
-
-
-    .. attribute:: dwPageSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: lpMinimumApplicationAddress
-
-        :class:`LPVOID`
-
-
-    .. attribute:: lpMaximumApplicationAddress
-
-        :class:`LPVOID`
-
-
-    .. attribute:: dwActiveProcessorMask
-
-        :class:`DWORD_PTR`
-
-
-    .. attribute:: dwNumberOfProcessors
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwProcessorType
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwAllocationGranularity
-
-        :class:`DWORD`
-
-
-    .. attribute:: wProcessorLevel
-
-        :class:`WORD`
-
-
-    .. attribute:: wProcessorRevision
-
-        :class:`WORD`
 
 _TIME_ZONE_INFORMATION
 ''''''''''''''''''''''

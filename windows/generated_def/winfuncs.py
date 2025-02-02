@@ -1745,6 +1745,11 @@ GetProcessInformationParams = ((1, 'hProcess'), (1, 'ProcessInformationClass'), 
 SetProcessInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, PROCESS_INFORMATION_CLASS, LPVOID, DWORD)
 SetProcessInformationParams = ((1, 'hProcess'), (1, 'ProcessInformationClass'), (1, 'ProcessInformation'), (1, 'ProcessInformationSize'))
 
+#def RtlGetCurrentPeb():
+#    return RtlGetCurrentPeb.ctypes_function()
+RtlGetCurrentPebPrototype = WINFUNCTYPE(PVOID)
+RtlGetCurrentPebParams = ()
+
 #def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
 #    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 RegQueryValueExAPrototype = WINFUNCTYPE(LSTATUS, HKEY, LPCSTR, LPDWORD, LPDWORD, LPBYTE, LPDWORD)
