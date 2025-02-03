@@ -47,8 +47,17 @@ else:
 XREGISTER = {'X0', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19', 'X20', 'X21', 'X22', 'X23', 'X24', 'X25', 'X26', 'X27', 'X28', 'X29', 'X30'}
 WREGISTER = {'W0', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16', 'W17', 'W18', 'W19', 'W20', 'W21', 'W22', 'W23', 'W24', 'W25', 'W26', 'W27', 'W28', 'W29', 'W30'}
 ALL_REGISTER = XREGISTER | WREGISTER
+
 SP = "SP"
 WSP = "WSP"
+
+ZR = "XZR"
+WZR = "WZR"
+# Special register name for simple_arm64 that do not setup bitness
+# Bitness will depends on others registers in the instruction
+ZERO = "ZERO"
+
+SPECIAL_X31 = set((SP, WSP, ZR, WZR, ZERO))
 
 # Argument class
 class Shift(object):
@@ -108,9 +117,11 @@ class InstructionEncoding(object):
         self.bitness = self.BITNESS
 
     @classmethod
-    def is_register(self, arg, accept_sp):
+    def is_register(self, arg, accept_sp=False):
         arg = arg.upper()
-        return (accept_sp and (arg in [SP, WSP])) or arg in ALL_REGISTER
+        return (arg in ALL_REGISTER or
+                (accept_sp and (arg in [SP, WSP])) or
+                (not accept_sp and (arg in [ZR, WZR, ZERO])))
 
     @classmethod
     def is_imm(self, arg):
@@ -160,6 +171,15 @@ class InstructionEncoding(object):
 
     def encode_register(self, register, outsize=5):
         register = register.upper()
+        if register in SPECIAL_X31:
+            if register == ZERO:
+                pass # Special simple_arm64 value that do not setup bitness
+            elif register.startswith("W"):
+               self.setup_bitness(32)
+            else:
+                self.setup_bitness(64)
+            return self.binencode_imm(31, outsize)
+
         assert register in ALL_REGISTER
         if register in XREGISTER:
             self.setup_bitness(64)
@@ -448,6 +468,21 @@ class Movk(Instruction):
 # Todo: Instruction like "mov" that dispatch to other instruction encoding based on more precise condition on param ?
 class Orr(Instruction):
     encoding = [DataProcessingLogicalShiftedRegister.gen(opc=0b01)]
+
+
+# Meta Instruction that can dispatch to others Instruction/Encoding based on special case
+# Ex: "mov reg1, re2" -> "orr reg1, xzr, reg2"
+
+class Mov(Instruction): # VirtualInstruction ?
+    def __new__(self, *args):
+        argsdict = dict(enumerate(args)) # Like a list but allow arg.get(4)
+        if (set(argsdict) == {0, 1} and  # Only 2 args
+                InstructionEncoding.is_register(argsdict[0]) and
+                InstructionEncoding.is_register(argsdict[1])):
+            return Orr(argsdict[0], ZERO, argsdict[1])
+
+        raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, args))
+
 
 class MultipleInstr(object):
     INSTRUCTION_SIZE = 4

@@ -75,7 +75,7 @@ class CheckInstr(object):
         capres = capres_list[0]
         print("{0} {1}".format(capres.mnemonic, capres.op_str))
         if self.expected_result is not None:
-            if "{0} {1}".format(capres.mnemonic, capres.op_str) == self.expected_result:
+            if "{0} {1}".format(capres.mnemonic, capres.op_str).strip() == self.expected_result:
                 return True
             else:
                 raise AssertionError("Expected result <{0}> got <{1}>".format(self.expected_result, "{0} {1}".format(capres.mnemonic, capres.op_str)))
@@ -185,12 +185,29 @@ def test_shift_parsing():
     CheckInstr(Movz, must_fail=True)('W0', 0, "LSL #32"),
     CheckInstr(Movz, must_fail=True)('X0', 0, "ROR #32"),
 
+
+    CheckInstr(Orr)('X0', 'X18', 'XZR'),
+    # Official encoding for this in ARM64 ref
+    CheckInstr(Orr, expected_result="mov x0, x18")('X0', 'XZR', 'X18'),
+    CheckInstr(Orr, must_fail=True)('X0', 'WZR', 'X18'), # Size mismatch
+    CheckInstr(Orr, must_fail=True)('W0', 'XZR', 'W18'), # Size mismatch
+
     CheckInstr(Movk)('X0', 0x1234, "LSL #32"),
     CheckInstr(Movk)('X18', 0x5678, "LSL #48"),
 
     CheckInstr(Ret)("X0"),
-    CheckInstr(Ret, expected_result="ret ")("X30"),
+    CheckInstr(Ret, expected_result="ret")("X30"),
     CheckInstr(Ret)(),
+
+    # Virtual instruction that dispatch to something else:
+    # Ex: "mov reg1, re2" -> "orr reg1, xzr, reg2"
+
+    CheckInstr(Mov)('X0', 'X18'),
+    CheckInstr(Mov)('W0', 'W18'),
+    CheckInstr(Mov, must_fail=True)('X0', 'W18'),
+    CheckInstr(Mov, must_fail=True)('X0', 'X18', 'X12'),
+
+
 ], ids=CheckInstr.__repr__)
 def test_instruction_assembling(checkinstr):
     assert checkinstr.dotest()
