@@ -125,5 +125,5 @@ jobs:
       - name: Testing PFW execute
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
 
-      - name: Testing PFW execute
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k test_print_syswow_state -v -x -s
+      - name: Arm64 pytests
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k "test_print_syswow_state or teb or peb" -v -x -s
