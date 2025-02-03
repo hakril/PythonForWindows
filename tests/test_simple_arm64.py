@@ -25,8 +25,6 @@ pytestmark = pytest.mark.usefixtures("need_capstone")
 def disas(x):
     return list(disassembleur.disasm(x, 0))
 
-mnemonic_name_exception = {'movabs': 'mov'}
-
 
 class CheckInstr(object):
     def __init__(self, instr_to_test, expected_result=None, immediat_accepted=None, must_fail=None, debug=False):
@@ -88,8 +86,7 @@ class CheckInstr(object):
 
     def compare_mnemo(self, capres):
         expected = self.instr_to_test.__name__.lower()
-        cap_mnemo = mnemonic_name_exception.get(str(capres.mnemonic), str(capres.mnemonic))
-        if expected != cap_mnemo:
+        if expected != capres.mnemonic:
             raise AssertionError("Expected menmo {0} got {1}".format(expected, str(capres.mnemonic)))
         return True
 
@@ -128,13 +125,14 @@ class CheckInstr(object):
             if not (shift.type == "LSL" and shift.value == 0):
                 raise ValueError("Non consomated argument: {0} (probable non-encoded shift)".format(nextarg))
 
-    SHIFT_TYPE_TO_CAPSTONE = {
-        "LSL": capstone.arm64.ARM64_SFT_LSL,
-        "LSR": capstone.arm64.ARM64_SFT_LSR,
-        "ASR": capstone.arm64.ARM64_SFT_ASR,
-        "ROR": capstone.arm64.ARM64_SFT_ROR,
-        # "MSL": apstone.arm64.ARM64_SFT_MSL # Not yet used in PFW
-    }
+    if capstone:
+        SHIFT_TYPE_TO_CAPSTONE = {
+            "LSL": capstone.arm64.ARM64_SFT_LSL,
+            "LSR": capstone.arm64.ARM64_SFT_LSR,
+            "ASR": capstone.arm64.ARM64_SFT_ASR,
+            "ROR": capstone.arm64.ARM64_SFT_ROR,
+            # "MSL": apstone.arm64.ARM64_SFT_MSL # Not yet used in PFW
+        }
 
     def compare_shift(self, shiftstr, cap_shift):
         shift = Shift.parse(shiftstr)
