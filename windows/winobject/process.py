@@ -12,6 +12,7 @@ from collections import namedtuple
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
+import windows.native_exec.simple_arm64 as arm64
 import windows.remotectypes as rctypes
 import windows.generated_def as gdef
 
@@ -610,7 +611,7 @@ class CurrentThread(Thread):
     get_teb_code_by_architecture = {
         gdef.IMAGE_FILE_MACHINE_I386: x86.assemble("mov eax, fs:[0x18]; ret"),
         gdef.IMAGE_FILE_MACHINE_AMD64: x64.assemble("mov rax, gs:[0x30]; ret"),
-        gdef.IMAGE_FILE_MACHINE_ARM64: x64.assemble("mov x0, x18; ret")
+        gdef.IMAGE_FILE_MACHINE_ARM64: arm64.assemble("mov x0, x18; ret")
     }
 
     @property #It's not a fixedproperty because executing thread might change
