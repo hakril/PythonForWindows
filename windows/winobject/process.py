@@ -95,9 +95,7 @@ class Process(utils.AutoHandle):
 
         :returns: :class:`int` -- 32 or 64
 		"""
-        if windows.system.bitness == 32:
-            return 32
-        if self.is_wow_64:
+        if windows.system.bitness == 32 or self.is_wow_64:
             return 32
         return 64
 
@@ -609,10 +607,10 @@ class Thread(utils.AutoHandle):
 class CurrentThread(Thread):
     """The current thread"""
 
-    get_teb_code_by_bitness = {
-        32: x86.assemble("mov eax, fs:[0x18]; ret"),
-        64: x64.assemble("mov rax, gs:[0x30]; ret")
-
+    get_teb_code_by_architecture = {
+        gdef.IMAGE_FILE_MACHINE_I386: x86.assemble("mov eax, fs:[0x18]; ret"),
+        gdef.IMAGE_FILE_MACHINE_AMD64: x64.assemble("mov rax, gs:[0x30]; ret"),
+        gdef.IMAGE_FILE_MACHINE_ARM64: x64.assemble("mov x0, x18; ret")
     }
 
     @property #It's not a fixedproperty because executing thread might change
@@ -625,7 +623,7 @@ class CurrentThread(Thread):
 
     @property #It's not a fixedproperty because executing thread might change
     def teb_base(self):
-        get_teb_base_code = self.get_teb_code_by_bitness[self.owner.bitness]
+        get_teb_base_code = self.get_teb_code_by_architecture[self.owner.architecture]
         return self.owner.execute(get_teb_base_code)
 
     @property

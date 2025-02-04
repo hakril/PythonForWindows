@@ -3,6 +3,7 @@ import windows
 import windows.hooks as hooks
 import windows.utils as utils
 
+import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 from windows.utils import transform_ctypes_fields
 import windows.remotectypes as rctypes
@@ -38,9 +39,9 @@ def get_pe_bitness(baseaddr, target):
     # We can force bitness as the field we access are bitness-independant
     pe = GetPEFile(baseaddr, target, force_bitness=32)
     machine = pe.get_NT_HEADER().FileHeader.Machine
-    if machine == 0x14c:
+    if machine == gdef.IMAGE_FILE_MACHINE_I386:
         return 32
-    elif machine == 0x8664:
+    elif machine in (gdef.IMAGE_FILE_MACHINE_AMD64, gdef.IMAGE_FILE_MACHINE_ARM64):
         return 64
     else:
         raise ValueError("Unknow PE target machine <0x{0:x}>".format(machine))
