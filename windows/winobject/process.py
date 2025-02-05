@@ -925,6 +925,9 @@ class WinThread(Thread):
         # - Want the TEB of a 64b process
         # - Want the TEB64 of a Wowprocess
         # It's the same code for both
+        if windows.current_process._is_x86_on_arm64 and not self.bitness == 32:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
         if windows.current_process.is_wow_64:
             restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
             ressize = (ctypes.sizeof(restype))
