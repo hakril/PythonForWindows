@@ -122,6 +122,25 @@ class Process(utils.AutoHandle):
             return gdef.IMAGE_FILE_MACHINE_I386
         return gdef.IMAGE_FILE_MACHINE_AMD64
 
+    @utils.fixedproperty
+    def _is_x86_on_arm64(self):
+        return (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386)
+
+    @utils.fixedproperty
+    def _is_x86_on_x64(self):
+        return (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_AMD64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386)
+
+    @utils.fixedproperty
+    def _is_native_architecture(self):
+        return ((windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_INTEL and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386) or
+                (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_AMD64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_AMD64) or
+                (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_ARM64))
+
     @utils.fixedpropety
     def limited_handle(self):
         if windows.system.version[0] <= 5:
@@ -1186,26 +1205,27 @@ class WinProcess(Process):
 
     @utils.fixedproperty
     def peb_addr(self):
-        """The address of the PEB
+        """The address of the PEB.
 
             :type: :class:`int`
 		"""
-        if windows.current_process.bitness == 32 and self.bitness == 64:
+        if windows.current_process._is_x86_on_arm64 and not self.bitness == 32:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
+        if windows.current_process.bitness == 32 and self.bitness == 64: # Intel to Intel
             x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(x))()
-            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, gdef.ProcessBasicInformation, ProcessInformation=data)
             peb_offset = x.PebBaseAddress.offset
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
         elif windows.current_process.bitness == 64 and self.bitness == 32:
-            information_type = 26
             y = ULONGLONG()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, byref(y), sizeof(y))
+            winproxy.NtQueryInformationProcess(self.handle, gdef.ProcessWow64Information, byref(y), sizeof(y))
             peb_addr = y.value
         else:
-            information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            winproxy.NtQueryInformationProcess(self.handle, gdef.ProcessBasicInformation, x)
             peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
         if peb_addr is None:
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
