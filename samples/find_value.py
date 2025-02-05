@@ -18,6 +18,11 @@ def search_name_in_enum(target):
     for name, enum in meta.enums_walker():
         if match(target, name):
             print(name, enum)
+        if not issubclass(enum, gdef.EnumType):
+                continue
+        for enumvalue in enum.values:
+            if match(target, enumvalue.name):
+                print("Enum <{0!r}>".format(enumvalue))
 
 def search_name_in_struct(target):
     for name, struct in meta.structs_walker():
@@ -77,6 +82,13 @@ def search_value(target):
     for name, windef in meta.errors_walker():
         if target == windef:
             print(repr(windef))
+
+    for name, enum in meta.enums_walker():
+        if not issubclass(enum, gdef.EnumType):
+                continue
+        for enumvalue in enum.values:
+            if target == enumvalue:
+                print("Enum <{0!r}>".format(enumvalue))
 
 parser = argparse.ArgumentParser(prog=__file__)
 parser.add_argument('target', help='The name or value to research in PythonForWindows generated definition')
