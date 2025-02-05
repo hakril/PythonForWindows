@@ -927,7 +927,7 @@ class WinThread(Thread):
         # - Want the TEB of a 64b process
         # - Want the TEB64 of a Wowprocess
         # It's the same code for both
-        if windows.current_process._is_x86_on_arm64 and not self.owner.bitness == 32:
+        if windows.current_process._is_x86_on_arm64:
             raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
 
         if windows.current_process.is_wow_64:
@@ -1034,8 +1034,6 @@ class WinThread(Thread):
 
     @staticmethod
     def _get_thread_id_manual(handle):
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
-            raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
         res = THREAD_BASIC_INFORMATION()
         windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         id2 = res.ClientId.UniqueThread
