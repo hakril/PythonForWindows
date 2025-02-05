@@ -126,4 +126,4 @@ jobs:
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
 
       - name: Arm64 pytests
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k "test_print_syswow_state or teb or peb" -v -s
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -v -s
