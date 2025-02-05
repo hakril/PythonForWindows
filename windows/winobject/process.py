@@ -780,6 +780,8 @@ class CurrentProcess(Process):
 		"""
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
+        if windows.current_process._is_x86_on_arm64:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
         return windows.syswow64.get_current_process_syswow_peb()
 
     # TODO: use ctypes.string_at / ctypes.wstring_at for read_string / read_wstring ?
@@ -1252,6 +1254,10 @@ class WinProcess(Process):
     def peb_syswow_addr(self):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
+
+        if windows.current_process._is_x86_on_arm64:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
         if windows.current_process.bitness == 64:
             information_type = 0
             x = PROCESS_BASIC_INFORMATION()
