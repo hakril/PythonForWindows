@@ -14,22 +14,22 @@ def test_print_syswow_state():
     import platform
     print("")
     env = windows.system.environ
-    print(f"{platform.machine()=}")
-    print(f"{platform.architecture()=}")
-    print(f"{windows.system.bitness=}")
-    print(f"{windows.system.architecture=}")
-    print(f"{windows.current_process.bitness=}")
-    print(f"{windows.current_process.architecture=}")
-    print(f"{env['PROCESSOR_ARCHITECTURE']=}")
-    print(f"{env.get('PROCESSOR_ARCHITEW6432')=}")
+    print("platform.machine()={0}".format(platform.machine()))
+    print("platform.architecture()={0}".format(platform.architecture()))
+    print("windows.system.bitness={0}".format(windows.system.bitness))
+    print("windows.system.architecture={0}".format(windows.system.architecture))
+    print("windows.current_process.bitness={0}".format(windows.current_process.bitness))
+    print("windows.current_process.architecture={0}".format(windows.current_process.architecture))
+    print("env['PROCESSOR_ARCHITECTURE']={0}".format(env['PROCESSOR_ARCHITECTURE']))
+    print("env.get('PROCESSOR_ARCHITEW6432')={0}".format(env.get('PROCESSOR_ARCHITEW6432')))
 
     print("")
     print("IsWow64Process2")
     processMachine = gdef.USHORT()
     nativeMachine = gdef.USHORT()
     windows.winproxy.IsWow64Process2(windows.current_process.handle, processMachine, nativeMachine)
-    print(f"{hex(processMachine.value)=}")
-    print(f"{hex(nativeMachine.value)=}")
+    print("hex(processMachine.value)={0}".format(hex(processMachine.value)))
+    print("hex(nativeMachine.value)={0}".format(hex(nativeMachine.value)))
 
 
 @process_syswow_only
