@@ -3595,6 +3595,34 @@ class _IMAGE_LOAD_CONFIG_DIRECTORY64(Structure):
 IMAGE_LOAD_CONFIG_DIRECTORY64 = _IMAGE_LOAD_CONFIG_DIRECTORY64
 PIMAGE_LOAD_CONFIG_DIRECTORY64 = POINTER(_IMAGE_LOAD_CONFIG_DIRECTORY64)
 
+ProcThreadAttributeParentProcess = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeParentProcess", 0x0)
+ProcThreadAttributeHandleList = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeHandleList", 0x2)
+ProcThreadAttributeGroupAffinity = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeGroupAffinity", 0x3)
+ProcThreadAttributePreferredNode = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributePreferredNode", 0x4)
+ProcThreadAttributeIdealProcessor = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeIdealProcessor", 0x5)
+ProcThreadAttributeUmsThread = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeUmsThread", 0x6)
+ProcThreadAttributeMitigationPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMitigationPolicy", 0x7)
+ProcThreadAttributeSecurityCapabilities = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSecurityCapabilities", 0x9)
+ProcThreadAttributeProtectionLevel = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeProtectionLevel", 0xb)
+ProcThreadAttributeJobList = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeJobList", 0xd)
+ProcThreadAttributeChildProcessPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeChildProcessPolicy", 0xe)
+ProcThreadAttributeAllApplicationPackagesPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeAllApplicationPackagesPolicy", 0xf)
+ProcThreadAttributeWin32kFilter = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeWin32kFilter", 0x10)
+ProcThreadAttributeSafeOpenPromptOriginClaim = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSafeOpenPromptOriginClaim", 0x11)
+ProcThreadAttributeDesktopAppPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeDesktopAppPolicy", 0x12)
+ProcThreadAttributePseudoConsole = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributePseudoConsole", 0x16)
+ProcThreadAttributeMitigationAuditPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMitigationAuditPolicy", 0x18)
+ProcThreadAttributeMachineType = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMachineType", 0x19)
+ProcThreadAttributeComponentFilter = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeComponentFilter", 0x1a)
+ProcThreadAttributeEnableOptionalXStateFeatures = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeEnableOptionalXStateFeatures", 0x1b)
+ProcThreadAttributeTrustedApp = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeTrustedApp", 0x1d)
+ProcThreadAttributeSveVectorLength = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSveVectorLength", 0x1e)
+class _PROC_THREAD_ATTRIBUTE_NUM(EnumType):
+    values = [ProcThreadAttributeParentProcess, ProcThreadAttributeHandleList, ProcThreadAttributeGroupAffinity, ProcThreadAttributePreferredNode, ProcThreadAttributeIdealProcessor, ProcThreadAttributeUmsThread, ProcThreadAttributeMitigationPolicy, ProcThreadAttributeSecurityCapabilities, ProcThreadAttributeProtectionLevel, ProcThreadAttributeJobList, ProcThreadAttributeChildProcessPolicy, ProcThreadAttributeAllApplicationPackagesPolicy, ProcThreadAttributeWin32kFilter, ProcThreadAttributeSafeOpenPromptOriginClaim, ProcThreadAttributeDesktopAppPolicy, ProcThreadAttributePseudoConsole, ProcThreadAttributeMitigationAuditPolicy, ProcThreadAttributeMachineType, ProcThreadAttributeComponentFilter, ProcThreadAttributeEnableOptionalXStateFeatures, ProcThreadAttributeTrustedApp, ProcThreadAttributeSveVectorLength]
+    mapper = FlagMapper(*values)
+PROC_THREAD_ATTRIBUTE_NUM = _PROC_THREAD_ATTRIBUTE_NUM
+
+
 MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
 MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
 MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)

@@ -6,7 +6,8 @@ from ..error import (fail_on_zero,
                         no_error_check,
                         result_is_handle,
                         succeed_on_zero,
-                        fail_on_minus_one)
+                        fail_on_minus_one,
+                        WinproxyError)
 
 
 class Kernel32Proxy(ApiProxy):

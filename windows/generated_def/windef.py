@@ -24,6 +24,22 @@ def CTL_CODE(DeviceType, Function, Method, Access):
 
 def HRESULT_FACILITY(hr):
     return (((hr) >> 16) & 0x1fff)
+
+# https://github.com/microsoft/win32metadata/blob/6af96d8470751e13a4e3f579f84b7b8b3ca398e1/generation/WinSDK/RecompiledIdlHeaders/um/WinBase.h#L3562
+# Original MACRO:
+
+#define ProcThreadAttributeValue(Number, Thread, Input, Additive) \
+#      (((Number) & PROC_THREAD_ATTRIBUTE_NUMBER) | \
+#       ((Thread != FALSE) ? PROC_THREAD_ATTRIBUTE_THREAD : 0) | \
+#       ((Input != FALSE) ? PROC_THREAD_ATTRIBUTE_INPUT : 0) | \
+#       ((Additive != FALSE) ? PROC_THREAD_ATTRIBUTE_ADDITIVE : 0))
+
+def ProcThreadAttributeValue(Number, Thread, Input, Additive):
+    return ((Number & PROC_THREAD_ATTRIBUTE_NUMBER) |
+             (Thread and PROC_THREAD_ATTRIBUTE_THREAD) |
+             (Input and PROC_THREAD_ATTRIBUTE_INPUT) |
+             (Additive and PROC_THREAD_ATTRIBUTE_ADDITIVE))
+
 from .ntstatus import *
 from .winerror import *
 BG_JOB_ENUM_ALL_USERS = make_flag("BG_JOB_ENUM_ALL_USERS", 0x0001)
@@ -1169,6 +1185,52 @@ PIPE_UNLIMITED_INSTANCES = make_flag("PIPE_UNLIMITED_INSTANCES", 255)
 NMPWAIT_WAIT_FOREVER = make_flag("NMPWAIT_WAIT_FOREVER", 0xffffffff)
 NMPWAIT_NOWAIT = make_flag("NMPWAIT_NOWAIT", 0x00000001)
 NMPWAIT_USE_DEFAULT_WAIT = make_flag("NMPWAIT_USE_DEFAULT_WAIT", 0x00000000)
+ProcThreadAttributeParentProcess = make_flag("ProcThreadAttributeParentProcess", 0)
+ProcThreadAttributeExtendedFlags = make_flag("ProcThreadAttributeExtendedFlags", 1)
+ProcThreadAttributeHandleList = make_flag("ProcThreadAttributeHandleList", 2)
+ProcThreadAttributeGroupAffinity = make_flag("ProcThreadAttributeGroupAffinity", 3)
+ProcThreadAttributePreferredNode = make_flag("ProcThreadAttributePreferredNode", 4)
+ProcThreadAttributeIdealProcessor = make_flag("ProcThreadAttributeIdealProcessor", 5)
+ProcThreadAttributeUmsThread = make_flag("ProcThreadAttributeUmsThread", 6)
+ProcThreadAttributeMitigationPolicy = make_flag("ProcThreadAttributeMitigationPolicy", 7)
+ProcThreadAttributePackageFullName = make_flag("ProcThreadAttributePackageFullName", 8)
+ProcThreadAttributeSecurityCapabilities = make_flag("ProcThreadAttributeSecurityCapabilities", 9)
+ProcThreadAttributeConsoleReference = make_flag("ProcThreadAttributeConsoleReference", 10)
+ProcThreadAttributeProtectionLevel = make_flag("ProcThreadAttributeProtectionLevel", 11)
+ProcThreadAttributeOsMaxVersionTested = make_flag("ProcThreadAttributeOsMaxVersionTested", 12)
+ProcThreadAttributeJobList = make_flag("ProcThreadAttributeJobList", 13)
+ProcThreadAttributeChildProcessPolicy = make_flag("ProcThreadAttributeChildProcessPolicy", 14)
+ProcThreadAttributeAllApplicationPackagesPolicy = make_flag("ProcThreadAttributeAllApplicationPackagesPolicy", 15)
+ProcThreadAttributeWin32kFilter = make_flag("ProcThreadAttributeWin32kFilter", 16)
+ProcThreadAttributeSafeOpenPromptOriginClaim = make_flag("ProcThreadAttributeSafeOpenPromptOriginClaim", 17)
+ProcThreadAttributeDesktopAppPolicy = make_flag("ProcThreadAttributeDesktopAppPolicy", 18)
+ProcThreadAttributeBnoIsolation = make_flag("ProcThreadAttributeBnoIsolation", 19)
+ProcThreadAttributePseudoConsole = make_flag("ProcThreadAttributePseudoConsole", 22)
+ProcThreadAttributeIsolationManifest = make_flag("ProcThreadAttributeIsolationManifest", 23)
+ProcThreadAttributeMitigationAuditPolicy = make_flag("ProcThreadAttributeMitigationAuditPolicy", 24)
+ProcThreadAttributeMachineType = make_flag("ProcThreadAttributeMachineType", 25)
+ProcThreadAttributeComponentFilter = make_flag("ProcThreadAttributeComponentFilter", 26)
+ProcThreadAttributeEnableOptionalXStateFeatures = make_flag("ProcThreadAttributeEnableOptionalXStateFeatures", 27)
+ProcThreadAttributeCreateStore = make_flag("ProcThreadAttributeCreateStore", 28)
+ProcThreadAttributeTrustedApp = make_flag("ProcThreadAttributeTrustedApp", 29)
+ProcThreadAttributeSveVectorLength = make_flag("ProcThreadAttributeSveVectorLength", 30)
+PROC_THREAD_ATTRIBUTE_NUMBER = make_flag("PROC_THREAD_ATTRIBUTE_NUMBER", 0x0000FFFF)
+PROC_THREAD_ATTRIBUTE_THREAD = make_flag("PROC_THREAD_ATTRIBUTE_THREAD", 0x00010000)
+PROC_THREAD_ATTRIBUTE_INPUT = make_flag("PROC_THREAD_ATTRIBUTE_INPUT", 0x00020000)
+PROC_THREAD_ATTRIBUTE_ADDITIVE = make_flag("PROC_THREAD_ATTRIBUTE_ADDITIVE", 0x00040000)
+PROC_THREAD_ATTRIBUTE_PARENT_PROCESS = make_flag("PROC_THREAD_ATTRIBUTE_PARENT_PROCESS", ProcThreadAttributeValue ( ProcThreadAttributeParentProcess , False , True , False ))
+PROC_THREAD_ATTRIBUTE_HANDLE_LIST = make_flag("PROC_THREAD_ATTRIBUTE_HANDLE_LIST", ProcThreadAttributeValue ( ProcThreadAttributeHandleList , False , True , False ))
+PROC_THREAD_ATTRIBUTE_GROUP_AFFINITY = make_flag("PROC_THREAD_ATTRIBUTE_GROUP_AFFINITY", ProcThreadAttributeValue ( ProcThreadAttributeGroupAffinity , True , True , False ))
+PROC_THREAD_ATTRIBUTE_PREFERRED_NODE = make_flag("PROC_THREAD_ATTRIBUTE_PREFERRED_NODE", ProcThreadAttributeValue ( ProcThreadAttributePreferredNode , False , True , False ))
+PROC_THREAD_ATTRIBUTE_IDEAL_PROCESSOR = make_flag("PROC_THREAD_ATTRIBUTE_IDEAL_PROCESSOR", ProcThreadAttributeValue ( ProcThreadAttributeIdealProcessor , True , True , False ))
+PROC_THREAD_ATTRIBUTE_UMS_THREAD = make_flag("PROC_THREAD_ATTRIBUTE_UMS_THREAD", ProcThreadAttributeValue ( ProcThreadAttributeUmsThread , True , True , False ))
+PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY = make_flag("PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY", ProcThreadAttributeValue ( ProcThreadAttributeMitigationPolicy , False , True , False ))
+PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES = make_flag("PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES", ProcThreadAttributeValue ( ProcThreadAttributeSecurityCapabilities , False , True , False ))
+PROC_THREAD_ATTRIBUTE_PROTECTION_LEVEL = make_flag("PROC_THREAD_ATTRIBUTE_PROTECTION_LEVEL", ProcThreadAttributeValue ( ProcThreadAttributeProtectionLevel , False , True , False ))
+PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE = make_flag("PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE", ProcThreadAttributeValue ( ProcThreadAttributePseudoConsole , False , True , False ))
+PROC_THREAD_ATTRIBUTE_MACHINE_TYPE = make_flag("PROC_THREAD_ATTRIBUTE_MACHINE_TYPE", ProcThreadAttributeValue ( ProcThreadAttributeMachineType , False , True , False ))
+PROC_THREAD_ATTRIBUTE_ENABLE_OPTIONAL_XSTATE_FEATURES = make_flag("PROC_THREAD_ATTRIBUTE_ENABLE_OPTIONAL_XSTATE_FEATURES", ProcThreadAttributeValue ( ProcThreadAttributeEnableOptionalXStateFeatures , True , True , False ))
+PROC_THREAD_ATTRIBUTE_SVE_VECTOR_LENGTH = make_flag("PROC_THREAD_ATTRIBUTE_SVE_VECTOR_LENGTH", ProcThreadAttributeValue ( ProcThreadAttributeSveVectorLength , False , True , False ))
 PROCESSOR_INTEL_386 = make_flag("PROCESSOR_INTEL_386", 386)
 PROCESSOR_INTEL_486 = make_flag("PROCESSOR_INTEL_486", 486)
 PROCESSOR_INTEL_PENTIUM = make_flag("PROCESSOR_INTEL_PENTIUM", 586)

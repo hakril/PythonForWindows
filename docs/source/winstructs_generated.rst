@@ -29438,6 +29438,81 @@ _KEY_INFORMATION_CLASS
 
     .. attribute:: MaxKeyInfoClass(10)
 
+_PROC_THREAD_ATTRIBUTE_NUM
+''''''''''''''''''''''''''
+.. class:: PROC_THREAD_ATTRIBUTE_NUM
+
+    Alias for :class:`_PROC_THREAD_ATTRIBUTE_NUM`
+
+
+.. class:: _PROC_THREAD_ATTRIBUTE_NUM
+
+
+    .. attribute:: ProcThreadAttributeParentProcess(0)
+
+
+    .. attribute:: ProcThreadAttributeHandleList(2)
+
+
+    .. attribute:: ProcThreadAttributeGroupAffinity(3)
+
+
+    .. attribute:: ProcThreadAttributePreferredNode(4)
+
+
+    .. attribute:: ProcThreadAttributeIdealProcessor(5)
+
+
+    .. attribute:: ProcThreadAttributeUmsThread(6)
+
+
+    .. attribute:: ProcThreadAttributeMitigationPolicy(7)
+
+
+    .. attribute:: ProcThreadAttributeSecurityCapabilities(9)
+
+
+    .. attribute:: ProcThreadAttributeProtectionLevel(11)
+
+
+    .. attribute:: ProcThreadAttributeJobList(13)
+
+
+    .. attribute:: ProcThreadAttributeChildProcessPolicy(14)
+
+
+    .. attribute:: ProcThreadAttributeAllApplicationPackagesPolicy(15)
+
+
+    .. attribute:: ProcThreadAttributeWin32kFilter(16)
+
+
+    .. attribute:: ProcThreadAttributeSafeOpenPromptOriginClaim(17)
+
+
+    .. attribute:: ProcThreadAttributeDesktopAppPolicy(18)
+
+
+    .. attribute:: ProcThreadAttributePseudoConsole(22)
+
+
+    .. attribute:: ProcThreadAttributeMitigationAuditPolicy(24)
+
+
+    .. attribute:: ProcThreadAttributeMachineType(25)
+
+
+    .. attribute:: ProcThreadAttributeComponentFilter(26)
+
+
+    .. attribute:: ProcThreadAttributeEnableOptionalXStateFeatures(27)
+
+
+    .. attribute:: ProcThreadAttributeTrustedApp(29)
+
+
+    .. attribute:: ProcThreadAttributeSveVectorLength(30)
+
 _MEMORY_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: MEMORY_INFORMATION_CLASS

@@ -156,6 +156,9 @@ def test_HRESULT_FACILITY_macro():
     # RPC_E_INVALID_HEADER(0x80010111)
     assert gdef.HRESULT_FACILITY(gdef.RPC_E_INVALID_HEADER) == gdef.FACILITY_RPC == 1
 
+def test_ProcThreadAttributeValue_results():
+    assert gdef.PROC_THREAD_ATTRIBUTE_PARENT_PROCESS == 0x20000
+    assert gdef.PROC_THREAD_ATTRIBUTE_MACHINE_TYPE   == 0x20019
 
 # typedef struct _DnsRecordFlags
 # {

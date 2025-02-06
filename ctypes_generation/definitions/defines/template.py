@@ -24,3 +24,19 @@ def CTL_CODE(DeviceType, Function, Method, Access):
 
 def HRESULT_FACILITY(hr):
     return (((hr) >> 16) & 0x1fff)
+
+# https://github.com/microsoft/win32metadata/blob/6af96d8470751e13a4e3f579f84b7b8b3ca398e1/generation/WinSDK/RecompiledIdlHeaders/um/WinBase.h#L3562
+# Original MACRO:
+
+#define ProcThreadAttributeValue(Number, Thread, Input, Additive) \
+#      (((Number) & PROC_THREAD_ATTRIBUTE_NUMBER) | \
+#       ((Thread != FALSE) ? PROC_THREAD_ATTRIBUTE_THREAD : 0) | \
+#       ((Input != FALSE) ? PROC_THREAD_ATTRIBUTE_INPUT : 0) | \
+#       ((Additive != FALSE) ? PROC_THREAD_ATTRIBUTE_ADDITIVE : 0))
+
+def ProcThreadAttributeValue(Number, Thread, Input, Additive):
+    return ((Number & PROC_THREAD_ATTRIBUTE_NUMBER) |
+             (Thread and PROC_THREAD_ATTRIBUTE_THREAD) |
+             (Input and PROC_THREAD_ATTRIBUTE_INPUT) |
+             (Additive and PROC_THREAD_ATTRIBUTE_ADDITIVE))
+
