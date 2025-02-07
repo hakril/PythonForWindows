@@ -215,6 +215,11 @@ def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStac
     return CreateRemoteThread.ctypes_function(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
 
 @Kernel32Proxy()
+def CreateRemoteThreadEx(hProcess, lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpAttributeList=None, lpThreadId=None):
+   return CreateRemoteThreadEx.ctypes_function(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpAttributeList, lpThreadId)
+
+
+@Kernel32Proxy()
 def GetThreadContext(hThread, lpContext):
     # TODO: RM ME IF TEST PASS
     # if lpContext is None:
@@ -661,12 +666,7 @@ def FindNextChangeNotification(hChangeHandle):
 
 @Kernel32Proxy()
 def FindCloseChangeNotification(hChangeHandle):
-    return FindCloseChange
-    Notification.ctypes_function(hChangeHandle)
-
-@Kernel32Proxy()
-def FindNextChangeNotification(hChangeHandle):
-    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+    return FindCloseChangeNotification.ctypes_function(hChangeHandle)
 
 @Kernel32Proxy()
 def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine):
