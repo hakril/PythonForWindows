@@ -1172,7 +1172,7 @@ class WinProcess(Process):
         # And we can asume we known what we are doing -> So no safeguard ;)
         thread_handle = HANDLE()
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            if self._is_x86_on_arm64():
+            if self._is_x86_on_arm64:
                 raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             windows.syswow64.NtCreateThreadEx_32_to_64(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
         else:
