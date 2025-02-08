@@ -1168,11 +1168,16 @@ class WinProcess(Process):
 
             :rtype: :class:`WinThread` or :class:`DeadThread`
 		"""
+        # We are using NtCreateThreadEx as  its more permissive about cross-bitness / cross-architecture
+        # And we can asume we known what we are doing -> So no safeguard ;)
+        thread_handle = HANDLE()
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            thread_handle = HANDLE()
+            if self._is_x86_on_arm64():
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             windows.syswow64.NtCreateThreadEx_32_to_64(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
-            return WinThread._from_handle(thread_handle.value)
-        return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
+        else:
+            windows.winproxy.NtCreateThreadEx(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
+        return WinThread._from_handle(thread_handle.value)
 
     def load_library(self, dll_path):
         """Load the library in remote process
