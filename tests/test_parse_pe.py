@@ -16,8 +16,16 @@ def pe(request):
 
     pop_proc = request.param
     proc = pop_proc()
-    time.sleep(0.01)
-    yield proc.peb.modules[2].pe
+    for i in range(10):
+        try:
+            time.sleep(0.1)
+            yield proc.peb.modules[2].pe
+            break
+        except ValueError:
+            if i == 9:
+                # Last change failed
+                raise
+            continue # PEB.Ldr not ready yet
     proc.exit(0)
 
 PE_DOTNET32_DLL_NAME = "test_pe_dotnet32.dll"
