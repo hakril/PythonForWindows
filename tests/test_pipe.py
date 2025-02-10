@@ -33,6 +33,8 @@ with windows.pipe.create("{pipe}") as np:
 
 @python_injection
 def test_pipe_echo_server(proc32_64):
+    # Verify that injection / load of Pfw in remote works with a first safe stub
+    proc32_64.execute_python("import windows")
     t = proc32_64.execute_python_unsafe(rcode_test_echo_pipe.format(pipe=PIPE_NAME))
     time.sleep(0.5)
     assert not t.is_exit
@@ -45,6 +47,8 @@ def test_pipe_echo_server(proc32_64):
 
 @python_injection
 def test_pipe_recv_object(proc32_64):
+    # Verify that injection / load of Pfw in remote works with a first safe stub
+    proc32_64.execute_python("import windows")
     # not the good way to do the exchange (race possible)
     # Just for the sake of the test
     proc32_64.execute_python_unsafe(rcode_test_ipc_pipe.format(pipe=PIPE_NAME))
