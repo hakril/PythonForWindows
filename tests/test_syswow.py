@@ -69,6 +69,8 @@ class TestSyswowRemoteProcess(object):
         windows.current_process.write_qword({0},  res)
         """.format(addr)
 
+        # Execute the import safely so that the test will not hang if import fails
+        proc32.execute_python("import windows")
         t = proc32.execute_python_unsafe(textwrap.dedent(remote_python_code))
         # Wait for python execution
         while proc32.read_qword(addr) != 0x8877665544332211:

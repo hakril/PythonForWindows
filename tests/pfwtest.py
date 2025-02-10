@@ -24,6 +24,10 @@ process_64bit_only = pytest.mark.skipif(not is_process_64_bits, reason="Test for
 process_syswow_only = pytest.mark.skipif(not is_process_syswow, reason="Test for syswow process only")
 require_admin = pytest.mark.skipif(not is_admin, reason="Test must be launched as admin")
 
+def process_architecture_only(target_archi):
+    return pytest.mark.skipif(windows.current_process.architecture != target_archi,
+                                reason="Test for {0} architecture process only".format(target_archi))
+
 
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")

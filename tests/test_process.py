@@ -195,6 +195,7 @@ class TestProcessWithCheckGarbage(object):
 
     @windows_64bit_only
     def test_execute_to_64(self, proc64):
+        assert proc64.architecture == gdef.IMAGE_FILE_MACHINE_AMD64, "TODO: better machine fixture for ARM64"
         with proc64.allocated_memory(0x1000) as addr:
             shellcode = x64.MultipleInstr()
             shellcode += x64.Mov('RAX', 0x4242424243434343)
@@ -351,6 +352,7 @@ class TestProcessWithCheckGarbage(object):
 
     @windows_64bit_only
     def test_set_thread_context_64(self, proc64):
+        assert proc64.architecture == gdef.IMAGE_FILE_MACHINE_AMD64, "TODO: better machine fixture for ARM64"
         code =  x64.MultipleInstr()
         code += x64.Label(":LOOP")
         code += x64.Jmp(":LOOP")
