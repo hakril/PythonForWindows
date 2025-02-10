@@ -21,7 +21,7 @@ windows_64bit_only = pytest.mark.skipif(not is_windows_64_bits, reason="Test for
 
 process_32bit_only = pytest.mark.skipif(not is_process_32_bits, reason="Test for 32bits process only")
 process_64bit_only = pytest.mark.skipif(not is_process_64_bits, reason="Test for 64bits process only")
-process_syswow_only = pytest.mark.skipif(not is_process_syswow, reason="Test for syswow process only")
+process_syswow_only = pytest.mark.skipif((not is_process_syswow) or windows.current_process._is_x86_on_arm64, reason="Test for syswow process only (ARM64 computer not supported)")
 require_admin = pytest.mark.skipif(not is_admin, reason="Test must be launched as admin")
 
 def process_architecture_only(target_archi):

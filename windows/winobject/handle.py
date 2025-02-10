@@ -144,6 +144,8 @@ def enumerate_handles():
 
 
 def enumerate_handles_syswow64():
+    if windows.current_process._is_x86_on_arm64:
+        raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
     size_needed = gdef.ULONG()
     # Should at least be sizeof(gdef.SYSTEM_HANDLE_INFORMATION)
     tmp_buffer = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION64)()
