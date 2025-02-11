@@ -166,6 +166,8 @@ class Process(utils.AutoHandle):
         :type: :class:`int`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             xtype = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(xtype))()
@@ -236,6 +238,8 @@ class Process(utils.AutoHandle):
     def virtual_protect(self, addr, size, protect, old_protect=None):
         """Change the access right of one or more page of the process"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             if size & 0x0fff:
                 size = ((size >> 12) + 1) << 12
             if old_protect is None:
@@ -266,6 +270,8 @@ class Process(utils.AutoHandle):
         :rtype: :class:`~windows.generated_def.winstructs.MEMORY_BASIC_INFORMATION`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             res = MEMORY_BASIC_INFORMATION64()
             try:
                 v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=res)
@@ -346,6 +352,8 @@ class Process(utils.AutoHandle):
         for i, data in enumerate(info_array):
             info_array[i].VirtualAddress = addresses[i]
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, MemoryWorkingSetListEx, info_array)
         else:
             winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
@@ -908,6 +916,8 @@ class WinThread(Thread):
             :type: :class:`int`
 		"""
         if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             res = ULONGLONG()
             windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
             return res.value
