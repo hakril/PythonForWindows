@@ -28,6 +28,9 @@ def process_architecture_only(target_archi):
     return pytest.mark.skipif(windows.current_process.architecture != target_archi,
                                 reason="Test for {0} architecture process only".format(target_archi))
 
+def system_architecture_only(target_archi):
+        return pytest.mark.skipif(windows.system.architecture != target_archi,
+                                reason="Test for {0} architecture system only".format(target_archi))
 
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
