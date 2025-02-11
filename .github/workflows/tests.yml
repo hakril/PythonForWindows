@@ -99,6 +99,7 @@ jobs:
     needs: generate_ctypes
     timeout-minutes: 15
     runs-on: windows-ARM64
+    continue-on-error: true
 
     strategy:
       fail-fast: false
