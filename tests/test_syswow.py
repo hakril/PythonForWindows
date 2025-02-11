@@ -59,6 +59,7 @@ class TestSyswowRemoteProcess(object):
         assert "Wow64LdrpInitialize" in wow64.pe.exports
 
 
+    @process_architecture_only(gdef.IMAGE_FILE_MACHINE_AMD64)
     def test_getset_syswow_context(self, proc32):
         addr = proc32.virtual_alloc(0x1000)
         remote_python_code = """
