@@ -1,5 +1,7 @@
-import pytest
+import time
 import textwrap
+
+import pytest
 
 import windows
 import windows.generated_def as gdef
@@ -108,7 +110,6 @@ def loop_query_ppid(proc, target_ppid):
                 assert proc.read_memory(i.BaseAddress, 0x1000)
             # assert False, "LOL"
     except Exception as e:
-        # import traceback; traceback.print(
         threads_error[windows.current_thread.tid] = e
         raise
     return True
@@ -122,6 +123,7 @@ def test_syswow_call_multithread():
     # Old version of PFW did not handled that thus generating invalid result / crash
     for tnb in range(10):
         new_proc = windows.test.pop_proc_64()
+        time.sleep(0.1)
         new_proc_pid = new_proc.ppid
         all_procs.append(new_proc)
         t = threading.Thread(target=loop_query_ppid, args=(new_proc, new_proc_pid))
