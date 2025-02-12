@@ -125,4 +125,4 @@ jobs:
         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
 
       - name: Arm64 pytests
-        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k "not test_debugger" -v -s
+        run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k "not test_debugger" -v -s -r fEsx

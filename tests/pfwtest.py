@@ -73,13 +73,24 @@ def check_injected_python_installed(request):
     proc = request.getfixturevalue(procparam)
     if not windows.injection.find_python_dll_to_inject(proc.bitness):
         pytest.skip("Python {0}b not installed -> skipping test with python injection into {0}b process".format(proc.bitness))
+    return None
+
+@pytest.fixture
+def check_dll_injection_target_architecture(request):
+    # Find the process parameter
+    procparams = [argname for argname in request.fixturenames if argname.startswith("proc")]
+    if len(procparams) != 1:
+        raise ValueError("Could not find the fixture name of the injected python")
+    procparam = procparams[0]
+    proc = request.getfixturevalue(procparam)
     # xfail ARM64 injection as its not implemented
     if proc.architecture == gdef.IMAGE_FILE_MACHINE_ARM64:
         request.applymarker("xfail")
-    return None
 
 
-python_injection =  pytest.mark.usefixtures("check_injected_python_installed")
+
+dll_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture")
+python_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_injected_python_installed")
 
 
 ## P2 VS PY3

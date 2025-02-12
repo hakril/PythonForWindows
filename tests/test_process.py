@@ -214,6 +214,7 @@ class TestProcessWithCheckGarbage(object):
             dword = proc32_64.read_dword(addr)
             assert dword == 0x42424242
 
+    @python_injection
     def test_execute_python_good_version(self, proc32_64):
         PIPE_NAME = "PFW_TEST_Pipe"
         rcode = r"""import sys; import windows; import windows.pipe; windows.pipe.send_object("{pipe}", list(sys.version_info))"""
@@ -293,6 +294,7 @@ class TestProcessWithCheckGarbage(object):
         # Check the RemotePythonError contains the remote exception text
         assert b"ValueError: EXCEPTION_MESSAGE" in ar.value.args[0]
 
+    @python_injection
     def test_execute_python_create_console(self, proc32_64):
         res = proc32_64.execute_python("import windows; windows.utils.create_console()")
 
@@ -370,17 +372,19 @@ class TestProcessWithCheckGarbage(object):
         time.sleep(0.1)
         assert t.exit_code == 0x11223344
 
-
+    @dll_injection
     def test_load_library(self, proc32_64):
         DLL = "wintrust.dll"
         proc32_64.load_library(DLL)
         assert DLL in [m.name for m in proc32_64.peb.modules]
 
+    @dll_injection
     def test_load_library_suspended(self, proc32_64_suspended):
         DLL = "wintrust.dll"
         proc32_64_suspended.load_library(DLL)
         assert DLL in [m.name for m in proc32_64_suspended.peb.modules]
 
+    @dll_injection
     def test_load_library_unicode_name(self, proc32_64, tmpdir):
         mybitness = windows.current_process.bitness
         UNICODE_FILENAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b.dll'

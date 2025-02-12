@@ -159,11 +159,9 @@ def pytest_configure(config):
 @pytest.hookimpl(hookwrapper=True, trylast=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
-    # print("Make report {0} | {1}".format(item, call))
     if call.when == "teardown" and call.excinfo and type(call.excinfo.value) == NoLeakAssert:
         x = outcome.get_result()
         x.outcome = "failed"
-        # import pdb;pdb.set_trace()
         x.LEAK = call.excinfo.value.args[0]
 
 

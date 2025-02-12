@@ -1,6 +1,8 @@
 import windows
 import windows.pipe
 
+from .pfwtest import *
+
 def test_handle_process_id():
     handle_with_process = [h for h in windows.system.handles if h.dwProcessId]
     handle = handle_with_process[-1]
@@ -19,8 +21,8 @@ def test_local_handle_type():
 PIPE_NAME = "PFW_Test_handle_Pipe"
 TEST_FILE_FOR_HANDLE = r"C:\Windows\explorer.exe"
 
+@python_injection
 def test_remote_handle_type_and_name(proc32_64):
-    # tmpfile
     proc32_64.execute_python("import windows; import windows.pipe")
     # A filename that a normal process should not have a handle on (to be sur)
     proc32_64.execute_python(r"""f = open(r"{filename}")""".format(filename=TEST_FILE_FOR_HANDLE))
