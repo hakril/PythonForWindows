@@ -10,7 +10,7 @@ import windows
 import windows.generated_def as gdef
 
 from .conftest import pop_proc_32, pop_proc_64
-from .pfwtest import DEFAULT_CREATION_FLAGS, dll_injection
+from .pfwtest import *
 
 @pytest.fixture(params=
     [(pop_proc_32, DEFAULT_CREATION_FLAGS),
