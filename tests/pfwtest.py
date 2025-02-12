@@ -32,6 +32,17 @@ def system_architecture_only(target_archi):
         return pytest.mark.skipif(windows.system.architecture != target_archi,
                                 reason="Test for {0} architecture system only".format(target_archi))
 
+@pytest.fixture(scope="function")
+def check_cross_heaven_gate_arm64_xfail(request):
+    """Mark test crossing the heaven gate as xfail on x86 to arm64"""
+    if windows.current_process._is_x86_on_arm64:
+        request.applymarker("xfail")
+
+def cross_heaven_gates(tstfunc):
+    tstfunc = pytest.mark.usefixtures("check_cross_heaven_gate_arm64_xfail")(tstfunc)
+    tstfunc = pytest.mark.cross_heaven_gate(tstfunc)
+    return tstfunc
+
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
 
@@ -62,6 +73,9 @@ def check_injected_python_installed(request):
     proc = request.getfixturevalue(procparam)
     if not windows.injection.find_python_dll_to_inject(proc.bitness):
         pytest.skip("Python {0}b not installed -> skipping test with python injection into {0}b process".format(proc.bitness))
+    # xfail ARM64 injection as its not implemented
+    if proc.architecture == gdef.IMAGE_FILE_MACHINE_ARM64:
+        request.applymarker("xfail")
     return None
 
 
