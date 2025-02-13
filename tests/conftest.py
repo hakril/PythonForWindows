@@ -44,6 +44,9 @@ def generate_pop_and_exit_fixtures(proc_popers, ids=[], dwCreationFlags=DEFAULT_
     def pop_and_exit_process(request):
         proc_poper = request.param
         proc = proc_poper(dwCreationFlags=dwCreationFlags)
+        # Apply manually the xfail marker for a test on x86_on_arm64 for pe64 target (cross-heaven gate)
+        if windows.current_process._is_x86_on_arm64 and proc.bitness == 64:
+            request.applymarker("xfail") # Cross Heaven gate
         time.sleep(0.2) # Give time to the process to load :)
         print("Created {0} ({1}bits) for test".format(proc, proc.bitness))
         yield weakref.proxy(proc)  # provide the fixture value
