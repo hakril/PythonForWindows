@@ -46,7 +46,11 @@ def cross_heaven_gates(tstfunc):
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
 
-test_binary_name = "winver.exe"
+# msiexec.exe is new best choice:
+# - a real process (looking at calc.exe)
+# - GUI and wait for a click to close when no param
+# - Is ARM64CE on arm -> can be exec as AMD64 or ARM64 with `machine`` param
+test_binary_name = "msiexec.exe"
 DEFAULT_CREATION_FLAGS = gdef.CREATE_NEW_CONSOLE
 
 
@@ -89,8 +93,8 @@ def check_dll_injection_target_architecture(request):
 
 
 
-dll_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture")
-python_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_injected_python_installed")
+dll_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_cross_heaven_gate_arm64_xfail")
+python_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_injected_python_installed", "check_cross_heaven_gate_arm64_xfail")
 
 
 ## P2 VS PY3

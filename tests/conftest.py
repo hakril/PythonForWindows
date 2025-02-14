@@ -30,8 +30,11 @@ else:
                 assert p.bitness == 64
                 return p
     else:
+        # Force creation of AMD64 process on arm system
+        # TODO: also pop an ARM64 process when code works better with it
+        machine = gdef.IMAGE_FILE_MACHINE_AMD64 if windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 else None
         def pop_proc_64(dwCreationFlags=DEFAULT_CREATION_FLAGS):
-            p = windows.utils.create_process(r"C:\Windows\system32\{0}".format(test_binary_name).encode("ascii"), dwCreationFlags=dwCreationFlags, show_windows=True)
+            p = windows.utils.create_process(r"C:\Windows\system32\{0}".format(test_binary_name).encode("ascii"), dwCreationFlags=dwCreationFlags, show_windows=True, machine=machine)
             assert p.bitness == 64
             return p
 

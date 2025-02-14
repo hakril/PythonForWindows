@@ -9,9 +9,10 @@ from .pfwtest import *
 
 @pytest.fixture(params=[None, pop_proc_32, pop_proc_64], ids=["local-pe", "remote-pe32", "remote-pe64"])
 def pe(request):
-    # Pe will be kernelbase.dll
+    # Pe will be kernelbase.dll or kernel32.dll
+    # Cannot hardcode peb.modules[2] as it may be xtajitX.dll on arm64
     if request.param is None:
-        yield windows.current_process.peb.modules[2].pe
+        yield [mod for mod in windows.current_process.peb.modules if mod.name.lower().startswith("kernel")][0].pe
         return
 
     pop_proc = request.param
@@ -20,7 +21,8 @@ def pe(request):
     for i in range(10):
         try:
             time.sleep(0.1)
-            yield proc.peb.modules[2].pe
+            # Pe will be kernelbase.dll or kernel32.dll
+            yield [mod for mod in windows.current_process.peb.modules if mod.name.lower().startswith("kernel")][0].pe
             break
         except ValueError:
             if i == 9:
