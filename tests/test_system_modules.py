@@ -1,7 +1,7 @@
 import windows
 import ctypes
 
-from pfwtest import *
+from .pfwtest import *
 
 @cross_heaven_gates
 def test_system_module_gc():
