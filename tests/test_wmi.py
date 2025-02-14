@@ -75,6 +75,7 @@ def test_get_object(name, cls):
 # Todo: test
 #   - put_instance
 
+@cross_heaven_gates # proc.peb.commandline.str == cmdline
 @pytest.mark.parametrize("cmdline", [r"winver.exe test_string_pfw"])
 def test_exec_method_Win32_Process_create(cmdline):
     namespace = windows.system.wmi["root\\cimv2"]

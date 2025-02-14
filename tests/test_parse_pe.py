@@ -16,6 +16,7 @@ def pe(request):
 
     pop_proc = request.param
     proc = pop_proc()
+
     for i in range(10):
         try:
             time.sleep(0.1)
@@ -91,7 +92,7 @@ def test_pe_parsing_strange_optional_header_size(tmp_path, proc32):
     # Also check that section retrieval works (as its position is based on OptionalHeader Size)
     assert set(s.name for s in mod.pe.sections) == {".text", ".data", ".l1"}
 
-#  Make a test from current_process parsing ?
+@dll_injection
 def test_pe_parsing_dotnet32_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     mod = proc64.load_library(pe_dotnet32)
@@ -108,6 +109,7 @@ def test_pe_parsing_dotnet32_process_64(proc64, pe_dotnet32):
     assert mod.pe.sections
     assert ".text" in  set(s.name for s in mod.pe.sections)
 
+@dll_injection
 def test_pe_parsing_dotnet32_current_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     # So we injecte python code in a the remote proc64 to test the parsing from itself

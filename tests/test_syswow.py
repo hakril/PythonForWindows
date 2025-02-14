@@ -52,6 +52,7 @@ class TestSyswowCurrentProcess(object):
 @python_injection
 @windows_64bit_only
 class TestSyswowRemoteProcess(object):
+    @cross_heaven_gates
     def test_remote_pebsyswow(self, proc32):
         peb64 = proc32.peb_syswow
         modules_names = [m.name for m in peb64.modules]

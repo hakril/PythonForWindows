@@ -1,6 +1,9 @@
 import windows
 import ctypes
 
+from pfwtest import *
+
+@cross_heaven_gates
 def test_system_module_gc():
     # Test for issue 12 (Py3)
     # https://github.com/hakril/PythonForWindows/issues/12

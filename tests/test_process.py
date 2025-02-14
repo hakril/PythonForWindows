@@ -487,10 +487,12 @@ class TestProcessWithCheckGarbage(object):
         # Check type of teb.peb is the correct subclass (with modules & co)
         assert teb.peb.modules
 
+    @cross_heaven_gates
     def test_thread_teb_base(self, proc32_64):
         t = proc32_64.threads[0]
         assert t.teb_base != 0
 
+    @cross_heaven_gates
     def test_teb(self, proc32_64):
         teb = proc32_64.threads[0].teb
         if proc32_64.bitness == 32:
@@ -503,6 +505,7 @@ class TestProcessWithCheckGarbage(object):
         assert teb.peb.modules
 
     @windows_64bit_only
+    @cross_heaven_gates
     def test_thread_teb_syswow_base(self, proc32):
         t = proc32.threads[0]
         assert t.teb_base != 0
@@ -510,6 +513,7 @@ class TestProcessWithCheckGarbage(object):
         assert t.teb_base == t.teb_syswow_base + 0x2000
 
     @windows_64bit_only
+    @cross_heaven_gates
     def test_thread_teb_syswow(self, proc32):
         teb_syswow = proc32.threads[0].teb_syswow
         assert type(teb_syswow) == windows.winobject.process.RemoteTEB64
