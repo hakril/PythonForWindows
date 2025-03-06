@@ -5212,6 +5212,313 @@ class _TEB(Structure):
     ]
 TEB = _TEB
 
+class _ANON__ARM64_NT_NEON128_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Low", ULONGLONG),
+        ("High", LONGLONG),
+    ]
+
+class _ARM64_NT_NEON128(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("DUMMYSTRUCTNAME", _ANON__ARM64_NT_NEON128_SUB_STRUCTURE_1),
+        ("D", DOUBLE * (2)),
+        ("S", FLOAT * (4)),
+        ("H", WORD * (8)),
+        ("B", BYTE * (16)),
+    ]
+ARM64_NT_NEON128 = _ARM64_NT_NEON128
+PARM64_NT_NEON128 = POINTER(_ARM64_NT_NEON128)
+
+class _ANON__ANON__ARM64_NT_CONTEXT_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("X0", DWORD64),
+        ("X1", DWORD64),
+        ("X2", DWORD64),
+        ("X3", DWORD64),
+        ("X4", DWORD64),
+        ("X5", DWORD64),
+        ("X6", DWORD64),
+        ("X7", DWORD64),
+        ("X8", DWORD64),
+        ("X9", DWORD64),
+        ("X10", DWORD64),
+        ("X11", DWORD64),
+        ("X12", DWORD64),
+        ("X13", DWORD64),
+        ("X14", DWORD64),
+        ("X15", DWORD64),
+        ("X16", DWORD64),
+        ("X17", DWORD64),
+        ("X18", DWORD64),
+        ("X19", DWORD64),
+        ("X20", DWORD64),
+        ("X21", DWORD64),
+        ("X22", DWORD64),
+        ("X23", DWORD64),
+        ("X24", DWORD64),
+        ("X25", DWORD64),
+        ("X26", DWORD64),
+        ("X27", DWORD64),
+        ("X28", DWORD64),
+        ("Fp", DWORD64),
+        ("Lr", DWORD64),
+    ]
+
+class _ANON__ARM64_NT_CONTEXT_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("DUMMYSTRUCTNAME", _ANON__ANON__ARM64_NT_CONTEXT_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("X", DWORD64 * (31)),
+    ]
+
+class _ARM64_NT_CONTEXT(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Cpsr", DWORD),
+        ("DUMMYUNIONNAME", _ANON__ARM64_NT_CONTEXT_SUB_UNION_1),
+        ("Sp", DWORD64),
+        ("Pc", DWORD64),
+        ("V", ARM64_NT_NEON128 * (32)),
+        ("Fpcr", DWORD),
+        ("Fpsr", DWORD),
+        ("Bcr", DWORD * (ARM64_MAX_BREAKPOINTS)),
+        ("Bvr", DWORD64 * (ARM64_MAX_BREAKPOINTS)),
+        ("Wcr", DWORD * (ARM64_MAX_WATCHPOINTS)),
+        ("Wvr", DWORD64 * (ARM64_MAX_WATCHPOINTS)),
+    ]
+ARM64_NT_CONTEXT = _ARM64_NT_CONTEXT
+PARM64_NT_CONTEXT = POINTER(_ARM64_NT_CONTEXT)
+
+class _FLOATING_SAVE_AREA(Structure):
+    _fields_ = [
+        ("ControlWord", DWORD),
+        ("StatusWord", DWORD),
+        ("TagWord", DWORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", DWORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", DWORD),
+        ("RegisterArea", BYTE * (80)),
+        ("Cr0NpxState", DWORD),
+    ]
+FLOATING_SAVE_AREA = _FLOATING_SAVE_AREA
+
+class _CONTEXT32(Structure):
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Dr0", DWORD),
+        ("Dr1", DWORD),
+        ("Dr2", DWORD),
+        ("Dr3", DWORD),
+        ("Dr6", DWORD),
+        ("Dr7", DWORD),
+        ("FloatSave", FLOATING_SAVE_AREA),
+        ("SegGs", DWORD),
+        ("SegFs", DWORD),
+        ("SegEs", DWORD),
+        ("SegDs", DWORD),
+        ("Edi", DWORD),
+        ("Esi", DWORD),
+        ("Ebx", DWORD),
+        ("Edx", DWORD),
+        ("Ecx", DWORD),
+        ("Eax", DWORD),
+        ("Ebp", DWORD),
+        ("Eip", DWORD),
+        ("SegCs", DWORD),
+        ("EFlags", DWORD),
+        ("Esp", DWORD),
+        ("SegSs", DWORD),
+        ("ExtendedRegisters", BYTE * (512)),
+    ]
+CONTEXT32 = _CONTEXT32
+LPCONTEXT32 = POINTER(_CONTEXT32)
+PCONTEXT32 = POINTER(_CONTEXT32)
+
+class _WOW64_FLOATING_SAVE_AREA(Structure):
+    _fields_ = [
+        ("ControlWord", DWORD),
+        ("StatusWord", DWORD),
+        ("TagWord", DWORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", DWORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", DWORD),
+        ("RegisterArea", BYTE * (WOW64_SIZE_OF_80387_REGISTERS)),
+        ("Cr0NpxState", DWORD),
+    ]
+WOW64_FLOATING_SAVE_AREA = _WOW64_FLOATING_SAVE_AREA
+
+class _WOW64_CONTEXT(Structure):
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Dr0", DWORD),
+        ("Dr1", DWORD),
+        ("Dr2", DWORD),
+        ("Dr3", DWORD),
+        ("Dr6", DWORD),
+        ("Dr7", DWORD),
+        ("FloatSave", WOW64_FLOATING_SAVE_AREA),
+        ("SegGs", DWORD),
+        ("SegFs", DWORD),
+        ("SegEs", DWORD),
+        ("SegDs", DWORD),
+        ("Edi", DWORD),
+        ("Esi", DWORD),
+        ("Ebx", DWORD),
+        ("Edx", DWORD),
+        ("Ecx", DWORD),
+        ("Eax", DWORD),
+        ("Ebp", DWORD),
+        ("Eip", DWORD),
+        ("SegCs", DWORD),
+        ("EFlags", DWORD),
+        ("Esp", DWORD),
+        ("SegSs", DWORD),
+        ("ExtendedRegisters", BYTE * (WOW64_MAXIMUM_SUPPORTED_EXTENSION)),
+    ]
+PWOW64_CONTEXT = POINTER(_WOW64_CONTEXT)
+WOW64_CONTEXT = _WOW64_CONTEXT
+
+class _M128A(Structure):
+    _fields_ = [
+        ("Low", ULONGLONG),
+        ("High", LONGLONG),
+    ]
+M128A = _M128A
+PM128A = POINTER(_M128A)
+
+class _XSAVE_FORMAT_64(Structure):
+    _fields_ = [
+        ("ControlWord", WORD),
+        ("StatusWord", WORD),
+        ("TagWord", BYTE),
+        ("Reserved1", BYTE),
+        ("ErrorOpcode", WORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", WORD),
+        ("Reserved2", WORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", WORD),
+        ("Reserved3", WORD),
+        ("MxCsr", DWORD),
+        ("MxCsr_Mask", DWORD),
+        ("FloatRegisters", M128A * (8)),
+        ("XmmRegisters", M128A * (16)),
+        ("Reserved4", BYTE * (96)),
+    ]
+PXSAVE_FORMAT_64 = POINTER(_XSAVE_FORMAT_64)
+XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
+
+class _XSAVE_FORMAT_32(Structure):
+    _fields_ = [
+        ("ControlWord", WORD),
+        ("StatusWord", WORD),
+        ("TagWord", BYTE),
+        ("Reserved1", BYTE),
+        ("ErrorOpcode", WORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", WORD),
+        ("Reserved2", WORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", WORD),
+        ("Reserved3", WORD),
+        ("MxCsr", DWORD),
+        ("MxCsr_Mask", DWORD),
+        ("FloatRegisters", M128A * (8)),
+        ("XmmRegisters", M128A * (8)),
+        ("Reserved4", BYTE * (192)),
+        ("StackControl", DWORD * (7)),
+        ("Cr0NpxState", DWORD),
+    ]
+PXSAVE_FORMAT_32 = POINTER(_XSAVE_FORMAT_32)
+XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
+
+class _ANON__ANON__CONTEXT64_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Header", M128A * (2)),
+        ("Legacy", M128A * (8)),
+        ("Xmm0", M128A),
+        ("Xmm1", M128A),
+        ("Xmm2", M128A),
+        ("Xmm3", M128A),
+        ("Xmm4", M128A),
+        ("Xmm5", M128A),
+        ("Xmm6", M128A),
+        ("Xmm7", M128A),
+        ("Xmm8", M128A),
+        ("Xmm9", M128A),
+        ("Xmm10", M128A),
+        ("Xmm11", M128A),
+        ("Xmm12", M128A),
+        ("Xmm13", M128A),
+        ("Xmm14", M128A),
+        ("Xmm15", M128A),
+    ]
+
+class _ANON__CONTEXT64_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("FltSave", XSAVE_FORMAT_64),
+        ("DUMMYSTRUCTNAME", _ANON__ANON__CONTEXT64_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+class _CONTEXT64(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("P1Home", DWORD64),
+        ("P2Home", DWORD64),
+        ("P3Home", DWORD64),
+        ("P4Home", DWORD64),
+        ("P5Home", DWORD64),
+        ("P6Home", DWORD64),
+        ("ContextFlags", DWORD),
+        ("MxCsr", DWORD),
+        ("SegCs", WORD),
+        ("SegDs", WORD),
+        ("SegEs", WORD),
+        ("SegFs", WORD),
+        ("SegGs", WORD),
+        ("SegSs", WORD),
+        ("EFlags", DWORD),
+        ("Dr0", DWORD64),
+        ("Dr1", DWORD64),
+        ("Dr2", DWORD64),
+        ("Dr3", DWORD64),
+        ("Dr6", DWORD64),
+        ("Dr7", DWORD64),
+        ("Rax", DWORD64),
+        ("Rcx", DWORD64),
+        ("Rdx", DWORD64),
+        ("Rbx", DWORD64),
+        ("Rsp", DWORD64),
+        ("Rbp", DWORD64),
+        ("Rsi", DWORD64),
+        ("Rdi", DWORD64),
+        ("R8", DWORD64),
+        ("R9", DWORD64),
+        ("R10", DWORD64),
+        ("R11", DWORD64),
+        ("R12", DWORD64),
+        ("R13", DWORD64),
+        ("R14", DWORD64),
+        ("R15", DWORD64),
+        ("Rip", DWORD64),
+        ("DUMMYUNIONNAME", _ANON__CONTEXT64_SUB_UNION_1),
+        ("VectorRegister", M128A * (26)),
+        ("VectorControl", DWORD64),
+        ("DebugControl", DWORD64),
+        ("LastBranchToRip", DWORD64),
+        ("LastBranchFromRip", DWORD64),
+        ("LastExceptionToRip", DWORD64),
+        ("LastExceptionFromRip", DWORD64),
+    ]
+CONTEXT64 = _CONTEXT64
+LPCONTEXT64 = POINTER(_CONTEXT64)
+PCONTEXT64 = POINTER(_CONTEXT64)
+
 class _TRACE_PROVIDER_INFO(Structure):
     _fields_ = [
         ("ProviderGuid", GUID),
@@ -6320,234 +6627,6 @@ class _PROCESS_INFORMATION(Structure):
 LPPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
 PPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
 PROCESS_INFORMATION = _PROCESS_INFORMATION
-
-class _FLOATING_SAVE_AREA(Structure):
-    _fields_ = [
-        ("ControlWord", DWORD),
-        ("StatusWord", DWORD),
-        ("TagWord", DWORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", DWORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", DWORD),
-        ("RegisterArea", BYTE * (80)),
-        ("Cr0NpxState", DWORD),
-    ]
-FLOATING_SAVE_AREA = _FLOATING_SAVE_AREA
-
-class _CONTEXT32(Structure):
-    _fields_ = [
-        ("ContextFlags", DWORD),
-        ("Dr0", DWORD),
-        ("Dr1", DWORD),
-        ("Dr2", DWORD),
-        ("Dr3", DWORD),
-        ("Dr6", DWORD),
-        ("Dr7", DWORD),
-        ("FloatSave", FLOATING_SAVE_AREA),
-        ("SegGs", DWORD),
-        ("SegFs", DWORD),
-        ("SegEs", DWORD),
-        ("SegDs", DWORD),
-        ("Edi", DWORD),
-        ("Esi", DWORD),
-        ("Ebx", DWORD),
-        ("Edx", DWORD),
-        ("Ecx", DWORD),
-        ("Eax", DWORD),
-        ("Ebp", DWORD),
-        ("Eip", DWORD),
-        ("SegCs", DWORD),
-        ("EFlags", DWORD),
-        ("Esp", DWORD),
-        ("SegSs", DWORD),
-        ("ExtendedRegisters", BYTE * (512)),
-    ]
-CONTEXT32 = _CONTEXT32
-LPCONTEXT32 = POINTER(_CONTEXT32)
-PCONTEXT32 = POINTER(_CONTEXT32)
-
-class _WOW64_FLOATING_SAVE_AREA(Structure):
-    _fields_ = [
-        ("ControlWord", DWORD),
-        ("StatusWord", DWORD),
-        ("TagWord", DWORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", DWORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", DWORD),
-        ("RegisterArea", BYTE * (WOW64_SIZE_OF_80387_REGISTERS)),
-        ("Cr0NpxState", DWORD),
-    ]
-WOW64_FLOATING_SAVE_AREA = _WOW64_FLOATING_SAVE_AREA
-
-class _WOW64_CONTEXT(Structure):
-    _fields_ = [
-        ("ContextFlags", DWORD),
-        ("Dr0", DWORD),
-        ("Dr1", DWORD),
-        ("Dr2", DWORD),
-        ("Dr3", DWORD),
-        ("Dr6", DWORD),
-        ("Dr7", DWORD),
-        ("FloatSave", WOW64_FLOATING_SAVE_AREA),
-        ("SegGs", DWORD),
-        ("SegFs", DWORD),
-        ("SegEs", DWORD),
-        ("SegDs", DWORD),
-        ("Edi", DWORD),
-        ("Esi", DWORD),
-        ("Ebx", DWORD),
-        ("Edx", DWORD),
-        ("Ecx", DWORD),
-        ("Eax", DWORD),
-        ("Ebp", DWORD),
-        ("Eip", DWORD),
-        ("SegCs", DWORD),
-        ("EFlags", DWORD),
-        ("Esp", DWORD),
-        ("SegSs", DWORD),
-        ("ExtendedRegisters", BYTE * (WOW64_MAXIMUM_SUPPORTED_EXTENSION)),
-    ]
-PWOW64_CONTEXT = POINTER(_WOW64_CONTEXT)
-WOW64_CONTEXT = _WOW64_CONTEXT
-
-class _M128A(Structure):
-    _fields_ = [
-        ("Low", ULONGLONG),
-        ("High", LONGLONG),
-    ]
-M128A = _M128A
-PM128A = POINTER(_M128A)
-
-class _XSAVE_FORMAT_64(Structure):
-    _fields_ = [
-        ("ControlWord", WORD),
-        ("StatusWord", WORD),
-        ("TagWord", BYTE),
-        ("Reserved1", BYTE),
-        ("ErrorOpcode", WORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", WORD),
-        ("Reserved2", WORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", WORD),
-        ("Reserved3", WORD),
-        ("MxCsr", DWORD),
-        ("MxCsr_Mask", DWORD),
-        ("FloatRegisters", M128A * (8)),
-        ("XmmRegisters", M128A * (16)),
-        ("Reserved4", BYTE * (96)),
-    ]
-PXSAVE_FORMAT_64 = POINTER(_XSAVE_FORMAT_64)
-XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
-
-class _XSAVE_FORMAT_32(Structure):
-    _fields_ = [
-        ("ControlWord", WORD),
-        ("StatusWord", WORD),
-        ("TagWord", BYTE),
-        ("Reserved1", BYTE),
-        ("ErrorOpcode", WORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", WORD),
-        ("Reserved2", WORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", WORD),
-        ("Reserved3", WORD),
-        ("MxCsr", DWORD),
-        ("MxCsr_Mask", DWORD),
-        ("FloatRegisters", M128A * (8)),
-        ("XmmRegisters", M128A * (8)),
-        ("Reserved4", BYTE * (192)),
-        ("StackControl", DWORD * (7)),
-        ("Cr0NpxState", DWORD),
-    ]
-PXSAVE_FORMAT_32 = POINTER(_XSAVE_FORMAT_32)
-XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
-
-class _TMP_DUMMYSTRUCTNAME(Structure):
-    _fields_ = [
-        ("Header", M128A * (2)),
-        ("Legacy", M128A * (8)),
-        ("Xmm0", M128A),
-        ("Xmm1", M128A),
-        ("Xmm2", M128A),
-        ("Xmm3", M128A),
-        ("Xmm4", M128A),
-        ("Xmm5", M128A),
-        ("Xmm6", M128A),
-        ("Xmm7", M128A),
-        ("Xmm8", M128A),
-        ("Xmm9", M128A),
-        ("Xmm10", M128A),
-        ("Xmm11", M128A),
-        ("Xmm12", M128A),
-        ("Xmm13", M128A),
-        ("Xmm14", M128A),
-        ("Xmm15", M128A),
-    ]
-TMP_DUMMYSTRUCTNAME = _TMP_DUMMYSTRUCTNAME
-
-class _TMP_CONTEXT64_SUBUNION(Union):
-    _fields_ = [
-        ("FltSave", XSAVE_FORMAT_64),
-        ("DUMMYSTRUCTNAME", TMP_DUMMYSTRUCTNAME),
-    ]
-TMP_CONTEXT64_SUBUNION = _TMP_CONTEXT64_SUBUNION
-
-class _CONTEXT64(Structure):
-    _fields_ = [
-        ("P1Home", DWORD64),
-        ("P2Home", DWORD64),
-        ("P3Home", DWORD64),
-        ("P4Home", DWORD64),
-        ("P5Home", DWORD64),
-        ("P6Home", DWORD64),
-        ("ContextFlags", DWORD),
-        ("MxCsr", DWORD),
-        ("SegCs", WORD),
-        ("SegDs", WORD),
-        ("SegEs", WORD),
-        ("SegFs", WORD),
-        ("SegGs", WORD),
-        ("SegSs", WORD),
-        ("EFlags", DWORD),
-        ("Dr0", DWORD64),
-        ("Dr1", DWORD64),
-        ("Dr2", DWORD64),
-        ("Dr3", DWORD64),
-        ("Dr6", DWORD64),
-        ("Dr7", DWORD64),
-        ("Rax", DWORD64),
-        ("Rcx", DWORD64),
-        ("Rdx", DWORD64),
-        ("Rbx", DWORD64),
-        ("Rsp", DWORD64),
-        ("Rbp", DWORD64),
-        ("Rsi", DWORD64),
-        ("Rdi", DWORD64),
-        ("R8", DWORD64),
-        ("R9", DWORD64),
-        ("R10", DWORD64),
-        ("R11", DWORD64),
-        ("R12", DWORD64),
-        ("R13", DWORD64),
-        ("R14", DWORD64),
-        ("R15", DWORD64),
-        ("Rip", DWORD64),
-        ("DUMMYUNIONNAME", TMP_CONTEXT64_SUBUNION),
-        ("VectorRegister", M128A * (26)),
-        ("VectorControl", DWORD64),
-        ("DebugControl", DWORD64),
-        ("LastBranchToRip", DWORD64),
-        ("LastBranchFromRip", DWORD64),
-        ("LastExceptionToRip", DWORD64),
-        ("LastExceptionFromRip", DWORD64),
-    ]
-CONTEXT64 = _CONTEXT64
-LPCONTEXT64 = POINTER(_CONTEXT64)
-PCONTEXT64 = POINTER(_CONTEXT64)
 
 class tagPROCESSENTRY32W(Structure):
     _fields_ = [
