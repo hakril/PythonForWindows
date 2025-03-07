@@ -62,10 +62,14 @@ def stubborn_create_instance(clsid, iid):
     # resolver_info.OxidInfo.containerVersion.version is part of OxidInfo.ipidRemUnknown on PPRIV_RESOLVER_INFO_LEGACY
     # And this part of ipidRemUnknown is a PID
     # So a good value to check for > 3 :)
+    # On 2019 IT IS NOT :( as it's its own struct. So I will hardcod this one.
     # Bad alignemetn of containerVersion -> its an older version
-    if resolver_info.OxidInfo.containerVersion.version > 3:
-        dcomversionstruct = resolver_info.OxidInfo.dcomVersion
+    dcomversionstruct = resolver_info.OxidInfo.dcomVersion
+    if windows.system.build_number == 17763:
+        resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_17763)[0]
+    elif resolver_info.OxidInfo.containerVersion.version > 3:
         # If 5,7 -> good alignement of dcomversion so we know its PRIV_RESOLVER_INFO_17763
+        # Should never happen as its now covered by the `windows.system.build_number == 17763` check
         dcomversion = (dcomversionstruct.MajorVersion, dcomversionstruct.MinorVersion)
         if dcomversion == (5, 7):
             resolver_info = ctypes.cast(rpiv_infoptr, gdef.PPRIV_RESOLVER_INFO_17763)[0]

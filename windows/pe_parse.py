@@ -3,6 +3,7 @@ import windows
 import windows.hooks as hooks
 import windows.utils as utils
 
+import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 from windows.utils import transform_ctypes_fields
 import windows.remotectypes as rctypes
@@ -38,9 +39,9 @@ def get_pe_bitness(baseaddr, target):
     # We can force bitness as the field we access are bitness-independant
     pe = GetPEFile(baseaddr, target, force_bitness=32)
     machine = pe.get_NT_HEADER().FileHeader.Machine
-    if machine == 0x14c:
+    if machine == gdef.IMAGE_FILE_MACHINE_I386:
         return 32
-    elif machine == 0x8664:
+    elif machine in (gdef.IMAGE_FILE_MACHINE_AMD64, gdef.IMAGE_FILE_MACHINE_ARM64):
         return 64
     else:
         raise ValueError("Unknow PE target machine <0x{0:x}>".format(machine))
@@ -108,7 +109,7 @@ class PESection(IMAGE_SECTION_HEADER):
         if self.target is None:
             name = get_string(self.target, ctypes.addressof(self.Name))[:8]
         else:
-            name = get_string(self.target, self._base_addr)[:8]
+            name = self.target.read_memory(self._base_addr, 8).split(b"\x00", 1)[0].decode("ascii")
         # Decode as UTF-8 as the MS doc say ?
         return name
 
@@ -451,3 +452,16 @@ class PEFile(object):
             name = get_string(self.target, self.baseaddr + import_descriptor.Name)
             res.setdefault(name.lower(), []).extend(IAT)
         return res
+
+    @utils.fixedpropety
+    def binid(self):
+        """Return the hex-string {TimeStamp}{SizeOfCode} used by PDB to identify a PE.
+
+        I do not know the official name of this value...
+
+        :type: :class:`str`
+        """
+        nth = self.get_NT_HEADER()
+        timestamp = nth.FileHeader.TimeDateStamp
+        image_size = nth.OptionalHeader.SizeOfImage
+        return "{timestamp:08x}{image_size:x}".format(timestamp=timestamp, image_size=image_size)

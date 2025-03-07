@@ -6,7 +6,8 @@ from ..error import (fail_on_zero,
                         no_error_check,
                         result_is_handle,
                         succeed_on_zero,
-                        fail_on_minus_one)
+                        fail_on_minus_one,
+                        WinproxyError)
 
 
 class Kernel32Proxy(ApiProxy):
@@ -80,6 +81,18 @@ def GetPriorityClass(hProcess):
 @Kernel32Proxy()
 def SetPriorityClass(hProcess, dwPriorityClass):
     return SetPriorityClass.ctypes_function(hProcess, dwPriorityClass)
+
+@Kernel32Proxy()
+def GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize=None):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return GetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+@Kernel32Proxy()
+def SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize):
+    if ProcessInformationSize is None:
+        ProcessInformationSize = ctypes.sizeof(ProcessInformation)
+    return SetProcessInformation.ctypes_function(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
 
 
 PROCESS_MITIGATION_STUCTS = (gdef.PROCESS_MITIGATION_ASLR_POLICY,
@@ -200,6 +213,11 @@ def CreateThread(lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededPa
 def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStackSize=0,
                        lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
     return CreateRemoteThread.ctypes_function(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
+
+@Kernel32Proxy()
+def CreateRemoteThreadEx(hProcess, lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpAttributeList=None, lpThreadId=None):
+   return CreateRemoteThreadEx.ctypes_function(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpAttributeList, lpThreadId)
+
 
 @Kernel32Proxy()
 def GetThreadContext(hThread, lpContext):
@@ -407,6 +425,14 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
    return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
 
+@Kernel32Proxy(error_check=no_error_check)
+def GetNativeSystemInfo(lpSystemInfo):
+    return GetNativeSystemInfo.ctypes_function(lpSystemInfo)
+
+@Kernel32Proxy(error_check=no_error_check)
+def GetSystemInfo(lpSystemInfo):
+    return GetSystemInfo.ctypes_function(lpSystemInfo)
+
 ## Io
 
 @Kernel32Proxy()
@@ -503,6 +529,41 @@ def Wow64GetThreadContext(hThread, lpContext):
 def Wow64SetThreadContext(hThread, lpContext):
     return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
 
+@Kernel32Proxy()
+def IsWow64Process(hProcess, Wow64Process):
+    return IsWow64Process.ctypes_function(hProcess, Wow64Process)
+
+@Kernel32Proxy()
+def IsWow64Process2(hProcess, pProcessMachine, pNativeMachine):
+    return IsWow64Process2.ctypes_function(hProcess, pProcessMachine, pNativeMachine)
+
+@Kernel32Proxy()
+def IsWow64GuestMachineSupported(WowGuestMachine, MachineIsSupported):
+    return IsWow64GuestMachineSupported.ctypes_function(WowGuestMachine, MachineIsSupported)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryA(lpBuffer, uSize):
+    return GetSystemWow64DirectoryA.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64DirectoryW(lpBuffer, uSize):
+    return GetSystemWow64DirectoryW.ctypes_function(lpBuffer, uSize)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2A(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2A.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def GetSystemWow64Directory2W(lpBuffer, uSize, ImageFileMachineType):
+    return GetSystemWow64Directory2W.ctypes_function(lpBuffer, uSize, ImageFileMachineType)
+
+@Kernel32Proxy()
+def Wow64SetThreadDefaultGuestMachine(Machine):
+    return Wow64SetThreadDefaultGuestMachine.ctypes_function(Machine)
+
+@Kernel32Proxy()
+def Wow64SuspendThread(hThread):
+    return Wow64SuspendThread.ctypes_function(hThread)
 
 
 ## File
@@ -605,12 +666,7 @@ def FindNextChangeNotification(hChangeHandle):
 
 @Kernel32Proxy()
 def FindCloseChangeNotification(hChangeHandle):
-    return FindCloseChange
-    Notification.ctypes_function(hChangeHandle)
-
-@Kernel32Proxy()
-def FindNextChangeNotification(hChangeHandle):
-    return FindNextChangeNotification.ctypes_function(hChangeHandle)
+    return FindCloseChangeNotification.ctypes_function(hChangeHandle)
 
 @Kernel32Proxy()
 def ReadDirectoryChangesW(hDirectory, lpBuffer, nBufferLength, bWatchSubtree, dwNotifyFilter, lpBytesReturned, lpOverlapped, lpCompletionRoutine):

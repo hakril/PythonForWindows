@@ -94,3 +94,35 @@ jobs:
           secondary_rate_limit_wait_seconds: 90
           seconds_between_github_writes: 10
           seconds_between_github_reads: 1
+
+#   tests_arm64:
+#     needs: generate_ctypes
+#     timeout-minutes: 15
+#     runs-on: windows-ARM64
+#     continue-on-error: true
+#
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         python-version: [3.11]
+#         python-architecture: [x86, x64, arm64]
+#         include:
+#             # Translate architecture to bitness for py.exe commandline
+#             - python-bitness-to-test: 32
+#               python-architecture: x86
+#             - python-bitness-to-test: 64
+#               python-architecture: x64
+#             - python-bitness-to-test: arm64
+#               python-architecture: arm64
+#
+#     steps:
+#       - uses: actions/checkout@v4
+#
+#       - name: Listing python versions availables
+#         run: py -0
+#
+#       - name: Testing PFW execute
+#         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -c "import windows; print(windows)"
+#
+#       - name: Arm64 pytests
+#         run: py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pytest tests -k "not test_debugger" -v -s -r fEsx

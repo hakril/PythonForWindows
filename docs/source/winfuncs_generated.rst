@@ -696,6 +696,10 @@ Functions
 
 .. function:: FreeLibrary(hLibModule)
 
+.. function:: GetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
+.. function:: SetProcessInformation(hProcess, ProcessInformationClass, ProcessInformation, ProcessInformationSize)
+
 .. function:: RtlGetCurrentPeb()
 
 .. function:: RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
@@ -1214,6 +1218,42 @@ Functions
 
 .. function:: LookupAccountNameW(lpSystemName, lpAccountName, Sid, cbSid, ReferencedDomainName, cchReferencedDomainName, peUse)
 
+.. function:: GetNativeSystemInfo(lpSystemInfo)
+
+.. function:: GetSystemInfo(lpSystemInfo)
+
+.. function:: IsWow64Process(hProcess, Wow64Process)
+
+.. function:: IsWow64Process2(hProcess, pProcessMachine, pNativeMachine)
+
+.. function:: IsWow64GuestMachineSupported(WowGuestMachine, MachineIsSupported)
+
+.. function:: GetSystemWow64DirectoryA(lpBuffer, uSize)
+
+.. function:: GetSystemWow64DirectoryW(lpBuffer, uSize)
+
+.. function:: GetSystemWow64Directory2A(lpBuffer, uSize, ImageFileMachineType)
+
+.. function:: GetSystemWow64Directory2W(lpBuffer, uSize, ImageFileMachineType)
+
+.. function:: Wow64DisableWow64FsRedirection(OldValue)
+
+.. function:: Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection)
+
+.. function:: Wow64RevertWow64FsRedirection(OlValue)
+
+.. function:: Wow64GetThreadContext(hThread, lpContext)
+
+.. function:: Wow64SetThreadContext(hThread, lpContext)
+
+.. function:: Wow64SetThreadDefaultGuestMachine(Machine)
+
+.. function:: Wow64SuspendThread(hThread)
+
+.. function:: NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+
+.. function:: NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
+
 .. function:: FileTimeToSystemTime(lpFileTime, lpSystemTime)
 
 .. function:: SystemTimeToFileTime(lpSystemTime, lpFileTime)
@@ -1350,6 +1390,8 @@ Functions
 
 .. function:: CreateRemoteThread(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
 
+.. function:: CreateRemoteThreadEx(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpAttributeList, lpThreadId)
+
 .. function:: CreateProcessA(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
 .. function:: CreateProcessW(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
@@ -1370,11 +1412,7 @@ Functions
 
 .. function:: ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
-.. function:: NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
-
 .. function:: WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
-
-.. function:: NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 
 .. function:: GetCurrentProcess()
 
@@ -1468,14 +1506,6 @@ Functions
 
 .. function:: DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
 
-.. function:: Wow64DisableWow64FsRedirection(OldValue)
-
-.. function:: Wow64RevertWow64FsRedirection(OldValue)
-
-.. function:: Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection)
-
-.. function:: Wow64GetThreadContext(hThread, lpContext)
-
 .. function:: SetConsoleCtrlHandler(HandlerRoutine, Add)
 
 .. function:: GlobalAlloc(uFlags, dwBytes)
@@ -1529,8 +1559,6 @@ Functions
 .. function:: DebugBreakProcess(Process)
 
 .. function:: GetProcessId(Process)
-
-.. function:: Wow64SetThreadContext(hThread, lpContext)
 
 .. function:: GetMappedFileNameW(hProcess, lpv, lpFilename, nSize)
 

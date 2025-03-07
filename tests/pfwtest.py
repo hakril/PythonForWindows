@@ -21,14 +21,36 @@ windows_64bit_only = pytest.mark.skipif(not is_windows_64_bits, reason="Test for
 
 process_32bit_only = pytest.mark.skipif(not is_process_32_bits, reason="Test for 32bits process only")
 process_64bit_only = pytest.mark.skipif(not is_process_64_bits, reason="Test for 64bits process only")
-process_syswow_only = pytest.mark.skipif(not is_process_syswow, reason="Test for syswow process only")
+process_syswow_only = pytest.mark.skipif((not is_process_syswow) or windows.current_process._is_x86_on_arm64, reason="Test for syswow process only (ARM64 computer not supported)")
 require_admin = pytest.mark.skipif(not is_admin, reason="Test must be launched as admin")
 
+def process_architecture_only(target_archi):
+    return pytest.mark.skipif(windows.current_process.architecture != target_archi,
+                                reason="Test for {0} architecture process only".format(target_archi))
+
+def system_architecture_only(target_archi):
+        return pytest.mark.skipif(windows.system.architecture != target_archi,
+                                reason="Test for {0} architecture system only".format(target_archi))
+
+@pytest.fixture(scope="function")
+def check_cross_heaven_gate_arm64_xfail(request):
+    """Mark test crossing the heaven gate as xfail on x86 to arm64"""
+    if windows.current_process._is_x86_on_arm64:
+        request.applymarker("xfail")
+
+def cross_heaven_gates(tstfunc):
+    tstfunc = pytest.mark.usefixtures("check_cross_heaven_gate_arm64_xfail")(tstfunc)
+    tstfunc = pytest.mark.cross_heaven_gate(tstfunc)
+    return tstfunc
 
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")
 check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
 
-test_binary_name = "winver.exe"
+# msiexec.exe is new best choice:
+# - a real process (looking at calc.exe)
+# - GUI and wait for a click to close when no param
+# - Is ARM64CE on arm -> can be exec as AMD64 or ARM64 with `machine`` param
+test_binary_name = "msiexec.exe"
 DEFAULT_CREATION_FLAGS = gdef.CREATE_NEW_CONSOLE
 
 
@@ -57,8 +79,22 @@ def check_injected_python_installed(request):
         pytest.skip("Python {0}b not installed -> skipping test with python injection into {0}b process".format(proc.bitness))
     return None
 
+@pytest.fixture
+def check_dll_injection_target_architecture(request):
+    # Find the process parameter
+    procparams = [argname for argname in request.fixturenames if argname.startswith("proc")]
+    if len(procparams) != 1:
+        raise ValueError("Could not find the fixture name of the injected python")
+    procparam = procparams[0]
+    proc = request.getfixturevalue(procparam)
+    # xfail ARM64 injection as its not implemented
+    if proc.architecture == gdef.IMAGE_FILE_MACHINE_ARM64:
+        request.applymarker("xfail")
 
-python_injection =  pytest.mark.usefixtures("check_injected_python_installed")
+
+
+dll_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_cross_heaven_gate_arm64_xfail")
+python_injection =  pytest.mark.usefixtures("check_dll_injection_target_architecture", "check_injected_python_installed", "check_cross_heaven_gate_arm64_xfail")
 
 
 ## P2 VS PY3

@@ -60,3 +60,11 @@ BOOL LookupAccountNameW(
   LPDWORD       cchReferencedDomainName,
   PSID_NAME_USE peUse
 );
+
+PVOID GetNativeSystemInfo(
+  [out] LPSYSTEM_INFO lpSystemInfo
+);
+
+PVOID GetSystemInfo(
+  [out] LPSYSTEM_INFO lpSystemInfo
+);

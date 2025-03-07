@@ -1,5 +1,7 @@
-import pytest
+import time
 import textwrap
+
+import pytest
 
 import windows
 import windows.generated_def as gdef
@@ -8,8 +10,28 @@ import windows.native_exec.simple_x64 as x64
 
 from .pfwtest import *
 
-pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
+# pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
+def test_print_syswow_state():
+    import platform
+    print("")
+    env = windows.system.environ
+    print("platform.machine()={0}".format(platform.machine()))
+    print("platform.architecture()={0}".format(platform.architecture()))
+    print("windows.system.bitness={0}".format(windows.system.bitness))
+    print("windows.system.architecture={0}".format(windows.system.architecture))
+    print("windows.current_process.bitness={0}".format(windows.current_process.bitness))
+    print("windows.current_process.architecture={0}".format(windows.current_process.architecture))
+    print("env['PROCESSOR_ARCHITECTURE']={0}".format(env['PROCESSOR_ARCHITECTURE']))
+    print("env.get('PROCESSOR_ARCHITEW6432')={0}".format(env.get('PROCESSOR_ARCHITEW6432')))
+
+    print("")
+    print("IsWow64Process2")
+    processMachine = gdef.USHORT()
+    nativeMachine = gdef.USHORT()
+    windows.winproxy.IsWow64Process2(windows.current_process.handle, processMachine, nativeMachine)
+    print("hex(processMachine.value)={0}".format(hex(processMachine.value)))
+    print("hex(nativeMachine.value)={0}".format(hex(nativeMachine.value)))
 
 
 @process_syswow_only
@@ -30,6 +52,7 @@ class TestSyswowCurrentProcess(object):
 @python_injection
 @windows_64bit_only
 class TestSyswowRemoteProcess(object):
+    @cross_heaven_gates
     def test_remote_pebsyswow(self, proc32):
         peb64 = proc32.peb_syswow
         modules_names = [m.name for m in peb64.modules]
@@ -39,6 +62,7 @@ class TestSyswowRemoteProcess(object):
         assert "Wow64LdrpInitialize" in wow64.pe.exports
 
 
+    @system_architecture_only(gdef.PROCESSOR_ARCHITECTURE_AMD64)
     def test_getset_syswow_context(self, proc32):
         addr = proc32.virtual_alloc(0x1000)
         remote_python_code = """
@@ -49,6 +73,8 @@ class TestSyswowRemoteProcess(object):
         windows.current_process.write_qword({0},  res)
         """.format(addr)
 
+        # Execute the import safely so that the test will not hang if import fails
+        proc32.execute_python("import windows")
         t = proc32.execute_python_unsafe(textwrap.dedent(remote_python_code))
         # Wait for python execution
         while proc32.read_qword(addr) != 0x8877665544332211:
@@ -85,7 +111,6 @@ def loop_query_ppid(proc, target_ppid):
                 assert proc.read_memory(i.BaseAddress, 0x1000)
             # assert False, "LOL"
     except Exception as e:
-        # import traceback; traceback.print(
         threads_error[windows.current_thread.tid] = e
         raise
     return True
@@ -99,6 +124,7 @@ def test_syswow_call_multithread():
     # Old version of PFW did not handled that thus generating invalid result / crash
     for tnb in range(10):
         new_proc = windows.test.pop_proc_64()
+        time.sleep(0.1)
         new_proc_pid = new_proc.ppid
         all_procs.append(new_proc)
         t = threading.Thread(target=loop_query_ppid, args=(new_proc, new_proc_pid))

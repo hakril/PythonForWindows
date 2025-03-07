@@ -101,3 +101,5 @@
 #define IMAGE_FILE_MACHINE_M32R              0x9041
 #define IMAGE_FILE_MACHINE_CEE               0xC0EE
 #define IMAGE_FILE_MACHINE_ARM64             0xAA64
+
+#define IMAGE_FILE_MACHINE_TARGET_HOST      0x0001  // Useful for indicating we want to interact with the host and not a WoW guest.

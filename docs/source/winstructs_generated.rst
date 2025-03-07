@@ -7956,6 +7956,28 @@ _IMAGE_LOAD_CONFIG_DIRECTORY64
 
         :class:`ULONGLONG`
 
+_PROCESS_MACHINE_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: PROCESS_MACHINE_INFORMATION
+
+    Alias for :class:`_PROCESS_MACHINE_INFORMATION`
+
+.. class:: _PROCESS_MACHINE_INFORMATION
+
+    .. attribute:: ProcessMachine
+
+        :class:`USHORT`
+
+
+    .. attribute:: Res0
+
+        :class:`USHORT`
+
+
+    .. attribute:: MachineAttributes
+
+        :class:`MACHINE_ATTRIBUTES`
+
 _MEM_ADDRESS_REQUIREMENTS
 '''''''''''''''''''''''''
 .. class:: MEM_ADDRESS_REQUIREMENTS
@@ -10322,6 +10344,67 @@ _SYSTEM_BASIC_INFORMATION
 
         :class:`CHAR`
 
+_SYSTEM_INFO
+''''''''''''
+.. class:: LPSYSTEM_INFO
+
+    Pointer to :class:`_SYSTEM_INFO`
+
+.. class:: SYSTEM_INFO
+
+    Alias for :class:`_SYSTEM_INFO`
+
+.. class:: _SYSTEM_INFO
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__SYSTEM_INFO_SUB_UNION_1`
+
+
+    .. attribute:: dwPageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpMinimumApplicationAddress
+
+        :class:`LPVOID`
+
+
+    .. attribute:: lpMaximumApplicationAddress
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwActiveProcessorMask
+
+        :class:`DWORD_PTR`
+
+
+    .. attribute:: dwNumberOfProcessors
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProcessorType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwAllocationGranularity
+
+        :class:`DWORD`
+
+
+    .. attribute:: wProcessorLevel
+
+        :class:`WORD`
+
+
+    .. attribute:: wProcessorRevision
+
+        :class:`WORD`
+
 _CURDIR
 '''''''
 .. class:: CURDIR
@@ -11207,6 +11290,951 @@ _TEB
     .. attribute:: FpSoftwareStatusRegister
 
         :class:`ULONG`
+
+_ARM64_NT_NEON128
+'''''''''''''''''
+.. class:: ARM64_NT_NEON128
+
+    Alias for :class:`_ARM64_NT_NEON128`
+
+.. class:: PARM64_NT_NEON128
+
+    Pointer to :class:`_ARM64_NT_NEON128`
+
+.. class:: _ARM64_NT_NEON128
+
+    .. attribute:: DUMMYSTRUCTNAME
+
+        :class:`_ANON__ARM64_NT_NEON128_SUB_STRUCTURE_1`
+
+
+    .. attribute:: D
+
+        :class:`DOUBLE` ``[2]``
+
+
+    .. attribute:: S
+
+        :class:`FLOAT` ``[4]``
+
+
+    .. attribute:: H
+
+        :class:`WORD` ``[8]``
+
+
+    .. attribute:: B
+
+        :class:`BYTE` ``[16]``
+
+_ARM64_NT_CONTEXT
+'''''''''''''''''
+.. class:: ARM64_NT_CONTEXT
+
+    Alias for :class:`_ARM64_NT_CONTEXT`
+
+.. class:: PARM64_NT_CONTEXT
+
+    Pointer to :class:`_ARM64_NT_CONTEXT`
+
+.. class:: _ARM64_NT_CONTEXT
+
+    .. attribute:: ContextFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Cpsr
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__ARM64_NT_CONTEXT_SUB_UNION_1`
+
+
+    .. attribute:: Sp
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Pc
+
+        :class:`DWORD64`
+
+
+    .. attribute:: V
+
+        :class:`ARM64_NT_NEON128` ``[32]``
+
+
+    .. attribute:: Fpcr
+
+        :class:`DWORD`
+
+
+    .. attribute:: Fpsr
+
+        :class:`DWORD`
+
+
+    .. attribute:: Bcr
+
+        :class:`DWORD` ``[ARM64_MAX_BREAKPOINTS]``
+
+
+    .. attribute:: Bvr
+
+        :class:`DWORD64` ``[ARM64_MAX_BREAKPOINTS]``
+
+
+    .. attribute:: Wcr
+
+        :class:`DWORD` ``[ARM64_MAX_WATCHPOINTS]``
+
+
+    .. attribute:: Wvr
+
+        :class:`DWORD64` ``[ARM64_MAX_WATCHPOINTS]``
+
+_FLOATING_SAVE_AREA
+'''''''''''''''''''
+.. class:: FLOATING_SAVE_AREA
+
+    Alias for :class:`_FLOATING_SAVE_AREA`
+
+.. class:: _FLOATING_SAVE_AREA
+
+    .. attribute:: ControlWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: StatusWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: TagWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorSelector
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataSelector
+
+        :class:`DWORD`
+
+
+    .. attribute:: RegisterArea
+
+        :class:`BYTE` ``[80]``
+
+
+    .. attribute:: Cr0NpxState
+
+        :class:`DWORD`
+
+_CONTEXT32
+''''''''''
+.. class:: CONTEXT32
+
+    Alias for :class:`_CONTEXT32`
+
+.. class:: LPCONTEXT32
+
+    Pointer to :class:`_CONTEXT32`
+
+.. class:: PCONTEXT32
+
+    Pointer to :class:`_CONTEXT32`
+
+.. class:: _CONTEXT32
+
+    .. attribute:: ContextFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr0
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr1
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr2
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr3
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr6
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr7
+
+        :class:`DWORD`
+
+
+    .. attribute:: FloatSave
+
+        :class:`FLOATING_SAVE_AREA`
+
+
+    .. attribute:: SegGs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegFs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegEs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegDs
+
+        :class:`DWORD`
+
+
+    .. attribute:: Edi
+
+        :class:`DWORD`
+
+
+    .. attribute:: Esi
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ebx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Edx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ecx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Eax
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ebp
+
+        :class:`DWORD`
+
+
+    .. attribute:: Eip
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegCs
+
+        :class:`DWORD`
+
+
+    .. attribute:: EFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Esp
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegSs
+
+        :class:`DWORD`
+
+
+    .. attribute:: ExtendedRegisters
+
+        :class:`BYTE` ``[512]``
+
+_WOW64_FLOATING_SAVE_AREA
+'''''''''''''''''''''''''
+.. class:: WOW64_FLOATING_SAVE_AREA
+
+    Alias for :class:`_WOW64_FLOATING_SAVE_AREA`
+
+.. class:: _WOW64_FLOATING_SAVE_AREA
+
+    .. attribute:: ControlWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: StatusWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: TagWord
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorSelector
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataSelector
+
+        :class:`DWORD`
+
+
+    .. attribute:: RegisterArea
+
+        :class:`BYTE` ``[WOW64_SIZE_OF_80387_REGISTERS]``
+
+
+    .. attribute:: Cr0NpxState
+
+        :class:`DWORD`
+
+_WOW64_CONTEXT
+''''''''''''''
+.. class:: PWOW64_CONTEXT
+
+    Pointer to :class:`_WOW64_CONTEXT`
+
+.. class:: WOW64_CONTEXT
+
+    Alias for :class:`_WOW64_CONTEXT`
+
+.. class:: _WOW64_CONTEXT
+
+    .. attribute:: ContextFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr0
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr1
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr2
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr3
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr6
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr7
+
+        :class:`DWORD`
+
+
+    .. attribute:: FloatSave
+
+        :class:`WOW64_FLOATING_SAVE_AREA`
+
+
+    .. attribute:: SegGs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegFs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegEs
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegDs
+
+        :class:`DWORD`
+
+
+    .. attribute:: Edi
+
+        :class:`DWORD`
+
+
+    .. attribute:: Esi
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ebx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Edx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ecx
+
+        :class:`DWORD`
+
+
+    .. attribute:: Eax
+
+        :class:`DWORD`
+
+
+    .. attribute:: Ebp
+
+        :class:`DWORD`
+
+
+    .. attribute:: Eip
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegCs
+
+        :class:`DWORD`
+
+
+    .. attribute:: EFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Esp
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegSs
+
+        :class:`DWORD`
+
+
+    .. attribute:: ExtendedRegisters
+
+        :class:`BYTE` ``[WOW64_MAXIMUM_SUPPORTED_EXTENSION]``
+
+_M128A
+''''''
+.. class:: M128A
+
+    Alias for :class:`_M128A`
+
+.. class:: PM128A
+
+    Pointer to :class:`_M128A`
+
+.. class:: _M128A
+
+    .. attribute:: Low
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: High
+
+        :class:`LONGLONG`
+
+_XSAVE_FORMAT_64
+''''''''''''''''
+.. class:: PXSAVE_FORMAT_64
+
+    Pointer to :class:`_XSAVE_FORMAT_64`
+
+.. class:: XSAVE_FORMAT_64
+
+    Alias for :class:`_XSAVE_FORMAT_64`
+
+.. class:: _XSAVE_FORMAT_64
+
+    .. attribute:: ControlWord
+
+        :class:`WORD`
+
+
+    .. attribute:: StatusWord
+
+        :class:`WORD`
+
+
+    .. attribute:: TagWord
+
+        :class:`BYTE`
+
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE`
+
+
+    .. attribute:: ErrorOpcode
+
+        :class:`WORD`
+
+
+    .. attribute:: ErrorOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorSelector
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved2
+
+        :class:`WORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataSelector
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved3
+
+        :class:`WORD`
+
+
+    .. attribute:: MxCsr
+
+        :class:`DWORD`
+
+
+    .. attribute:: MxCsr_Mask
+
+        :class:`DWORD`
+
+
+    .. attribute:: FloatRegisters
+
+        :class:`M128A` ``[8]``
+
+
+    .. attribute:: XmmRegisters
+
+        :class:`M128A` ``[16]``
+
+
+    .. attribute:: Reserved4
+
+        :class:`BYTE` ``[96]``
+
+_XSAVE_FORMAT_32
+''''''''''''''''
+.. class:: PXSAVE_FORMAT_32
+
+    Pointer to :class:`_XSAVE_FORMAT_32`
+
+.. class:: XSAVE_FORMAT_32
+
+    Alias for :class:`_XSAVE_FORMAT_32`
+
+.. class:: _XSAVE_FORMAT_32
+
+    .. attribute:: ControlWord
+
+        :class:`WORD`
+
+
+    .. attribute:: StatusWord
+
+        :class:`WORD`
+
+
+    .. attribute:: TagWord
+
+        :class:`BYTE`
+
+
+    .. attribute:: Reserved1
+
+        :class:`BYTE`
+
+
+    .. attribute:: ErrorOpcode
+
+        :class:`WORD`
+
+
+    .. attribute:: ErrorOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: ErrorSelector
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved2
+
+        :class:`WORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataSelector
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved3
+
+        :class:`WORD`
+
+
+    .. attribute:: MxCsr
+
+        :class:`DWORD`
+
+
+    .. attribute:: MxCsr_Mask
+
+        :class:`DWORD`
+
+
+    .. attribute:: FloatRegisters
+
+        :class:`M128A` ``[8]``
+
+
+    .. attribute:: XmmRegisters
+
+        :class:`M128A` ``[8]``
+
+
+    .. attribute:: Reserved4
+
+        :class:`BYTE` ``[192]``
+
+
+    .. attribute:: StackControl
+
+        :class:`DWORD` ``[7]``
+
+
+    .. attribute:: Cr0NpxState
+
+        :class:`DWORD`
+
+_CONTEXT64
+''''''''''
+.. class:: CONTEXT64
+
+    Alias for :class:`_CONTEXT64`
+
+.. class:: LPCONTEXT64
+
+    Pointer to :class:`_CONTEXT64`
+
+.. class:: PCONTEXT64
+
+    Pointer to :class:`_CONTEXT64`
+
+.. class:: _CONTEXT64
+
+    .. attribute:: P1Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: P2Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: P3Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: P4Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: P5Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: P6Home
+
+        :class:`DWORD64`
+
+
+    .. attribute:: ContextFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MxCsr
+
+        :class:`DWORD`
+
+
+    .. attribute:: SegCs
+
+        :class:`WORD`
+
+
+    .. attribute:: SegDs
+
+        :class:`WORD`
+
+
+    .. attribute:: SegEs
+
+        :class:`WORD`
+
+
+    .. attribute:: SegFs
+
+        :class:`WORD`
+
+
+    .. attribute:: SegGs
+
+        :class:`WORD`
+
+
+    .. attribute:: SegSs
+
+        :class:`WORD`
+
+
+    .. attribute:: EFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: Dr0
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Dr1
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Dr2
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Dr3
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Dr6
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Dr7
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rax
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rcx
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rdx
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rbx
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rsp
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rbp
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rsi
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rdi
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R8
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R9
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R10
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R11
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R12
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R13
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R14
+
+        :class:`DWORD64`
+
+
+    .. attribute:: R15
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Rip
+
+        :class:`DWORD64`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__CONTEXT64_SUB_UNION_1`
+
+
+    .. attribute:: VectorRegister
+
+        :class:`M128A` ``[26]``
+
+
+    .. attribute:: VectorControl
+
+        :class:`DWORD64`
+
+
+    .. attribute:: DebugControl
+
+        :class:`DWORD64`
+
+
+    .. attribute:: LastBranchToRip
+
+        :class:`DWORD64`
+
+
+    .. attribute:: LastBranchFromRip
+
+        :class:`DWORD64`
+
+
+    .. attribute:: LastExceptionToRip
+
+        :class:`DWORD64`
+
+
+    .. attribute:: LastExceptionFromRip
+
+        :class:`DWORD64`
 
 _TRACE_PROVIDER_INFO
 ''''''''''''''''''''
@@ -12597,958 +13625,6 @@ _PROCESS_INFORMATION
     .. attribute:: dwThreadId
 
         :class:`DWORD`
-
-_FLOATING_SAVE_AREA
-'''''''''''''''''''
-.. class:: FLOATING_SAVE_AREA
-
-    Alias for :class:`_FLOATING_SAVE_AREA`
-
-.. class:: _FLOATING_SAVE_AREA
-
-    .. attribute:: ControlWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: StatusWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: TagWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorSelector
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataSelector
-
-        :class:`DWORD`
-
-
-    .. attribute:: RegisterArea
-
-        :class:`BYTE` ``[80]``
-
-
-    .. attribute:: Cr0NpxState
-
-        :class:`DWORD`
-
-_CONTEXT32
-''''''''''
-.. class:: CONTEXT32
-
-    Alias for :class:`_CONTEXT32`
-
-.. class:: LPCONTEXT32
-
-    Pointer to :class:`_CONTEXT32`
-
-.. class:: PCONTEXT32
-
-    Pointer to :class:`_CONTEXT32`
-
-.. class:: _CONTEXT32
-
-    .. attribute:: ContextFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr0
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr1
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr2
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr3
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr6
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr7
-
-        :class:`DWORD`
-
-
-    .. attribute:: FloatSave
-
-        :class:`FLOATING_SAVE_AREA`
-
-
-    .. attribute:: SegGs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegFs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegEs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegDs
-
-        :class:`DWORD`
-
-
-    .. attribute:: Edi
-
-        :class:`DWORD`
-
-
-    .. attribute:: Esi
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ebx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Edx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ecx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Eax
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ebp
-
-        :class:`DWORD`
-
-
-    .. attribute:: Eip
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegCs
-
-        :class:`DWORD`
-
-
-    .. attribute:: EFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: Esp
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegSs
-
-        :class:`DWORD`
-
-
-    .. attribute:: ExtendedRegisters
-
-        :class:`BYTE` ``[512]``
-
-_WOW64_FLOATING_SAVE_AREA
-'''''''''''''''''''''''''
-.. class:: WOW64_FLOATING_SAVE_AREA
-
-    Alias for :class:`_WOW64_FLOATING_SAVE_AREA`
-
-.. class:: _WOW64_FLOATING_SAVE_AREA
-
-    .. attribute:: ControlWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: StatusWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: TagWord
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorSelector
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataSelector
-
-        :class:`DWORD`
-
-
-    .. attribute:: RegisterArea
-
-        :class:`BYTE` ``[WOW64_SIZE_OF_80387_REGISTERS]``
-
-
-    .. attribute:: Cr0NpxState
-
-        :class:`DWORD`
-
-_WOW64_CONTEXT
-''''''''''''''
-.. class:: PWOW64_CONTEXT
-
-    Pointer to :class:`_WOW64_CONTEXT`
-
-.. class:: WOW64_CONTEXT
-
-    Alias for :class:`_WOW64_CONTEXT`
-
-.. class:: _WOW64_CONTEXT
-
-    .. attribute:: ContextFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr0
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr1
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr2
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr3
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr6
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr7
-
-        :class:`DWORD`
-
-
-    .. attribute:: FloatSave
-
-        :class:`WOW64_FLOATING_SAVE_AREA`
-
-
-    .. attribute:: SegGs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegFs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegEs
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegDs
-
-        :class:`DWORD`
-
-
-    .. attribute:: Edi
-
-        :class:`DWORD`
-
-
-    .. attribute:: Esi
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ebx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Edx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ecx
-
-        :class:`DWORD`
-
-
-    .. attribute:: Eax
-
-        :class:`DWORD`
-
-
-    .. attribute:: Ebp
-
-        :class:`DWORD`
-
-
-    .. attribute:: Eip
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegCs
-
-        :class:`DWORD`
-
-
-    .. attribute:: EFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: Esp
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegSs
-
-        :class:`DWORD`
-
-
-    .. attribute:: ExtendedRegisters
-
-        :class:`BYTE` ``[WOW64_MAXIMUM_SUPPORTED_EXTENSION]``
-
-_M128A
-''''''
-.. class:: M128A
-
-    Alias for :class:`_M128A`
-
-.. class:: PM128A
-
-    Pointer to :class:`_M128A`
-
-.. class:: _M128A
-
-    .. attribute:: Low
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: High
-
-        :class:`LONGLONG`
-
-_XSAVE_FORMAT_64
-''''''''''''''''
-.. class:: PXSAVE_FORMAT_64
-
-    Pointer to :class:`_XSAVE_FORMAT_64`
-
-.. class:: XSAVE_FORMAT_64
-
-    Alias for :class:`_XSAVE_FORMAT_64`
-
-.. class:: _XSAVE_FORMAT_64
-
-    .. attribute:: ControlWord
-
-        :class:`WORD`
-
-
-    .. attribute:: StatusWord
-
-        :class:`WORD`
-
-
-    .. attribute:: TagWord
-
-        :class:`BYTE`
-
-
-    .. attribute:: Reserved1
-
-        :class:`BYTE`
-
-
-    .. attribute:: ErrorOpcode
-
-        :class:`WORD`
-
-
-    .. attribute:: ErrorOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorSelector
-
-        :class:`WORD`
-
-
-    .. attribute:: Reserved2
-
-        :class:`WORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataSelector
-
-        :class:`WORD`
-
-
-    .. attribute:: Reserved3
-
-        :class:`WORD`
-
-
-    .. attribute:: MxCsr
-
-        :class:`DWORD`
-
-
-    .. attribute:: MxCsr_Mask
-
-        :class:`DWORD`
-
-
-    .. attribute:: FloatRegisters
-
-        :class:`M128A` ``[8]``
-
-
-    .. attribute:: XmmRegisters
-
-        :class:`M128A` ``[16]``
-
-
-    .. attribute:: Reserved4
-
-        :class:`BYTE` ``[96]``
-
-_XSAVE_FORMAT_32
-''''''''''''''''
-.. class:: PXSAVE_FORMAT_32
-
-    Pointer to :class:`_XSAVE_FORMAT_32`
-
-.. class:: XSAVE_FORMAT_32
-
-    Alias for :class:`_XSAVE_FORMAT_32`
-
-.. class:: _XSAVE_FORMAT_32
-
-    .. attribute:: ControlWord
-
-        :class:`WORD`
-
-
-    .. attribute:: StatusWord
-
-        :class:`WORD`
-
-
-    .. attribute:: TagWord
-
-        :class:`BYTE`
-
-
-    .. attribute:: Reserved1
-
-        :class:`BYTE`
-
-
-    .. attribute:: ErrorOpcode
-
-        :class:`WORD`
-
-
-    .. attribute:: ErrorOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: ErrorSelector
-
-        :class:`WORD`
-
-
-    .. attribute:: Reserved2
-
-        :class:`WORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataSelector
-
-        :class:`WORD`
-
-
-    .. attribute:: Reserved3
-
-        :class:`WORD`
-
-
-    .. attribute:: MxCsr
-
-        :class:`DWORD`
-
-
-    .. attribute:: MxCsr_Mask
-
-        :class:`DWORD`
-
-
-    .. attribute:: FloatRegisters
-
-        :class:`M128A` ``[8]``
-
-
-    .. attribute:: XmmRegisters
-
-        :class:`M128A` ``[8]``
-
-
-    .. attribute:: Reserved4
-
-        :class:`BYTE` ``[192]``
-
-
-    .. attribute:: StackControl
-
-        :class:`DWORD` ``[7]``
-
-
-    .. attribute:: Cr0NpxState
-
-        :class:`DWORD`
-
-_TMP_DUMMYSTRUCTNAME
-''''''''''''''''''''
-.. class:: TMP_DUMMYSTRUCTNAME
-
-    Alias for :class:`_TMP_DUMMYSTRUCTNAME`
-
-.. class:: _TMP_DUMMYSTRUCTNAME
-
-    .. attribute:: Header
-
-        :class:`M128A` ``[2]``
-
-
-    .. attribute:: Legacy
-
-        :class:`M128A` ``[8]``
-
-
-    .. attribute:: Xmm0
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm1
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm2
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm3
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm4
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm5
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm6
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm7
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm8
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm9
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm10
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm11
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm12
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm13
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm14
-
-        :class:`M128A`
-
-
-    .. attribute:: Xmm15
-
-        :class:`M128A`
-
-_TMP_CONTEXT64_SUBUNION
-'''''''''''''''''''''''
-.. class:: TMP_CONTEXT64_SUBUNION
-
-    Alias for :class:`_TMP_CONTEXT64_SUBUNION`
-
-.. class:: _TMP_CONTEXT64_SUBUNION
-
-    .. attribute:: FltSave
-
-        :class:`XSAVE_FORMAT_64`
-
-
-    .. attribute:: DUMMYSTRUCTNAME
-
-        :class:`TMP_DUMMYSTRUCTNAME`
-
-_CONTEXT64
-''''''''''
-.. class:: CONTEXT64
-
-    Alias for :class:`_CONTEXT64`
-
-.. class:: LPCONTEXT64
-
-    Pointer to :class:`_CONTEXT64`
-
-.. class:: PCONTEXT64
-
-    Pointer to :class:`_CONTEXT64`
-
-.. class:: _CONTEXT64
-
-    .. attribute:: P1Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: P2Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: P3Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: P4Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: P5Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: P6Home
-
-        :class:`DWORD64`
-
-
-    .. attribute:: ContextFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: MxCsr
-
-        :class:`DWORD`
-
-
-    .. attribute:: SegCs
-
-        :class:`WORD`
-
-
-    .. attribute:: SegDs
-
-        :class:`WORD`
-
-
-    .. attribute:: SegEs
-
-        :class:`WORD`
-
-
-    .. attribute:: SegFs
-
-        :class:`WORD`
-
-
-    .. attribute:: SegGs
-
-        :class:`WORD`
-
-
-    .. attribute:: SegSs
-
-        :class:`WORD`
-
-
-    .. attribute:: EFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: Dr0
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Dr1
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Dr2
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Dr3
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Dr6
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Dr7
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rax
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rcx
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rdx
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rbx
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rsp
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rbp
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rsi
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rdi
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R8
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R9
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R10
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R11
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R12
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R13
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R14
-
-        :class:`DWORD64`
-
-
-    .. attribute:: R15
-
-        :class:`DWORD64`
-
-
-    .. attribute:: Rip
-
-        :class:`DWORD64`
-
-
-    .. attribute:: DUMMYUNIONNAME
-
-        :class:`TMP_CONTEXT64_SUBUNION`
-
-
-    .. attribute:: VectorRegister
-
-        :class:`M128A` ``[26]``
-
-
-    .. attribute:: VectorControl
-
-        :class:`DWORD64`
-
-
-    .. attribute:: DebugControl
-
-        :class:`DWORD64`
-
-
-    .. attribute:: LastBranchToRip
-
-        :class:`DWORD64`
-
-
-    .. attribute:: LastBranchFromRip
-
-        :class:`DWORD64`
-
-
-    .. attribute:: LastExceptionToRip
-
-        :class:`DWORD64`
-
-
-    .. attribute:: LastExceptionFromRip
-
-        :class:`DWORD64`
 
 tagPROCESSENTRY32W
 ''''''''''''''''''
@@ -29355,6 +29431,473 @@ _KEY_INFORMATION_CLASS
 
     .. attribute:: MaxKeyInfoClass(10)
 
+_PROC_THREAD_ATTRIBUTE_NUM
+''''''''''''''''''''''''''
+.. class:: PROC_THREAD_ATTRIBUTE_NUM
+
+    Alias for :class:`_PROC_THREAD_ATTRIBUTE_NUM`
+
+
+.. class:: _PROC_THREAD_ATTRIBUTE_NUM
+
+
+    .. attribute:: ProcThreadAttributeParentProcess(0)
+
+
+    .. attribute:: ProcThreadAttributeHandleList(2)
+
+
+    .. attribute:: ProcThreadAttributeGroupAffinity(3)
+
+
+    .. attribute:: ProcThreadAttributePreferredNode(4)
+
+
+    .. attribute:: ProcThreadAttributeIdealProcessor(5)
+
+
+    .. attribute:: ProcThreadAttributeUmsThread(6)
+
+
+    .. attribute:: ProcThreadAttributeMitigationPolicy(7)
+
+
+    .. attribute:: ProcThreadAttributeSecurityCapabilities(9)
+
+
+    .. attribute:: ProcThreadAttributeProtectionLevel(11)
+
+
+    .. attribute:: ProcThreadAttributeJobList(13)
+
+
+    .. attribute:: ProcThreadAttributeChildProcessPolicy(14)
+
+
+    .. attribute:: ProcThreadAttributeAllApplicationPackagesPolicy(15)
+
+
+    .. attribute:: ProcThreadAttributeWin32kFilter(16)
+
+
+    .. attribute:: ProcThreadAttributeSafeOpenPromptOriginClaim(17)
+
+
+    .. attribute:: ProcThreadAttributeDesktopAppPolicy(18)
+
+
+    .. attribute:: ProcThreadAttributePseudoConsole(22)
+
+
+    .. attribute:: ProcThreadAttributeMitigationAuditPolicy(24)
+
+
+    .. attribute:: ProcThreadAttributeMachineType(25)
+
+
+    .. attribute:: ProcThreadAttributeComponentFilter(26)
+
+
+    .. attribute:: ProcThreadAttributeEnableOptionalXStateFeatures(27)
+
+
+    .. attribute:: ProcThreadAttributeTrustedApp(29)
+
+
+    .. attribute:: ProcThreadAttributeSveVectorLength(30)
+
+_MEMORY_INFORMATION_CLASS
+'''''''''''''''''''''''''
+.. class:: MEMORY_INFORMATION_CLASS
+
+    Alias for :class:`_MEMORY_INFORMATION_CLASS`
+
+
+.. class:: _MEMORY_INFORMATION_CLASS
+
+
+    .. attribute:: MemoryBasicInformation(0)
+
+
+    .. attribute:: MemoryWorkingSetList(1)
+
+
+    .. attribute:: MemorySectionName(2)
+
+
+    .. attribute:: MemoryBasicVlmInformation(3)
+
+
+    .. attribute:: MemoryWorkingSetListEx(4)
+
+_THREAD_INFORMATION_CLASS
+'''''''''''''''''''''''''
+.. class:: PTHREAD_INFORMATION_CLASS
+
+    Pointer to :class:`_THREAD_INFORMATION_CLASS`
+
+
+.. class:: THREAD_INFORMATION_CLASS
+
+    Alias for :class:`_THREAD_INFORMATION_CLASS`
+
+
+.. class:: _THREAD_INFORMATION_CLASS
+
+
+    .. attribute:: ThreadBasicInformation(0)
+
+
+    .. attribute:: ThreadTimes(1)
+
+
+    .. attribute:: ThreadPriority(2)
+
+
+    .. attribute:: ThreadBasePriority(3)
+
+
+    .. attribute:: ThreadAffinityMask(4)
+
+
+    .. attribute:: ThreadImpersonationToken(5)
+
+
+    .. attribute:: ThreadDescriptorTableEntry(6)
+
+
+    .. attribute:: ThreadEnableAlignmentFaultFixup(7)
+
+
+    .. attribute:: ThreadEventPair(8)
+
+
+    .. attribute:: ThreadQuerySetWin32StartAddress(9)
+
+
+    .. attribute:: ThreadZeroTlsCell(10)
+
+
+    .. attribute:: ThreadPerformanceCount(11)
+
+
+    .. attribute:: ThreadAmILastThread(12)
+
+
+    .. attribute:: ThreadIdealProcessor(13)
+
+
+    .. attribute:: ThreadPriorityBoost(14)
+
+
+    .. attribute:: ThreadSetTlsArrayAddress(15)
+
+
+    .. attribute:: ThreadIsIoPending(16)
+
+
+    .. attribute:: ThreadHideFromDebugger(17)
+
+_PROCESSINFOCLASS
+'''''''''''''''''
+.. class:: PROCESSINFOCLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+
+.. class:: _PROCESSINFOCLASS
+
+
+    .. attribute:: ProcessBasicInformation(0)
+
+
+    .. attribute:: ProcessQuotaLimits(1)
+
+
+    .. attribute:: ProcessIoCounters(2)
+
+
+    .. attribute:: ProcessVmCounters(3)
+
+
+    .. attribute:: ProcessTimes(4)
+
+
+    .. attribute:: ProcessBasePriority(5)
+
+
+    .. attribute:: ProcessRaisePriority(6)
+
+
+    .. attribute:: ProcessDebugPort(7)
+
+
+    .. attribute:: ProcessExceptionPort(8)
+
+
+    .. attribute:: ProcessAccessToken(9)
+
+
+    .. attribute:: ProcessLdtInformation(10)
+
+
+    .. attribute:: ProcessLdtSize(11)
+
+
+    .. attribute:: ProcessDefaultHardErrorMode(12)
+
+
+    .. attribute:: ProcessIoPortHandlers(13)
+
+
+    .. attribute:: ProcessPooledUsageAndLimits(14)
+
+
+    .. attribute:: ProcessWorkingSetWatch(15)
+
+
+    .. attribute:: ProcessUserModeIOPL(16)
+
+
+    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
+
+
+    .. attribute:: ProcessPriorityClass(18)
+
+
+    .. attribute:: ProcessWx86Information(19)
+
+
+    .. attribute:: ProcessHandleCount(20)
+
+
+    .. attribute:: ProcessAffinityMask(21)
+
+
+    .. attribute:: ProcessPriorityBoost(22)
+
+
+    .. attribute:: ProcessDeviceMap(23)
+
+
+    .. attribute:: ProcessSessionInformation(24)
+
+
+    .. attribute:: ProcessForegroundInformation(25)
+
+
+    .. attribute:: ProcessWow64Information(26)
+
+
+    .. attribute:: ProcessImageFileName(27)
+
+
+    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
+
+
+    .. attribute:: ProcessBreakOnTermination(29)
+
+
+    .. attribute:: ProcessDebugObjectHandle(30)
+
+
+    .. attribute:: ProcessDebugFlags(31)
+
+
+    .. attribute:: ProcessHandleTracing(32)
+
+
+    .. attribute:: ProcessIoPriority(33)
+
+
+    .. attribute:: ProcessExecuteFlags(34)
+
+
+    .. attribute:: ProcessTlsInformation(35)
+
+
+    .. attribute:: ProcessCookie(36)
+
+
+    .. attribute:: ProcessImageInformation(37)
+
+
+    .. attribute:: ProcessCycleTime(38)
+
+
+    .. attribute:: ProcessPagePriority(39)
+
+
+    .. attribute:: ProcessInstrumentationCallback(40)
+
+
+    .. attribute:: ProcessThreadStackAllocation(41)
+
+
+    .. attribute:: ProcessWorkingSetWatchEx(42)
+
+
+    .. attribute:: ProcessImageFileNameWin32(43)
+
+
+    .. attribute:: ProcessImageFileMapping(44)
+
+
+    .. attribute:: ProcessAffinityUpdateMode(45)
+
+
+    .. attribute:: ProcessMemoryAllocationMode(46)
+
+
+    .. attribute:: ProcessGroupInformation(47)
+
+
+    .. attribute:: ProcessTokenVirtualizationEnabled(48)
+
+
+    .. attribute:: ProcessOwnerInformation(49)
+
+
+    .. attribute:: ProcessWindowInformation(50)
+
+
+    .. attribute:: ProcessHandleInformation(51)
+
+
+    .. attribute:: ProcessMitigationPolicy(52)
+
+
+    .. attribute:: ProcessDynamicFunctionTableInformation(53)
+
+
+    .. attribute:: ProcessHandleCheckingMode(54)
+
+
+    .. attribute:: ProcessKeepAliveCount(55)
+
+
+    .. attribute:: ProcessRevokeFileHandles(56)
+
+
+    .. attribute:: ProcessWorkingSetControl(57)
+
+
+    .. attribute:: ProcessHandleTable(58)
+
+
+    .. attribute:: ProcessCheckStackExtentsMode(59)
+
+
+    .. attribute:: ProcessCommandLineInformation(60)
+
+
+    .. attribute:: ProcessProtectionInformation(61)
+
+
+    .. attribute:: ProcessMemoryExhaustion(62)
+
+
+    .. attribute:: ProcessFaultInformation(63)
+
+
+    .. attribute:: ProcessTelemetryIdInformation(64)
+
+
+    .. attribute:: ProcessCommitReleaseInformation(65)
+
+
+    .. attribute:: ProcessReserved1Information(66)
+
+
+    .. attribute:: ProcessReserved2Information(67)
+
+
+    .. attribute:: ProcessSubsystemProcess(68)
+
+
+    .. attribute:: ProcessInPrivate(70)
+
+
+    .. attribute:: ProcessRaiseUMExceptionOnInvalidHandleClose(71)
+
+
+    .. attribute:: ProcessSubsystemInformation(75)
+
+
+    .. attribute:: ProcessWin32kSyscallFilterInformation(79)
+
+
+    .. attribute:: ProcessEnergyTrackingState(82)
+
+
+    .. attribute:: MaxProcessInfoClass(83)
+
+_PROCESS_INFORMATION_CLASS
+''''''''''''''''''''''''''
+.. class:: PROCESS_INFORMATION_CLASS
+
+    Alias for :class:`_PROCESS_INFORMATION_CLASS`
+
+
+.. class:: _PROCESS_INFORMATION_CLASS
+
+
+    .. attribute:: ProcessMemoryPriority(0)
+
+
+    .. attribute:: ProcessMemoryExhaustionInfo(1)
+
+
+    .. attribute:: ProcessAppMemoryInfo(2)
+
+
+    .. attribute:: ProcessInPrivateInfo(3)
+
+
+    .. attribute:: ProcessPowerThrottling(4)
+
+
+    .. attribute:: ProcessReservedValue1(5)
+
+
+    .. attribute:: ProcessTelemetryCoverageInfo(6)
+
+
+    .. attribute:: ProcessProtectionLevelInfo(7)
+
+
+    .. attribute:: ProcessLeapSecondInfo(8)
+
+
+    .. attribute:: ProcessMachineTypeInfo(9)
+
+
+    .. attribute:: ProcessOverrideSubsequentPrefetchParameter(10)
+
+
+    .. attribute:: ProcessMaxOverridePrefetchParameter(11)
+
+
+    .. attribute:: ProcessInformationClassMax(12)
+
+_MACHINE_ATTRIBUTES
+'''''''''''''''''''
+.. class:: MACHINE_ATTRIBUTES
+
+    Alias for :class:`_MACHINE_ATTRIBUTES`
+
+
+.. class:: _MACHINE_ATTRIBUTES
+
+
+    .. attribute:: UserEnabled(1)
+
+
+    .. attribute:: KernelEnabled(2)
+
+
+    .. attribute:: Wow64Container(4)
+
 MEM_EXTENDED_PARAMETER_TYPE
 '''''''''''''''''''''''''''
 .. class:: PMEM_EXTENDED_PARAMETER_TYPE
@@ -31129,332 +31672,6 @@ _SECTION_INHERIT
 
 
     .. attribute:: ViewUnmap(2)
-
-_PROCESSINFOCLASS
-'''''''''''''''''
-.. class:: PROCESSINFOCLASS
-
-    Alias for :class:`_PROCESSINFOCLASS`
-
-
-.. class:: _PROCESSINFOCLASS
-
-
-    .. attribute:: ProcessBasicInformation(0)
-
-
-    .. attribute:: ProcessQuotaLimits(1)
-
-
-    .. attribute:: ProcessIoCounters(2)
-
-
-    .. attribute:: ProcessVmCounters(3)
-
-
-    .. attribute:: ProcessTimes(4)
-
-
-    .. attribute:: ProcessBasePriority(5)
-
-
-    .. attribute:: ProcessRaisePriority(6)
-
-
-    .. attribute:: ProcessDebugPort(7)
-
-
-    .. attribute:: ProcessExceptionPort(8)
-
-
-    .. attribute:: ProcessAccessToken(9)
-
-
-    .. attribute:: ProcessLdtInformation(10)
-
-
-    .. attribute:: ProcessLdtSize(11)
-
-
-    .. attribute:: ProcessDefaultHardErrorMode(12)
-
-
-    .. attribute:: ProcessIoPortHandlers(13)
-
-
-    .. attribute:: ProcessPooledUsageAndLimits(14)
-
-
-    .. attribute:: ProcessWorkingSetWatch(15)
-
-
-    .. attribute:: ProcessUserModeIOPL(16)
-
-
-    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
-
-
-    .. attribute:: ProcessPriorityClass(18)
-
-
-    .. attribute:: ProcessWx86Information(19)
-
-
-    .. attribute:: ProcessHandleCount(20)
-
-
-    .. attribute:: ProcessAffinityMask(21)
-
-
-    .. attribute:: ProcessPriorityBoost(22)
-
-
-    .. attribute:: ProcessDeviceMap(23)
-
-
-    .. attribute:: ProcessSessionInformation(24)
-
-
-    .. attribute:: ProcessForegroundInformation(25)
-
-
-    .. attribute:: ProcessWow64Information(26)
-
-
-    .. attribute:: ProcessImageFileName(27)
-
-
-    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
-
-
-    .. attribute:: ProcessBreakOnTermination(29)
-
-
-    .. attribute:: ProcessDebugObjectHandle(30)
-
-
-    .. attribute:: ProcessDebugFlags(31)
-
-
-    .. attribute:: ProcessHandleTracing(32)
-
-
-    .. attribute:: ProcessIoPriority(33)
-
-
-    .. attribute:: ProcessExecuteFlags(34)
-
-
-    .. attribute:: ProcessTlsInformation(35)
-
-
-    .. attribute:: ProcessCookie(36)
-
-
-    .. attribute:: ProcessImageInformation(37)
-
-
-    .. attribute:: ProcessCycleTime(38)
-
-
-    .. attribute:: ProcessPagePriority(39)
-
-
-    .. attribute:: ProcessInstrumentationCallback(40)
-
-
-    .. attribute:: ProcessThreadStackAllocation(41)
-
-
-    .. attribute:: ProcessWorkingSetWatchEx(42)
-
-
-    .. attribute:: ProcessImageFileNameWin32(43)
-
-
-    .. attribute:: ProcessImageFileMapping(44)
-
-
-    .. attribute:: ProcessAffinityUpdateMode(45)
-
-
-    .. attribute:: ProcessMemoryAllocationMode(46)
-
-
-    .. attribute:: ProcessGroupInformation(47)
-
-
-    .. attribute:: ProcessTokenVirtualizationEnabled(48)
-
-
-    .. attribute:: ProcessOwnerInformation(49)
-
-
-    .. attribute:: ProcessWindowInformation(50)
-
-
-    .. attribute:: ProcessHandleInformation(51)
-
-
-    .. attribute:: ProcessMitigationPolicy(52)
-
-
-    .. attribute:: ProcessDynamicFunctionTableInformation(53)
-
-
-    .. attribute:: ProcessHandleCheckingMode(54)
-
-
-    .. attribute:: ProcessKeepAliveCount(55)
-
-
-    .. attribute:: ProcessRevokeFileHandles(56)
-
-
-    .. attribute:: ProcessWorkingSetControl(57)
-
-
-    .. attribute:: ProcessHandleTable(58)
-
-
-    .. attribute:: ProcessCheckStackExtentsMode(59)
-
-
-    .. attribute:: ProcessCommandLineInformation(60)
-
-
-    .. attribute:: ProcessProtectionInformation(61)
-
-
-    .. attribute:: ProcessMemoryExhaustion(62)
-
-
-    .. attribute:: ProcessFaultInformation(63)
-
-
-    .. attribute:: ProcessTelemetryIdInformation(64)
-
-
-    .. attribute:: ProcessCommitReleaseInformation(65)
-
-
-    .. attribute:: ProcessReserved1Information(66)
-
-
-    .. attribute:: ProcessReserved2Information(67)
-
-
-    .. attribute:: ProcessSubsystemProcess(68)
-
-
-    .. attribute:: ProcessInPrivate(70)
-
-
-    .. attribute:: ProcessRaiseUMExceptionOnInvalidHandleClose(71)
-
-
-    .. attribute:: ProcessSubsystemInformation(75)
-
-
-    .. attribute:: ProcessWin32kSyscallFilterInformation(79)
-
-
-    .. attribute:: ProcessEnergyTrackingState(82)
-
-
-    .. attribute:: MaxProcessInfoClass(83)
-
-_MEMORY_INFORMATION_CLASS
-'''''''''''''''''''''''''
-.. class:: MEMORY_INFORMATION_CLASS
-
-    Alias for :class:`_MEMORY_INFORMATION_CLASS`
-
-
-.. class:: _MEMORY_INFORMATION_CLASS
-
-
-    .. attribute:: MemoryBasicInformation(0)
-
-
-    .. attribute:: MemoryWorkingSetList(1)
-
-
-    .. attribute:: MemorySectionName(2)
-
-
-    .. attribute:: MemoryBasicVlmInformation(3)
-
-
-    .. attribute:: MemoryWorkingSetListEx(4)
-
-_THREAD_INFORMATION_CLASS
-'''''''''''''''''''''''''
-.. class:: PTHREAD_INFORMATION_CLASS
-
-    Pointer to :class:`_THREAD_INFORMATION_CLASS`
-
-
-.. class:: THREAD_INFORMATION_CLASS
-
-    Alias for :class:`_THREAD_INFORMATION_CLASS`
-
-
-.. class:: _THREAD_INFORMATION_CLASS
-
-
-    .. attribute:: ThreadBasicInformation(0)
-
-
-    .. attribute:: ThreadTimes(1)
-
-
-    .. attribute:: ThreadPriority(2)
-
-
-    .. attribute:: ThreadBasePriority(3)
-
-
-    .. attribute:: ThreadAffinityMask(4)
-
-
-    .. attribute:: ThreadImpersonationToken(5)
-
-
-    .. attribute:: ThreadDescriptorTableEntry(6)
-
-
-    .. attribute:: ThreadEnableAlignmentFaultFixup(7)
-
-
-    .. attribute:: ThreadEventPair(8)
-
-
-    .. attribute:: ThreadQuerySetWin32StartAddress(9)
-
-
-    .. attribute:: ThreadZeroTlsCell(10)
-
-
-    .. attribute:: ThreadPerformanceCount(11)
-
-
-    .. attribute:: ThreadAmILastThread(12)
-
-
-    .. attribute:: ThreadIdealProcessor(13)
-
-
-    .. attribute:: ThreadPriorityBoost(14)
-
-
-    .. attribute:: ThreadSetTlsArrayAddress(15)
-
-
-    .. attribute:: ThreadIsIoPending(16)
-
-
-    .. attribute:: ThreadHideFromDebugger(17)
 
 _VARENUM
 ''''''''

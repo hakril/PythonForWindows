@@ -51,6 +51,7 @@ class TestSystemWithCheckGarbage(object):
     def test_wmi(self):
         assert windows.system.wmi is not None
 
+    @cross_heaven_gates
     def test_handles(self):
         assert windows.system.handles
 
@@ -66,6 +67,7 @@ class TestSystemWithCheckGarbage(object):
     def test_task_object_manager(self):
         assert windows.system.object_manager
 
+    @cross_heaven_gates
     def test_system_modules_ntosk(self):
         # NtQuerySystemInformation(gdef.SystemModuleInformation) returns CHAR so not unicode
         # Another Nt API that returns unicode ?
@@ -83,6 +85,7 @@ class TestSystemWithCheckGarbageAndHandleLeak(object):
         assert windows.current_process.pid in [p.pid for p in procs]
         assert is_unicode(windows.system.processes[0].name)
 
+    @cross_heaven_gates
     def test_system_modules(self):
         assert windows.system.modules
 

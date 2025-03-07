@@ -30,8 +30,11 @@ else:
                 assert p.bitness == 64
                 return p
     else:
+        # Force creation of AMD64 process on arm system
+        # TODO: also pop an ARM64 process when code works better with it
+        machine = gdef.IMAGE_FILE_MACHINE_AMD64 if windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 else None
         def pop_proc_64(dwCreationFlags=DEFAULT_CREATION_FLAGS):
-            p = windows.utils.create_process(r"C:\Windows\system32\{0}".format(test_binary_name).encode("ascii"), dwCreationFlags=dwCreationFlags, show_windows=True)
+            p = windows.utils.create_process(r"C:\Windows\system32\{0}".format(test_binary_name).encode("ascii"), dwCreationFlags=dwCreationFlags, show_windows=True, machine=machine)
             assert p.bitness == 64
             return p
 
@@ -44,6 +47,9 @@ def generate_pop_and_exit_fixtures(proc_popers, ids=[], dwCreationFlags=DEFAULT_
     def pop_and_exit_process(request):
         proc_poper = request.param
         proc = proc_poper(dwCreationFlags=dwCreationFlags)
+        # Apply manually the xfail marker for a test on x86_on_arm64 for pe64 target (cross-heaven gate)
+        if windows.current_process._is_x86_on_arm64 and proc.bitness == 64:
+            request.applymarker("xfail") # Cross Heaven gate
         time.sleep(0.2) # Give time to the process to load :)
         print("Created {0} ({1}bits) for test".format(proc, proc.bitness))
         yield weakref.proxy(proc)  # provide the fixture value
@@ -103,16 +109,14 @@ class HandleDebugger(object):
         print(self.handles_types(self.get_new_handle()))
 
 
-current_process_hdebugger = HandleDebugger(windows.current_process.pid)
-current_process_hdebugger.refresh_handles()
 
 class NoLeakAssert(AssertionError):
     pass
 
 
-
 @pytest.fixture()
 def check_for_handle_leak(request):
+    current_process_hdebugger = HandleDebugger(windows.current_process.pid)
     x = current_process_hdebugger.refresh_handles()
     yield None
     leaked_handles = current_process_hdebugger.get_new_handle(x)
@@ -161,11 +165,9 @@ def pytest_configure(config):
 @pytest.hookimpl(hookwrapper=True, trylast=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
-    # print("Make report {0} | {1}".format(item, call))
     if call.when == "teardown" and call.excinfo and type(call.excinfo.value) == NoLeakAssert:
         x = outcome.get_result()
         x.outcome = "failed"
-        # import pdb;pdb.set_trace()
         x.LEAK = call.excinfo.value.args[0]
 
 

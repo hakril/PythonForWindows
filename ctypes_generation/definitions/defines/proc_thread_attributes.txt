@@ -1,0 +1,79 @@
+// We have a rare case of defines that depends on an enum
+// Which is PROC_THREAD_ATTRIBUTE_NUM
+// So i Will just define a copy of those as define here
+// Define version copied from: https://github.com/winsiderss/systeminformer/blob/master/phnt/include/ntpsapi.h#L2666
+// Thx to them, as always :)
+
+#define ProcThreadAttributeParentProcess 0 // in HANDLE
+#define ProcThreadAttributeExtendedFlags 1 // in ULONG (EXTENDED_PROCESS_CREATION_FLAG_*)
+#define ProcThreadAttributeHandleList 2 // in HANDLE[]
+#define ProcThreadAttributeGroupAffinity 3 // in GROUP_AFFINITY // since WIN7
+#define ProcThreadAttributePreferredNode 4 // in USHORT
+#define ProcThreadAttributeIdealProcessor 5 // in PROCESSOR_NUMBER
+#define ProcThreadAttributeUmsThread 6 // in UMS_CREATE_THREAD_ATTRIBUTES
+#define ProcThreadAttributeMitigationPolicy 7 // in ULONG, ULONG64, or ULONG64[2]
+#define ProcThreadAttributePackageFullName 8 // in WCHAR[] // since WIN8
+#define ProcThreadAttributeSecurityCapabilities 9 // in SECURITY_CAPABILITIES
+#define ProcThreadAttributeConsoleReference 10 // BaseGetConsoleReference (kernelbase.dll)
+#define ProcThreadAttributeProtectionLevel 11 // in ULONG (PROTECTION_LEVEL_*) // since WINBLUE
+#define ProcThreadAttributeOsMaxVersionTested 12 // in MAXVERSIONTESTED_INFO // since THRESHOLD // (from exe.manifest)
+#define ProcThreadAttributeJobList 13 // in HANDLE[]
+#define ProcThreadAttributeChildProcessPolicy 14 // in ULONG (PROCESS_CREATION_CHILD_PROCESS_*) // since THRESHOLD2
+#define ProcThreadAttributeAllApplicationPackagesPolicy 15 // in ULONG (PROCESS_CREATION_ALL_APPLICATION_PACKAGES_*) // since REDSTONE
+#define ProcThreadAttributeWin32kFilter 16 // in WIN32K_SYSCALL_FILTER
+#define ProcThreadAttributeSafeOpenPromptOriginClaim 17 // in SE_SAFE_OPEN_PROMPT_RESULTS
+#define ProcThreadAttributeDesktopAppPolicy 18 // in ULONG (PROCESS_CREATION_DESKTOP_APP_*) // since RS2
+#define ProcThreadAttributeBnoIsolation 19 // in PROC_THREAD_BNOISOLATION_ATTRIBUTE
+#define ProcThreadAttributePseudoConsole 22 // in HANDLE (HPCON) // since RS5
+#define ProcThreadAttributeIsolationManifest 23 // in ISOLATION_MANIFEST_PROPERTIES // rev (diversenok) // since 19H2+
+#define ProcThreadAttributeMitigationAuditPolicy 24 // in ULONG, ULONG64, or ULONG64[2] // since 21H1
+#define ProcThreadAttributeMachineType 25 // in USHORT // since 21H2
+#define ProcThreadAttributeComponentFilter 26 // in ULONG
+#define ProcThreadAttributeEnableOptionalXStateFeatures 27 // in ULONG64 // since WIN11
+#define ProcThreadAttributeCreateStore 28 // ULONG // rev (diversenok)
+#define ProcThreadAttributeTrustedApp 29
+#define ProcThreadAttributeSveVectorLength 30
+
+// Real definition of value usef by API
+// From: https://github.com/microsoft/win32metadata/blob/6af96d8470751e13a4e3f579f84b7b8b3ca398e1/generation/WinSDK/RecompiledIdlHeaders/um/WinBase.h#L3568
+// macro ProcThreadAttributeValue is recoded in python in template.py
+// I replace TRUE by True && FALSE by False for native python compat :)
+
+#define PROC_THREAD_ATTRIBUTE_NUMBER    0x0000FFFF
+#define PROC_THREAD_ATTRIBUTE_THREAD    0x00010000  // Attribute may be used with thread creation
+#define PROC_THREAD_ATTRIBUTE_INPUT     0x00020000  // Attribute is input only
+#define PROC_THREAD_ATTRIBUTE_ADDITIVE  0x00040000  // Attribute may be "accumulated," e.g. bitmasks,
+
+#define PROC_THREAD_ATTRIBUTE_PARENT_PROCESS \
+    ProcThreadAttributeValue (ProcThreadAttributeParentProcess, False, True, False)
+#define PROC_THREAD_ATTRIBUTE_HANDLE_LIST \
+    ProcThreadAttributeValue (ProcThreadAttributeHandleList, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_GROUP_AFFINITY \
+    ProcThreadAttributeValue (ProcThreadAttributeGroupAffinity, True, True, False)
+#define PROC_THREAD_ATTRIBUTE_PREFERRED_NODE \
+    ProcThreadAttributeValue (ProcThreadAttributePreferredNode, False, True, False)
+#define PROC_THREAD_ATTRIBUTE_IDEAL_PROCESSOR \
+    ProcThreadAttributeValue (ProcThreadAttributeIdealProcessor, True, True, False)
+#define PROC_THREAD_ATTRIBUTE_UMS_THREAD \
+    ProcThreadAttributeValue (ProcThreadAttributeUmsThread, True, True, False)
+#define PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY \
+    ProcThreadAttributeValue (ProcThreadAttributeMitigationPolicy, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES \
+    ProcThreadAttributeValue (ProcThreadAttributeSecurityCapabilities, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_PROTECTION_LEVEL \
+    ProcThreadAttributeValue (ProcThreadAttributeProtectionLevel, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE \
+    ProcThreadAttributeValue (ProcThreadAttributePseudoConsole, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_MACHINE_TYPE \
+    ProcThreadAttributeValue (ProcThreadAttributeMachineType, False, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_ENABLE_OPTIONAL_XSTATE_FEATURES \
+    ProcThreadAttributeValue (ProcThreadAttributeEnableOptionalXStateFeatures, True, True, False)
+
+#define PROC_THREAD_ATTRIBUTE_SVE_VECTOR_LENGTH \
+    ProcThreadAttributeValue (ProcThreadAttributeSveVectorLength, False, True, False)

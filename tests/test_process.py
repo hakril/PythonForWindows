@@ -195,6 +195,7 @@ class TestProcessWithCheckGarbage(object):
 
     @windows_64bit_only
     def test_execute_to_64(self, proc64):
+        assert proc64.architecture == gdef.IMAGE_FILE_MACHINE_AMD64, "TODO: better machine fixture for ARM64"
         with proc64.allocated_memory(0x1000) as addr:
             shellcode = x64.MultipleInstr()
             shellcode += x64.Mov('RAX', 0x4242424243434343)
@@ -213,6 +214,7 @@ class TestProcessWithCheckGarbage(object):
             dword = proc32_64.read_dword(addr)
             assert dword == 0x42424242
 
+    @python_injection
     def test_execute_python_good_version(self, proc32_64):
         PIPE_NAME = "PFW_TEST_Pipe"
         rcode = r"""import sys; import windows; import windows.pipe; windows.pipe.send_object("{pipe}", list(sys.version_info))"""
@@ -292,6 +294,7 @@ class TestProcessWithCheckGarbage(object):
         # Check the RemotePythonError contains the remote exception text
         assert b"ValueError: EXCEPTION_MESSAGE" in ar.value.args[0]
 
+    @python_injection
     def test_execute_python_create_console(self, proc32_64):
         res = proc32_64.execute_python("import windows; windows.utils.create_console()")
 
@@ -351,6 +354,7 @@ class TestProcessWithCheckGarbage(object):
 
     @windows_64bit_only
     def test_set_thread_context_64(self, proc64):
+        assert proc64.architecture == gdef.IMAGE_FILE_MACHINE_AMD64, "TODO: better machine fixture for ARM64"
         code =  x64.MultipleInstr()
         code += x64.Label(":LOOP")
         code += x64.Jmp(":LOOP")
@@ -368,17 +372,19 @@ class TestProcessWithCheckGarbage(object):
         time.sleep(0.1)
         assert t.exit_code == 0x11223344
 
-
+    @dll_injection
     def test_load_library(self, proc32_64):
         DLL = "wintrust.dll"
         proc32_64.load_library(DLL)
         assert DLL in [m.name for m in proc32_64.peb.modules]
 
+    @dll_injection
     def test_load_library_suspended(self, proc32_64_suspended):
         DLL = "wintrust.dll"
         proc32_64_suspended.load_library(DLL)
         assert DLL in [m.name for m in proc32_64_suspended.peb.modules]
 
+    @dll_injection
     def test_load_library_unicode_name(self, proc32_64, tmpdir):
         mybitness = windows.current_process.bitness
         UNICODE_FILENAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b.dll'
@@ -481,10 +487,12 @@ class TestProcessWithCheckGarbage(object):
         # Check type of teb.peb is the correct subclass (with modules & co)
         assert teb.peb.modules
 
+    @cross_heaven_gates
     def test_thread_teb_base(self, proc32_64):
         t = proc32_64.threads[0]
         assert t.teb_base != 0
 
+    @cross_heaven_gates
     def test_teb(self, proc32_64):
         teb = proc32_64.threads[0].teb
         if proc32_64.bitness == 32:
@@ -497,6 +505,7 @@ class TestProcessWithCheckGarbage(object):
         assert teb.peb.modules
 
     @windows_64bit_only
+    @cross_heaven_gates
     def test_thread_teb_syswow_base(self, proc32):
         t = proc32.threads[0]
         assert t.teb_base != 0
@@ -504,6 +513,7 @@ class TestProcessWithCheckGarbage(object):
         assert t.teb_base == t.teb_syswow_base + 0x2000
 
     @windows_64bit_only
+    @cross_heaven_gates
     def test_thread_teb_syswow(self, proc32):
         teb_syswow = proc32.threads[0].teb_syswow
         assert type(teb_syswow) == windows.winobject.process.RemoteTEB64

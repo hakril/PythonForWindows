@@ -36,19 +36,6 @@ def get_remote_func_addr(target, dll_name, func_name):
         return mod.pe.exports[func_name]
 
 
-def is_wow_64(hProcess):
-    try:
-        fnIsWow64Process = get_func_addr("kernel32.dll", "IsWow64Process")
-    except winproxy.WinproxyError:
-        return False
-    IsWow64Process = ctypes.WINFUNCTYPE(BOOL, HANDLE, ctypes.POINTER(BOOL))(fnIsWow64Process)
-    Wow64Process = BOOL()
-    res = IsWow64Process(hProcess, ctypes.byref(Wow64Process))
-    if res:
-        return bool(Wow64Process)
-    raise ctypes.WinError()
-
-
 def create_file_from_handle(handle, mode="r"):
     """Return a Python :class:`file` around a ``Windows`` HANDLE"""
     flags = os.O_BINARY if "b" in mode else os.O_TEXT
@@ -86,14 +73,35 @@ def create_console():
     sys.stderr = console_stderr
 
 
-def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
-    """A convenient wrapper arround :func:`windows.winproxy.CreateProcessW`"""
+def create_process(path, args=None, dwCreationFlags=0, show_windows=True, machine=None):
+    """A convenient wrapper arround :func:`windows.winproxy.CreateProcessW`
+    ..note:
+        The machine param only works starting at vista and should be used on arm64 computer
+    """
     proc_info = PROCESS_INFORMATION()
+    StartupInfo = None
     lpStartupInfo = None
+
+    if machine is not None:
+        buffer = ctypes.create_string_buffer(0x100)
+        size = gdef.DWORD64(len(buffer))
+        machine = gdef.WORD(machine)
+        windows.winproxy.InitializeProcThreadAttributeList(buffer, 1, 0, size)
+        windows.winproxy.UpdateProcThreadAttribute(buffer, 0, gdef.PROC_THREAD_ATTRIBUTE_MACHINE_TYPE, ctypes.addressof(machine), ctypes.sizeof(machine), None, None)
+
+        startup_infoex = gdef.STARTUPINFOEXW()
+        startup_infoex.StartupInfo.cb = ctypes.sizeof(gdef.STARTUPINFOEXW)
+        startup_infoex.lpAttributeList = ctypes.cast(buffer, gdef.PVOID)
+        StartupInfo = startup_infoex.StartupInfo
+
+        dwCreationFlags |= gdef.EXTENDED_STARTUPINFO_PRESENT
+
     if show_windows:
-        StartupInfo = STARTUPINFOW()
-        StartupInfo.cb = ctypes.sizeof(StartupInfo)
+        if StartupInfo is None:
+            StartupInfo = STARTUPINFOW()
+            StartupInfo.cb = ctypes.sizeof(StartupInfo)
         StartupInfo.dwFlags = 0
+    if StartupInfo:
         lpStartupInfo = ctypes.byref(StartupInfo)
     lpCommandLine = None
     if isinstance(path, bytes):
@@ -110,6 +118,8 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     dbgprint("CreateProcessW new thread handle {:#x}".format(proc_info.hThread), "HANDLE")
     dbgprint("Automatic close of thread handle {:#x}".format(proc_info.hThread), "HANDLE")
     windows.winproxy.CloseHandle(proc_info.hThread)  # Give access to a WinThread in addition of the WinProcess ?
+    if machine:
+        windows.winproxy.DeleteProcThreadAttributeList(buffer)
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
@@ -299,6 +309,16 @@ def datetime_from_systemtime(systime):
             second=systime.wSecond,
             microsecond=systime.wMilliseconds * 1000,
     )
+
+IMAGE_FILE_MACHINE_TO_PROC_ARCH = {
+    gdef.IMAGE_FILE_MACHINE_I386: gdef.PROCESSOR_ARCHITECTURE_INTEL,
+    gdef.IMAGE_FILE_MACHINE_AMD64: gdef.PROCESSOR_ARCHITECTURE_AMD64,
+    gdef.IMAGE_FILE_MACHINE_ARM64: gdef.PROCESSOR_ARCHITECTURE_ARM64,
+    gdef.IMAGE_FILE_MACHINE_UNKNOWN: gdef.PROCESSOR_ARCHITECTURE_UNKNOWN
+}
+
+def image_file_machine_to_processor_architecture(image_file_machine):
+    return IMAGE_FILE_MACHINE_TO_PROC_ARCH[image_file_machine]
 
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
@@ -556,6 +576,14 @@ def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, secu
 #    h = windows.winproxy.CreateFileMappingA(fhandle, None, PAGE_READONLY, 0, 1, None)
 #    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)
 #    return addr
+
+def get_system_info(native=False):
+    res = gdef.SYSTEM_INFO()
+    if native:
+        windows.winproxy.GetNativeSystemInfo(res)
+    else:
+        windows.winproxy.GetSystemInfo(res)
+    return res
 
 def decompress_buffer(buffer, comptype=gdef.COMPRESSION_FORMAT_LZNT1, uncompress_size=None):
     if uncompress_size is None:

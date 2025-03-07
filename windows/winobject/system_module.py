@@ -44,6 +44,8 @@ def enumerate_kernel_modules():
     return list(modules)
 
 def enumerate_kernel_modules_syswow64():
+    if windows.current_process._is_x86_on_arm64:
+        raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
     cbsize = gdef.DWORD()
     windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemModuleInformation, None, 0, ctypes.addressof(cbsize))
     raw_buffer = (cbsize.value * gdef.BYTE)()

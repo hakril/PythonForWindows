@@ -12,6 +12,7 @@ from collections import namedtuple
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
+import windows.native_exec.simple_arm64 as arm64
 import windows.remotectypes as rctypes
 import windows.generated_def as gdef
 
@@ -70,8 +71,24 @@ class Process(utils.AutoHandle):
 
         :type: :class:`bool`
 		"""
-        # return utils.is_wow_64(self.handle)
-        return utils.is_wow_64(self.limited_handle)
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process):
+            return False
+        Wow64Process = gdef.BOOL()
+        windows.winproxy.IsWow64Process(self.handle, Wow64Process)
+        return bool(Wow64Process)
+
+
+
+    @utils.fixedproperty
+    def is_wow_64_2(self):
+        if not windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            return None, None
+        processMachine = gdef.USHORT()
+        nativeMachine = gdef.USHORT()
+        windows.winproxy.IsWow64Process2(self.handle, processMachine, nativeMachine)
+        return (gdef.IMAGE_FILE_MACHINE_MAPPER[processMachine.value],
+                gdef.IMAGE_FILE_MACHINE_MAPPER[nativeMachine.value])
+
 
     @utils.fixedproperty
     def bitness(self):
@@ -79,13 +96,52 @@ class Process(utils.AutoHandle):
 
         :returns: :class:`int` -- 32 or 64
 		"""
-        if windows.system.bitness == 32:
-            return 32
-        if self.is_wow_64:
+        if windows.system.bitness == 32 or self.is_wow_64:
             return 32
         return 64
 
     @utils.fixedproperty
+    def architecture(self):
+        # Syswow2 will exactly tell us the architecture
+        if windows.winproxy.is_implemented(windows.winproxy.IsWow64Process2):
+            process_machine, native_machine = self.is_wow_64_2
+            if process_machine != gdef.IMAGE_FILE_MACHINE_UNKNOWN:
+                return process_machine
+
+            if windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64:
+                # May be ARM64 or AMD64 as X64TA64 is not considered WOW64
+                # ProcessMachineTypeInfo is from build 22000
+                # What if not implemented ? parse target main binary PE ?
+                machine_archi = gdef.PROCESS_MACHINE_INFORMATION()
+                windows.winproxy.GetProcessInformation(self.handle, gdef.ProcessMachineTypeInfo, ctypes.byref(machine_archi), ctypes.sizeof(machine_archi))
+                return gdef.IMAGE_FILE_MACHINE_MAPPER[machine_archi.ProcessMachine]
+
+        # No IsWow64Process2 -> No ARM
+        # So its up on x86 -> x64 based on process bitness
+        if self.bitness == 32:
+            return gdef.IMAGE_FILE_MACHINE_I386
+        return gdef.IMAGE_FILE_MACHINE_AMD64
+
+    @utils.fixedproperty
+    def _is_x86_on_arm64(self):
+        return (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386)
+
+    @utils.fixedproperty
+    def _is_x86_on_x64(self):
+        return (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_AMD64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386)
+
+    @utils.fixedproperty
+    def _is_native_architecture(self):
+        return ((windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_INTEL and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_I386) or
+                (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_AMD64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_AMD64) or
+                (windows.system.architecture == gdef.PROCESSOR_ARCHITECTURE_ARM64 and
+                    self.architecture == gdef.IMAGE_FILE_MACHINE_ARM64))
+
+    @utils.fixedpropety
     def limited_handle(self):
         if windows.system.version[0] <= 5:
             # Windows XP | Serveur 2003
@@ -110,6 +166,8 @@ class Process(utils.AutoHandle):
         :type: :class:`int`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             xtype = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(xtype))()
@@ -180,6 +238,8 @@ class Process(utils.AutoHandle):
     def virtual_protect(self, addr, size, protect, old_protect=None):
         """Change the access right of one or more page of the process"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             if size & 0x0fff:
                 size = ((size >> 12) + 1) << 12
             if old_protect is None:
@@ -210,6 +270,8 @@ class Process(utils.AutoHandle):
         :rtype: :class:`~windows.generated_def.winstructs.MEMORY_BASIC_INFORMATION`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             res = MEMORY_BASIC_INFORMATION64()
             try:
                 v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=res)
@@ -290,6 +352,8 @@ class Process(utils.AutoHandle):
         for i, data in enumerate(info_array):
             info_array[i].VirtualAddress = addresses[i]
         if windows.current_process.bitness == 32 and self.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, MemoryWorkingSetListEx, info_array)
         else:
             winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
@@ -571,10 +635,10 @@ class Thread(utils.AutoHandle):
 class CurrentThread(Thread):
     """The current thread"""
 
-    get_teb_code_by_bitness = {
-        32: x86.assemble("mov eax, fs:[0x18]; ret"),
-        64: x64.assemble("mov rax, gs:[0x30]; ret")
-
+    get_teb_code_by_architecture = {
+        gdef.IMAGE_FILE_MACHINE_I386: x86.assemble("mov eax, fs:[0x18]; ret"),
+        gdef.IMAGE_FILE_MACHINE_AMD64: x64.assemble("mov rax, gs:[0x30]; ret"),
+        gdef.IMAGE_FILE_MACHINE_ARM64: arm64.assemble("mov x0, x18; ret")
     }
 
     @property #It's not a fixedproperty because executing thread might change
@@ -587,7 +651,7 @@ class CurrentThread(Thread):
 
     @property #It's not a fixedproperty because executing thread might change
     def teb_base(self):
-        get_teb_base_code = self.get_teb_code_by_bitness[self.owner.bitness]
+        get_teb_base_code = self.get_teb_code_by_architecture[self.owner.architecture]
         return self.owner.execute(get_teb_base_code)
 
     @property
@@ -724,6 +788,8 @@ class CurrentProcess(Process):
 		"""
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
+        if windows.current_process._is_x86_on_arm64:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
         return windows.syswow64.get_current_process_syswow_peb()
 
     # TODO: use ctypes.string_at / ctypes.wstring_at for read_string / read_wstring ?
@@ -850,6 +916,8 @@ class WinThread(Thread):
             :type: :class:`int`
 		"""
         if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            if windows.current_process._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             res = ULONGLONG()
             windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
             return res.value
@@ -869,6 +937,9 @@ class WinThread(Thread):
         # - Want the TEB of a 64b process
         # - Want the TEB64 of a Wowprocess
         # It's the same code for both
+        if windows.current_process._is_x86_on_arm64:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
         if windows.current_process.is_wow_64:
             restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
             ressize = (ctypes.sizeof(restype))
@@ -973,8 +1044,6 @@ class WinThread(Thread):
 
     @staticmethod
     def _get_thread_id_manual(handle):
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
-            raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
         res = THREAD_BASIC_INFORMATION()
         windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         id2 = res.ClientId.UniqueThread
@@ -1109,11 +1178,16 @@ class WinProcess(Process):
 
             :rtype: :class:`WinThread` or :class:`DeadThread`
 		"""
+        # We are using NtCreateThreadEx as  its more permissive about cross-bitness / cross-architecture
+        # And we can asume we known what we are doing -> So no safeguard ;)
+        thread_handle = HANDLE()
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            thread_handle = HANDLE()
+            if self._is_x86_on_arm64:
+                raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
             windows.syswow64.NtCreateThreadEx_32_to_64(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
-            return WinThread._from_handle(thread_handle.value)
-        return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
+        else:
+            windows.winproxy.NtCreateThreadEx(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
+        return WinThread._from_handle(thread_handle.value)
 
     def load_library(self, dll_path):
         """Load the library in remote process
@@ -1149,26 +1223,27 @@ class WinProcess(Process):
 
     @utils.fixedproperty
     def peb_addr(self):
-        """The address of the PEB
+        """The address of the PEB.
 
             :type: :class:`int`
 		"""
-        if windows.current_process.bitness == 32 and self.bitness == 64:
+        if windows.current_process._is_x86_on_arm64 and not self.bitness == 32:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
+        if windows.current_process.bitness == 32 and self.bitness == 64: # Intel to Intel
             x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(x))()
-            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, gdef.ProcessBasicInformation, ProcessInformation=data)
             peb_offset = x.PebBaseAddress.offset
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
         elif windows.current_process.bitness == 64 and self.bitness == 32:
-            information_type = 26
             y = ULONGLONG()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, byref(y), sizeof(y))
+            winproxy.NtQueryInformationProcess(self.handle, gdef.ProcessWow64Information, byref(y), sizeof(y))
             peb_addr = y.value
         else:
-            information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            winproxy.NtQueryInformationProcess(self.handle, gdef.ProcessBasicInformation, x)
             peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
         if peb_addr is None:
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
@@ -1192,6 +1267,10 @@ class WinProcess(Process):
     def peb_syswow_addr(self):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
+
+        if windows.current_process._is_x86_on_arm64:
+            raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
+
         if windows.current_process.bitness == 64:
             information_type = 0
             x = PROCESS_BASIC_INFORMATION()

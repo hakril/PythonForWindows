@@ -184,6 +184,8 @@ def perform_manual_getproc_loadlib(target, *args, **kwargs):
 
 
 def load_dll_in_remote_process(target, dll_path):
+    if target.architecture == gdef.IMAGE_FILE_MACHINE_ARM64:
+        raise NotImplementedError("Injection in ARM64 target process is not implemented")
     rpeb = target.peb
     if rpeb.Ldr:
         # LDR est parcourable, ca va etre deja plus simple..
@@ -372,6 +374,8 @@ def generate_python_exec_shellcode_64(target, PyDll):
 
 def inject_python_command(target, code_injected, PYDLL):
     """Postulate: PYDLL is already loaded in target process"""
+    if target.architecture == gdef.IMAGE_FILE_MACHINE_ARM64:
+        raise NotImplementedError("Injection in ARM64 target process is not implemented")
     PYCODE = code_injected + "\x00"
     # TODO: free this (how ? when ?)
     remote_python_code_addr = target.virtual_alloc(len(PYCODE))

@@ -9,15 +9,26 @@ from .pfwtest import *
 
 @pytest.fixture(params=[None, pop_proc_32, pop_proc_64], ids=["local-pe", "remote-pe32", "remote-pe64"])
 def pe(request):
-    # Pe will be kernelbase.dll
+    # Pe will be kernelbase.dll or kernel32.dll
+    # Cannot hardcode peb.modules[2] as it may be xtajitX.dll on arm64
     if request.param is None:
-        yield windows.current_process.peb.modules[2].pe
+        yield [mod for mod in windows.current_process.peb.modules if mod.name.lower().startswith("kernel")][0].pe
         return
 
     pop_proc = request.param
     proc = pop_proc()
-    time.sleep(0.01)
-    yield proc.peb.modules[2].pe
+
+    for i in range(10):
+        try:
+            time.sleep(0.1)
+            # Pe will be kernelbase.dll or kernel32.dll
+            yield [mod for mod in windows.current_process.peb.modules if mod.name.lower().startswith("kernel")][0].pe
+            break
+        except ValueError:
+            if i == 9:
+                # Last change failed
+                raise
+            continue # PEB.Ldr not ready yet
     proc.exit(0)
 
 PE_DOTNET32_DLL_NAME = "test_pe_dotnet32.dll"
@@ -83,10 +94,7 @@ def test_pe_parsing_strange_optional_header_size(tmp_path, proc32):
     # Also check that section retrieval works (as its position is based on OptionalHeader Size)
     assert set(s.name for s in mod.pe.sections) == {".text", ".data", ".l1"}
 
-
-
-
-#  Make a test from current_process parsing ?
+@dll_injection
 def test_pe_parsing_dotnet32_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     mod = proc64.load_library(pe_dotnet32)
@@ -103,6 +111,7 @@ def test_pe_parsing_dotnet32_process_64(proc64, pe_dotnet32):
     assert mod.pe.sections
     assert ".text" in  set(s.name for s in mod.pe.sections)
 
+@dll_injection
 def test_pe_parsing_dotnet32_current_process_64(proc64, pe_dotnet32):
     # .NET pe32 loadable in 64bit process -> rewrite of the OptionalHeader
     # So we injecte python code in a the remote proc64 to test the parsing from itself
@@ -117,6 +126,27 @@ def test_pe_parsing_dotnet32_current_process_64(proc64, pe_dotnet32):
         imported_dlls, sections_names = np.recv()
         assert imported_dlls == ['mscoree.dll']
         assert ".text" in  sections_names
+
+# PE header of Syschpe32\ntdll.dll with a 8 chars sections .hexpthk that broke the parseur
+# This PE as 8 bytes sections name + VirtualSize non aligned on 0x100 so there is a non-null non-ascii byte after the name
+PE_SECTION_8CHARS = b"""
+eJzzjZrAwMzAwMACxP//MzDsYIAABwbC4AMRagYbCHBlYPBhZEYRu8HAxMjNyMnAwMQAwSAgAMUK
+II4DhA2UY4VKw2hwQLFAmBBTFSBqQYQAwig4MECyg4ogAGiuMRZxvQgIuMDIAPcDAxuqGgUGhgS9
+SAjQhgqA1XGgqnNgYDigFwUBYHmYX7gwzHtAmW9GwSgYBfQAnU8b3zAAy4aMr/+BQNTGwIGht0aF
+IwMkF54BKg0yGBQcGAL+izoApTrfHJ4wvMAAB/+AA4/UnJx8hfL8opwUhbSi/FyFRIWAypKM/Dy3
+/KLwzLyU/PJihZLU4hIFUMU5CoYd0DBAsJuAbBsD7OpA7YsEIM4B4goD3GIMDO6pJcElKR6JeSk5
+qSB+eFFmSapbJpgTlJqYAmUyAFOXa0VqMkN2alFeao6xkV5KTg6NPDkKcAIAM7/CEw=="""
+
+def test_pe_parsing_section_8_chars(proc32, tmp_path):
+    pe_path = (tmp_path / "pe_parsing_8chars_section.exe")
+    pe_data = pe_data = zlib.decompress(b64decode(PE_SECTION_8CHARS))
+
+    with pe_path.open("wb") as f:
+        f.write(pe_data)
+
+    mod = proc32.load_library(str(pe_path))
+    # check that section retrieval works
+    assert set(s.name for s in mod.pe.sections) == {u".XXXXXXX", u".YYYYYYY", u".ZZZZZZZ"}
 
 # A "Portable Executable 32 .NET Assembly" DLL
 # Result of compiling a simple hello-world

@@ -3595,6 +3595,187 @@ class _IMAGE_LOAD_CONFIG_DIRECTORY64(Structure):
 IMAGE_LOAD_CONFIG_DIRECTORY64 = _IMAGE_LOAD_CONFIG_DIRECTORY64
 PIMAGE_LOAD_CONFIG_DIRECTORY64 = POINTER(_IMAGE_LOAD_CONFIG_DIRECTORY64)
 
+ProcThreadAttributeParentProcess = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeParentProcess", 0x0)
+ProcThreadAttributeHandleList = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeHandleList", 0x2)
+ProcThreadAttributeGroupAffinity = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeGroupAffinity", 0x3)
+ProcThreadAttributePreferredNode = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributePreferredNode", 0x4)
+ProcThreadAttributeIdealProcessor = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeIdealProcessor", 0x5)
+ProcThreadAttributeUmsThread = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeUmsThread", 0x6)
+ProcThreadAttributeMitigationPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMitigationPolicy", 0x7)
+ProcThreadAttributeSecurityCapabilities = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSecurityCapabilities", 0x9)
+ProcThreadAttributeProtectionLevel = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeProtectionLevel", 0xb)
+ProcThreadAttributeJobList = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeJobList", 0xd)
+ProcThreadAttributeChildProcessPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeChildProcessPolicy", 0xe)
+ProcThreadAttributeAllApplicationPackagesPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeAllApplicationPackagesPolicy", 0xf)
+ProcThreadAttributeWin32kFilter = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeWin32kFilter", 0x10)
+ProcThreadAttributeSafeOpenPromptOriginClaim = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSafeOpenPromptOriginClaim", 0x11)
+ProcThreadAttributeDesktopAppPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeDesktopAppPolicy", 0x12)
+ProcThreadAttributePseudoConsole = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributePseudoConsole", 0x16)
+ProcThreadAttributeMitigationAuditPolicy = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMitigationAuditPolicy", 0x18)
+ProcThreadAttributeMachineType = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeMachineType", 0x19)
+ProcThreadAttributeComponentFilter = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeComponentFilter", 0x1a)
+ProcThreadAttributeEnableOptionalXStateFeatures = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeEnableOptionalXStateFeatures", 0x1b)
+ProcThreadAttributeTrustedApp = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeTrustedApp", 0x1d)
+ProcThreadAttributeSveVectorLength = EnumValue("_PROC_THREAD_ATTRIBUTE_NUM", "ProcThreadAttributeSveVectorLength", 0x1e)
+class _PROC_THREAD_ATTRIBUTE_NUM(EnumType):
+    values = [ProcThreadAttributeParentProcess, ProcThreadAttributeHandleList, ProcThreadAttributeGroupAffinity, ProcThreadAttributePreferredNode, ProcThreadAttributeIdealProcessor, ProcThreadAttributeUmsThread, ProcThreadAttributeMitigationPolicy, ProcThreadAttributeSecurityCapabilities, ProcThreadAttributeProtectionLevel, ProcThreadAttributeJobList, ProcThreadAttributeChildProcessPolicy, ProcThreadAttributeAllApplicationPackagesPolicy, ProcThreadAttributeWin32kFilter, ProcThreadAttributeSafeOpenPromptOriginClaim, ProcThreadAttributeDesktopAppPolicy, ProcThreadAttributePseudoConsole, ProcThreadAttributeMitigationAuditPolicy, ProcThreadAttributeMachineType, ProcThreadAttributeComponentFilter, ProcThreadAttributeEnableOptionalXStateFeatures, ProcThreadAttributeTrustedApp, ProcThreadAttributeSveVectorLength]
+    mapper = FlagMapper(*values)
+PROC_THREAD_ATTRIBUTE_NUM = _PROC_THREAD_ATTRIBUTE_NUM
+
+
+MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
+MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
+MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
+MemoryBasicVlmInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicVlmInformation", 0x3)
+MemoryWorkingSetListEx = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetListEx", 0x4)
+class _MEMORY_INFORMATION_CLASS(EnumType):
+    values = [MemoryBasicInformation, MemoryWorkingSetList, MemorySectionName, MemoryBasicVlmInformation, MemoryWorkingSetListEx]
+    mapper = FlagMapper(*values)
+MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
+
+
+ThreadBasicInformation = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasicInformation", 0x0)
+ThreadTimes = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadTimes", 0x1)
+ThreadPriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriority", 0x2)
+ThreadBasePriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasePriority", 0x3)
+ThreadAffinityMask = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAffinityMask", 0x4)
+ThreadImpersonationToken = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadImpersonationToken", 0x5)
+ThreadDescriptorTableEntry = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadDescriptorTableEntry", 0x6)
+ThreadEnableAlignmentFaultFixup = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEnableAlignmentFaultFixup", 0x7)
+ThreadEventPair = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEventPair", 0x8)
+ThreadQuerySetWin32StartAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadQuerySetWin32StartAddress", 0x9)
+ThreadZeroTlsCell = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadZeroTlsCell", 0xa)
+ThreadPerformanceCount = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPerformanceCount", 0xb)
+ThreadAmILastThread = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAmILastThread", 0xc)
+ThreadIdealProcessor = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIdealProcessor", 0xd)
+ThreadPriorityBoost = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriorityBoost", 0xe)
+ThreadSetTlsArrayAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadSetTlsArrayAddress", 0xf)
+ThreadIsIoPending = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIsIoPending", 0x10)
+ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromDebugger", 0x11)
+class _THREAD_INFORMATION_CLASS(EnumType):
+    values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
+    mapper = FlagMapper(*values)
+PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
+THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
+
+
+ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
+ProcessQuotaLimits = EnumValue("_PROCESSINFOCLASS", "ProcessQuotaLimits", 0x1)
+ProcessIoCounters = EnumValue("_PROCESSINFOCLASS", "ProcessIoCounters", 0x2)
+ProcessVmCounters = EnumValue("_PROCESSINFOCLASS", "ProcessVmCounters", 0x3)
+ProcessTimes = EnumValue("_PROCESSINFOCLASS", "ProcessTimes", 0x4)
+ProcessBasePriority = EnumValue("_PROCESSINFOCLASS", "ProcessBasePriority", 0x5)
+ProcessRaisePriority = EnumValue("_PROCESSINFOCLASS", "ProcessRaisePriority", 0x6)
+ProcessDebugPort = EnumValue("_PROCESSINFOCLASS", "ProcessDebugPort", 0x7)
+ProcessExceptionPort = EnumValue("_PROCESSINFOCLASS", "ProcessExceptionPort", 0x8)
+ProcessAccessToken = EnumValue("_PROCESSINFOCLASS", "ProcessAccessToken", 0x9)
+ProcessLdtInformation = EnumValue("_PROCESSINFOCLASS", "ProcessLdtInformation", 0xa)
+ProcessLdtSize = EnumValue("_PROCESSINFOCLASS", "ProcessLdtSize", 0xb)
+ProcessDefaultHardErrorMode = EnumValue("_PROCESSINFOCLASS", "ProcessDefaultHardErrorMode", 0xc)
+ProcessIoPortHandlers = EnumValue("_PROCESSINFOCLASS", "ProcessIoPortHandlers", 0xd)
+ProcessPooledUsageAndLimits = EnumValue("_PROCESSINFOCLASS", "ProcessPooledUsageAndLimits", 0xe)
+ProcessWorkingSetWatch = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatch", 0xf)
+ProcessUserModeIOPL = EnumValue("_PROCESSINFOCLASS", "ProcessUserModeIOPL", 0x10)
+ProcessEnableAlignmentFaultFixup = EnumValue("_PROCESSINFOCLASS", "ProcessEnableAlignmentFaultFixup", 0x11)
+ProcessPriorityClass = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityClass", 0x12)
+ProcessWx86Information = EnumValue("_PROCESSINFOCLASS", "ProcessWx86Information", 0x13)
+ProcessHandleCount = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCount", 0x14)
+ProcessAffinityMask = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityMask", 0x15)
+ProcessPriorityBoost = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityBoost", 0x16)
+ProcessDeviceMap = EnumValue("_PROCESSINFOCLASS", "ProcessDeviceMap", 0x17)
+ProcessSessionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSessionInformation", 0x18)
+ProcessForegroundInformation = EnumValue("_PROCESSINFOCLASS", "ProcessForegroundInformation", 0x19)
+ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
+ProcessImageFileName = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileName", 0x1b)
+ProcessLUIDDeviceMapsEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessLUIDDeviceMapsEnabled", 0x1c)
+ProcessBreakOnTermination = EnumValue("_PROCESSINFOCLASS", "ProcessBreakOnTermination", 0x1d)
+ProcessDebugObjectHandle = EnumValue("_PROCESSINFOCLASS", "ProcessDebugObjectHandle", 0x1e)
+ProcessDebugFlags = EnumValue("_PROCESSINFOCLASS", "ProcessDebugFlags", 0x1f)
+ProcessHandleTracing = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTracing", 0x20)
+ProcessIoPriority = EnumValue("_PROCESSINFOCLASS", "ProcessIoPriority", 0x21)
+ProcessExecuteFlags = EnumValue("_PROCESSINFOCLASS", "ProcessExecuteFlags", 0x22)
+ProcessTlsInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTlsInformation", 0x23)
+ProcessCookie = EnumValue("_PROCESSINFOCLASS", "ProcessCookie", 0x24)
+ProcessImageInformation = EnumValue("_PROCESSINFOCLASS", "ProcessImageInformation", 0x25)
+ProcessCycleTime = EnumValue("_PROCESSINFOCLASS", "ProcessCycleTime", 0x26)
+ProcessPagePriority = EnumValue("_PROCESSINFOCLASS", "ProcessPagePriority", 0x27)
+ProcessInstrumentationCallback = EnumValue("_PROCESSINFOCLASS", "ProcessInstrumentationCallback", 0x28)
+ProcessThreadStackAllocation = EnumValue("_PROCESSINFOCLASS", "ProcessThreadStackAllocation", 0x29)
+ProcessWorkingSetWatchEx = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatchEx", 0x2a)
+ProcessImageFileNameWin32 = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileNameWin32", 0x2b)
+ProcessImageFileMapping = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileMapping", 0x2c)
+ProcessAffinityUpdateMode = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityUpdateMode", 0x2d)
+ProcessMemoryAllocationMode = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryAllocationMode", 0x2e)
+ProcessGroupInformation = EnumValue("_PROCESSINFOCLASS", "ProcessGroupInformation", 0x2f)
+ProcessTokenVirtualizationEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessTokenVirtualizationEnabled", 0x30)
+ProcessOwnerInformation = EnumValue("_PROCESSINFOCLASS", "ProcessOwnerInformation", 0x31)
+ProcessWindowInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWindowInformation", 0x32)
+ProcessHandleInformation = EnumValue("_PROCESSINFOCLASS", "ProcessHandleInformation", 0x33)
+ProcessMitigationPolicy = EnumValue("_PROCESSINFOCLASS", "ProcessMitigationPolicy", 0x34)
+ProcessDynamicFunctionTableInformation = EnumValue("_PROCESSINFOCLASS", "ProcessDynamicFunctionTableInformation", 0x35)
+ProcessHandleCheckingMode = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCheckingMode", 0x36)
+ProcessKeepAliveCount = EnumValue("_PROCESSINFOCLASS", "ProcessKeepAliveCount", 0x37)
+ProcessRevokeFileHandles = EnumValue("_PROCESSINFOCLASS", "ProcessRevokeFileHandles", 0x38)
+ProcessWorkingSetControl = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetControl", 0x39)
+ProcessHandleTable = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTable", 0x3a)
+ProcessCheckStackExtentsMode = EnumValue("_PROCESSINFOCLASS", "ProcessCheckStackExtentsMode", 0x3b)
+ProcessCommandLineInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommandLineInformation", 0x3c)
+ProcessProtectionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessProtectionInformation", 0x3d)
+ProcessMemoryExhaustion = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryExhaustion", 0x3e)
+ProcessFaultInformation = EnumValue("_PROCESSINFOCLASS", "ProcessFaultInformation", 0x3f)
+ProcessTelemetryIdInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTelemetryIdInformation", 0x40)
+ProcessCommitReleaseInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommitReleaseInformation", 0x41)
+ProcessReserved1Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved1Information", 0x42)
+ProcessReserved2Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved2Information", 0x43)
+ProcessSubsystemProcess = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemProcess", 0x44)
+ProcessInPrivate = EnumValue("_PROCESSINFOCLASS", "ProcessInPrivate", 0x46)
+ProcessRaiseUMExceptionOnInvalidHandleClose = EnumValue("_PROCESSINFOCLASS", "ProcessRaiseUMExceptionOnInvalidHandleClose", 0x47)
+ProcessSubsystemInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemInformation", 0x4b)
+ProcessWin32kSyscallFilterInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWin32kSyscallFilterInformation", 0x4f)
+ProcessEnergyTrackingState = EnumValue("_PROCESSINFOCLASS", "ProcessEnergyTrackingState", 0x52)
+MaxProcessInfoClass = EnumValue("_PROCESSINFOCLASS", "MaxProcessInfoClass", 0x53)
+class _PROCESSINFOCLASS(EnumType):
+    values = [ProcessBasicInformation, ProcessQuotaLimits, ProcessIoCounters, ProcessVmCounters, ProcessTimes, ProcessBasePriority, ProcessRaisePriority, ProcessDebugPort, ProcessExceptionPort, ProcessAccessToken, ProcessLdtInformation, ProcessLdtSize, ProcessDefaultHardErrorMode, ProcessIoPortHandlers, ProcessPooledUsageAndLimits, ProcessWorkingSetWatch, ProcessUserModeIOPL, ProcessEnableAlignmentFaultFixup, ProcessPriorityClass, ProcessWx86Information, ProcessHandleCount, ProcessAffinityMask, ProcessPriorityBoost, ProcessDeviceMap, ProcessSessionInformation, ProcessForegroundInformation, ProcessWow64Information, ProcessImageFileName, ProcessLUIDDeviceMapsEnabled, ProcessBreakOnTermination, ProcessDebugObjectHandle, ProcessDebugFlags, ProcessHandleTracing, ProcessIoPriority, ProcessExecuteFlags, ProcessTlsInformation, ProcessCookie, ProcessImageInformation, ProcessCycleTime, ProcessPagePriority, ProcessInstrumentationCallback, ProcessThreadStackAllocation, ProcessWorkingSetWatchEx, ProcessImageFileNameWin32, ProcessImageFileMapping, ProcessAffinityUpdateMode, ProcessMemoryAllocationMode, ProcessGroupInformation, ProcessTokenVirtualizationEnabled, ProcessOwnerInformation, ProcessWindowInformation, ProcessHandleInformation, ProcessMitigationPolicy, ProcessDynamicFunctionTableInformation, ProcessHandleCheckingMode, ProcessKeepAliveCount, ProcessRevokeFileHandles, ProcessWorkingSetControl, ProcessHandleTable, ProcessCheckStackExtentsMode, ProcessCommandLineInformation, ProcessProtectionInformation, ProcessMemoryExhaustion, ProcessFaultInformation, ProcessTelemetryIdInformation, ProcessCommitReleaseInformation, ProcessReserved1Information, ProcessReserved2Information, ProcessSubsystemProcess, ProcessInPrivate, ProcessRaiseUMExceptionOnInvalidHandleClose, ProcessSubsystemInformation, ProcessWin32kSyscallFilterInformation, ProcessEnergyTrackingState, MaxProcessInfoClass]
+    mapper = FlagMapper(*values)
+PROCESSINFOCLASS = _PROCESSINFOCLASS
+
+
+ProcessMemoryPriority = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMemoryPriority", 0x0)
+ProcessMemoryExhaustionInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMemoryExhaustionInfo", 0x1)
+ProcessAppMemoryInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessAppMemoryInfo", 0x2)
+ProcessInPrivateInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessInPrivateInfo", 0x3)
+ProcessPowerThrottling = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessPowerThrottling", 0x4)
+ProcessReservedValue1 = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessReservedValue1", 0x5)
+ProcessTelemetryCoverageInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessTelemetryCoverageInfo", 0x6)
+ProcessProtectionLevelInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessProtectionLevelInfo", 0x7)
+ProcessLeapSecondInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessLeapSecondInfo", 0x8)
+ProcessMachineTypeInfo = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMachineTypeInfo", 0x9)
+ProcessOverrideSubsequentPrefetchParameter = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessOverrideSubsequentPrefetchParameter", 0xa)
+ProcessMaxOverridePrefetchParameter = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessMaxOverridePrefetchParameter", 0xb)
+ProcessInformationClassMax = EnumValue("_PROCESS_INFORMATION_CLASS", "ProcessInformationClassMax", 0xc)
+class _PROCESS_INFORMATION_CLASS(EnumType):
+    values = [ProcessMemoryPriority, ProcessMemoryExhaustionInfo, ProcessAppMemoryInfo, ProcessInPrivateInfo, ProcessPowerThrottling, ProcessReservedValue1, ProcessTelemetryCoverageInfo, ProcessProtectionLevelInfo, ProcessLeapSecondInfo, ProcessMachineTypeInfo, ProcessOverrideSubsequentPrefetchParameter, ProcessMaxOverridePrefetchParameter, ProcessInformationClassMax]
+    mapper = FlagMapper(*values)
+PROCESS_INFORMATION_CLASS = _PROCESS_INFORMATION_CLASS
+
+
+UserEnabled = EnumValue("_MACHINE_ATTRIBUTES", "UserEnabled", 0x1)
+KernelEnabled = EnumValue("_MACHINE_ATTRIBUTES", "KernelEnabled", 0x2)
+Wow64Container = EnumValue("_MACHINE_ATTRIBUTES", "Wow64Container", 0x4)
+class _MACHINE_ATTRIBUTES(EnumType):
+    values = [UserEnabled, KernelEnabled, Wow64Container]
+    mapper = FlagMapper(*values)
+MACHINE_ATTRIBUTES = _MACHINE_ATTRIBUTES
+
+
+class _PROCESS_MACHINE_INFORMATION(Structure):
+    _fields_ = [
+        ("ProcessMachine", USHORT),
+        ("Res0", USHORT),
+        ("MachineAttributes", MACHINE_ATTRIBUTES),
+    ]
+PROCESS_MACHINE_INFORMATION = _PROCESS_MACHINE_INFORMATION
+
 MemExtendedParameterInvalidType = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterInvalidType", 0x0)
 MemExtendedParameterAddressRequirements = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterAddressRequirements", 0x1)
 MemExtendedParameterNumaNode = EnumValue("MEM_EXTENDED_PARAMETER_TYPE", "MemExtendedParameterNumaNode", 0x2)
@@ -4630,6 +4811,36 @@ class _SYSTEM_BASIC_INFORMATION(Structure):
 PSYSTEM_BASIC_INFORMATION = POINTER(_SYSTEM_BASIC_INFORMATION)
 SYSTEM_BASIC_INFORMATION = _SYSTEM_BASIC_INFORMATION
 
+class _ANON__ANON__SYSTEM_INFO_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("wProcessorArchitecture", WORD),
+        ("wReserved", WORD),
+    ]
+
+class _ANON__SYSTEM_INFO_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("dwOemId", DWORD),
+        ("DUMMYSTRUCTNAME", _ANON__ANON__SYSTEM_INFO_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+class _SYSTEM_INFO(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("DUMMYUNIONNAME", _ANON__SYSTEM_INFO_SUB_UNION_1),
+        ("dwPageSize", DWORD),
+        ("lpMinimumApplicationAddress", LPVOID),
+        ("lpMaximumApplicationAddress", LPVOID),
+        ("dwActiveProcessorMask", DWORD_PTR),
+        ("dwNumberOfProcessors", DWORD),
+        ("dwProcessorType", DWORD),
+        ("dwAllocationGranularity", DWORD),
+        ("wProcessorLevel", WORD),
+        ("wProcessorRevision", WORD),
+    ]
+LPSYSTEM_INFO = POINTER(_SYSTEM_INFO)
+SYSTEM_INFO = _SYSTEM_INFO
+
 TASK_ACTION_EXEC = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_EXEC", 0x0)
 TASK_ACTION_COM_HANDLER = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_COM_HANDLER", 0x5)
 TASK_ACTION_SEND_EMAIL = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SEND_EMAIL", 0x6)
@@ -5000,6 +5211,313 @@ class _TEB(Structure):
         ("FpSoftwareStatusRegister", ULONG),
     ]
 TEB = _TEB
+
+class _ANON__ARM64_NT_NEON128_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Low", ULONGLONG),
+        ("High", LONGLONG),
+    ]
+
+class _ARM64_NT_NEON128(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("DUMMYSTRUCTNAME", _ANON__ARM64_NT_NEON128_SUB_STRUCTURE_1),
+        ("D", DOUBLE * (2)),
+        ("S", FLOAT * (4)),
+        ("H", WORD * (8)),
+        ("B", BYTE * (16)),
+    ]
+ARM64_NT_NEON128 = _ARM64_NT_NEON128
+PARM64_NT_NEON128 = POINTER(_ARM64_NT_NEON128)
+
+class _ANON__ANON__ARM64_NT_CONTEXT_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("X0", DWORD64),
+        ("X1", DWORD64),
+        ("X2", DWORD64),
+        ("X3", DWORD64),
+        ("X4", DWORD64),
+        ("X5", DWORD64),
+        ("X6", DWORD64),
+        ("X7", DWORD64),
+        ("X8", DWORD64),
+        ("X9", DWORD64),
+        ("X10", DWORD64),
+        ("X11", DWORD64),
+        ("X12", DWORD64),
+        ("X13", DWORD64),
+        ("X14", DWORD64),
+        ("X15", DWORD64),
+        ("X16", DWORD64),
+        ("X17", DWORD64),
+        ("X18", DWORD64),
+        ("X19", DWORD64),
+        ("X20", DWORD64),
+        ("X21", DWORD64),
+        ("X22", DWORD64),
+        ("X23", DWORD64),
+        ("X24", DWORD64),
+        ("X25", DWORD64),
+        ("X26", DWORD64),
+        ("X27", DWORD64),
+        ("X28", DWORD64),
+        ("Fp", DWORD64),
+        ("Lr", DWORD64),
+    ]
+
+class _ANON__ARM64_NT_CONTEXT_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("DUMMYSTRUCTNAME", _ANON__ANON__ARM64_NT_CONTEXT_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("X", DWORD64 * (31)),
+    ]
+
+class _ARM64_NT_CONTEXT(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Cpsr", DWORD),
+        ("DUMMYUNIONNAME", _ANON__ARM64_NT_CONTEXT_SUB_UNION_1),
+        ("Sp", DWORD64),
+        ("Pc", DWORD64),
+        ("V", ARM64_NT_NEON128 * (32)),
+        ("Fpcr", DWORD),
+        ("Fpsr", DWORD),
+        ("Bcr", DWORD * (ARM64_MAX_BREAKPOINTS)),
+        ("Bvr", DWORD64 * (ARM64_MAX_BREAKPOINTS)),
+        ("Wcr", DWORD * (ARM64_MAX_WATCHPOINTS)),
+        ("Wvr", DWORD64 * (ARM64_MAX_WATCHPOINTS)),
+    ]
+ARM64_NT_CONTEXT = _ARM64_NT_CONTEXT
+PARM64_NT_CONTEXT = POINTER(_ARM64_NT_CONTEXT)
+
+class _FLOATING_SAVE_AREA(Structure):
+    _fields_ = [
+        ("ControlWord", DWORD),
+        ("StatusWord", DWORD),
+        ("TagWord", DWORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", DWORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", DWORD),
+        ("RegisterArea", BYTE * (80)),
+        ("Cr0NpxState", DWORD),
+    ]
+FLOATING_SAVE_AREA = _FLOATING_SAVE_AREA
+
+class _CONTEXT32(Structure):
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Dr0", DWORD),
+        ("Dr1", DWORD),
+        ("Dr2", DWORD),
+        ("Dr3", DWORD),
+        ("Dr6", DWORD),
+        ("Dr7", DWORD),
+        ("FloatSave", FLOATING_SAVE_AREA),
+        ("SegGs", DWORD),
+        ("SegFs", DWORD),
+        ("SegEs", DWORD),
+        ("SegDs", DWORD),
+        ("Edi", DWORD),
+        ("Esi", DWORD),
+        ("Ebx", DWORD),
+        ("Edx", DWORD),
+        ("Ecx", DWORD),
+        ("Eax", DWORD),
+        ("Ebp", DWORD),
+        ("Eip", DWORD),
+        ("SegCs", DWORD),
+        ("EFlags", DWORD),
+        ("Esp", DWORD),
+        ("SegSs", DWORD),
+        ("ExtendedRegisters", BYTE * (512)),
+    ]
+CONTEXT32 = _CONTEXT32
+LPCONTEXT32 = POINTER(_CONTEXT32)
+PCONTEXT32 = POINTER(_CONTEXT32)
+
+class _WOW64_FLOATING_SAVE_AREA(Structure):
+    _fields_ = [
+        ("ControlWord", DWORD),
+        ("StatusWord", DWORD),
+        ("TagWord", DWORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", DWORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", DWORD),
+        ("RegisterArea", BYTE * (WOW64_SIZE_OF_80387_REGISTERS)),
+        ("Cr0NpxState", DWORD),
+    ]
+WOW64_FLOATING_SAVE_AREA = _WOW64_FLOATING_SAVE_AREA
+
+class _WOW64_CONTEXT(Structure):
+    _fields_ = [
+        ("ContextFlags", DWORD),
+        ("Dr0", DWORD),
+        ("Dr1", DWORD),
+        ("Dr2", DWORD),
+        ("Dr3", DWORD),
+        ("Dr6", DWORD),
+        ("Dr7", DWORD),
+        ("FloatSave", WOW64_FLOATING_SAVE_AREA),
+        ("SegGs", DWORD),
+        ("SegFs", DWORD),
+        ("SegEs", DWORD),
+        ("SegDs", DWORD),
+        ("Edi", DWORD),
+        ("Esi", DWORD),
+        ("Ebx", DWORD),
+        ("Edx", DWORD),
+        ("Ecx", DWORD),
+        ("Eax", DWORD),
+        ("Ebp", DWORD),
+        ("Eip", DWORD),
+        ("SegCs", DWORD),
+        ("EFlags", DWORD),
+        ("Esp", DWORD),
+        ("SegSs", DWORD),
+        ("ExtendedRegisters", BYTE * (WOW64_MAXIMUM_SUPPORTED_EXTENSION)),
+    ]
+PWOW64_CONTEXT = POINTER(_WOW64_CONTEXT)
+WOW64_CONTEXT = _WOW64_CONTEXT
+
+class _M128A(Structure):
+    _fields_ = [
+        ("Low", ULONGLONG),
+        ("High", LONGLONG),
+    ]
+M128A = _M128A
+PM128A = POINTER(_M128A)
+
+class _XSAVE_FORMAT_64(Structure):
+    _fields_ = [
+        ("ControlWord", WORD),
+        ("StatusWord", WORD),
+        ("TagWord", BYTE),
+        ("Reserved1", BYTE),
+        ("ErrorOpcode", WORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", WORD),
+        ("Reserved2", WORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", WORD),
+        ("Reserved3", WORD),
+        ("MxCsr", DWORD),
+        ("MxCsr_Mask", DWORD),
+        ("FloatRegisters", M128A * (8)),
+        ("XmmRegisters", M128A * (16)),
+        ("Reserved4", BYTE * (96)),
+    ]
+PXSAVE_FORMAT_64 = POINTER(_XSAVE_FORMAT_64)
+XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
+
+class _XSAVE_FORMAT_32(Structure):
+    _fields_ = [
+        ("ControlWord", WORD),
+        ("StatusWord", WORD),
+        ("TagWord", BYTE),
+        ("Reserved1", BYTE),
+        ("ErrorOpcode", WORD),
+        ("ErrorOffset", DWORD),
+        ("ErrorSelector", WORD),
+        ("Reserved2", WORD),
+        ("DataOffset", DWORD),
+        ("DataSelector", WORD),
+        ("Reserved3", WORD),
+        ("MxCsr", DWORD),
+        ("MxCsr_Mask", DWORD),
+        ("FloatRegisters", M128A * (8)),
+        ("XmmRegisters", M128A * (8)),
+        ("Reserved4", BYTE * (192)),
+        ("StackControl", DWORD * (7)),
+        ("Cr0NpxState", DWORD),
+    ]
+PXSAVE_FORMAT_32 = POINTER(_XSAVE_FORMAT_32)
+XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
+
+class _ANON__ANON__CONTEXT64_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Header", M128A * (2)),
+        ("Legacy", M128A * (8)),
+        ("Xmm0", M128A),
+        ("Xmm1", M128A),
+        ("Xmm2", M128A),
+        ("Xmm3", M128A),
+        ("Xmm4", M128A),
+        ("Xmm5", M128A),
+        ("Xmm6", M128A),
+        ("Xmm7", M128A),
+        ("Xmm8", M128A),
+        ("Xmm9", M128A),
+        ("Xmm10", M128A),
+        ("Xmm11", M128A),
+        ("Xmm12", M128A),
+        ("Xmm13", M128A),
+        ("Xmm14", M128A),
+        ("Xmm15", M128A),
+    ]
+
+class _ANON__CONTEXT64_SUB_UNION_1(Union):
+    _anonymous_ = ("DUMMYSTRUCTNAME",)
+    _fields_ = [
+        ("FltSave", XSAVE_FORMAT_64),
+        ("DUMMYSTRUCTNAME", _ANON__ANON__CONTEXT64_SUB_UNION_1_SUB_STRUCTURE_1),
+    ]
+
+class _CONTEXT64(Structure):
+    _anonymous_ = ("DUMMYUNIONNAME",)
+    _fields_ = [
+        ("P1Home", DWORD64),
+        ("P2Home", DWORD64),
+        ("P3Home", DWORD64),
+        ("P4Home", DWORD64),
+        ("P5Home", DWORD64),
+        ("P6Home", DWORD64),
+        ("ContextFlags", DWORD),
+        ("MxCsr", DWORD),
+        ("SegCs", WORD),
+        ("SegDs", WORD),
+        ("SegEs", WORD),
+        ("SegFs", WORD),
+        ("SegGs", WORD),
+        ("SegSs", WORD),
+        ("EFlags", DWORD),
+        ("Dr0", DWORD64),
+        ("Dr1", DWORD64),
+        ("Dr2", DWORD64),
+        ("Dr3", DWORD64),
+        ("Dr6", DWORD64),
+        ("Dr7", DWORD64),
+        ("Rax", DWORD64),
+        ("Rcx", DWORD64),
+        ("Rdx", DWORD64),
+        ("Rbx", DWORD64),
+        ("Rsp", DWORD64),
+        ("Rbp", DWORD64),
+        ("Rsi", DWORD64),
+        ("Rdi", DWORD64),
+        ("R8", DWORD64),
+        ("R9", DWORD64),
+        ("R10", DWORD64),
+        ("R11", DWORD64),
+        ("R12", DWORD64),
+        ("R13", DWORD64),
+        ("R14", DWORD64),
+        ("R15", DWORD64),
+        ("Rip", DWORD64),
+        ("DUMMYUNIONNAME", _ANON__CONTEXT64_SUB_UNION_1),
+        ("VectorRegister", M128A * (26)),
+        ("VectorControl", DWORD64),
+        ("DebugControl", DWORD64),
+        ("LastBranchToRip", DWORD64),
+        ("LastBranchFromRip", DWORD64),
+        ("LastExceptionToRip", DWORD64),
+        ("LastExceptionFromRip", DWORD64),
+    ]
+CONTEXT64 = _CONTEXT64
+LPCONTEXT64 = POINTER(_CONTEXT64)
+PCONTEXT64 = POINTER(_CONTEXT64)
 
 class _TRACE_PROVIDER_INFO(Structure):
     _fields_ = [
@@ -5493,123 +6011,6 @@ class _SECTION_INHERIT(EnumType):
     values = [ViewShare, ViewUnmap]
     mapper = FlagMapper(*values)
 SECTION_INHERIT = _SECTION_INHERIT
-
-
-ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
-ProcessQuotaLimits = EnumValue("_PROCESSINFOCLASS", "ProcessQuotaLimits", 0x1)
-ProcessIoCounters = EnumValue("_PROCESSINFOCLASS", "ProcessIoCounters", 0x2)
-ProcessVmCounters = EnumValue("_PROCESSINFOCLASS", "ProcessVmCounters", 0x3)
-ProcessTimes = EnumValue("_PROCESSINFOCLASS", "ProcessTimes", 0x4)
-ProcessBasePriority = EnumValue("_PROCESSINFOCLASS", "ProcessBasePriority", 0x5)
-ProcessRaisePriority = EnumValue("_PROCESSINFOCLASS", "ProcessRaisePriority", 0x6)
-ProcessDebugPort = EnumValue("_PROCESSINFOCLASS", "ProcessDebugPort", 0x7)
-ProcessExceptionPort = EnumValue("_PROCESSINFOCLASS", "ProcessExceptionPort", 0x8)
-ProcessAccessToken = EnumValue("_PROCESSINFOCLASS", "ProcessAccessToken", 0x9)
-ProcessLdtInformation = EnumValue("_PROCESSINFOCLASS", "ProcessLdtInformation", 0xa)
-ProcessLdtSize = EnumValue("_PROCESSINFOCLASS", "ProcessLdtSize", 0xb)
-ProcessDefaultHardErrorMode = EnumValue("_PROCESSINFOCLASS", "ProcessDefaultHardErrorMode", 0xc)
-ProcessIoPortHandlers = EnumValue("_PROCESSINFOCLASS", "ProcessIoPortHandlers", 0xd)
-ProcessPooledUsageAndLimits = EnumValue("_PROCESSINFOCLASS", "ProcessPooledUsageAndLimits", 0xe)
-ProcessWorkingSetWatch = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatch", 0xf)
-ProcessUserModeIOPL = EnumValue("_PROCESSINFOCLASS", "ProcessUserModeIOPL", 0x10)
-ProcessEnableAlignmentFaultFixup = EnumValue("_PROCESSINFOCLASS", "ProcessEnableAlignmentFaultFixup", 0x11)
-ProcessPriorityClass = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityClass", 0x12)
-ProcessWx86Information = EnumValue("_PROCESSINFOCLASS", "ProcessWx86Information", 0x13)
-ProcessHandleCount = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCount", 0x14)
-ProcessAffinityMask = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityMask", 0x15)
-ProcessPriorityBoost = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityBoost", 0x16)
-ProcessDeviceMap = EnumValue("_PROCESSINFOCLASS", "ProcessDeviceMap", 0x17)
-ProcessSessionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSessionInformation", 0x18)
-ProcessForegroundInformation = EnumValue("_PROCESSINFOCLASS", "ProcessForegroundInformation", 0x19)
-ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
-ProcessImageFileName = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileName", 0x1b)
-ProcessLUIDDeviceMapsEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessLUIDDeviceMapsEnabled", 0x1c)
-ProcessBreakOnTermination = EnumValue("_PROCESSINFOCLASS", "ProcessBreakOnTermination", 0x1d)
-ProcessDebugObjectHandle = EnumValue("_PROCESSINFOCLASS", "ProcessDebugObjectHandle", 0x1e)
-ProcessDebugFlags = EnumValue("_PROCESSINFOCLASS", "ProcessDebugFlags", 0x1f)
-ProcessHandleTracing = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTracing", 0x20)
-ProcessIoPriority = EnumValue("_PROCESSINFOCLASS", "ProcessIoPriority", 0x21)
-ProcessExecuteFlags = EnumValue("_PROCESSINFOCLASS", "ProcessExecuteFlags", 0x22)
-ProcessTlsInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTlsInformation", 0x23)
-ProcessCookie = EnumValue("_PROCESSINFOCLASS", "ProcessCookie", 0x24)
-ProcessImageInformation = EnumValue("_PROCESSINFOCLASS", "ProcessImageInformation", 0x25)
-ProcessCycleTime = EnumValue("_PROCESSINFOCLASS", "ProcessCycleTime", 0x26)
-ProcessPagePriority = EnumValue("_PROCESSINFOCLASS", "ProcessPagePriority", 0x27)
-ProcessInstrumentationCallback = EnumValue("_PROCESSINFOCLASS", "ProcessInstrumentationCallback", 0x28)
-ProcessThreadStackAllocation = EnumValue("_PROCESSINFOCLASS", "ProcessThreadStackAllocation", 0x29)
-ProcessWorkingSetWatchEx = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatchEx", 0x2a)
-ProcessImageFileNameWin32 = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileNameWin32", 0x2b)
-ProcessImageFileMapping = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileMapping", 0x2c)
-ProcessAffinityUpdateMode = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityUpdateMode", 0x2d)
-ProcessMemoryAllocationMode = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryAllocationMode", 0x2e)
-ProcessGroupInformation = EnumValue("_PROCESSINFOCLASS", "ProcessGroupInformation", 0x2f)
-ProcessTokenVirtualizationEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessTokenVirtualizationEnabled", 0x30)
-ProcessOwnerInformation = EnumValue("_PROCESSINFOCLASS", "ProcessOwnerInformation", 0x31)
-ProcessWindowInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWindowInformation", 0x32)
-ProcessHandleInformation = EnumValue("_PROCESSINFOCLASS", "ProcessHandleInformation", 0x33)
-ProcessMitigationPolicy = EnumValue("_PROCESSINFOCLASS", "ProcessMitigationPolicy", 0x34)
-ProcessDynamicFunctionTableInformation = EnumValue("_PROCESSINFOCLASS", "ProcessDynamicFunctionTableInformation", 0x35)
-ProcessHandleCheckingMode = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCheckingMode", 0x36)
-ProcessKeepAliveCount = EnumValue("_PROCESSINFOCLASS", "ProcessKeepAliveCount", 0x37)
-ProcessRevokeFileHandles = EnumValue("_PROCESSINFOCLASS", "ProcessRevokeFileHandles", 0x38)
-ProcessWorkingSetControl = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetControl", 0x39)
-ProcessHandleTable = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTable", 0x3a)
-ProcessCheckStackExtentsMode = EnumValue("_PROCESSINFOCLASS", "ProcessCheckStackExtentsMode", 0x3b)
-ProcessCommandLineInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommandLineInformation", 0x3c)
-ProcessProtectionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessProtectionInformation", 0x3d)
-ProcessMemoryExhaustion = EnumValue("_PROCESSINFOCLASS", "ProcessMemoryExhaustion", 0x3e)
-ProcessFaultInformation = EnumValue("_PROCESSINFOCLASS", "ProcessFaultInformation", 0x3f)
-ProcessTelemetryIdInformation = EnumValue("_PROCESSINFOCLASS", "ProcessTelemetryIdInformation", 0x40)
-ProcessCommitReleaseInformation = EnumValue("_PROCESSINFOCLASS", "ProcessCommitReleaseInformation", 0x41)
-ProcessReserved1Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved1Information", 0x42)
-ProcessReserved2Information = EnumValue("_PROCESSINFOCLASS", "ProcessReserved2Information", 0x43)
-ProcessSubsystemProcess = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemProcess", 0x44)
-ProcessInPrivate = EnumValue("_PROCESSINFOCLASS", "ProcessInPrivate", 0x46)
-ProcessRaiseUMExceptionOnInvalidHandleClose = EnumValue("_PROCESSINFOCLASS", "ProcessRaiseUMExceptionOnInvalidHandleClose", 0x47)
-ProcessSubsystemInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSubsystemInformation", 0x4b)
-ProcessWin32kSyscallFilterInformation = EnumValue("_PROCESSINFOCLASS", "ProcessWin32kSyscallFilterInformation", 0x4f)
-ProcessEnergyTrackingState = EnumValue("_PROCESSINFOCLASS", "ProcessEnergyTrackingState", 0x52)
-MaxProcessInfoClass = EnumValue("_PROCESSINFOCLASS", "MaxProcessInfoClass", 0x53)
-class _PROCESSINFOCLASS(EnumType):
-    values = [ProcessBasicInformation, ProcessQuotaLimits, ProcessIoCounters, ProcessVmCounters, ProcessTimes, ProcessBasePriority, ProcessRaisePriority, ProcessDebugPort, ProcessExceptionPort, ProcessAccessToken, ProcessLdtInformation, ProcessLdtSize, ProcessDefaultHardErrorMode, ProcessIoPortHandlers, ProcessPooledUsageAndLimits, ProcessWorkingSetWatch, ProcessUserModeIOPL, ProcessEnableAlignmentFaultFixup, ProcessPriorityClass, ProcessWx86Information, ProcessHandleCount, ProcessAffinityMask, ProcessPriorityBoost, ProcessDeviceMap, ProcessSessionInformation, ProcessForegroundInformation, ProcessWow64Information, ProcessImageFileName, ProcessLUIDDeviceMapsEnabled, ProcessBreakOnTermination, ProcessDebugObjectHandle, ProcessDebugFlags, ProcessHandleTracing, ProcessIoPriority, ProcessExecuteFlags, ProcessTlsInformation, ProcessCookie, ProcessImageInformation, ProcessCycleTime, ProcessPagePriority, ProcessInstrumentationCallback, ProcessThreadStackAllocation, ProcessWorkingSetWatchEx, ProcessImageFileNameWin32, ProcessImageFileMapping, ProcessAffinityUpdateMode, ProcessMemoryAllocationMode, ProcessGroupInformation, ProcessTokenVirtualizationEnabled, ProcessOwnerInformation, ProcessWindowInformation, ProcessHandleInformation, ProcessMitigationPolicy, ProcessDynamicFunctionTableInformation, ProcessHandleCheckingMode, ProcessKeepAliveCount, ProcessRevokeFileHandles, ProcessWorkingSetControl, ProcessHandleTable, ProcessCheckStackExtentsMode, ProcessCommandLineInformation, ProcessProtectionInformation, ProcessMemoryExhaustion, ProcessFaultInformation, ProcessTelemetryIdInformation, ProcessCommitReleaseInformation, ProcessReserved1Information, ProcessReserved2Information, ProcessSubsystemProcess, ProcessInPrivate, ProcessRaiseUMExceptionOnInvalidHandleClose, ProcessSubsystemInformation, ProcessWin32kSyscallFilterInformation, ProcessEnergyTrackingState, MaxProcessInfoClass]
-    mapper = FlagMapper(*values)
-PROCESSINFOCLASS = _PROCESSINFOCLASS
-
-
-MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
-MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
-MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
-MemoryBasicVlmInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicVlmInformation", 0x3)
-MemoryWorkingSetListEx = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetListEx", 0x4)
-class _MEMORY_INFORMATION_CLASS(EnumType):
-    values = [MemoryBasicInformation, MemoryWorkingSetList, MemorySectionName, MemoryBasicVlmInformation, MemoryWorkingSetListEx]
-    mapper = FlagMapper(*values)
-MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
-
-
-ThreadBasicInformation = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasicInformation", 0x0)
-ThreadTimes = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadTimes", 0x1)
-ThreadPriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriority", 0x2)
-ThreadBasePriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasePriority", 0x3)
-ThreadAffinityMask = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAffinityMask", 0x4)
-ThreadImpersonationToken = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadImpersonationToken", 0x5)
-ThreadDescriptorTableEntry = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadDescriptorTableEntry", 0x6)
-ThreadEnableAlignmentFaultFixup = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEnableAlignmentFaultFixup", 0x7)
-ThreadEventPair = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEventPair", 0x8)
-ThreadQuerySetWin32StartAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadQuerySetWin32StartAddress", 0x9)
-ThreadZeroTlsCell = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadZeroTlsCell", 0xa)
-ThreadPerformanceCount = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPerformanceCount", 0xb)
-ThreadAmILastThread = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAmILastThread", 0xc)
-ThreadIdealProcessor = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIdealProcessor", 0xd)
-ThreadPriorityBoost = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriorityBoost", 0xe)
-ThreadSetTlsArrayAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadSetTlsArrayAddress", 0xf)
-ThreadIsIoPending = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIsIoPending", 0x10)
-ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromDebugger", 0x11)
-class _THREAD_INFORMATION_CLASS(EnumType):
-    values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
-    mapper = FlagMapper(*values)
-PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
-THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
 
 
 VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)
@@ -6226,234 +6627,6 @@ class _PROCESS_INFORMATION(Structure):
 LPPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
 PPROCESS_INFORMATION = POINTER(_PROCESS_INFORMATION)
 PROCESS_INFORMATION = _PROCESS_INFORMATION
-
-class _FLOATING_SAVE_AREA(Structure):
-    _fields_ = [
-        ("ControlWord", DWORD),
-        ("StatusWord", DWORD),
-        ("TagWord", DWORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", DWORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", DWORD),
-        ("RegisterArea", BYTE * (80)),
-        ("Cr0NpxState", DWORD),
-    ]
-FLOATING_SAVE_AREA = _FLOATING_SAVE_AREA
-
-class _CONTEXT32(Structure):
-    _fields_ = [
-        ("ContextFlags", DWORD),
-        ("Dr0", DWORD),
-        ("Dr1", DWORD),
-        ("Dr2", DWORD),
-        ("Dr3", DWORD),
-        ("Dr6", DWORD),
-        ("Dr7", DWORD),
-        ("FloatSave", FLOATING_SAVE_AREA),
-        ("SegGs", DWORD),
-        ("SegFs", DWORD),
-        ("SegEs", DWORD),
-        ("SegDs", DWORD),
-        ("Edi", DWORD),
-        ("Esi", DWORD),
-        ("Ebx", DWORD),
-        ("Edx", DWORD),
-        ("Ecx", DWORD),
-        ("Eax", DWORD),
-        ("Ebp", DWORD),
-        ("Eip", DWORD),
-        ("SegCs", DWORD),
-        ("EFlags", DWORD),
-        ("Esp", DWORD),
-        ("SegSs", DWORD),
-        ("ExtendedRegisters", BYTE * (512)),
-    ]
-CONTEXT32 = _CONTEXT32
-LPCONTEXT32 = POINTER(_CONTEXT32)
-PCONTEXT32 = POINTER(_CONTEXT32)
-
-class _WOW64_FLOATING_SAVE_AREA(Structure):
-    _fields_ = [
-        ("ControlWord", DWORD),
-        ("StatusWord", DWORD),
-        ("TagWord", DWORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", DWORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", DWORD),
-        ("RegisterArea", BYTE * (WOW64_SIZE_OF_80387_REGISTERS)),
-        ("Cr0NpxState", DWORD),
-    ]
-WOW64_FLOATING_SAVE_AREA = _WOW64_FLOATING_SAVE_AREA
-
-class _WOW64_CONTEXT(Structure):
-    _fields_ = [
-        ("ContextFlags", DWORD),
-        ("Dr0", DWORD),
-        ("Dr1", DWORD),
-        ("Dr2", DWORD),
-        ("Dr3", DWORD),
-        ("Dr6", DWORD),
-        ("Dr7", DWORD),
-        ("FloatSave", WOW64_FLOATING_SAVE_AREA),
-        ("SegGs", DWORD),
-        ("SegFs", DWORD),
-        ("SegEs", DWORD),
-        ("SegDs", DWORD),
-        ("Edi", DWORD),
-        ("Esi", DWORD),
-        ("Ebx", DWORD),
-        ("Edx", DWORD),
-        ("Ecx", DWORD),
-        ("Eax", DWORD),
-        ("Ebp", DWORD),
-        ("Eip", DWORD),
-        ("SegCs", DWORD),
-        ("EFlags", DWORD),
-        ("Esp", DWORD),
-        ("SegSs", DWORD),
-        ("ExtendedRegisters", BYTE * (WOW64_MAXIMUM_SUPPORTED_EXTENSION)),
-    ]
-PWOW64_CONTEXT = POINTER(_WOW64_CONTEXT)
-WOW64_CONTEXT = _WOW64_CONTEXT
-
-class _M128A(Structure):
-    _fields_ = [
-        ("Low", ULONGLONG),
-        ("High", LONGLONG),
-    ]
-M128A = _M128A
-PM128A = POINTER(_M128A)
-
-class _XSAVE_FORMAT_64(Structure):
-    _fields_ = [
-        ("ControlWord", WORD),
-        ("StatusWord", WORD),
-        ("TagWord", BYTE),
-        ("Reserved1", BYTE),
-        ("ErrorOpcode", WORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", WORD),
-        ("Reserved2", WORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", WORD),
-        ("Reserved3", WORD),
-        ("MxCsr", DWORD),
-        ("MxCsr_Mask", DWORD),
-        ("FloatRegisters", M128A * (8)),
-        ("XmmRegisters", M128A * (16)),
-        ("Reserved4", BYTE * (96)),
-    ]
-PXSAVE_FORMAT_64 = POINTER(_XSAVE_FORMAT_64)
-XSAVE_FORMAT_64 = _XSAVE_FORMAT_64
-
-class _XSAVE_FORMAT_32(Structure):
-    _fields_ = [
-        ("ControlWord", WORD),
-        ("StatusWord", WORD),
-        ("TagWord", BYTE),
-        ("Reserved1", BYTE),
-        ("ErrorOpcode", WORD),
-        ("ErrorOffset", DWORD),
-        ("ErrorSelector", WORD),
-        ("Reserved2", WORD),
-        ("DataOffset", DWORD),
-        ("DataSelector", WORD),
-        ("Reserved3", WORD),
-        ("MxCsr", DWORD),
-        ("MxCsr_Mask", DWORD),
-        ("FloatRegisters", M128A * (8)),
-        ("XmmRegisters", M128A * (8)),
-        ("Reserved4", BYTE * (192)),
-        ("StackControl", DWORD * (7)),
-        ("Cr0NpxState", DWORD),
-    ]
-PXSAVE_FORMAT_32 = POINTER(_XSAVE_FORMAT_32)
-XSAVE_FORMAT_32 = _XSAVE_FORMAT_32
-
-class _TMP_DUMMYSTRUCTNAME(Structure):
-    _fields_ = [
-        ("Header", M128A * (2)),
-        ("Legacy", M128A * (8)),
-        ("Xmm0", M128A),
-        ("Xmm1", M128A),
-        ("Xmm2", M128A),
-        ("Xmm3", M128A),
-        ("Xmm4", M128A),
-        ("Xmm5", M128A),
-        ("Xmm6", M128A),
-        ("Xmm7", M128A),
-        ("Xmm8", M128A),
-        ("Xmm9", M128A),
-        ("Xmm10", M128A),
-        ("Xmm11", M128A),
-        ("Xmm12", M128A),
-        ("Xmm13", M128A),
-        ("Xmm14", M128A),
-        ("Xmm15", M128A),
-    ]
-TMP_DUMMYSTRUCTNAME = _TMP_DUMMYSTRUCTNAME
-
-class _TMP_CONTEXT64_SUBUNION(Union):
-    _fields_ = [
-        ("FltSave", XSAVE_FORMAT_64),
-        ("DUMMYSTRUCTNAME", TMP_DUMMYSTRUCTNAME),
-    ]
-TMP_CONTEXT64_SUBUNION = _TMP_CONTEXT64_SUBUNION
-
-class _CONTEXT64(Structure):
-    _fields_ = [
-        ("P1Home", DWORD64),
-        ("P2Home", DWORD64),
-        ("P3Home", DWORD64),
-        ("P4Home", DWORD64),
-        ("P5Home", DWORD64),
-        ("P6Home", DWORD64),
-        ("ContextFlags", DWORD),
-        ("MxCsr", DWORD),
-        ("SegCs", WORD),
-        ("SegDs", WORD),
-        ("SegEs", WORD),
-        ("SegFs", WORD),
-        ("SegGs", WORD),
-        ("SegSs", WORD),
-        ("EFlags", DWORD),
-        ("Dr0", DWORD64),
-        ("Dr1", DWORD64),
-        ("Dr2", DWORD64),
-        ("Dr3", DWORD64),
-        ("Dr6", DWORD64),
-        ("Dr7", DWORD64),
-        ("Rax", DWORD64),
-        ("Rcx", DWORD64),
-        ("Rdx", DWORD64),
-        ("Rbx", DWORD64),
-        ("Rsp", DWORD64),
-        ("Rbp", DWORD64),
-        ("Rsi", DWORD64),
-        ("Rdi", DWORD64),
-        ("R8", DWORD64),
-        ("R9", DWORD64),
-        ("R10", DWORD64),
-        ("R11", DWORD64),
-        ("R12", DWORD64),
-        ("R13", DWORD64),
-        ("R14", DWORD64),
-        ("R15", DWORD64),
-        ("Rip", DWORD64),
-        ("DUMMYUNIONNAME", TMP_CONTEXT64_SUBUNION),
-        ("VectorRegister", M128A * (26)),
-        ("VectorControl", DWORD64),
-        ("DebugControl", DWORD64),
-        ("LastBranchToRip", DWORD64),
-        ("LastBranchFromRip", DWORD64),
-        ("LastExceptionToRip", DWORD64),
-        ("LastExceptionFromRip", DWORD64),
-    ]
-CONTEXT64 = _CONTEXT64
-LPCONTEXT64 = POINTER(_CONTEXT64)
-PCONTEXT64 = POINTER(_CONTEXT64)
 
 class tagPROCESSENTRY32W(Structure):
     _fields_ = [

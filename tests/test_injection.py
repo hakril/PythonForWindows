@@ -10,7 +10,7 @@ import windows
 import windows.generated_def as gdef
 
 from .conftest import pop_proc_32, pop_proc_64
-from .pfwtest import DEFAULT_CREATION_FLAGS
+from .pfwtest import *
 
 @pytest.fixture(params=
     [(pop_proc_32, DEFAULT_CREATION_FLAGS),
@@ -34,17 +34,20 @@ def proc_3264_runsus(request):
     del proc
 
 # Its really the same test as test_process.test_load_library but with suspended process as well
+@dll_injection
 def test_dll_injection(proc_3264_runsus):
     assert (not proc_3264_runsus.peb.Ldr) or ("wintrust.dll" not in [mod.name for mod in proc_3264_runsus.peb.modules])
     modaddr = windows.injection.load_dll_in_remote_process(proc_3264_runsus, "wintrust.dll")
     wintrustmod = [mod for mod in proc_3264_runsus.peb.modules if mod.name == "wintrust.dll"][0]
     assert wintrustmod.baseaddr == modaddr
 
+@dll_injection
 def test_dll_injection_error_reporting(proc_3264_runsus):
     with pytest.raises(windows.injection.InjectionFailedError) as excinfo:
         windows.injection.load_dll_in_remote_process(proc_3264_runsus, "NO_A_DLL.dll")
     assert excinfo.value.__cause__.winerror == gdef.ERROR_MOD_NOT_FOUND
 
+@dll_injection
 def test_dll_injection_access_denied(proc_3264_runsus, tmpdir):
         """Emulate injection of MsStore python, were its DLL are not executable by any other append
         See: https://github.com/hakril/PythonForWindows/issues/72

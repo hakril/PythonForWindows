@@ -65,6 +65,19 @@ BOOL FreeLibrary(
   HMODULE hLibModule
 );
 
+BOOL GetProcessInformation(
+  [in] HANDLE                    hProcess,
+  [in] PROCESS_INFORMATION_CLASS ProcessInformationClass,
+       LPVOID                    ProcessInformation,
+  [in] DWORD                     ProcessInformationSize
+);
+
+BOOL SetProcessInformation(
+  [in] HANDLE                    hProcess,
+  [in] PROCESS_INFORMATION_CLASS ProcessInformationClass,
+       LPVOID                    ProcessInformation,
+  [in] DWORD                     ProcessInformationSize
+);
 
 /* Not documented by seems present since dawn of time (WRK)
     I Prefere PVOID as a return value to allow simple cast to PEB subclass in process.py*/
