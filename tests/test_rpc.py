@@ -128,7 +128,7 @@ class DbgRpcClient(windows.rpc.RPCClient):
 FIREWALL_RPC_IID = "2fb92682-6599-42dc-ae13-bd2ca89bd11c"
 
 Proc0_RPC_FWOpenPolicyStore = 0
-Proc99_RPC_FWEnumFirewallRules2_33 = 99
+Proc9_RPC_FWEnumFirewallRules = 9
 
 def test_rpc_response_as_view():
     """Check that parsing response as view in RPC Client works. Testing after a bug in 32b RPCCLient"""
@@ -149,11 +149,11 @@ def test_rpc_response_as_view():
     rawpolstore = resp1[:20]
     assert not client.last_response_was_view
 
-    # Proc99_RPC_FWEnumFirewallRules2_33
+    # Proc9_RPC_FWEnumFirewallRules
     # \x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00
     # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/36cddff4-c427-4863-a58d-3d913a12b221
     # FW_PROFILE_TYPE_ALL : 0x7FFFFFFF
     # FW_RULE_STATUS_CLASS_OK +  FW_RULE_STATUS_PARTIALLY_IGNORED = 0x00010000 + 0x00020000
     # Flags = 7 ?
-    resp2 = client.call(iid, Proc99_RPC_FWEnumFirewallRules2_33, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
+    resp2 = client.call(iid, Proc9_RPC_FWEnumFirewallRules, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
     assert client.last_response_was_view
