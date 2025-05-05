@@ -114,3 +114,46 @@ def test_rpc_uac_call():
     assert proc.pid == pid
     proc.exit(0)
 
+
+class DbgRpcClient(windows.rpc.RPCClient):
+    def __init__(self, *args, **kwargs):
+        super(DbgRpcClient, self).__init__(*args, **kwargs)
+        self.last_response_was_view = False
+
+    def _get_response_effective_data(self, response):
+        self.last_response_was_view = response.view_is_valid
+        return super(DbgRpcClient, self)._get_response_effective_data(response)
+
+
+FIREWALL_RPC_IID = "2fb92682-6599-42dc-ae13-bd2ca89bd11c"
+
+Proc0_RPC_FWOpenPolicyStore = 0
+Proc9_RPC_FWEnumFirewallRules = 9
+
+def test_rpc_response_as_view():
+    """Check that parsing response as view in RPC Client works. Testing after a bug in 32b RPCCLient"""
+    # We test what by using a RPC endpoint that returns a lot of info : forcing a response in a view
+    # In this case we use the Firewall RPC and we list all Firerules.
+    # We use a custom RPCClient subclasse to track if last response was a view
+    client = windows.rpc.find_alpc_endpoint_and_connect(FIREWALL_RPC_IID, sid=gdef.WinLocalSid)
+    client.__class__ = DbgRpcClient
+    iid = client.bind(FIREWALL_RPC_IID)
+
+    # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/230d1ae7-b42e-4d9c-b997-b1463aaa0ded
+    # !\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00
+    # Binaryversion : 0x022f
+    # FW_STORE_TYPE_LOCAL
+    # FW_POLICY_ACCESS_RIGHT_READ
+    # Flags = 0
+    resp1 = client.call(iid, Proc0_RPC_FWOpenPolicyStore, params=b"!\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00")
+    rawpolstore = resp1[:20]
+    assert not client.last_response_was_view
+
+    # Proc9_RPC_FWEnumFirewallRules
+    # \x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00
+    # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/36cddff4-c427-4863-a58d-3d913a12b221
+    # FW_PROFILE_TYPE_ALL : 0x7FFFFFFF
+    # FW_RULE_STATUS_CLASS_OK +  FW_RULE_STATUS_PARTIALLY_IGNORED = 0x00010000 + 0x00020000
+    # Flags = 7 ?
+    resp2 = client.call(iid, Proc9_RPC_FWEnumFirewallRules, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
+    assert client.last_response_was_view

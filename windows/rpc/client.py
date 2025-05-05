@@ -220,7 +220,7 @@ class RPCClient(object):
             data = response.data[ctypes.sizeof(ALPC_RPC_RESPONSE):]
         else:
             # Response in view M extract size from PORT_MESSAGE & read data from view
-            assert response.port_message.u1.s1.TotalLength >= 0x48 # At least 0x20 of data
+            assert response.port_message.u1.s1.DataLength >= ctypes.sizeof(ALPC_RPC_RESPONSE) # 0x20
             rpcdatasize = struct.unpack("<I", response.data[0x18:0x1c])[0] # ctypes.sizeof(ALPC_RPC_RESPONSE)
             viewattr = response.view_attribute
             assert viewattr.ViewSize >= rpcdatasize
