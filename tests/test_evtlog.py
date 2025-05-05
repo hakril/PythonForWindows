@@ -65,7 +65,7 @@ def test_new_event():
     pre_events = chan.events
     p = windows.utils.create_process(POWERSHELL_PATH, POWERSHELL_ARG, show_windows=False)
     p.wait()
-    import time; time.sleep(1) # It seems to take some time to log the event
+    import time; time.sleep(5) # It seems to take some time to log the event
     post_events = chan.events
     assert len(post_events) > len(pre_events)
     nb_new_events = len(post_events) - len(pre_events)
