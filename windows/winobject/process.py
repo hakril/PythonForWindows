@@ -1106,13 +1106,13 @@ class WinProcess(Process):
             pass
         return urepr_encode(u'<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self))))
 
-    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE, addr=None):
+    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE, addr=None, type=gdef.MEM_COMMIT):
         """Allocate memory in the process
 
         :return: The address of the allocated memory
         :rtype: :class:`int`
 		"""
-        return winproxy.VirtualAllocEx(self.handle, lpAddress=addr, dwSize=size, flProtect=prot)
+        return winproxy.VirtualAllocEx(self.handle, lpAddress=addr, dwSize=size, flAllocationType=type, flProtect=prot)
 
     def virtual_free(self, addr):
         """Free memory in the process by virtual_alloc"""
