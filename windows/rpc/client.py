@@ -225,6 +225,11 @@ class RPCClient(object):
             viewattr = response.view_attribute
             assert viewattr.ViewSize >= rpcdatasize
             data = windows.current_process.read_memory(viewattr.ViewBase, rpcdatasize)
+            # We have copied the data from the view: free it
+            # It looks like:
+            # windows.winproxy.NtAlpcDeleteSectionView(self.alpc_client.handle, 0, viewattr.ViewBase)
+            # Will ne be enough, as it will wait for the message to be reused to unmap the section..
+            # And the current architecture encourage creating new message every time
         if response_header.request_id == self.REQUEST_IDENTIFIER_ORPC:
             # Parse & remove ORPC headers (orpcthat + LocalThat)
             data = self._pass_orpc_response_structures(data)
