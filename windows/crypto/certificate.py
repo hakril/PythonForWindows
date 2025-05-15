@@ -153,6 +153,14 @@ class CertificateStore(gdef.HCERTSTORE):
         return ctypes.cast(res, cls)
 
     @classmethod
+    def from_user_store(cls, store_name, user=True):
+        """Create a new :class:`CertificateStore` from system store ``store_name``
+        (see `System Store Locations <https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx>`_)
+        """
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_CURRENT_USER | gdef.CERT_STORE_READONLY_FLAG, store_name)
+        return ctypes.cast(res, cls)
+
+    @classmethod
     def new_in_memory(cls):
         """Create a new temporary :class:`CertificateStore` in memory"""
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
