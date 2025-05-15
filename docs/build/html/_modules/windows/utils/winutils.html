@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.utils.winutils &#8212; PythonForWindows 1.0.2 documentation</title>
+    <title>windows.utils.winutils &#8212; PythonForWindows 1.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=baaebd52"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.utils.winutils</a></li> 
       </ul>
@@ -73,19 +73,6 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Module &lt;</span><span class="si">{0}</span><span class="s2">&gt; not loaded in target &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dll_name</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="n">name_modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">mod</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">exports</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
-
-
-<span class="k">def</span> <span class="nf">is_wow_64</span><span class="p">(</span><span class="n">hProcess</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">fnIsWow64Process</span> <span class="o">=</span> <span class="n">get_func_addr</span><span class="p">(</span><span class="s2">&quot;kernel32.dll&quot;</span><span class="p">,</span> <span class="s2">&quot;IsWow64Process&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="n">IsWow64Process</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">HANDLE</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">BOOL</span><span class="p">))(</span><span class="n">fnIsWow64Process</span><span class="p">)</span>
-    <span class="n">Wow64Process</span> <span class="o">=</span> <span class="n">BOOL</span><span class="p">()</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">IsWow64Process</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">Wow64Process</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">Wow64Process</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="create_file_from_handle">
@@ -136,14 +123,35 @@
 
 <div class="viewcode-block" id="create_process">
 <a class="viewcode-back" href="../../../utils.html#windows.utils.create_process">[docs]</a>
-<span class="k">def</span> <span class="nf">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A convenient wrapper arround :func:`windows.winproxy.CreateProcessW`&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A convenient wrapper arround :func:`windows.winproxy.CreateProcessW`</span>
+<span class="sd">    ..note:</span>
+<span class="sd">        The machine param only works starting at vista and should be used on arm64 computer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">proc_info</span> <span class="o">=</span> <span class="n">PROCESS_INFORMATION</span><span class="p">()</span>
+    <span class="n">StartupInfo</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">lpStartupInfo</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">machine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD64</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+        <span class="n">machine</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WORD</span><span class="p">(</span><span class="n">machine</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">InitializeProcThreadAttributeList</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">UpdateProcThreadAttribute</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROC_THREAD_ATTRIBUTE_MACHINE_TYPE</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">machine</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">machine</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">startup_infoex</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STARTUPINFOEXW</span><span class="p">()</span>
+        <span class="n">startup_infoex</span><span class="o">.</span><span class="n">StartupInfo</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">STARTUPINFOEXW</span><span class="p">)</span>
+        <span class="n">startup_infoex</span><span class="o">.</span><span class="n">lpAttributeList</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span>
+        <span class="n">StartupInfo</span> <span class="o">=</span> <span class="n">startup_infoex</span><span class="o">.</span><span class="n">StartupInfo</span>
+
+        <span class="n">dwCreationFlags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EXTENDED_STARTUPINFO_PRESENT</span>
+
     <span class="k">if</span> <span class="n">show_windows</span><span class="p">:</span>
-        <span class="n">StartupInfo</span> <span class="o">=</span> <span class="n">STARTUPINFOW</span><span class="p">()</span>
-        <span class="n">StartupInfo</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">StartupInfo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">StartupInfo</span> <span class="o">=</span> <span class="n">STARTUPINFOW</span><span class="p">()</span>
+            <span class="n">StartupInfo</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">)</span>
         <span class="n">StartupInfo</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">StartupInfo</span><span class="p">:</span>
         <span class="n">lpStartupInfo</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">)</span>
     <span class="n">lpCommandLine</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
@@ -160,6 +168,8 @@
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CreateProcessW new thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Automatic close of thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
     <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">)</span>  <span class="c1"># Give access to a WinThread in addition of the WinProcess ?</span>
+    <span class="k">if</span> <span class="n">machine</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DeleteProcThreadAttributeList</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span></div>
 
 
@@ -359,6 +369,16 @@
             <span class="n">second</span><span class="o">=</span><span class="n">systime</span><span class="o">.</span><span class="n">wSecond</span><span class="p">,</span>
             <span class="n">microsecond</span><span class="o">=</span><span class="n">systime</span><span class="o">.</span><span class="n">wMilliseconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="p">)</span>
+
+<span class="n">IMAGE_FILE_MACHINE_TO_PROC_ARCH</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_I386</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSOR_ARCHITECTURE_INTEL</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_AMD64</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSOR_ARCHITECTURE_AMD64</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_ARM64</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSOR_ARCHITECTURE_ARM64</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_UNKNOWN</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSOR_ARCHITECTURE_UNKNOWN</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">image_file_machine_to_processor_architecture</span><span class="p">(</span><span class="n">image_file_machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">IMAGE_FILE_MACHINE_TO_PROC_ARCH</span><span class="p">[</span><span class="n">image_file_machine</span><span class="p">]</span>
 
 <span class="k">class</span> <span class="nc">FixedInteractiveConsole</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">InteractiveConsole</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">raw_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;&gt;&gt;&gt;&quot;</span><span class="p">):</span>
@@ -626,6 +646,14 @@
 <span class="c1">#    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)</span>
 <span class="c1">#    return addr</span>
 
+<span class="k">def</span> <span class="nf">get_system_info</span><span class="p">(</span><span class="n">native</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_INFO</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">native</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetNativeSystemInfo</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemInfo</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
 <span class="k">def</span> <span class="nf">decompress_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">comptype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">COMPRESSION_FORMAT_LZNT1</span><span class="p">,</span> <span class="n">uncompress_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">uncompress_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">uncompress_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
@@ -700,7 +728,7 @@
 <div class="viewcode-block" id="DisableWow64FsRedirection">
 <a class="viewcode-back" href="../../../utils.html#windows.utils.DisableWow64FsRedirection">[docs]</a>
 <span class="k">class</span> <span class="nc">DisableWow64FsRedirection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A context manager that disable the SysWow64 Filesystem Redirection ::</span>
 
 <span class="sd">        if is_process_32_bits:</span>
@@ -752,7 +780,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.utils.winutils</a></li> 
       </ul>

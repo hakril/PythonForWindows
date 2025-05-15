@@ -173,6 +173,8 @@ class NdrWString(object):
         assert size1 == size2
         assert zero == 0
         s = stream.read(size1 * 2)
+        if stream.use_memoryview:
+            return bytearray(s).decode("utf-16-le")
         return s.decode("utf-16-le")
 
     @classmethod
@@ -551,10 +553,14 @@ class NdrGuidConformantArray(NdrConformantArray):
 
 class NdrStream(object):
     """A stream of bytes used for NDR unpacking"""
-    def __init__(self, data):
+    def __init__(self, data, use_memoryview=False):
+        """"""
         self.fulldata = data
-        self.data = data
-        # self.data = memoryview(data) # FAST but need some code rewrite at some places
+        self.use_memoryview = use_memoryview
+        if use_memoryview:
+            self.data = memoryview(data) # FAST but need some code rewrite at some places
+        else:
+            self.data = data
 
     def partial_unpack(self, format):
         size = struct.calcsize(format)

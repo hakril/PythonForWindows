@@ -618,3 +618,27 @@ BOOL CertCloseStore(
   HCERTSTORE hCertStore,
   DWORD      dwFlags
 );
+
+BOOL CryptSignAndEncodeCertificate(
+  [in]      BCRYPT_KEY_HANDLE           hBCryptKey,
+  [in]      DWORD                       dwKeySpec,
+  [in]      DWORD                       dwCertEncodingType,
+  [in]      LPCSTR                      lpszStructType,
+  [in]      PVOID                       pvStructInfo,
+  [in]      PCRYPT_ALGORITHM_IDENTIFIER pSignatureAlgorithm,
+  [in]      PVOID                       pvHashAuxInfo,
+  [out]     BYTE                        *pbEncoded,
+  [in, out] DWORD                       *pcbEncoded
+);
+
+BOOL CryptSignCertificate(
+  [in]      BCRYPT_KEY_HANDLE           hBCryptKey,
+  [in]      DWORD                       dwKeySpec,
+  [in]      DWORD                       dwCertEncodingType,
+  [in]      BYTE                  *pbEncodedToBeSigned,
+  [in]      DWORD                       cbEncodedToBeSigned,
+  [in]      PCRYPT_ALGORITHM_IDENTIFIER pSignatureAlgorithm,
+  [in]      PVOID                       pvHashAuxInfo,
+  [out]     BYTE                        *pbSignature,
+  [in, out] DWORD                       *pcbSignature
+);

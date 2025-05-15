@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.com &#8212; PythonForWindows 1.0.2 documentation</title>
+    <title>windows.com &#8212; PythonForWindows 1.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=baaebd52"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.com</a></li> 
       </ul>
@@ -75,7 +75,13 @@
 
 
 <span class="k">def</span> <span class="nf">initsecurity</span><span class="p">():</span> <span class="c1"># Should take some parameters..</span>
-    <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_E_TOO_LATE</span><span class="p">:</span>
+            <span class="c1"># RPC_E_TOO_LATE can happen when the python environment invokes CoInitializeSecurity before we get to it</span>
+            <span class="c1"># mspython builds do this consistently.</span>
+            <span class="k">raise</span> <span class="n">e</span>
 
 
 <span class="k">class</span> <span class="nc">Dispatch</span><span class="p">(</span><span class="n">interfaces</span><span class="o">.</span><span class="n">IDispatch</span><span class="p">):</span>
@@ -489,7 +495,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.com</a></li> 
       </ul>

@@ -157,3 +157,42 @@ def test_rpc_response_as_view():
     # Flags = 7 ?
     resp2 = client.call(iid, Proc9_RPC_FWEnumFirewallRules, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
     assert client.last_response_was_view
+
+# This cannot work as is: as juste calling NtAlpcDeleteSectionView does not works.
+# We need to disconnect from the port or (guess) reuse the message (based on ID ?) so that the serv known we are done with the message and can suppress it.
+# More alpc client/serer test need to be done
+
+# def test_rpc_response_as_view_is_unmapped():
+#     """Test that when a RCP client response as a view, it is unmapped and does not take place in memory ater the call
+#     It's not private memory, but it take some place in the AS : which can be problematic in 32b python"""
+#     # The logic we use : make a LOT of call to an API known to send response as a view. And monitor the evolution of WorkingSetSize
+#     client = windows.rpc.find_alpc_endpoint_and_connect(FIREWALL_RPC_IID, sid=gdef.WinLocalSid)
+#     client.__class__ = DbgRpcClient
+#     iid = client.bind(FIREWALL_RPC_IID)
+#
+#     # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/230d1ae7-b42e-4d9c-b997-b1463aaa0ded
+#     # !\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00
+#     # Binaryversion : 0x022f
+#     # FW_STORE_TYPE_LOCAL
+#     # FW_POLICY_ACCESS_RIGHT_READ
+#     # Flags = 0
+#     resp1 = client.call(iid, Proc0_RPC_FWOpenPolicyStore, params=b"!\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00")
+#     rawpolstore = resp1[:20]
+#     assert not client.last_response_was_view
+#     initial_ws_size = windows.current_process.memory_info.WorkingSetSize
+#     ws_sizes = []
+#
+#     for i in range(100):
+#         # Proc9_RPC_FWEnumFirewallRules
+#         # \x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00
+#         # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/36cddff4-c427-4863-a58d-3d913a12b221
+#         # FW_PROFILE_TYPE_ALL : 0x7FFFFFFF
+#         # FW_RULE_STATUS_CLASS_OK +  FW_RULE_STATUS_PARTIALLY_IGNORED = 0x00010000 + 0x00020000
+#         # Flags = 7 ?
+#         resp2 = client.call(iid, Proc9_RPC_FWEnumFirewallRules, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
+#         assert client.last_response_was_view
+#         ws_sizes.append(windows.current_process.memory_info.WorkingSetSize - initial_ws_size)
+#         print("WorkingSetSize: {0}".format(windows.current_process.memory_info.WorkingSetSize))
+#     assert max(ws_sizes) - min(ws_sizes) < (1024 ** 2) # We should not vary more than 1 MO ?
+#     # Check if not all ws_size is not 4k bigger that the last one
+#     assert not all((ws_sizes[i+1] - ws_sizes[i] > 0x1000) for i in range(len(ws_sizes) - 1))

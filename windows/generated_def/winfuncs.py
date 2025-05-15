@@ -810,6 +810,16 @@ CryptGetOIDFunctionValueParams = ((1, 'dwEncodingType'), (1, 'pszFuncName'), (1,
 CertCloseStorePrototype = WINFUNCTYPE(BOOL, HCERTSTORE, DWORD)
 CertCloseStoreParams = ((1, 'hCertStore'), (1, 'dwFlags'))
 
+#def CryptSignAndEncodeCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, lpszStructType, pvStructInfo, pSignatureAlgorithm, pvHashAuxInfo, pbEncoded, pcbEncoded):
+#    return CryptSignAndEncodeCertificate.ctypes_function(hBCryptKey, dwKeySpec, dwCertEncodingType, lpszStructType, pvStructInfo, pSignatureAlgorithm, pvHashAuxInfo, pbEncoded, pcbEncoded)
+CryptSignAndEncodeCertificatePrototype = WINFUNCTYPE(BOOL, BCRYPT_KEY_HANDLE, DWORD, DWORD, LPCSTR, PVOID, PCRYPT_ALGORITHM_IDENTIFIER, PVOID, POINTER(BYTE), POINTER(DWORD))
+CryptSignAndEncodeCertificateParams = ((1, 'hBCryptKey'), (1, 'dwKeySpec'), (1, 'dwCertEncodingType'), (1, 'lpszStructType'), (1, 'pvStructInfo'), (1, 'pSignatureAlgorithm'), (1, 'pvHashAuxInfo'), (1, 'pbEncoded'), (1, 'pcbEncoded'))
+
+#def CryptSignCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, pbEncodedToBeSigned, cbEncodedToBeSigned, pSignatureAlgorithm, pvHashAuxInfo, pbSignature, pcbSignature):
+#    return CryptSignCertificate.ctypes_function(hBCryptKey, dwKeySpec, dwCertEncodingType, pbEncodedToBeSigned, cbEncodedToBeSigned, pSignatureAlgorithm, pvHashAuxInfo, pbSignature, pcbSignature)
+CryptSignCertificatePrototype = WINFUNCTYPE(BOOL, BCRYPT_KEY_HANDLE, DWORD, DWORD, POINTER(BYTE), DWORD, PCRYPT_ALGORITHM_IDENTIFIER, PVOID, POINTER(BYTE), POINTER(DWORD))
+CryptSignCertificateParams = ((1, 'hBCryptKey'), (1, 'dwKeySpec'), (1, 'dwCertEncodingType'), (1, 'pbEncodedToBeSigned'), (1, 'cbEncodedToBeSigned'), (1, 'pSignatureAlgorithm'), (1, 'pvHashAuxInfo'), (1, 'pbSignature'), (1, 'pcbSignature'))
+
 #def OpenVirtualDisk(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle):
 #    return OpenVirtualDisk.ctypes_function(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle)
 OpenVirtualDiskPrototype = WINFUNCTYPE(DWORD, PVIRTUAL_STORAGE_TYPE, PCWSTR, VIRTUAL_DISK_ACCESS_MASK, OPEN_VIRTUAL_DISK_FLAG, POPEN_VIRTUAL_DISK_PARAMETERS, PHANDLE)
@@ -1474,6 +1484,16 @@ OpenFileMappingAParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lp
 #    return UnmapViewOfFile.ctypes_function(lpBaseAddress)
 UnmapViewOfFilePrototype = WINFUNCTYPE(BOOL, LPCVOID)
 UnmapViewOfFileParams = ((1, 'lpBaseAddress'),)
+
+#def NCryptOpenKey(hProvider, phKey, pszKeyName, dwLegacyKeySpec, dwFlags):
+#    return NCryptOpenKey.ctypes_function(hProvider, phKey, pszKeyName, dwLegacyKeySpec, dwFlags)
+NCryptOpenKeyPrototype = WINFUNCTYPE(SECURITY_STATUS, NCRYPT_PROV_HANDLE, POINTER(NCRYPT_KEY_HANDLE), LPCWSTR, DWORD, DWORD)
+NCryptOpenKeyParams = ((1, 'hProvider'), (1, 'phKey'), (1, 'pszKeyName'), (1, 'dwLegacyKeySpec'), (1, 'dwFlags'))
+
+#def NCryptOpenStorageProvider(phProvider, pszProviderName, dwFlags):
+#    return NCryptOpenStorageProvider.ctypes_function(phProvider, pszProviderName, dwFlags)
+NCryptOpenStorageProviderPrototype = WINFUNCTYPE(SECURITY_STATUS, POINTER(NCRYPT_PROV_HANDLE), LPCWSTR, DWORD)
+NCryptOpenStorageProviderParams = ((1, 'phProvider'), (1, 'pszProviderName'), (1, 'dwFlags'))
 
 #def NetQueryDisplayInformation(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer):
 #    return NetQueryDisplayInformation.ctypes_function(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer)

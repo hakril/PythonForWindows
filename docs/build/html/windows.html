@@ -298,8 +298,28 @@ Custom dict built on GetEnvironmentStringsW() on py2</p>
 <dd><p>The name of the system version,  values are:</p>
 <blockquote>
 <div><ul class="simple">
+<li><p>Windows Server 2025</p></li>
+<li><p>Windows 11 Version 24H2</p></li>
+<li><p>Windows 11 Version 23H2</p></li>
+<li><p>Windows 11 Version 22H2</p></li>
+<li><p>Windows 11 Version 21H2</p></li>
+<li><p>Windows 10 Version 22H2</p></li>
+<li><p>Windows 10 Version 21H2</p></li>
+<li><p>Windows Server 2022</p></li>
+<li><p>Windows 10 Version 21H1</p></li>
+<li><p>Windows 10 Version 20H2</p></li>
+<li><p>Windows 10 Version 2004</p></li>
+<li><p>Windows 10 Version 1909</p></li>
+<li><p>Windows 10 Version 1903</p></li>
+<li><p>Windows Server 2019</p></li>
+<li><p>Windows 10 Version 1809</p></li>
+<li><p>Windows 10 Version 1803</p></li>
+<li><p>Windows 10 Version 1709</p></li>
+<li><p>Windows 10 Version 1703</p></li>
+<li><p>Windows 10 Version 1607</p></li>
+<li><p>Windows 10 Version 1511</p></li>
+<li><p>Windows 10 Version 1507</p></li>
 <li><p>Windows Server 2016</p></li>
-<li><p>Windows 10</p></li>
 <li><p>Windows Server 2012 R2</p></li>
 <li><p>Windows 8.1</p></li>
 <li><p>Windows Server 2012</p></li>
@@ -309,17 +329,18 @@ Custom dict built on GetEnvironmentStringsW() on py2</p>
 <li><p>Windows Server 2008</p></li>
 <li><p>Windows Vista</p></li>
 <li><p>Windows XP Professional x64 Edition</p></li>
-<li><p>TODO: version (5.2) + is_workstation + bitness == 32 (don’t even know if possible..)</p></li>
+<li><p>Unknown: version (5.2) + is_workstation + bitness == 32 (don’t even know if possible..)</p></li>
 <li><p>Windows Server 2003 R2</p></li>
 <li><p>Windows Server 2003</p></li>
 <li><p>Windows XP</p></li>
 <li><p>Windows 2000</p></li>
-<li><p>“Unknow Windows &lt;version={0} | is_workstation={1}&gt;”.format(version, is_workstation)</p></li>
+<li><p>“Unknown Windows 10+ &lt;versionstr={0} | is_workstation={1}&gt;”.format(self.versionstr, is_workstation)</p></li>
+<li><p>“Unknown Windows &lt;version={0} | is_workstation={1}&gt;”.format(version, is_workstation)</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></p>
 </dd>
 </dl>
 </dd></dl>

@@ -473,9 +473,182 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 </section>
+<section id="microsoft-store-python-injection">
+<span id="token-sample"></span><h3><span class="section-number">18.1.6. </span>Microsoft Store Python Injection<a class="headerlink" href="#microsoft-store-python-injection" title="Link to this heading">¶</a></h3>
+<p>Python execution in remote process fails with Microsoft Store builds of pythons (<cite>mspython</cite>), as the interpreter DLLs do not grant execute to Users.
+This sample shows a workaround by user <a class="reference external" href="https://github.com/dariushoule">https://github.com/dariushoule</a> by copying needed mspython files to a temporary directory and injecting those instead.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Some python interpreters run in environments with restrictive ACLs (no Users/* execute) on bundled DLLs.</span>
+<span class="c1"># The Microsoft Store version of python is the prime example of this.</span>
+<span class="c1">#</span>
+<span class="c1"># Remote execution of python is still possible by creating a minimal set of the dependencies outside of the restricted directory.</span>
+<span class="c1">#</span>
+<span class="c1"># This can be very helpful when operating PFW in environments with restrive GPOs / AppLocker.</span>
+
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.ntstatus</span> <span class="kn">import</span> <span class="n">STATUS_THREAD_IS_TERMINATING</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.windef</span> <span class="kn">import</span> <span class="n">CREATE_SUSPENDED</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="n">PROCESS_INFORMATION</span><span class="p">,</span> <span class="n">STARTUPINFOW</span>
+<span class="kn">from</span> <span class="nn">windows.injection</span> <span class="kn">import</span> <span class="n">RemotePythonError</span><span class="p">,</span> \
+    <span class="n">find_python_dll_to_inject</span><span class="p">,</span> <span class="n">get_dll_name_from_python_version</span><span class="p">,</span> <span class="n">inject_python_command</span><span class="p">,</span> <span class="n">load_dll_in_remote_process</span><span class="p">,</span> <span class="n">retrieve_exc</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executable is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">))</span>
+
+<span class="n">CACHE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">(),</span> <span class="s1">&#39;pfw_dllcache&#39;</span><span class="p">)</span>
+<span class="n">INTERPRETER_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">find_python_dll_to_inject</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span> <span class="c1"># Tailor bitness to your needs</span>
+
+
+<span class="k">def</span> <span class="nf">mspython_acl_workaround</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">pydll_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Works around mspython ACL restrictions on mspython interpreters</span>
+<span class="sd">    by copying the critical DLLs to a TEMP dir and orienting the interpreter</span>
+<span class="sd">    against that TEMP dir.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">CACHE_DIR</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">CACHE_DIR</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">dll</span> <span class="ow">in</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INTERPRETER_DIR</span><span class="p">,</span> <span class="s1">&#39;vcruntime140.dll&#39;</span><span class="p">),</span> <span class="n">pydll_path</span><span class="p">]:</span>
+        <span class="n">cache_dll_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CACHE_DIR</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dll</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Creates a copy of the DLL without bringing over restrictive ACLs</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">dll</span><span class="p">,</span> <span class="n">cache_dll_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># If its not writeable good chance these DLLs are just already loaded somewhere</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># Preloading python DLL and vcruntime so they don&#39;t get loaded from the path tree with restrictive ACLs</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Injecting: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cache_dll_path</span><span class="p">))</span>
+        <span class="n">load_dll_in_remote_process</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">cache_dll_path</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">dll</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INTERPRETER_DIR</span><span class="p">,</span> <span class="s1">&#39;dlls&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)):</span>
+        <span class="n">cache_dll_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CACHE_DIR</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dll</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Dynamic lib DLLs with restrictive ACLs copied to unrestricted parent</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">dll</span><span class="p">,</span> <span class="n">cache_dll_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="n">target</span><span class="o">.</span><span class="n">_workaround_applied</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="c1"># Adapted from windows\winobject\process.py</span>
+<span class="k">def</span> <span class="nf">execute_python_code</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+    <span class="n">py_dll_name</span> <span class="o">=</span> <span class="n">get_dll_name_from_python_version</span><span class="p">()</span>
+    <span class="n">pydll_path</span> <span class="o">=</span> <span class="n">find_python_dll_to_inject</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">bitness</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;_workaround_applied&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">mspython_acl_workaround</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">pydll_path</span><span class="p">)</span>
+    <span class="n">shellcode</span><span class="p">,</span> <span class="n">pythoncode</span> <span class="o">=</span> <span class="n">inject_python_command</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">py_dll_name</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">create_thread</span><span class="p">(</span><span class="n">shellcode</span><span class="p">,</span> <span class="n">pythoncode</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span>
+
+
+<span class="k">def</span> <span class="nf">safe_execute_python</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">execute_python_code</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="c1"># Wait termination of the thread</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">==</span> <span class="n">STATUS_THREAD_IS_TERMINATING</span> <span class="ow">or</span> <span class="n">process</span><span class="o">.</span><span class="n">is_exit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> died during execution of python command&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">process</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">!=</span> <span class="mh">0xffffffff</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown exit code </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">retrieve_last_exception_data</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">RemotePythonError</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Adapted from windows\injection.py</span>
+<span class="k">def</span> <span class="nf">retrieve_last_exception_data</span><span class="p">(</span><span class="n">process</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">process</span><span class="o">.</span><span class="n">allocated_memory</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span> <span class="k">as</span> <span class="n">mem</span><span class="p">:</span>
+        <span class="n">execute_python_code</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">retrieve_exc</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mem</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">mem</span> <span class="o">+</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="c1"># First: show what happen when injecting mspython normally</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying normal execute_python()&quot;</span><span class="p">)</span>
+<span class="n">proc1</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Windows\system32\winver.exe&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">proc1</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;2 + 2 == 5&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Exception during proc1.execute_python():&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+<span class="n">proc1</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying mspython workaround:&quot;</span><span class="p">)</span>
+<span class="n">proc_info</span> <span class="o">=</span> <span class="n">PROCESS_INFORMATION</span><span class="p">()</span>
+<span class="n">StartupInfo</span> <span class="o">=</span> <span class="n">STARTUPINFOW</span><span class="p">()</span>
+<span class="n">StartupInfo</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">)</span>
+<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateProcessW</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s2">&quot;C:\Windows\system32\winver.exe&quot;</span><span class="p">,</span>
+    <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">CREATE_SUSPENDED</span><span class="p">,</span>
+    <span class="c1"># Point PYTHONHOME to the interpreter dir so non-DLL libs can load</span>
+    <span class="c1"># Point PYTHONPATH to the newly created cache directory so DLL libs are loaded from there</span>
+    <span class="n">lpEnvironment</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\0</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">+</span> \
+                   <span class="s1">&#39;</span><span class="se">\0</span><span class="s1">PYTHONHOME=</span><span class="si">{}</span><span class="se">\0</span><span class="s1">PYTHONPATH=</span><span class="si">{}</span><span class="se">\0\0</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">INTERPRETER_DIR</span><span class="p">,</span> <span class="n">CACHE_DIR</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span>
+    <span class="n">lpProcessInformation</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">proc_info</span><span class="p">),</span>
+    <span class="n">lpStartupInfo</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">))</span>
+
+<span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Executing python code!&quot;</span><span class="p">)</span>
+<span class="n">safe_execute_python</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import windows</span>
+<span class="s2">windows.utils.create_console()</span>
+<span class="s2">print(&#39;hello from inside the suspended process!&#39;, flush=True)</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">process</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Executing more python code!&quot;</span><span class="p">)</span>
+<span class="n">safe_execute_python</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">print(&#39;hello from inside the resumed process!&#39;, flush=True)</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Executing an error python code!&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">safe_execute_python</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;BAD_VARIABLE&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">RemotePythonError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        Expected error during safe_execute_python&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Sleeping a little&quot;</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Killing target process !&quot;</span><span class="p">)</span>
+<span class="n">process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>PS C:\Users\hakril\PythonForWindows&gt; py .\samples\process\msstore_interpreter_remote_python.py
+Executable is: C:\Users\hakril\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe
+Trying normal execute_python()
+    Exception during proc1.execute_python():
+    InjectionFailedError(&#39;Injection of &lt;c:\\program files\\windowsapps\\pythonsoftwarefoundation.python.3.13_3.13.496.0_x64__qbz5n2kfra8p0\\vcruntime140.dll&gt; failed&#39;)
+Trying mspython workaround:
+    Executing python code!
+Injecting: C:\Users\hakril\AppData\Local\Temp\pfw_dllcache\vcruntime140.dll
+Injecting: C:\Users\hakril\AppData\Local\Temp\pfw_dllcache\python313.dll
+    Executing more python code!
+    Executing an error python code!
+        Expected error during safe_execute_python
+        b&#39;Traceback (most recent call last):\n  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;\nNameError: name \&#39;BAD_VARIABLE\&#39; is not defined\n&#39;
+   Sleeping a little
+   Killing target process !
+</pre></div>
+</div>
+</section>
 </section>
 <section id="token">
-<span id="token-sample"></span><h2><span class="section-number">18.2. </span>Token<a class="headerlink" href="#token" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">18.2. </span>Token<a class="headerlink" href="#token" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
@@ -4557,6 +4730,7 @@ BYE
 <li><a class="reference internal" href="#peb-exploration">18.1.3. <code class="xref py py-class docutils literal notranslate"><span class="pre">PEB</span></code> exploration</a></li>
 <li><a class="reference internal" href="#apisetmap">18.1.4. ApiSetMap</a></li>
 <li><a class="reference internal" href="#iat-hooking">18.1.5. IAT hooking</a></li>
+<li><a class="reference internal" href="#microsoft-store-python-injection">18.1.6. Microsoft Store Python Injection</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#token">18.2. Token</a></li>

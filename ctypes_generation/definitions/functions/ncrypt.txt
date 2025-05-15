@@ -1,0 +1,14 @@
+SECURITY_STATUS NCryptOpenKey(
+  [in]  NCRYPT_PROV_HANDLE hProvider,
+  [out] NCRYPT_KEY_HANDLE  *phKey,
+  [in]  LPCWSTR            pszKeyName,
+  [in]  DWORD              dwLegacyKeySpec,
+  [in]  DWORD              dwFlags
+);
+
+
+SECURITY_STATUS NCryptOpenStorageProvider(
+  [out]          NCRYPT_PROV_HANDLE *phProvider,
+  [in, optional] LPCWSTR            pszProviderName,
+  [in]           DWORD              dwFlags
+);

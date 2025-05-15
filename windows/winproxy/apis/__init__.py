@@ -7,6 +7,7 @@ from .dnsapi import *
 from .iphlpapi import *
 from .kernel32 import *
 from .ktmw32 import *
+from .ncrypt import *
 from .ntdll import *
 from .netapi32 import *
 from .ole32 import *

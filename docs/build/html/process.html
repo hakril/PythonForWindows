@@ -189,6 +189,17 @@
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.winobject.process.CurrentProcess.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#windows.winobject.process.CurrentProcess.name" title="Link to this definition">¶</a></dt>
+<dd><p>Name of the process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.winobject.process.CurrentProcess.open_token">
 <span class="sig-name descname"><span class="pre">open_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MAXIMUM_ALLOWED(0x2000000)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentProcess.open_token" title="Link to this definition">¶</a></dt>
@@ -346,7 +357,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.winobject.process.CurrentProcess.virtual_alloc">
-<span class="sig-name descname"><span class="pre">virtual_alloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAGE_EXECUTE_READWRITE(0x40)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.virtual_alloc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.virtual_alloc" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">virtual_alloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAGE_EXECUTE_READWRITE(0x40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MEM_COMMIT(0x1000)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.virtual_alloc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.virtual_alloc" title="Link to this definition">¶</a></dt>
 <dd><p>Allocate memory in the process</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -583,7 +594,7 @@ raises an exception if the remote thread raised one</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
-See workaround:  <a class="reference external" href="https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py">https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py</a></p>
+See workaround:  <a class="reference external" href="https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection">https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection</a></p>
 </div>
 </dd></dl>
 
@@ -604,7 +615,7 @@ See workaround:  <a class="reference external" href="https://github.com/hakril/P
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This method is incompatible with Microsoft Store builds of python, as the interpreter DLLs do not grant execute to Users.
-See workaround:  <a class="reference external" href="https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py">https://github.com/hakril/PythonForWindows/tree/master/samples/process/msstore_interpreter_remote_python.py</a></p>
+See workaround:  <a class="reference external" href="https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection">https://hakril.github.io/PythonForWindows/build/html/sample.html#microsoft-store-python-injection</a></p>
 </div>
 </dd></dl>
 
@@ -731,7 +742,7 @@ See workaround:  <a class="reference external" href="https://github.com/hakril/P
 <dl class="py property">
 <dt class="sig sig-object py" id="windows.winobject.process.WinProcess.peb_addr">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">peb_addr</span></span><a class="headerlink" href="#windows.winobject.process.WinProcess.peb_addr" title="Link to this definition">¶</a></dt>
-<dd><p>The address of the PEB</p>
+<dd><p>The address of the PEB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
@@ -885,7 +896,7 @@ See workaround:  <a class="reference external" href="https://github.com/hakril/P
 
 <dl class="py method">
 <dt class="sig sig-object py" id="windows.winobject.process.WinProcess.virtual_alloc">
-<span class="sig-name descname"><span class="pre">virtual_alloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAGE_EXECUTE_READWRITE(0x40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.virtual_alloc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.virtual_alloc" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">virtual_alloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAGE_EXECUTE_READWRITE(0x40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MEM_COMMIT(0x1000)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.virtual_alloc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.virtual_alloc" title="Link to this definition">¶</a></dt>
 <dd><p>Allocate memory in the process</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1453,6 +1464,18 @@ The behavior should match the non-exported function <code class="docutils litera
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">windows.pe_parse.</span></span><span class="sig-name descname"><span class="pre">PEFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseaddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetedbitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pe_parse.html#PEFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.pe_parse.PEFile" title="Link to this definition">¶</a></dt>
 <dd><p>Represent a PE loaded in a process (current or remote)</p>
 <dl class="py property">
+<dt class="sig sig-object py" id="windows.pe_parse.PEFile.binid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">binid</span></span><a class="headerlink" href="#windows.pe_parse.PEFile.binid" title="Link to this definition">¶</a></dt>
+<dd><p>Return the hex-string {TimeStamp}{SizeOfCode} used by PDB to identify a PE.</p>
+<p>I do not know the official name of this value…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="windows.pe_parse.PEFile.export_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">export_name</span></span><a class="headerlink" href="#windows.pe_parse.PEFile.export_name" title="Link to this definition">¶</a></dt>
 <dd><p>The Name attribute of the <code class="docutils literal notranslate"><span class="pre">EXPORT_DIRECTORY</span></code></p>
@@ -1590,6 +1613,7 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.is_wow_64"><code class="docutils literal notranslate"><span class="pre">is_wow_64</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.load_library"><code class="docutils literal notranslate"><span class="pre">load_library()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.memory_state"><code class="docutils literal notranslate"><span class="pre">memory_state()</span></code></a></li>
+<li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.open_token"><code class="docutils literal notranslate"><span class="pre">open_token()</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.peb"><code class="docutils literal notranslate"><span class="pre">peb</span></code></a></li>
 <li><a class="reference internal" href="#windows.winobject.process.CurrentProcess.peb_syswow"><code class="docutils literal notranslate"><span class="pre">peb_syswow</span></code></a></li>
@@ -1774,6 +1798,7 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
 <li><a class="reference internal" href="#windows.pe_parse.GetPEFile"><code class="docutils literal notranslate"><span class="pre">GetPEFile()</span></code></a></li>
 <li><a class="reference internal" href="#pefile">2.3.1.1. PEFile</a><ul>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile"><code class="docutils literal notranslate"><span class="pre">PEFile</span></code></a><ul>
+<li><a class="reference internal" href="#windows.pe_parse.PEFile.binid"><code class="docutils literal notranslate"><span class="pre">binid</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.export_name"><code class="docutils literal notranslate"><span class="pre">export_name</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.exports"><code class="docutils literal notranslate"><span class="pre">exports</span></code></a></li>
 <li><a class="reference internal" href="#windows.pe_parse.PEFile.imports"><code class="docutils literal notranslate"><span class="pre">imports</span></code></a></li>
