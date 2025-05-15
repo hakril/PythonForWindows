@@ -716,3 +716,11 @@ typedef struct _STRUCT_PLAINTEXTKEYBLOB {
   DWORD      dwKeySize;
   BYTE       rgbKeyData[0];
 } STRUCT_PLAINTEXTKEYBLOB, *PSTRUCT_PLAINTEXTKEYBLOB;
+
+typedef struct _CERT_REQUEST_INFO {
+  DWORD                dwVersion;
+  CERT_NAME_BLOB       Subject;
+  CERT_PUBLIC_KEY_INFO SubjectPublicKeyInfo;
+  DWORD                cAttribute;
+  PCRYPT_ATTRIBUTE     rgAttribute;
+} CERT_REQUEST_INFO, *PCERT_REQUEST_INFO;

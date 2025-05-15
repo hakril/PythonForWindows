@@ -247,6 +247,8 @@ Simple types
 
 .. autoclass:: NET_API_STATUS
 
+.. autoclass:: SECURITY_STATUS
+
 .. autoclass:: PVOID32
 
 .. autoclass:: PVOID64
@@ -254,6 +256,8 @@ Simple types
 .. autoclass:: NCRYPT_HANDLE
 
 .. autoclass:: NCRYPT_PROV_HANDLE
+
+.. autoclass:: BCRYPT_KEY_HANDLE
 
 .. autoclass:: NCRYPT_KEY_HANDLE
 
@@ -21112,6 +21116,42 @@ _STRUCT_PLAINTEXTKEYBLOB
     .. attribute:: rgbKeyData
 
         :class:`BYTE` ``[0]``
+
+_CERT_REQUEST_INFO
+''''''''''''''''''
+.. class:: CERT_REQUEST_INFO
+
+    Alias for :class:`_CERT_REQUEST_INFO`
+
+.. class:: PCERT_REQUEST_INFO
+
+    Pointer to :class:`_CERT_REQUEST_INFO`
+
+.. class:: _CERT_REQUEST_INFO
+
+    .. attribute:: dwVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: Subject
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: SubjectPublicKeyInfo
+
+        :class:`CERT_PUBLIC_KEY_INFO`
+
+
+    .. attribute:: cAttribute
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgAttribute
+
+        :class:`PCRYPT_ATTRIBUTE`
 
 _EXCEPTION_DEBUG_INFO
 '''''''''''''''''''''

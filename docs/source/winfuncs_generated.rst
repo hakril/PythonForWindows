@@ -326,6 +326,10 @@ Functions
 
 .. function:: CertCloseStore(hCertStore, dwFlags)
 
+.. function:: CryptSignAndEncodeCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, lpszStructType, pvStructInfo, pSignatureAlgorithm, pvHashAuxInfo, pbEncoded, pcbEncoded)
+
+.. function:: CryptSignCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, pbEncodedToBeSigned, cbEncodedToBeSigned, pSignatureAlgorithm, pvHashAuxInfo, pbSignature, pcbSignature)
+
 .. function:: OpenVirtualDisk(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle)
 
 .. function:: AttachVirtualDisk(VirtualDiskHandle, SecurityDescriptor, Flags, ProviderSpecificFlags, Parameters, Overlapped)
@@ -591,6 +595,10 @@ Functions
 .. function:: OpenFileMappingA(dwDesiredAccess, bInheritHandle, lpName)
 
 .. function:: UnmapViewOfFile(lpBaseAddress)
+
+.. function:: NCryptOpenKey(hProvider, phKey, pszKeyName, dwLegacyKeySpec, dwFlags)
+
+.. function:: NCryptOpenStorageProvider(phProvider, pszProviderName, dwFlags)
 
 .. function:: NetQueryDisplayInformation(ServerName, Level, Index, EntriesRequested, PreferredMaximumLength, ReturnedEntryCount, SortedBuffer)
 

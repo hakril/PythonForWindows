@@ -147,6 +147,10 @@ def CryptSignMessage(pSignPara, fDetachedSignature, cToBeSigned, rgpbToBeSigned,
 def CryptSignAndEncryptMessage(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob):
     return CryptSignAndEncryptMessage.ctypes_function(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob)
 
+@Crypt32Proxy()
+def CryptSignAndEncodeCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, lpszStructType, pvStructInfo, pSignatureAlgorithm, pvHashAuxInfo, pbEncoded, pcbEncoded):
+   lpszStructType = gdef.LPCSTR(lpszStructType) if isinstance(lpszStructType, int_types) else lpszStructType
+   return CryptSignAndEncodeCertificate.ctypes_function(hBCryptKey, dwKeySpec, dwCertEncodingType, lpszStructType, pvStructInfo, pSignatureAlgorithm, pvHashAuxInfo, pbEncoded, pcbEncoded)
 
 @Crypt32Proxy()
 def CryptVerifyMessageSignature(pVerifyPara, dwSignerIndex, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded, ppSignerCert):
@@ -176,6 +180,7 @@ def CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpec
 
 @Crypt32Proxy()
 def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo):
+    lpszStructType = gdef.LPCSTR(lpszStructType) if isinstance(lpszStructType, int_types) else lpszStructType
     return CryptDecodeObject.ctypes_function(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
 
 @Crypt32Proxy()

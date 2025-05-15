@@ -387,6 +387,38 @@
 #define CRYPT_ARCHIVABLE        0x00004000
 #define CRYPT_FORCE_KEY_PROTECTION_HIGH 0x00008000
 
+#define CERT_RDN_ANY_TYPE 0
+#define CERT_RDN_ENCODED_BLOB 1
+#define CERT_RDN_OCTET_STRING 2
+#define CERT_RDN_NUMERIC_STRING 3
+#define CERT_RDN_PRINTABLE_STRING 4
+#define CERT_RDN_TELETEX_STRING 5
+#define CERT_RDN_T61_STRING 5
+#define CERT_RDN_VIDEOTEX_STRING 6
+#define CERT_RDN_IA5_STRING 7
+#define CERT_RDN_GRAPHIC_STRING 8
+#define CERT_RDN_VISIBLE_STRING 9
+#define CERT_RDN_ISO646_STRING 9
+#define CERT_RDN_GENERAL_STRING 10
+#define CERT_RDN_UNIVERSAL_STRING 11
+#define CERT_RDN_INT4_STRING 11
+#define CERT_RDN_BMP_STRING 12
+#define CERT_RDN_UNICODE_STRING 12
+#define CERT_RDN_UTF8_STRING 13
+#define CERT_RDN_TYPE_MASK 0xff
+#define CERT_RDN_FLAGS_MASK 0xff000000
+#define CERT_RDN_ENABLE_T61_UNICODE_FLAG 0x80000000
+#define CERT_RDN_ENABLE_UTF8_UNICODE_FLAG 0x20000000
+#define CERT_RDN_FORCE_UTF8_UNICODE_FLAG 0x10000000
+#define CERT_RDN_DISABLE_CHECK_TYPE_FLAG 0x40000000
+#define CERT_RDN_DISABLE_IE4_UTF8_FLAG 0x1000000
+
+#define CRYPT_DECODE_NOCOPY_FLAG 0x1
+#define CRYPT_DECODE_TO_BE_SIGNED_FLAG 0x2
+#define CRYPT_DECODE_SHARE_OID_STRING_FLAG 0x4
+#define CRYPT_DECODE_NO_SIGNATURE_BYTE_REVERSAL_FLAG 0x8
+#define CRYPT_DECODE_ALLOC_FLAG 0x8000
+#define CRYPT_UNICODE_NAME_DECODE_DISABLE_IE4_UTF8_FLAG CERT_RDN_DISABLE_IE4_UTF8_FLAG
 
 #define CRYPT_ENCODE_DECODE_NONE            0
 #define X509_CERT                           (1)
@@ -583,3 +615,22 @@
 #define CMSG_CTRL_VERIFY_SIGNATURE_EX    19
 #define CMSG_CTRL_ADD_CMS_SIGNER_INFO    20
 #define CMSG_CTRL_ENABLE_STRONG_SIGNATURE 21
+
+
+//+-------------------------------------------------------------------------
+//  The following flag should be set in the above dwFlags to enable
+//  a CertSetCertificateContextProperty(CERT_KEY_CONTEXT_PROP_ID) after a
+//  CryptAcquireContext is done in the Sign or Decrypt Message functions.
+//
+//  The following define must not collide with any of the
+//  CryptAcquireContext dwFlag defines.
+//--------------------------------------------------------------------------
+#define CERT_SET_KEY_PROV_HANDLE_PROP_ID    0x00000001
+#define CERT_SET_KEY_CONTEXT_PROP_ID        0x00000001
+
+// Special dwKeySpec indicating a CNG NCRYPT_KEY_HANDLE instead of a CAPI1
+// HCRYPTPROV
+#define CERT_NCRYPT_KEY_SPEC                0xFFFFFFFF
+
+
+#define CERT_REQUEST_V1     0
