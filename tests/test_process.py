@@ -170,6 +170,40 @@ class TestProcessWithCheckGarbage(object):
                 current_proc.read_memory(waddr, 0x20) # Check that Reading dumbly fails
             assert current_proc.read_wstring(waddr) ==  test_string
 
+    def test_virtual_alloc_current_process(self):
+        current_proc = windows.current_process
+        addr1 = current_proc.virtual_alloc(0x1000, prot=gdef.PAGE_EXECUTE_READWRITE)
+        meminfo = current_proc.query_memory(addr1)
+        assert meminfo.AllocationBase == addr1
+        assert meminfo.AllocationProtect == gdef.PAGE_EXECUTE_READWRITE
+        assert meminfo.Type == gdef.MEM_PRIVATE
+        assert meminfo.State == gdef.MEM_COMMIT
+        assert meminfo.Protect == gdef.PAGE_EXECUTE_READWRITE
+        del meminfo
+
+        addr2 = current_proc.virtual_alloc(0x1000, prot=gdef.PAGE_READONLY, type=gdef.MEM_RESERVE)
+        meminfo = current_proc.query_memory(addr2)
+        assert meminfo.AllocationBase == addr2
+        assert meminfo.AllocationProtect == gdef.PAGE_READONLY
+        assert meminfo.Type == gdef.MEM_PRIVATE
+        assert meminfo.State == gdef.MEM_RESERVE
+
+    def test_virtual_alloc(self, proc32_64):
+        addr1 = proc32_64.virtual_alloc(0x1000, prot=gdef.PAGE_EXECUTE_READWRITE)
+        meminfo = proc32_64.query_memory(addr1)
+        assert meminfo.AllocationBase == addr1
+        assert meminfo.AllocationProtect == gdef.PAGE_EXECUTE_READWRITE
+        assert meminfo.Type == gdef.MEM_PRIVATE
+        assert meminfo.State == gdef.MEM_COMMIT
+        assert meminfo.Protect == gdef.PAGE_EXECUTE_READWRITE
+
+        addr2 = proc32_64.virtual_alloc(0x1000, prot=gdef.PAGE_READONLY, type=gdef.MEM_RESERVE)
+        meminfo = proc32_64.query_memory(addr2)
+        assert meminfo.AllocationBase == addr2
+        assert meminfo.AllocationProtect == gdef.PAGE_READONLY
+        assert meminfo.Type == gdef.MEM_PRIVATE
+        assert meminfo.State == gdef.MEM_RESERVE
+
     def test_query_memory(self, proc32_64):
         addr = proc32_64.virtual_alloc(0x2000, prot=gdef.PAGE_EXECUTE_READWRITE)
         proc32_64.virtual_protect(addr, 0x2000, gdef.PAGE_READONLY)
