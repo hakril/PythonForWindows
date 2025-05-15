@@ -773,15 +773,16 @@
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="c1"># byte to bits</span>
 
+
 <div class="viewcode-block" id="CurrentProcess.virtual_alloc">
 <a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.virtual_alloc">[docs]</a>
-    <span class="k">def</span> <span class="nf">virtual_alloc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">virtual_alloc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MEM_COMMIT</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Allocate memory in the process</span>
 
 <span class="sd">        :return: The address of the allocated memory</span>
 <span class="sd">        :rtype: :class:`int`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">lpAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flAllocationType</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CurrentProcess.virtual_free">
