@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.pe_parse &#8212; PythonForWindows 1.0.2 documentation</title>
+    <title>windows.pe_parse &#8212; PythonForWindows 1.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=baaebd52"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>
@@ -42,6 +42,7 @@
 <span class="kn">import</span> <span class="nn">windows.hooks</span> <span class="k">as</span> <span class="nn">hooks</span>
 <span class="kn">import</span> <span class="nn">windows.utils</span> <span class="k">as</span> <span class="nn">utils</span>
 
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">windows.utils</span> <span class="kn">import</span> <span class="n">transform_ctypes_fields</span>
 <span class="kn">import</span> <span class="nn">windows.remotectypes</span> <span class="k">as</span> <span class="nn">rctypes</span>
@@ -77,9 +78,9 @@
     <span class="c1"># We can force bitness as the field we access are bitness-independant</span>
     <span class="n">pe</span> <span class="o">=</span> <span class="n">GetPEFile</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">force_bitness</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
     <span class="n">machine</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">FileHeader</span><span class="o">.</span><span class="n">Machine</span>
-    <span class="k">if</span> <span class="n">machine</span> <span class="o">==</span> <span class="mh">0x14c</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">machine</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_I386</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">32</span>
-    <span class="k">elif</span> <span class="n">machine</span> <span class="o">==</span> <span class="mh">0x8664</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">machine</span> <span class="ow">in</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_AMD64</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IMAGE_FILE_MACHINE_ARM64</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">64</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow PE target machine &lt;0x</span><span class="si">{0:x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">machine</span><span class="p">))</span>
@@ -150,7 +151,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Name</span><span class="p">))[:</span><span class="mi">8</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_addr</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_addr</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
         <span class="c1"># Decode as UTF-8 as the MS doc say ?</span>
         <span class="k">return</span> <span class="n">name</span>
 
@@ -549,7 +550,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.pe_parse</a></li> 
       </ul>

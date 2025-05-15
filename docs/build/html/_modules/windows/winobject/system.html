@@ -49,7 +49,6 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 
-
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">process</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">network</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="kn">import</span> <span class="n">registry</span>
@@ -128,7 +127,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">logicaldrives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of logical drives [C:\, ...]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of logical drives [C:\\, ...]</span>
 
 <span class="sd">        :type: [:class:`~windows.winobject.volume.LogicalDrive`] -- A list of LogicalDrive</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -301,12 +300,77 @@
             <span class="n">result</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result_tup</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">result</span>
 
+    <span class="c1"># Based on:</span>
+    <span class="c1">#   https://jrsoftware.org/ishelp/index.php?topic=winvernotes</span>
+    <span class="c1">#   https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions</span>
+
+    <span class="n">WINDOWS_10_BUILD_NUMBER_VERSION</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># (build_number, is_workstation): &quot;version_name&quot;</span>
+        <span class="p">(</span><span class="mi">10240</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1507&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">10586</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1511&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">14393</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1607&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">15063</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1703&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">16299</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1709&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">17134</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1803&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">17763</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1809&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">18362</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1903&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">18363</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 1909&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">19041</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 2004&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">19042</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 20H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">19043</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 21H1&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">19044</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 21H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">19045</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 10 Version 22H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">22000</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 11 Version 21H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">22621</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 11 Version 22H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">22631</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 11 Version 23H2&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">26100</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows 11 Version 24H2&quot;</span><span class="p">,</span>
+
+        <span class="p">(</span><span class="mi">14393</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows Server 2016&quot;</span><span class="p">,</span>
+        <span class="c1"># 16299 : Windows Server, version 1709 ?</span>
+        <span class="c1"># 17134 : Windows Server, version 1803 ?</span>
+        <span class="c1"># 17134 : Windows Server, version 1803 ?</span>
+        <span class="p">(</span><span class="mi">17763</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows Server 2019&quot;</span><span class="p">,</span>
+        <span class="c1"># 18362 : Windows Server, version 1903 ?</span>
+        <span class="c1"># 18363 : Windows Server, version 1909 ?</span>
+        <span class="c1"># 19041 : Windows Server, version 2004 ?</span>
+        <span class="c1"># 19042 : Windows Server, version 20H2 ?</span>
+        <span class="p">(</span><span class="mi">20348</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows Server 2022&quot;</span><span class="p">,</span>
+        <span class="c1"># 25398 : Windows Server, version 23H2 ?</span>
+        <span class="p">(</span><span class="mi">26100</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="sa">u</span><span class="s2">&quot;Windows Server 2025&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_get_version_name_for_10_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_number</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">WINDOWS_10_BUILD_NUMBER_VERSION</span><span class="p">[(</span><span class="n">build_number</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Unknown Windows 10+ &lt;versionstr=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">versionstr</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
+
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">version_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The name of the system version,  values are:</span>
 
+<span class="sd">            * Windows Server 2025</span>
+<span class="sd">            * Windows 11 Version 24H2</span>
+<span class="sd">            * Windows 11 Version 23H2</span>
+<span class="sd">            * Windows 11 Version 22H2</span>
+<span class="sd">            * Windows 11 Version 21H2</span>
+<span class="sd">            * Windows 10 Version 22H2</span>
+<span class="sd">            * Windows 10 Version 21H2</span>
+<span class="sd">            * Windows Server 2022</span>
+<span class="sd">            * Windows 10 Version 21H1</span>
+<span class="sd">            * Windows 10 Version 20H2</span>
+<span class="sd">            * Windows 10 Version 2004</span>
+<span class="sd">            * Windows 10 Version 1909</span>
+<span class="sd">            * Windows 10 Version 1903</span>
+<span class="sd">            * Windows Server 2019</span>
+<span class="sd">            * Windows 10 Version 1809</span>
+<span class="sd">            * Windows 10 Version 1803</span>
+<span class="sd">            * Windows 10 Version 1709</span>
+<span class="sd">            * Windows 10 Version 1703</span>
+<span class="sd">            * Windows 10 Version 1607</span>
+<span class="sd">            * Windows 10 Version 1511</span>
+<span class="sd">            * Windows 10 Version 1507</span>
 <span class="sd">            * Windows Server 2016</span>
-<span class="sd">            * Windows 10</span>
 <span class="sd">            * Windows Server 2012 R2</span>
 <span class="sd">            * Windows 8.1</span>
 <span class="sd">            * Windows Server 2012</span>
@@ -316,19 +380,20 @@
 <span class="sd">            * Windows Server 2008</span>
 <span class="sd">            * Windows Vista</span>
 <span class="sd">            * Windows XP Professional x64 Edition</span>
-<span class="sd">            * TODO: version (5.2) + is_workstation + bitness == 32 (don&#39;t even know if possible..)</span>
+<span class="sd">            * Unknown: version (5.2) + is_workstation + bitness == 32 (don&#39;t even know if possible..)</span>
 <span class="sd">            * Windows Server 2003 R2</span>
 <span class="sd">            * Windows Server 2003</span>
 <span class="sd">            * Windows XP</span>
 <span class="sd">            * Windows 2000</span>
-<span class="sd">            * &quot;Unknow Windows &lt;version={0} | is_workstation={1}&gt;&quot;.format(version, is_workstation)</span>
+<span class="sd">            * &quot;Unknown Windows 10+ &lt;versionstr={0} | is_workstation={1}&gt;&quot;.format(self.versionstr, is_workstation)</span>
+<span class="sd">            * &quot;Unknown Windows &lt;version={0} | is_workstation={1}&gt;&quot;.format(version, is_workstation)</span>
 
-<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        :type: :class:`unicode`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
         <span class="n">is_workstation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">product_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_WORKSTATION</span>
         <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="sa">u</span><span class="s2">&quot;Windows Server 2016&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Windows 10&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_version_name_for_10_build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_number</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
             <span class="k">return</span>  <span class="p">[</span><span class="sa">u</span><span class="s2">&quot;Windows Server 2012 R2&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;Windows 8.1&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
@@ -343,7 +408,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
                     <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Windows XP Professional x64 Edition&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;TODO: version (5.2) + is_workstation + bitness == 32&quot;</span>
+                    <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Unknown: version (5.2) + is_workstation + bitness == 32&quot;</span>
             <span class="k">elif</span> <span class="n">metric</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Windows Server 2003 R2&quot;</span>
             <span class="k">else</span><span class="p">:</span>
@@ -353,7 +418,7 @@
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Windows 2000&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Unknow Windows &lt;version=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;Unknown Windows &lt;version=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
 
     <span class="n">VERSION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_SERVER</span><span class="p">)</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
@@ -561,6 +626,24 @@
         <span class="c1"># These are the part that do not move much between XP &amp; Win10</span>
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PFW_MINIMAL_KUSER_SHARED_DATA</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">MM_SHARED_USER_DATA_VA</span><span class="p">)</span>
 
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedproperty</span>
+    <span class="k">def</span> <span class="nf">architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Retrieve system processor architecture</span>
+        <span class="c1"># It&#39;s not that easy as x64-on-ARM64 will lie on most API except IsWow64Process2</span>
+        <span class="c1"># EX: GetNativeSystemInfo will returns PROCESSOR_ARCHITECTURE_AMD64</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">IsWow64Process2</span><span class="p">):</span>
+            <span class="n">process_machine</span><span class="p">,</span> <span class="n">native_machine</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">is_wow_64_2</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">image_file_machine_to_processor_architecture</span><span class="p">(</span><span class="n">native_machine</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown IsWow64Process2(native_machine:#x) -&gt; </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">native_machine</span><span class="p">))</span>
+
+        <span class="c1"># No IsWow64Process2 -&gt; assert it cannot be ARM64 and thus GetNativeSystemInfo will not lie ?</span>
+        <span class="n">sysinfo</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_INFO</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetNativeSystemInfo</span><span class="p">(</span><span class="n">sysinfo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSOR_ARCHITECTURE_MAPPER</span><span class="p">[</span><span class="n">sysinfo</span><span class="o">.</span><span class="n">wProcessorArchitecture</span><span class="p">]</span>
+
+
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
@@ -596,7 +679,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_threads</span><span class="p">():</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">System</span><span class="o">.</span><span class="n">enumerate_threads_generator</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">System</span><span class="o">.</span><span class="n">enumerate_threads_generator</span><span class="p">()]</span>
 
 
     <span class="k">def</span> <span class="nf">enumerate_threads_setup_owners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

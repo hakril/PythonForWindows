@@ -69,6 +69,20 @@ Output
 
 .. _token_sample:
 
+
+Microsoft Store Python Injection
+''''''''''''''''''''''''''''''''
+
+Python execution in remote process fails with Microsoft Store builds of pythons (`mspython`), as the interpreter DLLs do not grant execute to Users.
+This sample shows a workaround by user https://github.com/dariushoule by copying needed mspython files to a temporary directory and injecting those instead.
+
+.. literalinclude:: ..\..\samples\process\msstore_interpreter_remote_python.py
+
+Output
+
+.. literalinclude:: samples_output\process_msstore_interpreter_remote_python.txt
+
+
 Token
 """""
 
