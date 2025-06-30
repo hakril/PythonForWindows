@@ -236,6 +236,10 @@ def test_assembler():
     CheckInstr(Jmp)(mem('[EAX]'))
     CheckInstr(Jmp)(mem('[EAX + 2]'))
     CheckInstr(Jmp)(mem('[0x12345678]'))
+    # Ljmp testing
+    CheckInstr(Ljmp)(0x33, 0x12345678)
+    CheckInstr(Ljmp, expected_result="ljmp 0x23:0x11223344")("0x23:0x11223344")
+    assert Ljmp(0x33, 0x12345678).get_code() == Ljmp("0x33:0x12345678").get_code()
 
     assert x86.Test(mem('[ECX + 0x100]'), 'ECX').get_code() == x86.Test('ECX', mem('[ECX + 0x100]')).get_code()
     assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()

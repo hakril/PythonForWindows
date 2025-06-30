@@ -400,6 +400,16 @@ class Imm32(object):
 
 class SegmentSelectorAbsoluteAddr(object):
     def accept_arg(self, args, instr_state):
+        # Special case ptr 16:32
+        if isinstance(args[0], str) and args[0].count(":") == 1:
+            imm16, imm32 = [int(x, 0) for x in args[0].split(":")]
+            sizess, datass = UImm16().accept_arg([imm16], instr_state)
+            sizeabs, dataabs = Imm32().accept_arg([imm32], instr_state)
+            if sizess is None or sizeabs is None:
+                return None, None
+            # We only consumed 1 args as it was the same string
+            return (1, dataabs + datass)
+
         sizess, datass = UImm16().accept_arg(args, instr_state)
         if sizess is None:
             return None, None
@@ -710,6 +720,10 @@ class Jmp(JmpType):
                 (RawBits.from_int(8, 0xe9), JmpImm32(5)),
                 (RawBits.from_int(8, 0xff), Slash(4)),
                 (RawBits.from_int(8, 0xea), SegmentSelectorAbsoluteAddr())]
+
+# Allow a second mnemonic for the longjump
+class Ljmp(JmpType):
+    encoding = [(RawBits.from_int(8, 0xea), SegmentSelectorAbsoluteAddr())]
 
 
 class Jz(JmpType):
