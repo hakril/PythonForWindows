@@ -134,7 +134,8 @@ class FunctionParamDumpBPAbstract(object):
             else:
                 t = rt(value)
 
-            if not isinstance(t, (windows.remotectypes.RemotePtr64, windows.remotectypes.RemotePtr32)):
+            if (not isinstance(t, (windows.remotectypes.RemotePtr64, windows.remotectypes.RemotePtr32)) or
+                    isinstance(t, (ctypes.c_char_p, ctypes.c_wchar_p))):
                 try:
                     t = t.value
                 except AttributeError:
