@@ -126,14 +126,15 @@ class FunctionParamDumpBPAbstract(object):
     def extract_arguments_64bits(self, cproc, cthread):
         x = windows.debug.X64ArgumentRetriever()
         res = OrderedDict()
-        for i, (name, type) in enumerate(zip(self.target_params, self.target_args)):
+        for i, (name, atype) in enumerate(zip(self.target_params, self.target_args)):
             value = x.get_arg(i, cproc, cthread)
-            rt = windows.remotectypes.transform_type_to_remote64bits(type)
+            rt = windows.remotectypes.transform_type_to_remote64bits(atype)
             if issubclass(rt, windows.remotectypes.RemoteValue):
                 t = rt(value, cproc)
             else:
                 t = rt(value)
-            if not hasattr(t, "contents"):
+
+            if not isinstance(t, (windows.remotectypes.RemotePtr64, windows.remotectypes.RemotePtr32)):
                 try:
                     t = t.value
                 except AttributeError:
