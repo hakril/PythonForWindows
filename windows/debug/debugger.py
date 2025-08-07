@@ -422,8 +422,9 @@ class Debugger(object):
         return True
 
     def _restore_breakpoint_MEMBP(self, bp, target):
-        (page_addr, page_prot) = bp._reput_page
-        return target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
+        for (page_addr, page_prot) in bp._reput_pages:
+            target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
+        bp._reput_pages.clear()
 
 
     def _remove_breakpoint_MEMBP(self, bp, target):
@@ -542,7 +543,7 @@ class Debugger(object):
         ctx = thread.context
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
-        bp._reput_page = (fault_page, page_prot.value)
+        bp._reput_pages.append((fault_page, page_prot.value))
         self._breakpoint_to_reput[cp.pid].add(bp)
 
     # debug event handlers
@@ -665,6 +666,7 @@ class Debugger(object):
         fault_type = exception.ExceptionRecord.ExceptionInformation[0]
         fault_addr = exception.ExceptionRecord.ExceptionInformation[1]
         pc_addr = self.current_thread.context.pc
+        dbgprint("Handling access_violation at pc={0:#x} addr={1:#x}".format(pc_addr, fault_addr), "DBG")
         if fault_addr == pc_addr:
             fault_type = EXEC
         event = EVENT_STR[fault_type]

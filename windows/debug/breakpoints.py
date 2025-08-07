@@ -55,6 +55,7 @@ class MemoryBreakpoint(Breakpoint):
         self.size = size if size is not None else self.DEFAULT_SIZE
         events = events if events is not None else self.DEFAULT_EVENTS
         self.events = set(events)
+        self._reput_pages = [] # The current memory BP page that is passed
 
     def trigger(self, dbg, exception):
         """Called when breakpoint is hit"""
