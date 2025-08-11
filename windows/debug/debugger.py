@@ -685,11 +685,24 @@ class Debugger(object):
             self._pass_memory_breakpoint(bp, original_prot, fault_page)
             return DBG_CONTINUE
 
+        # We may have setup the "EEFlags.TF" ourself if the membreakpoint triggered twice on the same instruction
+        # Ex: write on two pages handled by our breakpoint (unaligned write on 0xfff-0x1000)
+
+        originalctx = self.current_thread.context
+        original_tf = originalctx.EEFlags.TF
+        # Temporary disable EEFlags.TF to see if user callback explicit ask for it
+        originalctx.EEFlags.TF = 0
+        self.current_thread.set_context(originalctx)
+
         with self.DisabledMemoryBreakpoint():
             continue_flag = mem_bp.trigger(self, exception)
         if self._killed_in_action():
             return continue_flag
-        self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        # Update explicit trigger based on new value of EEFlags.TF
+        self._explicit_single_step[self.current_thread.tid] |= self.current_thread.context.EEFlags.TF
+        # Reupdate the real EEFlags.TF based on its current value and the original one
+        if original_tf != 0 and not self.current_thread.context.EEFlags.TF:
+            self.single_step()
         if self._explicit_single_step[self.current_thread.tid]:
             dbgprint("Someone ask for an explicit Single step - 5", "DBG")
         # If BP has not been removed in trigger, pas it
