@@ -424,7 +424,7 @@ class Debugger(object):
     def _restore_breakpoint_MEMBP(self, bp, target):
         for (page_addr, page_prot) in bp._reput_pages:
             target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
-        bp._reput_pages.clear()
+        del bp._reput_pages[:]
 
 
     def _remove_breakpoint_MEMBP(self, bp, target):
