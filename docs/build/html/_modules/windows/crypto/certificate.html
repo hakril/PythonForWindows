@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>windows.crypto.certificate &#8212; PythonForWindows 1.0.3 documentation</title>
+    <title>windows.crypto.certificate &#8212; PythonForWindows 1.0.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/mbasic.css?v=957880af" />
     
-    <script src="../../../_static/documentation_options.js?v=baaebd52"></script>
+    <script src="../../../_static/documentation_options.js?v=71272d9f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.crypto.certificate</a></li> 
       </ul>
@@ -45,7 +45,7 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 <span class="kn">from</span> <span class="nn">windows.crypto</span> <span class="kn">import</span> <span class="n">DEFAULT_ENCODING</span>
-<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">urepr_encode</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="kn">import</span> <span class="n">urepr_encode</span><span class="p">,</span> <span class="n">unicode_type</span>
 
 <span class="kn">import</span> <span class="nn">windows.crypto.cryptmsg</span>
 
@@ -99,7 +99,8 @@
             <span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
             <span class="c1"># filename,</span>
             <span class="n">content_type</span><span class="p">,</span>
-            <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_QUERY_FORMAT_FLAG_BINARY</span><span class="p">,</span>
+            <span class="c1"># gdef.CERT_QUERY_FORMAT_FLAG_BINARY,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_QUERY_FORMAT_FLAG_ALL</span><span class="p">,</span>
             <span class="mi">0</span><span class="p">,</span>
             <span class="n">dwEncoding</span><span class="p">,</span>
             <span class="n">dwContentType</span><span class="p">,</span>
@@ -201,7 +202,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new :class:`CertificateStore` from system store ``store_name``</span>
 <span class="sd">        (see `System Store Locations &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx&gt;`_)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_LOCAL_MACHINE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store_name</span><span class="p">,</span> <span class="n">unicode_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;store_name should be an unicode string not </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">store_name</span><span class="p">)))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_W</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_LOCAL_MACHINE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
 
 
@@ -212,7 +215,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new :class:`CertificateStore` from system store ``store_name``</span>
 <span class="sd">        (see `System Store Locations &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx&gt;`_)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_CURRENT_USER</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store_name</span><span class="p">,</span> <span class="n">unicode_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;store_name should be an unicode string not </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">store_name</span><span class="p">)))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_W</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_CURRENT_USER</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
 
 
@@ -519,6 +524,22 @@
         <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Certificate.get_private_key">
+<a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate.get_private_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_private_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tmp API: return value will change&quot;&quot;&quot;</span>
+        <span class="n">keyhandle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HCRYPTPROV_OR_NCRYPT_KEY_HANDLE</span><span class="p">()</span>
+        <span class="n">keyspec</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">must_free_handle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CryptAcquireCertificatePrivateKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">keyhandle</span><span class="p">,</span> <span class="n">keyspec</span><span class="p">,</span> <span class="n">must_free_handle</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">keyhandle</span><span class="p">,</span> <span class="n">keyspec</span><span class="p">,</span> <span class="n">must_free_handle</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">private_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tmp API: return value will change&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_private_key</span><span class="p">(</span><span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_ACQUIRE_COMPARE_KEY_FLAG</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_ACQUIRE_USE_PROV_INFO_FLAG</span><span class="p">)</span>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">encoded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -708,7 +729,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 1.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">windows.crypto.certificate</a></li> 
       </ul>

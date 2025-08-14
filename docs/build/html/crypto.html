@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>11. windows.crypto – CryptoAPI &#8212; PythonForWindows 1.0.3 documentation</title>
+    <title>11. windows.crypto – CryptoAPI &#8212; PythonForWindows 1.0.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     <link rel="stylesheet" type="text/css" href="_static/css/mbasic.css?v=957880af" />
     
-    <script src="_static/documentation_options.js?v=baaebd52"></script>
+    <script src="_static/documentation_options.js?v=71272d9f"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="com.html" title="10. windows.com - Component Object Model"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">11. </span><code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></li> 
       </ul>
     </div>  
@@ -219,6 +219,12 @@ See <a class="reference external" href="https://msdn.microsoft.com/en-us/library
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="windows.crypto.Certificate.get_private_key">
+<span class="sig-name descname"><span class="pre">get_private_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.get_private_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.crypto.Certificate.get_private_key" title="Link to this definition">¶</a></dt>
+<dd><p>Tmp API: return value will change</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="windows.crypto.Certificate.get_property">
 <span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.get_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#windows.crypto.Certificate.get_property" title="Link to this definition">¶</a></dt>
 <dd><p>TODO: DOC :D + auto-type ?</p>
@@ -244,6 +250,12 @@ See <a class="reference external" href="https://msdn.microsoft.com/en-us/library
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="windows.crypto.Certificate.private_key">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">private_key</span></span><a class="headerlink" href="#windows.crypto.Certificate.private_key" title="Link to this definition">¶</a></dt>
+<dd><p>Tmp API: return value will change</p>
 </dd></dl>
 
 <dl class="py property">
@@ -651,9 +663,11 @@ See <a class="reference external" href="https://msdn.microsoft.com/en-us/library
 <li><a class="reference internal" href="#windows.crypto.Certificate.from_buffer"><code class="docutils literal notranslate"><span class="pre">from_buffer()</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.from_file"><code class="docutils literal notranslate"><span class="pre">from_file()</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.get_name"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li><a class="reference internal" href="#windows.crypto.Certificate.get_private_key"><code class="docutils literal notranslate"><span class="pre">get_private_key()</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.get_property"><code class="docutils literal notranslate"><span class="pre">get_property()</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.issuer"><code class="docutils literal notranslate"><span class="pre">issuer</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a class="reference internal" href="#windows.crypto.Certificate.private_key"><code class="docutils literal notranslate"><span class="pre">private_key</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.properties"><code class="docutils literal notranslate"><span class="pre">properties</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.raw_serial"><code class="docutils literal notranslate"><span class="pre">raw_serial</span></code></a></li>
 <li><a class="reference internal" href="#windows.crypto.Certificate.serial"><code class="docutils literal notranslate"><span class="pre">serial</span></code></a></li>
@@ -782,7 +796,7 @@ See <a class="reference external" href="https://msdn.microsoft.com/en-us/library
         <li class="right" >
           <a href="com.html" title="10. windows.com - Component Object Model"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 1.0.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">11. </span><code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></li> 
       </ul>
     </div>
