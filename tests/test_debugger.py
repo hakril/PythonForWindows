@@ -367,6 +367,54 @@ def test_memory_breakpoint_exec(proc32_64_debug):
     for i in range(NB_NOP_IN_PAGE + 1):
         assert TSTBP.DATA[i] == addr + i
 
+def test_memory_breakpoint_trigger_multipage(proc32_64_debug):
+    """Check that a memory breakpoint triggering on multiple page on the same instruction restore are correctly restored on all pages"""
+
+    class MultiPageMemBP(windows.debug.MemoryBreakpoint):
+        ALL_TRIGGER_ADDR = []
+
+        def trigger(self, dbg, exc):
+            pc_fault_addr = dbg.current_thread.context.pc
+            self.ALL_TRIGGER_ADDR.append(pc_fault_addr)
+            print(hex(pc_fault_addr))
+            # Stop when we have a breakpoint in the 2nd page of the alloc
+            if shellcodeaddr + 0x1000 <= pc_fault_addr <=  shellcodeaddr + 0x2000:
+                dbg.current_process.exit()
+
+    # Trigger a write that will write on both page at once,
+    # Triggering both pages mem-bp on the same instruction.
+    # Then call an instruction at the end of page to see if both page of mem-bp still trigger the BP
+
+    shellcodeaddr = proc32_64_debug.virtual_alloc(0x2000)
+
+    if proc32_64_debug.bitness == 64:
+        shellcode = x64.MultipleInstr()
+        shellcode += x64.Mov("RAX", shellcodeaddr + 0xffe)
+        shellcode += x64.Mov("RCX", 0xc3909090) # Nopnopnopret
+        shellcode += x64.Mov(x64.mem("[RAX]"), "ECX") # Will write on both page at once
+        shellcode += x64.Push("RAX")
+        shellcode += x64.Ret() # Jump on the nop + ret
+    else:
+        shellcode = x86.MultipleInstr()
+        shellcode += x86.Mov("EAX", shellcodeaddr + 0xffe)
+        shellcode += x86.Mov("ECX", 0xc3909090) # Nopnopnopret
+        shellcode += x86.Mov(x86.mem("[EAX]"), "ECX") # Will write on both page at once
+        shellcode += x86.Push("EAX")
+        shellcode += x86.Ret() # Jump on the nop + ret
+
+    d = windows.debug.Debugger(proc32_64_debug)
+    bp = MultiPageMemBP(addr=shellcodeaddr, size=0x2000, events="XW")
+    proc32_64_debug.write_memory(shellcodeaddr, shellcode.get_code())
+    d.add_bp(bp)
+    proc32_64_debug.create_thread(shellcodeaddr, 0)
+
+    d.loop()
+    # Check that the 2 nop at the end of the first page of the membp trigger
+    # If access right where not correctly restored: this would not trigger on the first page
+    assert shellcodeaddr + 0xffe in bp.ALL_TRIGGER_ADDR
+    assert shellcodeaddr + 0xfff in bp.ALL_TRIGGER_ADDR
+    assert shellcodeaddr + 0x1000 in bp.ALL_TRIGGER_ADDR
+
 
 # breakpoint remove
 import threading
@@ -701,3 +749,5 @@ def test_keyboardinterrupt_when_bp_event(proc32_64_debug, monkeypatch):
         assert bad_thread.context.pc == addr
     else:
         raise ValueError("Should have raised")
+
+

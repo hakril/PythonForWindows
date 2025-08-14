@@ -422,8 +422,9 @@ class Debugger(object):
         return True
 
     def _restore_breakpoint_MEMBP(self, bp, target):
-        (page_addr, page_prot) = bp._reput_page
-        return target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
+        for (page_addr, page_prot) in bp._reput_pages:
+            target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
+        del bp._reput_pages[:]
 
 
     def _remove_breakpoint_MEMBP(self, bp, target):
@@ -542,7 +543,7 @@ class Debugger(object):
         ctx = thread.context
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
-        bp._reput_page = (fault_page, page_prot.value)
+        bp._reput_pages.append((fault_page, page_prot.value))
         self._breakpoint_to_reput[cp.pid].add(bp)
 
     # debug event handlers
@@ -665,6 +666,7 @@ class Debugger(object):
         fault_type = exception.ExceptionRecord.ExceptionInformation[0]
         fault_addr = exception.ExceptionRecord.ExceptionInformation[1]
         pc_addr = self.current_thread.context.pc
+        dbgprint("Handling access_violation at pc={0:#x} addr={1:#x}".format(pc_addr, fault_addr), "DBG")
         if fault_addr == pc_addr:
             fault_type = EXEC
         event = EVENT_STR[fault_type]
@@ -683,11 +685,24 @@ class Debugger(object):
             self._pass_memory_breakpoint(bp, original_prot, fault_page)
             return DBG_CONTINUE
 
+        # We may have setup the "EEFlags.TF" ourself if the membreakpoint triggered twice on the same instruction
+        # Ex: write on two pages handled by our breakpoint (unaligned write on 0xfff-0x1000)
+
+        originalctx = self.current_thread.context
+        original_tf = originalctx.EEFlags.TF
+        # Temporary disable EEFlags.TF to see if user callback explicit ask for it
+        originalctx.EEFlags.TF = 0
+        self.current_thread.set_context(originalctx)
+
         with self.DisabledMemoryBreakpoint():
             continue_flag = mem_bp.trigger(self, exception)
         if self._killed_in_action():
             return continue_flag
-        self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        # Update explicit trigger based on new value of EEFlags.TF
+        self._explicit_single_step[self.current_thread.tid] |= self.current_thread.context.EEFlags.TF
+        # Reupdate the real EEFlags.TF based on its current value and the original one
+        if original_tf != 0 and not self.current_thread.context.EEFlags.TF:
+            self.single_step()
         if self._explicit_single_step[self.current_thread.tid]:
             dbgprint("Someone ask for an explicit Single step - 5", "DBG")
         # If BP has not been removed in trigger, pas it
