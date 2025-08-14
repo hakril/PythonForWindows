@@ -227,7 +227,7 @@ def test_crypt_obj():
     # TODO: Need some better ideas
 
 def test_certificate_from_store():
-    assert windows.crypto.CertificateStore.from_system_store("Root")
+    assert windows.crypto.CertificateStore.from_system_store(u"Root")
 
 
 def test_sign_verify(rawcert, rawpfx):
