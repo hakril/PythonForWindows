@@ -107,9 +107,13 @@ class CryptMessage(gdef.HCRYPTMSG):
         return self.get_param(gdef.CMSG_CONTENT_PARAM)[:]
 
     @property
+    def bare_content(self):
+        return self.get_param(gdef.CMSG_BARE_CONTENT_PARAM)[:]
+
+    @property
     def content_type(self):
         data = self.get_param(gdef.CMSG_INNER_CONTENT_TYPE_PARAM)
-        assert data[-1] == "\x00", "CMSG_INNER_CONTENT_TYPE_PARAM not NULL TERMINATED"
+        assert data[-1] == b"\x00", "CMSG_INNER_CONTENT_TYPE_PARAM not NULL TERMINATED"
         return data[:-1]
 
 

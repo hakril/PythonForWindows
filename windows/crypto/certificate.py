@@ -6,7 +6,7 @@ from windows import winproxy
 import windows.generated_def as gdef
 
 from windows.crypto import DEFAULT_ENCODING
-from windows.pycompat import urepr_encode
+from windows.pycompat import urepr_encode, unicode_type
 
 import windows.crypto.cryptmsg
 
@@ -58,7 +58,8 @@ class CryptObject(object):
             gdef.LPWSTR(filename),
             # filename,
             content_type,
-            gdef.CERT_QUERY_FORMAT_FLAG_BINARY,
+            # gdef.CERT_QUERY_FORMAT_FLAG_BINARY,
+            gdef.CERT_QUERY_FORMAT_FLAG_ALL,
             0,
             dwEncoding,
             dwContentType,
@@ -149,7 +150,9 @@ class CertificateStore(gdef.HCERTSTORE):
         """Create a new :class:`CertificateStore` from system store ``store_name``
         (see `System Store Locations <https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx>`_)
         """
-        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE | gdef.CERT_STORE_READONLY_FLAG, store_name)
+        if not isinstance(store_name, unicode_type):
+            raise ValueError("store_name should be an unicode string not {0}".format(type(store_name)))
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_W, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE | gdef.CERT_STORE_READONLY_FLAG, store_name)
         return ctypes.cast(res, cls)
 
     @classmethod
@@ -157,7 +160,9 @@ class CertificateStore(gdef.HCERTSTORE):
         """Create a new :class:`CertificateStore` from system store ``store_name``
         (see `System Store Locations <https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx>`_)
         """
-        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_CURRENT_USER | gdef.CERT_STORE_READONLY_FLAG, store_name)
+        if not isinstance(store_name, unicode_type):
+            raise ValueError("store_name should be an unicode string not {0}".format(type(store_name)))
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_W, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_CURRENT_USER | gdef.CERT_STORE_READONLY_FLAG, store_name)
         return ctypes.cast(res, cls)
 
     @classmethod
@@ -441,6 +446,19 @@ class Certificate(gdef.CERT_CONTEXT):
         buf = (gdef.BYTE * datasize.value)()
         windows.winproxy.CertGetCertificateContextProperty(self, prop, buf, datasize)
         return bytearray(buf)
+
+    def get_private_key(self, flags):
+        """Tmp API: return value will change"""
+        keyhandle = gdef.HCRYPTPROV_OR_NCRYPT_KEY_HANDLE()
+        keyspec = gdef.DWORD()
+        must_free_handle = gdef.BOOL()
+        windows.winproxy.CryptAcquireCertificatePrivateKey(self, flags, None, keyhandle, keyspec, must_free_handle)
+        return (keyhandle, keyspec, must_free_handle)
+
+    @property
+    def private_key(self):
+        """Tmp API: return value will change"""
+        return self.get_private_key(flags=gdef.CRYPT_ACQUIRE_COMPARE_KEY_FLAG | gdef.CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG | gdef.CRYPT_ACQUIRE_USE_PROV_INFO_FLAG)
 
 
     @property

@@ -820,6 +820,26 @@ CryptSignAndEncodeCertificateParams = ((1, 'hBCryptKey'), (1, 'dwKeySpec'), (1, 
 CryptSignCertificatePrototype = WINFUNCTYPE(BOOL, BCRYPT_KEY_HANDLE, DWORD, DWORD, POINTER(BYTE), DWORD, PCRYPT_ALGORITHM_IDENTIFIER, PVOID, POINTER(BYTE), POINTER(DWORD))
 CryptSignCertificateParams = ((1, 'hBCryptKey'), (1, 'dwKeySpec'), (1, 'dwCertEncodingType'), (1, 'pbEncodedToBeSigned'), (1, 'cbEncodedToBeSigned'), (1, 'pSignatureAlgorithm'), (1, 'pvHashAuxInfo'), (1, 'pbSignature'), (1, 'pcbSignature'))
 
+#def CryptBinaryToStringA(pbBinary, cbBinary, dwFlags, pszString, pcchString):
+#    return CryptBinaryToStringA.ctypes_function(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+CryptBinaryToStringAPrototype = WINFUNCTYPE(BOOL, POINTER(BYTE), DWORD, DWORD, LPSTR, POINTER(DWORD))
+CryptBinaryToStringAParams = ((1, 'pbBinary'), (1, 'cbBinary'), (1, 'dwFlags'), (1, 'pszString'), (1, 'pcchString'))
+
+#def CryptBinaryToStringW(pbBinary, cbBinary, dwFlags, pszString, pcchString):
+#    return CryptBinaryToStringW.ctypes_function(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+CryptBinaryToStringWPrototype = WINFUNCTYPE(BOOL, POINTER(BYTE), DWORD, DWORD, LPWSTR, POINTER(DWORD))
+CryptBinaryToStringWParams = ((1, 'pbBinary'), (1, 'cbBinary'), (1, 'dwFlags'), (1, 'pszString'), (1, 'pcchString'))
+
+#def CryptStringToBinaryA(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags):
+#    return CryptStringToBinaryA.ctypes_function(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)
+CryptStringToBinaryAPrototype = WINFUNCTYPE(BOOL, LPCSTR, DWORD, DWORD, POINTER(BYTE), POINTER(DWORD), POINTER(DWORD), POINTER(DWORD))
+CryptStringToBinaryAParams = ((1, 'pszString'), (1, 'cchString'), (1, 'dwFlags'), (1, 'pbBinary'), (1, 'pcbBinary'), (1, 'pdwSkip'), (1, 'pdwFlags'))
+
+#def CryptStringToBinaryW(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags):
+#    return CryptStringToBinaryW.ctypes_function(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)
+CryptStringToBinaryWPrototype = WINFUNCTYPE(BOOL, LPCWSTR, DWORD, DWORD, POINTER(BYTE), POINTER(DWORD), POINTER(DWORD), POINTER(DWORD))
+CryptStringToBinaryWParams = ((1, 'pszString'), (1, 'cchString'), (1, 'dwFlags'), (1, 'pbBinary'), (1, 'pcbBinary'), (1, 'pdwSkip'), (1, 'pdwFlags'))
+
 #def OpenVirtualDisk(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle):
 #    return OpenVirtualDisk.ctypes_function(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle)
 OpenVirtualDiskPrototype = WINFUNCTYPE(DWORD, PVIRTUAL_STORAGE_TYPE, PCWSTR, VIRTUAL_DISK_ACCESS_MASK, OPEN_VIRTUAL_DISK_FLAG, POPEN_VIRTUAL_DISK_PARAMETERS, PHANDLE)

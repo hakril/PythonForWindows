@@ -642,3 +642,39 @@ BOOL CryptSignCertificate(
   [out]     BYTE                        *pbSignature,
   [in, out] DWORD                       *pcbSignature
 );
+
+BOOL CryptBinaryToStringA(
+  [in]            BYTE *pbBinary,
+  [in]            DWORD      cbBinary,
+  [in]            DWORD      dwFlags,
+  [out, optional] LPSTR      pszString,
+  [in, out]       DWORD      *pcchString
+);
+
+BOOL CryptBinaryToStringW(
+  [in]            BYTE *pbBinary,
+  [in]            DWORD      cbBinary,
+  [in]            DWORD      dwFlags,
+  [out, optional] LPWSTR     pszString,
+  [in, out]       DWORD      *pcchString
+);
+
+BOOL CryptStringToBinaryA(
+  [in]      LPCSTR pszString,
+  [in]      DWORD  cchString,
+  [in]      DWORD  dwFlags,
+  [in]      BYTE   *pbBinary,
+  [in, out] DWORD  *pcbBinary,
+  [out]     DWORD  *pdwSkip,
+  [out]     DWORD  *pdwFlags
+);
+
+BOOL CryptStringToBinaryW(
+  [in]      LPCWSTR pszString,
+  [in]      DWORD   cchString,
+  [in]      DWORD   dwFlags,
+  [in]      BYTE    *pbBinary,
+  [in, out] DWORD   *pcbBinary,
+  [out]     DWORD   *pdwSkip,
+  [out]     DWORD   *pdwFlags
+);
