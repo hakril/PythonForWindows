@@ -244,3 +244,25 @@ def CryptProtectMemory(pDataIn, cbDataIn, dwFlags):
 @Crypt32Proxy()
 def CryptUnprotectMemory(pDataIn, cbDataIn, dwFlags):
     return CryptUnprotectMemory.ctypes_function(pDataIn, cbDataIn, dwFlags)
+
+# Binary <-> String
+
+@Crypt32Proxy()
+def CryptBinaryToStringA(pbBinary, cbBinary=None, dwFlags=NeededParameter, pszString=NeededParameter, pcchString=NeededParameter):
+    if cbBinary is None:
+        cbBinary = len(pbBinary)
+    return CryptBinaryToStringA.ctypes_function(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+
+@Crypt32Proxy()
+def CryptBinaryToStringW(pbBinary, cbBinary=None, dwFlags=NeededParameter, pszString=NeededParameter, pcchString=NeededParameter):
+    if cbBinary is None:
+        cbBinary = len(pbBinary)
+    return CryptBinaryToStringW.ctypes_function(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+
+@Crypt32Proxy()
+def CryptStringToBinaryA(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags):
+   return CryptStringToBinaryA.ctypes_function(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)
+
+@Crypt32Proxy()
+def CryptStringToBinaryW(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags):
+   return CryptStringToBinaryW.ctypes_function(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)

@@ -330,6 +330,14 @@ Functions
 
 .. function:: CryptSignCertificate(hBCryptKey, dwKeySpec, dwCertEncodingType, pbEncodedToBeSigned, cbEncodedToBeSigned, pSignatureAlgorithm, pvHashAuxInfo, pbSignature, pcbSignature)
 
+.. function:: CryptBinaryToStringA(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+
+.. function:: CryptBinaryToStringW(pbBinary, cbBinary, dwFlags, pszString, pcchString)
+
+.. function:: CryptStringToBinaryA(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)
+
+.. function:: CryptStringToBinaryW(pszString, cchString, dwFlags, pbBinary, pcbBinary, pdwSkip, pdwFlags)
+
 .. function:: OpenVirtualDisk(VirtualStorageType, Path, VirtualDiskAccessMask, Flags, Parameters, Handle)
 
 .. function:: AttachVirtualDisk(VirtualDiskHandle, SecurityDescriptor, Flags, ProviderSpecificFlags, Parameters, Overlapped)

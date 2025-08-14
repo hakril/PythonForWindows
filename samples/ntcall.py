@@ -159,7 +159,10 @@ def do_ntcall_from_args(args, subcall=False):
     hinfo = [x for x in windows.current_process.handles if x.value == handle][0]
     print("   * Name: {0}".format(hinfo.name))
     print("   * Type: {0}".format(hinfo.type))
-    print("   * Addr: {0:#x}".format(hinfo.pAddress))
+    if hinfo.pAddress is not None:
+        print("   * Addr: {0:#x}".format(hinfo.pAddress))
+    else:
+        print("   * Addr: None")
     return handle
 
 

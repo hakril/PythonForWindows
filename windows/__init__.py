@@ -10,7 +10,7 @@ Exported:
 
     current_thread : :class:`windows.winobject.CurrentThread`
 """
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 # check we are on windows
 import sys
