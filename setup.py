@@ -4,7 +4,7 @@ import os.path
 from setuptools import setup
 
 PKG_NAME = "PythonForWindows"
-VERSION  = "1.0.2"
+VERSION  = "1.0.4"
 
 # Load long description from README.md
 this_directory = os.path.abspath(os.path.dirname(__file__))
