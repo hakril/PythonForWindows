@@ -32,8 +32,11 @@ def verify_apisetmap_parsing(apisetmap_base, version=None):
     # Verify that at least one entry resolve to kernel32.dll
     # This ensure that the ApiSetMap parsing works at least a little
     assert "kernel32.dll" in apisetmap_dict.values()
+    print("Listing APISETMAP dlls")
     for dll in sorted(apisetmap_dict):
         print(dll)
+        if not any(dll.startswith(pref) for pref in KNOWN_APISETMAP_PREFIX):
+            print("Dll <dll> has unknown prefix".format(dll=dll))
     assert all(any(dll.startswith(pref) for pref in KNOWN_APISETMAP_PREFIX) for dll in apisetmap_dict)
     # This first key was found in most of the tested version by hand
     # MS-Win found on: 6.1.7600 (Win7)
