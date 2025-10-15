@@ -58,6 +58,11 @@ target = "APPP\x01\x02\x03\x04\x05\x06\x07\x08\x44PPP\x09\x0a\x0b\x0c\x0d\x0e\x0
 NDR_PACK_TEST_CASE = [
     # Simple case
     (ndr.make_structure([ndr.NdrLong, ndr.NdrLong]), (2, 2), b"\x02\x00\x00\x00\x02\x00\x00\x00"),
+    # String case, test packing works + \x00 is added if not present in string
+    (ndr.NdrCString, "Hello", b"\x06\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00Hello\x00PP"),
+    (ndr.NdrCString, "Hello\x00", b"\x06\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00Hello\x00PP"),
+    (ndr.NdrWString, "Hello", b"\x06\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00H\x00e\x00l\x00l\x00o\x00\x00\x00"),
+    (ndr.NdrWString, "Hello\x00", b"\x06\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00H\x00e\x00l\x00l\x00o\x00\x00\x00"),
     # Test GUID packing
     (ndr.NdrGuid, gdef.GUID.from_string("42424242-42424242-4242-4242-424242424242"), b"BBBBBBBBBBBBBBBB"),
     # Test CtxHandle packing

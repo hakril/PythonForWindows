@@ -20,7 +20,7 @@ def dumped_apisetmap_base_and_version(request):
     ctypes_data = ctypes.c_buffer(data)
     yield ctypes.addressof(ctypes_data), version
 
-KNOWN_APISETMAP_PREFIX = ["api-", "ext-", "MS-Win-"]
+KNOWN_APISETMAP_PREFIX = ["api-", "ext-", "MS-Win-", "SchemaExt-"]
 
 def verify_apisetmap_parsing(apisetmap_base, version=None):
     if version is not None:
