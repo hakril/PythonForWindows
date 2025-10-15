@@ -160,6 +160,9 @@ class NdrWString(object):
             return None
         if not data.endswith('\x00'):
             data += '\x00'
+        # Technically windows NDR seems to accept any bitstream that ends with '\x00\x00' here
+        # And not limited to valid utf-16
+        # Exemple: b'\x41\x00\x00\xD8'
         data = data.encode("utf-16-le")
         l = (len(data) // 2)
         result = struct.pack("<3I", l, 0, l)
@@ -179,7 +182,7 @@ class NdrWString(object):
 
     @classmethod
     def get_alignment(self):
-        # Not sur, but size is on 4 bytes so...
+        # Not sure, but size is on 4 bytes so...
         return 4
 
 class NdrCString(object):
@@ -190,6 +193,10 @@ class NdrCString(object):
             return None
         if not data.endswith('\x00'):
             data += '\x00'
+        # Windows NDR seems to accept any bitstream in a FC_C_CSTRING
+        # I was able to send range(1, 256) + b"\x00"
+        # For now play safe for user and only accept encoded with always keep the same number of bytes
+        data = data.encode("ascii")
         l = len(data)
         result = struct.pack("<3I", l, 0, l)
         result += data
