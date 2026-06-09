@@ -283,6 +283,8 @@ class System(object):
         (22621, True): u"Windows 11 Version 22H2",
         (22631, True): u"Windows 11 Version 23H2",
         (26100, True): u"Windows 11 Version 24H2",
+        (26200, True): u"Windows 11 Version 25H2",
+        (28000, True): u"Windows 11 Version 26H1",
 
         (14393, False): u"Windows Server 2016",
         # 16299 : Windows Server, version 1709 ?
