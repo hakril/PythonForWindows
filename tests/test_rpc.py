@@ -1,5 +1,5 @@
 import sys
-import pytest
+import struct
 import os.path
 import time
 
@@ -125,37 +125,79 @@ class DbgRpcClient(windows.rpc.RPCClient):
         return super(DbgRpcClient, self)._get_response_effective_data(response)
 
 
-FIREWALL_RPC_IID = "2fb92682-6599-42dc-ae13-bd2ca89bd11c"
+EVTX_RPC_IID = "82273FDC-E32A-18C3-3F78-827929DC23EA"
 
-Proc0_RPC_FWOpenPolicyStore = 0
-Proc9_RPC_FWEnumFirewallRules = 9
+Proc7_ElfRpc_s_OpenELW = 7
+Proc10_ElfRpc_s_ReadELW = 10
+
+class NdrCustomSizedString(object):
+    @classmethod
+    def pack(cls, data):
+        """Pack string ``data``. append ``\\x00`` if not present at the end of the string"""
+        if not data:
+            return None
+        result = struct.pack("<3I", data[0], 0, data[1])
+        result += data[2]
+        return ndr.dword_pad(result)
+
+    @classmethod
+    def get_alignment(self):
+        # Not sure, but size is on 4 bytes so...
+        return 4
+
+class RPC_UNICODE_STRING(ndr.NdrStructure):
+    MEMBERS = [
+        ndr.NdrShort,                        # Length (in bytes)
+        ndr.NdrShort,                        # MaximumLength (in bytes)
+        ndr.NdrUniquePTR(NdrCustomSizedString)     # Pointer to actual wide string character buffer
+    ]
+
+class ElfrOpenELWPayload(ndr.NdrParameters):
+    MEMBERS = [
+        ndr.NdrUniquePTR(ndr.NdrWString),   # UNCServerName (Pass None for local execution)
+        RPC_UNICODE_STRING,                             # ModuleName (The target Log Name)
+        RPC_UNICODE_STRING,                 # RegModuleName (Must be an empty string)
+        ndr.NdrLong,                        # MajorVersion
+        ndr.NdrLong                         # MinorVersion
+    ]
+
+class ElfrReadELWPayload(ndr.NdrParameters):
+    MEMBERS = [
+        ndr.NdrContextHandle,
+        ndr.NdrLong, # Flags
+        ndr.NdrLong, # RecordOffset
+        ndr.NdrLong, # NumberOfBytesToRead
+    ]
 
 def test_rpc_response_as_view():
     """Check that parsing response as view in RPC Client works. Testing after a bug in 32b RPCCLient"""
     # We test what by using a RPC endpoint that returns a lot of info : forcing a response in a view
-    # In this case we use the Firewall RPC and we list all Firerules.
+    # In this case we use the EVTX RPC & read method that allow us to ask for a sized return buffer
     # We use a custom RPCClient subclasse to track if last response was a view
-    client = windows.rpc.find_alpc_endpoint_and_connect(FIREWALL_RPC_IID, sid=gdef.WinLocalSid)
+    client = windows.rpc.RPCClient(r"\RPC Control\eventlog")
     client.__class__ = DbgRpcClient
-    iid = client.bind(FIREWALL_RPC_IID)
+    iid = client.bind(EVTX_RPC_IID, (0, 0))
 
-    # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/230d1ae7-b42e-4d9c-b997-b1463aaa0ded
-    # !\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00
-    # Binaryversion : 0x022f
-    # FW_STORE_TYPE_LOCAL
-    # FW_POLICY_ACCESS_RIGHT_READ
-    # Flags = 0
-    resp1 = client.call(iid, Proc0_RPC_FWOpenPolicyStore, params=b"!\x02\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00")
-    rawpolstore = resp1[:20]
+    # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-even/1898e85b-10a1-43b9-a27e-92fc833cebea
+
+
+    target_evtx = "Application"
+    tsize = len(target_evtx)
+    params = ElfrOpenELWPayload.pack([
+        None,                # UNCServerName (None resolves to a NULL pointer / Local)
+        (tsize * 2, (tsize + 1) * 2, (tsize + 1, tsize, target_evtx.encode("utf-16-le") + b"\x00")),  # ModuleName
+        (0, 0, ""),   # RegModuleName
+        1,                   # MajorVersion
+        1                    # MinorVersion
+    ])
+
+    resp1 = client.call(iid, Proc7_ElfRpc_s_OpenELW, params=params)
+    stream = ndr.NdrStream(resp1)
+    handle = ndr.NdrContextHandle.unpack(stream)
     assert not client.last_response_was_view
 
-    # Proc9_RPC_FWEnumFirewallRules
-    # \x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00
-    # https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/36cddff4-c427-4863-a58d-3d913a12b221
-    # FW_PROFILE_TYPE_ALL : 0x7FFFFFFF
-    # FW_RULE_STATUS_CLASS_OK +  FW_RULE_STATUS_PARTIALLY_IGNORED = 0x00010000 + 0x00020000
-    # Flags = 7 ?
-    resp2 = client.call(iid, Proc9_RPC_FWEnumFirewallRules, params=rawpolstore + b"\x00\x00\x03\x00\xff\xff\xff\x7f\x07\x00")
+    payload = ElfrReadELWPayload.pack([handle, 1 + 8, 0, 5000]) # Ask for a buffer of 5000 bytes -> response is view
+    res = client.call(iid, Proc10_ElfRpc_s_ReadELW, payload)
     assert client.last_response_was_view
 
 # This cannot work as is: as juste calling NtAlpcDeleteSectionView does not works.
