@@ -349,6 +349,7 @@ class Variant(VARIANT):
 class COMImplementation(object):
     """The base class to implements COM object respecting a given interface"""
     IMPLEMENT = None
+    COM_KEEPALIVE_REGISTRY = {} # Will keep on COM-alive object to prevent early garbage collection
 
     def get_index_of_method(self, method):
         # This code is horrible but not totally my fault
@@ -392,18 +393,47 @@ class COMImplementation(object):
         self.implems = implems
         self.vtable_pointer = ctypes.pointer(self.vtable)
         self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
+        self.com_refcount = 1
+        self.register()
+
+    # PFW COMImplementation API
+    def _get_keepalive_registry(self):
+        """Allow subclass to chose where are store alive COMImplementation object"""
+        return self.COM_KEEPALIVE_REGISTRY
+
+    def register(self):
+        """Called once at instanciation : should be used to register it in any pointer-keeper logic to prevent early garbage-collection
+        The method : revoke() will be called when RefCount go to 0.
+        """
+        self._get_keepalive_registry()[id(self)] = self # Add object to global table to prevent early garbage collection
+        return True
+
+    def revoke(self):
+        """Called once when Refcount is lowered to 0 : use it to remove from any global-state object for refcounting.
+        This indicate the object can be safely garbage collected from the COM point of view
+        """
+        del self._get_keepalive_registry()[id(self)]
+        return True
 
     def QueryInterface(self, this, piid, result):
         """Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface"""
         if piid[0] in (gdef.IUnknown.IID, self.IMPLEMENT.IID):
             result[0] = this
+            self.AddRef()
             return 1
         return E_NOINTERFACE
 
     def AddRef(self, *args):
         """Default ``AddRef`` implementation that returns ``1``"""
-        return 1
+        self.com_refcount += 1
+        return self.com_refcount
 
     def Release(self, *args):
         """Default ``Release`` implementation that returns ``1``"""
-        return 0
+        self.com_refcount -= 1
+        if self.com_refcount == 0:
+            self.revoke()
+        return self.com_refcount
+
+    def __repr__(self):
+        return "<{0} refcount={1} at {2:#08x}>".format(type(self).__name__, self.com_refcount, id(self))
