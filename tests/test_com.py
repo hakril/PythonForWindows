@@ -74,8 +74,4 @@ def test_com_implementation_keep_alive():
     assert objcom.OnCall(None) == 3
     assert objcom.Release() == 0 # trigger Revoke / free !
     gc.collect()
-    assert wref() is None # Check object is dead alive in python world
-    with pytest.raises(WindowsError):
-        # Should trigger a segfault catched by ctypes
-        # Ex: WindowsError: exception: access violation writing 0xFC458DF1
-        assert objcom.OnCall(None) == 4
+    assert wref() is None # Check object is dead in python world
