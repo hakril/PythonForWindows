@@ -3,6 +3,7 @@ import struct
 import ctypes
 import functools
 from ctypes import HRESULT, byref, cast
+from collections import defaultdict
 
 import windows
 from windows import winproxy
@@ -364,36 +365,98 @@ class COMImplementation(object):
         index_and_method = sorted((self.get_index_of_method(m),name, m) for name, m in interface._functions_.items())
         return index_and_method
 
-    def verify_implem(self, interface):
-        for func_name in interface._functions_:
-            implem = getattr(self, func_name, None)
-            if implem is None:
-                raise ValueError("<{0}> implementing <{1}> has no method <{2}>".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
-            if not callable(implem):
-                raise ValueError("{0} implementing <{1}>: <{2}> is not callable".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
+
+    def _get_implemented_interfaces(self):
+        implist = self.IMPLEMENT
+        if isinstance(implist, type) and issubclass(implist, windows.generated_def.interfaces.COMInterface):
+            # Only one class :
+            implist = (implist,)
+        return tuple(implist)
+
+    def _verify_interfaces_collision(self):
+        function_names = defaultdict(int)
+        for interface in self._get_implemented_interfaces():
+            for function in interface._functions_:
+                function_names[function] += 1
+        return set(function for function, count in function_names.items() if count > 1) - {"QueryInterface", "AddRef", "Release"}
+
+    def _verify_interfaces_implem(self):
+        for interface in self._get_implemented_interfaces():
+            for func_name in interface._functions_:
+                explicit_func_name = "{}_{}".format(interface.__name__, func_name)
+                explicit_implem = getattr(self, explicit_func_name, None)
+                if explicit_implem is not None:
+                    if not callable(explicit_implem):
+                        raise ValueError("{0} implementing <{1}>: <{2}> is not callable".format(type(self).__name__, interface.__name__, explicit_func_name))
+                    continue # Ok for explicit implem
+
+                # No explicit implem : go for implicit
+                implem = getattr(self, func_name, None)
+                if implem is None:
+                    raise ValueError("<{0}> implementing <{1}> has no method <{2}>".format(type(self).__name__, interface.__name__, func_name))
+                if not callable(implem):
+                    raise ValueError("{0} implementing <{1}>: <{2}> is not callable".format(type(self).__name__, interface.__name__, func_name))
+
+                # Prevent multiple usage of the same name if multiple implemented interface have a function with the same name: force explicit name
+                if func_name in self._colliding_functions:
+                    raise ValueError("{0} method <{1}> is used by more than 1 implemented interface : use explicit method name 'Interface_Method' (Ex: IPersist_GetClassID) ".format(type(self).__name__, func_name))
+
         return True
 
     def _create_vtable(self, interface):
         implems = []
         names = []
         for index, name, method in self.extract_methods_order(interface):
-            func_implem = getattr(self, name)
+            explicit_func_name = "{}_{}".format(interface.__name__, name)
+            # Explicit name (IPersist_GetClassID)
+            func_implem = getattr(self, explicit_func_name, None)
+            if func_implem is None:
+                # Implicit name (GetClassID) # Collision have been checked in verify_interfaces_implem()
+                func_implem = getattr(self, name, None)
+
             #'this' is a COM-interface of the type we are implementing
             types = [method.restype, interface] + list(method.argtypes)
             implems.append(ctypes.WINFUNCTYPE(*types)(func_implem))
             names.append(name)
         class Vtable(ctypes.Structure):
             _fields_ = [(name, ctypes.c_void_p) for name in names]
-        return Vtable(*[ctypes.cast(x, ctypes.c_void_p) for x in implems]), implems
+        vtable = Vtable(*[ctypes.cast(x, ctypes.c_void_p) for x in implems])
+        vtable._implems = implems # Keep a reference to prevent early garbage-collection
+        return ctypes.pointer(vtable)
+
+    def _create_vtables(self):
+        vtables = {}
+        for interface in self._get_implemented_interfaces():
+            vtables[str(interface.IID).upper()] = self._create_vtable(interface)
+        return vtables
+
+    @property
+    def _as_parameter_(self):
+        implist = self._get_implemented_interfaces()
+        if len(implist) > 1:
+            raise ValueError("Cannot use _as_parameter_ on {} implementing multiple COM interface : use .as_interface() for ctypes parameter passing".format(self))
+        return self._vtables_ptr[str(implist[0].IID)]
+
+    def as_interface(self, interface):
+        try:
+            iid = interface.IID
+        except AttributeError:
+            iid = interface
+
+        if iid == gdef.IUnknown.IID: # Any interface pointer will respect IUnknown
+            return list(self._vtables_ptr.values())[0]
+
+        try:
+            return self._vtables_ptr[str(iid)]
+        except KeyError as e:
+            raise ValueError("{} does not implement IID {} (interface={})".format(self, iid, interface))
 
     def __init__(self):
-        self.verify_implem(self.IMPLEMENT)
-        vtable, implems = self._create_vtable(self.IMPLEMENT)
-        self.vtable = vtable
-        self.implems = implems
-        self.vtable_pointer = ctypes.pointer(self.vtable)
-        self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
-        self.com_refcount = 1
+        self._colliding_functions = self._verify_interfaces_collision()
+        self._verify_interfaces_implem()
+        self._vtables = self._create_vtables()
+        self._vtables_ptr = {interface: ctypes.addressof(vtable) for interface, vtable in self._vtables.items()}
+        self._com_refcount = 1
         self.register()
 
     # PFW COMImplementation API
@@ -417,23 +480,23 @@ class COMImplementation(object):
 
     def QueryInterface(self, this, piid, result):
         """Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface"""
-        if piid[0] in (gdef.IUnknown.IID, self.IMPLEMENT.IID):
-            result[0] = this
+        if piid[0] == (gdef.IUnknown.IID) or piid[0] in (i.IID for i in self._get_implemented_interfaces()):
+            result[0] = self.as_interface(piid[0])
             self.AddRef()
             return 1
         return E_NOINTERFACE
 
     def AddRef(self, *args):
         """Default ``AddRef`` implementation that returns ``1``"""
-        self.com_refcount += 1
-        return self.com_refcount
+        self._com_refcount += 1
+        return self._com_refcount
 
     def Release(self, *args):
         """Default ``Release`` implementation that returns ``1``"""
-        self.com_refcount -= 1
-        if self.com_refcount == 0:
+        self._com_refcount -= 1
+        if self._com_refcount == 0:
             self.revoke()
-        return self.com_refcount
+        return self._com_refcount
 
     def __repr__(self):
-        return "<{0} refcount={1} at {2:#08x}>".format(type(self).__name__, self.com_refcount, id(self))
+        return "<{0} refcount={1} at {2:#08x}>".format(type(self).__name__, self._com_refcount, id(self))
