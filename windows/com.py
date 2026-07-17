@@ -437,17 +437,15 @@ class COMImplementation(object):
             raise ValueError("Cannot use _as_parameter_ on {} implementing multiple COM interface : use .as_interface() for ctypes parameter passing".format(self))
         return self._vtables_ptr[str(implist[0].IID)]
 
-    def as_interface(self, interface):
-        try:
+    def as_interface(self, interface=gdef.IUnknown, iid=None):
+        if iid is None:
             iid = interface.IID
-        except AttributeError:
-            iid = interface
 
         if iid == gdef.IUnknown.IID: # Any interface pointer will respect IUnknown
-            return list(self._vtables_ptr.values())[0]
+            return interface(list(self._vtables_ptr.values())[0])
 
         try:
-            return self._vtables_ptr[str(iid)]
+            return interface(self._vtables_ptr[str(iid)])
         except KeyError as e:
             raise ValueError("{} does not implement IID {} (interface={})".format(self, iid, interface))
 
@@ -481,7 +479,7 @@ class COMImplementation(object):
     def QueryInterface(self, this, piid, result):
         """Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface"""
         if piid[0] == (gdef.IUnknown.IID) or piid[0] in (i.IID for i in self._get_implemented_interfaces()):
-            result[0] = self.as_interface(piid[0])
+            result[0] = self.as_interface(iid=piid[0])
             self.AddRef()
             return 1
         return E_NOINTERFACE
