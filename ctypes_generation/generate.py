@@ -425,8 +425,6 @@ class COMCtypesGenerator(CtypesGenerator):
 
     def generate_files(self, files):
         generation_order = self.verify_inheritance_consistancy()
-        for i in generation_order:
-            print(i)
         self.generate_known_iid_list()
         # We generate COM interface in 2 step
         # 1) The Class itself with the IDD
@@ -482,7 +480,7 @@ class COMCtypesGenerator(CtypesGenerator):
             # Verify parent/child method consistancy
             parentmethods = comethods_by_name[real_parent]
             nbparentmethods = len(parentmethods)
-            print("{0} inherit {1}".format(cominterface.name, cominterface.parent_interface))
+            print("{0} inherit {1}".format(cominterface.name, real_parent))
             # Make a real debug message
             methoddiff = []
             for i, (method, parentmethod) in enumerate(zip(comethods_by_name[cominterface.name][:nbparentmethods], parentmethods)):
