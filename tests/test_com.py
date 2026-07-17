@@ -187,8 +187,13 @@ def test_com_multiple_implementation_with_collision():
     obj = CollisionMultipleInterfaceImplem()
     assert obj
 
-    # Emulate a call from C code
-    iunk = gdef.IUnknown(obj.as_interface(gdef.IUnknown))
+    # Emulate a call from C code : check that as_interface() indeed return an COMInterface subclasse of correct type
+    iunk = obj.as_interface(gdef.IUnknown)
+    assert isinstance(iunk, gdef.IUnknown)
+    assert isinstance(obj.as_interface(gdef.ITaskFolderCollection), gdef.ITaskFolderCollection)
+
+    # If we only give an IID: return a Iunknown for simple pvoid casting
+    assert isinstance(obj.as_interface(iid=gdef.ITaskFolderCollection.IID), gdef.IUnknown)
 
     idlesetting = iunk.query(gdef.IIdleSettings)
     taskfoldercollection = iunk.query(gdef.ITaskFolderCollection)

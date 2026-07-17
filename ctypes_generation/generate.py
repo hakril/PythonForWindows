@@ -4,6 +4,7 @@ import os.path
 import re
 import glob
 import textwrap
+
 try:
     from StringIO import StringIO
 except ImportError:
@@ -11,6 +12,7 @@ except ImportError:
 
 import pprint
 import shutil
+from collections import defaultdict
 
 import dummy_wintypes
 import struct_parser
@@ -422,15 +424,107 @@ class COMCtypesGenerator(CtypesGenerator):
             self.iids_def[name] = self.parse_iid(iid), iid
 
     def generate_files(self, files):
+        generation_order = self.verify_inheritance_consistancy()
+        for i in generation_order:
+            print(i)
         self.generate_known_iid_list()
         # We generate COM interface in 2 step
         # 1) The Class itself with the IDD
         # 2) The function list after all class we generated
         #    - This allow COM function to refer the interface in their def :)
-        for file in files:
-            self.generate_com_interface_class_iid(file.data)
-        for file in files:
-            self.generate_com_interface_functions(file.data)
+
+        for cominterface, parentname in generation_order:
+            self.generate_com_interface_class_iid(cominterface, parentname)
+
+        for cominterface, parentname in generation_order:
+            self.generate_com_interface_functions(cominterface)
+
+    def verify_inheritance_consistancy(self):
+        # Verify that an interface B inheriting A actually define all A methods.
+        # I have seen this bug in the windows SDK and lost some time...
+        comethods_by_name = {None: []}
+        inheritance_tree = defaultdict(list) # Parent -> children
+
+        for file in self.files:
+            cominterface = file.data
+            comethods_by_name[cominterface.name] = [m.name for m in cominterface.methods]
+
+        # Now : verify each on
+        for file in self.files:
+            cominterface = file.data
+            logical_parent = self._find_logical_parent_interface(cominterface.name)
+
+            if (cominterface.parent_interface is None) or (cominterface.parent_interface == logical_parent):
+                # Allow only definition of subclasse without the intermediary
+                # Ex: we have INetFwPolicy2 but not INetFwPolicy
+                # Create an inheritance schemas were INetFwPolicy is skip and go
+                # INetFwPolicy2 -> IUnknown
+                if logical_parent in comethods_by_name:
+                    real_parent = logical_parent
+                else:
+                    print("[!] <{}> should inherit non defined {} : defaulting to IUnknown".format(cominterface.name, logical_parent))
+                    real_parent = "IUnknown"
+            elif logical_parent == "IUnknown":
+                # We can have inheritance that does not respect standard versioning
+                # In this case : trust the explicit parent
+                # Ex: IDebugHostModule inherit IDebugHostSymbol
+                real_parent = cominterface.parent_interface
+            else:
+                raise ValueError("Unexpected interface inheritance shemas : <{0}> inherit <{1}> when {2} was expected : please fill an issue".format(
+                    cominterface.name,
+                    cominterface.parent_interface,
+                    logical_parent,
+                ))
+
+            # Fill the inheritance dict to generate interfaces in the correct order
+            inheritance_tree[real_parent].append(cominterface)
+
+            # Verify parent/child method consistancy
+            parentmethods = comethods_by_name[real_parent]
+            nbparentmethods = len(parentmethods)
+            print("{0} inherit {1}".format(cominterface.name, cominterface.parent_interface))
+            # Make a real debug message
+            methoddiff = []
+            for i, (method, parentmethod) in enumerate(zip(comethods_by_name[cominterface.name][:nbparentmethods], parentmethods)):
+                if method != parentmethod:
+                    methoddiff.append((i, method, parentmethod))
+            if methoddiff:
+                diffstr =  "\n   ".join("{0}] {1}->{2}".format(*x) for x in  methoddiff)
+                raise ValueError("Interface <{}> Inherint <{}> but do not have the same firts methods as its parent\n Diff is :\n    {}".format(cominterface.name, cominterface.parent_interface, diffstr))
+
+        return self._flatten_inheritance_tree(inheritance_tree)
+
+    def _find_logical_parent_interface(self, name):
+        """Try to find the logic parent interface
+        ITest3 -> ITest2
+        ITest2 -> ITest
+        Itest -> IUnknown
+        """
+        if name == "IUnknown":
+            return None
+        if not name[-1].isdigit(): # No number : parent is iunknown
+            return "IUnknown"
+        assert not name[-2].isdigit(), "Inteface name with double-digit version is not implemented : {}".format(name)
+        baseinterface = name[:-1]
+        version = int(name[-1])
+        if version == 2:
+            return baseinterface
+        return "{0}{1}".format(baseinterface, version-1)
+
+    def _flatten_inheritance_tree(self, tree):
+        """Flatten the inheritance dependancy to get the correct class generation order"""
+        assert [i.name for i in tree[None]] == ["IUnknown"], "Unexpected: <IUnknown> should not inherit from anything"
+        return self._get_recursive_children(tree, None)
+
+
+    def _get_recursive_children(self, tree, parent):
+        if parent not in tree:
+            return []
+        full_list = []
+        for child in tree[parent]:
+            full_list += [(child, parent)] +  self._get_recursive_children(tree, child.name)
+        return full_list
+
 
     def generate_known_iid_list(self):
         # Generate list of known IID at the start of the file
@@ -440,7 +534,7 @@ class COMCtypesGenerator(CtypesGenerator):
         #     self.emitline('IID_{name} = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
         pass
 
-    def generate_com_interface_class_iid(self, cominterface):
+    def generate_com_interface_class_iid(self, cominterface, parentname):
         if cominterface.iid is not None:
             iid_str = cominterface.iid
             iid_python = self.parse_iid(iid_str)
@@ -448,9 +542,15 @@ class COMCtypesGenerator(CtypesGenerator):
             print("Lookup of IID for <{0}>".format(cominterface.name))
             iid_python, iid_str = self.iids_def[cominterface.name]
 
-        cls_format_param = {"name": cominterface.name, "iid_python" : iid_python, "iid_str": iid_str}
+        if parentname is None:
+            assert cominterface.name == "IUnknown"
+            # The definition from the template
+            # IUnknown is the link between full COM inheritance & pfw logic from 'class COMInterface(ctypes.c_void_p):'
+            parentname = "COMInterface"
 
-        self.emitline("class {name}(COMInterface):".format(**cls_format_param))
+        cls_format_param = {"name": cominterface.name, "parent": parentname, "iid_python" : iid_python, "iid_str": iid_str}
+
+        self.emitline("class {name}({parent}):".format(**cls_format_param))
         self.emitline('    IID = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
         # self.emitline('    IID = IID_{name}'.format(name=cominterface.name)) # If we accept to have generate_known_iid_list()
         self.emitline('')
@@ -463,10 +563,25 @@ class COMCtypesGenerator(CtypesGenerator):
 
     def generate_com_interface_functions(self, cominterface):
         name = cominterface.name
+        self.generate_com_interface_implementation_exemple(cominterface)
+
         self.emitline("{name}._functions_ = {{".format(name=name))
         self.emit_com_interface_functions(cominterface)
         self.emitline('    }')
         self.emitline('')
+
+    def generate_com_interface_implementation_exemple(self, cominterface):
+        name = cominterface.name
+        self.emitline("# class {}Implem(windows.com.COMImplementation):".format(name))
+        self.emitline("#     IMPLEMENT = {}".format(name))
+        self.emitline("#")
+        # Ignore QueryInterface / AddRef / Release
+        for  method in cominterface.methods[3:]:
+            params_list = ["self"] + [p.name for p in method.args]
+            self.emitline("#     def {}({}):".format(method.name, ", ".join(params_list)))
+            self.emitline("#         print('{0}.{1}')".format(cominterface.name, method.name))
+            self.emitline("#         return E_NOTIMPL")
+            self.emitline("#")
 
     def emit_com_interface_functions(self, cominterface):
         indent = " " * 8
