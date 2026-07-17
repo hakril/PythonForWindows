@@ -126,7 +126,7 @@ class WinComParser(Parser):
 
     def parse(self):
         tok = self.peek()
-        if type(tok) == NameToken and tok.value == "@IID:":
+        if type(tok) == NameToken and tok.value == "@IID":
             self.next_token()
             iid = self.assert_token_type(NameToken).value
         else:
