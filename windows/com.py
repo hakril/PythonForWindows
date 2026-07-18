@@ -228,9 +228,6 @@ class Variant(VARIANT):
             return
         self.guess_type_and_set_value(value)
 
-    # Copy raw-ctypes fields which is a descriptor :)
-    rawvt = VARIANT.vt
-
     # Most of the value in the colunm[1]
     # are attribute of the sub-union _VARIANT_NAME_3
     # This union must be ctypes-anonymous for this code to works
@@ -258,14 +255,6 @@ class Variant(VARIANT):
     VARIANT_TYPE_BY_NAME = {f[0]: f[1] for f in VARIAN_NAME_3_TYPE._fields_}
     QUICK_CHECK_TYPE = {x: y for x,y, _ in CHECK_TYPE}
 
-    def get_vt(self):
-        rawvt = super(Variant, self).vt
-        return gdef.VARENUM.mapper[self.rawvt]
-
-    def set_vt(self, value):
-        self.rawvt = value
-
-    vt = property(get_vt, set_vt)
 
     def set_value_and_type(self, value, type):
         attr = self.QUICK_CHECK_TYPE[type]
@@ -327,23 +316,6 @@ class Variant(VARIANT):
 
     def __repr__(self):
         return """<{0} of type {1}>""".format(type(self).__name__, self.vt)
-
-# Deprecated: remove me when test pass :)
-# ImprovedVariant.MAPPER = {
-    # VT_UI1: ImprovedVariant.asbyte.fget,
-    # VT_I2: ImprovedVariant.asshort.fget,
-    # VT_DISPATCH: ImprovedVariant.asdispatch.fget,
-    # VT_BOOL: ImprovedVariant.asbool.fget,
-    # VT_I4: ImprovedVariant.aslong.fget,
-    # VT_BSTR: ImprovedVariant.asbstr.fget,
-    # VT_EMPTY: (lambda x: None),
-    # VT_NULL: (lambda x: None),
-    # VT_UNKNOWN: ImprovedVariant.asunknown.fget,
-    # (VT_ARRAY | VT_BSTR): ImprovedVariant.asbstr_array.fget,
-    # (VT_ARRAY | VT_I4): ImprovedVariant.aslong_array.fget,
-    # (VT_ARRAY | VT_UI1): ImprovedVariant.asbyte_array.fget,
-    # (VT_ARRAY | VT_BOOL): ImprovedVariant.asbool_array.fget
-# }
 
 
 

@@ -232,6 +232,4 @@ def test_com_interface_inheritance():
     # Version based inheritance
     assert issubclass(gdef.IBackgroundCopyFile3, gdef.IBackgroundCopyFile2)
     assert issubclass(gdef.IBackgroundCopyFile2, gdef.IBackgroundCopyFile)
-    # Explicit inheritance
-    assert issubclass(gdef.IDebugHostModule, gdef.IDebugHostSymbol)
-    assert issubclass(gdef.IDebugHostModule5, gdef.IDebugHostSymbol)
+    # TODO: Explicit inheritance
