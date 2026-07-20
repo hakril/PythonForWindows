@@ -106,13 +106,14 @@ def test_com_multiple_implementation_no_collision():
     with pytest.raises(ValueError):
         x = obj._as_parameter_ # _as_parameter_ cannot be ask directly on object implementing multiple interfaces
 
-    # Create a C-like pointer from the interface
-    objcom = gdef.ICallFrameEvents(obj.as_interface(gdef.ICallFrameEvents))
+    # Retrieve a C-like pointer from the interface
+    objcom = obj.as_interface(gdef.ICallFrameEvents)
+    assert isinstance(objcom, gdef.ICallFrameEvents)
     assert objcom.OnCall(None) == 1 # Count the number of call : proof of correct python-side execution
     assert objcom.OnCall(None) == 2
     assert obj.global_call == 2
 
-    objcom2 = gdef.IPersist(obj.as_interface(gdef.IPersist))
+    objcom2 = obj.as_interface(gdef.IPersist)
     assert objcom2.GetClassID(None) == 1 # Count the number of call : proof of correct python-side execution
     assert objcom2.GetClassID(None) == 2
     assert obj.global_call == 4
@@ -187,8 +188,13 @@ def test_com_multiple_implementation_with_collision():
     obj = CollisionMultipleInterfaceImplem()
     assert obj
 
-    # Emulate a call from C code
-    iunk = gdef.IUnknown(obj.as_interface(gdef.IUnknown))
+    # Emulate a call from C code : check that as_interface() indeed return an COMInterface subclasse of correct type
+    iunk = obj.as_interface(gdef.IUnknown)
+    assert isinstance(iunk, gdef.IUnknown)
+    assert isinstance(obj.as_interface(gdef.ITaskFolderCollection), gdef.ITaskFolderCollection)
+
+    # If we only give an IID: return a Iunknown for simple pvoid casting
+    assert isinstance(obj.as_interface(iid=gdef.ITaskFolderCollection.IID), gdef.IUnknown)
 
     idlesetting = iunk.query(gdef.IIdleSettings)
     taskfoldercollection = iunk.query(gdef.ITaskFolderCollection)

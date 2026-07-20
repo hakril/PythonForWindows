@@ -28898,6 +28898,171 @@ tagCALLFRAME_WALK
 
     .. attribute:: CALLFRAME_WALK_OUT(4)
 
+_VARENUM
+''''''''
+.. class:: VARENUM
+
+    Alias for :class:`_VARENUM`
+
+
+.. class:: _VARENUM
+
+
+    .. attribute:: VT_EMPTY(0)
+
+
+    .. attribute:: VT_NULL(1)
+
+
+    .. attribute:: VT_I2(2)
+
+
+    .. attribute:: VT_I4(3)
+
+
+    .. attribute:: VT_R4(4)
+
+
+    .. attribute:: VT_R8(5)
+
+
+    .. attribute:: VT_CY(6)
+
+
+    .. attribute:: VT_DATE(7)
+
+
+    .. attribute:: VT_BSTR(8)
+
+
+    .. attribute:: VT_DISPATCH(9)
+
+
+    .. attribute:: VT_ERROR(10)
+
+
+    .. attribute:: VT_BOOL(11)
+
+
+    .. attribute:: VT_VARIANT(12)
+
+
+    .. attribute:: VT_UNKNOWN(13)
+
+
+    .. attribute:: VT_DECIMAL(14)
+
+
+    .. attribute:: VT_I1(16)
+
+
+    .. attribute:: VT_UI1(17)
+
+
+    .. attribute:: VT_UI2(18)
+
+
+    .. attribute:: VT_UI4(19)
+
+
+    .. attribute:: VT_I8(20)
+
+
+    .. attribute:: VT_UI8(21)
+
+
+    .. attribute:: VT_INT(22)
+
+
+    .. attribute:: VT_UINT(23)
+
+
+    .. attribute:: VT_VOID(24)
+
+
+    .. attribute:: VT_HRESULT(25)
+
+
+    .. attribute:: VT_PTR(26)
+
+
+    .. attribute:: VT_SAFEARRAY(27)
+
+
+    .. attribute:: VT_CARRAY(28)
+
+
+    .. attribute:: VT_USERDEFINED(29)
+
+
+    .. attribute:: VT_LPSTR(30)
+
+
+    .. attribute:: VT_LPWSTR(31)
+
+
+    .. attribute:: VT_RECORD(36)
+
+
+    .. attribute:: VT_INT_PTR(37)
+
+
+    .. attribute:: VT_UINT_PTR(38)
+
+
+    .. attribute:: VT_FILETIME(64)
+
+
+    .. attribute:: VT_BLOB(65)
+
+
+    .. attribute:: VT_STREAM(66)
+
+
+    .. attribute:: VT_STORAGE(67)
+
+
+    .. attribute:: VT_STREAMED_OBJECT(68)
+
+
+    .. attribute:: VT_STORED_OBJECT(69)
+
+
+    .. attribute:: VT_BLOB_OBJECT(70)
+
+
+    .. attribute:: VT_CF(71)
+
+
+    .. attribute:: VT_CLSID(72)
+
+
+    .. attribute:: VT_VERSIONED_STREAM(73)
+
+
+    .. attribute:: VT_BSTR_BLOB(4095)
+
+
+    .. attribute:: VT_VECTOR(4096)
+
+
+    .. attribute:: VT_ARRAY(8192)
+
+
+    .. attribute:: VT_BYREF(16384)
+
+
+    .. attribute:: VT_RESERVED(32768)
+
+
+    .. attribute:: VT_ILLEGAL(65535)
+
+
+    .. attribute:: VT_ILLEGALMASKED(4095)
+
+
+    .. attribute:: VT_TYPEMASK(4095)
+
 tagCOMSD
 ''''''''
 .. class:: COMSD
@@ -31712,171 +31877,6 @@ _SECTION_INHERIT
 
 
     .. attribute:: ViewUnmap(2)
-
-_VARENUM
-''''''''
-.. class:: VARENUM
-
-    Alias for :class:`_VARENUM`
-
-
-.. class:: _VARENUM
-
-
-    .. attribute:: VT_EMPTY(0)
-
-
-    .. attribute:: VT_NULL(1)
-
-
-    .. attribute:: VT_I2(2)
-
-
-    .. attribute:: VT_I4(3)
-
-
-    .. attribute:: VT_R4(4)
-
-
-    .. attribute:: VT_R8(5)
-
-
-    .. attribute:: VT_CY(6)
-
-
-    .. attribute:: VT_DATE(7)
-
-
-    .. attribute:: VT_BSTR(8)
-
-
-    .. attribute:: VT_DISPATCH(9)
-
-
-    .. attribute:: VT_ERROR(10)
-
-
-    .. attribute:: VT_BOOL(11)
-
-
-    .. attribute:: VT_VARIANT(12)
-
-
-    .. attribute:: VT_UNKNOWN(13)
-
-
-    .. attribute:: VT_DECIMAL(14)
-
-
-    .. attribute:: VT_I1(16)
-
-
-    .. attribute:: VT_UI1(17)
-
-
-    .. attribute:: VT_UI2(18)
-
-
-    .. attribute:: VT_UI4(19)
-
-
-    .. attribute:: VT_I8(20)
-
-
-    .. attribute:: VT_UI8(21)
-
-
-    .. attribute:: VT_INT(22)
-
-
-    .. attribute:: VT_UINT(23)
-
-
-    .. attribute:: VT_VOID(24)
-
-
-    .. attribute:: VT_HRESULT(25)
-
-
-    .. attribute:: VT_PTR(26)
-
-
-    .. attribute:: VT_SAFEARRAY(27)
-
-
-    .. attribute:: VT_CARRAY(28)
-
-
-    .. attribute:: VT_USERDEFINED(29)
-
-
-    .. attribute:: VT_LPSTR(30)
-
-
-    .. attribute:: VT_LPWSTR(31)
-
-
-    .. attribute:: VT_RECORD(36)
-
-
-    .. attribute:: VT_INT_PTR(37)
-
-
-    .. attribute:: VT_UINT_PTR(38)
-
-
-    .. attribute:: VT_FILETIME(64)
-
-
-    .. attribute:: VT_BLOB(65)
-
-
-    .. attribute:: VT_STREAM(66)
-
-
-    .. attribute:: VT_STORAGE(67)
-
-
-    .. attribute:: VT_STREAMED_OBJECT(68)
-
-
-    .. attribute:: VT_STORED_OBJECT(69)
-
-
-    .. attribute:: VT_BLOB_OBJECT(70)
-
-
-    .. attribute:: VT_CF(71)
-
-
-    .. attribute:: VT_CLSID(72)
-
-
-    .. attribute:: VT_VERSIONED_STREAM(73)
-
-
-    .. attribute:: VT_BSTR_BLOB(4095)
-
-
-    .. attribute:: VT_VECTOR(4096)
-
-
-    .. attribute:: VT_ARRAY(8192)
-
-
-    .. attribute:: VT_BYREF(16384)
-
-
-    .. attribute:: VT_RESERVED(32768)
-
-
-    .. attribute:: VT_ILLEGAL(65535)
-
-
-    .. attribute:: VT_ILLEGALMASKED(4095)
-
-
-    .. attribute:: VT_TYPEMASK(4095)
 
 _UDP_TABLE_CLASS
 ''''''''''''''''

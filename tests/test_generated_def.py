@@ -213,3 +213,23 @@ def test_MIDL_XmitDefs_0001_NT_1607():
     # +0x028 uClientCausalityTraceId : Uint8B
     assert gdef.MIDL_XmitDefs_0001_NT_1607.originalClientLogicalThreadId.offset == 0x018
     assert gdef.MIDL_XmitDefs_0001_NT_1607.uClientCausalityTraceId.offset == 0x028
+
+
+# Test variant improved
+
+def test_variant_VT_UNKNOWN():
+    variant = gdef.VARIANT.create(value=0x42, type=gdef.VT_UNKNOWN)
+    assert isinstance(variant.value, gdef.IUnknown)
+    assert variant.value.value == 0x42
+
+
+# Test generated com interface logic
+
+def test_com_interface_inheritance():
+    assert issubclass(gdef.IUnknown, gdef.PVOID)
+    # Standard inheritance
+    assert issubclass(gdef.ICallFactory, gdef.IUnknown)
+    # Version based inheritance
+    assert issubclass(gdef.IBackgroundCopyFile3, gdef.IBackgroundCopyFile2)
+    assert issubclass(gdef.IBackgroundCopyFile2, gdef.IBackgroundCopyFile)
+    # TODO: Explicit inheritance

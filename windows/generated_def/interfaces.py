@@ -28,20 +28,29 @@ class COMInterface(ctypes.c_void_p):
         ctypes._check_HRESULT(result)
         return args
 
+    errcheck = _default_errcheck
+
     def __getattr__(self, name):
         if name in self._functions_:
             winfunc = self._functions_[name]
             # Hacking the HRESULT _check_retval_ and
             # letting COMInterface.errcheck do the work of validating / raising
             winfunc.restype = COMHRESULT
-            effective_errcheck = getattr(self, "errcheck", self._default_errcheck)
-            winfunc.errcheck = effective_errcheck
+            winfunc.errcheck = self.errcheck
             return functools.partial(winfunc, self)
         return super(COMInterface, self).__getattribute__(name)
 
     def __repr__(self):
         description = "<NULL>" if not self.value else ""
         return "<{0}{1} at {2:#x}>".format(type(self).__name__, description, id(self))
+
+    # use the context protocol to allow Release() in exit
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if bool(self):
+            self.Release()
 
     # Simplified API for QueryInterface for interface embeding their IID
     # Or for string/Obj
@@ -78,82 +87,85 @@ class COMInterface(ctypes.c_void_p):
 
 
 
-class ICallFactory(COMInterface):
+class IUnknown(COMInterface):
+    IID = generate_IID(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IUnknown", strid="00000000-0000-0000-C000-000000000046")
+
+class ICallFactory(IUnknown):
     IID = generate_IID(0x1C733A30, 0x2A1C, 0x11CE, 0xAD, 0xE5, 0x00, 0xAA, 0x00, 0x44, 0x77, 0x3D, name="ICallFactory", strid="1C733A30-2A1C-11CE-ADE5-00AA0044773D")
 
-class ICallFrame(COMInterface):
+class ICallFrame(IUnknown):
     IID = generate_IID(0xD573B4B0, 0x894E, 0x11D2, 0xB8, 0xB6, 0x00, 0xC0, 0x4F, 0xB9, 0x61, 0x8A, name="ICallFrame", strid="D573B4B0-894E-11D2-B8B6-00C04FB9618A")
 
-class ICallFrameEvents(COMInterface):
+class ICallFrameEvents(IUnknown):
     IID = generate_IID(0xFD5E0843, 0xFC91, 0x11D0, 0x97, 0xD7, 0x00, 0xC0, 0x4F, 0xB9, 0x61, 0x8A, name="ICallFrameEvents", strid="FD5E0843-FC91-11D0-97D7-00C04FB9618A")
 
-class ICallFrameWalker(COMInterface):
+class ICallFrameWalker(IUnknown):
     IID = generate_IID(0x08B23919, 0x392D, 0x11D2, 0xB8, 0xA4, 0x00, 0xC0, 0x4F, 0xB9, 0x61, 0x8A, name="ICallFrameWalker", strid="08B23919-392D-11D2-B8A4-00C04FB9618A")
 
-class ICallInterceptor(COMInterface):
+class ICallInterceptor(IUnknown):
     IID = generate_IID(0x60C7CA75, 0x896D, 0x11D2, 0xB8, 0xB6, 0x00, 0xC0, 0x4F, 0xB9, 0x61, 0x8A, name="ICallInterceptor", strid="60C7CA75-896D-11D2-B8B6-00C04FB9618A")
 
-class IClassFactory(COMInterface):
+class IClassFactory(IUnknown):
     IID = generate_IID(0x00000001, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IClassFactory", strid="00000001-0000-0000-C000-000000000046")
 
-class IClientSecurity(COMInterface):
+class IClientSecurity(IUnknown):
     IID = generate_IID(0x0000013D, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IClientSecurity", strid="0000013D-0000-0000-C000-000000000046")
 
-class IComCatalog(COMInterface):
+class IComCatalog(IUnknown):
     IID = generate_IID(0x000001E0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IComCatalog", strid="000001E0-0000-0000-C000-000000000046")
 
-class IDispatch(COMInterface):
+class IDispatch(IUnknown):
     IID = generate_IID(0x00020400, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IDispatch", strid="00020400-0000-0000-C000-000000000046")
 
-class IEnumVARIANT(COMInterface):
+class IEnumVARIANT(IUnknown):
     IID = generate_IID(0x00020404, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumVARIANT", strid="00020404-0000-0000-C000-000000000046")
 
-class IInternalUnknown(COMInterface):
+class IInternalUnknown(IUnknown):
     IID = generate_IID(0x00000021, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IInternalUnknown", strid="00000021-0000-0000-C000-000000000046")
 
-class IMarshal(COMInterface):
+class IMarshal(IUnknown):
     IID = generate_IID(0x00000003, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IMarshal", strid="00000003-0000-0000-C000-000000000046")
 
-class IMoniker(COMInterface):
+class IMoniker(IUnknown):
     IID = generate_IID(0x0000000F, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IMoniker", strid="0000000F-0000-0000-C000-000000000046")
 
-class INetFwPolicy2(COMInterface):
+class INetFwPolicy2(IUnknown):
     IID = generate_IID(0x98325047, 0xC671, 0x4174, 0x8D, 0x81, 0xDE, 0xFC, 0xD3, 0xF0, 0x31, 0x86, name="INetFwPolicy2", strid="98325047-C671-4174-8D81-DEFCD3F03186")
 
-class INetFwRule(COMInterface):
+class INetFwRule(IUnknown):
     IID = generate_IID(0xAF230D27, 0xBABA, 0x4E42, 0xAC, 0xED, 0xF5, 0x24, 0xF2, 0x2C, 0xFC, 0xE2, name="INetFwRule", strid="AF230D27-BABA-4E42-ACED-F524F22CFCE2")
 
-class INetFwRules(COMInterface):
+class INetFwRules(IUnknown):
     IID = generate_IID(0x9C4C6277, 0x5027, 0x441E, 0xAF, 0xAE, 0xCA, 0x1F, 0x54, 0x2D, 0xA0, 0x09, name="INetFwRules", strid="9C4C6277-5027-441E-AFAE-CA1F542DA009")
 
-class INetFwServiceRestriction(COMInterface):
+class INetFwServiceRestriction(IUnknown):
     IID = generate_IID(0x8267BBE3, 0xF890, 0x491C, 0xB7, 0xB6, 0x2D, 0xB1, 0xEF, 0x0E, 0x5D, 0x2B, name="INetFwServiceRestriction", strid="8267BBE3-F890-491C-B7B6-2DB1EF0E5D2B")
 
-class IObjContext(COMInterface):
+class IObjContext(IUnknown):
     IID = generate_IID(0x000001C6, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IObjContext", strid="000001C6-0000-0000-C000-000000000046")
 
-class IPersist(COMInterface):
+class IPersist(IUnknown):
     IID = generate_IID(0x0000010C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPersist", strid="0000010C-0000-0000-C000-000000000046")
 
-class IPersistFile(COMInterface):
+class IPersistFile(IUnknown):
     IID = generate_IID(0x0000010B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPersistFile", strid="0000010B-0000-0000-C000-000000000046")
 
-class IRemUnknown(COMInterface):
+class IRemUnknown(IUnknown):
     IID = generate_IID(0x00000131, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IRemUnknown", strid="00000131-0000-0000-C000-000000000046")
 
-class IShellLinkA(COMInterface):
+class IShellLinkA(IUnknown):
     IID = generate_IID(0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IShellLinkA", strid="000214EE-0000-0000-C000-000000000046")
 
-class IShellLinkW(COMInterface):
+class IShellLinkW(IUnknown):
     IID = generate_IID(0x000214F9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IShellLinkW", strid="000214F9-0000-0000-C000-000000000046")
 
-class IStdIdentity(COMInterface):
+class IStdIdentity(IUnknown):
     IID = generate_IID(0x0000001b, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStdIdentity", strid="0000001b-0000-0000-c000-000000000046")
 
-class IStorage(COMInterface):
+class IStorage(IUnknown):
     IID = generate_IID(0x0000000B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStorage", strid="0000000B-0000-0000-C000-000000000046")
 
-class IStream(COMInterface):
+class IStream(IUnknown):
     IID = generate_IID(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStream", strid="0000000C-0000-0000-C000-000000000046")
 
 OLD_IStream = IStream
@@ -180,258 +192,274 @@ class IStream(OLD_IStream):
 
 
 
-class ITypeComp(COMInterface):
+class ITypeComp(IUnknown):
     IID = generate_IID(0x00020403, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeComp", strid="00020403-0000-0000-C000-000000000046")
 
-class ITypeInfo(COMInterface):
+class ITypeInfo(IUnknown):
     IID = generate_IID(0x00020401, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeInfo", strid="00020401-0000-0000-C000-000000000046")
 
-class ITypeLib(COMInterface):
+class ITypeLib(IUnknown):
     IID = generate_IID(0x00020402, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeLib", strid="00020402-0000-0000-C000-000000000046")
 
-class IUnknown(COMInterface):
-    IID = generate_IID(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IUnknown", strid="00000000-0000-0000-C000-000000000046")
-
-class IBackgroundCopyCallback(COMInterface):
+class IBackgroundCopyCallback(IUnknown):
     IID = generate_IID(0x97EA99C7, 0x0186, 0x4AD4, 0x8D, 0xF9, 0xC5, 0xB4, 0xE0, 0xED, 0x6B, 0x22, name="IBackgroundCopyCallback", strid="97EA99C7-0186-4AD4-8DF9-C5B4E0ED6B22")
 
-class IBackgroundCopyError(COMInterface):
+class IBackgroundCopyError(IUnknown):
     IID = generate_IID(0x19C613A0, 0xFCB8, 0x4F28, 0x81, 0xAE, 0x89, 0x7C, 0x3D, 0x07, 0x8F, 0x81, name="IBackgroundCopyError", strid="19C613A0-FCB8-4F28-81AE-897C3D078F81")
 
-class IBackgroundCopyFile(COMInterface):
+class IBackgroundCopyFile(IUnknown):
     IID = generate_IID(0x01B7BD23, 0xFB88, 0x4A77, 0x84, 0x90, 0x58, 0x91, 0xD3, 0xE4, 0x65, 0x3A, name="IBackgroundCopyFile", strid="01B7BD23-FB88-4A77-8490-5891D3E4653A")
 
-class IBackgroundCopyFile2(COMInterface):
+class IBackgroundCopyFile2(IBackgroundCopyFile):
     IID = generate_IID(0x83E81B93, 0x0873, 0x474D, 0x8A, 0x8C, 0xF2, 0x01, 0x8B, 0x1A, 0x93, 0x9C, name="IBackgroundCopyFile2", strid="83E81B93-0873-474D-8A8C-F2018B1A939C")
 
-class IBackgroundCopyFile3(COMInterface):
+class IBackgroundCopyFile3(IBackgroundCopyFile2):
     IID = generate_IID(0x659CDEAA, 0x489E, 0x11D9, 0xA9, 0xCD, 0x00, 0x0D, 0x56, 0x96, 0x52, 0x51, name="IBackgroundCopyFile3", strid="659CDEAA-489E-11D9-A9CD-000D56965251")
 
-class IBackgroundCopyJob(COMInterface):
+class IBackgroundCopyJob(IUnknown):
     IID = generate_IID(0x37668D37, 0x507E, 0x4160, 0x93, 0x16, 0x26, 0x30, 0x6D, 0x15, 0x0B, 0x12, name="IBackgroundCopyJob", strid="37668D37-507E-4160-9316-26306D150B12")
 
-class IBackgroundCopyJob2(COMInterface):
+class IBackgroundCopyJob2(IBackgroundCopyJob):
     IID = generate_IID(0x54B50739, 0x686F, 0x45EB, 0x9D, 0xFF, 0xD6, 0xA9, 0xA0, 0xFA, 0xA9, 0xAF, name="IBackgroundCopyJob2", strid="54B50739-686F-45EB-9DFF-D6A9A0FAA9AF")
 
-class IBackgroundCopyManager(COMInterface):
+class IBackgroundCopyManager(IUnknown):
     IID = generate_IID(0x5CE34C0D, 0x0DC9, 0x4C1F, 0x89, 0x7C, 0xDA, 0xA1, 0xB7, 0x8C, 0xEE, 0x7C, name="IBackgroundCopyManager", strid="5CE34C0D-0DC9-4C1F-897C-DAA1B78CEE7C")
 
-class IEnumBackgroundCopyFiles(COMInterface):
+class IEnumBackgroundCopyFiles(IUnknown):
     IID = generate_IID(0xCA51E165, 0xC365, 0x424C, 0x8D, 0x41, 0x24, 0xAA, 0xA4, 0xFF, 0x3C, 0x40, name="IEnumBackgroundCopyFiles", strid="CA51E165-C365-424C-8D41-24AAA4FF3C40")
 
-class IEnumBackgroundCopyJobs(COMInterface):
+class IEnumBackgroundCopyJobs(IUnknown):
     IID = generate_IID(0x1AF4F612, 0x3B71, 0x466F, 0x8F, 0x58, 0x7B, 0x6F, 0x73, 0xAC, 0x57, 0xAD, name="IEnumBackgroundCopyJobs", strid="1AF4F612-3B71-466F-8F58-7B6F73AC57AD")
 
-class IActivationProperties(COMInterface):
+class IActivationProperties(IUnknown):
     IID = generate_IID(0x000001AF, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationProperties", strid="000001AF-0000-0000-C000-000000000046")
 
-class IActivationPropertiesOut(COMInterface):
+class IActivationPropertiesOut(IUnknown):
     IID = generate_IID(0x000001A3, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationPropertiesOut", strid="000001A3-0000-0000-C000-000000000046")
 
-class IActivationPropertiesIn(COMInterface):
+class IActivationPropertiesIn(IUnknown):
     IID = generate_IID(0x000001A2, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationPropertiesIn", strid="000001A2-0000-0000-C000-000000000046")
 
-class IActivationStageInfo(COMInterface):
+class IActivationStageInfo(IUnknown):
     IID = generate_IID(0x000001A8, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IActivationStageInfo", strid="000001A8-0000-0000-C000-000000000046")
 
-class IClassClassicInfo(COMInterface):
+class IClassClassicInfo(IUnknown):
     IID = generate_IID(0x000001E2, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IClassClassicInfo", strid="000001E2-0000-0000-C000-000000000046")
 
-class IComClassInfo(COMInterface):
+class IComClassInfo(IUnknown):
     IID = generate_IID(0x000001E1, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IComClassInfo", strid="000001E1-0000-0000-C000-000000000046")
 
-class IContext(COMInterface):
+class IContext(IUnknown):
     IID = generate_IID(0x000001C0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IContext", strid="000001C0-0000-0000-C000-000000000046")
 
-class IEnumContextProps(COMInterface):
+class IEnumContextProps(IUnknown):
     IID = generate_IID(0x000001C1, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumContextProps", strid="000001C1-0000-0000-C000-000000000046")
 
-class IEnumSTATSTG(COMInterface):
+class IEnumSTATSTG(IUnknown):
     IID = generate_IID(0x0000000D, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumSTATSTG", strid="0000000D-0000-0000-C000-000000000046")
 
-class IInitActivationPropertiesIn(COMInterface):
+class IInitActivationPropertiesIn(IUnknown):
     IID = generate_IID(0x000001A1, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IInitActivationPropertiesIn", strid="000001A1-0000-0000-C000-000000000046")
 
-class IOpaqueDataInfo(COMInterface):
+class IOpaqueDataInfo(IUnknown):
     IID = generate_IID(0x000001A9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IOpaqueDataInfo", strid="000001A9-0000-0000-C000-000000000046")
 
-class IPrivActivationPropertiesIn(COMInterface):
+class IPrivActivationPropertiesIn(IUnknown):
     IID = generate_IID(0x000001B5, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPrivActivationPropertiesIn", strid="000001B5-0000-0000-C000-000000000046")
 
-class IPrivActivationPropertiesOut(COMInterface):
+class IPrivActivationPropertiesOut(IUnknown):
     IID = generate_IID(0x000001B0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPrivActivationPropertiesOut", strid="000001B0-0000-0000-C000-000000000046")
 
-class IScmReplyInfo(COMInterface):
+class IScmReplyInfo(IUnknown):
     IID = generate_IID(0x000001B6, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IScmReplyInfo", strid="000001B6-0000-0000-C000-000000000046")
 
-class IScmRequestInfo(COMInterface):
+class IScmRequestInfo(IUnknown):
     IID = generate_IID(0x000001AA, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IScmRequestInfo", strid="000001AA-0000-0000-C000-000000000046")
 
-class IStandardActivator(COMInterface):
+class IStandardActivator(IUnknown):
     IID = generate_IID(0x000001B8, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStandardActivator", strid="000001B8-0000-0000-C000-000000000046")
 
-class ISystemActivator(COMInterface):
+class ISystemActivator(IUnknown):
     IID = generate_IID(0x000001A0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ISystemActivator", strid="000001A0-0000-0000-C000-000000000046")
 
-class IBindCtx(COMInterface):
+class IBindCtx(IUnknown):
     IID = generate_IID(0x0000000E, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IBindCtx", strid="0000000E-0000-0000-C000-000000000046")
 
-class IEnumExplorerCommand(COMInterface):
+class IEnumExplorerCommand(IUnknown):
     IID = generate_IID(0xA88826F8, 0x186F, 0x4987, 0xAA, 0xDE, 0xEA, 0x0C, 0xEF, 0x8F, 0xBF, 0xE8, name="IEnumExplorerCommand", strid="A88826F8-186F-4987-AADE-EA0CEF8FBFE8")
 
-class IEnumMoniker(COMInterface):
+class IEnumMoniker(IUnknown):
     IID = generate_IID(0x00000102, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumMoniker", strid="00000102-0000-0000-C000-000000000046")
 
-class IEnumShellItems(COMInterface):
+class IEnumShellItems(IUnknown):
     IID = generate_IID(0x70629033, 0xE363, 0x4A28, 0xA5, 0x67, 0x0D, 0xB7, 0x80, 0x06, 0xE6, 0xD7, name="IEnumShellItems", strid="70629033-E363-4A28-A567-0DB78006E6D7")
 
-class IEnumString(COMInterface):
+class IEnumString(IUnknown):
     IID = generate_IID(0x00000101, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumString", strid="00000101-0000-0000-C000-000000000046")
 
-class IExplorerCommand(COMInterface):
+class IExplorerCommand(IUnknown):
     IID = generate_IID(0xA08CE4D0, 0xFA25, 0x44AB, 0xB5, 0x7C, 0xC7, 0xB1, 0xC3, 0x23, 0xE0, 0xB9, name="IExplorerCommand", strid="A08CE4D0-FA25-44AB-B57C-C7B1C323E0B9")
 
-class IRunningObjectTable(COMInterface):
+class IRunningObjectTable(IUnknown):
     IID = generate_IID(0x00000010, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IRunningObjectTable", strid="00000010-0000-0000-C000-000000000046")
 
-class IShellItem(COMInterface):
+class IShellItem(IUnknown):
     IID = generate_IID(0x43826D1E, 0xE718, 0x42EE, 0xBC, 0x55, 0xA1, 0xE2, 0x61, 0xC3, 0x7B, 0xFE, name="IShellItem", strid="43826D1E-E718-42EE-BC55-A1E261C37BFE")
 
-class IShellItemArray(COMInterface):
+class IShellItemArray(IUnknown):
     IID = generate_IID(0x787F8E92, 0x9837, 0x4011, 0x9F, 0x83, 0x7D, 0xE5, 0x93, 0xBD, 0xC0, 0x02, name="IShellItemArray", strid="787F8E92-9837-4011-9F83-7DE593BDC002")
 
-class IProxyManager(COMInterface):
+class IProxyManager(IUnknown):
     IID = generate_IID(0x00000008, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IProxyManager", strid="00000008-0000-0000-c000-000000000046")
 
-class IProxyServerIdentity(COMInterface):
+class IProxyServerIdentity(IUnknown):
     IID = generate_IID(0x5524fe34, 0x8da7, 0x40a8, 0x81, 0x65, 0xe8, 0xb3, 0x7a, 0x8b, 0x4a, 0x4b, name="IProxyServerIdentity", strid="5524fe34-8da7-40a8-8165-e8b37a8b4a4b")
 
-class IApplicationActivationManager(COMInterface):
+class IApplicationActivationManager(IUnknown):
     IID = generate_IID(0x2E941141, 0x7F97, 0x4756, 0xBA, 0x1D, 0x9D, 0xEC, 0xDE, 0x89, 0x4A, 0x3D, name="IApplicationActivationManager", strid="2E941141-7F97-4756-BA1D-9DECDE894A3D")
 
-class IPackageDebugSettings(COMInterface):
+class IPackageDebugSettings(IUnknown):
     IID = generate_IID(0xF27C3930, 0x8029, 0x4AD1, 0x94, 0xE3, 0x3D, 0xBA, 0x41, 0x78, 0x10, 0xC1, name="IPackageDebugSettings", strid="F27C3930-8029-4AD1-94E3-3DBA417810C1")
 
-class IPackageExecutionStateChangeNotification(COMInterface):
+class IPackageExecutionStateChangeNotification(IUnknown):
     IID = generate_IID(0x1BB12A62, 0x2AD8, 0x432B, 0x8C, 0xCF, 0x0C, 0x2C, 0x52, 0xAF, 0xCD, 0x5B, name="IPackageExecutionStateChangeNotification", strid="1BB12A62-2AD8-432B-8CCF-0C2C52AFCD5B")
 
-class IChannelHook(COMInterface):
+class IChannelHook(IUnknown):
     IID = generate_IID(0x1008C4A0, 0x7613, 0x11CF, 0x9A, 0xF1, 0x00, 0x20, 0xAF, 0x6E, 0x72, 0xF4, name="IChannelHook", strid="1008C4A0-7613-11CF-9AF1-0020AF6E72F4")
 
-class IRpcChannelBuffer(COMInterface):
+class IRpcChannelBuffer(IUnknown):
     IID = generate_IID(0xD5F56B60, 0x593B, 0x101A, 0xB5, 0x69, 0x08, 0x00, 0x2B, 0x2D, 0xBF, 0x7A, name="IRpcChannelBuffer", strid="D5F56B60-593B-101A-B569-08002B2DBF7A")
 
-class IRpcHelper(COMInterface):
+class IRpcHelper(IUnknown):
     IID = generate_IID(0x00000149, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IRpcHelper", strid="00000149-0000-0000-C000-000000000046")
 
-class IRpcOptions(COMInterface):
+class IRpcOptions(IUnknown):
     IID = generate_IID(0x00000144, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IRpcOptions", strid="00000144-0000-0000-C000-000000000046")
 
-class IRpcStubBuffer(COMInterface):
+class IRpcStubBuffer(IUnknown):
     IID = generate_IID(0xD5F56AFC, 0x593B, 0x101A, 0xB5, 0x69, 0x08, 0x00, 0x2B, 0x2D, 0xBF, 0x7A, name="IRpcStubBuffer", strid="D5F56AFC-593B-101A-B569-08002B2DBF7A")
 
-class IAction(COMInterface):
+class IAction(IUnknown):
     IID = generate_IID(0xBAE54997, 0x48B1, 0x4CBE, 0x99, 0x65, 0xD6, 0xBE, 0x26, 0x3E, 0xBE, 0xA4, name="IAction", strid="BAE54997-48B1-4CBE-9965-D6BE263EBEA4")
 
-class IActionCollection(COMInterface):
+class IActionCollection(IUnknown):
     IID = generate_IID(0x02820E19, 0x7B98, 0x4ED2, 0xB2, 0xE8, 0xFD, 0xCC, 0xCE, 0xFF, 0x61, 0x9B, name="IActionCollection", strid="02820E19-7B98-4ED2-B2E8-FDCCCEFF619B")
 
-class IComHandlerAction(COMInterface):
+class IComHandlerAction(IUnknown):
     IID = generate_IID(0x6D2FD252, 0x75C5, 0x4F66, 0x90, 0xBA, 0x2A, 0x7D, 0x8C, 0xC3, 0x03, 0x9F, name="IComHandlerAction", strid="6D2FD252-75C5-4F66-90BA-2A7D8CC3039F")
 
-class IEmailAction(COMInterface):
+class IEmailAction(IUnknown):
     IID = generate_IID(0x10F62C64, 0x7E16, 0x4314, 0xA0, 0xC2, 0x0C, 0x36, 0x83, 0xF9, 0x9D, 0x40, name="IEmailAction", strid="10F62C64-7E16-4314-A0C2-0C3683F99D40")
 
-class IExecAction(COMInterface):
+class IExecAction(IUnknown):
     IID = generate_IID(0x4C3D624D, 0xFD6B, 0x49A3, 0xB9, 0xB7, 0x09, 0xCB, 0x3C, 0xD3, 0xF0, 0x47, name="IExecAction", strid="4C3D624D-FD6B-49A3-B9B7-09CB3CD3F047")
 
-class IIdleSettings(COMInterface):
+class IIdleSettings(IUnknown):
     IID = generate_IID(0x84594461, 0x0053, 0x4342, 0xA8, 0xFD, 0x08, 0x8F, 0xAB, 0xF1, 0x1F, 0x32, name="IIdleSettings", strid="84594461-0053-4342-A8FD-088FABF11F32")
 
-class INetworkSettings(COMInterface):
+class INetworkSettings(IUnknown):
     IID = generate_IID(0x9F7DEA84, 0xC30B, 0x4245, 0x80, 0xB6, 0x00, 0xE9, 0xF6, 0x46, 0xF1, 0xB4, name="INetworkSettings", strid="9F7DEA84-C30B-4245-80B6-00E9F646F1B4")
 
-class IPrincipal(COMInterface):
+class IPrincipal(IUnknown):
     IID = generate_IID(0xD98D51E5, 0xC9B4, 0x496A, 0xA9, 0xC1, 0x18, 0x98, 0x02, 0x61, 0xCF, 0x0F, name="IPrincipal", strid="D98D51E5-C9B4-496A-A9C1-18980261CF0F")
 
-class IRegisteredTask(COMInterface):
+class IRegisteredTask(IUnknown):
     IID = generate_IID(0x9C86F320, 0xDEE3, 0x4DD1, 0xB9, 0x72, 0xA3, 0x03, 0xF2, 0x6B, 0x06, 0x1E, name="IRegisteredTask", strid="9C86F320-DEE3-4DD1-B972-A303F26B061E")
 
-class IRegisteredTaskCollection(COMInterface):
+class IRegisteredTaskCollection(IUnknown):
     IID = generate_IID(0x86627EB4, 0x42A7, 0x41E4, 0xA4, 0xD9, 0xAC, 0x33, 0xA7, 0x2F, 0x2D, 0x52, name="IRegisteredTaskCollection", strid="86627EB4-42A7-41E4-A4D9-AC33A72F2D52")
 
-class IRegistrationInfo(COMInterface):
+class IRegistrationInfo(IUnknown):
     IID = generate_IID(0x416D8B73, 0xCB41, 0x4EA1, 0x80, 0x5C, 0x9B, 0xE9, 0xA5, 0xAC, 0x4A, 0x74, name="IRegistrationInfo", strid="416D8B73-CB41-4EA1-805C-9BE9A5AC4A74")
 
-class IRepetitionPattern(COMInterface):
+class IRepetitionPattern(IUnknown):
     IID = generate_IID(0x7FB9ACF1, 0x26BE, 0x400E, 0x85, 0xB5, 0x29, 0x4B, 0x9C, 0x75, 0xDF, 0xD6, name="IRepetitionPattern", strid="7FB9ACF1-26BE-400E-85B5-294B9C75DFD6")
 
-class IRunningTask(COMInterface):
+class IRunningTask(IUnknown):
     IID = generate_IID(0x653758FB, 0x7B9A, 0x4F1E, 0xA4, 0x71, 0xBE, 0xEB, 0x8E, 0x9B, 0x83, 0x4E, name="IRunningTask", strid="653758FB-7B9A-4F1E-A471-BEEB8E9B834E")
 
-class IRunningTaskCollection(COMInterface):
+class IRunningTaskCollection(IUnknown):
     IID = generate_IID(0x6A67614B, 0x6828, 0x4FEC, 0xAA, 0x54, 0x6D, 0x52, 0xE8, 0xF1, 0xF2, 0xDB, name="IRunningTaskCollection", strid="6A67614B-6828-4FEC-AA54-6D52E8F1F2DB")
 
-class IShowMessageAction(COMInterface):
+class IShowMessageAction(IUnknown):
     IID = generate_IID(0x505E9E68, 0xAF89, 0x46B8, 0xA3, 0x0F, 0x56, 0x16, 0x2A, 0x83, 0xD5, 0x37, name="IShowMessageAction", strid="505E9E68-AF89-46B8-A30F-56162A83D537")
 
-class ITaskDefinition(COMInterface):
+class ITaskDefinition(IUnknown):
     IID = generate_IID(0xF5BC8FC5, 0x536D, 0x4F77, 0xB8, 0x52, 0xFB, 0xC1, 0x35, 0x6F, 0xDE, 0xB6, name="ITaskDefinition", strid="F5BC8FC5-536D-4F77-B852-FBC1356FDEB6")
 
-class ITaskFolder(COMInterface):
+class ITaskFolder(IUnknown):
     IID = generate_IID(0x8CFAC062, 0xA080, 0x4C15, 0x9A, 0x88, 0xAA, 0x7C, 0x2A, 0xF8, 0x0D, 0xFC, name="ITaskFolder", strid="8CFAC062-A080-4C15-9A88-AA7C2AF80DFC")
 
-class ITaskFolderCollection(COMInterface):
+class ITaskFolderCollection(IUnknown):
     IID = generate_IID(0x79184A66, 0x8664, 0x423F, 0x97, 0xF1, 0x63, 0x73, 0x56, 0xA5, 0xD8, 0x12, name="ITaskFolderCollection", strid="79184A66-8664-423F-97F1-637356A5D812")
 
-class ITaskNamedValueCollection(COMInterface):
+class ITaskNamedValueCollection(IUnknown):
     IID = generate_IID(0xB4EF826B, 0x63C3, 0x46E4, 0xA5, 0x04, 0xEF, 0x69, 0xE4, 0xF7, 0xEA, 0x4D, name="ITaskNamedValueCollection", strid="B4EF826B-63C3-46E4-A504-EF69E4F7EA4D")
 
-class ITaskNamedValuePair(COMInterface):
+class ITaskNamedValuePair(IUnknown):
     IID = generate_IID(0x39038068, 0x2B46, 0x4AFD, 0x86, 0x62, 0x7B, 0xB6, 0xF8, 0x68, 0xD2, 0x21, name="ITaskNamedValuePair", strid="39038068-2B46-4AFD-8662-7BB6F868D221")
 
-class ITaskService(COMInterface):
+class ITaskService(IUnknown):
     IID = generate_IID(0x2FABA4C7, 0x4DA9, 0x4013, 0x96, 0x97, 0x20, 0xCC, 0x3F, 0xD4, 0x0F, 0x85, name="ITaskService", strid="2FABA4C7-4DA9-4013-9697-20CC3FD40F85")
 
-class ITaskSettings(COMInterface):
+class ITaskSettings(IUnknown):
     IID = generate_IID(0x8FD4711D, 0x2D02, 0x4C8C, 0x87, 0xE3, 0xEF, 0xF6, 0x99, 0xDE, 0x12, 0x7E, name="ITaskSettings", strid="8FD4711D-2D02-4C8C-87E3-EFF699DE127E")
 
-class ITrigger(COMInterface):
+class ITrigger(IUnknown):
     IID = generate_IID(0x09941815, 0xEA89, 0x4B5B, 0x89, 0xE0, 0x2A, 0x77, 0x38, 0x01, 0xFA, 0xC3, name="ITrigger", strid="09941815-EA89-4B5B-89E0-2A773801FAC3")
 
-class ITriggerCollection(COMInterface):
+class ITriggerCollection(IUnknown):
     IID = generate_IID(0x85DF5081, 0x1B24, 0x4F32, 0x87, 0x8A, 0xD9, 0xD1, 0x4D, 0xF4, 0xCB, 0x77, name="ITriggerCollection", strid="85DF5081-1B24-4F32-878A-D9D14DF4CB77")
 
-class IWebBrowser2(COMInterface):
+class IWebBrowser2(IUnknown):
     IID = generate_IID(0xD30C1661, 0xCDAF, 0x11D0, 0x8A, 0x3E, 0x00, 0xC0, 0x4F, 0xC9, 0xE2, 0x6E, name="IWebBrowser2", strid="D30C1661-CDAF-11D0-8A3E-00C04FC9E26E")
 
-class IEnumWbemClassObject(COMInterface):
+class IEnumWbemClassObject(IUnknown):
     IID = generate_IID(0x027947E1, 0xD731, 0x11CE, 0xA3, 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, name="IEnumWbemClassObject", strid="027947E1-D731-11CE-A357-000000000001")
 
-class IWbemCallResult(COMInterface):
+class IWbemCallResult(IUnknown):
     IID = generate_IID(0x44ACA675, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemCallResult", strid="44ACA675-E8FC-11D0-A07C-00C04FB68820")
 
-class IWbemClassObject(COMInterface):
+class IWbemClassObject(IUnknown):
     IID = generate_IID(0xDC12A681, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemClassObject", strid="DC12A681-737F-11CF-884D-00AA004B2E24")
 
-class IWbemContext(COMInterface):
+class IWbemContext(IUnknown):
     IID = generate_IID(0x44ACA674, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemContext", strid="44ACA674-E8FC-11D0-A07C-00C04FB68820")
 
-class IWbemLocator(COMInterface):
+class IWbemLocator(IUnknown):
     IID = generate_IID(0xDC12A687, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemLocator", strid="DC12A687-737F-11CF-884D-00AA004B2E24")
 
-class IWbemObjectSink(COMInterface):
+class IWbemObjectSink(IUnknown):
     IID = generate_IID(0x7C857801, 0x7381, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemObjectSink", strid="7C857801-7381-11CF-884D-00AA004B2E24")
 
-class IWbemObjectTextSrc(COMInterface):
+class IWbemObjectTextSrc(IUnknown):
     IID = generate_IID(0xBFBF883A, 0xCAD7, 0x11D3, 0xA1, 0x1B, 0x00, 0x10, 0x5A, 0x1F, 0x51, 0x5A, name="IWbemObjectTextSrc", strid="BFBF883A-CAD7-11D3-A11B-00105A1F515A")
 
-class IWbemQualifierSet(COMInterface):
+class IWbemQualifierSet(IUnknown):
     IID = generate_IID(0xDC12A680, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemQualifierSet", strid="DC12A680-737F-11CF-884D-00AA004B2E24")
 
-class IWbemServices(COMInterface):
+class IWbemServices(IUnknown):
     IID = generate_IID(0x0EFA6E54, 0xF313, 0x405D, 0xB5, 0xD8, 0x83, 0x0A, 0x91, 0x4F, 0x64, 0x96, name="IWbemServices", strid="0EFA6E54-F313-405D-B5D8-830A914F6496")
 
+# class IUnknownImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IUnknown
+#
+IUnknown._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+    }
+
+# class ICallFactoryImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ICallFactory
+#
+#     def CreateCall(self, This, riid, pCtrlUnk, riid2, ppv):
+#         print('ICallFactory.CreateCall')
+#         return E_NOTIMPL
+#
 ICallFactory._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -443,6 +471,85 @@ ICallFactory._functions_ = {
         "CreateCall": ctypes.WINFUNCTYPE(HRESULT, REFIID, IUnknown, REFIID, POINTER(IUnknown))(3, "CreateCall"),
     }
 
+# class ICallFrameImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ICallFrame
+#
+#     def GetInfo(self, This, pInfo):
+#         print('ICallFrame.GetInfo')
+#         return E_NOTIMPL
+#
+#     def GetIIDAndMethod(self, This, pIID, piMethod):
+#         print('ICallFrame.GetIIDAndMethod')
+#         return E_NOTIMPL
+#
+#     def GetNames(self, This, pwszInterface, pwszMethod):
+#         print('ICallFrame.GetNames')
+#         return E_NOTIMPL
+#
+#     def GetStackLocation(self, This):
+#         print('ICallFrame.GetStackLocation')
+#         return E_NOTIMPL
+#
+#     def SetStackLocation(self, This, pvStack):
+#         print('ICallFrame.SetStackLocation')
+#         return E_NOTIMPL
+#
+#     def SetReturnValue(self, This, hr):
+#         print('ICallFrame.SetReturnValue')
+#         return E_NOTIMPL
+#
+#     def GetReturnValue(self, This):
+#         print('ICallFrame.GetReturnValue')
+#         return E_NOTIMPL
+#
+#     def GetParamInfo(self, This, iparam, pInfo):
+#         print('ICallFrame.GetParamInfo')
+#         return E_NOTIMPL
+#
+#     def SetParam(self, This, iparam, pvar):
+#         print('ICallFrame.SetParam')
+#         return E_NOTIMPL
+#
+#     def GetParam(self, This, iparam, pvar):
+#         print('ICallFrame.GetParam')
+#         return E_NOTIMPL
+#
+#     def Copy(self, This, copyControl, pWalker, ppFrame):
+#         print('ICallFrame.Copy')
+#         return E_NOTIMPL
+#
+#     def Free(self, This, pframeArgsDest, pWalkerDestFree, pWalkerCopy, freeFlags, pWalkerFree, nullFlags):
+#         print('ICallFrame.Free')
+#         return E_NOTIMPL
+#
+#     def FreeParam(self, This, iparam, freeFlags, pWalkerFree, nullFlags):
+#         print('ICallFrame.FreeParam')
+#         return E_NOTIMPL
+#
+#     def WalkFrame(self, This, walkWhat, pWalker):
+#         print('ICallFrame.WalkFrame')
+#         return E_NOTIMPL
+#
+#     def GetMarshalSizeMax(self, This, pmshlContext, mshlflags, pcbBufferNeeded):
+#         print('ICallFrame.GetMarshalSizeMax')
+#         return E_NOTIMPL
+#
+#     def Marshal(self, This, pmshlContext, mshlflags, pBuffer, cbBuffer, pcbBufferUsed, pdataRep, prpcFlags):
+#         print('ICallFrame.Marshal')
+#         return E_NOTIMPL
+#
+#     def Unmarshal(self, This, pBuffer, cbBuffer, dataRep, pcontext, pcbUnmarshalled):
+#         print('ICallFrame.Unmarshal')
+#         return E_NOTIMPL
+#
+#     def ReleaseMarshalData(self, This, pBuffer, cbBuffer, ibFirstRelease, dataRep, pcontext):
+#         print('ICallFrame.ReleaseMarshalData')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, pvReceiver):
+#         print('ICallFrame.Invoke')
+#         return E_NOTIMPL
+#
 ICallFrame._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -490,6 +597,13 @@ ICallFrame._functions_ = {
         "Invoke": ctypes.CFUNCTYPE(HRESULT, PVOID)(21, "Invoke"),
     }
 
+# class ICallFrameEventsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ICallFrameEvents
+#
+#     def OnCall(self, This, pFrame):
+#         print('ICallFrameEvents.OnCall')
+#         return E_NOTIMPL
+#
 ICallFrameEvents._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -501,6 +615,13 @@ ICallFrameEvents._functions_ = {
         "OnCall": ctypes.WINFUNCTYPE(HRESULT, ICallFrame)(3, "OnCall"),
     }
 
+# class ICallFrameWalkerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ICallFrameWalker
+#
+#     def OnWalkInterface(self, This, iid, ppvInterface, fIn, fOut):
+#         print('ICallFrameWalker.OnWalkInterface')
+#         return E_NOTIMPL
+#
 ICallFrameWalker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -512,6 +633,33 @@ ICallFrameWalker._functions_ = {
         "OnWalkInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID), BOOL, BOOL)(3, "OnWalkInterface"),
     }
 
+# class ICallInterceptorImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ICallInterceptor
+#
+#     def CallIndirect(self, This, phrReturn, iMethod, pvArgs, cbArgs):
+#         print('ICallInterceptor.CallIndirect')
+#         return E_NOTIMPL
+#
+#     def GetMethodInfo(self, This, iMethod, pInfo, pwszMethod):
+#         print('ICallInterceptor.GetMethodInfo')
+#         return E_NOTIMPL
+#
+#     def GetStackSize(self, This, iMethod, cbArgs):
+#         print('ICallInterceptor.GetStackSize')
+#         return E_NOTIMPL
+#
+#     def GetIID(self, This, piid, pfDerivesFromIDispatch, pcMethod, pwszInterface):
+#         print('ICallInterceptor.GetIID')
+#         return E_NOTIMPL
+#
+#     def RegisterSink(self, This, psink):
+#         print('ICallInterceptor.RegisterSink')
+#         return E_NOTIMPL
+#
+#     def GetRegisteredSink(self, This, ppsink):
+#         print('ICallInterceptor.GetRegisteredSink')
+#         return E_NOTIMPL
+#
 ICallInterceptor._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -533,6 +681,17 @@ ICallInterceptor._functions_ = {
         "GetRegisteredSink": ctypes.WINFUNCTYPE(HRESULT, POINTER(ICallFrameEvents))(8, "GetRegisteredSink"),
     }
 
+# class IClassFactoryImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IClassFactory
+#
+#     def CreateInstance(self, This, pUnkOuter, riid, ppvObject):
+#         print('IClassFactory.CreateInstance')
+#         return E_NOTIMPL
+#
+#     def LockServer(self, This, fLock):
+#         print('IClassFactory.LockServer')
+#         return E_NOTIMPL
+#
 IClassFactory._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -546,6 +705,21 @@ IClassFactory._functions_ = {
         "LockServer": ctypes.WINFUNCTYPE(HRESULT, BOOL)(4, "LockServer"),
     }
 
+# class IClientSecurityImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IClientSecurity
+#
+#     def QueryBlanket(self, This, pProxy, pAuthnSvc, pAuthzSvc, pServerPrincName, pAuthnLevel, pImpLevel, pAuthInfo, pCapabilites):
+#         print('IClientSecurity.QueryBlanket')
+#         return E_NOTIMPL
+#
+#     def SetBlanket(self, This, pProxy, dwAuthnSvc, dwAuthzSvc, pServerPrincName, dwAuthnLevel, dwImpLevel, pAuthInfo, dwCapabilities):
+#         print('IClientSecurity.SetBlanket')
+#         return E_NOTIMPL
+#
+#     def CopyProxy(self, This, pProxy, ppCopy):
+#         print('IClientSecurity.CopyProxy')
+#         return E_NOTIMPL
+#
 IClientSecurity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -561,6 +735,49 @@ IClientSecurity._functions_ = {
         "CopyProxy": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IUnknown))(5, "CopyProxy"),
     }
 
+# class IComCatalogImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IComCatalog
+#
+#     def GetClassInfo(self, This, guidConfiguredClsid, riid, ppv):
+#         print('IComCatalog.GetClassInfo')
+#         return E_NOTIMPL
+#
+#     def GetApplicationInfo(self, This, guidApplId, riid, ppv):
+#         print('IComCatalog.GetApplicationInfo')
+#         return E_NOTIMPL
+#
+#     def GetProcessInfo(self, This, guidProcess, riid, ppv):
+#         print('IComCatalog.GetProcessInfo')
+#         return E_NOTIMPL
+#
+#     def GetServerGroupInfo(self, This, guidServerGroup, riid, ppv):
+#         print('IComCatalog.GetServerGroupInfo')
+#         return E_NOTIMPL
+#
+#     def GetRetQueueInfo(self, This, wszFormatName, riid, ppv):
+#         print('IComCatalog.GetRetQueueInfo')
+#         return E_NOTIMPL
+#
+#     def GetApplicationInfoForExe(self, This, pwszExeName, riid, ppv):
+#         print('IComCatalog.GetApplicationInfoForExe')
+#         return E_NOTIMPL
+#
+#     def GetTypeLibrary(self, This, guidTypeLib, riid, ppv):
+#         print('IComCatalog.GetTypeLibrary')
+#         return E_NOTIMPL
+#
+#     def GetInterfaceInfo(self, This, iidInterface, riid, ppv):
+#         print('IComCatalog.GetInterfaceInfo')
+#         return E_NOTIMPL
+#
+#     def FlushCache(self, This):
+#         print('IComCatalog.FlushCache')
+#         return E_NOTIMPL
+#
+#     def GetClassInfoFromProgId(self, This, pwszProgID, riid, ppv):
+#         print('IComCatalog.GetClassInfoFromProgId')
+#         return E_NOTIMPL
+#
 IComCatalog._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -590,6 +807,25 @@ IComCatalog._functions_ = {
         "GetClassInfoFromProgId": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID))(12, "GetClassInfoFromProgId"),
     }
 
+# class IDispatchImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IDispatch
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IDispatch.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IDispatch.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IDispatch.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IDispatch.Invoke')
+#         return E_NOTIMPL
+#
 IDispatch._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -607,6 +843,25 @@ IDispatch._functions_ = {
         "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
     }
 
+# class IEnumVARIANTImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumVARIANT
+#
+#     def Next(self, This, celt, rgVar, pCeltFetched):
+#         print('IEnumVARIANT.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumVARIANT.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumVARIANT.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppEnum):
+#         print('IEnumVARIANT.Clone')
+#         return E_NOTIMPL
+#
 IEnumVARIANT._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -624,6 +879,13 @@ IEnumVARIANT._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumVARIANT))(6, "Clone"),
     }
 
+# class IInternalUnknownImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IInternalUnknown
+#
+#     def QueryInternalInterface(self, This, riid, ppv):
+#         print('IInternalUnknown.QueryInternalInterface')
+#         return E_NOTIMPL
+#
 IInternalUnknown._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -635,6 +897,33 @@ IInternalUnknown._functions_ = {
         "QueryInternalInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(3, "QueryInternalInterface"),
     }
 
+# class IMarshalImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IMarshal
+#
+#     def GetUnmarshalClass(self, This, riid, pv, dwDestContext, pvDestContext, mshlflags, pCid):
+#         print('IMarshal.GetUnmarshalClass')
+#         return E_NOTIMPL
+#
+#     def GetMarshalSizeMax(self, This, riid, pv, dwDestContext, pvDestContext, mshlflags, pSize):
+#         print('IMarshal.GetMarshalSizeMax')
+#         return E_NOTIMPL
+#
+#     def MarshalInterface(self, This, pStm, riid, pv, dwDestContext, pvDestContext, mshlflags):
+#         print('IMarshal.MarshalInterface')
+#         return E_NOTIMPL
+#
+#     def UnmarshalInterface(self, This, pStm, riid, ppv):
+#         print('IMarshal.UnmarshalInterface')
+#         return E_NOTIMPL
+#
+#     def ReleaseMarshalData(self, This, pStm):
+#         print('IMarshal.ReleaseMarshalData')
+#         return E_NOTIMPL
+#
+#     def DisconnectObject(self, This, dwReserved):
+#         print('IMarshal.DisconnectObject')
+#         return E_NOTIMPL
+#
 IMarshal._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -656,6 +945,89 @@ IMarshal._functions_ = {
         "DisconnectObject": ctypes.WINFUNCTYPE(HRESULT, DWORD)(8, "DisconnectObject"),
     }
 
+# class IMonikerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IMoniker
+#
+#     def GetClassID(self, This, pClassID):
+#         print('IMoniker.GetClassID')
+#         return E_NOTIMPL
+#
+#     def IsDirty(self, This):
+#         print('IMoniker.IsDirty')
+#         return E_NOTIMPL
+#
+#     def Load(self, This, pStm):
+#         print('IMoniker.Load')
+#         return E_NOTIMPL
+#
+#     def Save(self, This, pStm, fClearDirty):
+#         print('IMoniker.Save')
+#         return E_NOTIMPL
+#
+#     def GetSizeMax(self, This, pcbSize):
+#         print('IMoniker.GetSizeMax')
+#         return E_NOTIMPL
+#
+#     def BindToObject(self, This, pbc, pmkToLeft, riidResult, ppvResult):
+#         print('IMoniker.BindToObject')
+#         return E_NOTIMPL
+#
+#     def BindToStorage(self, This, pbc, pmkToLeft, riid, ppvObj):
+#         print('IMoniker.BindToStorage')
+#         return E_NOTIMPL
+#
+#     def Reduce(self, This, pbc, dwReduceHowFar, ppmkToLeft, ppmkReduced):
+#         print('IMoniker.Reduce')
+#         return E_NOTIMPL
+#
+#     def ComposeWith(self, This, pmkRight, fOnlyIfNotGeneric, ppmkComposite):
+#         print('IMoniker.ComposeWith')
+#         return E_NOTIMPL
+#
+#     def Enum(self, This, fForward, ppenumMoniker):
+#         print('IMoniker.Enum')
+#         return E_NOTIMPL
+#
+#     def IsEqual(self, This, pmkOtherMoniker):
+#         print('IMoniker.IsEqual')
+#         return E_NOTIMPL
+#
+#     def Hash(self, This, pdwHash):
+#         print('IMoniker.Hash')
+#         return E_NOTIMPL
+#
+#     def IsRunning(self, This, pbc, pmkToLeft, pmkNewlyRunning):
+#         print('IMoniker.IsRunning')
+#         return E_NOTIMPL
+#
+#     def GetTimeOfLastChange(self, This, pbc, pmkToLeft, pFileTime):
+#         print('IMoniker.GetTimeOfLastChange')
+#         return E_NOTIMPL
+#
+#     def Inverse(self, This, ppmk):
+#         print('IMoniker.Inverse')
+#         return E_NOTIMPL
+#
+#     def CommonPrefixWith(self, This, pmkOther, ppmkPrefix):
+#         print('IMoniker.CommonPrefixWith')
+#         return E_NOTIMPL
+#
+#     def RelativePathTo(self, This, pmkOther, ppmkRelPath):
+#         print('IMoniker.RelativePathTo')
+#         return E_NOTIMPL
+#
+#     def GetDisplayName(self, This, pbc, pmkToLeft, ppszDisplayName):
+#         print('IMoniker.GetDisplayName')
+#         return E_NOTIMPL
+#
+#     def ParseDisplayName(self, This, pbc, pmkToLeft, pszDisplayName, pchEaten, ppmkOut):
+#         print('IMoniker.ParseDisplayName')
+#         return E_NOTIMPL
+#
+#     def IsSystemMoniker(self, This, pdwMksys):
+#         print('IMoniker.IsSystemMoniker')
+#         return E_NOTIMPL
+#
 IMoniker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -705,6 +1077,113 @@ IMoniker._functions_ = {
         "IsSystemMoniker": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(22, "IsSystemMoniker"),
     }
 
+# class INetFwPolicy2Implem(windows.com.COMImplementation):
+#     IMPLEMENT = INetFwPolicy2
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('INetFwPolicy2.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('INetFwPolicy2.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('INetFwPolicy2.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('INetFwPolicy2.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_CurrentProfileTypes(self, This, profileTypesBitmask):
+#         print('INetFwPolicy2.get_CurrentProfileTypes')
+#         return E_NOTIMPL
+#
+#     def get_FirewallEnabled(self, This, profileType, enabled):
+#         print('INetFwPolicy2.get_FirewallEnabled')
+#         return E_NOTIMPL
+#
+#     def put_FirewallEnabled(self, This, profileType, enabled):
+#         print('INetFwPolicy2.put_FirewallEnabled')
+#         return E_NOTIMPL
+#
+#     def get_ExcludedInterfaces(self, This, profileType, interfaces):
+#         print('INetFwPolicy2.get_ExcludedInterfaces')
+#         return E_NOTIMPL
+#
+#     def put_ExcludedInterfaces(self, This, profileType, interfaces):
+#         print('INetFwPolicy2.put_ExcludedInterfaces')
+#         return E_NOTIMPL
+#
+#     def get_BlockAllInboundTraffic(self, This, profileType, Block):
+#         print('INetFwPolicy2.get_BlockAllInboundTraffic')
+#         return E_NOTIMPL
+#
+#     def put_BlockAllInboundTraffic(self, This, profileType, Block):
+#         print('INetFwPolicy2.put_BlockAllInboundTraffic')
+#         return E_NOTIMPL
+#
+#     def get_NotificationsDisabled(self, This, profileType, disabled):
+#         print('INetFwPolicy2.get_NotificationsDisabled')
+#         return E_NOTIMPL
+#
+#     def put_NotificationsDisabled(self, This, profileType, disabled):
+#         print('INetFwPolicy2.put_NotificationsDisabled')
+#         return E_NOTIMPL
+#
+#     def get_UnicastResponsesToMulticastBroadcastDisabled(self, This, profileType, disabled):
+#         print('INetFwPolicy2.get_UnicastResponsesToMulticastBroadcastDisabled')
+#         return E_NOTIMPL
+#
+#     def put_UnicastResponsesToMulticastBroadcastDisabled(self, This, profileType, disabled):
+#         print('INetFwPolicy2.put_UnicastResponsesToMulticastBroadcastDisabled')
+#         return E_NOTIMPL
+#
+#     def get_Rules(self, This, rules):
+#         print('INetFwPolicy2.get_Rules')
+#         return E_NOTIMPL
+#
+#     def get_ServiceRestriction(self, This, ServiceRestriction):
+#         print('INetFwPolicy2.get_ServiceRestriction')
+#         return E_NOTIMPL
+#
+#     def EnableRuleGroup(self, This, profileTypesBitmask, group, enable):
+#         print('INetFwPolicy2.EnableRuleGroup')
+#         return E_NOTIMPL
+#
+#     def IsRuleGroupEnabled(self, This, profileTypesBitmask, group, enabled):
+#         print('INetFwPolicy2.IsRuleGroupEnabled')
+#         return E_NOTIMPL
+#
+#     def RestoreLocalFirewallDefaults(self, This):
+#         print('INetFwPolicy2.RestoreLocalFirewallDefaults')
+#         return E_NOTIMPL
+#
+#     def get_DefaultInboundAction(self, This, profileType, action):
+#         print('INetFwPolicy2.get_DefaultInboundAction')
+#         return E_NOTIMPL
+#
+#     def put_DefaultInboundAction(self, This, profileType, action):
+#         print('INetFwPolicy2.put_DefaultInboundAction')
+#         return E_NOTIMPL
+#
+#     def get_DefaultOutboundAction(self, This, profileType, action):
+#         print('INetFwPolicy2.get_DefaultOutboundAction')
+#         return E_NOTIMPL
+#
+#     def put_DefaultOutboundAction(self, This, profileType, action):
+#         print('INetFwPolicy2.put_DefaultOutboundAction')
+#         return E_NOTIMPL
+#
+#     def get_IsRuleGroupCurrentlyEnabled(self, This, group, enabled):
+#         print('INetFwPolicy2.get_IsRuleGroupCurrentlyEnabled')
+#         return E_NOTIMPL
+#
+#     def get_LocalPolicyModifyState(self, This, modifyState):
+#         print('INetFwPolicy2.get_LocalPolicyModifyState')
+#         return E_NOTIMPL
+#
 INetFwPolicy2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -766,6 +1245,169 @@ INetFwPolicy2._functions_ = {
         "get_LocalPolicyModifyState": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_MODIFY_STATE))(28, "get_LocalPolicyModifyState"),
     }
 
+# class INetFwRuleImplem(windows.com.COMImplementation):
+#     IMPLEMENT = INetFwRule
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('INetFwRule.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('INetFwRule.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('INetFwRule.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('INetFwRule.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, name):
+#         print('INetFwRule.get_Name')
+#         return E_NOTIMPL
+#
+#     def put_Name(self, This, name):
+#         print('INetFwRule.put_Name')
+#         return E_NOTIMPL
+#
+#     def get_Description(self, This, desc):
+#         print('INetFwRule.get_Description')
+#         return E_NOTIMPL
+#
+#     def put_Description(self, This, desc):
+#         print('INetFwRule.put_Description')
+#         return E_NOTIMPL
+#
+#     def get_ApplicationName(self, This, imageFileName):
+#         print('INetFwRule.get_ApplicationName')
+#         return E_NOTIMPL
+#
+#     def put_ApplicationName(self, This, imageFileName):
+#         print('INetFwRule.put_ApplicationName')
+#         return E_NOTIMPL
+#
+#     def get_ServiceName(self, This, serviceName):
+#         print('INetFwRule.get_ServiceName')
+#         return E_NOTIMPL
+#
+#     def put_ServiceName(self, This, serviceName):
+#         print('INetFwRule.put_ServiceName')
+#         return E_NOTIMPL
+#
+#     def get_Protocol(self, This, protocol):
+#         print('INetFwRule.get_Protocol')
+#         return E_NOTIMPL
+#
+#     def put_Protocol(self, This, protocol):
+#         print('INetFwRule.put_Protocol')
+#         return E_NOTIMPL
+#
+#     def get_LocalPorts(self, This, portNumbers):
+#         print('INetFwRule.get_LocalPorts')
+#         return E_NOTIMPL
+#
+#     def put_LocalPorts(self, This, portNumbers):
+#         print('INetFwRule.put_LocalPorts')
+#         return E_NOTIMPL
+#
+#     def get_RemotePorts(self, This, portNumbers):
+#         print('INetFwRule.get_RemotePorts')
+#         return E_NOTIMPL
+#
+#     def put_RemotePorts(self, This, portNumbers):
+#         print('INetFwRule.put_RemotePorts')
+#         return E_NOTIMPL
+#
+#     def get_LocalAddresses(self, This, localAddrs):
+#         print('INetFwRule.get_LocalAddresses')
+#         return E_NOTIMPL
+#
+#     def put_LocalAddresses(self, This, localAddrs):
+#         print('INetFwRule.put_LocalAddresses')
+#         return E_NOTIMPL
+#
+#     def get_RemoteAddresses(self, This, remoteAddrs):
+#         print('INetFwRule.get_RemoteAddresses')
+#         return E_NOTIMPL
+#
+#     def put_RemoteAddresses(self, This, remoteAddrs):
+#         print('INetFwRule.put_RemoteAddresses')
+#         return E_NOTIMPL
+#
+#     def get_IcmpTypesAndCodes(self, This, icmpTypesAndCodes):
+#         print('INetFwRule.get_IcmpTypesAndCodes')
+#         return E_NOTIMPL
+#
+#     def put_IcmpTypesAndCodes(self, This, icmpTypesAndCodes):
+#         print('INetFwRule.put_IcmpTypesAndCodes')
+#         return E_NOTIMPL
+#
+#     def get_Direction(self, This, dir):
+#         print('INetFwRule.get_Direction')
+#         return E_NOTIMPL
+#
+#     def put_Direction(self, This, dir):
+#         print('INetFwRule.put_Direction')
+#         return E_NOTIMPL
+#
+#     def get_Interfaces(self, This, interfaces):
+#         print('INetFwRule.get_Interfaces')
+#         return E_NOTIMPL
+#
+#     def put_Interfaces(self, This, interfaces):
+#         print('INetFwRule.put_Interfaces')
+#         return E_NOTIMPL
+#
+#     def get_InterfaceTypes(self, This, interfaceTypes):
+#         print('INetFwRule.get_InterfaceTypes')
+#         return E_NOTIMPL
+#
+#     def put_InterfaceTypes(self, This, interfaceTypes):
+#         print('INetFwRule.put_InterfaceTypes')
+#         return E_NOTIMPL
+#
+#     def get_Enabled(self, This, enabled):
+#         print('INetFwRule.get_Enabled')
+#         return E_NOTIMPL
+#
+#     def put_Enabled(self, This, enabled):
+#         print('INetFwRule.put_Enabled')
+#         return E_NOTIMPL
+#
+#     def get_Grouping(self, This, context):
+#         print('INetFwRule.get_Grouping')
+#         return E_NOTIMPL
+#
+#     def put_Grouping(self, This, context):
+#         print('INetFwRule.put_Grouping')
+#         return E_NOTIMPL
+#
+#     def get_Profiles(self, This, profileTypesBitmask):
+#         print('INetFwRule.get_Profiles')
+#         return E_NOTIMPL
+#
+#     def put_Profiles(self, This, profileTypesBitmask):
+#         print('INetFwRule.put_Profiles')
+#         return E_NOTIMPL
+#
+#     def get_EdgeTraversal(self, This, enabled):
+#         print('INetFwRule.get_EdgeTraversal')
+#         return E_NOTIMPL
+#
+#     def put_EdgeTraversal(self, This, enabled):
+#         print('INetFwRule.put_EdgeTraversal')
+#         return E_NOTIMPL
+#
+#     def get_Action(self, This, action):
+#         print('INetFwRule.get_Action')
+#         return E_NOTIMPL
+#
+#     def put_Action(self, This, action):
+#         print('INetFwRule.put_Action')
+#         return E_NOTIMPL
+#
 INetFwRule._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -855,6 +1497,45 @@ INetFwRule._functions_ = {
         "put_Action": ctypes.WINFUNCTYPE(HRESULT, NET_FW_ACTION)(42, "put_Action"),
     }
 
+# class INetFwRulesImplem(windows.com.COMImplementation):
+#     IMPLEMENT = INetFwRules
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('INetFwRules.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('INetFwRules.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('INetFwRules.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('INetFwRules.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, count):
+#         print('INetFwRules.get_Count')
+#         return E_NOTIMPL
+#
+#     def Add(self, This, rule):
+#         print('INetFwRules.Add')
+#         return E_NOTIMPL
+#
+#     def Remove(self, This, name):
+#         print('INetFwRules.Remove')
+#         return E_NOTIMPL
+#
+#     def Item(self, This, name, rule):
+#         print('INetFwRules.Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, newEnum):
+#         print('INetFwRules.get__NewEnum')
+#         return E_NOTIMPL
+#
 INetFwRules._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -882,6 +1563,37 @@ INetFwRules._functions_ = {
         "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(11, "get__NewEnum"),
     }
 
+# class INetFwServiceRestrictionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = INetFwServiceRestriction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('INetFwServiceRestriction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('INetFwServiceRestriction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('INetFwServiceRestriction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('INetFwServiceRestriction.Invoke')
+#         return E_NOTIMPL
+#
+#     def RestrictService(self, This, serviceName, appName, restrictService, serviceSidRestricted):
+#         print('INetFwServiceRestriction.RestrictService')
+#         return E_NOTIMPL
+#
+#     def ServiceRestricted(self, This, serviceName, appName, serviceRestricted):
+#         print('INetFwServiceRestriction.ServiceRestricted')
+#         return E_NOTIMPL
+#
+#     def get_Rules(self, This, rules):
+#         print('INetFwServiceRestriction.get_Rules')
+#         return E_NOTIMPL
+#
 INetFwServiceRestriction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -905,6 +1617,53 @@ INetFwServiceRestriction._functions_ = {
         "get_Rules": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules))(9, "get_Rules"),
     }
 
+# class IObjContextImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IObjContext
+#
+#     def SetProperty(self, This, rpolicyId, flags, pUnk):
+#         print('IObjContext.SetProperty')
+#         return E_NOTIMPL
+#
+#     def RemoveProperty(self, This, rPolicyId):
+#         print('IObjContext.RemoveProperty')
+#         return E_NOTIMPL
+#
+#     def GetProperty(self, This, rGuid, pFlags, ppUnk):
+#         print('IObjContext.GetProperty')
+#         return E_NOTIMPL
+#
+#     def EnumContextProps(self, This, ppEnumContextProps):
+#         print('IObjContext.EnumContextProps')
+#         return E_NOTIMPL
+#
+#     def Reserved1(self, This):
+#         print('IObjContext.Reserved1')
+#         return E_NOTIMPL
+#
+#     def Reserved2(self, This):
+#         print('IObjContext.Reserved2')
+#         return E_NOTIMPL
+#
+#     def Reserved3(self, This):
+#         print('IObjContext.Reserved3')
+#         return E_NOTIMPL
+#
+#     def Reserved4(self, This):
+#         print('IObjContext.Reserved4')
+#         return E_NOTIMPL
+#
+#     def Reserved5(self, This):
+#         print('IObjContext.Reserved5')
+#         return E_NOTIMPL
+#
+#     def Reserved6(self, This):
+#         print('IObjContext.Reserved6')
+#         return E_NOTIMPL
+#
+#     def Reserved7(self, This):
+#         print('IObjContext.Reserved7')
+#         return E_NOTIMPL
+#
 IObjContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -936,6 +1695,13 @@ IObjContext._functions_ = {
         "Reserved7": ctypes.WINFUNCTYPE(PVOID)(13, "Reserved7"),
     }
 
+# class IPersistImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPersist
+#
+#     def GetClassID(self, This, pClassID):
+#         print('IPersist.GetClassID')
+#         return E_NOTIMPL
+#
 IPersist._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -947,6 +1713,33 @@ IPersist._functions_ = {
         "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
     }
 
+# class IPersistFileImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPersistFile
+#
+#     def GetClassID(self, This, pClassID):
+#         print('IPersistFile.GetClassID')
+#         return E_NOTIMPL
+#
+#     def IsDirty(self, This):
+#         print('IPersistFile.IsDirty')
+#         return E_NOTIMPL
+#
+#     def Load(self, This, pszFileName, dwMode):
+#         print('IPersistFile.Load')
+#         return E_NOTIMPL
+#
+#     def Save(self, This, pszFileName, fRemember):
+#         print('IPersistFile.Save')
+#         return E_NOTIMPL
+#
+#     def SaveCompleted(self, This, pszFileName):
+#         print('IPersistFile.SaveCompleted')
+#         return E_NOTIMPL
+#
+#     def GetCurFile(self, This, ppszFileName):
+#         print('IPersistFile.GetCurFile')
+#         return E_NOTIMPL
+#
 IPersistFile._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -968,6 +1761,21 @@ IPersistFile._functions_ = {
         "GetCurFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR))(8, "GetCurFile"),
     }
 
+# class IRemUnknownImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRemUnknown
+#
+#     def RemQueryInterface(self, This, ripid, cRefs, cIids, iids, ppQIResults):
+#         print('IRemUnknown.RemQueryInterface')
+#         return E_NOTIMPL
+#
+#     def RemAddRef(self, This, cInterfaceRefs, InterfaceRefs, pResults):
+#         print('IRemUnknown.RemAddRef')
+#         return E_NOTIMPL
+#
+#     def RemRelease(self, This, cInterfaceRefs, InterfaceRefs):
+#         print('IRemUnknown.RemRelease')
+#         return E_NOTIMPL
+#
 IRemUnknown._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -983,6 +1791,81 @@ IRemUnknown._functions_ = {
         "RemRelease": ctypes.WINFUNCTYPE(HRESULT, USHORT, POINTER(REMINTERFACEREF))(5, "RemRelease"),
     }
 
+# class IShellLinkAImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IShellLinkA
+#
+#     def GetPath(self, This, pszFile, cch, pfd, fFlags):
+#         print('IShellLinkA.GetPath')
+#         return E_NOTIMPL
+#
+#     def GetIDList(self, This, ppidl):
+#         print('IShellLinkA.GetIDList')
+#         return E_NOTIMPL
+#
+#     def SetIDList(self, This, pidl):
+#         print('IShellLinkA.SetIDList')
+#         return E_NOTIMPL
+#
+#     def GetDescription(self, This, pszName, cch):
+#         print('IShellLinkA.GetDescription')
+#         return E_NOTIMPL
+#
+#     def SetDescription(self, This, pszName):
+#         print('IShellLinkA.SetDescription')
+#         return E_NOTIMPL
+#
+#     def GetWorkingDirectory(self, This, pszDir, cch):
+#         print('IShellLinkA.GetWorkingDirectory')
+#         return E_NOTIMPL
+#
+#     def SetWorkingDirectory(self, This, pszDir):
+#         print('IShellLinkA.SetWorkingDirectory')
+#         return E_NOTIMPL
+#
+#     def GetArguments(self, This, pszArgs, cch):
+#         print('IShellLinkA.GetArguments')
+#         return E_NOTIMPL
+#
+#     def SetArguments(self, This, pszArgs):
+#         print('IShellLinkA.SetArguments')
+#         return E_NOTIMPL
+#
+#     def GetHotkey(self, This, pwHotkey):
+#         print('IShellLinkA.GetHotkey')
+#         return E_NOTIMPL
+#
+#     def SetHotkey(self, This, wHotkey):
+#         print('IShellLinkA.SetHotkey')
+#         return E_NOTIMPL
+#
+#     def GetShowCmd(self, This, piShowCmd):
+#         print('IShellLinkA.GetShowCmd')
+#         return E_NOTIMPL
+#
+#     def SetShowCmd(self, This, iShowCmd):
+#         print('IShellLinkA.SetShowCmd')
+#         return E_NOTIMPL
+#
+#     def GetIconLocation(self, This, pszIconPath, cch, piIcon):
+#         print('IShellLinkA.GetIconLocation')
+#         return E_NOTIMPL
+#
+#     def SetIconLocation(self, This, pszIconPath, iIcon):
+#         print('IShellLinkA.SetIconLocation')
+#         return E_NOTIMPL
+#
+#     def SetRelativePath(self, This, pszPathRel, dwReserved):
+#         print('IShellLinkA.SetRelativePath')
+#         return E_NOTIMPL
+#
+#     def Resolve(self, This, hwnd, fFlags):
+#         print('IShellLinkA.Resolve')
+#         return E_NOTIMPL
+#
+#     def SetPath(self, This, pszFile):
+#         print('IShellLinkA.SetPath')
+#         return E_NOTIMPL
+#
 IShellLinkA._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1028,6 +1911,81 @@ IShellLinkA._functions_ = {
         "SetPath": ctypes.WINFUNCTYPE(HRESULT, LPCSTR)(20, "SetPath"),
     }
 
+# class IShellLinkWImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IShellLinkW
+#
+#     def GetPath(self, This, pszFile, cch, pfd, fFlags):
+#         print('IShellLinkW.GetPath')
+#         return E_NOTIMPL
+#
+#     def GetIDList(self, This, ppidl):
+#         print('IShellLinkW.GetIDList')
+#         return E_NOTIMPL
+#
+#     def SetIDList(self, This, pidl):
+#         print('IShellLinkW.SetIDList')
+#         return E_NOTIMPL
+#
+#     def GetDescription(self, This, pszName, cch):
+#         print('IShellLinkW.GetDescription')
+#         return E_NOTIMPL
+#
+#     def SetDescription(self, This, pszName):
+#         print('IShellLinkW.SetDescription')
+#         return E_NOTIMPL
+#
+#     def GetWorkingDirectory(self, This, pszDir, cch):
+#         print('IShellLinkW.GetWorkingDirectory')
+#         return E_NOTIMPL
+#
+#     def SetWorkingDirectory(self, This, pszDir):
+#         print('IShellLinkW.SetWorkingDirectory')
+#         return E_NOTIMPL
+#
+#     def GetArguments(self, This, pszArgs, cch):
+#         print('IShellLinkW.GetArguments')
+#         return E_NOTIMPL
+#
+#     def SetArguments(self, This, pszArgs):
+#         print('IShellLinkW.SetArguments')
+#         return E_NOTIMPL
+#
+#     def GetHotkey(self, This, pwHotkey):
+#         print('IShellLinkW.GetHotkey')
+#         return E_NOTIMPL
+#
+#     def SetHotkey(self, This, wHotkey):
+#         print('IShellLinkW.SetHotkey')
+#         return E_NOTIMPL
+#
+#     def GetShowCmd(self, This, piShowCmd):
+#         print('IShellLinkW.GetShowCmd')
+#         return E_NOTIMPL
+#
+#     def SetShowCmd(self, This, iShowCmd):
+#         print('IShellLinkW.SetShowCmd')
+#         return E_NOTIMPL
+#
+#     def GetIconLocation(self, This, pszIconPath, cch, piIcon):
+#         print('IShellLinkW.GetIconLocation')
+#         return E_NOTIMPL
+#
+#     def SetIconLocation(self, This, pszIconPath, iIcon):
+#         print('IShellLinkW.SetIconLocation')
+#         return E_NOTIMPL
+#
+#     def SetRelativePath(self, This, pszPathRel, dwReserved):
+#         print('IShellLinkW.SetRelativePath')
+#         return E_NOTIMPL
+#
+#     def Resolve(self, This, hwnd, fFlags):
+#         print('IShellLinkW.Resolve')
+#         return E_NOTIMPL
+#
+#     def SetPath(self, This, pszFile):
+#         print('IShellLinkW.SetPath')
+#         return E_NOTIMPL
+#
 IShellLinkW._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1073,6 +2031,9 @@ IShellLinkW._functions_ = {
         "SetPath": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(20, "SetPath"),
     }
 
+# class IStdIdentityImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IStdIdentity
+#
 IStdIdentity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1082,6 +2043,69 @@ IStdIdentity._functions_ = {
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
     }
 
+# class IStorageImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IStorage
+#
+#     def CreateStream(self, This, pwcsName, grfMode, reserved1, reserved2, ppstm):
+#         print('IStorage.CreateStream')
+#         return E_NOTIMPL
+#
+#     def OpenStream(self, This, pwcsName, reserved1, grfMode, reserved2, ppstm):
+#         print('IStorage.OpenStream')
+#         return E_NOTIMPL
+#
+#     def CreateStorage(self, This, pwcsName, grfMode, reserved1, reserved2, ppstg):
+#         print('IStorage.CreateStorage')
+#         return E_NOTIMPL
+#
+#     def OpenStorage(self, This, pwcsName, pstgPriority, grfMode, snbExclude, reserved, ppstg):
+#         print('IStorage.OpenStorage')
+#         return E_NOTIMPL
+#
+#     def CopyTo(self, This, ciidExclude, rgiidExclude, snbExclude, pstgDest):
+#         print('IStorage.CopyTo')
+#         return E_NOTIMPL
+#
+#     def MoveElementTo(self, This, pwcsName, pstgDest, pwcsNewName, grfFlags):
+#         print('IStorage.MoveElementTo')
+#         return E_NOTIMPL
+#
+#     def Commit(self, This, grfCommitFlags):
+#         print('IStorage.Commit')
+#         return E_NOTIMPL
+#
+#     def Revert(self, This):
+#         print('IStorage.Revert')
+#         return E_NOTIMPL
+#
+#     def EnumElements(self, This, reserved1, reserved2, reserved3, ppenum):
+#         print('IStorage.EnumElements')
+#         return E_NOTIMPL
+#
+#     def DestroyElement(self, This, pwcsName):
+#         print('IStorage.DestroyElement')
+#         return E_NOTIMPL
+#
+#     def RenameElement(self, This, pwcsOldName, pwcsNewName):
+#         print('IStorage.RenameElement')
+#         return E_NOTIMPL
+#
+#     def SetElementTimes(self, This, pwcsName, pctime, patime, pmtime):
+#         print('IStorage.SetElementTimes')
+#         return E_NOTIMPL
+#
+#     def SetClass(self, This, clsid):
+#         print('IStorage.SetClass')
+#         return E_NOTIMPL
+#
+#     def SetStateBits(self, This, grfStateBits, grfMask):
+#         print('IStorage.SetStateBits')
+#         return E_NOTIMPL
+#
+#     def Stat(self, This, pstatstg, grfStatFlag):
+#         print('IStorage.Stat')
+#         return E_NOTIMPL
+#
 IStorage._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1121,6 +2145,53 @@ IStorage._functions_ = {
         "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(17, "Stat"),
     }
 
+# class IStreamImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IStream
+#
+#     def Read(self, This, pv, cb, pcbRead):
+#         print('IStream.Read')
+#         return E_NOTIMPL
+#
+#     def Write(self, This, pv, cb, pcbWritten):
+#         print('IStream.Write')
+#         return E_NOTIMPL
+#
+#     def Seek(self, This, dlibMove, dwOrigin, plibNewPosition):
+#         print('IStream.Seek')
+#         return E_NOTIMPL
+#
+#     def SetSize(self, This, libNewSize):
+#         print('IStream.SetSize')
+#         return E_NOTIMPL
+#
+#     def CopyTo(self, This, pstm, cb, pcbRead, pcbWritten):
+#         print('IStream.CopyTo')
+#         return E_NOTIMPL
+#
+#     def Commit(self, This, grfCommitFlags):
+#         print('IStream.Commit')
+#         return E_NOTIMPL
+#
+#     def Revert(self, This):
+#         print('IStream.Revert')
+#         return E_NOTIMPL
+#
+#     def LockRegion(self, This, libOffset, cb, dwLockType):
+#         print('IStream.LockRegion')
+#         return E_NOTIMPL
+#
+#     def UnlockRegion(self, This, libOffset, cb, dwLockType):
+#         print('IStream.UnlockRegion')
+#         return E_NOTIMPL
+#
+#     def Stat(self, This, pstatstg, grfStatFlag):
+#         print('IStream.Stat')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppstm):
+#         print('IStream.Clone')
+#         return E_NOTIMPL
+#
 IStream._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1152,6 +2223,17 @@ IStream._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IStream))(13, "Clone"),
     }
 
+# class ITypeCompImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITypeComp
+#
+#     def Bind(self, This, szName, lHashVal, wFlags, ppTInfo, pDescKind, pBindPtr):
+#         print('ITypeComp.Bind')
+#         return E_NOTIMPL
+#
+#     def BindType(self, This, szName, lHashVal, ppTInfo, ppTComp):
+#         print('ITypeComp.BindType')
+#         return E_NOTIMPL
+#
 ITypeComp._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:*PVOID
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1165,6 +2247,85 @@ ITypeComp._functions_ = {
         "BindType": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(ITypeComp))(4, "BindType"),
     }
 
+# class ITypeInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITypeInfo
+#
+#     def GetTypeAttr(self, This, ppTypeAttr):
+#         print('ITypeInfo.GetTypeAttr')
+#         return E_NOTIMPL
+#
+#     def GetTypeComp(self, This, ppTComp):
+#         print('ITypeInfo.GetTypeComp')
+#         return E_NOTIMPL
+#
+#     def GetFuncDesc(self, This, index, ppFuncDesc):
+#         print('ITypeInfo.GetFuncDesc')
+#         return E_NOTIMPL
+#
+#     def GetVarDesc(self, This, index, ppVarDesc):
+#         print('ITypeInfo.GetVarDesc')
+#         return E_NOTIMPL
+#
+#     def GetNames(self, This, memid, rgBstrNames, cMaxNames, pcNames):
+#         print('ITypeInfo.GetNames')
+#         return E_NOTIMPL
+#
+#     def GetRefTypeOfImplType(self, This, index, pRefType):
+#         print('ITypeInfo.GetRefTypeOfImplType')
+#         return E_NOTIMPL
+#
+#     def GetImplTypeFlags(self, This, index, pImplTypeFlags):
+#         print('ITypeInfo.GetImplTypeFlags')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, rgszNames, cNames, pMemId):
+#         print('ITypeInfo.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, pvInstance, memid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITypeInfo.Invoke')
+#         return E_NOTIMPL
+#
+#     def GetDocumentation(self, This, memid, pBstrName, pBstrDocString, pdwHelpContext, pBstrHelpFile):
+#         print('ITypeInfo.GetDocumentation')
+#         return E_NOTIMPL
+#
+#     def GetDllEntry(self, This, memid, invKind, pBstrDllName, pBstrName, pwOrdinal):
+#         print('ITypeInfo.GetDllEntry')
+#         return E_NOTIMPL
+#
+#     def GetRefTypeInfo(self, This, hRefType, ppTInfo):
+#         print('ITypeInfo.GetRefTypeInfo')
+#         return E_NOTIMPL
+#
+#     def AddressOfMember(self, This, memid, invKind, ppv):
+#         print('ITypeInfo.AddressOfMember')
+#         return E_NOTIMPL
+#
+#     def CreateInstance(self, This, pUnkOuter, riid, ppvObj):
+#         print('ITypeInfo.CreateInstance')
+#         return E_NOTIMPL
+#
+#     def GetMops(self, This, memid, pBstrMops):
+#         print('ITypeInfo.GetMops')
+#         return E_NOTIMPL
+#
+#     def GetContainingTypeLib(self, This, ppTLib, pIndex):
+#         print('ITypeInfo.GetContainingTypeLib')
+#         return E_NOTIMPL
+#
+#     def ReleaseTypeAttr(self, This, pTypeAttr):
+#         print('ITypeInfo.ReleaseTypeAttr')
+#         return E_NOTIMPL
+#
+#     def ReleaseFuncDesc(self, This, pFuncDesc):
+#         print('ITypeInfo.ReleaseFuncDesc')
+#         return E_NOTIMPL
+#
+#     def ReleaseVarDesc(self, This, pVarDesc):
+#         print('ITypeInfo.ReleaseVarDesc')
+#         return E_NOTIMPL
+#
 ITypeInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1212,6 +2373,49 @@ ITypeInfo._functions_ = {
         "ReleaseVarDesc": ctypes.WINFUNCTYPE(DWORD, POINTER(VARDESC))(21, "ReleaseVarDesc"),
     }
 
+# class ITypeLibImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITypeLib
+#
+#     def GetTypeInfoCount(self, This):
+#         print('ITypeLib.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, index, ppTInfo):
+#         print('ITypeLib.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfoType(self, This, index, pTKind):
+#         print('ITypeLib.GetTypeInfoType')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfoOfGuid(self, This, guid, ppTinfo):
+#         print('ITypeLib.GetTypeInfoOfGuid')
+#         return E_NOTIMPL
+#
+#     def GetLibAttr(self, This, ppTLibAttr):
+#         print('ITypeLib.GetLibAttr')
+#         return E_NOTIMPL
+#
+#     def GetTypeComp(self, This, ppTComp):
+#         print('ITypeLib.GetTypeComp')
+#         return E_NOTIMPL
+#
+#     def GetDocumentation(self, This, index, pBstrName, pBstrDocString, pdwHelpContext, pBstrHelpFile):
+#         print('ITypeLib.GetDocumentation')
+#         return E_NOTIMPL
+#
+#     def IsName(self, This, szNameBuf, lHashVal, pfName):
+#         print('ITypeLib.IsName')
+#         return E_NOTIMPL
+#
+#     def FindName(self, This, szNameBuf, lHashVal, ppTInfo, rgMemId, pcFound):
+#         print('ITypeLib.FindName')
+#         return E_NOTIMPL
+#
+#     def ReleaseTLibAttr(self, This, pTLibAttr):
+#         print('ITypeLib.ReleaseTLibAttr')
+#         return E_NOTIMPL
+#
 ITypeLib._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1241,15 +2445,21 @@ ITypeLib._functions_ = {
         "ReleaseTLibAttr": ctypes.WINFUNCTYPE(DWORD, POINTER(TLIBATTR))(12, "ReleaseTLibAttr"),
     }
 
-IUnknown._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-    }
-
+# class IBackgroundCopyCallbackImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyCallback
+#
+#     def JobTransferred(self, This, pJob):
+#         print('IBackgroundCopyCallback.JobTransferred')
+#         return E_NOTIMPL
+#
+#     def JobError(self, This, pJob, pError):
+#         print('IBackgroundCopyCallback.JobError')
+#         return E_NOTIMPL
+#
+#     def JobModification(self, This, pJob, dwReserved):
+#         print('IBackgroundCopyCallback.JobModification')
+#         return E_NOTIMPL
+#
 IBackgroundCopyCallback._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1265,6 +2475,29 @@ IBackgroundCopyCallback._functions_ = {
         "JobModification": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, DWORD)(5, "JobModification"),
     }
 
+# class IBackgroundCopyErrorImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyError
+#
+#     def GetError(self, This, pContext, pCode):
+#         print('IBackgroundCopyError.GetError')
+#         return E_NOTIMPL
+#
+#     def GetFile(self, This, pVal):
+#         print('IBackgroundCopyError.GetFile')
+#         return E_NOTIMPL
+#
+#     def GetErrorDescription(self, This, LanguageId, pErrorDescription):
+#         print('IBackgroundCopyError.GetErrorDescription')
+#         return E_NOTIMPL
+#
+#     def GetErrorContextDescription(self, This, LanguageId, pContextDescription):
+#         print('IBackgroundCopyError.GetErrorContextDescription')
+#         return E_NOTIMPL
+#
+#     def GetProtocol(self, This, pProtocol):
+#         print('IBackgroundCopyError.GetProtocol')
+#         return E_NOTIMPL
+#
 IBackgroundCopyError._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1284,6 +2517,21 @@ IBackgroundCopyError._functions_ = {
         "GetProtocol": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(7, "GetProtocol"),
     }
 
+# class IBackgroundCopyFileImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyFile
+#
+#     def GetRemoteName(self, This, pVal):
+#         print('IBackgroundCopyFile.GetRemoteName')
+#         return E_NOTIMPL
+#
+#     def GetLocalName(self, This, pVal):
+#         print('IBackgroundCopyFile.GetLocalName')
+#         return E_NOTIMPL
+#
+#     def GetProgress(self, This, pVal):
+#         print('IBackgroundCopyFile.GetProgress')
+#         return E_NOTIMPL
+#
 IBackgroundCopyFile._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1299,6 +2547,29 @@ IBackgroundCopyFile._functions_ = {
         "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
     }
 
+# class IBackgroundCopyFile2Implem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyFile2
+#
+#     def GetRemoteName(self, This, pVal):
+#         print('IBackgroundCopyFile2.GetRemoteName')
+#         return E_NOTIMPL
+#
+#     def GetLocalName(self, This, pVal):
+#         print('IBackgroundCopyFile2.GetLocalName')
+#         return E_NOTIMPL
+#
+#     def GetProgress(self, This, pVal):
+#         print('IBackgroundCopyFile2.GetProgress')
+#         return E_NOTIMPL
+#
+#     def GetFileRanges(self, This, RangeCount, Ranges):
+#         print('IBackgroundCopyFile2.GetFileRanges')
+#         return E_NOTIMPL
+#
+#     def SetRemoteName(self, This, Val):
+#         print('IBackgroundCopyFile2.SetRemoteName')
+#         return E_NOTIMPL
+#
 IBackgroundCopyFile2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1318,6 +2589,45 @@ IBackgroundCopyFile2._functions_ = {
         "SetRemoteName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetRemoteName"),
     }
 
+# class IBackgroundCopyFile3Implem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyFile3
+#
+#     def GetRemoteName(self, This, pVal):
+#         print('IBackgroundCopyFile3.GetRemoteName')
+#         return E_NOTIMPL
+#
+#     def GetLocalName(self, This, pVal):
+#         print('IBackgroundCopyFile3.GetLocalName')
+#         return E_NOTIMPL
+#
+#     def GetProgress(self, This, pVal):
+#         print('IBackgroundCopyFile3.GetProgress')
+#         return E_NOTIMPL
+#
+#     def GetFileRanges(self, This, RangeCount, Ranges):
+#         print('IBackgroundCopyFile3.GetFileRanges')
+#         return E_NOTIMPL
+#
+#     def SetRemoteName(self, This, Val):
+#         print('IBackgroundCopyFile3.SetRemoteName')
+#         return E_NOTIMPL
+#
+#     def GetTemporaryName(self, This, pFilename):
+#         print('IBackgroundCopyFile3.GetTemporaryName')
+#         return E_NOTIMPL
+#
+#     def SetValidationState(self, This, state):
+#         print('IBackgroundCopyFile3.SetValidationState')
+#         return E_NOTIMPL
+#
+#     def GetValidationState(self, This, pState):
+#         print('IBackgroundCopyFile3.GetValidationState')
+#         return E_NOTIMPL
+#
+#     def IsDownloadedFromPeer(self, This, pVal):
+#         print('IBackgroundCopyFile3.IsDownloadedFromPeer')
+#         return E_NOTIMPL
+#
 IBackgroundCopyFile3._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1345,6 +2655,137 @@ IBackgroundCopyFile3._functions_ = {
         "IsDownloadedFromPeer": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(11, "IsDownloadedFromPeer"),
     }
 
+# class IBackgroundCopyJobImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyJob
+#
+#     def AddFileSet(self, This, cFileCount, pFileSet):
+#         print('IBackgroundCopyJob.AddFileSet')
+#         return E_NOTIMPL
+#
+#     def AddFile(self, This, RemoteUrl, LocalName):
+#         print('IBackgroundCopyJob.AddFile')
+#         return E_NOTIMPL
+#
+#     def EnumFiles(self, This, pEnum):
+#         print('IBackgroundCopyJob.EnumFiles')
+#         return E_NOTIMPL
+#
+#     def Suspend(self, This):
+#         print('IBackgroundCopyJob.Suspend')
+#         return E_NOTIMPL
+#
+#     def Resume(self, This):
+#         print('IBackgroundCopyJob.Resume')
+#         return E_NOTIMPL
+#
+#     def Cancel(self, This):
+#         print('IBackgroundCopyJob.Cancel')
+#         return E_NOTIMPL
+#
+#     def Complete(self, This):
+#         print('IBackgroundCopyJob.Complete')
+#         return E_NOTIMPL
+#
+#     def GetId(self, This, pVal):
+#         print('IBackgroundCopyJob.GetId')
+#         return E_NOTIMPL
+#
+#     def GetType(self, This, pVal):
+#         print('IBackgroundCopyJob.GetType')
+#         return E_NOTIMPL
+#
+#     def GetProgress(self, This, pVal):
+#         print('IBackgroundCopyJob.GetProgress')
+#         return E_NOTIMPL
+#
+#     def GetTimes(self, This, pVal):
+#         print('IBackgroundCopyJob.GetTimes')
+#         return E_NOTIMPL
+#
+#     def GetState(self, This, pVal):
+#         print('IBackgroundCopyJob.GetState')
+#         return E_NOTIMPL
+#
+#     def GetError(self, This, ppError):
+#         print('IBackgroundCopyJob.GetError')
+#         return E_NOTIMPL
+#
+#     def GetOwner(self, This, pVal):
+#         print('IBackgroundCopyJob.GetOwner')
+#         return E_NOTIMPL
+#
+#     def SetDisplayName(self, This, Val):
+#         print('IBackgroundCopyJob.SetDisplayName')
+#         return E_NOTIMPL
+#
+#     def GetDisplayName(self, This, pVal):
+#         print('IBackgroundCopyJob.GetDisplayName')
+#         return E_NOTIMPL
+#
+#     def SetDescription(self, This, Val):
+#         print('IBackgroundCopyJob.SetDescription')
+#         return E_NOTIMPL
+#
+#     def GetDescription(self, This, pVal):
+#         print('IBackgroundCopyJob.GetDescription')
+#         return E_NOTIMPL
+#
+#     def SetPriority(self, This, Val):
+#         print('IBackgroundCopyJob.SetPriority')
+#         return E_NOTIMPL
+#
+#     def GetPriority(self, This, pVal):
+#         print('IBackgroundCopyJob.GetPriority')
+#         return E_NOTIMPL
+#
+#     def SetNotifyFlags(self, This, Val):
+#         print('IBackgroundCopyJob.SetNotifyFlags')
+#         return E_NOTIMPL
+#
+#     def GetNotifyFlags(self, This, pVal):
+#         print('IBackgroundCopyJob.GetNotifyFlags')
+#         return E_NOTIMPL
+#
+#     def SetNotifyInterface(self, This, Val):
+#         print('IBackgroundCopyJob.SetNotifyInterface')
+#         return E_NOTIMPL
+#
+#     def GetNotifyInterface(self, This, pVal):
+#         print('IBackgroundCopyJob.GetNotifyInterface')
+#         return E_NOTIMPL
+#
+#     def SetMinimumRetryDelay(self, This, Seconds):
+#         print('IBackgroundCopyJob.SetMinimumRetryDelay')
+#         return E_NOTIMPL
+#
+#     def GetMinimumRetryDelay(self, This, Seconds):
+#         print('IBackgroundCopyJob.GetMinimumRetryDelay')
+#         return E_NOTIMPL
+#
+#     def SetNoProgressTimeout(self, This, Seconds):
+#         print('IBackgroundCopyJob.SetNoProgressTimeout')
+#         return E_NOTIMPL
+#
+#     def GetNoProgressTimeout(self, This, Seconds):
+#         print('IBackgroundCopyJob.GetNoProgressTimeout')
+#         return E_NOTIMPL
+#
+#     def GetErrorCount(self, This, Errors):
+#         print('IBackgroundCopyJob.GetErrorCount')
+#         return E_NOTIMPL
+#
+#     def SetProxySettings(self, This, ProxyUsage, ProxyList, ProxyBypassList):
+#         print('IBackgroundCopyJob.SetProxySettings')
+#         return E_NOTIMPL
+#
+#     def GetProxySettings(self, This, pProxyUsage, pProxyList, pProxyBypassList):
+#         print('IBackgroundCopyJob.GetProxySettings')
+#         return E_NOTIMPL
+#
+#     def TakeOwnership(self, This):
+#         print('IBackgroundCopyJob.TakeOwnership')
+#         return E_NOTIMPL
+#
 IBackgroundCopyJob._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1418,6 +2859,169 @@ IBackgroundCopyJob._functions_ = {
         "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
     }
 
+# class IBackgroundCopyJob2Implem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyJob2
+#
+#     def AddFileSet(self, This, cFileCount, pFileSet):
+#         print('IBackgroundCopyJob2.AddFileSet')
+#         return E_NOTIMPL
+#
+#     def AddFile(self, This, RemoteUrl, LocalName):
+#         print('IBackgroundCopyJob2.AddFile')
+#         return E_NOTIMPL
+#
+#     def EnumFiles(self, This, pEnum):
+#         print('IBackgroundCopyJob2.EnumFiles')
+#         return E_NOTIMPL
+#
+#     def Suspend(self, This):
+#         print('IBackgroundCopyJob2.Suspend')
+#         return E_NOTIMPL
+#
+#     def Resume(self, This):
+#         print('IBackgroundCopyJob2.Resume')
+#         return E_NOTIMPL
+#
+#     def Cancel(self, This):
+#         print('IBackgroundCopyJob2.Cancel')
+#         return E_NOTIMPL
+#
+#     def Complete(self, This):
+#         print('IBackgroundCopyJob2.Complete')
+#         return E_NOTIMPL
+#
+#     def GetId(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetId')
+#         return E_NOTIMPL
+#
+#     def GetType(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetType')
+#         return E_NOTIMPL
+#
+#     def GetProgress(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetProgress')
+#         return E_NOTIMPL
+#
+#     def GetTimes(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetTimes')
+#         return E_NOTIMPL
+#
+#     def GetState(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetState')
+#         return E_NOTIMPL
+#
+#     def GetError(self, This, ppError):
+#         print('IBackgroundCopyJob2.GetError')
+#         return E_NOTIMPL
+#
+#     def GetOwner(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetOwner')
+#         return E_NOTIMPL
+#
+#     def SetDisplayName(self, This, Val):
+#         print('IBackgroundCopyJob2.SetDisplayName')
+#         return E_NOTIMPL
+#
+#     def GetDisplayName(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetDisplayName')
+#         return E_NOTIMPL
+#
+#     def SetDescription(self, This, Val):
+#         print('IBackgroundCopyJob2.SetDescription')
+#         return E_NOTIMPL
+#
+#     def GetDescription(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetDescription')
+#         return E_NOTIMPL
+#
+#     def SetPriority(self, This, Val):
+#         print('IBackgroundCopyJob2.SetPriority')
+#         return E_NOTIMPL
+#
+#     def GetPriority(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetPriority')
+#         return E_NOTIMPL
+#
+#     def SetNotifyFlags(self, This, Val):
+#         print('IBackgroundCopyJob2.SetNotifyFlags')
+#         return E_NOTIMPL
+#
+#     def GetNotifyFlags(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetNotifyFlags')
+#         return E_NOTIMPL
+#
+#     def SetNotifyInterface(self, This, Val):
+#         print('IBackgroundCopyJob2.SetNotifyInterface')
+#         return E_NOTIMPL
+#
+#     def GetNotifyInterface(self, This, pVal):
+#         print('IBackgroundCopyJob2.GetNotifyInterface')
+#         return E_NOTIMPL
+#
+#     def SetMinimumRetryDelay(self, This, Seconds):
+#         print('IBackgroundCopyJob2.SetMinimumRetryDelay')
+#         return E_NOTIMPL
+#
+#     def GetMinimumRetryDelay(self, This, Seconds):
+#         print('IBackgroundCopyJob2.GetMinimumRetryDelay')
+#         return E_NOTIMPL
+#
+#     def SetNoProgressTimeout(self, This, Seconds):
+#         print('IBackgroundCopyJob2.SetNoProgressTimeout')
+#         return E_NOTIMPL
+#
+#     def GetNoProgressTimeout(self, This, Seconds):
+#         print('IBackgroundCopyJob2.GetNoProgressTimeout')
+#         return E_NOTIMPL
+#
+#     def GetErrorCount(self, This, Errors):
+#         print('IBackgroundCopyJob2.GetErrorCount')
+#         return E_NOTIMPL
+#
+#     def SetProxySettings(self, This, ProxyUsage, ProxyList, ProxyBypassList):
+#         print('IBackgroundCopyJob2.SetProxySettings')
+#         return E_NOTIMPL
+#
+#     def GetProxySettings(self, This, pProxyUsage, pProxyList, pProxyBypassList):
+#         print('IBackgroundCopyJob2.GetProxySettings')
+#         return E_NOTIMPL
+#
+#     def TakeOwnership(self, This):
+#         print('IBackgroundCopyJob2.TakeOwnership')
+#         return E_NOTIMPL
+#
+#     def SetNotifyCmdLine(self, This, Program, Parameters):
+#         print('IBackgroundCopyJob2.SetNotifyCmdLine')
+#         return E_NOTIMPL
+#
+#     def GetNotifyCmdLine(self, This, pProgram, pParameters):
+#         print('IBackgroundCopyJob2.GetNotifyCmdLine')
+#         return E_NOTIMPL
+#
+#     def GetReplyProgress(self, This, pProgress):
+#         print('IBackgroundCopyJob2.GetReplyProgress')
+#         return E_NOTIMPL
+#
+#     def GetReplyData(self, This, ppBuffer, pLength):
+#         print('IBackgroundCopyJob2.GetReplyData')
+#         return E_NOTIMPL
+#
+#     def SetReplyFileName(self, This, ReplyFileName):
+#         print('IBackgroundCopyJob2.SetReplyFileName')
+#         return E_NOTIMPL
+#
+#     def GetReplyFileName(self, This, pReplyFileName):
+#         print('IBackgroundCopyJob2.GetReplyFileName')
+#         return E_NOTIMPL
+#
+#     def SetCredentials(self, This, credentials):
+#         print('IBackgroundCopyJob2.SetCredentials')
+#         return E_NOTIMPL
+#
+#     def RemoveCredentials(self, This, Target, Scheme):
+#         print('IBackgroundCopyJob2.RemoveCredentials')
+#         return E_NOTIMPL
+#
 IBackgroundCopyJob2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1507,6 +3111,25 @@ IBackgroundCopyJob2._functions_ = {
         "RemoveCredentials": ctypes.WINFUNCTYPE(HRESULT, BG_AUTH_TARGET, BG_AUTH_SCHEME)(42, "RemoveCredentials"),
     }
 
+# class IBackgroundCopyManagerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBackgroundCopyManager
+#
+#     def CreateJob(self, This, DisplayName, Type, pJobId, ppJob):
+#         print('IBackgroundCopyManager.CreateJob')
+#         return E_NOTIMPL
+#
+#     def GetJob(self, This, jobID, ppJob):
+#         print('IBackgroundCopyManager.GetJob')
+#         return E_NOTIMPL
+#
+#     def EnumJobs(self, This, dwFlags, ppEnum):
+#         print('IBackgroundCopyManager.EnumJobs')
+#         return E_NOTIMPL
+#
+#     def GetErrorDescription(self, This, hResult, LanguageId, pErrorDescription):
+#         print('IBackgroundCopyManager.GetErrorDescription')
+#         return E_NOTIMPL
+#
 IBackgroundCopyManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1524,6 +3147,29 @@ IBackgroundCopyManager._functions_ = {
         "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorDescription"),
     }
 
+# class IEnumBackgroundCopyFilesImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumBackgroundCopyFiles
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumBackgroundCopyFiles.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumBackgroundCopyFiles.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumBackgroundCopyFiles.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumBackgroundCopyFiles.Clone')
+#         return E_NOTIMPL
+#
+#     def GetCount(self, This, puCount):
+#         print('IEnumBackgroundCopyFiles.GetCount')
+#         return E_NOTIMPL
+#
 IEnumBackgroundCopyFiles._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1543,6 +3189,29 @@ IEnumBackgroundCopyFiles._functions_ = {
         "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
     }
 
+# class IEnumBackgroundCopyJobsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumBackgroundCopyJobs
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumBackgroundCopyJobs.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumBackgroundCopyJobs.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumBackgroundCopyJobs.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumBackgroundCopyJobs.Clone')
+#         return E_NOTIMPL
+#
+#     def GetCount(self, This, puCount):
+#         print('IEnumBackgroundCopyJobs.GetCount')
+#         return E_NOTIMPL
+#
 IEnumBackgroundCopyJobs._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1562,6 +3231,49 @@ IEnumBackgroundCopyJobs._functions_ = {
         "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
     }
 
+# class IActivationPropertiesImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IActivationProperties
+#
+#     def GetUnmarshalClass(self, This, riid, pv, dwDestContext, pvDestContext, mshlflags, pCid):
+#         print('IActivationProperties.GetUnmarshalClass')
+#         return E_NOTIMPL
+#
+#     def GetMarshalSizeMax(self, This, riid, pv, dwDestContext, pvDestContext, mshlflags, pSize):
+#         print('IActivationProperties.GetMarshalSizeMax')
+#         return E_NOTIMPL
+#
+#     def MarshalInterface(self, This, pStm, riid, pv, dwDestContext, pvDestContext, mshlflags):
+#         print('IActivationProperties.MarshalInterface')
+#         return E_NOTIMPL
+#
+#     def UnmarshalInterface(self, This, pStm, riid, ppv):
+#         print('IActivationProperties.UnmarshalInterface')
+#         return E_NOTIMPL
+#
+#     def ReleaseMarshalData(self, This, pStm):
+#         print('IActivationProperties.ReleaseMarshalData')
+#         return E_NOTIMPL
+#
+#     def DisconnectObject(self, This, dwReserved):
+#         print('IActivationProperties.DisconnectObject')
+#         return E_NOTIMPL
+#
+#     def SetDestCtx(self, This, dwDestCtx):
+#         print('IActivationProperties.SetDestCtx')
+#         return E_NOTIMPL
+#
+#     def SetMarshalFlags(self, This, dwMarshalFlags):
+#         print('IActivationProperties.SetMarshalFlags')
+#         return E_NOTIMPL
+#
+#     def SetLocalBlob(self, This, blob):
+#         print('IActivationProperties.SetLocalBlob')
+#         return E_NOTIMPL
+#
+#     def GetLocalBlob(self, This, blob):
+#         print('IActivationProperties.GetLocalBlob')
+#         return E_NOTIMPL
+#
 IActivationProperties._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1591,6 +3303,25 @@ IActivationProperties._functions_ = {
         "GetLocalBlob": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(12, "GetLocalBlob"),
     }
 
+# class IActivationPropertiesOutImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IActivationPropertiesOut
+#
+#     def GetActivationID(self, This, pActivationID):
+#         print('IActivationPropertiesOut.GetActivationID')
+#         return E_NOTIMPL
+#
+#     def GetObjectInterface(self, This, riid, actvflags, ppv):
+#         print('IActivationPropertiesOut.GetObjectInterface')
+#         return E_NOTIMPL
+#
+#     def GetObjectInterfaces(self, This, cIfs, actvflags, multiQi):
+#         print('IActivationPropertiesOut.GetObjectInterfaces')
+#         return E_NOTIMPL
+#
+#     def RemoveRequestedIIDs(self, This, cIfs, rgIID):
+#         print('IActivationPropertiesOut.RemoveRequestedIIDs')
+#         return E_NOTIMPL
+#
 IActivationPropertiesOut._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1608,6 +3339,49 @@ IActivationPropertiesOut._functions_ = {
         "RemoveRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID))(6, "RemoveRequestedIIDs"),
     }
 
+# class IActivationPropertiesInImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IActivationPropertiesIn
+#
+#     def GetActivationID(self, This, pActivationID):
+#         print('IActivationPropertiesIn.GetActivationID')
+#         return E_NOTIMPL
+#
+#     def GetClassInfo(self, This, riid, ppv):
+#         print('IActivationPropertiesIn.GetClassInfo')
+#         return E_NOTIMPL
+#
+#     def GetClsctx(self, This, pclsctx):
+#         print('IActivationPropertiesIn.GetClsctx')
+#         return E_NOTIMPL
+#
+#     def GetActivationFlags(self, This, pactvflags):
+#         print('IActivationPropertiesIn.GetActivationFlags')
+#         return E_NOTIMPL
+#
+#     def AddRequestedIIDs(self, This, cIfs, rgIID):
+#         print('IActivationPropertiesIn.AddRequestedIIDs')
+#         return E_NOTIMPL
+#
+#     def GetRequestedIIDs(self, This, pulCount, prgIID):
+#         print('IActivationPropertiesIn.GetRequestedIIDs')
+#         return E_NOTIMPL
+#
+#     def DelegateGetClassObject(self, This, pActPropsOut):
+#         print('IActivationPropertiesIn.DelegateGetClassObject')
+#         return E_NOTIMPL
+#
+#     def DelegateCreateInstance(self, This, pUnkOuter, pActPropsOut):
+#         print('IActivationPropertiesIn.DelegateCreateInstance')
+#         return E_NOTIMPL
+#
+#     def DelegateCIAndGetCF(self, This, pUnkOuter, pActPropsOut, ppCf):
+#         print('IActivationPropertiesIn.DelegateCIAndGetCF')
+#         return E_NOTIMPL
+#
+#     def GetReturnActivationProperties(self, This, pUnk, ppActOut):
+#         print('IActivationPropertiesIn.GetReturnActivationProperties')
+#         return E_NOTIMPL
+#
 IActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1637,6 +3411,21 @@ IActivationPropertiesIn._functions_ = {
         "GetReturnActivationProperties": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(12, "GetReturnActivationProperties"),
     }
 
+# class IActivationStageInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IActivationStageInfo
+#
+#     def SetStageAndIndex(self, This, stage, index):
+#         print('IActivationStageInfo.SetStageAndIndex')
+#         return E_NOTIMPL
+#
+#     def GetStage(self, This, pstage):
+#         print('IActivationStageInfo.GetStage')
+#         return E_NOTIMPL
+#
+#     def GetIndex(self, This, pindex):
+#         print('IActivationStageInfo.GetIndex')
+#         return E_NOTIMPL
+#
 IActivationStageInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1652,6 +3441,37 @@ IActivationStageInfo._functions_ = {
         "GetIndex": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(5, "GetIndex"),
     }
 
+# class IClassClassicInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IClassClassicInfo
+#
+#     def GetThreadingModel(self, This, pthreadmodel):
+#         print('IClassClassicInfo.GetThreadingModel')
+#         return E_NOTIMPL
+#
+#     def GetModulePath(self, This, clsctx, pwszDllName):
+#         print('IClassClassicInfo.GetModulePath')
+#         return E_NOTIMPL
+#
+#     def GetImplementedClsid(self, This, ppguidClsid):
+#         print('IClassClassicInfo.GetImplementedClsid')
+#         return E_NOTIMPL
+#
+#     def GetProcess(self, This, riid, ppv):
+#         print('IClassClassicInfo.GetProcess')
+#         return E_NOTIMPL
+#
+#     def GetRemoteServerName(self, This, pwszServerName):
+#         print('IClassClassicInfo.GetRemoteServerName')
+#         return E_NOTIMPL
+#
+#     def GetLocalServerType(self, This, pType):
+#         print('IClassClassicInfo.GetLocalServerType')
+#         return E_NOTIMPL
+#
+#     def GetSurrogateCommandLine(self, This, pwszSurrogateCommandLine):
+#         print('IClassClassicInfo.GetSurrogateCommandLine')
+#         return E_NOTIMPL
+#
 IClassClassicInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1675,6 +3495,65 @@ IClassClassicInfo._functions_ = {
         "GetSurrogateCommandLine": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR)))(9, "GetSurrogateCommandLine"),
     }
 
+# class IComClassInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IComClassInfo
+#
+#     def GetConfiguredClsid(self, This, ppguidClsid):
+#         print('IComClassInfo.GetConfiguredClsid')
+#         return E_NOTIMPL
+#
+#     def GetProgId(self, This, pwszProgid):
+#         print('IComClassInfo.GetProgId')
+#         return E_NOTIMPL
+#
+#     def GetClassName(self, This, pwszClassName):
+#         print('IComClassInfo.GetClassName')
+#         return E_NOTIMPL
+#
+#     def GetApplication(self, This, riid, ppv):
+#         print('IComClassInfo.GetApplication')
+#         return E_NOTIMPL
+#
+#     def GetClassContext(self, This, clsctxFilter, pclsctx):
+#         print('IComClassInfo.GetClassContext')
+#         return E_NOTIMPL
+#
+#     def GetCustomActivatorCount(self, This, activationStage, pulCount):
+#         print('IComClassInfo.GetCustomActivatorCount')
+#         return E_NOTIMPL
+#
+#     def GetCustomActivatorClsids(self, This, activationStage, prgguidClsid):
+#         print('IComClassInfo.GetCustomActivatorClsids')
+#         return E_NOTIMPL
+#
+#     def GetCustomActivators(self, This, activationStage, prgpActivator):
+#         print('IComClassInfo.GetCustomActivators')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, riid, ppv):
+#         print('IComClassInfo.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def IsComPlusConfiguredClass(self, This, pfComPlusConfiguredClass):
+#         print('IComClassInfo.IsComPlusConfiguredClass')
+#         return E_NOTIMPL
+#
+#     def MustRunInClientContext(self, This, pbMustRunInClientContext):
+#         print('IComClassInfo.MustRunInClientContext')
+#         return E_NOTIMPL
+#
+#     def GetVersionNumber(self, This, pdwVersionMS, pdwVersionLS):
+#         print('IComClassInfo.GetVersionNumber')
+#         return E_NOTIMPL
+#
+#     def Lock(self, This):
+#         print('IComClassInfo.Lock')
+#         return E_NOTIMPL
+#
+#     def Unlock(self, This):
+#         print('IComClassInfo.Unlock')
+#         return E_NOTIMPL
+#
 IComClassInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1712,6 +3591,25 @@ IComClassInfo._functions_ = {
         "Unlock": ctypes.WINFUNCTYPE(HRESULT)(16, "Unlock"),
     }
 
+# class IContextImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IContext
+#
+#     def SetProperty(self, This, rpolicyId, flags, pUnk):
+#         print('IContext.SetProperty')
+#         return E_NOTIMPL
+#
+#     def RemoveProperty(self, This, rPolicyId):
+#         print('IContext.RemoveProperty')
+#         return E_NOTIMPL
+#
+#     def GetProperty(self, This, rGuid, pFlags, ppUnk):
+#         print('IContext.GetProperty')
+#         return E_NOTIMPL
+#
+#     def EnumContextProps(self, This, ppEnumContextProps):
+#         print('IContext.EnumContextProps')
+#         return E_NOTIMPL
+#
 IContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1729,6 +3627,29 @@ IContext._functions_ = {
         "EnumContextProps": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps))(6, "EnumContextProps"),
     }
 
+# class IEnumContextPropsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumContextProps
+#
+#     def Next(self, This, celt, pContextProperties, pceltFetched):
+#         print('IEnumContextProps.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumContextProps.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumContextProps.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppEnumContextProps):
+#         print('IEnumContextProps.Clone')
+#         return E_NOTIMPL
+#
+#     def Count(self, This, pcelt):
+#         print('IEnumContextProps.Count')
+#         return E_NOTIMPL
+#
 IEnumContextProps._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1748,6 +3669,25 @@ IEnumContextProps._functions_ = {
         "Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "Count"),
     }
 
+# class IEnumSTATSTGImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumSTATSTG
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumSTATSTG.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumSTATSTG.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumSTATSTG.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumSTATSTG.Clone')
+#         return E_NOTIMPL
+#
 IEnumSTATSTG._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1765,6 +3705,33 @@ IEnumSTATSTG._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumSTATSTG))(6, "Clone"),
     }
 
+# class IInitActivationPropertiesInImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IInitActivationPropertiesIn
+#
+#     def SetClsctx(self, This, clsctx):
+#         print('IInitActivationPropertiesIn.SetClsctx')
+#         return E_NOTIMPL
+#
+#     def SetActivationFlags(self, This, actvflags):
+#         print('IInitActivationPropertiesIn.SetActivationFlags')
+#         return E_NOTIMPL
+#
+#     def SetClassInfo(self, This, pUnkClassInfo):
+#         print('IInitActivationPropertiesIn.SetClassInfo')
+#         return E_NOTIMPL
+#
+#     def SetContextInfo(self, This, pClientContext, pPrototypeContext):
+#         print('IInitActivationPropertiesIn.SetContextInfo')
+#         return E_NOTIMPL
+#
+#     def SetConstructFromStorage(self, This, pStorage):
+#         print('IInitActivationPropertiesIn.SetConstructFromStorage')
+#         return E_NOTIMPL
+#
+#     def SetConstructFromFile(self, This, wszFileName, dwMode):
+#         print('IInitActivationPropertiesIn.SetConstructFromFile')
+#         return E_NOTIMPL
+#
 IInitActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1786,6 +3753,29 @@ IInitActivationPropertiesIn._functions_ = {
         "SetConstructFromFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), DWORD)(8, "SetConstructFromFile"),
     }
 
+# class IOpaqueDataInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IOpaqueDataInfo
+#
+#     def AddOpaqueData(self, This, pData):
+#         print('IOpaqueDataInfo.AddOpaqueData')
+#         return E_NOTIMPL
+#
+#     def GetOpaqueData(self, This, guid, pData):
+#         print('IOpaqueDataInfo.GetOpaqueData')
+#         return E_NOTIMPL
+#
+#     def DeleteOpaqueData(self, This, guid):
+#         print('IOpaqueDataInfo.DeleteOpaqueData')
+#         return E_NOTIMPL
+#
+#     def GetOpaqueDataCount(self, This, pulCount):
+#         print('IOpaqueDataInfo.GetOpaqueDataCount')
+#         return E_NOTIMPL
+#
+#     def GetAllOpaqueData(self, This, prgData):
+#         print('IOpaqueDataInfo.GetAllOpaqueData')
+#         return E_NOTIMPL
+#
 IOpaqueDataInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1805,6 +3795,69 @@ IOpaqueDataInfo._functions_ = {
         "GetAllOpaqueData": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(OpaqueData)))(7, "GetAllOpaqueData"),
     }
 
+# class IPrivActivationPropertiesInImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPrivActivationPropertiesIn
+#
+#     def GetActivationID(self, This, pActivationID):
+#         print('IPrivActivationPropertiesIn.GetActivationID')
+#         return E_NOTIMPL
+#
+#     def GetClassInfo(self, This, riid, ppv):
+#         print('IPrivActivationPropertiesIn.GetClassInfo')
+#         return E_NOTIMPL
+#
+#     def GetClsctx(self, This, pclsctx):
+#         print('IPrivActivationPropertiesIn.GetClsctx')
+#         return E_NOTIMPL
+#
+#     def GetActivationFlags(self, This, pactvflags):
+#         print('IPrivActivationPropertiesIn.GetActivationFlags')
+#         return E_NOTIMPL
+#
+#     def AddRequestedIIDs(self, This, cIfs, rgIID):
+#         print('IPrivActivationPropertiesIn.AddRequestedIIDs')
+#         return E_NOTIMPL
+#
+#     def GetRequestedIIDs(self, This, pulCount, prgIID):
+#         print('IPrivActivationPropertiesIn.GetRequestedIIDs')
+#         return E_NOTIMPL
+#
+#     def DelegateGetClassObject(self, This, pActPropsOut):
+#         print('IPrivActivationPropertiesIn.DelegateGetClassObject')
+#         return E_NOTIMPL
+#
+#     def DelegateCreateInstance(self, This, pUnkOuter, pActPropsOut):
+#         print('IPrivActivationPropertiesIn.DelegateCreateInstance')
+#         return E_NOTIMPL
+#
+#     def DelegateCIAndGetCF(self, This, pUnkOuter, pActPropsOut, ppCf):
+#         print('IPrivActivationPropertiesIn.DelegateCIAndGetCF')
+#         return E_NOTIMPL
+#
+#     def GetReturnActivationProperties(self, This, pUnk, ppActOut):
+#         print('IPrivActivationPropertiesIn.GetReturnActivationProperties')
+#         return E_NOTIMPL
+#
+#     def PrivGetReturnActivationProperties(self, This, ppActOut):
+#         print('IPrivActivationPropertiesIn.PrivGetReturnActivationProperties')
+#         return E_NOTIMPL
+#
+#     def GetCOMVersion(self, This, pVersion):
+#         print('IPrivActivationPropertiesIn.GetCOMVersion')
+#         return E_NOTIMPL
+#
+#     def GetClsid(self, This, pClsid):
+#         print('IPrivActivationPropertiesIn.GetClsid')
+#         return E_NOTIMPL
+#
+#     def GetClientToken(self, This, pHandle):
+#         print('IPrivActivationPropertiesIn.GetClientToken')
+#         return E_NOTIMPL
+#
+#     def GetDestCtx(self, This, pdwDestCtx):
+#         print('IPrivActivationPropertiesIn.GetDestCtx')
+#         return E_NOTIMPL
+#
 IPrivActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1844,6 +3897,37 @@ IPrivActivationPropertiesIn._functions_ = {
         "GetDestCtx": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(17, "GetDestCtx"),
     }
 
+# class IPrivActivationPropertiesOutImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPrivActivationPropertiesOut
+#
+#     def GetActivationID(self, This, pActivationID):
+#         print('IPrivActivationPropertiesOut.GetActivationID')
+#         return E_NOTIMPL
+#
+#     def GetObjectInterface(self, This, riid, actvflags, ppv):
+#         print('IPrivActivationPropertiesOut.GetObjectInterface')
+#         return E_NOTIMPL
+#
+#     def GetObjectInterfaces(self, This, cIfs, actvflags, multiQi):
+#         print('IPrivActivationPropertiesOut.GetObjectInterfaces')
+#         return E_NOTIMPL
+#
+#     def RemoveRequestedIIDs(self, This, cIfs, rgIID):
+#         print('IPrivActivationPropertiesOut.RemoveRequestedIIDs')
+#         return E_NOTIMPL
+#
+#     def SetObjectInterfaces(self, This, cIfs, pIID, pUnk):
+#         print('IPrivActivationPropertiesOut.SetObjectInterfaces')
+#         return E_NOTIMPL
+#
+#     def SetMarshalledResults(self, This, cIfs, pIID, pHr, pIntfData):
+#         print('IPrivActivationPropertiesOut.SetMarshalledResults')
+#         return E_NOTIMPL
+#
+#     def GetMarshalledResults(self, This, pcIfs, pIID, pHr, pIntfData):
+#         print('IPrivActivationPropertiesOut.GetMarshalledResults')
+#         return E_NOTIMPL
+#
 IPrivActivationPropertiesOut._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1867,6 +3951,25 @@ IPrivActivationPropertiesOut._functions_ = {
         "GetMarshalledResults": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(IID)), POINTER(POINTER(HRESULT)), POINTER(POINTER(POINTER(MInterfacePointer))))(9, "GetMarshalledResults"),
     }
 
+# class IScmReplyInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IScmReplyInfo
+#
+#     def SetResolverInfo(self, This, pResolverInfo):
+#         print('IScmReplyInfo.SetResolverInfo')
+#         return E_NOTIMPL
+#
+#     def GetResolverInfo(self, This, ppResolverInfo):
+#         print('IScmReplyInfo.GetResolverInfo')
+#         return E_NOTIMPL
+#
+#     def SetRemoteReplyInfo(self, This, pRemoteReply):
+#         print('IScmReplyInfo.SetRemoteReplyInfo')
+#         return E_NOTIMPL
+#
+#     def GetRemoteReplyInfo(self, This, ppRemoteReply):
+#         print('IScmReplyInfo.GetRemoteReplyInfo')
+#         return E_NOTIMPL
+#
 IScmReplyInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1884,6 +3987,25 @@ IScmReplyInfo._functions_ = {
         "GetRemoteReplyInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REPLY_SCM_INFO)))(6, "GetRemoteReplyInfo"),
     }
 
+# class IScmRequestInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IScmRequestInfo
+#
+#     def SetScmInfo(self, This, pScmInfo):
+#         print('IScmRequestInfo.SetScmInfo')
+#         return E_NOTIMPL
+#
+#     def GetScmInfo(self, This, ppScmInfo):
+#         print('IScmRequestInfo.GetScmInfo')
+#         return E_NOTIMPL
+#
+#     def SetRemoteRequestInfo(self, This, pRemoteReq):
+#         print('IScmRequestInfo.SetRemoteRequestInfo')
+#         return E_NOTIMPL
+#
+#     def GetRemoteRequestInfo(self, This, ppRemoteReq):
+#         print('IScmRequestInfo.GetRemoteRequestInfo')
+#         return E_NOTIMPL
+#
 IScmRequestInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1901,6 +4023,29 @@ IScmRequestInfo._functions_ = {
         "GetRemoteRequestInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REQUEST_SCM_INFO)))(6, "GetRemoteRequestInfo"),
     }
 
+# class IStandardActivatorImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IStandardActivator
+#
+#     def StandardGetClassObject(self, This, rclsid, dwClsCtx, pServerInfo, riid, ppv):
+#         print('IStandardActivator.StandardGetClassObject')
+#         return E_NOTIMPL
+#
+#     def StandardCreateInstance(self, This, Clsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResults):
+#         print('IStandardActivator.StandardCreateInstance')
+#         return E_NOTIMPL
+#
+#     def StandardGetInstanceFromFile(self, This, pServerInfo, pclsidOverride, punkOuter, dwClsCtx, grfMode, pwszName, dwCount, pResults):
+#         print('IStandardActivator.StandardGetInstanceFromFile')
+#         return E_NOTIMPL
+#
+#     def StandardGetInstanceFromIStorage(self, This, pServerInfo, pclsidOverride, punkOuter, dwClsCtx, pstg, dwCount, pResults):
+#         print('IStandardActivator.StandardGetInstanceFromIStorage')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IStandardActivator.Reset')
+#         return E_NOTIMPL
+#
 IStandardActivator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1920,6 +4065,17 @@ IStandardActivator._functions_ = {
         "Reset": ctypes.WINFUNCTYPE(HRESULT)(7, "Reset"),
     }
 
+# class ISystemActivatorImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ISystemActivator
+#
+#     def GetClassObject(self, This, pActProperties, ppActProperties):
+#         print('ISystemActivator.GetClassObject')
+#         return E_NOTIMPL
+#
+#     def CreateInstance(self, This, pUnkOuter, pActProperties, ppActProperties):
+#         print('ISystemActivator.CreateInstance')
+#         return E_NOTIMPL
+#
 ISystemActivator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1933,6 +4089,49 @@ ISystemActivator._functions_ = {
         "CreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, IActivationPropertiesIn, POINTER(IActivationPropertiesOut))(4, "CreateInstance"),
     }
 
+# class IBindCtxImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IBindCtx
+#
+#     def RegisterObjectBound(self, This, punk):
+#         print('IBindCtx.RegisterObjectBound')
+#         return E_NOTIMPL
+#
+#     def RevokeObjectBound(self, This, punk):
+#         print('IBindCtx.RevokeObjectBound')
+#         return E_NOTIMPL
+#
+#     def ReleaseBoundObjects(self, This):
+#         print('IBindCtx.ReleaseBoundObjects')
+#         return E_NOTIMPL
+#
+#     def SetBindOptions(self, This, pbindopts):
+#         print('IBindCtx.SetBindOptions')
+#         return E_NOTIMPL
+#
+#     def GetBindOptions(self, This, pbindopts):
+#         print('IBindCtx.GetBindOptions')
+#         return E_NOTIMPL
+#
+#     def GetRunningObjectTable(self, This, pprot):
+#         print('IBindCtx.GetRunningObjectTable')
+#         return E_NOTIMPL
+#
+#     def RegisterObjectParam(self, This, pszKey, punk):
+#         print('IBindCtx.RegisterObjectParam')
+#         return E_NOTIMPL
+#
+#     def GetObjectParam(self, This, pszKey, ppunk):
+#         print('IBindCtx.GetObjectParam')
+#         return E_NOTIMPL
+#
+#     def EnumObjectParam(self, This, ppenum):
+#         print('IBindCtx.EnumObjectParam')
+#         return E_NOTIMPL
+#
+#     def RevokeObjectParam(self, This, pszKey):
+#         print('IBindCtx.RevokeObjectParam')
+#         return E_NOTIMPL
+#
 IBindCtx._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1962,6 +4161,25 @@ IBindCtx._functions_ = {
         "RevokeObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR)(12, "RevokeObjectParam"),
     }
 
+# class IEnumExplorerCommandImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumExplorerCommand
+#
+#     def Next(self, This, celt, pUICommand, pceltFetched):
+#         print('IEnumExplorerCommand.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumExplorerCommand.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumExplorerCommand.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumExplorerCommand.Clone')
+#         return E_NOTIMPL
+#
 IEnumExplorerCommand._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1979,6 +4197,25 @@ IEnumExplorerCommand._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(6, "Clone"),
     }
 
+# class IEnumMonikerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumMoniker
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumMoniker.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumMoniker.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumMoniker.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumMoniker.Clone')
+#         return E_NOTIMPL
+#
 IEnumMoniker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -1996,6 +4233,25 @@ IEnumMoniker._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(6, "Clone"),
     }
 
+# class IEnumShellItemsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumShellItems
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumShellItems.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumShellItems.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumShellItems.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumShellItems.Clone')
+#         return E_NOTIMPL
+#
 IEnumShellItems._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2013,6 +4269,25 @@ IEnumShellItems._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(6, "Clone"),
     }
 
+# class IEnumStringImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumString
+#
+#     def Next(self, This, celt, rgelt, pceltFetched):
+#         print('IEnumString.Next')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, celt):
+#         print('IEnumString.Skip')
+#         return E_NOTIMPL
+#
+#     def Reset(self, This):
+#         print('IEnumString.Reset')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppenum):
+#         print('IEnumString.Clone')
+#         return E_NOTIMPL
+#
 IEnumString._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2030,6 +4305,41 @@ IEnumString._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString))(6, "Clone"),
     }
 
+# class IExplorerCommandImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IExplorerCommand
+#
+#     def GetTitle(self, This, psiItemArray, ppszName):
+#         print('IExplorerCommand.GetTitle')
+#         return E_NOTIMPL
+#
+#     def GetIcon(self, This, psiItemArray, ppszIcon):
+#         print('IExplorerCommand.GetIcon')
+#         return E_NOTIMPL
+#
+#     def GetToolTip(self, This, psiItemArray, ppszInfotip):
+#         print('IExplorerCommand.GetToolTip')
+#         return E_NOTIMPL
+#
+#     def GetCanonicalName(self, This, pguidCommandName):
+#         print('IExplorerCommand.GetCanonicalName')
+#         return E_NOTIMPL
+#
+#     def GetState(self, This, psiItemArray, fOkToBeSlow, pCmdState):
+#         print('IExplorerCommand.GetState')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, psiItemArray, pbc):
+#         print('IExplorerCommand.Invoke')
+#         return E_NOTIMPL
+#
+#     def GetFlags(self, This, pFlags):
+#         print('IExplorerCommand.GetFlags')
+#         return E_NOTIMPL
+#
+#     def EnumSubCommands(self, This, ppEnum):
+#         print('IExplorerCommand.EnumSubCommands')
+#         return E_NOTIMPL
+#
 IExplorerCommand._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2055,6 +4365,37 @@ IExplorerCommand._functions_ = {
         "EnumSubCommands": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(10, "EnumSubCommands"),
     }
 
+# class IRunningObjectTableImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRunningObjectTable
+#
+#     def Register(self, This, grfFlags, punkObject, pmkObjectName, pdwRegister):
+#         print('IRunningObjectTable.Register')
+#         return E_NOTIMPL
+#
+#     def Revoke(self, This, dwRegister):
+#         print('IRunningObjectTable.Revoke')
+#         return E_NOTIMPL
+#
+#     def IsRunning(self, This, pmkObjectName):
+#         print('IRunningObjectTable.IsRunning')
+#         return E_NOTIMPL
+#
+#     def GetObject(self, This, pmkObjectName, ppunkObject):
+#         print('IRunningObjectTable.GetObject')
+#         return E_NOTIMPL
+#
+#     def NoteChangeTime(self, This, dwRegister, pfiletime):
+#         print('IRunningObjectTable.NoteChangeTime')
+#         return E_NOTIMPL
+#
+#     def GetTimeOfLastChange(self, This, pmkObjectName, pfiletime):
+#         print('IRunningObjectTable.GetTimeOfLastChange')
+#         return E_NOTIMPL
+#
+#     def EnumRunning(self, This, ppenumMoniker):
+#         print('IRunningObjectTable.EnumRunning')
+#         return E_NOTIMPL
+#
 IRunningObjectTable._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2078,6 +4419,29 @@ IRunningObjectTable._functions_ = {
         "EnumRunning": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(9, "EnumRunning"),
     }
 
+# class IShellItemImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IShellItem
+#
+#     def BindToHandler(self, This, pbc, bhid, riid, ppv):
+#         print('IShellItem.BindToHandler')
+#         return E_NOTIMPL
+#
+#     def GetParent(self, This, ppsi):
+#         print('IShellItem.GetParent')
+#         return E_NOTIMPL
+#
+#     def GetDisplayName(self, This, sigdnName, ppszName):
+#         print('IShellItem.GetDisplayName')
+#         return E_NOTIMPL
+#
+#     def GetAttributes(self, This, sfgaoMask, psfgaoAttribs):
+#         print('IShellItem.GetAttributes')
+#         return E_NOTIMPL
+#
+#     def Compare(self, This, psi, hint, piOrder):
+#         print('IShellItem.Compare')
+#         return E_NOTIMPL
+#
 IShellItem._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2097,6 +4461,37 @@ IShellItem._functions_ = {
         "Compare": ctypes.WINFUNCTYPE(HRESULT, IShellItem, SICHINTF, POINTER(INT))(7, "Compare"),
     }
 
+# class IShellItemArrayImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IShellItemArray
+#
+#     def BindToHandler(self, This, pbc, bhid, riid, ppvOut):
+#         print('IShellItemArray.BindToHandler')
+#         return E_NOTIMPL
+#
+#     def GetPropertyStore(self, This, flags, riid, ppv):
+#         print('IShellItemArray.GetPropertyStore')
+#         return E_NOTIMPL
+#
+#     def GetPropertyDescriptionList(self, This, keyType, riid, ppv):
+#         print('IShellItemArray.GetPropertyDescriptionList')
+#         return E_NOTIMPL
+#
+#     def GetAttributes(self, This, AttribFlags, sfgaoMask, psfgaoAttribs):
+#         print('IShellItemArray.GetAttributes')
+#         return E_NOTIMPL
+#
+#     def GetCount(self, This, pdwNumItems):
+#         print('IShellItemArray.GetCount')
+#         return E_NOTIMPL
+#
+#     def GetItemAt(self, This, dwIndex, ppsi):
+#         print('IShellItemArray.GetItemAt')
+#         return E_NOTIMPL
+#
+#     def EnumItems(self, This, ppenumShellItems):
+#         print('IShellItemArray.EnumItems')
+#         return E_NOTIMPL
+#
 IShellItemArray._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2120,6 +4515,49 @@ IShellItemArray._functions_ = {
         "EnumItems": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(9, "EnumItems"),
     }
 
+# class IProxyManagerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IProxyManager
+#
+#     def CreateServer(self, This, rclsid, clsctx, pv):
+#         print('IProxyManager.CreateServer')
+#         return E_NOTIMPL
+#
+#     def IsConnected(self, This):
+#         print('IProxyManager.IsConnected')
+#         return E_NOTIMPL
+#
+#     def LockConnection(self, This, fLock, fLastUnlockReleases):
+#         print('IProxyManager.LockConnection')
+#         return E_NOTIMPL
+#
+#     def Disconnect(self, This):
+#         print('IProxyManager.Disconnect')
+#         return E_NOTIMPL
+#
+#     def GetConnectionStatus(self, This):
+#         print('IProxyManager.GetConnectionStatus')
+#         return E_NOTIMPL
+#
+#     def ScalarDeletingDestructor(self, This):
+#         print('IProxyManager.ScalarDeletingDestructor')
+#         return E_NOTIMPL
+#
+#     def SetMapping(self, This):
+#         print('IProxyManager.SetMapping')
+#         return E_NOTIMPL
+#
+#     def GetMapping(self, This):
+#         print('IProxyManager.GetMapping')
+#         return E_NOTIMPL
+#
+#     def GetServerObjectContext(self, This):
+#         print('IProxyManager.GetServerObjectContext')
+#         return E_NOTIMPL
+#
+#     def GetWrapperForContex(self, This, pCtx, riid, ppv):
+#         print('IProxyManager.GetWrapperForContex')
+#         return E_NOTIMPL
+#
 IProxyManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2149,6 +4587,17 @@ IProxyManager._functions_ = {
         "GetWrapperForContex": ctypes.WINFUNCTYPE(HRESULT, IObjContext, POINTER(IID), POINTER(PVOID))(12, "GetWrapperForContex"),
     }
 
+# class IProxyServerIdentityImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IProxyServerIdentity
+#
+#     def GetServerProcessId(self, This, processId):
+#         print('IProxyServerIdentity.GetServerProcessId')
+#         return E_NOTIMPL
+#
+#     def GetServerProcessHandle(self, This, dwDesiredAccess, bInheritHandle, phProcess):
+#         print('IProxyServerIdentity.GetServerProcessHandle')
+#         return E_NOTIMPL
+#
 IProxyServerIdentity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2162,6 +4611,21 @@ IProxyServerIdentity._functions_ = {
         "GetServerProcessHandle": ctypes.WINFUNCTYPE(HRESULT, DWORD, INT, POINTER(PVOID))(4, "GetServerProcessHandle"),
     }
 
+# class IApplicationActivationManagerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IApplicationActivationManager
+#
+#     def ActivateApplication(self, This, appUserModelId, arguments, options, processId):
+#         print('IApplicationActivationManager.ActivateApplication')
+#         return E_NOTIMPL
+#
+#     def ActivateForFile(self, This, appUserModelId, itemArray, verb, processId):
+#         print('IApplicationActivationManager.ActivateForFile')
+#         return E_NOTIMPL
+#
+#     def ActivateForProtocol(self, This, appUserModelId, itemArray, processId):
+#         print('IApplicationActivationManager.ActivateForProtocol')
+#         return E_NOTIMPL
+#
 IApplicationActivationManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2177,6 +4641,69 @@ IApplicationActivationManager._functions_ = {
         "ActivateForProtocol": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD))(5, "ActivateForProtocol"),
     }
 
+# class IPackageDebugSettingsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPackageDebugSettings
+#
+#     def EnableDebugging(self, This, packageFullName, debuggerCommandLine, environment):
+#         print('IPackageDebugSettings.EnableDebugging')
+#         return E_NOTIMPL
+#
+#     def DisableDebugging(self, This, packageFullName):
+#         print('IPackageDebugSettings.DisableDebugging')
+#         return E_NOTIMPL
+#
+#     def Suspend(self, This, packageFullName):
+#         print('IPackageDebugSettings.Suspend')
+#         return E_NOTIMPL
+#
+#     def Resume(self, This, packageFullName):
+#         print('IPackageDebugSettings.Resume')
+#         return E_NOTIMPL
+#
+#     def TerminateAllProcesses(self, This, packageFullName):
+#         print('IPackageDebugSettings.TerminateAllProcesses')
+#         return E_NOTIMPL
+#
+#     def SetTargetSessionId(self, This, sessionId):
+#         print('IPackageDebugSettings.SetTargetSessionId')
+#         return E_NOTIMPL
+#
+#     def EnumerateBackgroundTasks(self, This, packageFullName, taskCount, taskIds, taskNames):
+#         print('IPackageDebugSettings.EnumerateBackgroundTasks')
+#         return E_NOTIMPL
+#
+#     def ActivateBackgroundTask(self, This, taskId):
+#         print('IPackageDebugSettings.ActivateBackgroundTask')
+#         return E_NOTIMPL
+#
+#     def StartServicing(self, This, packageFullName):
+#         print('IPackageDebugSettings.StartServicing')
+#         return E_NOTIMPL
+#
+#     def StopServicing(self, This, packageFullName):
+#         print('IPackageDebugSettings.StopServicing')
+#         return E_NOTIMPL
+#
+#     def StartSessionRedirection(self, This, packageFullName, sessionId):
+#         print('IPackageDebugSettings.StartSessionRedirection')
+#         return E_NOTIMPL
+#
+#     def StopSessionRedirection(self, This, packageFullName):
+#         print('IPackageDebugSettings.StopSessionRedirection')
+#         return E_NOTIMPL
+#
+#     def GetPackageExecutionState(self, This, packageFullName, packageExecutionState):
+#         print('IPackageDebugSettings.GetPackageExecutionState')
+#         return E_NOTIMPL
+#
+#     def RegisterForPackageStateChanges(self, This, packageFullName, pPackageExecutionStateChangeNotification, pdwCookie):
+#         print('IPackageDebugSettings.RegisterForPackageStateChanges')
+#         return E_NOTIMPL
+#
+#     def UnregisterForPackageStateChanges(self, This, dwCookie):
+#         print('IPackageDebugSettings.UnregisterForPackageStateChanges')
+#         return E_NOTIMPL
+#
 IPackageDebugSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2216,6 +4743,13 @@ IPackageDebugSettings._functions_ = {
         "UnregisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, DWORD)(17, "UnregisterForPackageStateChanges"),
     }
 
+# class IPackageExecutionStateChangeNotificationImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPackageExecutionStateChangeNotification
+#
+#     def OnStateChanged(self, This, pszPackageFullName, pesNewState):
+#         print('IPackageExecutionStateChangeNotification.OnStateChanged')
+#         return E_NOTIMPL
+#
 IPackageExecutionStateChangeNotification._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2227,6 +4761,33 @@ IPackageExecutionStateChangeNotification._functions_ = {
         "OnStateChanged": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE)(3, "OnStateChanged"),
     }
 
+# class IChannelHookImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IChannelHook
+#
+#     def ClientGetSize(self, This, uExtent, riid, pDataSize):
+#         print('IChannelHook.ClientGetSize')
+#         return E_NOTIMPL
+#
+#     def ClientFillBuffer(self, This, uExtent, riid, pDataSize, pDataBuffer):
+#         print('IChannelHook.ClientFillBuffer')
+#         return E_NOTIMPL
+#
+#     def ClientNotify(self, This, uExtent, riid, cbDataSize, pDataBuffer, lDataRep, hrFault):
+#         print('IChannelHook.ClientNotify')
+#         return E_NOTIMPL
+#
+#     def ServerNotify(self, This, uExtent, riid, cbDataSize, pDataBuffer, lDataRep):
+#         print('IChannelHook.ServerNotify')
+#         return E_NOTIMPL
+#
+#     def ServerGetSize(self, This, uExtent, riid, hrFault, pDataSize):
+#         print('IChannelHook.ServerGetSize')
+#         return E_NOTIMPL
+#
+#     def ServerFillBuffer(self, This, uExtent, riid, pDataSize, pDataBuffer, hrFault):
+#         print('IChannelHook.ServerFillBuffer')
+#         return E_NOTIMPL
+#
 IChannelHook._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2248,6 +4809,29 @@ IChannelHook._functions_ = {
         "ServerFillBuffer": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG), PVOID, HRESULT)(8, "ServerFillBuffer"),
     }
 
+# class IRpcChannelBufferImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRpcChannelBuffer
+#
+#     def GetBuffer(self, This, pMessage, riid):
+#         print('IRpcChannelBuffer.GetBuffer')
+#         return E_NOTIMPL
+#
+#     def SendReceive(self, This, pMessage, pStatus):
+#         print('IRpcChannelBuffer.SendReceive')
+#         return E_NOTIMPL
+#
+#     def FreeBuffer(self, This, pMessage):
+#         print('IRpcChannelBuffer.FreeBuffer')
+#         return E_NOTIMPL
+#
+#     def GetDestCtx(self, This, pdwDestContext, ppvDestContext):
+#         print('IRpcChannelBuffer.GetDestCtx')
+#         return E_NOTIMPL
+#
+#     def IsConnected(self, This):
+#         print('IRpcChannelBuffer.IsConnected')
+#         return E_NOTIMPL
+#
 IRpcChannelBuffer._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2267,6 +4851,17 @@ IRpcChannelBuffer._functions_ = {
         "IsConnected": ctypes.WINFUNCTYPE(HRESULT)(7, "IsConnected"),
     }
 
+# class IRpcHelperImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRpcHelper
+#
+#     def GetDCOMProtocolVersion(self, This, pComVersion):
+#         print('IRpcHelper.GetDCOMProtocolVersion')
+#         return E_NOTIMPL
+#
+#     def GetIIDFromOBJREF(self, This, pObjRef, piid):
+#         print('IRpcHelper.GetIIDFromOBJREF')
+#         return E_NOTIMPL
+#
 IRpcHelper._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2280,6 +4875,17 @@ IRpcHelper._functions_ = {
         "GetIIDFromOBJREF": ctypes.WINFUNCTYPE(HRESULT, PVOID, POINTER(POINTER(IID)))(4, "GetIIDFromOBJREF"),
     }
 
+# class IRpcOptionsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRpcOptions
+#
+#     def Set(self, This, pPrx, dwProperty, dwValue):
+#         print('IRpcOptions.Set')
+#         return E_NOTIMPL
+#
+#     def Query(self, This, pPrx, dwProperty, pdwValue):
+#         print('IRpcOptions.Query')
+#         return E_NOTIMPL
+#
 IRpcOptions._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2293,6 +4899,37 @@ IRpcOptions._functions_ = {
         "Query": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, POINTER(ULONG_PTR))(4, "Query"),
     }
 
+# class IRpcStubBufferImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRpcStubBuffer
+#
+#     def Connect(self, This, pUnkServer):
+#         print('IRpcStubBuffer.Connect')
+#         return E_NOTIMPL
+#
+#     def Disconnect(self, This):
+#         print('IRpcStubBuffer.Disconnect')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, _prpcmsg, _pRpcChannelBuffer):
+#         print('IRpcStubBuffer.Invoke')
+#         return E_NOTIMPL
+#
+#     def IsIIDSupported(self, This, riid):
+#         print('IRpcStubBuffer.IsIIDSupported')
+#         return E_NOTIMPL
+#
+#     def CountRefs(self, This):
+#         print('IRpcStubBuffer.CountRefs')
+#         return E_NOTIMPL
+#
+#     def DebugServerQueryInterface(self, This, ppv):
+#         print('IRpcStubBuffer.DebugServerQueryInterface')
+#         return E_NOTIMPL
+#
+#     def DebugServerRelease(self, This, pv):
+#         print('IRpcStubBuffer.DebugServerRelease')
+#         return E_NOTIMPL
+#
 IRpcStubBuffer._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:*PVOID
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2316,6 +4953,37 @@ IRpcStubBuffer._functions_ = {
         "DebugServerRelease": ctypes.WINFUNCTYPE(PVOID, PVOID)(9, "DebugServerRelease"),
     }
 
+# class IActionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IAction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IAction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IAction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IAction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IAction.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IAction.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IAction.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('IAction.get_Type')
+#         return E_NOTIMPL
+#
 IAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2339,6 +5007,65 @@ IAction._functions_ = {
         "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
     }
 
+# class IActionCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IActionCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IActionCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IActionCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IActionCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IActionCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('IActionCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppAction):
+#         print('IActionCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('IActionCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
+#     def get_XmlText(self, This, pText):
+#         print('IActionCollection.get_XmlText')
+#         return E_NOTIMPL
+#
+#     def put_XmlText(self, This, text):
+#         print('IActionCollection.put_XmlText')
+#         return E_NOTIMPL
+#
+#     def Create(self, This, type, ppAction):
+#         print('IActionCollection.Create')
+#         return E_NOTIMPL
+#
+#     def Remove(self, This, index):
+#         print('IActionCollection.Remove')
+#         return E_NOTIMPL
+#
+#     def Clear(self, This):
+#         print('IActionCollection.Clear')
+#         return E_NOTIMPL
+#
+#     def get_Context(self, This, pContext):
+#         print('IActionCollection.get_Context')
+#         return E_NOTIMPL
+#
+#     def put_Context(self, This, context):
+#         print('IActionCollection.put_Context')
+#         return E_NOTIMPL
+#
 IActionCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2376,6 +5103,53 @@ IActionCollection._functions_ = {
         "put_Context": ctypes.WINFUNCTYPE(HRESULT, BSTR)(16, "put_Context"),
     }
 
+# class IComHandlerActionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IComHandlerAction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IComHandlerAction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IComHandlerAction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IComHandlerAction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IComHandlerAction.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IComHandlerAction.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IComHandlerAction.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('IComHandlerAction.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_ClassId(self, This, pClsid):
+#         print('IComHandlerAction.get_ClassId')
+#         return E_NOTIMPL
+#
+#     def put_ClassId(self, This, clsid):
+#         print('IComHandlerAction.put_ClassId')
+#         return E_NOTIMPL
+#
+#     def get_Data(self, This, pData):
+#         print('IComHandlerAction.get_Data')
+#         return E_NOTIMPL
+#
+#     def put_Data(self, This, data):
+#         print('IComHandlerAction.put_Data')
+#         return E_NOTIMPL
+#
 IComHandlerAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2407,6 +5181,117 @@ IComHandlerAction._functions_ = {
         "put_Data": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_Data"),
     }
 
+# class IEmailActionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEmailAction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IEmailAction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IEmailAction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IEmailAction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IEmailAction.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IEmailAction.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IEmailAction.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('IEmailAction.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_Server(self, This, pServer):
+#         print('IEmailAction.get_Server')
+#         return E_NOTIMPL
+#
+#     def put_Server(self, This, server):
+#         print('IEmailAction.put_Server')
+#         return E_NOTIMPL
+#
+#     def get_Subject(self, This, pSubject):
+#         print('IEmailAction.get_Subject')
+#         return E_NOTIMPL
+#
+#     def put_Subject(self, This, subject):
+#         print('IEmailAction.put_Subject')
+#         return E_NOTIMPL
+#
+#     def get_To(self, This, pTo):
+#         print('IEmailAction.get_To')
+#         return E_NOTIMPL
+#
+#     def put_To(self, This, to):
+#         print('IEmailAction.put_To')
+#         return E_NOTIMPL
+#
+#     def get_Cc(self, This, pCc):
+#         print('IEmailAction.get_Cc')
+#         return E_NOTIMPL
+#
+#     def put_Cc(self, This, cc):
+#         print('IEmailAction.put_Cc')
+#         return E_NOTIMPL
+#
+#     def get_Bcc(self, This, pBcc):
+#         print('IEmailAction.get_Bcc')
+#         return E_NOTIMPL
+#
+#     def put_Bcc(self, This, bcc):
+#         print('IEmailAction.put_Bcc')
+#         return E_NOTIMPL
+#
+#     def get_ReplyTo(self, This, pReplyTo):
+#         print('IEmailAction.get_ReplyTo')
+#         return E_NOTIMPL
+#
+#     def put_ReplyTo(self, This, replyTo):
+#         print('IEmailAction.put_ReplyTo')
+#         return E_NOTIMPL
+#
+#     def get_From(self, This, pFrom):
+#         print('IEmailAction.get_From')
+#         return E_NOTIMPL
+#
+#     def put_From(self, This, from):
+#         print('IEmailAction.put_From')
+#         return E_NOTIMPL
+#
+#     def get_HeaderFields(self, This, ppHeaderFields):
+#         print('IEmailAction.get_HeaderFields')
+#         return E_NOTIMPL
+#
+#     def put_HeaderFields(self, This, pHeaderFields):
+#         print('IEmailAction.put_HeaderFields')
+#         return E_NOTIMPL
+#
+#     def get_Body(self, This, pBody):
+#         print('IEmailAction.get_Body')
+#         return E_NOTIMPL
+#
+#     def put_Body(self, This, body):
+#         print('IEmailAction.put_Body')
+#         return E_NOTIMPL
+#
+#     def get_Attachments(self, This, pAttachements):
+#         print('IEmailAction.get_Attachments')
+#         return E_NOTIMPL
+#
+#     def put_Attachments(self, This, pAttachements):
+#         print('IEmailAction.put_Attachments')
+#         return E_NOTIMPL
+#
 IEmailAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2470,6 +5355,61 @@ IEmailAction._functions_ = {
         "put_Attachments": ctypes.WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY))(29, "put_Attachments"),
     }
 
+# class IExecActionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IExecAction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IExecAction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IExecAction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IExecAction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IExecAction.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IExecAction.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IExecAction.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('IExecAction.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_Path(self, This, pPath):
+#         print('IExecAction.get_Path')
+#         return E_NOTIMPL
+#
+#     def put_Path(self, This, path):
+#         print('IExecAction.put_Path')
+#         return E_NOTIMPL
+#
+#     def get_Arguments(self, This, pArgument):
+#         print('IExecAction.get_Arguments')
+#         return E_NOTIMPL
+#
+#     def put_Arguments(self, This, argument):
+#         print('IExecAction.put_Arguments')
+#         return E_NOTIMPL
+#
+#     def get_WorkingDirectory(self, This, pWorkingDirectory):
+#         print('IExecAction.get_WorkingDirectory')
+#         return E_NOTIMPL
+#
+#     def put_WorkingDirectory(self, This, workingDirectory):
+#         print('IExecAction.put_WorkingDirectory')
+#         return E_NOTIMPL
+#
 IExecAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2505,6 +5445,57 @@ IExecAction._functions_ = {
         "put_WorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, BSTR)(15, "put_WorkingDirectory"),
     }
 
+# class IIdleSettingsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IIdleSettings
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IIdleSettings.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IIdleSettings.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IIdleSettings.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IIdleSettings.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_IdleDuration(self, This, pDelay):
+#         print('IIdleSettings.get_IdleDuration')
+#         return E_NOTIMPL
+#
+#     def put_IdleDuration(self, This, delay):
+#         print('IIdleSettings.put_IdleDuration')
+#         return E_NOTIMPL
+#
+#     def get_WaitTimeout(self, This, pTimeout):
+#         print('IIdleSettings.get_WaitTimeout')
+#         return E_NOTIMPL
+#
+#     def put_WaitTimeout(self, This, timeout):
+#         print('IIdleSettings.put_WaitTimeout')
+#         return E_NOTIMPL
+#
+#     def get_StopOnIdleEnd(self, This, pStop):
+#         print('IIdleSettings.get_StopOnIdleEnd')
+#         return E_NOTIMPL
+#
+#     def put_StopOnIdleEnd(self, This, stop):
+#         print('IIdleSettings.put_StopOnIdleEnd')
+#         return E_NOTIMPL
+#
+#     def get_RestartOnIdle(self, This, pRestart):
+#         print('IIdleSettings.get_RestartOnIdle')
+#         return E_NOTIMPL
+#
+#     def put_RestartOnIdle(self, This, restart):
+#         print('IIdleSettings.put_RestartOnIdle')
+#         return E_NOTIMPL
+#
 IIdleSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2538,6 +5529,41 @@ IIdleSettings._functions_ = {
         "put_RestartOnIdle": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(14, "put_RestartOnIdle"),
     }
 
+# class INetworkSettingsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = INetworkSettings
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('INetworkSettings.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('INetworkSettings.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('INetworkSettings.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('INetworkSettings.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, pName):
+#         print('INetworkSettings.get_Name')
+#         return E_NOTIMPL
+#
+#     def put_Name(self, This, name):
+#         print('INetworkSettings.put_Name')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('INetworkSettings.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, id):
+#         print('INetworkSettings.put_Id')
+#         return E_NOTIMPL
+#
 INetworkSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2563,6 +5589,73 @@ INetworkSettings._functions_ = {
         "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Id"),
     }
 
+# class IPrincipalImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPrincipal
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IPrincipal.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IPrincipal.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IPrincipal.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IPrincipal.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IPrincipal.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IPrincipal.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_DisplayName(self, This, pName):
+#         print('IPrincipal.get_DisplayName')
+#         return E_NOTIMPL
+#
+#     def put_DisplayName(self, This, name):
+#         print('IPrincipal.put_DisplayName')
+#         return E_NOTIMPL
+#
+#     def get_UserId(self, This, pUser):
+#         print('IPrincipal.get_UserId')
+#         return E_NOTIMPL
+#
+#     def put_UserId(self, This, user):
+#         print('IPrincipal.put_UserId')
+#         return E_NOTIMPL
+#
+#     def get_LogonType(self, This, pLogon):
+#         print('IPrincipal.get_LogonType')
+#         return E_NOTIMPL
+#
+#     def put_LogonType(self, This, logon):
+#         print('IPrincipal.put_LogonType')
+#         return E_NOTIMPL
+#
+#     def get_GroupId(self, This, pGroup):
+#         print('IPrincipal.get_GroupId')
+#         return E_NOTIMPL
+#
+#     def put_GroupId(self, This, group):
+#         print('IPrincipal.put_GroupId')
+#         return E_NOTIMPL
+#
+#     def get_RunLevel(self, This, pRunLevel):
+#         print('IPrincipal.get_RunLevel')
+#         return E_NOTIMPL
+#
+#     def put_RunLevel(self, This, runLevel):
+#         print('IPrincipal.put_RunLevel')
+#         return E_NOTIMPL
+#
 IPrincipal._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2604,6 +5697,97 @@ IPrincipal._functions_ = {
         "put_RunLevel": ctypes.WINFUNCTYPE(HRESULT, TASK_RUNLEVEL_TYPE)(18, "put_RunLevel"),
     }
 
+# class IRegisteredTaskImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRegisteredTask
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRegisteredTask.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRegisteredTask.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRegisteredTask.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRegisteredTask.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, pName):
+#         print('IRegisteredTask.get_Name')
+#         return E_NOTIMPL
+#
+#     def get_Path(self, This, pPath):
+#         print('IRegisteredTask.get_Path')
+#         return E_NOTIMPL
+#
+#     def get_State(self, This, pState):
+#         print('IRegisteredTask.get_State')
+#         return E_NOTIMPL
+#
+#     def get_Enabled(self, This, pEnabled):
+#         print('IRegisteredTask.get_Enabled')
+#         return E_NOTIMPL
+#
+#     def put_Enabled(self, This, enabled):
+#         print('IRegisteredTask.put_Enabled')
+#         return E_NOTIMPL
+#
+#     def Run(self, This, params, ppRunningTask):
+#         print('IRegisteredTask.Run')
+#         return E_NOTIMPL
+#
+#     def RunEx(self, This, params, flags, sessionID, user, ppRunningTask):
+#         print('IRegisteredTask.RunEx')
+#         return E_NOTIMPL
+#
+#     def GetInstances(self, This, flags, ppRunningTasks):
+#         print('IRegisteredTask.GetInstances')
+#         return E_NOTIMPL
+#
+#     def get_LastRunTime(self, This, pLastRunTime):
+#         print('IRegisteredTask.get_LastRunTime')
+#         return E_NOTIMPL
+#
+#     def get_LastTaskResult(self, This, pLastTaskResult):
+#         print('IRegisteredTask.get_LastTaskResult')
+#         return E_NOTIMPL
+#
+#     def get_NumberOfMissedRuns(self, This, pNumberOfMissedRuns):
+#         print('IRegisteredTask.get_NumberOfMissedRuns')
+#         return E_NOTIMPL
+#
+#     def get_NextRunTime(self, This, pNextRunTime):
+#         print('IRegisteredTask.get_NextRunTime')
+#         return E_NOTIMPL
+#
+#     def get_Definition(self, This, ppDefinition):
+#         print('IRegisteredTask.get_Definition')
+#         return E_NOTIMPL
+#
+#     def get_Xml(self, This, pXml):
+#         print('IRegisteredTask.get_Xml')
+#         return E_NOTIMPL
+#
+#     def GetSecurityDescriptor(self, This, securityInformation, pSddl):
+#         print('IRegisteredTask.GetSecurityDescriptor')
+#         return E_NOTIMPL
+#
+#     def SetSecurityDescriptor(self, This, sddl, flags):
+#         print('IRegisteredTask.SetSecurityDescriptor')
+#         return E_NOTIMPL
+#
+#     def Stop(self, This, flags):
+#         print('IRegisteredTask.Stop')
+#         return E_NOTIMPL
+#
+#     def GetRunTimes(self, This, pstStart, pstEnd, pCount, pRunTimes):
+#         print('IRegisteredTask.GetRunTimes')
+#         return E_NOTIMPL
+#
 IRegisteredTask._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2657,6 +5841,37 @@ IRegisteredTask._functions_ = {
         "GetRunTimes": ctypes.WINFUNCTYPE(HRESULT, LPSYSTEMTIME, LPSYSTEMTIME, POINTER(DWORD), POINTER(LPSYSTEMTIME))(24, "GetRunTimes"),
     }
 
+# class IRegisteredTaskCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRegisteredTaskCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRegisteredTaskCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRegisteredTaskCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRegisteredTaskCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRegisteredTaskCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('IRegisteredTaskCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppRegisteredTask):
+#         print('IRegisteredTaskCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('IRegisteredTaskCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
 IRegisteredTaskCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2680,6 +5895,97 @@ IRegisteredTaskCollection._functions_ = {
         "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
     }
 
+# class IRegistrationInfoImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRegistrationInfo
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRegistrationInfo.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRegistrationInfo.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRegistrationInfo.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRegistrationInfo.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Description(self, This, pDescription):
+#         print('IRegistrationInfo.get_Description')
+#         return E_NOTIMPL
+#
+#     def put_Description(self, This, description):
+#         print('IRegistrationInfo.put_Description')
+#         return E_NOTIMPL
+#
+#     def get_Author(self, This, pAuthor):
+#         print('IRegistrationInfo.get_Author')
+#         return E_NOTIMPL
+#
+#     def put_Author(self, This, author):
+#         print('IRegistrationInfo.put_Author')
+#         return E_NOTIMPL
+#
+#     def get_Version(self, This, pVersion):
+#         print('IRegistrationInfo.get_Version')
+#         return E_NOTIMPL
+#
+#     def put_Version(self, This, version):
+#         print('IRegistrationInfo.put_Version')
+#         return E_NOTIMPL
+#
+#     def get_Date(self, This, pDate):
+#         print('IRegistrationInfo.get_Date')
+#         return E_NOTIMPL
+#
+#     def put_Date(self, This, date):
+#         print('IRegistrationInfo.put_Date')
+#         return E_NOTIMPL
+#
+#     def get_Documentation(self, This, pDocumentation):
+#         print('IRegistrationInfo.get_Documentation')
+#         return E_NOTIMPL
+#
+#     def put_Documentation(self, This, documentation):
+#         print('IRegistrationInfo.put_Documentation')
+#         return E_NOTIMPL
+#
+#     def get_XmlText(self, This, pText):
+#         print('IRegistrationInfo.get_XmlText')
+#         return E_NOTIMPL
+#
+#     def put_XmlText(self, This, text):
+#         print('IRegistrationInfo.put_XmlText')
+#         return E_NOTIMPL
+#
+#     def get_URI(self, This, pUri):
+#         print('IRegistrationInfo.get_URI')
+#         return E_NOTIMPL
+#
+#     def put_URI(self, This, uri):
+#         print('IRegistrationInfo.put_URI')
+#         return E_NOTIMPL
+#
+#     def get_SecurityDescriptor(self, This, pSddl):
+#         print('IRegistrationInfo.get_SecurityDescriptor')
+#         return E_NOTIMPL
+#
+#     def put_SecurityDescriptor(self, This, sddl):
+#         print('IRegistrationInfo.put_SecurityDescriptor')
+#         return E_NOTIMPL
+#
+#     def get_Source(self, This, pSource):
+#         print('IRegistrationInfo.get_Source')
+#         return E_NOTIMPL
+#
+#     def put_Source(self, This, source):
+#         print('IRegistrationInfo.put_Source')
+#         return E_NOTIMPL
+#
 IRegistrationInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2733,6 +6039,49 @@ IRegistrationInfo._functions_ = {
         "put_Source": ctypes.WINFUNCTYPE(HRESULT, BSTR)(24, "put_Source"),
     }
 
+# class IRepetitionPatternImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRepetitionPattern
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRepetitionPattern.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRepetitionPattern.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRepetitionPattern.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRepetitionPattern.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Interval(self, This, pInterval):
+#         print('IRepetitionPattern.get_Interval')
+#         return E_NOTIMPL
+#
+#     def put_Interval(self, This, interval):
+#         print('IRepetitionPattern.put_Interval')
+#         return E_NOTIMPL
+#
+#     def get_Duration(self, This, pDuration):
+#         print('IRepetitionPattern.get_Duration')
+#         return E_NOTIMPL
+#
+#     def put_Duration(self, This, duration):
+#         print('IRepetitionPattern.put_Duration')
+#         return E_NOTIMPL
+#
+#     def get_StopAtDurationEnd(self, This, pStop):
+#         print('IRepetitionPattern.get_StopAtDurationEnd')
+#         return E_NOTIMPL
+#
+#     def put_StopAtDurationEnd(self, This, stop):
+#         print('IRepetitionPattern.put_StopAtDurationEnd')
+#         return E_NOTIMPL
+#
 IRepetitionPattern._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2762,6 +6111,57 @@ IRepetitionPattern._functions_ = {
         "put_StopAtDurationEnd": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(12, "put_StopAtDurationEnd"),
     }
 
+# class IRunningTaskImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRunningTask
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRunningTask.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRunningTask.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRunningTask.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRunningTask.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, pName):
+#         print('IRunningTask.get_Name')
+#         return E_NOTIMPL
+#
+#     def get_InstanceGuid(self, This, pGuid):
+#         print('IRunningTask.get_InstanceGuid')
+#         return E_NOTIMPL
+#
+#     def get_Path(self, This, pPath):
+#         print('IRunningTask.get_Path')
+#         return E_NOTIMPL
+#
+#     def get_State(self, This, pState):
+#         print('IRunningTask.get_State')
+#         return E_NOTIMPL
+#
+#     def get_CurrentAction(self, This, pName):
+#         print('IRunningTask.get_CurrentAction')
+#         return E_NOTIMPL
+#
+#     def Stop(self, This):
+#         print('IRunningTask.Stop')
+#         return E_NOTIMPL
+#
+#     def Refresh(self, This):
+#         print('IRunningTask.Refresh')
+#         return E_NOTIMPL
+#
+#     def get_EnginePID(self, This, pPID):
+#         print('IRunningTask.get_EnginePID')
+#         return E_NOTIMPL
+#
 IRunningTask._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2795,6 +6195,37 @@ IRunningTask._functions_ = {
         "get_EnginePID": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(14, "get_EnginePID"),
     }
 
+# class IRunningTaskCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IRunningTaskCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IRunningTaskCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IRunningTaskCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IRunningTaskCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IRunningTaskCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('IRunningTaskCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppRunningTask):
+#         print('IRunningTaskCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('IRunningTaskCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
 IRunningTaskCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2818,6 +6249,53 @@ IRunningTaskCollection._functions_ = {
         "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
     }
 
+# class IShowMessageActionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IShowMessageAction
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IShowMessageAction.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IShowMessageAction.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IShowMessageAction.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IShowMessageAction.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('IShowMessageAction.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, Id):
+#         print('IShowMessageAction.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('IShowMessageAction.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_Title(self, This, pTitle):
+#         print('IShowMessageAction.get_Title')
+#         return E_NOTIMPL
+#
+#     def put_Title(self, This, title):
+#         print('IShowMessageAction.put_Title')
+#         return E_NOTIMPL
+#
+#     def get_MessageBody(self, This, pMessageBody):
+#         print('IShowMessageAction.get_MessageBody')
+#         return E_NOTIMPL
+#
+#     def put_MessageBody(self, This, messageBody):
+#         print('IShowMessageAction.put_MessageBody')
+#         return E_NOTIMPL
+#
 IShowMessageAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2849,6 +6327,81 @@ IShowMessageAction._functions_ = {
         "put_MessageBody": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_MessageBody"),
     }
 
+# class ITaskDefinitionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskDefinition
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskDefinition.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskDefinition.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskDefinition.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskDefinition.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_RegistrationInfo(self, This, ppRegistrationInfo):
+#         print('ITaskDefinition.get_RegistrationInfo')
+#         return E_NOTIMPL
+#
+#     def put_RegistrationInfo(self, This, pRegistrationInfo):
+#         print('ITaskDefinition.put_RegistrationInfo')
+#         return E_NOTIMPL
+#
+#     def get_Triggers(self, This, ppTriggers):
+#         print('ITaskDefinition.get_Triggers')
+#         return E_NOTIMPL
+#
+#     def put_Triggers(self, This, pTriggers):
+#         print('ITaskDefinition.put_Triggers')
+#         return E_NOTIMPL
+#
+#     def get_Settings(self, This, ppSettings):
+#         print('ITaskDefinition.get_Settings')
+#         return E_NOTIMPL
+#
+#     def put_Settings(self, This, pSettings):
+#         print('ITaskDefinition.put_Settings')
+#         return E_NOTIMPL
+#
+#     def get_Data(self, This, pData):
+#         print('ITaskDefinition.get_Data')
+#         return E_NOTIMPL
+#
+#     def put_Data(self, This, data):
+#         print('ITaskDefinition.put_Data')
+#         return E_NOTIMPL
+#
+#     def get_Principal(self, This, ppPrincipal):
+#         print('ITaskDefinition.get_Principal')
+#         return E_NOTIMPL
+#
+#     def put_Principal(self, This, pPrincipal):
+#         print('ITaskDefinition.put_Principal')
+#         return E_NOTIMPL
+#
+#     def get_Actions(self, This, ppActions):
+#         print('ITaskDefinition.get_Actions')
+#         return E_NOTIMPL
+#
+#     def put_Actions(self, This, pActions):
+#         print('ITaskDefinition.put_Actions')
+#         return E_NOTIMPL
+#
+#     def get_XmlText(self, This, pXml):
+#         print('ITaskDefinition.get_XmlText')
+#         return E_NOTIMPL
+#
+#     def put_XmlText(self, This, xml):
+#         print('ITaskDefinition.put_XmlText')
+#         return E_NOTIMPL
+#
 ITaskDefinition._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2894,6 +6447,77 @@ ITaskDefinition._functions_ = {
         "put_XmlText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(20, "put_XmlText"),
     }
 
+# class ITaskFolderImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskFolder
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskFolder.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskFolder.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskFolder.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskFolder.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, pName):
+#         print('ITaskFolder.get_Name')
+#         return E_NOTIMPL
+#
+#     def get_Path(self, This, pPath):
+#         print('ITaskFolder.get_Path')
+#         return E_NOTIMPL
+#
+#     def GetFolder(self, This, path, ppFolder):
+#         print('ITaskFolder.GetFolder')
+#         return E_NOTIMPL
+#
+#     def GetFolders(self, This, flags, ppFolders):
+#         print('ITaskFolder.GetFolders')
+#         return E_NOTIMPL
+#
+#     def CreateFolder(self, This, subFolderName, sddl, ppFolder):
+#         print('ITaskFolder.CreateFolder')
+#         return E_NOTIMPL
+#
+#     def DeleteFolder(self, This, subFolderName, flags):
+#         print('ITaskFolder.DeleteFolder')
+#         return E_NOTIMPL
+#
+#     def GetTask(self, This, path, ppTask):
+#         print('ITaskFolder.GetTask')
+#         return E_NOTIMPL
+#
+#     def GetTasks(self, This, flags, ppTasks):
+#         print('ITaskFolder.GetTasks')
+#         return E_NOTIMPL
+#
+#     def DeleteTask(self, This, name, flags):
+#         print('ITaskFolder.DeleteTask')
+#         return E_NOTIMPL
+#
+#     def RegisterTask(self, This, path, xmlText, flags, userId, password, logonType, sddl, ppTask):
+#         print('ITaskFolder.RegisterTask')
+#         return E_NOTIMPL
+#
+#     def RegisterTaskDefinition(self, This, path, pDefinition, flags, userId, password, logonType, sddl, ppTask):
+#         print('ITaskFolder.RegisterTaskDefinition')
+#         return E_NOTIMPL
+#
+#     def GetSecurityDescriptor(self, This, securityInformation, pSddl):
+#         print('ITaskFolder.GetSecurityDescriptor')
+#         return E_NOTIMPL
+#
+#     def SetSecurityDescriptor(self, This, sddl, flags):
+#         print('ITaskFolder.SetSecurityDescriptor')
+#         return E_NOTIMPL
+#
 ITaskFolder._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2937,6 +6561,37 @@ ITaskFolder._functions_ = {
         "SetSecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG)(19, "SetSecurityDescriptor"),
     }
 
+# class ITaskFolderCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskFolderCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskFolderCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskFolderCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskFolderCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskFolderCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('ITaskFolderCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppFolder):
+#         print('ITaskFolderCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('ITaskFolderCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
 ITaskFolderCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2960,6 +6615,49 @@ ITaskFolderCollection._functions_ = {
         "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
     }
 
+# class ITaskNamedValueCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskNamedValueCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskNamedValueCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskNamedValueCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskNamedValueCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskNamedValueCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('ITaskNamedValueCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppPair):
+#         print('ITaskNamedValueCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('ITaskNamedValueCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
+#     def Create(self, This, name, value, ppPair):
+#         print('ITaskNamedValueCollection.Create')
+#         return E_NOTIMPL
+#
+#     def Remove(self, This, index):
+#         print('ITaskNamedValueCollection.Remove')
+#         return E_NOTIMPL
+#
+#     def Clear(self, This):
+#         print('ITaskNamedValueCollection.Clear')
+#         return E_NOTIMPL
+#
 ITaskNamedValueCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2989,6 +6687,41 @@ ITaskNamedValueCollection._functions_ = {
         "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
     }
 
+# class ITaskNamedValuePairImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskNamedValuePair
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskNamedValuePair.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskNamedValuePair.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskNamedValuePair.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskNamedValuePair.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, pName):
+#         print('ITaskNamedValuePair.get_Name')
+#         return E_NOTIMPL
+#
+#     def put_Name(self, This, name):
+#         print('ITaskNamedValuePair.put_Name')
+#         return E_NOTIMPL
+#
+#     def get_Value(self, This, pValue):
+#         print('ITaskNamedValuePair.get_Value')
+#         return E_NOTIMPL
+#
+#     def put_Value(self, This, value):
+#         print('ITaskNamedValuePair.put_Value')
+#         return E_NOTIMPL
+#
 ITaskNamedValuePair._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3014,6 +6747,61 @@ ITaskNamedValuePair._functions_ = {
         "put_Value": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Value"),
     }
 
+# class ITaskServiceImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskService
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskService.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskService.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskService.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskService.Invoke')
+#         return E_NOTIMPL
+#
+#     def GetFolder(self, This, path, ppFolder):
+#         print('ITaskService.GetFolder')
+#         return E_NOTIMPL
+#
+#     def GetRunningTasks(self, This, flags, ppRunningTasks):
+#         print('ITaskService.GetRunningTasks')
+#         return E_NOTIMPL
+#
+#     def NewTask(self, This, flags, ppDefinition):
+#         print('ITaskService.NewTask')
+#         return E_NOTIMPL
+#
+#     def Connect(self, This, serverName, user, domain, password):
+#         print('ITaskService.Connect')
+#         return E_NOTIMPL
+#
+#     def get_Connected(self, This, pConnected):
+#         print('ITaskService.get_Connected')
+#         return E_NOTIMPL
+#
+#     def get_TargetServer(self, This, pServer):
+#         print('ITaskService.get_TargetServer')
+#         return E_NOTIMPL
+#
+#     def get_ConnectedUser(self, This, pUser):
+#         print('ITaskService.get_ConnectedUser')
+#         return E_NOTIMPL
+#
+#     def get_ConnectedDomain(self, This, pDomain):
+#         print('ITaskService.get_ConnectedDomain')
+#         return E_NOTIMPL
+#
+#     def get_HighestVersion(self, This, pVersion):
+#         print('ITaskService.get_HighestVersion')
+#         return E_NOTIMPL
+#
 ITaskService._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3049,6 +6837,185 @@ ITaskService._functions_ = {
         "get_HighestVersion": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(15, "get_HighestVersion"),
     }
 
+# class ITaskSettingsImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITaskSettings
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITaskSettings.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITaskSettings.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITaskSettings.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITaskSettings.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_AllowDemandStart(self, This, pAllowDemandStart):
+#         print('ITaskSettings.get_AllowDemandStart')
+#         return E_NOTIMPL
+#
+#     def put_AllowDemandStart(self, This, allowDemandStart):
+#         print('ITaskSettings.put_AllowDemandStart')
+#         return E_NOTIMPL
+#
+#     def get_RestartInterval(self, This, pRestartInterval):
+#         print('ITaskSettings.get_RestartInterval')
+#         return E_NOTIMPL
+#
+#     def put_RestartInterval(self, This, restartInterval):
+#         print('ITaskSettings.put_RestartInterval')
+#         return E_NOTIMPL
+#
+#     def get_RestartCount(self, This, pRestartCount):
+#         print('ITaskSettings.get_RestartCount')
+#         return E_NOTIMPL
+#
+#     def put_RestartCount(self, This, restartCount):
+#         print('ITaskSettings.put_RestartCount')
+#         return E_NOTIMPL
+#
+#     def get_MultipleInstances(self, This, pPolicy):
+#         print('ITaskSettings.get_MultipleInstances')
+#         return E_NOTIMPL
+#
+#     def put_MultipleInstances(self, This, policy):
+#         print('ITaskSettings.put_MultipleInstances')
+#         return E_NOTIMPL
+#
+#     def get_StopIfGoingOnBatteries(self, This, pStopIfOnBatteries):
+#         print('ITaskSettings.get_StopIfGoingOnBatteries')
+#         return E_NOTIMPL
+#
+#     def put_StopIfGoingOnBatteries(self, This, stopIfOnBatteries):
+#         print('ITaskSettings.put_StopIfGoingOnBatteries')
+#         return E_NOTIMPL
+#
+#     def get_DisallowStartIfOnBatteries(self, This, pDisallowStart):
+#         print('ITaskSettings.get_DisallowStartIfOnBatteries')
+#         return E_NOTIMPL
+#
+#     def put_DisallowStartIfOnBatteries(self, This, disallowStart):
+#         print('ITaskSettings.put_DisallowStartIfOnBatteries')
+#         return E_NOTIMPL
+#
+#     def get_AllowHardTerminate(self, This, pAllowHardTerminate):
+#         print('ITaskSettings.get_AllowHardTerminate')
+#         return E_NOTIMPL
+#
+#     def put_AllowHardTerminate(self, This, allowHardTerminate):
+#         print('ITaskSettings.put_AllowHardTerminate')
+#         return E_NOTIMPL
+#
+#     def get_StartWhenAvailable(self, This, pStartWhenAvailable):
+#         print('ITaskSettings.get_StartWhenAvailable')
+#         return E_NOTIMPL
+#
+#     def put_StartWhenAvailable(self, This, startWhenAvailable):
+#         print('ITaskSettings.put_StartWhenAvailable')
+#         return E_NOTIMPL
+#
+#     def get_XmlText(self, This, pText):
+#         print('ITaskSettings.get_XmlText')
+#         return E_NOTIMPL
+#
+#     def put_XmlText(self, This, text):
+#         print('ITaskSettings.put_XmlText')
+#         return E_NOTIMPL
+#
+#     def get_RunOnlyIfNetworkAvailable(self, This, pRunOnlyIfNetworkAvailable):
+#         print('ITaskSettings.get_RunOnlyIfNetworkAvailable')
+#         return E_NOTIMPL
+#
+#     def put_RunOnlyIfNetworkAvailable(self, This, runOnlyIfNetworkAvailable):
+#         print('ITaskSettings.put_RunOnlyIfNetworkAvailable')
+#         return E_NOTIMPL
+#
+#     def get_ExecutionTimeLimit(self, This, pExecutionTimeLimit):
+#         print('ITaskSettings.get_ExecutionTimeLimit')
+#         return E_NOTIMPL
+#
+#     def put_ExecutionTimeLimit(self, This, executionTimeLimit):
+#         print('ITaskSettings.put_ExecutionTimeLimit')
+#         return E_NOTIMPL
+#
+#     def get_Enabled(self, This, pEnabled):
+#         print('ITaskSettings.get_Enabled')
+#         return E_NOTIMPL
+#
+#     def put_Enabled(self, This, enabled):
+#         print('ITaskSettings.put_Enabled')
+#         return E_NOTIMPL
+#
+#     def get_DeleteExpiredTaskAfter(self, This, pExpirationDelay):
+#         print('ITaskSettings.get_DeleteExpiredTaskAfter')
+#         return E_NOTIMPL
+#
+#     def put_DeleteExpiredTaskAfter(self, This, expirationDelay):
+#         print('ITaskSettings.put_DeleteExpiredTaskAfter')
+#         return E_NOTIMPL
+#
+#     def get_Priority(self, This, pPriority):
+#         print('ITaskSettings.get_Priority')
+#         return E_NOTIMPL
+#
+#     def put_Priority(self, This, priority):
+#         print('ITaskSettings.put_Priority')
+#         return E_NOTIMPL
+#
+#     def get_Compatibility(self, This, pCompatLevel):
+#         print('ITaskSettings.get_Compatibility')
+#         return E_NOTIMPL
+#
+#     def put_Compatibility(self, This, compatLevel):
+#         print('ITaskSettings.put_Compatibility')
+#         return E_NOTIMPL
+#
+#     def get_Hidden(self, This, pHidden):
+#         print('ITaskSettings.get_Hidden')
+#         return E_NOTIMPL
+#
+#     def put_Hidden(self, This, hidden):
+#         print('ITaskSettings.put_Hidden')
+#         return E_NOTIMPL
+#
+#     def get_IdleSettings(self, This, ppIdleSettings):
+#         print('ITaskSettings.get_IdleSettings')
+#         return E_NOTIMPL
+#
+#     def put_IdleSettings(self, This, pIdleSettings):
+#         print('ITaskSettings.put_IdleSettings')
+#         return E_NOTIMPL
+#
+#     def get_RunOnlyIfIdle(self, This, pRunOnlyIfIdle):
+#         print('ITaskSettings.get_RunOnlyIfIdle')
+#         return E_NOTIMPL
+#
+#     def put_RunOnlyIfIdle(self, This, runOnlyIfIdle):
+#         print('ITaskSettings.put_RunOnlyIfIdle')
+#         return E_NOTIMPL
+#
+#     def get_WakeToRun(self, This, pWake):
+#         print('ITaskSettings.get_WakeToRun')
+#         return E_NOTIMPL
+#
+#     def put_WakeToRun(self, This, wake):
+#         print('ITaskSettings.put_WakeToRun')
+#         return E_NOTIMPL
+#
+#     def get_NetworkSettings(self, This, ppNetworkSettings):
+#         print('ITaskSettings.get_NetworkSettings')
+#         return E_NOTIMPL
+#
+#     def put_NetworkSettings(self, This, pNetworkSettings):
+#         print('ITaskSettings.put_NetworkSettings')
+#         return E_NOTIMPL
+#
 ITaskSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3146,6 +7113,77 @@ ITaskSettings._functions_ = {
         "put_NetworkSettings": ctypes.WINFUNCTYPE(HRESULT, INetworkSettings)(46, "put_NetworkSettings"),
     }
 
+# class ITriggerImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITrigger
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITrigger.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITrigger.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITrigger.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITrigger.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, pType):
+#         print('ITrigger.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_Id(self, This, pId):
+#         print('ITrigger.get_Id')
+#         return E_NOTIMPL
+#
+#     def put_Id(self, This, id):
+#         print('ITrigger.put_Id')
+#         return E_NOTIMPL
+#
+#     def get_Repetition(self, This, ppRepeat):
+#         print('ITrigger.get_Repetition')
+#         return E_NOTIMPL
+#
+#     def put_Repetition(self, This, pRepeat):
+#         print('ITrigger.put_Repetition')
+#         return E_NOTIMPL
+#
+#     def get_ExecutionTimeLimit(self, This, pTimeLimit):
+#         print('ITrigger.get_ExecutionTimeLimit')
+#         return E_NOTIMPL
+#
+#     def put_ExecutionTimeLimit(self, This, timelimit):
+#         print('ITrigger.put_ExecutionTimeLimit')
+#         return E_NOTIMPL
+#
+#     def get_StartBoundary(self, This, pStart):
+#         print('ITrigger.get_StartBoundary')
+#         return E_NOTIMPL
+#
+#     def put_StartBoundary(self, This, start):
+#         print('ITrigger.put_StartBoundary')
+#         return E_NOTIMPL
+#
+#     def get_EndBoundary(self, This, pEnd):
+#         print('ITrigger.get_EndBoundary')
+#         return E_NOTIMPL
+#
+#     def put_EndBoundary(self, This, end):
+#         print('ITrigger.put_EndBoundary')
+#         return E_NOTIMPL
+#
+#     def get_Enabled(self, This, pEnabled):
+#         print('ITrigger.get_Enabled')
+#         return E_NOTIMPL
+#
+#     def put_Enabled(self, This, enabled):
+#         print('ITrigger.put_Enabled')
+#         return E_NOTIMPL
+#
 ITrigger._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3189,6 +7227,49 @@ ITrigger._functions_ = {
         "put_Enabled": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(19, "put_Enabled"),
     }
 
+# class ITriggerCollectionImplem(windows.com.COMImplementation):
+#     IMPLEMENT = ITriggerCollection
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('ITriggerCollection.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('ITriggerCollection.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('ITriggerCollection.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('ITriggerCollection.Invoke')
+#         return E_NOTIMPL
+#
+#     def get_Count(self, This, pCount):
+#         print('ITriggerCollection.get_Count')
+#         return E_NOTIMPL
+#
+#     def get_Item(self, This, index, ppTrigger):
+#         print('ITriggerCollection.get_Item')
+#         return E_NOTIMPL
+#
+#     def get__NewEnum(self, This, ppEnum):
+#         print('ITriggerCollection.get__NewEnum')
+#         return E_NOTIMPL
+#
+#     def Create(self, This, type, ppTrigger):
+#         print('ITriggerCollection.Create')
+#         return E_NOTIMPL
+#
+#     def Remove(self, This, index):
+#         print('ITriggerCollection.Remove')
+#         return E_NOTIMPL
+#
+#     def Clear(self, This):
+#         print('ITriggerCollection.Clear')
+#         return E_NOTIMPL
+#
 ITriggerCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3218,6 +7299,281 @@ ITriggerCollection._functions_ = {
         "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
     }
 
+# class IWebBrowser2Implem(windows.com.COMImplementation):
+#     IMPLEMENT = IWebBrowser2
+#
+#     def GetTypeInfoCount(self, This, pctinfo):
+#         print('IWebBrowser2.GetTypeInfoCount')
+#         return E_NOTIMPL
+#
+#     def GetTypeInfo(self, This, iTInfo, lcid, ppTInfo):
+#         print('IWebBrowser2.GetTypeInfo')
+#         return E_NOTIMPL
+#
+#     def GetIDsOfNames(self, This, riid, rgszNames, cNames, lcid, rgDispId):
+#         print('IWebBrowser2.GetIDsOfNames')
+#         return E_NOTIMPL
+#
+#     def Invoke(self, This, dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr):
+#         print('IWebBrowser2.Invoke')
+#         return E_NOTIMPL
+#
+#     def GoBack(self, This):
+#         print('IWebBrowser2.GoBack')
+#         return E_NOTIMPL
+#
+#     def GoForward(self, This):
+#         print('IWebBrowser2.GoForward')
+#         return E_NOTIMPL
+#
+#     def GoHome(self, This):
+#         print('IWebBrowser2.GoHome')
+#         return E_NOTIMPL
+#
+#     def GoSearch(self, This):
+#         print('IWebBrowser2.GoSearch')
+#         return E_NOTIMPL
+#
+#     def Navigate(self, This, URL, Flags, TargetFrameName, PostData, Headers):
+#         print('IWebBrowser2.Navigate')
+#         return E_NOTIMPL
+#
+#     def Refresh(self, This):
+#         print('IWebBrowser2.Refresh')
+#         return E_NOTIMPL
+#
+#     def Refresh2(self, This, Level):
+#         print('IWebBrowser2.Refresh2')
+#         return E_NOTIMPL
+#
+#     def Stop(self, This):
+#         print('IWebBrowser2.Stop')
+#         return E_NOTIMPL
+#
+#     def get_Application(self, This, ppDisp):
+#         print('IWebBrowser2.get_Application')
+#         return E_NOTIMPL
+#
+#     def get_Parent(self, This, ppDisp):
+#         print('IWebBrowser2.get_Parent')
+#         return E_NOTIMPL
+#
+#     def get_Container(self, This, ppDisp):
+#         print('IWebBrowser2.get_Container')
+#         return E_NOTIMPL
+#
+#     def get_Document(self, This, ppDisp):
+#         print('IWebBrowser2.get_Document')
+#         return E_NOTIMPL
+#
+#     def get_TopLevelContainer(self, This, pBool):
+#         print('IWebBrowser2.get_TopLevelContainer')
+#         return E_NOTIMPL
+#
+#     def get_Type(self, This, Type):
+#         print('IWebBrowser2.get_Type')
+#         return E_NOTIMPL
+#
+#     def get_Left(self, This, pl):
+#         print('IWebBrowser2.get_Left')
+#         return E_NOTIMPL
+#
+#     def put_Left(self, This, Left):
+#         print('IWebBrowser2.put_Left')
+#         return E_NOTIMPL
+#
+#     def get_Top(self, This, pl):
+#         print('IWebBrowser2.get_Top')
+#         return E_NOTIMPL
+#
+#     def put_Top(self, This, Top):
+#         print('IWebBrowser2.put_Top')
+#         return E_NOTIMPL
+#
+#     def get_Width(self, This, pl):
+#         print('IWebBrowser2.get_Width')
+#         return E_NOTIMPL
+#
+#     def put_Width(self, This, Width):
+#         print('IWebBrowser2.put_Width')
+#         return E_NOTIMPL
+#
+#     def get_Height(self, This, pl):
+#         print('IWebBrowser2.get_Height')
+#         return E_NOTIMPL
+#
+#     def put_Height(self, This, Height):
+#         print('IWebBrowser2.put_Height')
+#         return E_NOTIMPL
+#
+#     def get_LocationName(self, This, LocationName):
+#         print('IWebBrowser2.get_LocationName')
+#         return E_NOTIMPL
+#
+#     def get_LocationURL(self, This, LocationURL):
+#         print('IWebBrowser2.get_LocationURL')
+#         return E_NOTIMPL
+#
+#     def get_Busy(self, This, pBool):
+#         print('IWebBrowser2.get_Busy')
+#         return E_NOTIMPL
+#
+#     def Quit(self, This):
+#         print('IWebBrowser2.Quit')
+#         return E_NOTIMPL
+#
+#     def ClientToWindow(self, This, pcx, pcy):
+#         print('IWebBrowser2.ClientToWindow')
+#         return E_NOTIMPL
+#
+#     def PutProperty(self, This, Property, vtValue):
+#         print('IWebBrowser2.PutProperty')
+#         return E_NOTIMPL
+#
+#     def GetProperty(self, This, Property, pvtValue):
+#         print('IWebBrowser2.GetProperty')
+#         return E_NOTIMPL
+#
+#     def get_Name(self, This, Name):
+#         print('IWebBrowser2.get_Name')
+#         return E_NOTIMPL
+#
+#     def get_HWND(self, This, pHWND):
+#         print('IWebBrowser2.get_HWND')
+#         return E_NOTIMPL
+#
+#     def get_FullName(self, This, FullName):
+#         print('IWebBrowser2.get_FullName')
+#         return E_NOTIMPL
+#
+#     def get_Path(self, This, Path):
+#         print('IWebBrowser2.get_Path')
+#         return E_NOTIMPL
+#
+#     def get_Visible(self, This, pBool):
+#         print('IWebBrowser2.get_Visible')
+#         return E_NOTIMPL
+#
+#     def put_Visible(self, This, Value):
+#         print('IWebBrowser2.put_Visible')
+#         return E_NOTIMPL
+#
+#     def get_StatusBar(self, This, pBool):
+#         print('IWebBrowser2.get_StatusBar')
+#         return E_NOTIMPL
+#
+#     def put_StatusBar(self, This, Value):
+#         print('IWebBrowser2.put_StatusBar')
+#         return E_NOTIMPL
+#
+#     def get_StatusText(self, This, StatusText):
+#         print('IWebBrowser2.get_StatusText')
+#         return E_NOTIMPL
+#
+#     def put_StatusText(self, This, StatusText):
+#         print('IWebBrowser2.put_StatusText')
+#         return E_NOTIMPL
+#
+#     def get_ToolBar(self, This, Value):
+#         print('IWebBrowser2.get_ToolBar')
+#         return E_NOTIMPL
+#
+#     def put_ToolBar(self, This, Value):
+#         print('IWebBrowser2.put_ToolBar')
+#         return E_NOTIMPL
+#
+#     def get_MenuBar(self, This, Value):
+#         print('IWebBrowser2.get_MenuBar')
+#         return E_NOTIMPL
+#
+#     def put_MenuBar(self, This, Value):
+#         print('IWebBrowser2.put_MenuBar')
+#         return E_NOTIMPL
+#
+#     def get_FullScreen(self, This, pbFullScreen):
+#         print('IWebBrowser2.get_FullScreen')
+#         return E_NOTIMPL
+#
+#     def put_FullScreen(self, This, bFullScreen):
+#         print('IWebBrowser2.put_FullScreen')
+#         return E_NOTIMPL
+#
+#     def Navigate2(self, This, URL, Flags, TargetFrameName, PostData, Headers):
+#         print('IWebBrowser2.Navigate2')
+#         return E_NOTIMPL
+#
+#     def QueryStatusWB(self, This, cmdID, pcmdf):
+#         print('IWebBrowser2.QueryStatusWB')
+#         return E_NOTIMPL
+#
+#     def ExecWB(self, This, cmdID, cmdexecopt, pvaIn, pvaOut):
+#         print('IWebBrowser2.ExecWB')
+#         return E_NOTIMPL
+#
+#     def ShowBrowserBar(self, This, pvaClsid, pvarShow, pvarSize):
+#         print('IWebBrowser2.ShowBrowserBar')
+#         return E_NOTIMPL
+#
+#     def get_ReadyState(self, This, plReadyState):
+#         print('IWebBrowser2.get_ReadyState')
+#         return E_NOTIMPL
+#
+#     def get_Offline(self, This, pbOffline):
+#         print('IWebBrowser2.get_Offline')
+#         return E_NOTIMPL
+#
+#     def put_Offline(self, This, bOffline):
+#         print('IWebBrowser2.put_Offline')
+#         return E_NOTIMPL
+#
+#     def get_Silent(self, This, pbSilent):
+#         print('IWebBrowser2.get_Silent')
+#         return E_NOTIMPL
+#
+#     def put_Silent(self, This, bSilent):
+#         print('IWebBrowser2.put_Silent')
+#         return E_NOTIMPL
+#
+#     def get_RegisterAsBrowser(self, This, pbRegister):
+#         print('IWebBrowser2.get_RegisterAsBrowser')
+#         return E_NOTIMPL
+#
+#     def put_RegisterAsBrowser(self, This, bRegister):
+#         print('IWebBrowser2.put_RegisterAsBrowser')
+#         return E_NOTIMPL
+#
+#     def get_RegisterAsDropTarget(self, This, pbRegister):
+#         print('IWebBrowser2.get_RegisterAsDropTarget')
+#         return E_NOTIMPL
+#
+#     def put_RegisterAsDropTarget(self, This, bRegister):
+#         print('IWebBrowser2.put_RegisterAsDropTarget')
+#         return E_NOTIMPL
+#
+#     def get_TheaterMode(self, This, pbRegister):
+#         print('IWebBrowser2.get_TheaterMode')
+#         return E_NOTIMPL
+#
+#     def put_TheaterMode(self, This, bRegister):
+#         print('IWebBrowser2.put_TheaterMode')
+#         return E_NOTIMPL
+#
+#     def get_AddressBar(self, This, Value):
+#         print('IWebBrowser2.get_AddressBar')
+#         return E_NOTIMPL
+#
+#     def put_AddressBar(self, This, Value):
+#         print('IWebBrowser2.put_AddressBar')
+#         return E_NOTIMPL
+#
+#     def get_Resizable(self, This, Value):
+#         print('IWebBrowser2.get_Resizable')
+#         return E_NOTIMPL
+#
+#     def put_Resizable(self, This, Value):
+#         print('IWebBrowser2.put_Resizable')
+#         return E_NOTIMPL
+#
 IWebBrowser2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3363,6 +7719,29 @@ IWebBrowser2._functions_ = {
         "put_Resizable": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(70, "put_Resizable"),
     }
 
+# class IEnumWbemClassObjectImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IEnumWbemClassObject
+#
+#     def Reset(self, This):
+#         print('IEnumWbemClassObject.Reset')
+#         return E_NOTIMPL
+#
+#     def Next(self, This, lTimeout, uCount, apObjects, puReturned):
+#         print('IEnumWbemClassObject.Next')
+#         return E_NOTIMPL
+#
+#     def NextAsync(self, This, uCount, pSink):
+#         print('IEnumWbemClassObject.NextAsync')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppEnum):
+#         print('IEnumWbemClassObject.Clone')
+#         return E_NOTIMPL
+#
+#     def Skip(self, This, lTimeout, nCount):
+#         print('IEnumWbemClassObject.Skip')
+#         return E_NOTIMPL
+#
 IEnumWbemClassObject._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3382,6 +7761,25 @@ IEnumWbemClassObject._functions_ = {
         "Skip": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG)(7, "Skip"),
     }
 
+# class IWbemCallResultImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemCallResult
+#
+#     def GetResultObject(self, This, lTimeout, ppResultObject):
+#         print('IWbemCallResult.GetResultObject')
+#         return E_NOTIMPL
+#
+#     def GetResultString(self, This, lTimeout, pstrResultString):
+#         print('IWbemCallResult.GetResultString')
+#         return E_NOTIMPL
+#
+#     def GetResultServices(self, This, lTimeout, ppServices):
+#         print('IWbemCallResult.GetResultServices')
+#         return E_NOTIMPL
+#
+#     def GetCallStatus(self, This, lTimeout, plStatus):
+#         print('IWbemCallResult.GetCallStatus')
+#         return E_NOTIMPL
+#
 IWbemCallResult._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3399,6 +7797,105 @@ IWbemCallResult._functions_ = {
         "GetCallStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(LONG))(6, "GetCallStatus"),
     }
 
+# class IWbemClassObjectImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemClassObject
+#
+#     def GetQualifierSet(self, This, ppQualSet):
+#         print('IWbemClassObject.GetQualifierSet')
+#         return E_NOTIMPL
+#
+#     def Get(self, This, wszName, lFlags, pVal, pType, plFlavor):
+#         print('IWbemClassObject.Get')
+#         return E_NOTIMPL
+#
+#     def Put(self, This, wszName, lFlags, pVal, Type):
+#         print('IWbemClassObject.Put')
+#         return E_NOTIMPL
+#
+#     def Delete(self, This, wszName):
+#         print('IWbemClassObject.Delete')
+#         return E_NOTIMPL
+#
+#     def GetNames(self, This, wszQualifierName, lFlags, pQualifierVal, pNames):
+#         print('IWbemClassObject.GetNames')
+#         return E_NOTIMPL
+#
+#     def BeginEnumeration(self, This, lEnumFlags):
+#         print('IWbemClassObject.BeginEnumeration')
+#         return E_NOTIMPL
+#
+#     def Next(self, This, lFlags, strName, pVal, pType, plFlavor):
+#         print('IWbemClassObject.Next')
+#         return E_NOTIMPL
+#
+#     def EndEnumeration(self, This):
+#         print('IWbemClassObject.EndEnumeration')
+#         return E_NOTIMPL
+#
+#     def GetPropertyQualifierSet(self, This, wszProperty, ppQualSet):
+#         print('IWbemClassObject.GetPropertyQualifierSet')
+#         return E_NOTIMPL
+#
+#     def Clone(self, This, ppCopy):
+#         print('IWbemClassObject.Clone')
+#         return E_NOTIMPL
+#
+#     def GetObjectText(self, This, lFlags, pstrObjectText):
+#         print('IWbemClassObject.GetObjectText')
+#         return E_NOTIMPL
+#
+#     def SpawnDerivedClass(self, This, lFlags, ppNewClass):
+#         print('IWbemClassObject.SpawnDerivedClass')
+#         return E_NOTIMPL
+#
+#     def SpawnInstance(self, This, lFlags, ppNewInstance):
+#         print('IWbemClassObject.SpawnInstance')
+#         return E_NOTIMPL
+#
+#     def CompareTo(self, This, lFlags, pCompareTo):
+#         print('IWbemClassObject.CompareTo')
+#         return E_NOTIMPL
+#
+#     def GetPropertyOrigin(self, This, wszName, pstrClassName):
+#         print('IWbemClassObject.GetPropertyOrigin')
+#         return E_NOTIMPL
+#
+#     def InheritsFrom(self, This, strAncestor):
+#         print('IWbemClassObject.InheritsFrom')
+#         return E_NOTIMPL
+#
+#     def GetMethod(self, This, wszName, lFlags, ppInSignature, ppOutSignature):
+#         print('IWbemClassObject.GetMethod')
+#         return E_NOTIMPL
+#
+#     def PutMethod(self, This, wszName, lFlags, pInSignature, pOutSignature):
+#         print('IWbemClassObject.PutMethod')
+#         return E_NOTIMPL
+#
+#     def DeleteMethod(self, This, wszName):
+#         print('IWbemClassObject.DeleteMethod')
+#         return E_NOTIMPL
+#
+#     def BeginMethodEnumeration(self, This, lEnumFlags):
+#         print('IWbemClassObject.BeginMethodEnumeration')
+#         return E_NOTIMPL
+#
+#     def NextMethod(self, This, lFlags, pstrName, ppInSignature, ppOutSignature):
+#         print('IWbemClassObject.NextMethod')
+#         return E_NOTIMPL
+#
+#     def EndMethodEnumeration(self, This):
+#         print('IWbemClassObject.EndMethodEnumeration')
+#         return E_NOTIMPL
+#
+#     def GetMethodQualifierSet(self, This, wszMethod, ppQualSet):
+#         print('IWbemClassObject.GetMethodQualifierSet')
+#         return E_NOTIMPL
+#
+#     def GetMethodOrigin(self, This, wszMethodName, pstrClassName):
+#         print('IWbemClassObject.GetMethodOrigin')
+#         return E_NOTIMPL
+#
 IWbemClassObject._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3456,6 +7953,45 @@ IWbemClassObject._functions_ = {
         "GetMethodOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(26, "GetMethodOrigin"),
     }
 
+# class IWbemContextImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemContext
+#
+#     def Clone(self, This, ppNewCopy):
+#         print('IWbemContext.Clone')
+#         return E_NOTIMPL
+#
+#     def GetNames(self, This, lFlags, pNames):
+#         print('IWbemContext.GetNames')
+#         return E_NOTIMPL
+#
+#     def BeginEnumeration(self, This, lFlags):
+#         print('IWbemContext.BeginEnumeration')
+#         return E_NOTIMPL
+#
+#     def Next(self, This, lFlags, pstrName, pValue):
+#         print('IWbemContext.Next')
+#         return E_NOTIMPL
+#
+#     def EndEnumeration(self, This):
+#         print('IWbemContext.EndEnumeration')
+#         return E_NOTIMPL
+#
+#     def SetValue(self, This, wszName, lFlags, pValue):
+#         print('IWbemContext.SetValue')
+#         return E_NOTIMPL
+#
+#     def GetValue(self, This, wszName, lFlags, pValue):
+#         print('IWbemContext.GetValue')
+#         return E_NOTIMPL
+#
+#     def DeleteValue(self, This, wszName, lFlags):
+#         print('IWbemContext.DeleteValue')
+#         return E_NOTIMPL
+#
+#     def DeleteAll(self, This):
+#         print('IWbemContext.DeleteAll')
+#         return E_NOTIMPL
+#
 IWbemContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3483,6 +8019,13 @@ IWbemContext._functions_ = {
         "DeleteAll": ctypes.WINFUNCTYPE(HRESULT)(11, "DeleteAll"),
     }
 
+# class IWbemLocatorImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemLocator
+#
+#     def ConnectServer(self, This, strNetworkResource, strUser, strPassword, strLocale, lSecurityFlags, strAuthority, pCtx, ppNamespace):
+#         print('IWbemLocator.ConnectServer')
+#         return E_NOTIMPL
+#
 IWbemLocator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3494,6 +8037,17 @@ IWbemLocator._functions_ = {
         "ConnectServer": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, BSTR, BSTR, LONG, BSTR, IWbemContext, POINTER(IWbemServices))(3, "ConnectServer"),
     }
 
+# class IWbemObjectSinkImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemObjectSink
+#
+#     def Indicate(self, This, lObjectCount, apObjArray):
+#         print('IWbemObjectSink.Indicate')
+#         return E_NOTIMPL
+#
+#     def SetStatus(self, This, lFlags, hResult, strParam, pObjParam):
+#         print('IWbemObjectSink.SetStatus')
+#         return E_NOTIMPL
+#
 IWbemObjectSink._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3507,6 +8061,17 @@ IWbemObjectSink._functions_ = {
         "SetStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject)(4, "SetStatus"),
     }
 
+# class IWbemObjectTextSrcImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemObjectTextSrc
+#
+#     def GetText(self, This, lFlags, pObj, uObjTextFormat, pCtx, strText):
+#         print('IWbemObjectTextSrc.GetText')
+#         return E_NOTIMPL
+#
+#     def CreateFromText(self, This, lFlags, strText, uObjTextFormat, pCtx, pNewObj):
+#         print('IWbemObjectTextSrc.CreateFromText')
+#         return E_NOTIMPL
+#
 IWbemObjectTextSrc._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3520,6 +8085,37 @@ IWbemObjectTextSrc._functions_ = {
         "CreateFromText": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, ULONG, IWbemContext, POINTER(IWbemClassObject))(4, "CreateFromText"),
     }
 
+# class IWbemQualifierSetImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemQualifierSet
+#
+#     def Get(self, This, wszName, lFlags, pVal, plFlavor):
+#         print('IWbemQualifierSet.Get')
+#         return E_NOTIMPL
+#
+#     def Put(self, This, wszName, pVal, lFlavor):
+#         print('IWbemQualifierSet.Put')
+#         return E_NOTIMPL
+#
+#     def Delete(self, This, wszName):
+#         print('IWbemQualifierSet.Delete')
+#         return E_NOTIMPL
+#
+#     def GetNames(self, This, lFlags, pNames):
+#         print('IWbemQualifierSet.GetNames')
+#         return E_NOTIMPL
+#
+#     def BeginEnumeration(self, This, lFlags):
+#         print('IWbemQualifierSet.BeginEnumeration')
+#         return E_NOTIMPL
+#
+#     def Next(self, This, lFlags, pstrName, pVal, plFlavor):
+#         print('IWbemQualifierSet.Next')
+#         return E_NOTIMPL
+#
+#     def EndEnumeration(self, This):
+#         print('IWbemQualifierSet.EndEnumeration')
+#         return E_NOTIMPL
+#
 IWbemQualifierSet._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -3543,6 +8139,101 @@ IWbemQualifierSet._functions_ = {
         "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(9, "EndEnumeration"),
     }
 
+# class IWbemServicesImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IWbemServices
+#
+#     def OpenNamespace(self, This, strNamespace, lFlags, pCtx, ppWorkingNamespace, ppResult):
+#         print('IWbemServices.OpenNamespace')
+#         return E_NOTIMPL
+#
+#     def CancelAsyncCall(self, This, pSink):
+#         print('IWbemServices.CancelAsyncCall')
+#         return E_NOTIMPL
+#
+#     def QueryObjectSink(self, This, lFlags, ppResponseHandler):
+#         print('IWbemServices.QueryObjectSink')
+#         return E_NOTIMPL
+#
+#     def GetObject(self, This, strObjectPath, lFlags, pCtx, ppObject, ppCallResult):
+#         print('IWbemServices.GetObject')
+#         return E_NOTIMPL
+#
+#     def GetObjectAsync(self, This, strObjectPath, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.GetObjectAsync')
+#         return E_NOTIMPL
+#
+#     def PutClass(self, This, pObject, lFlags, pCtx, ppCallResult):
+#         print('IWbemServices.PutClass')
+#         return E_NOTIMPL
+#
+#     def PutClassAsync(self, This, pObject, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.PutClassAsync')
+#         return E_NOTIMPL
+#
+#     def DeleteClass(self, This, strClass, lFlags, pCtx, ppCallResult):
+#         print('IWbemServices.DeleteClass')
+#         return E_NOTIMPL
+#
+#     def DeleteClassAsync(self, This, strClass, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.DeleteClassAsync')
+#         return E_NOTIMPL
+#
+#     def CreateClassEnum(self, This, strSuperclass, lFlags, pCtx, ppEnum):
+#         print('IWbemServices.CreateClassEnum')
+#         return E_NOTIMPL
+#
+#     def CreateClassEnumAsync(self, This, strSuperclass, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.CreateClassEnumAsync')
+#         return E_NOTIMPL
+#
+#     def PutInstance(self, This, pInst, lFlags, pCtx, ppCallResult):
+#         print('IWbemServices.PutInstance')
+#         return E_NOTIMPL
+#
+#     def PutInstanceAsync(self, This, pInst, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.PutInstanceAsync')
+#         return E_NOTIMPL
+#
+#     def DeleteInstance(self, This, strObjectPath, lFlags, pCtx, ppCallResult):
+#         print('IWbemServices.DeleteInstance')
+#         return E_NOTIMPL
+#
+#     def DeleteInstanceAsync(self, This, strObjectPath, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.DeleteInstanceAsync')
+#         return E_NOTIMPL
+#
+#     def CreateInstanceEnum(self, This, strFilter, lFlags, pCtx, ppEnum):
+#         print('IWbemServices.CreateInstanceEnum')
+#         return E_NOTIMPL
+#
+#     def CreateInstanceEnumAsync(self, This, strFilter, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.CreateInstanceEnumAsync')
+#         return E_NOTIMPL
+#
+#     def ExecQuery(self, This, strQueryLanguage, strQuery, lFlags, pCtx, ppEnum):
+#         print('IWbemServices.ExecQuery')
+#         return E_NOTIMPL
+#
+#     def ExecQueryAsync(self, This, strQueryLanguage, strQuery, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.ExecQueryAsync')
+#         return E_NOTIMPL
+#
+#     def ExecNotificationQuery(self, This, strQueryLanguage, strQuery, lFlags, pCtx, ppEnum):
+#         print('IWbemServices.ExecNotificationQuery')
+#         return E_NOTIMPL
+#
+#     def ExecNotificationQueryAsync(self, This, strQueryLanguage, strQuery, lFlags, pCtx, pResponseHandler):
+#         print('IWbemServices.ExecNotificationQueryAsync')
+#         return E_NOTIMPL
+#
+#     def ExecMethod(self, This, strObjectPath, strMethodName, lFlags, pCtx, pInParams, ppOutParams, ppCallResult):
+#         print('IWbemServices.ExecMethod')
+#         return E_NOTIMPL
+#
+#     def ExecMethodAsync(self, This, strObjectPath, strMethodName, lFlags, pCtx, pInParams, pResponseHandler):
+#         print('IWbemServices.ExecMethodAsync')
+#         return E_NOTIMPL
+#
 IWbemServices._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),

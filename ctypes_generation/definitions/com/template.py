@@ -27,20 +27,29 @@ class COMInterface(ctypes.c_void_p):
         ctypes._check_HRESULT(result)
         return args
 
+    errcheck = _default_errcheck
+
     def __getattr__(self, name):
         if name in self._functions_:
             winfunc = self._functions_[name]
             # Hacking the HRESULT _check_retval_ and
             # letting COMInterface.errcheck do the work of validating / raising
             winfunc.restype = COMHRESULT
-            effective_errcheck = getattr(self, "errcheck", self._default_errcheck)
-            winfunc.errcheck = effective_errcheck
+            winfunc.errcheck = self.errcheck
             return functools.partial(winfunc, self)
         return super(COMInterface, self).__getattribute__(name)
 
     def __repr__(self):
         description = "<NULL>" if not self.value else ""
         return "<{0}{1} at {2:#x}>".format(type(self).__name__, description, id(self))
+
+    # use the context protocol to allow Release() in exit
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if bool(self):
+            self.Release()
 
     # Simplified API for QueryInterface for interface embeding their IID
     # Or for string/Obj

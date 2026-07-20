@@ -858,6 +858,64 @@ class tagCALLFRAME_WALK(EnumType):
 CALLFRAME_WALK = tagCALLFRAME_WALK
 
 
+VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)
+VT_NULL = EnumValue("_VARENUM", "VT_NULL", 0x1)
+VT_I2 = EnumValue("_VARENUM", "VT_I2", 0x2)
+VT_I4 = EnumValue("_VARENUM", "VT_I4", 0x3)
+VT_R4 = EnumValue("_VARENUM", "VT_R4", 0x4)
+VT_R8 = EnumValue("_VARENUM", "VT_R8", 0x5)
+VT_CY = EnumValue("_VARENUM", "VT_CY", 0x6)
+VT_DATE = EnumValue("_VARENUM", "VT_DATE", 0x7)
+VT_BSTR = EnumValue("_VARENUM", "VT_BSTR", 0x8)
+VT_DISPATCH = EnumValue("_VARENUM", "VT_DISPATCH", 0x9)
+VT_ERROR = EnumValue("_VARENUM", "VT_ERROR", 0xa)
+VT_BOOL = EnumValue("_VARENUM", "VT_BOOL", 0xb)
+VT_VARIANT = EnumValue("_VARENUM", "VT_VARIANT", 0xc)
+VT_UNKNOWN = EnumValue("_VARENUM", "VT_UNKNOWN", 0xd)
+VT_DECIMAL = EnumValue("_VARENUM", "VT_DECIMAL", 0xe)
+VT_I1 = EnumValue("_VARENUM", "VT_I1", 0x10)
+VT_UI1 = EnumValue("_VARENUM", "VT_UI1", 0x11)
+VT_UI2 = EnumValue("_VARENUM", "VT_UI2", 0x12)
+VT_UI4 = EnumValue("_VARENUM", "VT_UI4", 0x13)
+VT_I8 = EnumValue("_VARENUM", "VT_I8", 0x14)
+VT_UI8 = EnumValue("_VARENUM", "VT_UI8", 0x15)
+VT_INT = EnumValue("_VARENUM", "VT_INT", 0x16)
+VT_UINT = EnumValue("_VARENUM", "VT_UINT", 0x17)
+VT_VOID = EnumValue("_VARENUM", "VT_VOID", 0x18)
+VT_HRESULT = EnumValue("_VARENUM", "VT_HRESULT", 0x19)
+VT_PTR = EnumValue("_VARENUM", "VT_PTR", 0x1a)
+VT_SAFEARRAY = EnumValue("_VARENUM", "VT_SAFEARRAY", 0x1b)
+VT_CARRAY = EnumValue("_VARENUM", "VT_CARRAY", 0x1c)
+VT_USERDEFINED = EnumValue("_VARENUM", "VT_USERDEFINED", 0x1d)
+VT_LPSTR = EnumValue("_VARENUM", "VT_LPSTR", 0x1e)
+VT_LPWSTR = EnumValue("_VARENUM", "VT_LPWSTR", 0x1f)
+VT_RECORD = EnumValue("_VARENUM", "VT_RECORD", 0x24)
+VT_INT_PTR = EnumValue("_VARENUM", "VT_INT_PTR", 0x25)
+VT_UINT_PTR = EnumValue("_VARENUM", "VT_UINT_PTR", 0x26)
+VT_FILETIME = EnumValue("_VARENUM", "VT_FILETIME", 0x40)
+VT_BLOB = EnumValue("_VARENUM", "VT_BLOB", 0x41)
+VT_STREAM = EnumValue("_VARENUM", "VT_STREAM", 0x42)
+VT_STORAGE = EnumValue("_VARENUM", "VT_STORAGE", 0x43)
+VT_STREAMED_OBJECT = EnumValue("_VARENUM", "VT_STREAMED_OBJECT", 0x44)
+VT_STORED_OBJECT = EnumValue("_VARENUM", "VT_STORED_OBJECT", 0x45)
+VT_BLOB_OBJECT = EnumValue("_VARENUM", "VT_BLOB_OBJECT", 0x46)
+VT_CF = EnumValue("_VARENUM", "VT_CF", 0x47)
+VT_CLSID = EnumValue("_VARENUM", "VT_CLSID", 0x48)
+VT_VERSIONED_STREAM = EnumValue("_VARENUM", "VT_VERSIONED_STREAM", 0x49)
+VT_BSTR_BLOB = EnumValue("_VARENUM", "VT_BSTR_BLOB", 0xfff)
+VT_VECTOR = EnumValue("_VARENUM", "VT_VECTOR", 0x1000)
+VT_ARRAY = EnumValue("_VARENUM", "VT_ARRAY", 0x2000)
+VT_BYREF = EnumValue("_VARENUM", "VT_BYREF", 0x4000)
+VT_RESERVED = EnumValue("_VARENUM", "VT_RESERVED", 0x8000)
+VT_ILLEGAL = EnumValue("_VARENUM", "VT_ILLEGAL", 0xffff)
+VT_ILLEGALMASKED = EnumValue("_VARENUM", "VT_ILLEGALMASKED", 0xfff)
+VT_TYPEMASK = EnumValue("_VARENUM", "VT_TYPEMASK", 0xfff)
+class _VARENUM(EnumType):
+    values = [VT_EMPTY, VT_NULL, VT_I2, VT_I4, VT_R4, VT_R8, VT_CY, VT_DATE, VT_BSTR, VT_DISPATCH, VT_ERROR, VT_BOOL, VT_VARIANT, VT_UNKNOWN, VT_DECIMAL, VT_I1, VT_UI1, VT_UI2, VT_UI4, VT_I8, VT_UI8, VT_INT, VT_UINT, VT_VOID, VT_HRESULT, VT_PTR, VT_SAFEARRAY, VT_CARRAY, VT_USERDEFINED, VT_LPSTR, VT_LPWSTR, VT_RECORD, VT_INT_PTR, VT_UINT_PTR, VT_FILETIME, VT_BLOB, VT_STREAM, VT_STORAGE, VT_STREAMED_OBJECT, VT_STORED_OBJECT, VT_BLOB_OBJECT, VT_CF, VT_CLSID, VT_VERSIONED_STREAM, VT_BSTR_BLOB, VT_VECTOR, VT_ARRAY, VT_BYREF, VT_RESERVED, VT_ILLEGAL, VT_ILLEGALMASKED, VT_TYPEMASK]
+    mapper = FlagMapper(*values)
+VARENUM = _VARENUM
+
+
 class tagMULTI_QI(Structure):
     _fields_ = [
         ("pIID", POINTER(IID)),
@@ -1017,6 +1075,123 @@ VARIANT = __tagVARIANT
 VARIANTARG = __tagVARIANT
 _tagVARIANT = __tagVARIANT
 
+
+_original__tagVARIANT = __tagVARIANT
+class __tagVARIANT(__tagVARIANT):
+    VT_TYPE_TO_FIELD = {
+        # Fundamental Types
+        VT_EMPTY: None,
+        VT_NULL: None,
+        VT_I2: "iVal",
+        VT_I4: "lVal",
+        VT_R4: "fltVal",
+        VT_R8: "dblVal",
+        VT_CY: "cyVal",
+        VT_DATE: "date",
+        VT_BSTR: "bstrVal",
+        VT_DISPATCH: "pdispVal",
+        VT_ERROR: "scode",
+        VT_BOOL: "boolVal",
+        VT_VARIANT: "pvarVal",  # Only used with VT_BYREF
+        VT_UNKNOWN: "punkVal",
+        VT_DECIMAL: "decVal",   # Note: decVal sits parallel to the inner struct layout, handled via union
+        VT_I1: "cVal",
+        VT_UI1: "bVal",
+        VT_UI2: "uiVal",
+        VT_UI4: "ulVal",
+        VT_I8: "llVal",
+        VT_UI8: "ullVal",
+        VT_INT: "intVal",
+        VT_UINT: "uintVal",
+        VT_VOID: "byref",       # Generic raw pointer
+        VT_HRESULT: "scode",
+        VT_PTR: "byref",
+        VT_SAFEARRAY: "parray",
+        VT_CARRAY: "byref",
+        VT_USERDEFINED: "byref",
+        VT_RECORD: "pvRecord",  # Access via __VARIANT_NAME_4 struct inside the union
+
+        # Pointer variants (VT_BYREF combinations)
+        VT_I2 | VT_BYREF: "piVal",
+        VT_I4 | VT_BYREF: "plVal",
+        VT_R4 | VT_BYREF: "pfltVal",
+        VT_R8 | VT_BYREF: "pdblVal",
+        VT_CY | VT_BYREF: "pcyVal",
+        VT_DATE | VT_BYREF: "pdate",
+        VT_BSTR | VT_BYREF: "pbstrVal",
+        VT_DISPATCH | VT_BYREF: "ppdispVal",
+        VT_ERROR | VT_BYREF: "pscode",
+        VT_BOOL | VT_BYREF: "pboolVal",
+        VT_VARIANT | VT_BYREF: "pvarVal",
+        VT_UNKNOWN | VT_BYREF: "ppunkVal",
+        VT_SAFEARRAY | VT_BYREF: "pparray",
+        VT_DECIMAL | VT_BYREF: "pdecVal",
+        VT_I1 | VT_BYREF: "pcVal",
+        VT_UI1 | VT_BYREF: "pbVal",
+        VT_UI2 | VT_BYREF: "puiVal",
+        VT_UI4 | VT_BYREF: "pulVal",
+        VT_I8 | VT_BYREF: "pllVal",
+        VT_UI8 | VT_BYREF: "pullVal",
+        VT_INT | VT_BYREF: "pintVal",
+        VT_UINT | VT_BYREF: "puintVal",
+    }
+
+    # # Copy raw-ctypes fields which is a descriptor :)
+    # Allow to redefine the vt with type and allow access to the undervalue here
+    rawvt = _original__tagVARIANT.vt
+
+    def get_vt(self):
+        # Depending on a typedef is not perfect, but name with __ at start break python
+        # NameError: name '_tagVARIANT__tagVARIANT' is not defined
+        rawvt = super(VARIANT, self).vt
+        return VARENUM.mapper[self.rawvt]
+
+    def set_vt(self, value):
+        self.rawvt = value
+
+    vt = property(get_vt, set_vt)
+
+    @property
+    def value(self):
+        fieldname = self.VT_TYPE_TO_FIELD[self.rawvt]
+        value = getattr(self, fieldname)
+        if self.rawvt == VT_UNKNOWN:
+            value = windows.generated_def.IUnknown(value)
+        return value
+
+    @classmethod
+    def create(cls, value, type=None):
+        if type is None:
+            return cls._create_with_guessed_type(value)
+        return cls._create_with_fixed_type(value, type)
+
+    @classmethod
+    def _create_with_guessed_type(cls, value):
+        # TODO : better
+        if value is None:
+            return cls(VT_NULL)
+        if isinstance(value, bool):
+            return cls(VT_BOOL, boolVal=value)
+        if isinstance(value, int):
+            return cls(VT_INT, intVal=value) # Default on llval ? int-val ?
+        if isinstance(value, str): # TODO: py2/py3
+            return cls(VT_BSTR, bstrVal=value)
+        raise ValueError("Could not guess VARIANT type for value {}".format(value))
+
+    @classmethod
+    def _create_with_fixed_type(cls, value, type):
+        if type in (VT_EMPTY, VT_NULL):
+            return cls(vt=type)
+        targetfield = cls.VT_TYPE_TO_FIELD[type]
+        return cls(vt=type, **{targetfield: value})
+
+    def __repr__(self):
+        return "<{0} type={1}>".format(type(self).__name__, VARENUM.mapper[self.vt])
+LPVARIANT = POINTER(__tagVARIANT)
+LPVARIANTARG = POINTER(__tagVARIANT)
+VARIANT = __tagVARIANT
+VARIANTARG = __tagVARIANT
+_tagVARIANT = __tagVARIANT
 SD_LAUNCHPERMISSIONS = EnumValue("tagCOMSD", "SD_LAUNCHPERMISSIONS", 0x0)
 SD_ACCESSPERMISSIONS = EnumValue("tagCOMSD", "SD_ACCESSPERMISSIONS", 0x1)
 SD_LAUNCHRESTRICTIONS = EnumValue("tagCOMSD", "SD_LAUNCHRESTRICTIONS", 0x2)
@@ -6013,64 +6188,6 @@ class _SECTION_INHERIT(EnumType):
     values = [ViewShare, ViewUnmap]
     mapper = FlagMapper(*values)
 SECTION_INHERIT = _SECTION_INHERIT
-
-
-VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)
-VT_NULL = EnumValue("_VARENUM", "VT_NULL", 0x1)
-VT_I2 = EnumValue("_VARENUM", "VT_I2", 0x2)
-VT_I4 = EnumValue("_VARENUM", "VT_I4", 0x3)
-VT_R4 = EnumValue("_VARENUM", "VT_R4", 0x4)
-VT_R8 = EnumValue("_VARENUM", "VT_R8", 0x5)
-VT_CY = EnumValue("_VARENUM", "VT_CY", 0x6)
-VT_DATE = EnumValue("_VARENUM", "VT_DATE", 0x7)
-VT_BSTR = EnumValue("_VARENUM", "VT_BSTR", 0x8)
-VT_DISPATCH = EnumValue("_VARENUM", "VT_DISPATCH", 0x9)
-VT_ERROR = EnumValue("_VARENUM", "VT_ERROR", 0xa)
-VT_BOOL = EnumValue("_VARENUM", "VT_BOOL", 0xb)
-VT_VARIANT = EnumValue("_VARENUM", "VT_VARIANT", 0xc)
-VT_UNKNOWN = EnumValue("_VARENUM", "VT_UNKNOWN", 0xd)
-VT_DECIMAL = EnumValue("_VARENUM", "VT_DECIMAL", 0xe)
-VT_I1 = EnumValue("_VARENUM", "VT_I1", 0x10)
-VT_UI1 = EnumValue("_VARENUM", "VT_UI1", 0x11)
-VT_UI2 = EnumValue("_VARENUM", "VT_UI2", 0x12)
-VT_UI4 = EnumValue("_VARENUM", "VT_UI4", 0x13)
-VT_I8 = EnumValue("_VARENUM", "VT_I8", 0x14)
-VT_UI8 = EnumValue("_VARENUM", "VT_UI8", 0x15)
-VT_INT = EnumValue("_VARENUM", "VT_INT", 0x16)
-VT_UINT = EnumValue("_VARENUM", "VT_UINT", 0x17)
-VT_VOID = EnumValue("_VARENUM", "VT_VOID", 0x18)
-VT_HRESULT = EnumValue("_VARENUM", "VT_HRESULT", 0x19)
-VT_PTR = EnumValue("_VARENUM", "VT_PTR", 0x1a)
-VT_SAFEARRAY = EnumValue("_VARENUM", "VT_SAFEARRAY", 0x1b)
-VT_CARRAY = EnumValue("_VARENUM", "VT_CARRAY", 0x1c)
-VT_USERDEFINED = EnumValue("_VARENUM", "VT_USERDEFINED", 0x1d)
-VT_LPSTR = EnumValue("_VARENUM", "VT_LPSTR", 0x1e)
-VT_LPWSTR = EnumValue("_VARENUM", "VT_LPWSTR", 0x1f)
-VT_RECORD = EnumValue("_VARENUM", "VT_RECORD", 0x24)
-VT_INT_PTR = EnumValue("_VARENUM", "VT_INT_PTR", 0x25)
-VT_UINT_PTR = EnumValue("_VARENUM", "VT_UINT_PTR", 0x26)
-VT_FILETIME = EnumValue("_VARENUM", "VT_FILETIME", 0x40)
-VT_BLOB = EnumValue("_VARENUM", "VT_BLOB", 0x41)
-VT_STREAM = EnumValue("_VARENUM", "VT_STREAM", 0x42)
-VT_STORAGE = EnumValue("_VARENUM", "VT_STORAGE", 0x43)
-VT_STREAMED_OBJECT = EnumValue("_VARENUM", "VT_STREAMED_OBJECT", 0x44)
-VT_STORED_OBJECT = EnumValue("_VARENUM", "VT_STORED_OBJECT", 0x45)
-VT_BLOB_OBJECT = EnumValue("_VARENUM", "VT_BLOB_OBJECT", 0x46)
-VT_CF = EnumValue("_VARENUM", "VT_CF", 0x47)
-VT_CLSID = EnumValue("_VARENUM", "VT_CLSID", 0x48)
-VT_VERSIONED_STREAM = EnumValue("_VARENUM", "VT_VERSIONED_STREAM", 0x49)
-VT_BSTR_BLOB = EnumValue("_VARENUM", "VT_BSTR_BLOB", 0xfff)
-VT_VECTOR = EnumValue("_VARENUM", "VT_VECTOR", 0x1000)
-VT_ARRAY = EnumValue("_VARENUM", "VT_ARRAY", 0x2000)
-VT_BYREF = EnumValue("_VARENUM", "VT_BYREF", 0x4000)
-VT_RESERVED = EnumValue("_VARENUM", "VT_RESERVED", 0x8000)
-VT_ILLEGAL = EnumValue("_VARENUM", "VT_ILLEGAL", 0xffff)
-VT_ILLEGALMASKED = EnumValue("_VARENUM", "VT_ILLEGALMASKED", 0xfff)
-VT_TYPEMASK = EnumValue("_VARENUM", "VT_TYPEMASK", 0xfff)
-class _VARENUM(EnumType):
-    values = [VT_EMPTY, VT_NULL, VT_I2, VT_I4, VT_R4, VT_R8, VT_CY, VT_DATE, VT_BSTR, VT_DISPATCH, VT_ERROR, VT_BOOL, VT_VARIANT, VT_UNKNOWN, VT_DECIMAL, VT_I1, VT_UI1, VT_UI2, VT_UI4, VT_I8, VT_UI8, VT_INT, VT_UINT, VT_VOID, VT_HRESULT, VT_PTR, VT_SAFEARRAY, VT_CARRAY, VT_USERDEFINED, VT_LPSTR, VT_LPWSTR, VT_RECORD, VT_INT_PTR, VT_UINT_PTR, VT_FILETIME, VT_BLOB, VT_STREAM, VT_STORAGE, VT_STREAMED_OBJECT, VT_STORED_OBJECT, VT_BLOB_OBJECT, VT_CF, VT_CLSID, VT_VERSIONED_STREAM, VT_BSTR_BLOB, VT_VECTOR, VT_ARRAY, VT_BYREF, VT_RESERVED, VT_ILLEGAL, VT_ILLEGALMASKED, VT_TYPEMASK]
-    mapper = FlagMapper(*values)
-VARENUM = _VARENUM
 
 
 UDP_TABLE_BASIC = EnumValue("_UDP_TABLE_CLASS", "UDP_TABLE_BASIC", 0x0)

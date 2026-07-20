@@ -87,13 +87,88 @@ class WinComParser(Parser):
         self.assert_token_type(SemiColonToken)
         return ret_type.value, method_name.value, args
 
+    def parse_macro_based_com_method(self, interface_name):
+        # STDMETHOD(NAME) | STDMETHOD_(RetType, NAME)
+        stddef_macro = self.assert_token_type(NameToken)
+        self.assert_token_type(OpenParenthesisToken)
+        assert stddef_macro.value in ("STDMETHOD", "STDMETHODV", "STDMETHOD_"), "Unknown COM definition macro : {0}".format(stddef_macro)
+        if stddef_macro.value == "STDMETHOD_":
+            ret_type = self.assert_token_type(NameToken).value
+            self.assert_token_type(CommaToken)
+            method_name = self.assert_token_type(NameToken)
+        else: # STDMETHOD(QueryInterface) | STDMETHODV(Name)(Arg, Arg, ...)
+            ret_type = "HRESULT"
+            method_name = self.assert_token_type(NameToken)
+        self.assert_token_type(CloseParenthesisToken)
+
+        #(THIS, ARG2, ARG3)
+        self.assert_token_type(OpenParenthesisToken)
+        # THIS / THIS_ may be present or not
+        potential_this = self.peek()
+        if type(potential_this) == NameToken and potential_this.value in ("THIS_", "THIS"):
+            self.assert_token_type(NameToken) # Pass over THIS/THIS_
+        # Emulate a full argument from the "THIS" macro
+        args = [(interface_name, 1, "This")]
+        # Parse the args
+        while type(self.peek()) != CloseParenthesisToken:
+            if self.peek().value == "...": #TODO: '...' token ?
+                self.next_token()
+                # '...' should be last token before ')'
+                args.append("...") # Put a type ?
+                assert type(self.peek()) == CloseParenthesisToken
+                continue
+            args.append(self.parse_midl_generated_com_argument())
+            #print("Pass <{0}>".format(p))
+        self.next_token()
+        self.assert_name("PURE")
+        self.assert_token_type(SemiColonToken)
+        return ret_type, method_name.value, args
+
     def parse(self):
         tok = self.peek()
-        if type(tok) == NameToken and tok.value == "@IID:":
+        if type(tok) == NameToken and tok.value == "@IID":
             self.next_token()
             iid = self.assert_token_type(NameToken).value
         else:
             iid = None
+
+        # Midl Generated or custom macro definition ?
+        first_token = self.peek()
+        if type(first_token) == NameToken and first_token.value == "DECLARE_INTERFACE_":
+            # Manual COM interface definition : not MIDL generated
+            # Ex: windbg definitions
+            return self.parse_macro_based_com_vtbl(iid=iid)
+        else:
+            return self.parse_midl_generated_com_vtbl(iid=iid)
+
+
+    def parse_macro_based_com_vtbl(self, iid):
+        self.assert_name("DECLARE_INTERFACE_")
+        self.assert_token_type(OpenParenthesisToken)
+        interface_name = self.assert_token_type(NameToken).value
+        vtable_name = "{interface_name}Vtbl".format(interface_name=interface_name)
+
+
+
+        self.assert_token_type(CommaToken)
+        parent_interface = self.assert_token_type(NameToken).value
+        self.assert_token_type(CloseParenthesisToken)
+        self.assert_token_type(OpenBracketToken)
+
+        res = WinCOMVTABLE(vtable_name, parent_interface=parent_interface)
+        res.iid = iid
+
+        while type(self.peek()) != CloseBracketToken:
+            ret_type, method_name, args = self.parse_macro_based_com_method(interface_name)
+            res.add_method(ret_type, method_name, args)
+
+        self.assert_token_type(CloseBracketToken)
+        self.assert_token_type(SemiColonToken)
+
+        res.typedefptr = None
+        return res
+
+    def parse_midl_generated_com_vtbl(self, iid):
         self.assert_keyword("typedef")
         self.assert_keyword("struct")
 
@@ -129,8 +204,9 @@ class WinComParser(Parser):
 Method = namedtuple("Method", ["ret_type", "name", "args", 'functype'])
 MethodArg = namedtuple("MethodArg", ["type", "byreflevel", "name"])
 class WinCOMVTABLE(object):
-    def __init__(self, vtbl_name):
+    def __init__(self, vtbl_name, parent_interface=None):
         self.vtbl_name = vtbl_name
+        self.parent_interface = parent_interface
         if not vtbl_name.endswith("Vtbl"):
             raise ValueError("Com interface are expected to finish by <Vtbl> got <{0}".format(vtbl.name))
         self.name = vtbl_name[:-len("Vtbl")]
