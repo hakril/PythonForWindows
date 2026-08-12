@@ -32,9 +32,12 @@ class COMInterface(ctypes.c_void_p):
 
     def __getattr__(self, name):
         if name in self._functions_:
-            winfunc = self._functions_[name]
+            funcdefinition = self._functions_[name]
             # Hacking the HRESULT _check_retval_ and
             # letting COMInterface.errcheck do the work of validating / raising
+            # https://docs.python.org/2/library/ctypes.html#ctypes.PYFUNCTYPE
+            # prototype(vtbl_index, name[, paramflags[, iid]])
+            winfunc = funcdefinition["type"](funcdefinition["method_offset"], name)
             winfunc.restype = COMHRESULT
             winfunc.errcheck = self.errcheck
             return functools.partial(winfunc, self)
@@ -282,6 +285,9 @@ class IStandardActivator(IUnknown):
 class ISystemActivator(IUnknown):
     IID = generate_IID(0x000001A0, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ISystemActivator", strid="000001A0-0000-0000-C000-000000000046")
 
+class IPFWComTest(IUnknown):
+    IID = generate_IID(0xb8b44ed5, 0xeb34, 0x497b, 0xa7, 0x9d, 0x15, 0x15, 0x71, 0x8d, 0x83, 0xf6, name="IPFWComTest", strid="b8b44ed5-eb34-497b-a79d-1515718d83f6")
+
 class IBindCtx(IUnknown):
     IID = generate_IID(0x0000000E, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IBindCtx", strid="0000000E-0000-0000-C000-000000000046")
 
@@ -446,11 +452,20 @@ class IWbemServices(IUnknown):
 #
 IUnknown._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
     }
 
 # class ICallFactoryImplem(windows.com.COMImplementation):
@@ -462,13 +477,25 @@ IUnknown._functions_ = {
 #
 ICallFactory._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CreateCall -> riid:REFIID, pCtrlUnk:*IUnknown, riid2:REFIID, ppv:**IUnknown
-        "CreateCall": ctypes.WINFUNCTYPE(HRESULT, REFIID, IUnknown, REFIID, POINTER(IUnknown))(3, "CreateCall"),
+        "CreateCall": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, IUnknown, REFIID, POINTER(IUnknown)),
+            "method_offset" : 3,
+        },
     }
 
 # class ICallFrameImplem(windows.com.COMImplementation):
@@ -552,49 +579,115 @@ ICallFactory._functions_ = {
 #
 ICallFrame._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetInfo -> pInfo:*CALLFRAMEINFO
-        "GetInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAMEINFO))(3, "GetInfo"),
+        "GetInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAMEINFO)),
+            "method_offset" : 3,
+        },
         # GetIIDAndMethod -> pIID:*IID, piMethod:*ULONG
-        "GetIIDAndMethod": ctypes.WINFUNCTYPE(HRESULT, POINTER(IID), POINTER(ULONG))(4, "GetIIDAndMethod"),
+        "GetIIDAndMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IID), POINTER(ULONG)),
+            "method_offset" : 4,
+        },
         # GetNames -> pwszInterface:*LPWSTR, pwszMethod:*LPWSTR
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR))(5, "GetNames"),
+        "GetNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR)),
+            "method_offset" : 5,
+        },
         # GetStackLocation -> 
-        "GetStackLocation": ctypes.WINFUNCTYPE(PVOID)(6, "GetStackLocation"),
+        "GetStackLocation": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 6,
+        },
         # SetStackLocation -> pvStack:PVOID
-        "SetStackLocation": ctypes.WINFUNCTYPE(VOID, PVOID)(7, "SetStackLocation"),
+        "SetStackLocation": {
+            "type": ctypes.WINFUNCTYPE(VOID, PVOID),
+            "method_offset" : 7,
+        },
         # SetReturnValue -> hr:HRESULT
-        "SetReturnValue": ctypes.WINFUNCTYPE(VOID, HRESULT)(8, "SetReturnValue"),
+        "SetReturnValue": {
+            "type": ctypes.WINFUNCTYPE(VOID, HRESULT),
+            "method_offset" : 8,
+        },
         # GetReturnValue -> 
-        "GetReturnValue": ctypes.WINFUNCTYPE(HRESULT)(9, "GetReturnValue"),
+        "GetReturnValue": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # GetParamInfo -> iparam:ULONG, pInfo:*CALLFRAMEPARAMINFO
-        "GetParamInfo": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(CALLFRAMEPARAMINFO))(10, "GetParamInfo"),
+        "GetParamInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(CALLFRAMEPARAMINFO)),
+            "method_offset" : 10,
+        },
         # SetParam -> iparam:ULONG, pvar:*VARIANT
-        "SetParam": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT))(11, "SetParam"),
+        "SetParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT)),
+            "method_offset" : 11,
+        },
         # GetParam -> iparam:ULONG, pvar:*VARIANT
-        "GetParam": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT))(12, "GetParam"),
+        "GetParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT)),
+            "method_offset" : 12,
+        },
         # Copy -> copyControl:CALLFRAME_COPY, pWalker:*ICallFrameWalker, ppFrame:**ICallFrame
-        "Copy": ctypes.WINFUNCTYPE(HRESULT, CALLFRAME_COPY, ICallFrameWalker, POINTER(ICallFrame))(13, "Copy"),
+        "Copy": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, CALLFRAME_COPY, ICallFrameWalker, POINTER(ICallFrame)),
+            "method_offset" : 13,
+        },
         # Free -> pframeArgsDest:*ICallFrame, pWalkerDestFree:*ICallFrameWalker, pWalkerCopy:*ICallFrameWalker, freeFlags:DWORD, pWalkerFree:*ICallFrameWalker, nullFlags:DWORD
-        "Free": ctypes.WINFUNCTYPE(HRESULT, ICallFrame, ICallFrameWalker, ICallFrameWalker, DWORD, ICallFrameWalker, DWORD)(14, "Free"),
+        "Free": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ICallFrame, ICallFrameWalker, ICallFrameWalker, DWORD, ICallFrameWalker, DWORD),
+            "method_offset" : 14,
+        },
         # FreeParam -> iparam:ULONG, freeFlags:DWORD, pWalkerFree:*ICallFrameWalker, nullFlags:DWORD
-        "FreeParam": ctypes.WINFUNCTYPE(HRESULT, ULONG, DWORD, ICallFrameWalker, DWORD)(15, "FreeParam"),
+        "FreeParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, DWORD, ICallFrameWalker, DWORD),
+            "method_offset" : 15,
+        },
         # WalkFrame -> walkWhat:DWORD, pWalker:*ICallFrameWalker
-        "WalkFrame": ctypes.WINFUNCTYPE(HRESULT, DWORD, ICallFrameWalker)(16, "WalkFrame"),
+        "WalkFrame": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, ICallFrameWalker),
+            "method_offset" : 16,
+        },
         # GetMarshalSizeMax -> pmshlContext:*CALLFRAME_MARSHALCONTEXT, mshlflags:MSHLFLAGS, pcbBufferNeeded:*ULONG
-        "GetMarshalSizeMax": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAME_MARSHALCONTEXT), MSHLFLAGS, POINTER(ULONG))(17, "GetMarshalSizeMax"),
+        "GetMarshalSizeMax": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAME_MARSHALCONTEXT), MSHLFLAGS, POINTER(ULONG)),
+            "method_offset" : 17,
+        },
         # Marshal -> pmshlContext:*CALLFRAME_MARSHALCONTEXT, mshlflags:MSHLFLAGS, pBuffer:PVOID, cbBuffer:ULONG, pcbBufferUsed:*ULONG, pdataRep:*RPCOLEDATAREP, prpcFlags:*ULONG
-        "Marshal": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAME_MARSHALCONTEXT), MSHLFLAGS, PVOID, ULONG, POINTER(ULONG), POINTER(RPCOLEDATAREP), POINTER(ULONG))(18, "Marshal"),
+        "Marshal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CALLFRAME_MARSHALCONTEXT), MSHLFLAGS, PVOID, ULONG, POINTER(ULONG), POINTER(RPCOLEDATAREP), POINTER(ULONG)),
+            "method_offset" : 18,
+        },
         # Unmarshal -> pBuffer:PVOID, cbBuffer:ULONG, dataRep:RPCOLEDATAREP, pcontext:*CALLFRAME_MARSHALCONTEXT, pcbUnmarshalled:*ULONG
-        "Unmarshal": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, RPCOLEDATAREP, POINTER(CALLFRAME_MARSHALCONTEXT), POINTER(ULONG))(19, "Unmarshal"),
+        "Unmarshal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, RPCOLEDATAREP, POINTER(CALLFRAME_MARSHALCONTEXT), POINTER(ULONG)),
+            "method_offset" : 19,
+        },
         # ReleaseMarshalData -> pBuffer:PVOID, cbBuffer:ULONG, ibFirstRelease:ULONG, dataRep:RPCOLEDATAREP, pcontext:*CALLFRAME_MARSHALCONTEXT
-        "ReleaseMarshalData": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, ULONG, RPCOLEDATAREP, POINTER(CALLFRAME_MARSHALCONTEXT))(20, "ReleaseMarshalData"),
+        "ReleaseMarshalData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, ULONG, RPCOLEDATAREP, POINTER(CALLFRAME_MARSHALCONTEXT)),
+            "method_offset" : 20,
+        },
         # Invoke -> pvReceiver:*void
-        "Invoke": ctypes.CFUNCTYPE(HRESULT, PVOID)(21, "Invoke"),
+        "Invoke": {
+            "type": ctypes.CFUNCTYPE(HRESULT, PVOID),
+            "method_offset" : 21,
+        },
     }
 
 # class ICallFrameEventsImplem(windows.com.COMImplementation):
@@ -606,13 +699,25 @@ ICallFrame._functions_ = {
 #
 ICallFrameEvents._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # OnCall -> pFrame:*ICallFrame
-        "OnCall": ctypes.WINFUNCTYPE(HRESULT, ICallFrame)(3, "OnCall"),
+        "OnCall": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ICallFrame),
+            "method_offset" : 3,
+        },
     }
 
 # class ICallFrameWalkerImplem(windows.com.COMImplementation):
@@ -624,13 +729,25 @@ ICallFrameEvents._functions_ = {
 #
 ICallFrameWalker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # OnWalkInterface -> iid:REFIID, ppvInterface:*PVOID, fIn:BOOL, fOut:BOOL
-        "OnWalkInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID), BOOL, BOOL)(3, "OnWalkInterface"),
+        "OnWalkInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID), BOOL, BOOL),
+            "method_offset" : 3,
+        },
     }
 
 # class ICallInterceptorImplem(windows.com.COMImplementation):
@@ -662,23 +779,50 @@ ICallFrameWalker._functions_ = {
 #
 ICallInterceptor._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CallIndirect -> phrReturn:*HRESULT, iMethod:ULONG, pvArgs:*void, cbArgs:*ULONG
-        "CallIndirect": ctypes.WINFUNCTYPE(HRESULT, POINTER(HRESULT), ULONG, PVOID, POINTER(ULONG))(3, "CallIndirect"),
+        "CallIndirect": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(HRESULT), ULONG, PVOID, POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # GetMethodInfo -> iMethod:ULONG, pInfo:*CALLFRAMEINFO, pwszMethod:*LPWSTR
-        "GetMethodInfo": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(CALLFRAMEINFO), POINTER(LPWSTR))(4, "GetMethodInfo"),
+        "GetMethodInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(CALLFRAMEINFO), POINTER(LPWSTR)),
+            "method_offset" : 4,
+        },
         # GetStackSize -> iMethod:ULONG, cbArgs:*ULONG
-        "GetStackSize": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(ULONG))(5, "GetStackSize"),
+        "GetStackSize": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(ULONG)),
+            "method_offset" : 5,
+        },
         # GetIID -> piid:*IID, pfDerivesFromIDispatch:*BOOL, pcMethod:*ULONG, pwszInterface:*LPWSTR
-        "GetIID": ctypes.WINFUNCTYPE(HRESULT, POINTER(IID), POINTER(BOOL), POINTER(ULONG), POINTER(LPWSTR))(6, "GetIID"),
+        "GetIID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IID), POINTER(BOOL), POINTER(ULONG), POINTER(LPWSTR)),
+            "method_offset" : 6,
+        },
         # RegisterSink -> psink:*ICallFrameEvents
-        "RegisterSink": ctypes.WINFUNCTYPE(HRESULT, ICallFrameEvents)(7, "RegisterSink"),
+        "RegisterSink": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ICallFrameEvents),
+            "method_offset" : 7,
+        },
         # GetRegisteredSink -> ppsink:**ICallFrameEvents
-        "GetRegisteredSink": ctypes.WINFUNCTYPE(HRESULT, POINTER(ICallFrameEvents))(8, "GetRegisteredSink"),
+        "GetRegisteredSink": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ICallFrameEvents)),
+            "method_offset" : 8,
+        },
     }
 
 # class IClassFactoryImplem(windows.com.COMImplementation):
@@ -694,15 +838,30 @@ ICallInterceptor._functions_ = {
 #
 IClassFactory._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CreateInstance -> pUnkOuter:*IUnknown, riid:REFIID, ppvObject:**void
-        "CreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, REFIID, POINTER(PVOID))(3, "CreateInstance"),
+        "CreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # LockServer -> fLock:BOOL
-        "LockServer": ctypes.WINFUNCTYPE(HRESULT, BOOL)(4, "LockServer"),
+        "LockServer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BOOL),
+            "method_offset" : 4,
+        },
     }
 
 # class IClientSecurityImplem(windows.com.COMImplementation):
@@ -722,17 +881,35 @@ IClassFactory._functions_ = {
 #
 IClientSecurity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # QueryBlanket -> pProxy:*IUnknown, pAuthnSvc:*DWORD, pAuthzSvc:*DWORD, pServerPrincName:**OLECHAR, pAuthnLevel:*DWORD, pImpLevel:*DWORD, pAuthInfo:**void, pCapabilites:*DWORD
-        "QueryBlanket": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(DWORD), POINTER(DWORD), POINTER(POINTER(OLECHAR)), POINTER(DWORD), POINTER(DWORD), POINTER(PVOID), POINTER(DWORD))(3, "QueryBlanket"),
+        "QueryBlanket": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(DWORD), POINTER(DWORD), POINTER(POINTER(OLECHAR)), POINTER(DWORD), POINTER(DWORD), POINTER(PVOID), POINTER(DWORD)),
+            "method_offset" : 3,
+        },
         # SetBlanket -> pProxy:*IUnknown, dwAuthnSvc:DWORD, dwAuthzSvc:DWORD, pServerPrincName:*OLECHAR, dwAuthnLevel:DWORD, dwImpLevel:DWORD, pAuthInfo:*void, dwCapabilities:DWORD
-        "SetBlanket": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, DWORD, POINTER(OLECHAR), DWORD, DWORD, PVOID, DWORD)(4, "SetBlanket"),
+        "SetBlanket": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, DWORD, POINTER(OLECHAR), DWORD, DWORD, PVOID, DWORD),
+            "method_offset" : 4,
+        },
         # CopyProxy -> pProxy:*IUnknown, ppCopy:**IUnknown
-        "CopyProxy": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IUnknown))(5, "CopyProxy"),
+        "CopyProxy": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IUnknown)),
+            "method_offset" : 5,
+        },
     }
 
 # class IComCatalogImplem(windows.com.COMImplementation):
@@ -780,31 +957,70 @@ IClientSecurity._functions_ = {
 #
 IComCatalog._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetClassInfo -> guidConfiguredClsid:REFGUID, riid:REFIID, ppv:**void
-        "GetClassInfo": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID))(3, "GetClassInfo"),
+        "GetClassInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # GetApplicationInfo -> guidApplId:REFGUID, riid:REFIID, ppv:**void
-        "GetApplicationInfo": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID))(4, "GetApplicationInfo"),
+        "GetApplicationInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetProcessInfo -> guidProcess:REFGUID, riid:REFIID, ppv:**void
-        "GetProcessInfo": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID))(5, "GetProcessInfo"),
+        "GetProcessInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 5,
+        },
         # GetServerGroupInfo -> guidServerGroup:REFGUID, riid:REFIID, ppv:**void
-        "GetServerGroupInfo": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID))(6, "GetServerGroupInfo"),
+        "GetServerGroupInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # GetRetQueueInfo -> wszFormatName:*WCHAR, riid:REFIID, ppv:**void
-        "GetRetQueueInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID))(7, "GetRetQueueInfo"),
+        "GetRetQueueInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID)),
+            "method_offset" : 7,
+        },
         # GetApplicationInfoForExe -> pwszExeName:*WCHAR, riid:REFIID, ppv:**void
-        "GetApplicationInfoForExe": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID))(8, "GetApplicationInfoForExe"),
+        "GetApplicationInfoForExe": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID)),
+            "method_offset" : 8,
+        },
         # GetTypeLibrary -> guidTypeLib:REFGUID, riid:REFIID, ppv:**void
-        "GetTypeLibrary": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID))(9, "GetTypeLibrary"),
+        "GetTypeLibrary": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 9,
+        },
         # GetInterfaceInfo -> iidInterface:REFIID, riid:REFIID, ppv:**void
-        "GetInterfaceInfo": ctypes.WINFUNCTYPE(HRESULT, REFIID, REFIID, POINTER(PVOID))(10, "GetInterfaceInfo"),
+        "GetInterfaceInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, REFIID, POINTER(PVOID)),
+            "method_offset" : 10,
+        },
         # FlushCache -> 
-        "FlushCache": ctypes.WINFUNCTYPE(HRESULT)(11, "FlushCache"),
+        "FlushCache": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 11,
+        },
         # GetClassInfoFromProgId -> pwszProgID:*WCHAR, riid:REFIID, ppv:**void
-        "GetClassInfoFromProgId": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID))(12, "GetClassInfoFromProgId"),
+        "GetClassInfoFromProgId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), REFIID, POINTER(PVOID)),
+            "method_offset" : 12,
+        },
     }
 
 # class IDispatchImplem(windows.com.COMImplementation):
@@ -828,19 +1044,40 @@ IComCatalog._functions_ = {
 #
 IDispatch._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumVARIANTImplem(windows.com.COMImplementation):
@@ -864,19 +1101,40 @@ IDispatch._functions_ = {
 #
 IEnumVARIANT._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgVar:*VARIANT, pCeltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppEnum:**IEnumVARIANT
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumVARIANT))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumVARIANT)),
+            "method_offset" : 6,
+        },
     }
 
 # class IInternalUnknownImplem(windows.com.COMImplementation):
@@ -888,13 +1146,25 @@ IEnumVARIANT._functions_ = {
 #
 IInternalUnknown._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # QueryInternalInterface -> riid:REFIID, ppv:**void
-        "QueryInternalInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(3, "QueryInternalInterface"),
+        "QueryInternalInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
     }
 
 # class IMarshalImplem(windows.com.COMImplementation):
@@ -926,23 +1196,50 @@ IInternalUnknown._functions_ = {
 #
 IMarshal._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetUnmarshalClass -> riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD, pCid:*CLSID
-        "GetUnmarshalClass": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(CLSID))(3, "GetUnmarshalClass"),
+        "GetUnmarshalClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(CLSID)),
+            "method_offset" : 3,
+        },
         # GetMarshalSizeMax -> riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD, pSize:*DWORD
-        "GetMarshalSizeMax": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(DWORD))(4, "GetMarshalSizeMax"),
+        "GetMarshalSizeMax": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(DWORD)),
+            "method_offset" : 4,
+        },
         # MarshalInterface -> pStm:*IStream, riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD
-        "MarshalInterface": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, PVOID, DWORD, PVOID, DWORD)(5, "MarshalInterface"),
+        "MarshalInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, PVOID, DWORD, PVOID, DWORD),
+            "method_offset" : 5,
+        },
         # UnmarshalInterface -> pStm:*IStream, riid:REFIID, ppv:**void
-        "UnmarshalInterface": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, POINTER(PVOID))(6, "UnmarshalInterface"),
+        "UnmarshalInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # ReleaseMarshalData -> pStm:*IStream
-        "ReleaseMarshalData": ctypes.WINFUNCTYPE(HRESULT, IStream)(7, "ReleaseMarshalData"),
+        "ReleaseMarshalData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream),
+            "method_offset" : 7,
+        },
         # DisconnectObject -> dwReserved:DWORD
-        "DisconnectObject": ctypes.WINFUNCTYPE(HRESULT, DWORD)(8, "DisconnectObject"),
+        "DisconnectObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 8,
+        },
     }
 
 # class IMonikerImplem(windows.com.COMImplementation):
@@ -1030,51 +1327,120 @@ IMarshal._functions_ = {
 #
 IMoniker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetClassID -> pClassID:*CLSID
-        "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
+        "GetClassID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
+            "method_offset" : 3,
+        },
         # IsDirty -> 
-        "IsDirty": ctypes.WINFUNCTYPE(HRESULT)(4, "IsDirty"),
+        "IsDirty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 4,
+        },
         # Load -> pStm:*IStream
-        "Load": ctypes.WINFUNCTYPE(HRESULT, IStream)(5, "Load"),
+        "Load": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream),
+            "method_offset" : 5,
+        },
         # Save -> pStm:*IStream, fClearDirty:BOOL
-        "Save": ctypes.WINFUNCTYPE(HRESULT, IStream, BOOL)(6, "Save"),
+        "Save": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, BOOL),
+            "method_offset" : 6,
+        },
         # GetSizeMax -> pcbSize:*ULARGE_INTEGER
-        "GetSizeMax": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULARGE_INTEGER))(7, "GetSizeMax"),
+        "GetSizeMax": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULARGE_INTEGER)),
+            "method_offset" : 7,
+        },
         # BindToObject -> pbc:*IBindCtx, pmkToLeft:*IMoniker, riidResult:REFIID, ppvResult:**void
-        "BindToObject": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID))(8, "BindToObject"),
+        "BindToObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID)),
+            "method_offset" : 8,
+        },
         # BindToStorage -> pbc:*IBindCtx, pmkToLeft:*IMoniker, riid:REFIID, ppvObj:**void
-        "BindToStorage": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID))(9, "BindToStorage"),
+        "BindToStorage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID)),
+            "method_offset" : 9,
+        },
         # Reduce -> pbc:*IBindCtx, dwReduceHowFar:DWORD, ppmkToLeft:**IMoniker, ppmkReduced:**IMoniker
-        "Reduce": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, DWORD, POINTER(IMoniker), POINTER(IMoniker))(10, "Reduce"),
+        "Reduce": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, DWORD, POINTER(IMoniker), POINTER(IMoniker)),
+            "method_offset" : 10,
+        },
         # ComposeWith -> pmkRight:*IMoniker, fOnlyIfNotGeneric:BOOL, ppmkComposite:**IMoniker
-        "ComposeWith": ctypes.WINFUNCTYPE(HRESULT, IMoniker, BOOL, POINTER(IMoniker))(11, "ComposeWith"),
+        "ComposeWith": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker, BOOL, POINTER(IMoniker)),
+            "method_offset" : 11,
+        },
         # Enum -> fForward:BOOL, ppenumMoniker:**IEnumMoniker
-        "Enum": ctypes.WINFUNCTYPE(HRESULT, BOOL, POINTER(IEnumMoniker))(12, "Enum"),
+        "Enum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BOOL, POINTER(IEnumMoniker)),
+            "method_offset" : 12,
+        },
         # IsEqual -> pmkOtherMoniker:*IMoniker
-        "IsEqual": ctypes.WINFUNCTYPE(HRESULT, IMoniker)(13, "IsEqual"),
+        "IsEqual": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker),
+            "method_offset" : 13,
+        },
         # Hash -> pdwHash:*DWORD
-        "Hash": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(14, "Hash"),
+        "Hash": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 14,
+        },
         # IsRunning -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pmkNewlyRunning:*IMoniker
-        "IsRunning": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, IMoniker)(15, "IsRunning"),
+        "IsRunning": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, IMoniker),
+            "method_offset" : 15,
+        },
         # GetTimeOfLastChange -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pFileTime:*FILETIME
-        "GetTimeOfLastChange": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(FILETIME))(16, "GetTimeOfLastChange"),
+        "GetTimeOfLastChange": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(FILETIME)),
+            "method_offset" : 16,
+        },
         # Inverse -> ppmk:**IMoniker
-        "Inverse": ctypes.WINFUNCTYPE(HRESULT, POINTER(IMoniker))(17, "Inverse"),
+        "Inverse": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IMoniker)),
+            "method_offset" : 17,
+        },
         # CommonPrefixWith -> pmkOther:*IMoniker, ppmkPrefix:**IMoniker
-        "CommonPrefixWith": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker))(18, "CommonPrefixWith"),
+        "CommonPrefixWith": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker)),
+            "method_offset" : 18,
+        },
         # RelativePathTo -> pmkOther:*IMoniker, ppmkRelPath:**IMoniker
-        "RelativePathTo": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker))(19, "RelativePathTo"),
+        "RelativePathTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker)),
+            "method_offset" : 19,
+        },
         # GetDisplayName -> pbc:*IBindCtx, pmkToLeft:*IMoniker, ppszDisplayName:*LPOLESTR
-        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(LPOLESTR))(20, "GetDisplayName"),
+        "GetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(LPOLESTR)),
+            "method_offset" : 20,
+        },
         # ParseDisplayName -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pszDisplayName:LPOLESTR, pchEaten:*ULONG, ppmkOut:**IMoniker
-        "ParseDisplayName": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, LPOLESTR, POINTER(ULONG), POINTER(IMoniker))(21, "ParseDisplayName"),
+        "ParseDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, LPOLESTR, POINTER(ULONG), POINTER(IMoniker)),
+            "method_offset" : 21,
+        },
         # IsSystemMoniker -> pdwMksys:*DWORD
-        "IsSystemMoniker": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(22, "IsSystemMoniker"),
+        "IsSystemMoniker": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 22,
+        },
     }
 
 # class INetFwPolicy2Implem(windows.com.COMImplementation):
@@ -1186,63 +1552,150 @@ IMoniker._functions_ = {
 #
 INetFwPolicy2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_CurrentProfileTypes -> profileTypesBitmask:*LONG
-        "get_CurrentProfileTypes": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_CurrentProfileTypes"),
+        "get_CurrentProfileTypes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_FirewallEnabled -> profileType:NET_FW_PROFILE_TYPE2, enabled:*VARIANT_BOOL
-        "get_FirewallEnabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL))(8, "get_FirewallEnabled"),
+        "get_FirewallEnabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL)),
+            "method_offset" : 8,
+        },
         # put_FirewallEnabled -> profileType:NET_FW_PROFILE_TYPE2, enabled:VARIANT_BOOL
-        "put_FirewallEnabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL)(9, "put_FirewallEnabled"),
+        "put_FirewallEnabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL),
+            "method_offset" : 9,
+        },
         # get_ExcludedInterfaces -> profileType:NET_FW_PROFILE_TYPE2, interfaces:*VARIANT
-        "get_ExcludedInterfaces": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT))(10, "get_ExcludedInterfaces"),
+        "get_ExcludedInterfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT)),
+            "method_offset" : 10,
+        },
         # put_ExcludedInterfaces -> profileType:NET_FW_PROFILE_TYPE2, interfaces:VARIANT
-        "put_ExcludedInterfaces": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT)(11, "put_ExcludedInterfaces"),
+        "put_ExcludedInterfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT),
+            "method_offset" : 11,
+        },
         # get_BlockAllInboundTraffic -> profileType:NET_FW_PROFILE_TYPE2, Block:*VARIANT_BOOL
-        "get_BlockAllInboundTraffic": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL))(12, "get_BlockAllInboundTraffic"),
+        "get_BlockAllInboundTraffic": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL)),
+            "method_offset" : 12,
+        },
         # put_BlockAllInboundTraffic -> profileType:NET_FW_PROFILE_TYPE2, Block:VARIANT_BOOL
-        "put_BlockAllInboundTraffic": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL)(13, "put_BlockAllInboundTraffic"),
+        "put_BlockAllInboundTraffic": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL),
+            "method_offset" : 13,
+        },
         # get_NotificationsDisabled -> profileType:NET_FW_PROFILE_TYPE2, disabled:*VARIANT_BOOL
-        "get_NotificationsDisabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL))(14, "get_NotificationsDisabled"),
+        "get_NotificationsDisabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL)),
+            "method_offset" : 14,
+        },
         # put_NotificationsDisabled -> profileType:NET_FW_PROFILE_TYPE2, disabled:VARIANT_BOOL
-        "put_NotificationsDisabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL)(15, "put_NotificationsDisabled"),
+        "put_NotificationsDisabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL),
+            "method_offset" : 15,
+        },
         # get_UnicastResponsesToMulticastBroadcastDisabled -> profileType:NET_FW_PROFILE_TYPE2, disabled:*VARIANT_BOOL
-        "get_UnicastResponsesToMulticastBroadcastDisabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL))(16, "get_UnicastResponsesToMulticastBroadcastDisabled"),
+        "get_UnicastResponsesToMulticastBroadcastDisabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(VARIANT_BOOL)),
+            "method_offset" : 16,
+        },
         # put_UnicastResponsesToMulticastBroadcastDisabled -> profileType:NET_FW_PROFILE_TYPE2, disabled:VARIANT_BOOL
-        "put_UnicastResponsesToMulticastBroadcastDisabled": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL)(17, "put_UnicastResponsesToMulticastBroadcastDisabled"),
+        "put_UnicastResponsesToMulticastBroadcastDisabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, VARIANT_BOOL),
+            "method_offset" : 17,
+        },
         # get_Rules -> rules:**INetFwRules
-        "get_Rules": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules))(18, "get_Rules"),
+        "get_Rules": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules)),
+            "method_offset" : 18,
+        },
         # get_ServiceRestriction -> ServiceRestriction:**INetFwServiceRestriction
-        "get_ServiceRestriction": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwServiceRestriction))(19, "get_ServiceRestriction"),
+        "get_ServiceRestriction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwServiceRestriction)),
+            "method_offset" : 19,
+        },
         # EnableRuleGroup -> profileTypesBitmask:LONG, group:BSTR, enable:VARIANT_BOOL
-        "EnableRuleGroup": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, VARIANT_BOOL)(20, "EnableRuleGroup"),
+        "EnableRuleGroup": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, VARIANT_BOOL),
+            "method_offset" : 20,
+        },
         # IsRuleGroupEnabled -> profileTypesBitmask:LONG, group:BSTR, enabled:*VARIANT_BOOL
-        "IsRuleGroupEnabled": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, POINTER(VARIANT_BOOL))(21, "IsRuleGroupEnabled"),
+        "IsRuleGroupEnabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, POINTER(VARIANT_BOOL)),
+            "method_offset" : 21,
+        },
         # RestoreLocalFirewallDefaults -> 
-        "RestoreLocalFirewallDefaults": ctypes.WINFUNCTYPE(HRESULT)(22, "RestoreLocalFirewallDefaults"),
+        "RestoreLocalFirewallDefaults": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 22,
+        },
         # get_DefaultInboundAction -> profileType:NET_FW_PROFILE_TYPE2, action:*NET_FW_ACTION
-        "get_DefaultInboundAction": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(NET_FW_ACTION))(23, "get_DefaultInboundAction"),
+        "get_DefaultInboundAction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(NET_FW_ACTION)),
+            "method_offset" : 23,
+        },
         # put_DefaultInboundAction -> profileType:NET_FW_PROFILE_TYPE2, action:NET_FW_ACTION
-        "put_DefaultInboundAction": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, NET_FW_ACTION)(24, "put_DefaultInboundAction"),
+        "put_DefaultInboundAction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, NET_FW_ACTION),
+            "method_offset" : 24,
+        },
         # get_DefaultOutboundAction -> profileType:NET_FW_PROFILE_TYPE2, action:*NET_FW_ACTION
-        "get_DefaultOutboundAction": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(NET_FW_ACTION))(25, "get_DefaultOutboundAction"),
+        "get_DefaultOutboundAction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, POINTER(NET_FW_ACTION)),
+            "method_offset" : 25,
+        },
         # put_DefaultOutboundAction -> profileType:NET_FW_PROFILE_TYPE2, action:NET_FW_ACTION
-        "put_DefaultOutboundAction": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, NET_FW_ACTION)(26, "put_DefaultOutboundAction"),
+        "put_DefaultOutboundAction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_PROFILE_TYPE2, NET_FW_ACTION),
+            "method_offset" : 26,
+        },
         # get_IsRuleGroupCurrentlyEnabled -> group:BSTR, enabled:*VARIANT_BOOL
-        "get_IsRuleGroupCurrentlyEnabled": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT_BOOL))(27, "get_IsRuleGroupCurrentlyEnabled"),
+        "get_IsRuleGroupCurrentlyEnabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT_BOOL)),
+            "method_offset" : 27,
+        },
         # get_LocalPolicyModifyState -> modifyState:*NET_FW_MODIFY_STATE
-        "get_LocalPolicyModifyState": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_MODIFY_STATE))(28, "get_LocalPolicyModifyState"),
+        "get_LocalPolicyModifyState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_MODIFY_STATE)),
+            "method_offset" : 28,
+        },
     }
 
 # class INetFwRuleImplem(windows.com.COMImplementation):
@@ -1410,91 +1863,220 @@ INetFwPolicy2._functions_ = {
 #
 INetFwRule._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> name:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Name -> name:BSTR
-        "put_Name": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Name"),
+        "put_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Description -> desc:*BSTR
-        "get_Description": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Description"),
+        "get_Description": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_Description -> desc:BSTR
-        "put_Description": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Description"),
+        "put_Description": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_ApplicationName -> imageFileName:*BSTR
-        "get_ApplicationName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(11, "get_ApplicationName"),
+        "get_ApplicationName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 11,
+        },
         # put_ApplicationName -> imageFileName:BSTR
-        "put_ApplicationName": ctypes.WINFUNCTYPE(HRESULT, BSTR)(12, "put_ApplicationName"),
+        "put_ApplicationName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 12,
+        },
         # get_ServiceName -> serviceName:*BSTR
-        "get_ServiceName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(13, "get_ServiceName"),
+        "get_ServiceName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 13,
+        },
         # put_ServiceName -> serviceName:BSTR
-        "put_ServiceName": ctypes.WINFUNCTYPE(HRESULT, BSTR)(14, "put_ServiceName"),
+        "put_ServiceName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 14,
+        },
         # get_Protocol -> protocol:*LONG
-        "get_Protocol": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(15, "get_Protocol"),
+        "get_Protocol": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 15,
+        },
         # put_Protocol -> protocol:LONG
-        "put_Protocol": ctypes.WINFUNCTYPE(HRESULT, LONG)(16, "put_Protocol"),
+        "put_Protocol": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 16,
+        },
         # get_LocalPorts -> portNumbers:*BSTR
-        "get_LocalPorts": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(17, "get_LocalPorts"),
+        "get_LocalPorts": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 17,
+        },
         # put_LocalPorts -> portNumbers:BSTR
-        "put_LocalPorts": ctypes.WINFUNCTYPE(HRESULT, BSTR)(18, "put_LocalPorts"),
+        "put_LocalPorts": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 18,
+        },
         # get_RemotePorts -> portNumbers:*BSTR
-        "get_RemotePorts": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(19, "get_RemotePorts"),
+        "get_RemotePorts": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 19,
+        },
         # put_RemotePorts -> portNumbers:BSTR
-        "put_RemotePorts": ctypes.WINFUNCTYPE(HRESULT, BSTR)(20, "put_RemotePorts"),
+        "put_RemotePorts": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 20,
+        },
         # get_LocalAddresses -> localAddrs:*BSTR
-        "get_LocalAddresses": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(21, "get_LocalAddresses"),
+        "get_LocalAddresses": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 21,
+        },
         # put_LocalAddresses -> localAddrs:BSTR
-        "put_LocalAddresses": ctypes.WINFUNCTYPE(HRESULT, BSTR)(22, "put_LocalAddresses"),
+        "put_LocalAddresses": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 22,
+        },
         # get_RemoteAddresses -> remoteAddrs:*BSTR
-        "get_RemoteAddresses": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(23, "get_RemoteAddresses"),
+        "get_RemoteAddresses": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 23,
+        },
         # put_RemoteAddresses -> remoteAddrs:BSTR
-        "put_RemoteAddresses": ctypes.WINFUNCTYPE(HRESULT, BSTR)(24, "put_RemoteAddresses"),
+        "put_RemoteAddresses": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 24,
+        },
         # get_IcmpTypesAndCodes -> icmpTypesAndCodes:*BSTR
-        "get_IcmpTypesAndCodes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(25, "get_IcmpTypesAndCodes"),
+        "get_IcmpTypesAndCodes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 25,
+        },
         # put_IcmpTypesAndCodes -> icmpTypesAndCodes:BSTR
-        "put_IcmpTypesAndCodes": ctypes.WINFUNCTYPE(HRESULT, BSTR)(26, "put_IcmpTypesAndCodes"),
+        "put_IcmpTypesAndCodes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 26,
+        },
         # get_Direction -> dir:*NET_FW_RULE_DIRECTION
-        "get_Direction": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_RULE_DIRECTION))(27, "get_Direction"),
+        "get_Direction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_RULE_DIRECTION)),
+            "method_offset" : 27,
+        },
         # put_Direction -> dir:NET_FW_RULE_DIRECTION
-        "put_Direction": ctypes.WINFUNCTYPE(HRESULT, NET_FW_RULE_DIRECTION)(28, "put_Direction"),
+        "put_Direction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_RULE_DIRECTION),
+            "method_offset" : 28,
+        },
         # get_Interfaces -> interfaces:*VARIANT
-        "get_Interfaces": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT))(29, "get_Interfaces"),
+        "get_Interfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT)),
+            "method_offset" : 29,
+        },
         # put_Interfaces -> interfaces:VARIANT
-        "put_Interfaces": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(30, "put_Interfaces"),
+        "put_Interfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
+            "method_offset" : 30,
+        },
         # get_InterfaceTypes -> interfaceTypes:*BSTR
-        "get_InterfaceTypes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(31, "get_InterfaceTypes"),
+        "get_InterfaceTypes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 31,
+        },
         # put_InterfaceTypes -> interfaceTypes:BSTR
-        "put_InterfaceTypes": ctypes.WINFUNCTYPE(HRESULT, BSTR)(32, "put_InterfaceTypes"),
+        "put_InterfaceTypes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 32,
+        },
         # get_Enabled -> enabled:*VARIANT_BOOL
-        "get_Enabled": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(33, "get_Enabled"),
+        "get_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 33,
+        },
         # put_Enabled -> enabled:VARIANT_BOOL
-        "put_Enabled": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(34, "put_Enabled"),
+        "put_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 34,
+        },
         # get_Grouping -> context:*BSTR
-        "get_Grouping": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(35, "get_Grouping"),
+        "get_Grouping": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 35,
+        },
         # put_Grouping -> context:BSTR
-        "put_Grouping": ctypes.WINFUNCTYPE(HRESULT, BSTR)(36, "put_Grouping"),
+        "put_Grouping": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 36,
+        },
         # get_Profiles -> profileTypesBitmask:*LONG
-        "get_Profiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(37, "get_Profiles"),
+        "get_Profiles": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 37,
+        },
         # put_Profiles -> profileTypesBitmask:LONG
-        "put_Profiles": ctypes.WINFUNCTYPE(HRESULT, LONG)(38, "put_Profiles"),
+        "put_Profiles": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 38,
+        },
         # get_EdgeTraversal -> enabled:*VARIANT_BOOL
-        "get_EdgeTraversal": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(39, "get_EdgeTraversal"),
+        "get_EdgeTraversal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 39,
+        },
         # put_EdgeTraversal -> enabled:VARIANT_BOOL
-        "put_EdgeTraversal": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(40, "put_EdgeTraversal"),
+        "put_EdgeTraversal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 40,
+        },
         # get_Action -> action:*NET_FW_ACTION
-        "get_Action": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_ACTION))(41, "get_Action"),
+        "get_Action": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(NET_FW_ACTION)),
+            "method_offset" : 41,
+        },
         # put_Action -> action:NET_FW_ACTION
-        "put_Action": ctypes.WINFUNCTYPE(HRESULT, NET_FW_ACTION)(42, "put_Action"),
+        "put_Action": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, NET_FW_ACTION),
+            "method_offset" : 42,
+        },
     }
 
 # class INetFwRulesImplem(windows.com.COMImplementation):
@@ -1538,29 +2120,65 @@ INetFwRule._functions_ = {
 #
 INetFwRules._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> count:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # Add -> rule:*INetFwRule
-        "Add": ctypes.WINFUNCTYPE(HRESULT, INetFwRule)(8, "Add"),
+        "Add": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INetFwRule),
+            "method_offset" : 8,
+        },
         # Remove -> name:BSTR
-        "Remove": ctypes.WINFUNCTYPE(HRESULT, BSTR)(9, "Remove"),
+        "Remove": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 9,
+        },
         # Item -> name:BSTR, rule:**INetFwRule
-        "Item": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(INetFwRule))(10, "Item"),
+        "Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(INetFwRule)),
+            "method_offset" : 10,
+        },
         # get__NewEnum -> newEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(11, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 11,
+        },
     }
 
 # class INetFwServiceRestrictionImplem(windows.com.COMImplementation):
@@ -1596,25 +2214,55 @@ INetFwRules._functions_ = {
 #
 INetFwServiceRestriction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # RestrictService -> serviceName:BSTR, appName:BSTR, restrictService:VARIANT_BOOL, serviceSidRestricted:VARIANT_BOOL
-        "RestrictService": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, VARIANT_BOOL, VARIANT_BOOL)(7, "RestrictService"),
+        "RestrictService": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, VARIANT_BOOL, VARIANT_BOOL),
+            "method_offset" : 7,
+        },
         # ServiceRestricted -> serviceName:BSTR, appName:BSTR, serviceRestricted:*VARIANT_BOOL
-        "ServiceRestricted": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, POINTER(VARIANT_BOOL))(8, "ServiceRestricted"),
+        "ServiceRestricted": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, POINTER(VARIANT_BOOL)),
+            "method_offset" : 8,
+        },
         # get_Rules -> rules:**INetFwRules
-        "get_Rules": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules))(9, "get_Rules"),
+        "get_Rules": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules)),
+            "method_offset" : 9,
+        },
     }
 
 # class IObjContextImplem(windows.com.COMImplementation):
@@ -1666,33 +2314,75 @@ INetFwServiceRestriction._functions_ = {
 #
 IObjContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetProperty -> rpolicyId:REFGUID, flags:CPFLAGS, pUnk:*IUnknown
-        "SetProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID, CPFLAGS, IUnknown)(3, "SetProperty"),
+        "SetProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, CPFLAGS, IUnknown),
+            "method_offset" : 3,
+        },
         # RemoveProperty -> rPolicyId:REFGUID
-        "RemoveProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID)(4, "RemoveProperty"),
+        "RemoveProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID),
+            "method_offset" : 4,
+        },
         # GetProperty -> rGuid:REFGUID, pFlags:*CPFLAGS, ppUnk:**IUnknown
-        "GetProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(CPFLAGS), POINTER(IUnknown))(5, "GetProperty"),
+        "GetProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(CPFLAGS), POINTER(IUnknown)),
+            "method_offset" : 5,
+        },
         # EnumContextProps -> ppEnumContextProps:**IEnumContextProps
-        "EnumContextProps": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps))(6, "EnumContextProps"),
+        "EnumContextProps": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps)),
+            "method_offset" : 6,
+        },
         # Reserved1 -> 
-        "Reserved1": ctypes.WINFUNCTYPE(PVOID)(7, "Reserved1"),
+        "Reserved1": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 7,
+        },
         # Reserved2 -> 
-        "Reserved2": ctypes.WINFUNCTYPE(PVOID)(8, "Reserved2"),
+        "Reserved2": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 8,
+        },
         # Reserved3 -> 
-        "Reserved3": ctypes.WINFUNCTYPE(PVOID)(9, "Reserved3"),
+        "Reserved3": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 9,
+        },
         # Reserved4 -> 
-        "Reserved4": ctypes.WINFUNCTYPE(PVOID)(10, "Reserved4"),
+        "Reserved4": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 10,
+        },
         # Reserved5 -> 
-        "Reserved5": ctypes.WINFUNCTYPE(PVOID)(11, "Reserved5"),
+        "Reserved5": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 11,
+        },
         # Reserved6 -> 
-        "Reserved6": ctypes.WINFUNCTYPE(PVOID)(12, "Reserved6"),
+        "Reserved6": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 12,
+        },
         # Reserved7 -> 
-        "Reserved7": ctypes.WINFUNCTYPE(PVOID)(13, "Reserved7"),
+        "Reserved7": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 13,
+        },
     }
 
 # class IPersistImplem(windows.com.COMImplementation):
@@ -1704,13 +2394,25 @@ IObjContext._functions_ = {
 #
 IPersist._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetClassID -> pClassID:*CLSID
-        "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
+        "GetClassID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
+            "method_offset" : 3,
+        },
     }
 
 # class IPersistFileImplem(windows.com.COMImplementation):
@@ -1742,23 +2444,50 @@ IPersist._functions_ = {
 #
 IPersistFile._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetClassID -> pClassID:*CLSID
-        "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
+        "GetClassID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
+            "method_offset" : 3,
+        },
         # IsDirty -> 
-        "IsDirty": ctypes.WINFUNCTYPE(HRESULT)(4, "IsDirty"),
+        "IsDirty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 4,
+        },
         # Load -> pszFileName:LPCOLESTR, dwMode:DWORD
-        "Load": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR, DWORD)(5, "Load"),
+        "Load": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR, DWORD),
+            "method_offset" : 5,
+        },
         # Save -> pszFileName:LPCOLESTR, fRemember:BOOL
-        "Save": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR, BOOL)(6, "Save"),
+        "Save": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR, BOOL),
+            "method_offset" : 6,
+        },
         # SaveCompleted -> pszFileName:LPCOLESTR
-        "SaveCompleted": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR)(7, "SaveCompleted"),
+        "SaveCompleted": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCOLESTR),
+            "method_offset" : 7,
+        },
         # GetCurFile -> ppszFileName:*LPOLESTR
-        "GetCurFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR))(8, "GetCurFile"),
+        "GetCurFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR)),
+            "method_offset" : 8,
+        },
     }
 
 # class IRemUnknownImplem(windows.com.COMImplementation):
@@ -1778,17 +2507,35 @@ IPersistFile._functions_ = {
 #
 IRemUnknown._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # RemQueryInterface -> ripid:REFIPID, cRefs:ULONG, cIids:USHORT, iids:*IID, ppQIResults:**REMQIRESULT
-        "RemQueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIPID, ULONG, USHORT, POINTER(IID), POINTER(POINTER(REMQIRESULT)))(3, "RemQueryInterface"),
+        "RemQueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIPID, ULONG, USHORT, POINTER(IID), POINTER(POINTER(REMQIRESULT))),
+            "method_offset" : 3,
+        },
         # RemAddRef -> cInterfaceRefs:USHORT, InterfaceRefs:*REMINTERFACEREF, pResults:*HRESULT
-        "RemAddRef": ctypes.WINFUNCTYPE(HRESULT, USHORT, POINTER(REMINTERFACEREF), POINTER(HRESULT))(4, "RemAddRef"),
+        "RemAddRef": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, USHORT, POINTER(REMINTERFACEREF), POINTER(HRESULT)),
+            "method_offset" : 4,
+        },
         # RemRelease -> cInterfaceRefs:USHORT, InterfaceRefs:*REMINTERFACEREF
-        "RemRelease": ctypes.WINFUNCTYPE(HRESULT, USHORT, POINTER(REMINTERFACEREF))(5, "RemRelease"),
+        "RemRelease": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, USHORT, POINTER(REMINTERFACEREF)),
+            "method_offset" : 5,
+        },
     }
 
 # class IShellLinkAImplem(windows.com.COMImplementation):
@@ -1868,47 +2615,110 @@ IRemUnknown._functions_ = {
 #
 IShellLinkA._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetPath -> pszFile:LPSTR, cch:INT, pfd:*WIN32_FIND_DATAA, fFlags:DWORD
-        "GetPath": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT, POINTER(WIN32_FIND_DATAA), DWORD)(3, "GetPath"),
+        "GetPath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT, POINTER(WIN32_FIND_DATAA), DWORD),
+            "method_offset" : 3,
+        },
         # GetIDList -> ppidl:*PIDLIST_ABSOLUTE
-        "GetIDList": ctypes.WINFUNCTYPE(HRESULT, POINTER(PIDLIST_ABSOLUTE))(4, "GetIDList"),
+        "GetIDList": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PIDLIST_ABSOLUTE)),
+            "method_offset" : 4,
+        },
         # SetIDList -> pidl:PCIDLIST_ABSOLUTE
-        "SetIDList": ctypes.WINFUNCTYPE(HRESULT, PCIDLIST_ABSOLUTE)(5, "SetIDList"),
+        "SetIDList": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PCIDLIST_ABSOLUTE),
+            "method_offset" : 5,
+        },
         # GetDescription -> pszName:LPSTR, cch:INT
-        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT)(6, "GetDescription"),
+        "GetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT),
+            "method_offset" : 6,
+        },
         # SetDescription -> pszName:LPCSTR
-        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCSTR)(7, "SetDescription"),
+        "SetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR),
+            "method_offset" : 7,
+        },
         # GetWorkingDirectory -> pszDir:LPSTR, cch:INT
-        "GetWorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT)(8, "GetWorkingDirectory"),
+        "GetWorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT),
+            "method_offset" : 8,
+        },
         # SetWorkingDirectory -> pszDir:LPCSTR
-        "SetWorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, LPCSTR)(9, "SetWorkingDirectory"),
+        "SetWorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR),
+            "method_offset" : 9,
+        },
         # GetArguments -> pszArgs:LPSTR, cch:INT
-        "GetArguments": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT)(10, "GetArguments"),
+        "GetArguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT),
+            "method_offset" : 10,
+        },
         # SetArguments -> pszArgs:LPCSTR
-        "SetArguments": ctypes.WINFUNCTYPE(HRESULT, LPCSTR)(11, "SetArguments"),
+        "SetArguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR),
+            "method_offset" : 11,
+        },
         # GetHotkey -> pwHotkey:*WORD
-        "GetHotkey": ctypes.WINFUNCTYPE(HRESULT, POINTER(WORD))(12, "GetHotkey"),
+        "GetHotkey": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WORD)),
+            "method_offset" : 12,
+        },
         # SetHotkey -> wHotkey:WORD
-        "SetHotkey": ctypes.WINFUNCTYPE(HRESULT, WORD)(13, "SetHotkey"),
+        "SetHotkey": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, WORD),
+            "method_offset" : 13,
+        },
         # GetShowCmd -> piShowCmd:*INT
-        "GetShowCmd": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(14, "GetShowCmd"),
+        "GetShowCmd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 14,
+        },
         # SetShowCmd -> iShowCmd:INT
-        "SetShowCmd": ctypes.WINFUNCTYPE(HRESULT, INT)(15, "SetShowCmd"),
+        "SetShowCmd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT),
+            "method_offset" : 15,
+        },
         # GetIconLocation -> pszIconPath:LPSTR, cch:INT, piIcon:*INT
-        "GetIconLocation": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT, POINTER(INT))(16, "GetIconLocation"),
+        "GetIconLocation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSTR, INT, POINTER(INT)),
+            "method_offset" : 16,
+        },
         # SetIconLocation -> pszIconPath:LPCSTR, iIcon:INT
-        "SetIconLocation": ctypes.WINFUNCTYPE(HRESULT, LPCSTR, INT)(17, "SetIconLocation"),
+        "SetIconLocation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR, INT),
+            "method_offset" : 17,
+        },
         # SetRelativePath -> pszPathRel:LPCSTR, dwReserved:DWORD
-        "SetRelativePath": ctypes.WINFUNCTYPE(HRESULT, LPCSTR, DWORD)(18, "SetRelativePath"),
+        "SetRelativePath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR, DWORD),
+            "method_offset" : 18,
+        },
         # Resolve -> hwnd:HWND, fFlags:DWORD
-        "Resolve": ctypes.WINFUNCTYPE(HRESULT, HWND, DWORD)(19, "Resolve"),
+        "Resolve": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, HWND, DWORD),
+            "method_offset" : 19,
+        },
         # SetPath -> pszFile:LPCSTR
-        "SetPath": ctypes.WINFUNCTYPE(HRESULT, LPCSTR)(20, "SetPath"),
+        "SetPath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCSTR),
+            "method_offset" : 20,
+        },
     }
 
 # class IShellLinkWImplem(windows.com.COMImplementation):
@@ -1988,47 +2798,110 @@ IShellLinkA._functions_ = {
 #
 IShellLinkW._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetPath -> pszFile:LPWSTR, cch:INT, pfd:*WIN32_FIND_DATAW, fFlags:DWORD
-        "GetPath": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT, POINTER(WIN32_FIND_DATAW), DWORD)(3, "GetPath"),
+        "GetPath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT, POINTER(WIN32_FIND_DATAW), DWORD),
+            "method_offset" : 3,
+        },
         # GetIDList -> ppidl:*PIDLIST_ABSOLUTE
-        "GetIDList": ctypes.WINFUNCTYPE(HRESULT, POINTER(PIDLIST_ABSOLUTE))(4, "GetIDList"),
+        "GetIDList": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PIDLIST_ABSOLUTE)),
+            "method_offset" : 4,
+        },
         # SetIDList -> pidl:PCIDLIST_ABSOLUTE
-        "SetIDList": ctypes.WINFUNCTYPE(HRESULT, PCIDLIST_ABSOLUTE)(5, "SetIDList"),
+        "SetIDList": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PCIDLIST_ABSOLUTE),
+            "method_offset" : 5,
+        },
         # GetDescription -> pszName:LPWSTR, cch:INT
-        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT)(6, "GetDescription"),
+        "GetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT),
+            "method_offset" : 6,
+        },
         # SetDescription -> pszName:LPCWSTR
-        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetDescription"),
+        "SetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 7,
+        },
         # GetWorkingDirectory -> pszDir:LPWSTR, cch:INT
-        "GetWorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT)(8, "GetWorkingDirectory"),
+        "GetWorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT),
+            "method_offset" : 8,
+        },
         # SetWorkingDirectory -> pszDir:LPCWSTR
-        "SetWorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(9, "SetWorkingDirectory"),
+        "SetWorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 9,
+        },
         # GetArguments -> pszArgs:LPWSTR, cch:INT
-        "GetArguments": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT)(10, "GetArguments"),
+        "GetArguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT),
+            "method_offset" : 10,
+        },
         # SetArguments -> pszArgs:LPCWSTR
-        "SetArguments": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(11, "SetArguments"),
+        "SetArguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 11,
+        },
         # GetHotkey -> pwHotkey:*WORD
-        "GetHotkey": ctypes.WINFUNCTYPE(HRESULT, POINTER(WORD))(12, "GetHotkey"),
+        "GetHotkey": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WORD)),
+            "method_offset" : 12,
+        },
         # SetHotkey -> wHotkey:WORD
-        "SetHotkey": ctypes.WINFUNCTYPE(HRESULT, WORD)(13, "SetHotkey"),
+        "SetHotkey": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, WORD),
+            "method_offset" : 13,
+        },
         # GetShowCmd -> piShowCmd:*INT
-        "GetShowCmd": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(14, "GetShowCmd"),
+        "GetShowCmd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 14,
+        },
         # SetShowCmd -> iShowCmd:INT
-        "SetShowCmd": ctypes.WINFUNCTYPE(HRESULT, INT)(15, "SetShowCmd"),
+        "SetShowCmd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT),
+            "method_offset" : 15,
+        },
         # GetIconLocation -> pszIconPath:LPWSTR, cch:INT, piIcon:*INT
-        "GetIconLocation": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT, POINTER(INT))(16, "GetIconLocation"),
+        "GetIconLocation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPWSTR, INT, POINTER(INT)),
+            "method_offset" : 16,
+        },
         # SetIconLocation -> pszIconPath:LPCWSTR, iIcon:INT
-        "SetIconLocation": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, INT)(17, "SetIconLocation"),
+        "SetIconLocation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, INT),
+            "method_offset" : 17,
+        },
         # SetRelativePath -> pszPathRel:LPCWSTR, dwReserved:DWORD
-        "SetRelativePath": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, DWORD)(18, "SetRelativePath"),
+        "SetRelativePath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, DWORD),
+            "method_offset" : 18,
+        },
         # Resolve -> hwnd:HWND, fFlags:DWORD
-        "Resolve": ctypes.WINFUNCTYPE(HRESULT, HWND, DWORD)(19, "Resolve"),
+        "Resolve": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, HWND, DWORD),
+            "method_offset" : 19,
+        },
         # SetPath -> pszFile:LPCWSTR
-        "SetPath": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(20, "SetPath"),
+        "SetPath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 20,
+        },
     }
 
 # class IStdIdentityImplem(windows.com.COMImplementation):
@@ -2036,11 +2909,20 @@ IShellLinkW._functions_ = {
 #
 IStdIdentity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
     }
 
 # class IStorageImplem(windows.com.COMImplementation):
@@ -2108,41 +2990,95 @@ IStdIdentity._functions_ = {
 #
 IStorage._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CreateStream -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstm:**IStream
-        "CreateStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStream))(3, "CreateStream"),
+        "CreateStream": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStream)),
+            "method_offset" : 3,
+        },
         # OpenStream -> pwcsName:*OLECHAR, reserved1:*void, grfMode:DWORD, reserved2:DWORD, ppstm:**IStream
-        "OpenStream": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), PVOID, DWORD, DWORD, POINTER(IStream))(4, "OpenStream"),
+        "OpenStream": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), PVOID, DWORD, DWORD, POINTER(IStream)),
+            "method_offset" : 4,
+        },
         # CreateStorage -> pwcsName:*OLECHAR, grfMode:DWORD, reserved1:DWORD, reserved2:DWORD, ppstg:**IStorage
-        "CreateStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStorage))(5, "CreateStorage"),
+        "CreateStorage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), DWORD, DWORD, DWORD, POINTER(IStorage)),
+            "method_offset" : 5,
+        },
         # OpenStorage -> pwcsName:*OLECHAR, pstgPriority:*IStorage, grfMode:DWORD, snbExclude:SNB, reserved:DWORD, ppstg:**IStorage
-        "OpenStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, DWORD, SNB, DWORD, POINTER(IStorage))(6, "OpenStorage"),
+        "OpenStorage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, DWORD, SNB, DWORD, POINTER(IStorage)),
+            "method_offset" : 6,
+        },
         # CopyTo -> ciidExclude:DWORD, rgiidExclude:*IID, snbExclude:SNB, pstgDest:*IStorage
-        "CopyTo": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), SNB, IStorage)(7, "CopyTo"),
+        "CopyTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), SNB, IStorage),
+            "method_offset" : 7,
+        },
         # MoveElementTo -> pwcsName:*OLECHAR, pstgDest:*IStorage, pwcsNewName:*OLECHAR, grfFlags:DWORD
-        "MoveElementTo": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, POINTER(OLECHAR), DWORD)(8, "MoveElementTo"),
+        "MoveElementTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), IStorage, POINTER(OLECHAR), DWORD),
+            "method_offset" : 8,
+        },
         # Commit -> grfCommitFlags:DWORD
-        "Commit": ctypes.WINFUNCTYPE(HRESULT, DWORD)(9, "Commit"),
+        "Commit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 9,
+        },
         # Revert -> 
-        "Revert": ctypes.WINFUNCTYPE(HRESULT)(10, "Revert"),
+        "Revert": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 10,
+        },
         # EnumElements -> reserved1:DWORD, reserved2:*void, reserved3:DWORD, ppenum:**IEnumSTATSTG
-        "EnumElements": ctypes.WINFUNCTYPE(HRESULT, DWORD, PVOID, DWORD, POINTER(IEnumSTATSTG))(11, "EnumElements"),
+        "EnumElements": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, PVOID, DWORD, POINTER(IEnumSTATSTG)),
+            "method_offset" : 11,
+        },
         # DestroyElement -> pwcsName:*OLECHAR
-        "DestroyElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR))(12, "DestroyElement"),
+        "DestroyElement": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR)),
+            "method_offset" : 12,
+        },
         # RenameElement -> pwcsOldName:*OLECHAR, pwcsNewName:*OLECHAR
-        "RenameElement": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(OLECHAR))(13, "RenameElement"),
+        "RenameElement": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(OLECHAR)),
+            "method_offset" : 13,
+        },
         # SetElementTimes -> pwcsName:*OLECHAR, pctime:*FILETIME, patime:*FILETIME, pmtime:*FILETIME
-        "SetElementTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(FILETIME), POINTER(FILETIME), POINTER(FILETIME))(14, "SetElementTimes"),
+        "SetElementTimes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OLECHAR), POINTER(FILETIME), POINTER(FILETIME), POINTER(FILETIME)),
+            "method_offset" : 14,
+        },
         # SetClass -> clsid:REFCLSID
-        "SetClass": ctypes.WINFUNCTYPE(HRESULT, REFCLSID)(15, "SetClass"),
+        "SetClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFCLSID),
+            "method_offset" : 15,
+        },
         # SetStateBits -> grfStateBits:DWORD, grfMask:DWORD
-        "SetStateBits": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD)(16, "SetStateBits"),
+        "SetStateBits": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD),
+            "method_offset" : 16,
+        },
         # Stat -> pstatstg:*STATSTG, grfStatFlag:DWORD
-        "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(17, "Stat"),
+        "Stat": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD),
+            "method_offset" : 17,
+        },
     }
 
 # class IStreamImplem(windows.com.COMImplementation):
@@ -2194,33 +3130,75 @@ IStorage._functions_ = {
 #
 IStream._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Read -> pv:*void, cb:ULONG, pcbRead:*ULONG
-        "Read": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG))(3, "Read"),
+        "Read": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Write -> pv:*void, cb:ULONG, pcbWritten:*ULONG
-        "Write": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG))(4, "Write"),
+        "Write": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG)),
+            "method_offset" : 4,
+        },
         # Seek -> dlibMove:LARGE_INTEGER, dwOrigin:DWORD, plibNewPosition:*ULARGE_INTEGER
-        "Seek": ctypes.WINFUNCTYPE(HRESULT, LARGE_INTEGER, DWORD, POINTER(ULARGE_INTEGER))(5, "Seek"),
+        "Seek": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LARGE_INTEGER, DWORD, POINTER(ULARGE_INTEGER)),
+            "method_offset" : 5,
+        },
         # SetSize -> libNewSize:ULARGE_INTEGER
-        "SetSize": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER)(6, "SetSize"),
+        "SetSize": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER),
+            "method_offset" : 6,
+        },
         # CopyTo -> pstm:*IStream, cb:ULARGE_INTEGER, pcbRead:*ULARGE_INTEGER, pcbWritten:*ULARGE_INTEGER
-        "CopyTo": ctypes.WINFUNCTYPE(HRESULT, IStream, ULARGE_INTEGER, POINTER(ULARGE_INTEGER), POINTER(ULARGE_INTEGER))(7, "CopyTo"),
+        "CopyTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, ULARGE_INTEGER, POINTER(ULARGE_INTEGER), POINTER(ULARGE_INTEGER)),
+            "method_offset" : 7,
+        },
         # Commit -> grfCommitFlags:DWORD
-        "Commit": ctypes.WINFUNCTYPE(HRESULT, DWORD)(8, "Commit"),
+        "Commit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 8,
+        },
         # Revert -> 
-        "Revert": ctypes.WINFUNCTYPE(HRESULT)(9, "Revert"),
+        "Revert": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # LockRegion -> libOffset:ULARGE_INTEGER, cb:ULARGE_INTEGER, dwLockType:DWORD
-        "LockRegion": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD)(10, "LockRegion"),
+        "LockRegion": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD),
+            "method_offset" : 10,
+        },
         # UnlockRegion -> libOffset:ULARGE_INTEGER, cb:ULARGE_INTEGER, dwLockType:DWORD
-        "UnlockRegion": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD)(11, "UnlockRegion"),
+        "UnlockRegion": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD),
+            "method_offset" : 11,
+        },
         # Stat -> pstatstg:*STATSTG, grfStatFlag:DWORD
-        "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(12, "Stat"),
+        "Stat": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD),
+            "method_offset" : 12,
+        },
         # Clone -> ppstm:**IStream
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IStream))(13, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IStream)),
+            "method_offset" : 13,
+        },
     }
 
 # class ITypeCompImplem(windows.com.COMImplementation):
@@ -2236,15 +3214,30 @@ IStream._functions_ = {
 #
 ITypeComp._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:*PVOID
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Bind -> szName:LPOLESTR, lHashVal:ULONG, wFlags:WORD, ppTInfo:**ITypeInfo, pDescKind:*DESCKIND, pBindPtr:*BINDPTR
-        "Bind": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, WORD, POINTER(ITypeInfo), POINTER(DESCKIND), POINTER(BINDPTR))(3, "Bind"),
+        "Bind": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, WORD, POINTER(ITypeInfo), POINTER(DESCKIND), POINTER(BINDPTR)),
+            "method_offset" : 3,
+        },
         # BindType -> szName:LPOLESTR, lHashVal:ULONG, ppTInfo:**ITypeInfo, ppTComp:**ITypeComp
-        "BindType": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(ITypeComp))(4, "BindType"),
+        "BindType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(ITypeComp)),
+            "method_offset" : 4,
+        },
     }
 
 # class ITypeInfoImplem(windows.com.COMImplementation):
@@ -2328,49 +3321,115 @@ ITypeComp._functions_ = {
 #
 ITypeInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeAttr -> ppTypeAttr:**TYPEATTR
-        "GetTypeAttr": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TYPEATTR)))(3, "GetTypeAttr"),
+        "GetTypeAttr": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TYPEATTR))),
+            "method_offset" : 3,
+        },
         # GetTypeComp -> ppTComp:**ITypeComp
-        "GetTypeComp": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp))(4, "GetTypeComp"),
+        "GetTypeComp": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp)),
+            "method_offset" : 4,
+        },
         # GetFuncDesc -> index:UINT, ppFuncDesc:**FUNCDESC
-        "GetFuncDesc": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(FUNCDESC)))(5, "GetFuncDesc"),
+        "GetFuncDesc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(FUNCDESC))),
+            "method_offset" : 5,
+        },
         # GetVarDesc -> index:UINT, ppVarDesc:**VARDESC
-        "GetVarDesc": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(VARDESC)))(6, "GetVarDesc"),
+        "GetVarDesc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(VARDESC))),
+            "method_offset" : 6,
+        },
         # GetNames -> memid:MEMBERID, rgBstrNames:*BSTR, cMaxNames:UINT, pcNames:*UINT
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), UINT, POINTER(UINT))(7, "GetNames"),
+        "GetNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), UINT, POINTER(UINT)),
+            "method_offset" : 7,
+        },
         # GetRefTypeOfImplType -> index:UINT, pRefType:*HREFTYPE
-        "GetRefTypeOfImplType": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(HREFTYPE))(8, "GetRefTypeOfImplType"),
+        "GetRefTypeOfImplType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(HREFTYPE)),
+            "method_offset" : 8,
+        },
         # GetImplTypeFlags -> index:UINT, pImplTypeFlags:*INT
-        "GetImplTypeFlags": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(INT))(9, "GetImplTypeFlags"),
+        "GetImplTypeFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(INT)),
+            "method_offset" : 9,
+        },
         # GetIDsOfNames -> rgszNames:*LPOLESTR, cNames:UINT, pMemId:*MEMBERID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR), UINT, POINTER(MEMBERID))(10, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR), UINT, POINTER(MEMBERID)),
+            "method_offset" : 10,
+        },
         # Invoke -> pvInstance:PVOID, memid:MEMBERID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, PVOID, MEMBERID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(11, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, MEMBERID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 11,
+        },
         # GetDocumentation -> memid:MEMBERID, pBstrName:*BSTR, pBstrDocString:*BSTR, pdwHelpContext:*DWORD, pBstrHelpFile:*BSTR
-        "GetDocumentation": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR))(12, "GetDocumentation"),
+        "GetDocumentation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # GetDllEntry -> memid:MEMBERID, invKind:INVOKEKIND, pBstrDllName:*BSTR, pBstrName:*BSTR, pwOrdinal:*WORD
-        "GetDllEntry": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(BSTR), POINTER(BSTR), POINTER(WORD))(13, "GetDllEntry"),
+        "GetDllEntry": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(BSTR), POINTER(BSTR), POINTER(WORD)),
+            "method_offset" : 13,
+        },
         # GetRefTypeInfo -> hRefType:HREFTYPE, ppTInfo:**ITypeInfo
-        "GetRefTypeInfo": ctypes.WINFUNCTYPE(HRESULT, HREFTYPE, POINTER(ITypeInfo))(14, "GetRefTypeInfo"),
+        "GetRefTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, HREFTYPE, POINTER(ITypeInfo)),
+            "method_offset" : 14,
+        },
         # AddressOfMember -> memid:MEMBERID, invKind:INVOKEKIND, ppv:*PVOID
-        "AddressOfMember": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(PVOID))(15, "AddressOfMember"),
+        "AddressOfMember": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(PVOID)),
+            "method_offset" : 15,
+        },
         # CreateInstance -> pUnkOuter:*IUnknown, riid:REFIID, ppvObj:*PVOID
-        "CreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, REFIID, POINTER(PVOID))(16, "CreateInstance"),
+        "CreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, REFIID, POINTER(PVOID)),
+            "method_offset" : 16,
+        },
         # GetMops -> memid:MEMBERID, pBstrMops:*BSTR
-        "GetMops": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR))(17, "GetMops"),
+        "GetMops": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR)),
+            "method_offset" : 17,
+        },
         # GetContainingTypeLib -> ppTLib:**ITypeLib, pIndex:*UINT
-        "GetContainingTypeLib": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeLib), POINTER(UINT))(18, "GetContainingTypeLib"),
+        "GetContainingTypeLib": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeLib), POINTER(UINT)),
+            "method_offset" : 18,
+        },
         # ReleaseTypeAttr -> pTypeAttr:*TYPEATTR
-        "ReleaseTypeAttr": ctypes.WINFUNCTYPE(DWORD, POINTER(TYPEATTR))(19, "ReleaseTypeAttr"),
+        "ReleaseTypeAttr": {
+            "type": ctypes.WINFUNCTYPE(DWORD, POINTER(TYPEATTR)),
+            "method_offset" : 19,
+        },
         # ReleaseFuncDesc -> pFuncDesc:*FUNCDESC
-        "ReleaseFuncDesc": ctypes.WINFUNCTYPE(DWORD, POINTER(FUNCDESC))(20, "ReleaseFuncDesc"),
+        "ReleaseFuncDesc": {
+            "type": ctypes.WINFUNCTYPE(DWORD, POINTER(FUNCDESC)),
+            "method_offset" : 20,
+        },
         # ReleaseVarDesc -> pVarDesc:*VARDESC
-        "ReleaseVarDesc": ctypes.WINFUNCTYPE(DWORD, POINTER(VARDESC))(21, "ReleaseVarDesc"),
+        "ReleaseVarDesc": {
+            "type": ctypes.WINFUNCTYPE(DWORD, POINTER(VARDESC)),
+            "method_offset" : 21,
+        },
     }
 
 # class ITypeLibImplem(windows.com.COMImplementation):
@@ -2418,31 +3477,70 @@ ITypeInfo._functions_ = {
 #
 ITypeLib._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> 
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(UINT)(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(UINT),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> index:UINT, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetTypeInfoType -> index:UINT, pTKind:*TYPEKIND
-        "GetTypeInfoType": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(TYPEKIND))(5, "GetTypeInfoType"),
+        "GetTypeInfoType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(TYPEKIND)),
+            "method_offset" : 5,
+        },
         # GetTypeInfoOfGuid -> guid:REFGUID, ppTinfo:**ITypeInfo
-        "GetTypeInfoOfGuid": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(ITypeInfo))(6, "GetTypeInfoOfGuid"),
+        "GetTypeInfoOfGuid": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(ITypeInfo)),
+            "method_offset" : 6,
+        },
         # GetLibAttr -> ppTLibAttr:**TLIBATTR
-        "GetLibAttr": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TLIBATTR)))(7, "GetLibAttr"),
+        "GetLibAttr": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TLIBATTR))),
+            "method_offset" : 7,
+        },
         # GetTypeComp -> ppTComp:**ITypeComp
-        "GetTypeComp": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp))(8, "GetTypeComp"),
+        "GetTypeComp": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp)),
+            "method_offset" : 8,
+        },
         # GetDocumentation -> index:INT, pBstrName:*BSTR, pBstrDocString:*BSTR, pdwHelpContext:*DWORD, pBstrHelpFile:*BSTR
-        "GetDocumentation": ctypes.WINFUNCTYPE(HRESULT, INT, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR))(9, "GetDocumentation"),
+        "GetDocumentation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # IsName -> szNameBuf:LPOLESTR, lHashVal:ULONG, pfName:*BOOL
-        "IsName": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(BOOL))(10, "IsName"),
+        "IsName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(BOOL)),
+            "method_offset" : 10,
+        },
         # FindName -> szNameBuf:LPOLESTR, lHashVal:ULONG, ppTInfo:**ITypeInfo, rgMemId:*MEMBERID, pcFound:*USHORT
-        "FindName": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(MEMBERID), POINTER(USHORT))(11, "FindName"),
+        "FindName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(MEMBERID), POINTER(USHORT)),
+            "method_offset" : 11,
+        },
         # ReleaseTLibAttr -> pTLibAttr:*TLIBATTR
-        "ReleaseTLibAttr": ctypes.WINFUNCTYPE(DWORD, POINTER(TLIBATTR))(12, "ReleaseTLibAttr"),
+        "ReleaseTLibAttr": {
+            "type": ctypes.WINFUNCTYPE(DWORD, POINTER(TLIBATTR)),
+            "method_offset" : 12,
+        },
     }
 
 # class IBackgroundCopyCallbackImplem(windows.com.COMImplementation):
@@ -2462,17 +3560,35 @@ ITypeLib._functions_ = {
 #
 IBackgroundCopyCallback._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # JobTransferred -> pJob:*IBackgroundCopyJob
-        "JobTransferred": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob)(3, "JobTransferred"),
+        "JobTransferred": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob),
+            "method_offset" : 3,
+        },
         # JobError -> pJob:*IBackgroundCopyJob, pError:*IBackgroundCopyError
-        "JobError": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, IBackgroundCopyError)(4, "JobError"),
+        "JobError": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, IBackgroundCopyError),
+            "method_offset" : 4,
+        },
         # JobModification -> pJob:*IBackgroundCopyJob, dwReserved:DWORD
-        "JobModification": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, DWORD)(5, "JobModification"),
+        "JobModification": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, DWORD),
+            "method_offset" : 5,
+        },
     }
 
 # class IBackgroundCopyErrorImplem(windows.com.COMImplementation):
@@ -2500,21 +3616,45 @@ IBackgroundCopyCallback._functions_ = {
 #
 IBackgroundCopyError._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetError -> pContext:*BG_ERROR_CONTEXT, pCode:*HRESULT
-        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_ERROR_CONTEXT), POINTER(HRESULT))(3, "GetError"),
+        "GetError": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_ERROR_CONTEXT), POINTER(HRESULT)),
+            "method_offset" : 3,
+        },
         # GetFile -> pVal:**IBackgroundCopyFile
-        "GetFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyFile))(4, "GetFile"),
+        "GetFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyFile)),
+            "method_offset" : 4,
+        },
         # GetErrorDescription -> LanguageId:DWORD, pErrorDescription:*LPWSTR
-        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(5, "GetErrorDescription"),
+        "GetErrorDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR)),
+            "method_offset" : 5,
+        },
         # GetErrorContextDescription -> LanguageId:DWORD, pContextDescription:*LPWSTR
-        "GetErrorContextDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorContextDescription"),
+        "GetErrorContextDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR)),
+            "method_offset" : 6,
+        },
         # GetProtocol -> pProtocol:*LPWSTR
-        "GetProtocol": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(7, "GetProtocol"),
+        "GetProtocol": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 7,
+        },
     }
 
 # class IBackgroundCopyFileImplem(windows.com.COMImplementation):
@@ -2534,17 +3674,35 @@ IBackgroundCopyError._functions_ = {
 #
 IBackgroundCopyFile._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetRemoteName -> pVal:*LPWSTR
-        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        "GetRemoteName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 3,
+        },
         # GetLocalName -> pVal:*LPWSTR
-        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        "GetLocalName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 4,
+        },
         # GetProgress -> pVal:*BG_FILE_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
+        "GetProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS)),
+            "method_offset" : 5,
+        },
     }
 
 # class IBackgroundCopyFile2Implem(windows.com.COMImplementation):
@@ -2572,21 +3730,45 @@ IBackgroundCopyFile._functions_ = {
 #
 IBackgroundCopyFile2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetRemoteName -> pVal:*LPWSTR
-        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        "GetRemoteName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 3,
+        },
         # GetLocalName -> pVal:*LPWSTR
-        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        "GetLocalName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 4,
+        },
         # GetProgress -> pVal:*BG_FILE_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
+        "GetProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS)),
+            "method_offset" : 5,
+        },
         # GetFileRanges -> RangeCount:*DWORD, Ranges:**BG_FILE_RANGE
-        "GetFileRanges": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE)))(6, "GetFileRanges"),
+        "GetFileRanges": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE))),
+            "method_offset" : 6,
+        },
         # SetRemoteName -> Val:LPCWSTR
-        "SetRemoteName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetRemoteName"),
+        "SetRemoteName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 7,
+        },
     }
 
 # class IBackgroundCopyFile3Implem(windows.com.COMImplementation):
@@ -2630,29 +3812,65 @@ IBackgroundCopyFile2._functions_ = {
 #
 IBackgroundCopyFile3._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetRemoteName -> pVal:*LPWSTR
-        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        "GetRemoteName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 3,
+        },
         # GetLocalName -> pVal:*LPWSTR
-        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        "GetLocalName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 4,
+        },
         # GetProgress -> pVal:*BG_FILE_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
+        "GetProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS)),
+            "method_offset" : 5,
+        },
         # GetFileRanges -> RangeCount:*DWORD, Ranges:**BG_FILE_RANGE
-        "GetFileRanges": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE)))(6, "GetFileRanges"),
+        "GetFileRanges": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE))),
+            "method_offset" : 6,
+        },
         # SetRemoteName -> Val:LPCWSTR
-        "SetRemoteName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetRemoteName"),
+        "SetRemoteName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 7,
+        },
         # GetTemporaryName -> pFilename:*LPWSTR
-        "GetTemporaryName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(8, "GetTemporaryName"),
+        "GetTemporaryName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 8,
+        },
         # SetValidationState -> state:BOOL
-        "SetValidationState": ctypes.WINFUNCTYPE(HRESULT, BOOL)(9, "SetValidationState"),
+        "SetValidationState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BOOL),
+            "method_offset" : 9,
+        },
         # GetValidationState -> pState:*BOOL
-        "GetValidationState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(10, "GetValidationState"),
+        "GetValidationState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL)),
+            "method_offset" : 10,
+        },
         # IsDownloadedFromPeer -> pVal:*BOOL
-        "IsDownloadedFromPeer": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(11, "IsDownloadedFromPeer"),
+        "IsDownloadedFromPeer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL)),
+            "method_offset" : 11,
+        },
     }
 
 # class IBackgroundCopyJobImplem(windows.com.COMImplementation):
@@ -2788,75 +4006,180 @@ IBackgroundCopyFile3._functions_ = {
 #
 IBackgroundCopyJob._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # AddFileSet -> cFileCount:ULONG, pFileSet:*BG_FILE_INFO
-        "AddFileSet": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO))(3, "AddFileSet"),
+        "AddFileSet": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO)),
+            "method_offset" : 3,
+        },
         # AddFile -> RemoteUrl:LPCWSTR, LocalName:LPCWSTR
-        "AddFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(4, "AddFile"),
+        "AddFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR),
+            "method_offset" : 4,
+        },
         # EnumFiles -> pEnum:**IEnumBackgroundCopyFiles
-        "EnumFiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(5, "EnumFiles"),
+        "EnumFiles": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles)),
+            "method_offset" : 5,
+        },
         # Suspend -> 
-        "Suspend": ctypes.WINFUNCTYPE(HRESULT)(6, "Suspend"),
+        "Suspend": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 6,
+        },
         # Resume -> 
-        "Resume": ctypes.WINFUNCTYPE(HRESULT)(7, "Resume"),
+        "Resume": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
         # Cancel -> 
-        "Cancel": ctypes.WINFUNCTYPE(HRESULT)(8, "Cancel"),
+        "Cancel": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 8,
+        },
         # Complete -> 
-        "Complete": ctypes.WINFUNCTYPE(HRESULT)(9, "Complete"),
+        "Complete": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # GetId -> pVal:*GUID
-        "GetId": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(10, "GetId"),
+        "GetId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 10,
+        },
         # GetType -> pVal:*BG_JOB_TYPE
-        "GetType": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE))(11, "GetType"),
+        "GetType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE)),
+            "method_offset" : 11,
+        },
         # GetProgress -> pVal:*BG_JOB_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS))(12, "GetProgress"),
+        "GetProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS)),
+            "method_offset" : 12,
+        },
         # GetTimes -> pVal:*BG_JOB_TIMES
-        "GetTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES))(13, "GetTimes"),
+        "GetTimes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES)),
+            "method_offset" : 13,
+        },
         # GetState -> pVal:*BG_JOB_STATE
-        "GetState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE))(14, "GetState"),
+        "GetState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE)),
+            "method_offset" : 14,
+        },
         # GetError -> ppError:**IBackgroundCopyError
-        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError))(15, "GetError"),
+        "GetError": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError)),
+            "method_offset" : 15,
+        },
         # GetOwner -> pVal:*LPWSTR
-        "GetOwner": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(16, "GetOwner"),
+        "GetOwner": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 16,
+        },
         # SetDisplayName -> Val:LPCWSTR
-        "SetDisplayName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(17, "SetDisplayName"),
+        "SetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 17,
+        },
         # GetDisplayName -> pVal:*LPWSTR
-        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(18, "GetDisplayName"),
+        "GetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 18,
+        },
         # SetDescription -> Val:LPCWSTR
-        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(19, "SetDescription"),
+        "SetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 19,
+        },
         # GetDescription -> pVal:*LPWSTR
-        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(20, "GetDescription"),
+        "GetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 20,
+        },
         # SetPriority -> Val:BG_JOB_PRIORITY
-        "SetPriority": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY)(21, "SetPriority"),
+        "SetPriority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY),
+            "method_offset" : 21,
+        },
         # GetPriority -> pVal:*BG_JOB_PRIORITY
-        "GetPriority": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY))(22, "GetPriority"),
+        "GetPriority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY)),
+            "method_offset" : 22,
+        },
         # SetNotifyFlags -> Val:ULONG
-        "SetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, ULONG)(23, "SetNotifyFlags"),
+        "SetNotifyFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 23,
+        },
         # GetNotifyFlags -> pVal:*ULONG
-        "GetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(24, "GetNotifyFlags"),
+        "GetNotifyFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 24,
+        },
         # SetNotifyInterface -> Val:*IUnknown
-        "SetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(25, "SetNotifyInterface"),
+        "SetNotifyInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 25,
+        },
         # GetNotifyInterface -> pVal:**IUnknown
-        "GetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(26, "GetNotifyInterface"),
+        "GetNotifyInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 26,
+        },
         # SetMinimumRetryDelay -> Seconds:ULONG
-        "SetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, ULONG)(27, "SetMinimumRetryDelay"),
+        "SetMinimumRetryDelay": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 27,
+        },
         # GetMinimumRetryDelay -> Seconds:*ULONG
-        "GetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(28, "GetMinimumRetryDelay"),
+        "GetMinimumRetryDelay": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 28,
+        },
         # SetNoProgressTimeout -> Seconds:ULONG
-        "SetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, ULONG)(29, "SetNoProgressTimeout"),
+        "SetNoProgressTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 29,
+        },
         # GetNoProgressTimeout -> Seconds:*ULONG
-        "GetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(30, "GetNoProgressTimeout"),
+        "GetNoProgressTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 30,
+        },
         # GetErrorCount -> Errors:*ULONG
-        "GetErrorCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(31, "GetErrorCount"),
+        "GetErrorCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 31,
+        },
         # SetProxySettings -> ProxyUsage:BG_JOB_PROXY_USAGE, ProxyList:*WCHAR, ProxyBypassList:*WCHAR
-        "SetProxySettings": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR))(32, "SetProxySettings"),
+        "SetProxySettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR)),
+            "method_offset" : 32,
+        },
         # GetProxySettings -> pProxyUsage:*BG_JOB_PROXY_USAGE, pProxyList:*LPWSTR, pProxyBypassList:*LPWSTR
-        "GetProxySettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR))(33, "GetProxySettings"),
+        "GetProxySettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR)),
+            "method_offset" : 33,
+        },
         # TakeOwnership -> 
-        "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
+        "TakeOwnership": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 34,
+        },
     }
 
 # class IBackgroundCopyJob2Implem(windows.com.COMImplementation):
@@ -3024,91 +4347,220 @@ IBackgroundCopyJob._functions_ = {
 #
 IBackgroundCopyJob2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # AddFileSet -> cFileCount:ULONG, pFileSet:*BG_FILE_INFO
-        "AddFileSet": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO))(3, "AddFileSet"),
+        "AddFileSet": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO)),
+            "method_offset" : 3,
+        },
         # AddFile -> RemoteUrl:LPCWSTR, LocalName:LPCWSTR
-        "AddFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(4, "AddFile"),
+        "AddFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR),
+            "method_offset" : 4,
+        },
         # EnumFiles -> pEnum:**IEnumBackgroundCopyFiles
-        "EnumFiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(5, "EnumFiles"),
+        "EnumFiles": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles)),
+            "method_offset" : 5,
+        },
         # Suspend -> 
-        "Suspend": ctypes.WINFUNCTYPE(HRESULT)(6, "Suspend"),
+        "Suspend": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 6,
+        },
         # Resume -> 
-        "Resume": ctypes.WINFUNCTYPE(HRESULT)(7, "Resume"),
+        "Resume": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
         # Cancel -> 
-        "Cancel": ctypes.WINFUNCTYPE(HRESULT)(8, "Cancel"),
+        "Cancel": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 8,
+        },
         # Complete -> 
-        "Complete": ctypes.WINFUNCTYPE(HRESULT)(9, "Complete"),
+        "Complete": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # GetId -> pVal:*GUID
-        "GetId": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(10, "GetId"),
+        "GetId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 10,
+        },
         # GetType -> pVal:*BG_JOB_TYPE
-        "GetType": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE))(11, "GetType"),
+        "GetType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE)),
+            "method_offset" : 11,
+        },
         # GetProgress -> pVal:*BG_JOB_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS))(12, "GetProgress"),
+        "GetProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS)),
+            "method_offset" : 12,
+        },
         # GetTimes -> pVal:*BG_JOB_TIMES
-        "GetTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES))(13, "GetTimes"),
+        "GetTimes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES)),
+            "method_offset" : 13,
+        },
         # GetState -> pVal:*BG_JOB_STATE
-        "GetState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE))(14, "GetState"),
+        "GetState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE)),
+            "method_offset" : 14,
+        },
         # GetError -> ppError:**IBackgroundCopyError
-        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError))(15, "GetError"),
+        "GetError": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError)),
+            "method_offset" : 15,
+        },
         # GetOwner -> pVal:*LPWSTR
-        "GetOwner": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(16, "GetOwner"),
+        "GetOwner": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 16,
+        },
         # SetDisplayName -> Val:LPCWSTR
-        "SetDisplayName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(17, "SetDisplayName"),
+        "SetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 17,
+        },
         # GetDisplayName -> pVal:*LPWSTR
-        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(18, "GetDisplayName"),
+        "GetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 18,
+        },
         # SetDescription -> Val:LPCWSTR
-        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(19, "SetDescription"),
+        "SetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 19,
+        },
         # GetDescription -> pVal:*LPWSTR
-        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(20, "GetDescription"),
+        "GetDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 20,
+        },
         # SetPriority -> Val:BG_JOB_PRIORITY
-        "SetPriority": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY)(21, "SetPriority"),
+        "SetPriority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY),
+            "method_offset" : 21,
+        },
         # GetPriority -> pVal:*BG_JOB_PRIORITY
-        "GetPriority": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY))(22, "GetPriority"),
+        "GetPriority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY)),
+            "method_offset" : 22,
+        },
         # SetNotifyFlags -> Val:ULONG
-        "SetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, ULONG)(23, "SetNotifyFlags"),
+        "SetNotifyFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 23,
+        },
         # GetNotifyFlags -> pVal:*ULONG
-        "GetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(24, "GetNotifyFlags"),
+        "GetNotifyFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 24,
+        },
         # SetNotifyInterface -> Val:*IUnknown
-        "SetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(25, "SetNotifyInterface"),
+        "SetNotifyInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 25,
+        },
         # GetNotifyInterface -> pVal:**IUnknown
-        "GetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(26, "GetNotifyInterface"),
+        "GetNotifyInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 26,
+        },
         # SetMinimumRetryDelay -> Seconds:ULONG
-        "SetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, ULONG)(27, "SetMinimumRetryDelay"),
+        "SetMinimumRetryDelay": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 27,
+        },
         # GetMinimumRetryDelay -> Seconds:*ULONG
-        "GetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(28, "GetMinimumRetryDelay"),
+        "GetMinimumRetryDelay": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 28,
+        },
         # SetNoProgressTimeout -> Seconds:ULONG
-        "SetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, ULONG)(29, "SetNoProgressTimeout"),
+        "SetNoProgressTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 29,
+        },
         # GetNoProgressTimeout -> Seconds:*ULONG
-        "GetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(30, "GetNoProgressTimeout"),
+        "GetNoProgressTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 30,
+        },
         # GetErrorCount -> Errors:*ULONG
-        "GetErrorCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(31, "GetErrorCount"),
+        "GetErrorCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 31,
+        },
         # SetProxySettings -> ProxyUsage:BG_JOB_PROXY_USAGE, ProxyList:*WCHAR, ProxyBypassList:*WCHAR
-        "SetProxySettings": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR))(32, "SetProxySettings"),
+        "SetProxySettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR)),
+            "method_offset" : 32,
+        },
         # GetProxySettings -> pProxyUsage:*BG_JOB_PROXY_USAGE, pProxyList:*LPWSTR, pProxyBypassList:*LPWSTR
-        "GetProxySettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR))(33, "GetProxySettings"),
+        "GetProxySettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR)),
+            "method_offset" : 33,
+        },
         # TakeOwnership -> 
-        "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
+        "TakeOwnership": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 34,
+        },
         # SetNotifyCmdLine -> Program:LPCWSTR, Parameters:LPCWSTR
-        "SetNotifyCmdLine": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(35, "SetNotifyCmdLine"),
+        "SetNotifyCmdLine": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR),
+            "method_offset" : 35,
+        },
         # GetNotifyCmdLine -> pProgram:*LPWSTR, pParameters:*LPWSTR
-        "GetNotifyCmdLine": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR))(36, "GetNotifyCmdLine"),
+        "GetNotifyCmdLine": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR)),
+            "method_offset" : 36,
+        },
         # GetReplyProgress -> pProgress:*BG_JOB_REPLY_PROGRESS
-        "GetReplyProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_REPLY_PROGRESS))(37, "GetReplyProgress"),
+        "GetReplyProgress": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_REPLY_PROGRESS)),
+            "method_offset" : 37,
+        },
         # GetReplyData -> ppBuffer:**BYTE, pLength:*UINT64
-        "GetReplyData": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(BYTE)), POINTER(UINT64))(38, "GetReplyData"),
+        "GetReplyData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(BYTE)), POINTER(UINT64)),
+            "method_offset" : 38,
+        },
         # SetReplyFileName -> ReplyFileName:LPCWSTR
-        "SetReplyFileName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(39, "SetReplyFileName"),
+        "SetReplyFileName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 39,
+        },
         # GetReplyFileName -> pReplyFileName:*LPWSTR
-        "GetReplyFileName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(40, "GetReplyFileName"),
+        "GetReplyFileName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR)),
+            "method_offset" : 40,
+        },
         # SetCredentials -> credentials:*BG_AUTH_CREDENTIALS
-        "SetCredentials": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_AUTH_CREDENTIALS))(41, "SetCredentials"),
+        "SetCredentials": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_AUTH_CREDENTIALS)),
+            "method_offset" : 41,
+        },
         # RemoveCredentials -> Target:BG_AUTH_TARGET, Scheme:BG_AUTH_SCHEME
-        "RemoveCredentials": ctypes.WINFUNCTYPE(HRESULT, BG_AUTH_TARGET, BG_AUTH_SCHEME)(42, "RemoveCredentials"),
+        "RemoveCredentials": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BG_AUTH_TARGET, BG_AUTH_SCHEME),
+            "method_offset" : 42,
+        },
     }
 
 # class IBackgroundCopyManagerImplem(windows.com.COMImplementation):
@@ -3132,19 +4584,40 @@ IBackgroundCopyJob2._functions_ = {
 #
 IBackgroundCopyManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CreateJob -> DisplayName:LPCWSTR, Type:BG_JOB_TYPE, pJobId:*GUID, ppJob:**IBackgroundCopyJob
-        "CreateJob": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, BG_JOB_TYPE, POINTER(GUID), POINTER(IBackgroundCopyJob))(3, "CreateJob"),
+        "CreateJob": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, BG_JOB_TYPE, POINTER(GUID), POINTER(IBackgroundCopyJob)),
+            "method_offset" : 3,
+        },
         # GetJob -> jobID:REFGUID, ppJob:**IBackgroundCopyJob
-        "GetJob": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(IBackgroundCopyJob))(4, "GetJob"),
+        "GetJob": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(IBackgroundCopyJob)),
+            "method_offset" : 4,
+        },
         # EnumJobs -> dwFlags:DWORD, ppEnum:**IEnumBackgroundCopyJobs
-        "EnumJobs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IEnumBackgroundCopyJobs))(5, "EnumJobs"),
+        "EnumJobs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IEnumBackgroundCopyJobs)),
+            "method_offset" : 5,
+        },
         # GetErrorDescription -> hResult:HRESULT, LanguageId:DWORD, pErrorDescription:*LPWSTR
-        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorDescription"),
+        "GetErrorDescription": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, HRESULT, DWORD, POINTER(LPWSTR)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumBackgroundCopyFilesImplem(windows.com.COMImplementation):
@@ -3172,21 +4645,45 @@ IBackgroundCopyManager._functions_ = {
 #
 IEnumBackgroundCopyFiles._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:**IBackgroundCopyFile, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyFile), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyFile), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumBackgroundCopyFiles
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles)),
+            "method_offset" : 6,
+        },
         # GetCount -> puCount:*ULONG
-        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
+        "GetCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 7,
+        },
     }
 
 # class IEnumBackgroundCopyJobsImplem(windows.com.COMImplementation):
@@ -3214,21 +4711,45 @@ IEnumBackgroundCopyFiles._functions_ = {
 #
 IEnumBackgroundCopyJobs._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:**IBackgroundCopyJob, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyJob), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyJob), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumBackgroundCopyJobs
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyJobs))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyJobs)),
+            "method_offset" : 6,
+        },
         # GetCount -> puCount:*ULONG
-        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
+        "GetCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 7,
+        },
     }
 
 # class IActivationPropertiesImplem(windows.com.COMImplementation):
@@ -3276,31 +4797,70 @@ IEnumBackgroundCopyJobs._functions_ = {
 #
 IActivationProperties._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetUnmarshalClass -> riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD, pCid:*CLSID
-        "GetUnmarshalClass": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(CLSID))(3, "GetUnmarshalClass"),
+        "GetUnmarshalClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(CLSID)),
+            "method_offset" : 3,
+        },
         # GetMarshalSizeMax -> riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD, pSize:*DWORD
-        "GetMarshalSizeMax": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(DWORD))(4, "GetMarshalSizeMax"),
+        "GetMarshalSizeMax": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, PVOID, DWORD, PVOID, DWORD, POINTER(DWORD)),
+            "method_offset" : 4,
+        },
         # MarshalInterface -> pStm:*IStream, riid:REFIID, pv:*void, dwDestContext:DWORD, pvDestContext:*void, mshlflags:DWORD
-        "MarshalInterface": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, PVOID, DWORD, PVOID, DWORD)(5, "MarshalInterface"),
+        "MarshalInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, PVOID, DWORD, PVOID, DWORD),
+            "method_offset" : 5,
+        },
         # UnmarshalInterface -> pStm:*IStream, riid:REFIID, ppv:**void
-        "UnmarshalInterface": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, POINTER(PVOID))(6, "UnmarshalInterface"),
+        "UnmarshalInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream, REFIID, POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # ReleaseMarshalData -> pStm:*IStream
-        "ReleaseMarshalData": ctypes.WINFUNCTYPE(HRESULT, IStream)(7, "ReleaseMarshalData"),
+        "ReleaseMarshalData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStream),
+            "method_offset" : 7,
+        },
         # DisconnectObject -> dwReserved:DWORD
-        "DisconnectObject": ctypes.WINFUNCTYPE(HRESULT, DWORD)(8, "DisconnectObject"),
+        "DisconnectObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 8,
+        },
         # SetDestCtx -> dwDestCtx:DWORD
-        "SetDestCtx": ctypes.WINFUNCTYPE(HRESULT, DWORD)(9, "SetDestCtx"),
+        "SetDestCtx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 9,
+        },
         # SetMarshalFlags -> dwMarshalFlags:DWORD
-        "SetMarshalFlags": ctypes.WINFUNCTYPE(HRESULT, DWORD)(10, "SetMarshalFlags"),
+        "SetMarshalFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 10,
+        },
         # SetLocalBlob -> blob:*void
-        "SetLocalBlob": ctypes.WINFUNCTYPE(HRESULT, PVOID)(11, "SetLocalBlob"),
+        "SetLocalBlob": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID),
+            "method_offset" : 11,
+        },
         # GetLocalBlob -> blob:**void
-        "GetLocalBlob": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(12, "GetLocalBlob"),
+        "GetLocalBlob": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID)),
+            "method_offset" : 12,
+        },
     }
 
 # class IActivationPropertiesOutImplem(windows.com.COMImplementation):
@@ -3324,19 +4884,40 @@ IActivationProperties._functions_ = {
 #
 IActivationPropertiesOut._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetActivationID -> pActivationID:*GUID
-        "GetActivationID": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(3, "GetActivationID"),
+        "GetActivationID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 3,
+        },
         # GetObjectInterface -> riid:REFIID, actvflags:DWORD, ppv:**void
-        "GetObjectInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, DWORD, POINTER(PVOID))(4, "GetObjectInterface"),
+        "GetObjectInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, DWORD, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetObjectInterfaces -> cIfs:DWORD, actvflags:DWORD, multiQi:*MULTI_QI
-        "GetObjectInterfaces": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(MULTI_QI))(5, "GetObjectInterfaces"),
+        "GetObjectInterfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(MULTI_QI)),
+            "method_offset" : 5,
+        },
         # RemoveRequestedIIDs -> cIfs:DWORD, rgIID:*IID
-        "RemoveRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID))(6, "RemoveRequestedIIDs"),
+        "RemoveRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID)),
+            "method_offset" : 6,
+        },
     }
 
 # class IActivationPropertiesInImplem(windows.com.COMImplementation):
@@ -3384,31 +4965,70 @@ IActivationPropertiesOut._functions_ = {
 #
 IActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetActivationID -> pActivationID:*GUID
-        "GetActivationID": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(3, "GetActivationID"),
+        "GetActivationID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 3,
+        },
         # GetClassInfo -> riid:REFIID, ppv:**void
-        "GetClassInfo": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(4, "GetClassInfo"),
+        "GetClassInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetClsctx -> pclsctx:*DWORD
-        "GetClsctx": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(5, "GetClsctx"),
+        "GetClsctx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 5,
+        },
         # GetActivationFlags -> pactvflags:*DWORD
-        "GetActivationFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(6, "GetActivationFlags"),
+        "GetActivationFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 6,
+        },
         # AddRequestedIIDs -> cIfs:DWORD, rgIID:*IID
-        "AddRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID))(7, "AddRequestedIIDs"),
+        "AddRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID)),
+            "method_offset" : 7,
+        },
         # GetRequestedIIDs -> pulCount:*ULONG, prgIID:**IID
-        "GetRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG), POINTER(POINTER(IID)))(8, "GetRequestedIIDs"),
+        "GetRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG), POINTER(POINTER(IID))),
+            "method_offset" : 8,
+        },
         # DelegateGetClassObject -> pActPropsOut:**IActivationPropertiesOut
-        "DelegateGetClassObject": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActivationPropertiesOut))(9, "DelegateGetClassObject"),
+        "DelegateGetClassObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 9,
+        },
         # DelegateCreateInstance -> pUnkOuter:*IUnknown, pActPropsOut:**IActivationPropertiesOut
-        "DelegateCreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(10, "DelegateCreateInstance"),
+        "DelegateCreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 10,
+        },
         # DelegateCIAndGetCF -> pUnkOuter:*IUnknown, pActPropsOut:**IActivationPropertiesOut, ppCf:**IClassFactory
-        "DelegateCIAndGetCF": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut), POINTER(IClassFactory))(11, "DelegateCIAndGetCF"),
+        "DelegateCIAndGetCF": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut), POINTER(IClassFactory)),
+            "method_offset" : 11,
+        },
         # GetReturnActivationProperties -> pUnk:*IUnknown, ppActOut:**IActivationPropertiesOut
-        "GetReturnActivationProperties": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(12, "GetReturnActivationProperties"),
+        "GetReturnActivationProperties": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 12,
+        },
     }
 
 # class IActivationStageInfoImplem(windows.com.COMImplementation):
@@ -3428,17 +5048,35 @@ IActivationPropertiesIn._functions_ = {
 #
 IActivationStageInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetStageAndIndex -> stage:ACTIVATION_STAGE, index:INT
-        "SetStageAndIndex": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, INT)(3, "SetStageAndIndex"),
+        "SetStageAndIndex": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, INT),
+            "method_offset" : 3,
+        },
         # GetStage -> pstage:*ACTIVATION_STAGE
-        "GetStage": ctypes.WINFUNCTYPE(HRESULT, POINTER(ACTIVATION_STAGE))(4, "GetStage"),
+        "GetStage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ACTIVATION_STAGE)),
+            "method_offset" : 4,
+        },
         # GetIndex -> pindex:*INT
-        "GetIndex": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(5, "GetIndex"),
+        "GetIndex": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 5,
+        },
     }
 
 # class IClassClassicInfoImplem(windows.com.COMImplementation):
@@ -3474,25 +5112,55 @@ IActivationStageInfo._functions_ = {
 #
 IClassClassicInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetThreadingModel -> pthreadmodel:*ThreadingModel
-        "GetThreadingModel": ctypes.WINFUNCTYPE(HRESULT, POINTER(ThreadingModel))(3, "GetThreadingModel"),
+        "GetThreadingModel": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ThreadingModel)),
+            "method_offset" : 3,
+        },
         # GetModulePath -> clsctx:CLSCTX, pwszDllName:**WCHAR
-        "GetModulePath": ctypes.WINFUNCTYPE(HRESULT, CLSCTX, POINTER(POINTER(WCHAR)))(4, "GetModulePath"),
+        "GetModulePath": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, CLSCTX, POINTER(POINTER(WCHAR))),
+            "method_offset" : 4,
+        },
         # GetImplementedClsid -> ppguidClsid:**GUID
-        "GetImplementedClsid": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(GUID)))(5, "GetImplementedClsid"),
+        "GetImplementedClsid": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(GUID))),
+            "method_offset" : 5,
+        },
         # GetProcess -> riid:REFIID, ppv:**void
-        "GetProcess": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(6, "GetProcess"),
+        "GetProcess": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # GetRemoteServerName -> pwszServerName:**WCHAR
-        "GetRemoteServerName": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR)))(7, "GetRemoteServerName"),
+        "GetRemoteServerName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR))),
+            "method_offset" : 7,
+        },
         # GetLocalServerType -> pType:*LocalServerType
-        "GetLocalServerType": ctypes.WINFUNCTYPE(HRESULT, POINTER(LocalServerType))(8, "GetLocalServerType"),
+        "GetLocalServerType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LocalServerType)),
+            "method_offset" : 8,
+        },
         # GetSurrogateCommandLine -> pwszSurrogateCommandLine:**WCHAR
-        "GetSurrogateCommandLine": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR)))(9, "GetSurrogateCommandLine"),
+        "GetSurrogateCommandLine": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR))),
+            "method_offset" : 9,
+        },
     }
 
 # class IComClassInfoImplem(windows.com.COMImplementation):
@@ -3556,39 +5224,90 @@ IClassClassicInfo._functions_ = {
 #
 IComClassInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetConfiguredClsid -> ppguidClsid:**GUID
-        "GetConfiguredClsid": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(GUID)))(3, "GetConfiguredClsid"),
+        "GetConfiguredClsid": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(GUID))),
+            "method_offset" : 3,
+        },
         # GetProgId -> pwszProgid:**WCHAR
-        "GetProgId": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR)))(4, "GetProgId"),
+        "GetProgId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR))),
+            "method_offset" : 4,
+        },
         # GetClassName -> pwszClassName:**WCHAR
-        "GetClassName": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR)))(5, "GetClassName"),
+        "GetClassName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(WCHAR))),
+            "method_offset" : 5,
+        },
         # GetApplication -> riid:REFIID, ppv:**void
-        "GetApplication": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(6, "GetApplication"),
+        "GetApplication": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # GetClassContext -> clsctxFilter:CLSCTX, pclsctx:*CLSCTX
-        "GetClassContext": ctypes.WINFUNCTYPE(HRESULT, CLSCTX, POINTER(CLSCTX))(7, "GetClassContext"),
+        "GetClassContext": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, CLSCTX, POINTER(CLSCTX)),
+            "method_offset" : 7,
+        },
         # GetCustomActivatorCount -> activationStage:ACTIVATION_STAGE, pulCount:*ULONG
-        "GetCustomActivatorCount": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(ULONG))(8, "GetCustomActivatorCount"),
+        "GetCustomActivatorCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(ULONG)),
+            "method_offset" : 8,
+        },
         # GetCustomActivatorClsids -> activationStage:ACTIVATION_STAGE, prgguidClsid:**GUID
-        "GetCustomActivatorClsids": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(POINTER(GUID)))(9, "GetCustomActivatorClsids"),
+        "GetCustomActivatorClsids": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(POINTER(GUID))),
+            "method_offset" : 9,
+        },
         # GetCustomActivators -> activationStage:ACTIVATION_STAGE, prgpActivator:***ISystemActivator
-        "GetCustomActivators": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(POINTER(ISystemActivator)))(10, "GetCustomActivators"),
+        "GetCustomActivators": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ACTIVATION_STAGE, POINTER(POINTER(ISystemActivator))),
+            "method_offset" : 10,
+        },
         # GetTypeInfo -> riid:REFIID, ppv:**void
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(11, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 11,
+        },
         # IsComPlusConfiguredClass -> pfComPlusConfiguredClass:*BOOL
-        "IsComPlusConfiguredClass": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(12, "IsComPlusConfiguredClass"),
+        "IsComPlusConfiguredClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL)),
+            "method_offset" : 12,
+        },
         # MustRunInClientContext -> pbMustRunInClientContext:*BOOL
-        "MustRunInClientContext": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(13, "MustRunInClientContext"),
+        "MustRunInClientContext": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL)),
+            "method_offset" : 13,
+        },
         # GetVersionNumber -> pdwVersionMS:*DWORD, pdwVersionLS:*DWORD
-        "GetVersionNumber": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(DWORD))(14, "GetVersionNumber"),
+        "GetVersionNumber": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(DWORD)),
+            "method_offset" : 14,
+        },
         # Lock -> 
-        "Lock": ctypes.WINFUNCTYPE(HRESULT)(15, "Lock"),
+        "Lock": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 15,
+        },
         # Unlock -> 
-        "Unlock": ctypes.WINFUNCTYPE(HRESULT)(16, "Unlock"),
+        "Unlock": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 16,
+        },
     }
 
 # class IContextImplem(windows.com.COMImplementation):
@@ -3612,19 +5331,40 @@ IComClassInfo._functions_ = {
 #
 IContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetProperty -> rpolicyId:REFGUID, flags:CPFLAGS, pUnk:*IUnknown
-        "SetProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID, CPFLAGS, IUnknown)(3, "SetProperty"),
+        "SetProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, CPFLAGS, IUnknown),
+            "method_offset" : 3,
+        },
         # RemoveProperty -> rPolicyId:REFGUID
-        "RemoveProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID)(4, "RemoveProperty"),
+        "RemoveProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID),
+            "method_offset" : 4,
+        },
         # GetProperty -> rGuid:REFGUID, pFlags:*CPFLAGS, ppUnk:**IUnknown
-        "GetProperty": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(CPFLAGS), POINTER(IUnknown))(5, "GetProperty"),
+        "GetProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(CPFLAGS), POINTER(IUnknown)),
+            "method_offset" : 5,
+        },
         # EnumContextProps -> ppEnumContextProps:**IEnumContextProps
-        "EnumContextProps": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps))(6, "EnumContextProps"),
+        "EnumContextProps": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumContextPropsImplem(windows.com.COMImplementation):
@@ -3652,21 +5392,45 @@ IContext._functions_ = {
 #
 IEnumContextProps._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, pContextProperties:*ContextProperty, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(ContextProperty), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(ContextProperty), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppEnumContextProps:**IEnumContextProps
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps)),
+            "method_offset" : 6,
+        },
         # Count -> pcelt:*ULONG
-        "Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "Count"),
+        "Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 7,
+        },
     }
 
 # class IEnumSTATSTGImplem(windows.com.COMImplementation):
@@ -3690,19 +5454,40 @@ IEnumContextProps._functions_ = {
 #
 IEnumSTATSTG._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:*STATSTG, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(STATSTG), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(STATSTG), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumSTATSTG
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumSTATSTG))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumSTATSTG)),
+            "method_offset" : 6,
+        },
     }
 
 # class IInitActivationPropertiesInImplem(windows.com.COMImplementation):
@@ -3734,23 +5519,50 @@ IEnumSTATSTG._functions_ = {
 #
 IInitActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetClsctx -> clsctx:DWORD
-        "SetClsctx": ctypes.WINFUNCTYPE(HRESULT, DWORD)(3, "SetClsctx"),
+        "SetClsctx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 3,
+        },
         # SetActivationFlags -> actvflags:DWORD
-        "SetActivationFlags": ctypes.WINFUNCTYPE(HRESULT, DWORD)(4, "SetActivationFlags"),
+        "SetActivationFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 4,
+        },
         # SetClassInfo -> pUnkClassInfo:*IUnknown
-        "SetClassInfo": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(5, "SetClassInfo"),
+        "SetClassInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 5,
+        },
         # SetContextInfo -> pClientContext:*IContext, pPrototypeContext:*IContext
-        "SetContextInfo": ctypes.WINFUNCTYPE(HRESULT, IContext, IContext)(6, "SetContextInfo"),
+        "SetContextInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IContext, IContext),
+            "method_offset" : 6,
+        },
         # SetConstructFromStorage -> pStorage:*IStorage
-        "SetConstructFromStorage": ctypes.WINFUNCTYPE(HRESULT, IStorage)(7, "SetConstructFromStorage"),
+        "SetConstructFromStorage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IStorage),
+            "method_offset" : 7,
+        },
         # SetConstructFromFile -> wszFileName:*WCHAR, dwMode:DWORD
-        "SetConstructFromFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), DWORD)(8, "SetConstructFromFile"),
+        "SetConstructFromFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(WCHAR), DWORD),
+            "method_offset" : 8,
+        },
     }
 
 # class IOpaqueDataInfoImplem(windows.com.COMImplementation):
@@ -3778,21 +5590,45 @@ IInitActivationPropertiesIn._functions_ = {
 #
 IOpaqueDataInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # AddOpaqueData -> pData:*OpaqueData
-        "AddOpaqueData": ctypes.WINFUNCTYPE(HRESULT, POINTER(OpaqueData))(3, "AddOpaqueData"),
+        "AddOpaqueData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(OpaqueData)),
+            "method_offset" : 3,
+        },
         # GetOpaqueData -> guid:REFGUID, pData:**OpaqueData
-        "GetOpaqueData": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(POINTER(OpaqueData)))(4, "GetOpaqueData"),
+        "GetOpaqueData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(POINTER(OpaqueData))),
+            "method_offset" : 4,
+        },
         # DeleteOpaqueData -> guid:REFGUID
-        "DeleteOpaqueData": ctypes.WINFUNCTYPE(HRESULT, REFGUID)(5, "DeleteOpaqueData"),
+        "DeleteOpaqueData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFGUID),
+            "method_offset" : 5,
+        },
         # GetOpaqueDataCount -> pulCount:*ULONG
-        "GetOpaqueDataCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(6, "GetOpaqueDataCount"),
+        "GetOpaqueDataCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG)),
+            "method_offset" : 6,
+        },
         # GetAllOpaqueData -> prgData:**OpaqueData
-        "GetAllOpaqueData": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(OpaqueData)))(7, "GetAllOpaqueData"),
+        "GetAllOpaqueData": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(OpaqueData))),
+            "method_offset" : 7,
+        },
     }
 
 # class IPrivActivationPropertiesInImplem(windows.com.COMImplementation):
@@ -3860,41 +5696,95 @@ IOpaqueDataInfo._functions_ = {
 #
 IPrivActivationPropertiesIn._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetActivationID -> pActivationID:*GUID
-        "GetActivationID": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(3, "GetActivationID"),
+        "GetActivationID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 3,
+        },
         # GetClassInfo -> riid:REFIID, ppv:**void
-        "GetClassInfo": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(4, "GetClassInfo"),
+        "GetClassInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetClsctx -> pclsctx:*DWORD
-        "GetClsctx": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(5, "GetClsctx"),
+        "GetClsctx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 5,
+        },
         # GetActivationFlags -> pactvflags:*DWORD
-        "GetActivationFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(6, "GetActivationFlags"),
+        "GetActivationFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 6,
+        },
         # AddRequestedIIDs -> cIfs:DWORD, rgIID:*IID
-        "AddRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID))(7, "AddRequestedIIDs"),
+        "AddRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID)),
+            "method_offset" : 7,
+        },
         # GetRequestedIIDs -> pulCount:*ULONG, prgIID:**IID
-        "GetRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG), POINTER(POINTER(IID)))(8, "GetRequestedIIDs"),
+        "GetRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG), POINTER(POINTER(IID))),
+            "method_offset" : 8,
+        },
         # DelegateGetClassObject -> pActPropsOut:**IActivationPropertiesOut
-        "DelegateGetClassObject": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActivationPropertiesOut))(9, "DelegateGetClassObject"),
+        "DelegateGetClassObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 9,
+        },
         # DelegateCreateInstance -> pUnkOuter:*IUnknown, pActPropsOut:**IActivationPropertiesOut
-        "DelegateCreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(10, "DelegateCreateInstance"),
+        "DelegateCreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 10,
+        },
         # DelegateCIAndGetCF -> pUnkOuter:*IUnknown, pActPropsOut:**IActivationPropertiesOut, ppCf:**IClassFactory
-        "DelegateCIAndGetCF": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut), POINTER(IClassFactory))(11, "DelegateCIAndGetCF"),
+        "DelegateCIAndGetCF": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut), POINTER(IClassFactory)),
+            "method_offset" : 11,
+        },
         # GetReturnActivationProperties -> pUnk:*IUnknown, ppActOut:**IActivationPropertiesOut
-        "GetReturnActivationProperties": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut))(12, "GetReturnActivationProperties"),
+        "GetReturnActivationProperties": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 12,
+        },
         # PrivGetReturnActivationProperties -> ppActOut:**IPrivActivationPropertiesOut
-        "PrivGetReturnActivationProperties": ctypes.WINFUNCTYPE(HRESULT, POINTER(IPrivActivationPropertiesOut))(13, "PrivGetReturnActivationProperties"),
+        "PrivGetReturnActivationProperties": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IPrivActivationPropertiesOut)),
+            "method_offset" : 13,
+        },
         # GetCOMVersion -> pVersion:*COMVERSION
-        "GetCOMVersion": ctypes.WINFUNCTYPE(HRESULT, POINTER(COMVERSION))(14, "GetCOMVersion"),
+        "GetCOMVersion": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(COMVERSION)),
+            "method_offset" : 14,
+        },
         # GetClsid -> pClsid:*CLSID
-        "GetClsid": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(15, "GetClsid"),
+        "GetClsid": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
+            "method_offset" : 15,
+        },
         # GetClientToken -> pHandle:*HANDLE
-        "GetClientToken": ctypes.WINFUNCTYPE(HRESULT, POINTER(HANDLE))(16, "GetClientToken"),
+        "GetClientToken": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(HANDLE)),
+            "method_offset" : 16,
+        },
         # GetDestCtx -> pdwDestCtx:*DWORD
-        "GetDestCtx": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(17, "GetDestCtx"),
+        "GetDestCtx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 17,
+        },
     }
 
 # class IPrivActivationPropertiesOutImplem(windows.com.COMImplementation):
@@ -3930,25 +5820,55 @@ IPrivActivationPropertiesIn._functions_ = {
 #
 IPrivActivationPropertiesOut._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetActivationID -> pActivationID:*GUID
-        "GetActivationID": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(3, "GetActivationID"),
+        "GetActivationID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 3,
+        },
         # GetObjectInterface -> riid:REFIID, actvflags:DWORD, ppv:**void
-        "GetObjectInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, DWORD, POINTER(PVOID))(4, "GetObjectInterface"),
+        "GetObjectInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, DWORD, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetObjectInterfaces -> cIfs:DWORD, actvflags:DWORD, multiQi:*MULTI_QI
-        "GetObjectInterfaces": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(MULTI_QI))(5, "GetObjectInterfaces"),
+        "GetObjectInterfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(MULTI_QI)),
+            "method_offset" : 5,
+        },
         # RemoveRequestedIIDs -> cIfs:DWORD, rgIID:*IID
-        "RemoveRequestedIIDs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID))(6, "RemoveRequestedIIDs"),
+        "RemoveRequestedIIDs": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID)),
+            "method_offset" : 6,
+        },
         # SetObjectInterfaces -> cIfs:DWORD, pIID:*IID, pUnk:*IUnknown
-        "SetObjectInterfaces": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), IUnknown)(7, "SetObjectInterfaces"),
+        "SetObjectInterfaces": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), IUnknown),
+            "method_offset" : 7,
+        },
         # SetMarshalledResults -> cIfs:DWORD, pIID:*IID, pHr:*HRESULT, pIntfData:**MInterfacePointer
-        "SetMarshalledResults": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), POINTER(HRESULT), POINTER(POINTER(MInterfacePointer)))(8, "SetMarshalledResults"),
+        "SetMarshalledResults": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IID), POINTER(HRESULT), POINTER(POINTER(MInterfacePointer))),
+            "method_offset" : 8,
+        },
         # GetMarshalledResults -> pcIfs:*DWORD, pIID:**IID, pHr:**HRESULT, pIntfData:***MInterfacePointer
-        "GetMarshalledResults": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(IID)), POINTER(POINTER(HRESULT)), POINTER(POINTER(POINTER(MInterfacePointer))))(9, "GetMarshalledResults"),
+        "GetMarshalledResults": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(IID)), POINTER(POINTER(HRESULT)), POINTER(POINTER(POINTER(MInterfacePointer)))),
+            "method_offset" : 9,
+        },
     }
 
 # class IScmReplyInfoImplem(windows.com.COMImplementation):
@@ -3972,19 +5892,40 @@ IPrivActivationPropertiesOut._functions_ = {
 #
 IScmReplyInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetResolverInfo -> pResolverInfo:*PRIV_RESOLVER_INFO
-        "SetResolverInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(PRIV_RESOLVER_INFO))(3, "SetResolverInfo"),
+        "SetResolverInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PRIV_RESOLVER_INFO)),
+            "method_offset" : 3,
+        },
         # GetResolverInfo -> ppResolverInfo:**PRIV_RESOLVER_INFO
-        "GetResolverInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(PRIV_RESOLVER_INFO)))(4, "GetResolverInfo"),
+        "GetResolverInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(PRIV_RESOLVER_INFO))),
+            "method_offset" : 4,
+        },
         # SetRemoteReplyInfo -> pRemoteReply:*REMOTE_REPLY_SCM_INFO
-        "SetRemoteReplyInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(REMOTE_REPLY_SCM_INFO))(5, "SetRemoteReplyInfo"),
+        "SetRemoteReplyInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(REMOTE_REPLY_SCM_INFO)),
+            "method_offset" : 5,
+        },
         # GetRemoteReplyInfo -> ppRemoteReply:**REMOTE_REPLY_SCM_INFO
-        "GetRemoteReplyInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REPLY_SCM_INFO)))(6, "GetRemoteReplyInfo"),
+        "GetRemoteReplyInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REPLY_SCM_INFO))),
+            "method_offset" : 6,
+        },
     }
 
 # class IScmRequestInfoImplem(windows.com.COMImplementation):
@@ -4008,19 +5949,40 @@ IScmReplyInfo._functions_ = {
 #
 IScmRequestInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # SetScmInfo -> pScmInfo:*PRIV_SCM_INFO
-        "SetScmInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(PRIV_SCM_INFO))(3, "SetScmInfo"),
+        "SetScmInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PRIV_SCM_INFO)),
+            "method_offset" : 3,
+        },
         # GetScmInfo -> ppScmInfo:**PRIV_SCM_INFO
-        "GetScmInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(PRIV_SCM_INFO)))(4, "GetScmInfo"),
+        "GetScmInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(PRIV_SCM_INFO))),
+            "method_offset" : 4,
+        },
         # SetRemoteRequestInfo -> pRemoteReq:*REMOTE_REQUEST_SCM_INFO
-        "SetRemoteRequestInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(REMOTE_REQUEST_SCM_INFO))(5, "SetRemoteRequestInfo"),
+        "SetRemoteRequestInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(REMOTE_REQUEST_SCM_INFO)),
+            "method_offset" : 5,
+        },
         # GetRemoteRequestInfo -> ppRemoteReq:**REMOTE_REQUEST_SCM_INFO
-        "GetRemoteRequestInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REQUEST_SCM_INFO)))(6, "GetRemoteRequestInfo"),
+        "GetRemoteRequestInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(REMOTE_REQUEST_SCM_INFO))),
+            "method_offset" : 6,
+        },
     }
 
 # class IStandardActivatorImplem(windows.com.COMImplementation):
@@ -4048,21 +6010,45 @@ IScmRequestInfo._functions_ = {
 #
 IStandardActivator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # StandardGetClassObject -> rclsid:REFCLSID, dwClsCtx:DWORD, pServerInfo:*COSERVERINFO, riid:REFIID, ppv:**void
-        "StandardGetClassObject": ctypes.WINFUNCTYPE(HRESULT, REFCLSID, DWORD, POINTER(COSERVERINFO), REFIID, POINTER(PVOID))(3, "StandardGetClassObject"),
+        "StandardGetClassObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFCLSID, DWORD, POINTER(COSERVERINFO), REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # StandardCreateInstance -> Clsid:REFCLSID, punkOuter:*IUnknown, dwClsCtx:DWORD, pServerInfo:*COSERVERINFO, dwCount:DWORD, pResults:*MULTI_QI
-        "StandardCreateInstance": ctypes.WINFUNCTYPE(HRESULT, REFCLSID, IUnknown, DWORD, POINTER(COSERVERINFO), DWORD, POINTER(MULTI_QI))(4, "StandardCreateInstance"),
+        "StandardCreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFCLSID, IUnknown, DWORD, POINTER(COSERVERINFO), DWORD, POINTER(MULTI_QI)),
+            "method_offset" : 4,
+        },
         # StandardGetInstanceFromFile -> pServerInfo:*COSERVERINFO, pclsidOverride:*CLSID, punkOuter:*IUnknown, dwClsCtx:DWORD, grfMode:DWORD, pwszName:*OLECHAR, dwCount:DWORD, pResults:*MULTI_QI
-        "StandardGetInstanceFromFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, DWORD, POINTER(OLECHAR), DWORD, POINTER(MULTI_QI))(5, "StandardGetInstanceFromFile"),
+        "StandardGetInstanceFromFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, DWORD, POINTER(OLECHAR), DWORD, POINTER(MULTI_QI)),
+            "method_offset" : 5,
+        },
         # StandardGetInstanceFromIStorage -> pServerInfo:*COSERVERINFO, pclsidOverride:*CLSID, punkOuter:*IUnknown, dwClsCtx:DWORD, pstg:*IStorage, dwCount:DWORD, pResults:*MULTI_QI
-        "StandardGetInstanceFromIStorage": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, IStorage, DWORD, POINTER(MULTI_QI))(6, "StandardGetInstanceFromIStorage"),
+        "StandardGetInstanceFromIStorage": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, IStorage, DWORD, POINTER(MULTI_QI)),
+            "method_offset" : 6,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(7, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
     }
 
 # class ISystemActivatorImplem(windows.com.COMImplementation):
@@ -4078,15 +6064,60 @@ IStandardActivator._functions_ = {
 #
 ISystemActivator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetClassObject -> pActProperties:*IActivationPropertiesIn, ppActProperties:**IActivationPropertiesOut
-        "GetClassObject": ctypes.WINFUNCTYPE(HRESULT, IActivationPropertiesIn, POINTER(IActivationPropertiesOut))(3, "GetClassObject"),
+        "GetClassObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IActivationPropertiesIn, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 3,
+        },
         # CreateInstance -> pUnkOuter:*IUnknown, pActProperties:*IActivationPropertiesIn, ppActProperties:**IActivationPropertiesOut
-        "CreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, IActivationPropertiesIn, POINTER(IActivationPropertiesOut))(4, "CreateInstance"),
+        "CreateInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, IActivationPropertiesIn, POINTER(IActivationPropertiesOut)),
+            "method_offset" : 4,
+        },
+    }
+
+# class IPFWComTestImplem(windows.com.COMImplementation):
+#     IMPLEMENT = IPFWComTest
+#
+#     def TestFunc1(self, This, param, result):
+#         print('IPFWComTest.TestFunc1')
+#         return E_NOTIMPL
+#
+IPFWComTest._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
+        # AddRef -> 
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
+        # Release -> 
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
+        # TestFunc1 -> param:ULONG, result:*ULONG
+        "TestFunc1": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(ULONG)),
+            "method_offset" : 3,
+        },
     }
 
 # class IBindCtxImplem(windows.com.COMImplementation):
@@ -4134,31 +6165,70 @@ ISystemActivator._functions_ = {
 #
 IBindCtx._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # RegisterObjectBound -> punk:*IUnknown
-        "RegisterObjectBound": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(3, "RegisterObjectBound"),
+        "RegisterObjectBound": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 3,
+        },
         # RevokeObjectBound -> punk:*IUnknown
-        "RevokeObjectBound": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(4, "RevokeObjectBound"),
+        "RevokeObjectBound": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 4,
+        },
         # ReleaseBoundObjects -> 
-        "ReleaseBoundObjects": ctypes.WINFUNCTYPE(HRESULT)(5, "ReleaseBoundObjects"),
+        "ReleaseBoundObjects": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # SetBindOptions -> pbindopts:*BIND_OPTS
-        "SetBindOptions": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS))(6, "SetBindOptions"),
+        "SetBindOptions": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS)),
+            "method_offset" : 6,
+        },
         # GetBindOptions -> pbindopts:*BIND_OPTS
-        "GetBindOptions": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS))(7, "GetBindOptions"),
+        "GetBindOptions": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS)),
+            "method_offset" : 7,
+        },
         # GetRunningObjectTable -> pprot:**IRunningObjectTable
-        "GetRunningObjectTable": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRunningObjectTable))(8, "GetRunningObjectTable"),
+        "GetRunningObjectTable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRunningObjectTable)),
+            "method_offset" : 8,
+        },
         # RegisterObjectParam -> pszKey:LPOLESTR, punk:*IUnknown
-        "RegisterObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, IUnknown)(9, "RegisterObjectParam"),
+        "RegisterObjectParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, IUnknown),
+            "method_offset" : 9,
+        },
         # GetObjectParam -> pszKey:LPOLESTR, ppunk:**IUnknown
-        "GetObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, POINTER(IUnknown))(10, "GetObjectParam"),
+        "GetObjectParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, POINTER(IUnknown)),
+            "method_offset" : 10,
+        },
         # EnumObjectParam -> ppenum:**IEnumString
-        "EnumObjectParam": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString))(11, "EnumObjectParam"),
+        "EnumObjectParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString)),
+            "method_offset" : 11,
+        },
         # RevokeObjectParam -> pszKey:LPOLESTR
-        "RevokeObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR)(12, "RevokeObjectParam"),
+        "RevokeObjectParam": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR),
+            "method_offset" : 12,
+        },
     }
 
 # class IEnumExplorerCommandImplem(windows.com.COMImplementation):
@@ -4182,19 +6252,40 @@ IBindCtx._functions_ = {
 #
 IEnumExplorerCommand._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, pUICommand:**IExplorerCommand, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IExplorerCommand), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IExplorerCommand), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumExplorerCommand
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumMonikerImplem(windows.com.COMImplementation):
@@ -4218,19 +6309,40 @@ IEnumExplorerCommand._functions_ = {
 #
 IEnumMoniker._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:**IMoniker, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IMoniker), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IMoniker), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumMoniker
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumShellItemsImplem(windows.com.COMImplementation):
@@ -4254,19 +6366,40 @@ IEnumMoniker._functions_ = {
 #
 IEnumShellItems._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:**IShellItem, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IShellItem), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IShellItem), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumShellItems
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems)),
+            "method_offset" : 6,
+        },
     }
 
 # class IEnumStringImplem(windows.com.COMImplementation):
@@ -4290,19 +6423,40 @@ IEnumShellItems._functions_ = {
 #
 IEnumString._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Next -> celt:ULONG, rgelt:*LPOLESTR, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(LPOLESTR), POINTER(ULONG))(3, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(LPOLESTR), POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 4,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 5,
+        },
         # Clone -> ppenum:**IEnumString
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString)),
+            "method_offset" : 6,
+        },
     }
 
 # class IExplorerCommandImplem(windows.com.COMImplementation):
@@ -4342,27 +6496,60 @@ IEnumString._functions_ = {
 #
 IExplorerCommand._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTitle -> psiItemArray:*IShellItemArray, ppszName:*LPWSTR
-        "GetTitle": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(3, "GetTitle"),
+        "GetTitle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR)),
+            "method_offset" : 3,
+        },
         # GetIcon -> psiItemArray:*IShellItemArray, ppszIcon:*LPWSTR
-        "GetIcon": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(4, "GetIcon"),
+        "GetIcon": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR)),
+            "method_offset" : 4,
+        },
         # GetToolTip -> psiItemArray:*IShellItemArray, ppszInfotip:*LPWSTR
-        "GetToolTip": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(5, "GetToolTip"),
+        "GetToolTip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR)),
+            "method_offset" : 5,
+        },
         # GetCanonicalName -> pguidCommandName:*GUID
-        "GetCanonicalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(6, "GetCanonicalName"),
+        "GetCanonicalName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID)),
+            "method_offset" : 6,
+        },
         # GetState -> psiItemArray:*IShellItemArray, fOkToBeSlow:BOOL, pCmdState:*EXPCMDSTATE
-        "GetState": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, BOOL, POINTER(EXPCMDSTATE))(7, "GetState"),
+        "GetState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, BOOL, POINTER(EXPCMDSTATE)),
+            "method_offset" : 7,
+        },
         # Invoke -> psiItemArray:*IShellItemArray, pbc:*IBindCtx
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, IBindCtx)(8, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, IBindCtx),
+            "method_offset" : 8,
+        },
         # GetFlags -> pFlags:*EXPCMDFLAGS
-        "GetFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(EXPCMDFLAGS))(9, "GetFlags"),
+        "GetFlags": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(EXPCMDFLAGS)),
+            "method_offset" : 9,
+        },
         # EnumSubCommands -> ppEnum:**IEnumExplorerCommand
-        "EnumSubCommands": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(10, "EnumSubCommands"),
+        "EnumSubCommands": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand)),
+            "method_offset" : 10,
+        },
     }
 
 # class IRunningObjectTableImplem(windows.com.COMImplementation):
@@ -4398,25 +6585,55 @@ IExplorerCommand._functions_ = {
 #
 IRunningObjectTable._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Register -> grfFlags:DWORD, punkObject:*IUnknown, pmkObjectName:*IMoniker, pdwRegister:*DWORD
-        "Register": ctypes.WINFUNCTYPE(HRESULT, DWORD, IUnknown, IMoniker, POINTER(DWORD))(3, "Register"),
+        "Register": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, IUnknown, IMoniker, POINTER(DWORD)),
+            "method_offset" : 3,
+        },
         # Revoke -> dwRegister:DWORD
-        "Revoke": ctypes.WINFUNCTYPE(HRESULT, DWORD)(4, "Revoke"),
+        "Revoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 4,
+        },
         # IsRunning -> pmkObjectName:*IMoniker
-        "IsRunning": ctypes.WINFUNCTYPE(HRESULT, IMoniker)(5, "IsRunning"),
+        "IsRunning": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker),
+            "method_offset" : 5,
+        },
         # GetObject -> pmkObjectName:*IMoniker, ppunkObject:**IUnknown
-        "GetObject": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IUnknown))(6, "GetObject"),
+        "GetObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IUnknown)),
+            "method_offset" : 6,
+        },
         # NoteChangeTime -> dwRegister:DWORD, pfiletime:*FILETIME
-        "NoteChangeTime": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(FILETIME))(7, "NoteChangeTime"),
+        "NoteChangeTime": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(FILETIME)),
+            "method_offset" : 7,
+        },
         # GetTimeOfLastChange -> pmkObjectName:*IMoniker, pfiletime:*FILETIME
-        "GetTimeOfLastChange": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(FILETIME))(8, "GetTimeOfLastChange"),
+        "GetTimeOfLastChange": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(FILETIME)),
+            "method_offset" : 8,
+        },
         # EnumRunning -> ppenumMoniker:**IEnumMoniker
-        "EnumRunning": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(9, "EnumRunning"),
+        "EnumRunning": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker)),
+            "method_offset" : 9,
+        },
     }
 
 # class IShellItemImplem(windows.com.COMImplementation):
@@ -4444,21 +6661,45 @@ IRunningObjectTable._functions_ = {
 #
 IShellItem._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # BindToHandler -> pbc:*IBindCtx, bhid:REFGUID, riid:REFIID, ppv:**void
-        "BindToHandler": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID))(3, "BindToHandler"),
+        "BindToHandler": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # GetParent -> ppsi:**IShellItem
-        "GetParent": ctypes.WINFUNCTYPE(HRESULT, POINTER(IShellItem))(4, "GetParent"),
+        "GetParent": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IShellItem)),
+            "method_offset" : 4,
+        },
         # GetDisplayName -> sigdnName:SIGDN, ppszName:*LPWSTR
-        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, SIGDN, POINTER(LPWSTR))(5, "GetDisplayName"),
+        "GetDisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, SIGDN, POINTER(LPWSTR)),
+            "method_offset" : 5,
+        },
         # GetAttributes -> sfgaoMask:SFGAOF, psfgaoAttribs:*SFGAOF
-        "GetAttributes": ctypes.WINFUNCTYPE(HRESULT, SFGAOF, POINTER(SFGAOF))(6, "GetAttributes"),
+        "GetAttributes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, SFGAOF, POINTER(SFGAOF)),
+            "method_offset" : 6,
+        },
         # Compare -> psi:*IShellItem, hint:SICHINTF, piOrder:*INT
-        "Compare": ctypes.WINFUNCTYPE(HRESULT, IShellItem, SICHINTF, POINTER(INT))(7, "Compare"),
+        "Compare": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IShellItem, SICHINTF, POINTER(INT)),
+            "method_offset" : 7,
+        },
     }
 
 # class IShellItemArrayImplem(windows.com.COMImplementation):
@@ -4494,25 +6735,55 @@ IShellItem._functions_ = {
 #
 IShellItemArray._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # BindToHandler -> pbc:*IBindCtx, bhid:REFGUID, riid:REFIID, ppvOut:**void
-        "BindToHandler": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID))(3, "BindToHandler"),
+        "BindToHandler": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # GetPropertyStore -> flags:GETPROPERTYSTOREFLAGS, riid:REFIID, ppv:**void
-        "GetPropertyStore": ctypes.WINFUNCTYPE(HRESULT, GETPROPERTYSTOREFLAGS, REFIID, POINTER(PVOID))(4, "GetPropertyStore"),
+        "GetPropertyStore": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, GETPROPERTYSTOREFLAGS, REFIID, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
         # GetPropertyDescriptionList -> keyType:REFPROPERTYKEY, riid:REFIID, ppv:**void
-        "GetPropertyDescriptionList": ctypes.WINFUNCTYPE(HRESULT, REFPROPERTYKEY, REFIID, POINTER(PVOID))(5, "GetPropertyDescriptionList"),
+        "GetPropertyDescriptionList": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFPROPERTYKEY, REFIID, POINTER(PVOID)),
+            "method_offset" : 5,
+        },
         # GetAttributes -> AttribFlags:SIATTRIBFLAGS, sfgaoMask:SFGAOF, psfgaoAttribs:*SFGAOF
-        "GetAttributes": ctypes.WINFUNCTYPE(HRESULT, SIATTRIBFLAGS, SFGAOF, POINTER(SFGAOF))(6, "GetAttributes"),
+        "GetAttributes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, SIATTRIBFLAGS, SFGAOF, POINTER(SFGAOF)),
+            "method_offset" : 6,
+        },
         # GetCount -> pdwNumItems:*DWORD
-        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(7, "GetCount"),
+        "GetCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 7,
+        },
         # GetItemAt -> dwIndex:DWORD, ppsi:**IShellItem
-        "GetItemAt": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IShellItem))(8, "GetItemAt"),
+        "GetItemAt": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IShellItem)),
+            "method_offset" : 8,
+        },
         # EnumItems -> ppenumShellItems:**IEnumShellItems
-        "EnumItems": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(9, "EnumItems"),
+        "EnumItems": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems)),
+            "method_offset" : 9,
+        },
     }
 
 # class IProxyManagerImplem(windows.com.COMImplementation):
@@ -4560,31 +6831,70 @@ IShellItemArray._functions_ = {
 #
 IProxyManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # CreateServer -> rclsid:*REFCLSID, clsctx:*DWORD, pv:*PVOID
-        "CreateServer": ctypes.WINFUNCTYPE(HRESULT, POINTER(REFCLSID), POINTER(DWORD), POINTER(PVOID))(3, "CreateServer"),
+        "CreateServer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(REFCLSID), POINTER(DWORD), POINTER(PVOID)),
+            "method_offset" : 3,
+        },
         # IsConnected -> 
-        "IsConnected": ctypes.WINFUNCTYPE(BOOL)(4, "IsConnected"),
+        "IsConnected": {
+            "type": ctypes.WINFUNCTYPE(BOOL),
+            "method_offset" : 4,
+        },
         # LockConnection -> fLock:BOOL, fLastUnlockReleases:BOOL
-        "LockConnection": ctypes.WINFUNCTYPE(HRESULT, BOOL, BOOL)(5, "LockConnection"),
+        "LockConnection": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BOOL, BOOL),
+            "method_offset" : 5,
+        },
         # Disconnect -> 
-        "Disconnect": ctypes.WINFUNCTYPE(HRESULT)(6, "Disconnect"),
+        "Disconnect": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 6,
+        },
         # GetConnectionStatus -> 
-        "GetConnectionStatus": ctypes.WINFUNCTYPE(HRESULT)(7, "GetConnectionStatus"),
+        "GetConnectionStatus": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
         # ScalarDeletingDestructor -> 
-        "ScalarDeletingDestructor": ctypes.WINFUNCTYPE(HRESULT)(8, "ScalarDeletingDestructor"),
+        "ScalarDeletingDestructor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 8,
+        },
         # SetMapping -> 
-        "SetMapping": ctypes.WINFUNCTYPE(HRESULT)(9, "SetMapping"),
+        "SetMapping": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # GetMapping -> 
-        "GetMapping": ctypes.WINFUNCTYPE(HRESULT)(10, "GetMapping"),
+        "GetMapping": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 10,
+        },
         # GetServerObjectContext -> 
-        "GetServerObjectContext": ctypes.WINFUNCTYPE(IObjContext)(11, "GetServerObjectContext"),
+        "GetServerObjectContext": {
+            "type": ctypes.WINFUNCTYPE(IObjContext),
+            "method_offset" : 11,
+        },
         # GetWrapperForContex -> pCtx:*IObjContext, riid:*IID, ppv:**void
-        "GetWrapperForContex": ctypes.WINFUNCTYPE(HRESULT, IObjContext, POINTER(IID), POINTER(PVOID))(12, "GetWrapperForContex"),
+        "GetWrapperForContex": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IObjContext, POINTER(IID), POINTER(PVOID)),
+            "method_offset" : 12,
+        },
     }
 
 # class IProxyServerIdentityImplem(windows.com.COMImplementation):
@@ -4600,15 +6910,30 @@ IProxyManager._functions_ = {
 #
 IProxyServerIdentity._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetServerProcessId -> processId:*UINT
-        "GetServerProcessId": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetServerProcessId"),
+        "GetServerProcessId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetServerProcessHandle -> dwDesiredAccess:DWORD, bInheritHandle:INT, phProcess:*PVOID
-        "GetServerProcessHandle": ctypes.WINFUNCTYPE(HRESULT, DWORD, INT, POINTER(PVOID))(4, "GetServerProcessHandle"),
+        "GetServerProcessHandle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, INT, POINTER(PVOID)),
+            "method_offset" : 4,
+        },
     }
 
 # class IApplicationActivationManagerImplem(windows.com.COMImplementation):
@@ -4628,17 +6953,35 @@ IProxyServerIdentity._functions_ = {
 #
 IApplicationActivationManager._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # ActivateApplication -> appUserModelId:LPCWSTR, arguments:LPCWSTR, options:ACTIVATEOPTIONS, processId:*DWORD
-        "ActivateApplication": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, ACTIVATEOPTIONS, POINTER(DWORD))(3, "ActivateApplication"),
+        "ActivateApplication": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, ACTIVATEOPTIONS, POINTER(DWORD)),
+            "method_offset" : 3,
+        },
         # ActivateForFile -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, verb:LPCWSTR, processId:*DWORD
-        "ActivateForFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, LPCWSTR, POINTER(DWORD))(4, "ActivateForFile"),
+        "ActivateForFile": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, LPCWSTR, POINTER(DWORD)),
+            "method_offset" : 4,
+        },
         # ActivateForProtocol -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, processId:*DWORD
-        "ActivateForProtocol": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD))(5, "ActivateForProtocol"),
+        "ActivateForProtocol": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD)),
+            "method_offset" : 5,
+        },
     }
 
 # class IPackageDebugSettingsImplem(windows.com.COMImplementation):
@@ -4706,41 +7049,95 @@ IApplicationActivationManager._functions_ = {
 #
 IPackageDebugSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # EnableDebugging -> packageFullName:LPCWSTR, debuggerCommandLine:LPCWSTR, environment:PZZWSTR
-        "EnableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, PZZWSTR)(3, "EnableDebugging"),
+        "EnableDebugging": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, PZZWSTR),
+            "method_offset" : 3,
+        },
         # DisableDebugging -> packageFullName:LPCWSTR
-        "DisableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(4, "DisableDebugging"),
+        "DisableDebugging": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 4,
+        },
         # Suspend -> packageFullName:LPCWSTR
-        "Suspend": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Suspend"),
+        "Suspend": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 5,
+        },
         # Resume -> packageFullName:LPCWSTR
-        "Resume": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Resume"),
+        "Resume": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 6,
+        },
         # TerminateAllProcesses -> packageFullName:LPCWSTR
-        "TerminateAllProcesses": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "TerminateAllProcesses"),
+        "TerminateAllProcesses": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 7,
+        },
         # SetTargetSessionId -> sessionId:ULONG
-        "SetTargetSessionId": ctypes.WINFUNCTYPE(HRESULT, ULONG)(8, "SetTargetSessionId"),
+        "SetTargetSessionId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
+            "method_offset" : 8,
+        },
         # EnumerateBackgroundTasks -> packageFullName:LPCWSTR, taskCount:*ULONG, taskIds:*LPCGUID, taskNames:**LPCWSTR
-        "EnumerateBackgroundTasks": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(ULONG), POINTER(LPCGUID), POINTER(POINTER(LPCWSTR)))(9, "EnumerateBackgroundTasks"),
+        "EnumerateBackgroundTasks": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(ULONG), POINTER(LPCGUID), POINTER(POINTER(LPCWSTR))),
+            "method_offset" : 9,
+        },
         # ActivateBackgroundTask -> taskId:LPCGUID
-        "ActivateBackgroundTask": ctypes.WINFUNCTYPE(HRESULT, LPCGUID)(10, "ActivateBackgroundTask"),
+        "ActivateBackgroundTask": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCGUID),
+            "method_offset" : 10,
+        },
         # StartServicing -> packageFullName:LPCWSTR
-        "StartServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(11, "StartServicing"),
+        "StartServicing": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 11,
+        },
         # StopServicing -> packageFullName:LPCWSTR
-        "StopServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(12, "StopServicing"),
+        "StopServicing": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 12,
+        },
         # StartSessionRedirection -> packageFullName:LPCWSTR, sessionId:ULONG
-        "StartSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, ULONG)(13, "StartSessionRedirection"),
+        "StartSessionRedirection": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, ULONG),
+            "method_offset" : 13,
+        },
         # StopSessionRedirection -> packageFullName:LPCWSTR
-        "StopSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(14, "StopSessionRedirection"),
+        "StopSessionRedirection": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 14,
+        },
         # GetPackageExecutionState -> packageFullName:LPCWSTR, packageExecutionState:*PACKAGE_EXECUTION_STATE
-        "GetPackageExecutionState": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(PACKAGE_EXECUTION_STATE))(15, "GetPackageExecutionState"),
+        "GetPackageExecutionState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(PACKAGE_EXECUTION_STATE)),
+            "method_offset" : 15,
+        },
         # RegisterForPackageStateChanges -> packageFullName:LPCWSTR, pPackageExecutionStateChangeNotification:*IPackageExecutionStateChangeNotification, pdwCookie:*DWORD
-        "RegisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IPackageExecutionStateChangeNotification, POINTER(DWORD))(16, "RegisterForPackageStateChanges"),
+        "RegisterForPackageStateChanges": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IPackageExecutionStateChangeNotification, POINTER(DWORD)),
+            "method_offset" : 16,
+        },
         # UnregisterForPackageStateChanges -> dwCookie:DWORD
-        "UnregisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, DWORD)(17, "UnregisterForPackageStateChanges"),
+        "UnregisterForPackageStateChanges": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
+            "method_offset" : 17,
+        },
     }
 
 # class IPackageExecutionStateChangeNotificationImplem(windows.com.COMImplementation):
@@ -4752,13 +7149,25 @@ IPackageDebugSettings._functions_ = {
 #
 IPackageExecutionStateChangeNotification._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # OnStateChanged -> pszPackageFullName:LPCWSTR, pesNewState:PACKAGE_EXECUTION_STATE
-        "OnStateChanged": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE)(3, "OnStateChanged"),
+        "OnStateChanged": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE),
+            "method_offset" : 3,
+        },
     }
 
 # class IChannelHookImplem(windows.com.COMImplementation):
@@ -4790,23 +7199,50 @@ IPackageExecutionStateChangeNotification._functions_ = {
 #
 IChannelHook._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # ClientGetSize -> uExtent:REFGUID, riid:REFIID, pDataSize:*ULONG
-        "ClientGetSize": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG))(3, "ClientGetSize"),
+        "ClientGetSize": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG)),
+            "method_offset" : 3,
+        },
         # ClientFillBuffer -> uExtent:REFGUID, riid:REFIID, pDataSize:*ULONG, pDataBuffer:*void
-        "ClientFillBuffer": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG), PVOID)(4, "ClientFillBuffer"),
+        "ClientFillBuffer": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG), PVOID),
+            "method_offset" : 4,
+        },
         # ClientNotify -> uExtent:REFGUID, riid:REFIID, cbDataSize:ULONG, pDataBuffer:*void, lDataRep:DWORD, hrFault:HRESULT
-        "ClientNotify": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, ULONG, PVOID, DWORD, HRESULT)(5, "ClientNotify"),
+        "ClientNotify": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, ULONG, PVOID, DWORD, HRESULT),
+            "method_offset" : 5,
+        },
         # ServerNotify -> uExtent:REFGUID, riid:REFIID, cbDataSize:ULONG, pDataBuffer:*void, lDataRep:DWORD
-        "ServerNotify": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, ULONG, PVOID, DWORD)(6, "ServerNotify"),
+        "ServerNotify": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, ULONG, PVOID, DWORD),
+            "method_offset" : 6,
+        },
         # ServerGetSize -> uExtent:REFGUID, riid:REFIID, hrFault:HRESULT, pDataSize:*ULONG
-        "ServerGetSize": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, HRESULT, POINTER(ULONG))(7, "ServerGetSize"),
+        "ServerGetSize": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, HRESULT, POINTER(ULONG)),
+            "method_offset" : 7,
+        },
         # ServerFillBuffer -> uExtent:REFGUID, riid:REFIID, pDataSize:*ULONG, pDataBuffer:*void, hrFault:HRESULT
-        "ServerFillBuffer": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG), PVOID, HRESULT)(8, "ServerFillBuffer"),
+        "ServerFillBuffer": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFGUID, REFIID, POINTER(ULONG), PVOID, HRESULT),
+            "method_offset" : 8,
+        },
     }
 
 # class IRpcChannelBufferImplem(windows.com.COMImplementation):
@@ -4834,21 +7270,45 @@ IChannelHook._functions_ = {
 #
 IRpcChannelBuffer._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetBuffer -> pMessage:*RPCOLEMESSAGE, riid:REFIID
-        "GetBuffer": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), REFIID)(3, "GetBuffer"),
+        "GetBuffer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), REFIID),
+            "method_offset" : 3,
+        },
         # SendReceive -> pMessage:*RPCOLEMESSAGE, pStatus:*ULONG
-        "SendReceive": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), POINTER(ULONG))(4, "SendReceive"),
+        "SendReceive": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), POINTER(ULONG)),
+            "method_offset" : 4,
+        },
         # FreeBuffer -> pMessage:*RPCOLEMESSAGE
-        "FreeBuffer": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE))(5, "FreeBuffer"),
+        "FreeBuffer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE)),
+            "method_offset" : 5,
+        },
         # GetDestCtx -> pdwDestContext:*DWORD, ppvDestContext:**void
-        "GetDestCtx": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(PVOID))(6, "GetDestCtx"),
+        "GetDestCtx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(PVOID)),
+            "method_offset" : 6,
+        },
         # IsConnected -> 
-        "IsConnected": ctypes.WINFUNCTYPE(HRESULT)(7, "IsConnected"),
+        "IsConnected": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
     }
 
 # class IRpcHelperImplem(windows.com.COMImplementation):
@@ -4864,15 +7324,30 @@ IRpcChannelBuffer._functions_ = {
 #
 IRpcHelper._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetDCOMProtocolVersion -> pComVersion:*DWORD
-        "GetDCOMProtocolVersion": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(3, "GetDCOMProtocolVersion"),
+        "GetDCOMProtocolVersion": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 3,
+        },
         # GetIIDFromOBJREF -> pObjRef:*void, piid:**IID
-        "GetIIDFromOBJREF": ctypes.WINFUNCTYPE(HRESULT, PVOID, POINTER(POINTER(IID)))(4, "GetIIDFromOBJREF"),
+        "GetIIDFromOBJREF": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, PVOID, POINTER(POINTER(IID))),
+            "method_offset" : 4,
+        },
     }
 
 # class IRpcOptionsImplem(windows.com.COMImplementation):
@@ -4888,15 +7363,30 @@ IRpcHelper._functions_ = {
 #
 IRpcOptions._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Set -> pPrx:*IUnknown, dwProperty:DWORD, dwValue:ULONG_PTR
-        "Set": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, ULONG_PTR)(3, "Set"),
+        "Set": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, ULONG_PTR),
+            "method_offset" : 3,
+        },
         # Query -> pPrx:*IUnknown, dwProperty:DWORD, pdwValue:*ULONG_PTR
-        "Query": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, POINTER(ULONG_PTR))(4, "Query"),
+        "Query": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown, DWORD, POINTER(ULONG_PTR)),
+            "method_offset" : 4,
+        },
     }
 
 # class IRpcStubBufferImplem(windows.com.COMImplementation):
@@ -4932,25 +7422,55 @@ IRpcOptions._functions_ = {
 #
 IRpcStubBuffer._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:*PVOID
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Connect -> pUnkServer:*IUnknown
-        "Connect": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(3, "Connect"),
+        "Connect": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
+            "method_offset" : 3,
+        },
         # Disconnect -> 
-        "Disconnect": ctypes.WINFUNCTYPE(PVOID)(4, "Disconnect"),
+        "Disconnect": {
+            "type": ctypes.WINFUNCTYPE(PVOID),
+            "method_offset" : 4,
+        },
         # Invoke -> _prpcmsg:*RPCOLEMESSAGE, _pRpcChannelBuffer:*IRpcChannelBuffer
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), IRpcChannelBuffer)(5, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(RPCOLEMESSAGE), IRpcChannelBuffer),
+            "method_offset" : 5,
+        },
         # IsIIDSupported -> riid:REFIID
-        "IsIIDSupported": ctypes.WINFUNCTYPE(PVOID, REFIID)(6, "IsIIDSupported"),
+        "IsIIDSupported": {
+            "type": ctypes.WINFUNCTYPE(PVOID, REFIID),
+            "method_offset" : 6,
+        },
         # CountRefs -> 
-        "CountRefs": ctypes.WINFUNCTYPE(ULONG)(7, "CountRefs"),
+        "CountRefs": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 7,
+        },
         # DebugServerQueryInterface -> ppv:*PVOID
-        "DebugServerQueryInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(8, "DebugServerQueryInterface"),
+        "DebugServerQueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID)),
+            "method_offset" : 8,
+        },
         # DebugServerRelease -> pv:PVOID
-        "DebugServerRelease": ctypes.WINFUNCTYPE(PVOID, PVOID)(9, "DebugServerRelease"),
+        "DebugServerRelease": {
+            "type": ctypes.WINFUNCTYPE(PVOID, PVOID),
+            "method_offset" : 9,
+        },
     }
 
 # class IActionImplem(windows.com.COMImplementation):
@@ -4986,25 +7506,55 @@ IRpcStubBuffer._functions_ = {
 #
 IAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Type -> pType:*TASK_ACTION_TYPE
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE)),
+            "method_offset" : 9,
+        },
     }
 
 # class IActionCollectionImplem(windows.com.COMImplementation):
@@ -5068,39 +7618,90 @@ IAction._functions_ = {
 #
 IActionCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:LONG, ppAction:**IAction
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IAction))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IAction)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
         # get_XmlText -> pText:*BSTR
-        "get_XmlText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(10, "get_XmlText"),
+        "get_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 10,
+        },
         # put_XmlText -> text:BSTR
-        "put_XmlText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(11, "put_XmlText"),
+        "put_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 11,
+        },
         # Create -> type:TASK_ACTION_TYPE, ppAction:**IAction
-        "Create": ctypes.WINFUNCTYPE(HRESULT, TASK_ACTION_TYPE, POINTER(IAction))(12, "Create"),
+        "Create": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_ACTION_TYPE, POINTER(IAction)),
+            "method_offset" : 12,
+        },
         # Remove -> index:VARIANT
-        "Remove": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(13, "Remove"),
+        "Remove": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
+            "method_offset" : 13,
+        },
         # Clear -> 
-        "Clear": ctypes.WINFUNCTYPE(HRESULT)(14, "Clear"),
+        "Clear": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 14,
+        },
         # get_Context -> pContext:*BSTR
-        "get_Context": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(15, "get_Context"),
+        "get_Context": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 15,
+        },
         # put_Context -> context:BSTR
-        "put_Context": ctypes.WINFUNCTYPE(HRESULT, BSTR)(16, "put_Context"),
+        "put_Context": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 16,
+        },
     }
 
 # class IComHandlerActionImplem(windows.com.COMImplementation):
@@ -5152,33 +7753,75 @@ IActionCollection._functions_ = {
 #
 IComHandlerAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Type -> pType:*TASK_ACTION_TYPE
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE)),
+            "method_offset" : 9,
+        },
         # get_ClassId -> pClsid:*BSTR
-        "get_ClassId": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(10, "get_ClassId"),
+        "get_ClassId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 10,
+        },
         # put_ClassId -> clsid:BSTR
-        "put_ClassId": ctypes.WINFUNCTYPE(HRESULT, BSTR)(11, "put_ClassId"),
+        "put_ClassId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 11,
+        },
         # get_Data -> pData:*BSTR
-        "get_Data": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_Data"),
+        "get_Data": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # put_Data -> data:BSTR
-        "put_Data": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_Data"),
+        "put_Data": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 13,
+        },
     }
 
 # class IEmailActionImplem(windows.com.COMImplementation):
@@ -5294,65 +7937,155 @@ IComHandlerAction._functions_ = {
 #
 IEmailAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Type -> pType:*TASK_ACTION_TYPE
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE)),
+            "method_offset" : 9,
+        },
         # get_Server -> pServer:*BSTR
-        "get_Server": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(10, "get_Server"),
+        "get_Server": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 10,
+        },
         # put_Server -> server:BSTR
-        "put_Server": ctypes.WINFUNCTYPE(HRESULT, BSTR)(11, "put_Server"),
+        "put_Server": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 11,
+        },
         # get_Subject -> pSubject:*BSTR
-        "get_Subject": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_Subject"),
+        "get_Subject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # put_Subject -> subject:BSTR
-        "put_Subject": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_Subject"),
+        "put_Subject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 13,
+        },
         # get_To -> pTo:*BSTR
-        "get_To": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(14, "get_To"),
+        "get_To": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 14,
+        },
         # put_To -> to:BSTR
-        "put_To": ctypes.WINFUNCTYPE(HRESULT, BSTR)(15, "put_To"),
+        "put_To": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 15,
+        },
         # get_Cc -> pCc:*BSTR
-        "get_Cc": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(16, "get_Cc"),
+        "get_Cc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 16,
+        },
         # put_Cc -> cc:BSTR
-        "put_Cc": ctypes.WINFUNCTYPE(HRESULT, BSTR)(17, "put_Cc"),
+        "put_Cc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 17,
+        },
         # get_Bcc -> pBcc:*BSTR
-        "get_Bcc": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(18, "get_Bcc"),
+        "get_Bcc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 18,
+        },
         # put_Bcc -> bcc:BSTR
-        "put_Bcc": ctypes.WINFUNCTYPE(HRESULT, BSTR)(19, "put_Bcc"),
+        "put_Bcc": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 19,
+        },
         # get_ReplyTo -> pReplyTo:*BSTR
-        "get_ReplyTo": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(20, "get_ReplyTo"),
+        "get_ReplyTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 20,
+        },
         # put_ReplyTo -> replyTo:BSTR
-        "put_ReplyTo": ctypes.WINFUNCTYPE(HRESULT, BSTR)(21, "put_ReplyTo"),
+        "put_ReplyTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 21,
+        },
         # get_From -> pFrom:*BSTR
-        "get_From": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(22, "get_From"),
+        "get_From": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 22,
+        },
         # put_From -> from:BSTR
-        "put_From": ctypes.WINFUNCTYPE(HRESULT, BSTR)(23, "put_From"),
+        "put_From": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 23,
+        },
         # get_HeaderFields -> ppHeaderFields:**ITaskNamedValueCollection
-        "get_HeaderFields": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskNamedValueCollection))(24, "get_HeaderFields"),
+        "get_HeaderFields": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskNamedValueCollection)),
+            "method_offset" : 24,
+        },
         # put_HeaderFields -> pHeaderFields:*ITaskNamedValueCollection
-        "put_HeaderFields": ctypes.WINFUNCTYPE(HRESULT, ITaskNamedValueCollection)(25, "put_HeaderFields"),
+        "put_HeaderFields": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ITaskNamedValueCollection),
+            "method_offset" : 25,
+        },
         # get_Body -> pBody:*BSTR
-        "get_Body": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(26, "get_Body"),
+        "get_Body": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 26,
+        },
         # put_Body -> body:BSTR
-        "put_Body": ctypes.WINFUNCTYPE(HRESULT, BSTR)(27, "put_Body"),
+        "put_Body": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 27,
+        },
         # get_Attachments -> pAttachements:**SAFEARRAY
-        "get_Attachments": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(SAFEARRAY)))(28, "get_Attachments"),
+        "get_Attachments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(SAFEARRAY))),
+            "method_offset" : 28,
+        },
         # put_Attachments -> pAttachements:*SAFEARRAY
-        "put_Attachments": ctypes.WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY))(29, "put_Attachments"),
+        "put_Attachments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(SAFEARRAY)),
+            "method_offset" : 29,
+        },
     }
 
 # class IExecActionImplem(windows.com.COMImplementation):
@@ -5412,37 +8145,85 @@ IEmailAction._functions_ = {
 #
 IExecAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Type -> pType:*TASK_ACTION_TYPE
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE)),
+            "method_offset" : 9,
+        },
         # get_Path -> pPath:*BSTR
-        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(10, "get_Path"),
+        "get_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 10,
+        },
         # put_Path -> path:BSTR
-        "put_Path": ctypes.WINFUNCTYPE(HRESULT, BSTR)(11, "put_Path"),
+        "put_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 11,
+        },
         # get_Arguments -> pArgument:*BSTR
-        "get_Arguments": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_Arguments"),
+        "get_Arguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # put_Arguments -> argument:BSTR
-        "put_Arguments": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_Arguments"),
+        "put_Arguments": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 13,
+        },
         # get_WorkingDirectory -> pWorkingDirectory:*BSTR
-        "get_WorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(14, "get_WorkingDirectory"),
+        "get_WorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 14,
+        },
         # put_WorkingDirectory -> workingDirectory:BSTR
-        "put_WorkingDirectory": ctypes.WINFUNCTYPE(HRESULT, BSTR)(15, "put_WorkingDirectory"),
+        "put_WorkingDirectory": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 15,
+        },
     }
 
 # class IIdleSettingsImplem(windows.com.COMImplementation):
@@ -5498,35 +8279,80 @@ IExecAction._functions_ = {
 #
 IIdleSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_IdleDuration -> pDelay:*BSTR
-        "get_IdleDuration": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_IdleDuration"),
+        "get_IdleDuration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_IdleDuration -> delay:BSTR
-        "put_IdleDuration": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_IdleDuration"),
+        "put_IdleDuration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_WaitTimeout -> pTimeout:*BSTR
-        "get_WaitTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_WaitTimeout"),
+        "get_WaitTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_WaitTimeout -> timeout:BSTR
-        "put_WaitTimeout": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_WaitTimeout"),
+        "put_WaitTimeout": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_StopOnIdleEnd -> pStop:*VARIANT_BOOL
-        "get_StopOnIdleEnd": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(11, "get_StopOnIdleEnd"),
+        "get_StopOnIdleEnd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 11,
+        },
         # put_StopOnIdleEnd -> stop:VARIANT_BOOL
-        "put_StopOnIdleEnd": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(12, "put_StopOnIdleEnd"),
+        "put_StopOnIdleEnd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 12,
+        },
         # get_RestartOnIdle -> pRestart:*VARIANT_BOOL
-        "get_RestartOnIdle": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(13, "get_RestartOnIdle"),
+        "get_RestartOnIdle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 13,
+        },
         # put_RestartOnIdle -> restart:VARIANT_BOOL
-        "put_RestartOnIdle": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(14, "put_RestartOnIdle"),
+        "put_RestartOnIdle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 14,
+        },
     }
 
 # class INetworkSettingsImplem(windows.com.COMImplementation):
@@ -5566,27 +8392,60 @@ IIdleSettings._functions_ = {
 #
 INetworkSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> pName:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Name -> name:BSTR
-        "put_Name": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Name"),
+        "put_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_Id -> id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
     }
 
 # class IPrincipalImplem(windows.com.COMImplementation):
@@ -5658,43 +8517,100 @@ INetworkSettings._functions_ = {
 #
 IPrincipal._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_DisplayName -> pName:*BSTR
-        "get_DisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_DisplayName"),
+        "get_DisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_DisplayName -> name:BSTR
-        "put_DisplayName": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_DisplayName"),
+        "put_DisplayName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_UserId -> pUser:*BSTR
-        "get_UserId": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(11, "get_UserId"),
+        "get_UserId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 11,
+        },
         # put_UserId -> user:BSTR
-        "put_UserId": ctypes.WINFUNCTYPE(HRESULT, BSTR)(12, "put_UserId"),
+        "put_UserId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 12,
+        },
         # get_LogonType -> pLogon:*TASK_LOGON_TYPE
-        "get_LogonType": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_LOGON_TYPE))(13, "get_LogonType"),
+        "get_LogonType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_LOGON_TYPE)),
+            "method_offset" : 13,
+        },
         # put_LogonType -> logon:TASK_LOGON_TYPE
-        "put_LogonType": ctypes.WINFUNCTYPE(HRESULT, TASK_LOGON_TYPE)(14, "put_LogonType"),
+        "put_LogonType": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_LOGON_TYPE),
+            "method_offset" : 14,
+        },
         # get_GroupId -> pGroup:*BSTR
-        "get_GroupId": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(15, "get_GroupId"),
+        "get_GroupId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 15,
+        },
         # put_GroupId -> group:BSTR
-        "put_GroupId": ctypes.WINFUNCTYPE(HRESULT, BSTR)(16, "put_GroupId"),
+        "put_GroupId": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 16,
+        },
         # get_RunLevel -> pRunLevel:*TASK_RUNLEVEL_TYPE
-        "get_RunLevel": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_RUNLEVEL_TYPE))(17, "get_RunLevel"),
+        "get_RunLevel": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_RUNLEVEL_TYPE)),
+            "method_offset" : 17,
+        },
         # put_RunLevel -> runLevel:TASK_RUNLEVEL_TYPE
-        "put_RunLevel": ctypes.WINFUNCTYPE(HRESULT, TASK_RUNLEVEL_TYPE)(18, "put_RunLevel"),
+        "put_RunLevel": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_RUNLEVEL_TYPE),
+            "method_offset" : 18,
+        },
     }
 
 # class IRegisteredTaskImplem(windows.com.COMImplementation):
@@ -5790,55 +8706,130 @@ IPrincipal._functions_ = {
 #
 IRegisteredTask._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> pName:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # get_Path -> pPath:*BSTR
-        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(8, "get_Path"),
+        "get_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 8,
+        },
         # get_State -> pState:*TASK_STATE
-        "get_State": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_STATE))(9, "get_State"),
+        "get_State": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_STATE)),
+            "method_offset" : 9,
+        },
         # get_Enabled -> pEnabled:*VARIANT_BOOL
-        "get_Enabled": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(10, "get_Enabled"),
+        "get_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 10,
+        },
         # put_Enabled -> enabled:VARIANT_BOOL
-        "put_Enabled": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(11, "put_Enabled"),
+        "put_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 11,
+        },
         # Run -> params:VARIANT, ppRunningTask:**IRunningTask
-        "Run": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRunningTask))(12, "Run"),
+        "Run": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRunningTask)),
+            "method_offset" : 12,
+        },
         # RunEx -> params:VARIANT, flags:LONG, sessionID:LONG, user:BSTR, ppRunningTask:**IRunningTask
-        "RunEx": ctypes.WINFUNCTYPE(HRESULT, VARIANT, LONG, LONG, BSTR, POINTER(IRunningTask))(13, "RunEx"),
+        "RunEx": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, LONG, LONG, BSTR, POINTER(IRunningTask)),
+            "method_offset" : 13,
+        },
         # GetInstances -> flags:LONG, ppRunningTasks:**IRunningTaskCollection
-        "GetInstances": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRunningTaskCollection))(14, "GetInstances"),
+        "GetInstances": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRunningTaskCollection)),
+            "method_offset" : 14,
+        },
         # get_LastRunTime -> pLastRunTime:*DATE
-        "get_LastRunTime": ctypes.WINFUNCTYPE(HRESULT, POINTER(DATE))(15, "get_LastRunTime"),
+        "get_LastRunTime": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DATE)),
+            "method_offset" : 15,
+        },
         # get_LastTaskResult -> pLastTaskResult:*LONG
-        "get_LastTaskResult": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(16, "get_LastTaskResult"),
+        "get_LastTaskResult": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 16,
+        },
         # get_NumberOfMissedRuns -> pNumberOfMissedRuns:*LONG
-        "get_NumberOfMissedRuns": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(17, "get_NumberOfMissedRuns"),
+        "get_NumberOfMissedRuns": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 17,
+        },
         # get_NextRunTime -> pNextRunTime:*DATE
-        "get_NextRunTime": ctypes.WINFUNCTYPE(HRESULT, POINTER(DATE))(18, "get_NextRunTime"),
+        "get_NextRunTime": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DATE)),
+            "method_offset" : 18,
+        },
         # get_Definition -> ppDefinition:**ITaskDefinition
-        "get_Definition": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskDefinition))(19, "get_Definition"),
+        "get_Definition": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskDefinition)),
+            "method_offset" : 19,
+        },
         # get_Xml -> pXml:*BSTR
-        "get_Xml": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(20, "get_Xml"),
+        "get_Xml": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 20,
+        },
         # GetSecurityDescriptor -> securityInformation:LONG, pSddl:*BSTR
-        "GetSecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(21, "GetSecurityDescriptor"),
+        "GetSecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR)),
+            "method_offset" : 21,
+        },
         # SetSecurityDescriptor -> sddl:BSTR, flags:LONG
-        "SetSecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG)(22, "SetSecurityDescriptor"),
+        "SetSecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG),
+            "method_offset" : 22,
+        },
         # Stop -> flags:LONG
-        "Stop": ctypes.WINFUNCTYPE(HRESULT, LONG)(23, "Stop"),
+        "Stop": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 23,
+        },
         # GetRunTimes -> pstStart:LPSYSTEMTIME, pstEnd:LPSYSTEMTIME, pCount:*DWORD, pRunTimes:*LPSYSTEMTIME
-        "GetRunTimes": ctypes.WINFUNCTYPE(HRESULT, LPSYSTEMTIME, LPSYSTEMTIME, POINTER(DWORD), POINTER(LPSYSTEMTIME))(24, "GetRunTimes"),
+        "GetRunTimes": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPSYSTEMTIME, LPSYSTEMTIME, POINTER(DWORD), POINTER(LPSYSTEMTIME)),
+            "method_offset" : 24,
+        },
     }
 
 # class IRegisteredTaskCollectionImplem(windows.com.COMImplementation):
@@ -5874,25 +8865,55 @@ IRegisteredTask._functions_ = {
 #
 IRegisteredTaskCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:VARIANT, ppRegisteredTask:**IRegisteredTask
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRegisteredTask))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRegisteredTask)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
     }
 
 # class IRegistrationInfoImplem(windows.com.COMImplementation):
@@ -5988,55 +9009,130 @@ IRegisteredTaskCollection._functions_ = {
 #
 IRegistrationInfo._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Description -> pDescription:*BSTR
-        "get_Description": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Description"),
+        "get_Description": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Description -> description:BSTR
-        "put_Description": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Description"),
+        "put_Description": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Author -> pAuthor:*BSTR
-        "get_Author": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Author"),
+        "get_Author": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_Author -> author:BSTR
-        "put_Author": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Author"),
+        "put_Author": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_Version -> pVersion:*BSTR
-        "get_Version": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(11, "get_Version"),
+        "get_Version": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 11,
+        },
         # put_Version -> version:BSTR
-        "put_Version": ctypes.WINFUNCTYPE(HRESULT, BSTR)(12, "put_Version"),
+        "put_Version": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 12,
+        },
         # get_Date -> pDate:*BSTR
-        "get_Date": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(13, "get_Date"),
+        "get_Date": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 13,
+        },
         # put_Date -> date:BSTR
-        "put_Date": ctypes.WINFUNCTYPE(HRESULT, BSTR)(14, "put_Date"),
+        "put_Date": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 14,
+        },
         # get_Documentation -> pDocumentation:*BSTR
-        "get_Documentation": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(15, "get_Documentation"),
+        "get_Documentation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 15,
+        },
         # put_Documentation -> documentation:BSTR
-        "put_Documentation": ctypes.WINFUNCTYPE(HRESULT, BSTR)(16, "put_Documentation"),
+        "put_Documentation": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 16,
+        },
         # get_XmlText -> pText:*BSTR
-        "get_XmlText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(17, "get_XmlText"),
+        "get_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 17,
+        },
         # put_XmlText -> text:BSTR
-        "put_XmlText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(18, "put_XmlText"),
+        "put_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 18,
+        },
         # get_URI -> pUri:*BSTR
-        "get_URI": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(19, "get_URI"),
+        "get_URI": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 19,
+        },
         # put_URI -> uri:BSTR
-        "put_URI": ctypes.WINFUNCTYPE(HRESULT, BSTR)(20, "put_URI"),
+        "put_URI": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 20,
+        },
         # get_SecurityDescriptor -> pSddl:*VARIANT
-        "get_SecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT))(21, "get_SecurityDescriptor"),
+        "get_SecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT)),
+            "method_offset" : 21,
+        },
         # put_SecurityDescriptor -> sddl:VARIANT
-        "put_SecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(22, "put_SecurityDescriptor"),
+        "put_SecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
+            "method_offset" : 22,
+        },
         # get_Source -> pSource:*BSTR
-        "get_Source": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(23, "get_Source"),
+        "get_Source": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 23,
+        },
         # put_Source -> source:BSTR
-        "put_Source": ctypes.WINFUNCTYPE(HRESULT, BSTR)(24, "put_Source"),
+        "put_Source": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 24,
+        },
     }
 
 # class IRepetitionPatternImplem(windows.com.COMImplementation):
@@ -6084,31 +9180,70 @@ IRegistrationInfo._functions_ = {
 #
 IRepetitionPattern._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Interval -> pInterval:*BSTR
-        "get_Interval": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Interval"),
+        "get_Interval": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Interval -> interval:BSTR
-        "put_Interval": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Interval"),
+        "put_Interval": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Duration -> pDuration:*BSTR
-        "get_Duration": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Duration"),
+        "get_Duration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_Duration -> duration:BSTR
-        "put_Duration": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Duration"),
+        "put_Duration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_StopAtDurationEnd -> pStop:*VARIANT_BOOL
-        "get_StopAtDurationEnd": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(11, "get_StopAtDurationEnd"),
+        "get_StopAtDurationEnd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 11,
+        },
         # put_StopAtDurationEnd -> stop:VARIANT_BOOL
-        "put_StopAtDurationEnd": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(12, "put_StopAtDurationEnd"),
+        "put_StopAtDurationEnd": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 12,
+        },
     }
 
 # class IRunningTaskImplem(windows.com.COMImplementation):
@@ -6164,35 +9299,80 @@ IRepetitionPattern._functions_ = {
 #
 IRunningTask._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> pName:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # get_InstanceGuid -> pGuid:*BSTR
-        "get_InstanceGuid": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(8, "get_InstanceGuid"),
+        "get_InstanceGuid": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 8,
+        },
         # get_Path -> pPath:*BSTR
-        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Path"),
+        "get_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # get_State -> pState:*TASK_STATE
-        "get_State": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_STATE))(10, "get_State"),
+        "get_State": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_STATE)),
+            "method_offset" : 10,
+        },
         # get_CurrentAction -> pName:*BSTR
-        "get_CurrentAction": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(11, "get_CurrentAction"),
+        "get_CurrentAction": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 11,
+        },
         # Stop -> 
-        "Stop": ctypes.WINFUNCTYPE(HRESULT)(12, "Stop"),
+        "Stop": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 12,
+        },
         # Refresh -> 
-        "Refresh": ctypes.WINFUNCTYPE(HRESULT)(13, "Refresh"),
+        "Refresh": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 13,
+        },
         # get_EnginePID -> pPID:*DWORD
-        "get_EnginePID": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(14, "get_EnginePID"),
+        "get_EnginePID": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 14,
+        },
     }
 
 # class IRunningTaskCollectionImplem(windows.com.COMImplementation):
@@ -6228,25 +9408,55 @@ IRunningTask._functions_ = {
 #
 IRunningTaskCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:VARIANT, ppRunningTask:**IRunningTask
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRunningTask))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(IRunningTask)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
     }
 
 # class IShowMessageActionImplem(windows.com.COMImplementation):
@@ -6298,33 +9508,75 @@ IRunningTaskCollection._functions_ = {
 #
 IShowMessageAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Id -> Id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Type -> pType:*TASK_ACTION_TYPE
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE))(9, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_ACTION_TYPE)),
+            "method_offset" : 9,
+        },
         # get_Title -> pTitle:*BSTR
-        "get_Title": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(10, "get_Title"),
+        "get_Title": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 10,
+        },
         # put_Title -> title:BSTR
-        "put_Title": ctypes.WINFUNCTYPE(HRESULT, BSTR)(11, "put_Title"),
+        "put_Title": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 11,
+        },
         # get_MessageBody -> pMessageBody:*BSTR
-        "get_MessageBody": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_MessageBody"),
+        "get_MessageBody": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # put_MessageBody -> messageBody:BSTR
-        "put_MessageBody": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_MessageBody"),
+        "put_MessageBody": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 13,
+        },
     }
 
 # class ITaskDefinitionImplem(windows.com.COMImplementation):
@@ -6404,47 +9656,110 @@ IShowMessageAction._functions_ = {
 #
 ITaskDefinition._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_RegistrationInfo -> ppRegistrationInfo:**IRegistrationInfo
-        "get_RegistrationInfo": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRegistrationInfo))(7, "get_RegistrationInfo"),
+        "get_RegistrationInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRegistrationInfo)),
+            "method_offset" : 7,
+        },
         # put_RegistrationInfo -> pRegistrationInfo:*IRegistrationInfo
-        "put_RegistrationInfo": ctypes.WINFUNCTYPE(HRESULT, IRegistrationInfo)(8, "put_RegistrationInfo"),
+        "put_RegistrationInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IRegistrationInfo),
+            "method_offset" : 8,
+        },
         # get_Triggers -> ppTriggers:**ITriggerCollection
-        "get_Triggers": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITriggerCollection))(9, "get_Triggers"),
+        "get_Triggers": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITriggerCollection)),
+            "method_offset" : 9,
+        },
         # put_Triggers -> pTriggers:*ITriggerCollection
-        "put_Triggers": ctypes.WINFUNCTYPE(HRESULT, ITriggerCollection)(10, "put_Triggers"),
+        "put_Triggers": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ITriggerCollection),
+            "method_offset" : 10,
+        },
         # get_Settings -> ppSettings:**ITaskSettings
-        "get_Settings": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskSettings))(11, "get_Settings"),
+        "get_Settings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITaskSettings)),
+            "method_offset" : 11,
+        },
         # put_Settings -> pSettings:*ITaskSettings
-        "put_Settings": ctypes.WINFUNCTYPE(HRESULT, ITaskSettings)(12, "put_Settings"),
+        "put_Settings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ITaskSettings),
+            "method_offset" : 12,
+        },
         # get_Data -> pData:*BSTR
-        "get_Data": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(13, "get_Data"),
+        "get_Data": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 13,
+        },
         # put_Data -> data:BSTR
-        "put_Data": ctypes.WINFUNCTYPE(HRESULT, BSTR)(14, "put_Data"),
+        "put_Data": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 14,
+        },
         # get_Principal -> ppPrincipal:**IPrincipal
-        "get_Principal": ctypes.WINFUNCTYPE(HRESULT, POINTER(IPrincipal))(15, "get_Principal"),
+        "get_Principal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IPrincipal)),
+            "method_offset" : 15,
+        },
         # put_Principal -> pPrincipal:*IPrincipal
-        "put_Principal": ctypes.WINFUNCTYPE(HRESULT, IPrincipal)(16, "put_Principal"),
+        "put_Principal": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IPrincipal),
+            "method_offset" : 16,
+        },
         # get_Actions -> ppActions:**IActionCollection
-        "get_Actions": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActionCollection))(17, "get_Actions"),
+        "get_Actions": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IActionCollection)),
+            "method_offset" : 17,
+        },
         # put_Actions -> pActions:*IActionCollection
-        "put_Actions": ctypes.WINFUNCTYPE(HRESULT, IActionCollection)(18, "put_Actions"),
+        "put_Actions": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IActionCollection),
+            "method_offset" : 18,
+        },
         # get_XmlText -> pXml:*BSTR
-        "get_XmlText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(19, "get_XmlText"),
+        "get_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 19,
+        },
         # put_XmlText -> xml:BSTR
-        "put_XmlText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(20, "put_XmlText"),
+        "put_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 20,
+        },
     }
 
 # class ITaskFolderImplem(windows.com.COMImplementation):
@@ -6520,45 +9835,105 @@ ITaskDefinition._functions_ = {
 #
 ITaskFolder._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> pName:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # get_Path -> pPath:*BSTR
-        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(8, "get_Path"),
+        "get_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 8,
+        },
         # GetFolder -> path:BSTR, ppFolder:**ITaskFolder
-        "GetFolder": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(ITaskFolder))(9, "GetFolder"),
+        "GetFolder": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(ITaskFolder)),
+            "method_offset" : 9,
+        },
         # GetFolders -> flags:LONG, ppFolders:**ITaskFolderCollection
-        "GetFolders": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITaskFolderCollection))(10, "GetFolders"),
+        "GetFolders": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITaskFolderCollection)),
+            "method_offset" : 10,
+        },
         # CreateFolder -> subFolderName:BSTR, sddl:VARIANT, ppFolder:**ITaskFolder
-        "CreateFolder": ctypes.WINFUNCTYPE(HRESULT, BSTR, VARIANT, POINTER(ITaskFolder))(11, "CreateFolder"),
+        "CreateFolder": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, VARIANT, POINTER(ITaskFolder)),
+            "method_offset" : 11,
+        },
         # DeleteFolder -> subFolderName:BSTR, flags:LONG
-        "DeleteFolder": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG)(12, "DeleteFolder"),
+        "DeleteFolder": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG),
+            "method_offset" : 12,
+        },
         # GetTask -> path:BSTR, ppTask:**IRegisteredTask
-        "GetTask": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(IRegisteredTask))(13, "GetTask"),
+        "GetTask": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(IRegisteredTask)),
+            "method_offset" : 13,
+        },
         # GetTasks -> flags:LONG, ppTasks:**IRegisteredTaskCollection
-        "GetTasks": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRegisteredTaskCollection))(14, "GetTasks"),
+        "GetTasks": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRegisteredTaskCollection)),
+            "method_offset" : 14,
+        },
         # DeleteTask -> name:BSTR, flags:LONG
-        "DeleteTask": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG)(15, "DeleteTask"),
+        "DeleteTask": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG),
+            "method_offset" : 15,
+        },
         # RegisterTask -> path:BSTR, xmlText:BSTR, flags:LONG, userId:VARIANT, password:VARIANT, logonType:TASK_LOGON_TYPE, sddl:VARIANT, ppTask:**IRegisteredTask
-        "RegisterTask": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, VARIANT, VARIANT, TASK_LOGON_TYPE, VARIANT, POINTER(IRegisteredTask))(16, "RegisterTask"),
+        "RegisterTask": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, VARIANT, VARIANT, TASK_LOGON_TYPE, VARIANT, POINTER(IRegisteredTask)),
+            "method_offset" : 16,
+        },
         # RegisterTaskDefinition -> path:BSTR, pDefinition:*ITaskDefinition, flags:LONG, userId:VARIANT, password:VARIANT, logonType:TASK_LOGON_TYPE, sddl:VARIANT, ppTask:**IRegisteredTask
-        "RegisterTaskDefinition": ctypes.WINFUNCTYPE(HRESULT, BSTR, ITaskDefinition, LONG, VARIANT, VARIANT, TASK_LOGON_TYPE, VARIANT, POINTER(IRegisteredTask))(17, "RegisterTaskDefinition"),
+        "RegisterTaskDefinition": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, ITaskDefinition, LONG, VARIANT, VARIANT, TASK_LOGON_TYPE, VARIANT, POINTER(IRegisteredTask)),
+            "method_offset" : 17,
+        },
         # GetSecurityDescriptor -> securityInformation:LONG, pSddl:*BSTR
-        "GetSecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(18, "GetSecurityDescriptor"),
+        "GetSecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR)),
+            "method_offset" : 18,
+        },
         # SetSecurityDescriptor -> sddl:BSTR, flags:LONG
-        "SetSecurityDescriptor": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG)(19, "SetSecurityDescriptor"),
+        "SetSecurityDescriptor": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG),
+            "method_offset" : 19,
+        },
     }
 
 # class ITaskFolderCollectionImplem(windows.com.COMImplementation):
@@ -6594,25 +9969,55 @@ ITaskFolder._functions_ = {
 #
 ITaskFolderCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:VARIANT, ppFolder:**ITaskFolder
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(ITaskFolder))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, POINTER(ITaskFolder)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
     }
 
 # class ITaskNamedValueCollectionImplem(windows.com.COMImplementation):
@@ -6660,31 +10065,70 @@ ITaskFolderCollection._functions_ = {
 #
 ITaskNamedValueCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:LONG, ppPair:**ITaskNamedValuePair
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITaskNamedValuePair))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITaskNamedValuePair)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
         # Create -> name:BSTR, value:BSTR, ppPair:**ITaskNamedValuePair
-        "Create": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, POINTER(ITaskNamedValuePair))(10, "Create"),
+        "Create": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, POINTER(ITaskNamedValuePair)),
+            "method_offset" : 10,
+        },
         # Remove -> index:LONG
-        "Remove": ctypes.WINFUNCTYPE(HRESULT, LONG)(11, "Remove"),
+        "Remove": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 11,
+        },
         # Clear -> 
-        "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
+        "Clear": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 12,
+        },
     }
 
 # class ITaskNamedValuePairImplem(windows.com.COMImplementation):
@@ -6724,27 +10168,60 @@ ITaskNamedValueCollection._functions_ = {
 #
 ITaskNamedValuePair._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Name -> pName:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(7, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 7,
+        },
         # put_Name -> name:BSTR
-        "put_Name": ctypes.WINFUNCTYPE(HRESULT, BSTR)(8, "put_Name"),
+        "put_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 8,
+        },
         # get_Value -> pValue:*BSTR
-        "get_Value": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_Value"),
+        "get_Value": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_Value -> value:BSTR
-        "put_Value": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_Value"),
+        "put_Value": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
     }
 
 # class ITaskServiceImplem(windows.com.COMImplementation):
@@ -6804,37 +10281,85 @@ ITaskNamedValuePair._functions_ = {
 #
 ITaskService._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # GetFolder -> path:BSTR, ppFolder:**ITaskFolder
-        "GetFolder": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(ITaskFolder))(7, "GetFolder"),
+        "GetFolder": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(ITaskFolder)),
+            "method_offset" : 7,
+        },
         # GetRunningTasks -> flags:LONG, ppRunningTasks:**IRunningTaskCollection
-        "GetRunningTasks": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRunningTaskCollection))(8, "GetRunningTasks"),
+        "GetRunningTasks": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IRunningTaskCollection)),
+            "method_offset" : 8,
+        },
         # NewTask -> flags:DWORD, ppDefinition:**ITaskDefinition
-        "NewTask": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(ITaskDefinition))(9, "NewTask"),
+        "NewTask": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(ITaskDefinition)),
+            "method_offset" : 9,
+        },
         # Connect -> serverName:VARIANT, user:VARIANT, domain:VARIANT, password:VARIANT
-        "Connect": ctypes.WINFUNCTYPE(HRESULT, VARIANT, VARIANT, VARIANT, VARIANT)(10, "Connect"),
+        "Connect": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT, VARIANT, VARIANT, VARIANT),
+            "method_offset" : 10,
+        },
         # get_Connected -> pConnected:*VARIANT_BOOL
-        "get_Connected": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(11, "get_Connected"),
+        "get_Connected": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 11,
+        },
         # get_TargetServer -> pServer:*BSTR
-        "get_TargetServer": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_TargetServer"),
+        "get_TargetServer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # get_ConnectedUser -> pUser:*BSTR
-        "get_ConnectedUser": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(13, "get_ConnectedUser"),
+        "get_ConnectedUser": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 13,
+        },
         # get_ConnectedDomain -> pDomain:*BSTR
-        "get_ConnectedDomain": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(14, "get_ConnectedDomain"),
+        "get_ConnectedDomain": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 14,
+        },
         # get_HighestVersion -> pVersion:*DWORD
-        "get_HighestVersion": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(15, "get_HighestVersion"),
+        "get_HighestVersion": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 15,
+        },
     }
 
 # class ITaskSettingsImplem(windows.com.COMImplementation):
@@ -7018,99 +10543,240 @@ ITaskService._functions_ = {
 #
 ITaskSettings._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_AllowDemandStart -> pAllowDemandStart:*VARIANT_BOOL
-        "get_AllowDemandStart": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(7, "get_AllowDemandStart"),
+        "get_AllowDemandStart": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 7,
+        },
         # put_AllowDemandStart -> allowDemandStart:VARIANT_BOOL
-        "put_AllowDemandStart": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(8, "put_AllowDemandStart"),
+        "put_AllowDemandStart": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 8,
+        },
         # get_RestartInterval -> pRestartInterval:*BSTR
-        "get_RestartInterval": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(9, "get_RestartInterval"),
+        "get_RestartInterval": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 9,
+        },
         # put_RestartInterval -> restartInterval:BSTR
-        "put_RestartInterval": ctypes.WINFUNCTYPE(HRESULT, BSTR)(10, "put_RestartInterval"),
+        "put_RestartInterval": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 10,
+        },
         # get_RestartCount -> pRestartCount:*INT
-        "get_RestartCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(11, "get_RestartCount"),
+        "get_RestartCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 11,
+        },
         # put_RestartCount -> restartCount:INT
-        "put_RestartCount": ctypes.WINFUNCTYPE(HRESULT, INT)(12, "put_RestartCount"),
+        "put_RestartCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT),
+            "method_offset" : 12,
+        },
         # get_MultipleInstances -> pPolicy:*TASK_INSTANCES_POLICY
-        "get_MultipleInstances": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_INSTANCES_POLICY))(13, "get_MultipleInstances"),
+        "get_MultipleInstances": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_INSTANCES_POLICY)),
+            "method_offset" : 13,
+        },
         # put_MultipleInstances -> policy:TASK_INSTANCES_POLICY
-        "put_MultipleInstances": ctypes.WINFUNCTYPE(HRESULT, TASK_INSTANCES_POLICY)(14, "put_MultipleInstances"),
+        "put_MultipleInstances": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_INSTANCES_POLICY),
+            "method_offset" : 14,
+        },
         # get_StopIfGoingOnBatteries -> pStopIfOnBatteries:*VARIANT_BOOL
-        "get_StopIfGoingOnBatteries": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(15, "get_StopIfGoingOnBatteries"),
+        "get_StopIfGoingOnBatteries": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 15,
+        },
         # put_StopIfGoingOnBatteries -> stopIfOnBatteries:VARIANT_BOOL
-        "put_StopIfGoingOnBatteries": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(16, "put_StopIfGoingOnBatteries"),
+        "put_StopIfGoingOnBatteries": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 16,
+        },
         # get_DisallowStartIfOnBatteries -> pDisallowStart:*VARIANT_BOOL
-        "get_DisallowStartIfOnBatteries": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(17, "get_DisallowStartIfOnBatteries"),
+        "get_DisallowStartIfOnBatteries": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 17,
+        },
         # put_DisallowStartIfOnBatteries -> disallowStart:VARIANT_BOOL
-        "put_DisallowStartIfOnBatteries": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(18, "put_DisallowStartIfOnBatteries"),
+        "put_DisallowStartIfOnBatteries": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 18,
+        },
         # get_AllowHardTerminate -> pAllowHardTerminate:*VARIANT_BOOL
-        "get_AllowHardTerminate": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(19, "get_AllowHardTerminate"),
+        "get_AllowHardTerminate": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 19,
+        },
         # put_AllowHardTerminate -> allowHardTerminate:VARIANT_BOOL
-        "put_AllowHardTerminate": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(20, "put_AllowHardTerminate"),
+        "put_AllowHardTerminate": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 20,
+        },
         # get_StartWhenAvailable -> pStartWhenAvailable:*VARIANT_BOOL
-        "get_StartWhenAvailable": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(21, "get_StartWhenAvailable"),
+        "get_StartWhenAvailable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 21,
+        },
         # put_StartWhenAvailable -> startWhenAvailable:VARIANT_BOOL
-        "put_StartWhenAvailable": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(22, "put_StartWhenAvailable"),
+        "put_StartWhenAvailable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 22,
+        },
         # get_XmlText -> pText:*BSTR
-        "get_XmlText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(23, "get_XmlText"),
+        "get_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 23,
+        },
         # put_XmlText -> text:BSTR
-        "put_XmlText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(24, "put_XmlText"),
+        "put_XmlText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 24,
+        },
         # get_RunOnlyIfNetworkAvailable -> pRunOnlyIfNetworkAvailable:*VARIANT_BOOL
-        "get_RunOnlyIfNetworkAvailable": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(25, "get_RunOnlyIfNetworkAvailable"),
+        "get_RunOnlyIfNetworkAvailable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 25,
+        },
         # put_RunOnlyIfNetworkAvailable -> runOnlyIfNetworkAvailable:VARIANT_BOOL
-        "put_RunOnlyIfNetworkAvailable": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(26, "put_RunOnlyIfNetworkAvailable"),
+        "put_RunOnlyIfNetworkAvailable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 26,
+        },
         # get_ExecutionTimeLimit -> pExecutionTimeLimit:*BSTR
-        "get_ExecutionTimeLimit": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(27, "get_ExecutionTimeLimit"),
+        "get_ExecutionTimeLimit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 27,
+        },
         # put_ExecutionTimeLimit -> executionTimeLimit:BSTR
-        "put_ExecutionTimeLimit": ctypes.WINFUNCTYPE(HRESULT, BSTR)(28, "put_ExecutionTimeLimit"),
+        "put_ExecutionTimeLimit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 28,
+        },
         # get_Enabled -> pEnabled:*VARIANT_BOOL
-        "get_Enabled": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(29, "get_Enabled"),
+        "get_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 29,
+        },
         # put_Enabled -> enabled:VARIANT_BOOL
-        "put_Enabled": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(30, "put_Enabled"),
+        "put_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 30,
+        },
         # get_DeleteExpiredTaskAfter -> pExpirationDelay:*BSTR
-        "get_DeleteExpiredTaskAfter": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(31, "get_DeleteExpiredTaskAfter"),
+        "get_DeleteExpiredTaskAfter": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 31,
+        },
         # put_DeleteExpiredTaskAfter -> expirationDelay:BSTR
-        "put_DeleteExpiredTaskAfter": ctypes.WINFUNCTYPE(HRESULT, BSTR)(32, "put_DeleteExpiredTaskAfter"),
+        "put_DeleteExpiredTaskAfter": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 32,
+        },
         # get_Priority -> pPriority:*INT
-        "get_Priority": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(33, "get_Priority"),
+        "get_Priority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 33,
+        },
         # put_Priority -> priority:INT
-        "put_Priority": ctypes.WINFUNCTYPE(HRESULT, INT)(34, "put_Priority"),
+        "put_Priority": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT),
+            "method_offset" : 34,
+        },
         # get_Compatibility -> pCompatLevel:*TASK_COMPATIBILITY
-        "get_Compatibility": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_COMPATIBILITY))(35, "get_Compatibility"),
+        "get_Compatibility": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_COMPATIBILITY)),
+            "method_offset" : 35,
+        },
         # put_Compatibility -> compatLevel:TASK_COMPATIBILITY
-        "put_Compatibility": ctypes.WINFUNCTYPE(HRESULT, TASK_COMPATIBILITY)(36, "put_Compatibility"),
+        "put_Compatibility": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_COMPATIBILITY),
+            "method_offset" : 36,
+        },
         # get_Hidden -> pHidden:*VARIANT_BOOL
-        "get_Hidden": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(37, "get_Hidden"),
+        "get_Hidden": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 37,
+        },
         # put_Hidden -> hidden:VARIANT_BOOL
-        "put_Hidden": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(38, "put_Hidden"),
+        "put_Hidden": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 38,
+        },
         # get_IdleSettings -> ppIdleSettings:**IIdleSettings
-        "get_IdleSettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(IIdleSettings))(39, "get_IdleSettings"),
+        "get_IdleSettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IIdleSettings)),
+            "method_offset" : 39,
+        },
         # put_IdleSettings -> pIdleSettings:*IIdleSettings
-        "put_IdleSettings": ctypes.WINFUNCTYPE(HRESULT, IIdleSettings)(40, "put_IdleSettings"),
+        "put_IdleSettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IIdleSettings),
+            "method_offset" : 40,
+        },
         # get_RunOnlyIfIdle -> pRunOnlyIfIdle:*VARIANT_BOOL
-        "get_RunOnlyIfIdle": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(41, "get_RunOnlyIfIdle"),
+        "get_RunOnlyIfIdle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 41,
+        },
         # put_RunOnlyIfIdle -> runOnlyIfIdle:VARIANT_BOOL
-        "put_RunOnlyIfIdle": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(42, "put_RunOnlyIfIdle"),
+        "put_RunOnlyIfIdle": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 42,
+        },
         # get_WakeToRun -> pWake:*VARIANT_BOOL
-        "get_WakeToRun": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(43, "get_WakeToRun"),
+        "get_WakeToRun": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 43,
+        },
         # put_WakeToRun -> wake:VARIANT_BOOL
-        "put_WakeToRun": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(44, "put_WakeToRun"),
+        "put_WakeToRun": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 44,
+        },
         # get_NetworkSettings -> ppNetworkSettings:**INetworkSettings
-        "get_NetworkSettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetworkSettings))(45, "get_NetworkSettings"),
+        "get_NetworkSettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetworkSettings)),
+            "method_offset" : 45,
+        },
         # put_NetworkSettings -> pNetworkSettings:*INetworkSettings
-        "put_NetworkSettings": ctypes.WINFUNCTYPE(HRESULT, INetworkSettings)(46, "put_NetworkSettings"),
+        "put_NetworkSettings": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INetworkSettings),
+            "method_offset" : 46,
+        },
     }
 
 # class ITriggerImplem(windows.com.COMImplementation):
@@ -7186,45 +10852,105 @@ ITaskSettings._functions_ = {
 #
 ITrigger._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Type -> pType:*TASK_TRIGGER_TYPE2
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_TRIGGER_TYPE2))(7, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(TASK_TRIGGER_TYPE2)),
+            "method_offset" : 7,
+        },
         # get_Id -> pId:*BSTR
-        "get_Id": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(8, "get_Id"),
+        "get_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 8,
+        },
         # put_Id -> id:BSTR
-        "put_Id": ctypes.WINFUNCTYPE(HRESULT, BSTR)(9, "put_Id"),
+        "put_Id": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 9,
+        },
         # get_Repetition -> ppRepeat:**IRepetitionPattern
-        "get_Repetition": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRepetitionPattern))(10, "get_Repetition"),
+        "get_Repetition": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRepetitionPattern)),
+            "method_offset" : 10,
+        },
         # put_Repetition -> pRepeat:*IRepetitionPattern
-        "put_Repetition": ctypes.WINFUNCTYPE(HRESULT, IRepetitionPattern)(11, "put_Repetition"),
+        "put_Repetition": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IRepetitionPattern),
+            "method_offset" : 11,
+        },
         # get_ExecutionTimeLimit -> pTimeLimit:*BSTR
-        "get_ExecutionTimeLimit": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(12, "get_ExecutionTimeLimit"),
+        "get_ExecutionTimeLimit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 12,
+        },
         # put_ExecutionTimeLimit -> timelimit:BSTR
-        "put_ExecutionTimeLimit": ctypes.WINFUNCTYPE(HRESULT, BSTR)(13, "put_ExecutionTimeLimit"),
+        "put_ExecutionTimeLimit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 13,
+        },
         # get_StartBoundary -> pStart:*BSTR
-        "get_StartBoundary": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(14, "get_StartBoundary"),
+        "get_StartBoundary": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 14,
+        },
         # put_StartBoundary -> start:BSTR
-        "put_StartBoundary": ctypes.WINFUNCTYPE(HRESULT, BSTR)(15, "put_StartBoundary"),
+        "put_StartBoundary": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 15,
+        },
         # get_EndBoundary -> pEnd:*BSTR
-        "get_EndBoundary": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(16, "get_EndBoundary"),
+        "get_EndBoundary": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 16,
+        },
         # put_EndBoundary -> end:BSTR
-        "put_EndBoundary": ctypes.WINFUNCTYPE(HRESULT, BSTR)(17, "put_EndBoundary"),
+        "put_EndBoundary": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 17,
+        },
         # get_Enabled -> pEnabled:*VARIANT_BOOL
-        "get_Enabled": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(18, "get_Enabled"),
+        "get_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 18,
+        },
         # put_Enabled -> enabled:VARIANT_BOOL
-        "put_Enabled": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(19, "put_Enabled"),
+        "put_Enabled": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 19,
+        },
     }
 
 # class ITriggerCollectionImplem(windows.com.COMImplementation):
@@ -7272,31 +10998,70 @@ ITrigger._functions_ = {
 #
 ITriggerCollection._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # get_Count -> pCount:*LONG
-        "get_Count": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(7, "get_Count"),
+        "get_Count": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 7,
+        },
         # get_Item -> index:LONG, ppTrigger:**ITrigger
-        "get_Item": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITrigger))(8, "get_Item"),
+        "get_Item": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(ITrigger)),
+            "method_offset" : 8,
+        },
         # get__NewEnum -> ppEnum:**IUnknown
-        "get__NewEnum": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(9, "get__NewEnum"),
+        "get__NewEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown)),
+            "method_offset" : 9,
+        },
         # Create -> type:TASK_TRIGGER_TYPE2, ppTrigger:**ITrigger
-        "Create": ctypes.WINFUNCTYPE(HRESULT, TASK_TRIGGER_TYPE2, POINTER(ITrigger))(10, "Create"),
+        "Create": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, TASK_TRIGGER_TYPE2, POINTER(ITrigger)),
+            "method_offset" : 10,
+        },
         # Remove -> index:VARIANT
-        "Remove": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(11, "Remove"),
+        "Remove": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
+            "method_offset" : 11,
+        },
         # Clear -> 
-        "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
+        "Clear": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 12,
+        },
     }
 
 # class IWebBrowser2Implem(windows.com.COMImplementation):
@@ -7576,147 +11341,360 @@ ITriggerCollection._functions_ = {
 #
 IWebBrowser2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetTypeInfoCount -> pctinfo:*UINT
-        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        "GetTypeInfoCount": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT)),
+            "method_offset" : 3,
+        },
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        "GetTypeInfo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo)),
+            "method_offset" : 4,
+        },
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
-        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        "GetIDsOfNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID)),
+            "method_offset" : 5,
+        },
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
-        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        "Invoke": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
+            "method_offset" : 6,
+        },
         # GoBack -> 
-        "GoBack": ctypes.WINFUNCTYPE(HRESULT)(7, "GoBack"),
+        "GoBack": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
         # GoForward -> 
-        "GoForward": ctypes.WINFUNCTYPE(HRESULT)(8, "GoForward"),
+        "GoForward": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 8,
+        },
         # GoHome -> 
-        "GoHome": ctypes.WINFUNCTYPE(HRESULT)(9, "GoHome"),
+        "GoHome": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
         # GoSearch -> 
-        "GoSearch": ctypes.WINFUNCTYPE(HRESULT)(10, "GoSearch"),
+        "GoSearch": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 10,
+        },
         # Navigate -> URL:BSTR, Flags:*VARIANT, TargetFrameName:*VARIANT, PostData:*VARIANT, Headers:*VARIANT
-        "Navigate": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(11, "Navigate"),
+        "Navigate": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT)),
+            "method_offset" : 11,
+        },
         # Refresh -> 
-        "Refresh": ctypes.WINFUNCTYPE(HRESULT)(12, "Refresh"),
+        "Refresh": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 12,
+        },
         # Refresh2 -> Level:*VARIANT
-        "Refresh2": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT))(13, "Refresh2"),
+        "Refresh2": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT)),
+            "method_offset" : 13,
+        },
         # Stop -> 
-        "Stop": ctypes.WINFUNCTYPE(HRESULT)(14, "Stop"),
+        "Stop": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 14,
+        },
         # get_Application -> ppDisp:**IDispatch
-        "get_Application": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(15, "get_Application"),
+        "get_Application": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch)),
+            "method_offset" : 15,
+        },
         # get_Parent -> ppDisp:**IDispatch
-        "get_Parent": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(16, "get_Parent"),
+        "get_Parent": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch)),
+            "method_offset" : 16,
+        },
         # get_Container -> ppDisp:**IDispatch
-        "get_Container": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(17, "get_Container"),
+        "get_Container": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch)),
+            "method_offset" : 17,
+        },
         # get_Document -> ppDisp:**IDispatch
-        "get_Document": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(18, "get_Document"),
+        "get_Document": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch)),
+            "method_offset" : 18,
+        },
         # get_TopLevelContainer -> pBool:*VARIANT_BOOL
-        "get_TopLevelContainer": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(19, "get_TopLevelContainer"),
+        "get_TopLevelContainer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 19,
+        },
         # get_Type -> Type:*BSTR
-        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(20, "get_Type"),
+        "get_Type": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 20,
+        },
         # get_Left -> pl:*LONG
-        "get_Left": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(21, "get_Left"),
+        "get_Left": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 21,
+        },
         # put_Left -> Left:LONG
-        "put_Left": ctypes.WINFUNCTYPE(HRESULT, LONG)(22, "put_Left"),
+        "put_Left": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 22,
+        },
         # get_Top -> pl:*LONG
-        "get_Top": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(23, "get_Top"),
+        "get_Top": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 23,
+        },
         # put_Top -> Top:LONG
-        "put_Top": ctypes.WINFUNCTYPE(HRESULT, LONG)(24, "put_Top"),
+        "put_Top": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 24,
+        },
         # get_Width -> pl:*LONG
-        "get_Width": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(25, "get_Width"),
+        "get_Width": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 25,
+        },
         # put_Width -> Width:LONG
-        "put_Width": ctypes.WINFUNCTYPE(HRESULT, LONG)(26, "put_Width"),
+        "put_Width": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 26,
+        },
         # get_Height -> pl:*LONG
-        "get_Height": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(27, "get_Height"),
+        "get_Height": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG)),
+            "method_offset" : 27,
+        },
         # put_Height -> Height:LONG
-        "put_Height": ctypes.WINFUNCTYPE(HRESULT, LONG)(28, "put_Height"),
+        "put_Height": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 28,
+        },
         # get_LocationName -> LocationName:*BSTR
-        "get_LocationName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(29, "get_LocationName"),
+        "get_LocationName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 29,
+        },
         # get_LocationURL -> LocationURL:*BSTR
-        "get_LocationURL": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(30, "get_LocationURL"),
+        "get_LocationURL": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 30,
+        },
         # get_Busy -> pBool:*VARIANT_BOOL
-        "get_Busy": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(31, "get_Busy"),
+        "get_Busy": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 31,
+        },
         # Quit -> 
-        "Quit": ctypes.WINFUNCTYPE(HRESULT)(32, "Quit"),
+        "Quit": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 32,
+        },
         # ClientToWindow -> pcx:*INT, pcy:*INT
-        "ClientToWindow": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT), POINTER(INT))(33, "ClientToWindow"),
+        "ClientToWindow": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT), POINTER(INT)),
+            "method_offset" : 33,
+        },
         # PutProperty -> Property:BSTR, vtValue:VARIANT
-        "PutProperty": ctypes.WINFUNCTYPE(HRESULT, BSTR, VARIANT)(34, "PutProperty"),
+        "PutProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, VARIANT),
+            "method_offset" : 34,
+        },
         # GetProperty -> Property:BSTR, pvtValue:*VARIANT
-        "GetProperty": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT))(35, "GetProperty"),
+        "GetProperty": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT)),
+            "method_offset" : 35,
+        },
         # get_Name -> Name:*BSTR
-        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(36, "get_Name"),
+        "get_Name": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 36,
+        },
         # get_HWND -> pHWND:*PVOID
-        "get_HWND": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(37, "get_HWND"),
+        "get_HWND": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID)),
+            "method_offset" : 37,
+        },
         # get_FullName -> FullName:*BSTR
-        "get_FullName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(38, "get_FullName"),
+        "get_FullName": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 38,
+        },
         # get_Path -> Path:*BSTR
-        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(39, "get_Path"),
+        "get_Path": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 39,
+        },
         # get_Visible -> pBool:*VARIANT_BOOL
-        "get_Visible": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(40, "get_Visible"),
+        "get_Visible": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 40,
+        },
         # put_Visible -> Value:VARIANT_BOOL
-        "put_Visible": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(41, "put_Visible"),
+        "put_Visible": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 41,
+        },
         # get_StatusBar -> pBool:*VARIANT_BOOL
-        "get_StatusBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(42, "get_StatusBar"),
+        "get_StatusBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 42,
+        },
         # put_StatusBar -> Value:VARIANT_BOOL
-        "put_StatusBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(43, "put_StatusBar"),
+        "put_StatusBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 43,
+        },
         # get_StatusText -> StatusText:*BSTR
-        "get_StatusText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(44, "get_StatusText"),
+        "get_StatusText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
+            "method_offset" : 44,
+        },
         # put_StatusText -> StatusText:BSTR
-        "put_StatusText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(45, "put_StatusText"),
+        "put_StatusText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR),
+            "method_offset" : 45,
+        },
         # get_ToolBar -> Value:*INT
-        "get_ToolBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(46, "get_ToolBar"),
+        "get_ToolBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT)),
+            "method_offset" : 46,
+        },
         # put_ToolBar -> Value:INT
-        "put_ToolBar": ctypes.WINFUNCTYPE(HRESULT, INT)(47, "put_ToolBar"),
+        "put_ToolBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, INT),
+            "method_offset" : 47,
+        },
         # get_MenuBar -> Value:*VARIANT_BOOL
-        "get_MenuBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(48, "get_MenuBar"),
+        "get_MenuBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 48,
+        },
         # put_MenuBar -> Value:VARIANT_BOOL
-        "put_MenuBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(49, "put_MenuBar"),
+        "put_MenuBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 49,
+        },
         # get_FullScreen -> pbFullScreen:*VARIANT_BOOL
-        "get_FullScreen": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(50, "get_FullScreen"),
+        "get_FullScreen": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 50,
+        },
         # put_FullScreen -> bFullScreen:VARIANT_BOOL
-        "put_FullScreen": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(51, "put_FullScreen"),
+        "put_FullScreen": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 51,
+        },
         # Navigate2 -> URL:*VARIANT, Flags:*VARIANT, TargetFrameName:*VARIANT, PostData:*VARIANT, Headers:*VARIANT
-        "Navigate2": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(52, "Navigate2"),
+        "Navigate2": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT)),
+            "method_offset" : 52,
+        },
         # QueryStatusWB -> cmdID:DWORD, pcmdf:*DWORD
-        "QueryStatusWB": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(DWORD))(53, "QueryStatusWB"),
+        "QueryStatusWB": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(DWORD)),
+            "method_offset" : 53,
+        },
         # ExecWB -> cmdID:DWORD, cmdexecopt:DWORD, pvaIn:*VARIANT, pvaOut:*VARIANT
-        "ExecWB": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(VARIANT), POINTER(VARIANT))(54, "ExecWB"),
+        "ExecWB": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(VARIANT), POINTER(VARIANT)),
+            "method_offset" : 54,
+        },
         # ShowBrowserBar -> pvaClsid:*VARIANT, pvarShow:*VARIANT, pvarSize:*VARIANT
-        "ShowBrowserBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(55, "ShowBrowserBar"),
+        "ShowBrowserBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT)),
+            "method_offset" : 55,
+        },
         # get_ReadyState -> plReadyState:*DWORD
-        "get_ReadyState": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(56, "get_ReadyState"),
+        "get_ReadyState": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD)),
+            "method_offset" : 56,
+        },
         # get_Offline -> pbOffline:*VARIANT_BOOL
-        "get_Offline": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(57, "get_Offline"),
+        "get_Offline": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 57,
+        },
         # put_Offline -> bOffline:VARIANT_BOOL
-        "put_Offline": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(58, "put_Offline"),
+        "put_Offline": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 58,
+        },
         # get_Silent -> pbSilent:*VARIANT_BOOL
-        "get_Silent": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(59, "get_Silent"),
+        "get_Silent": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 59,
+        },
         # put_Silent -> bSilent:VARIANT_BOOL
-        "put_Silent": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(60, "put_Silent"),
+        "put_Silent": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 60,
+        },
         # get_RegisterAsBrowser -> pbRegister:*VARIANT_BOOL
-        "get_RegisterAsBrowser": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(61, "get_RegisterAsBrowser"),
+        "get_RegisterAsBrowser": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 61,
+        },
         # put_RegisterAsBrowser -> bRegister:VARIANT_BOOL
-        "put_RegisterAsBrowser": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(62, "put_RegisterAsBrowser"),
+        "put_RegisterAsBrowser": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 62,
+        },
         # get_RegisterAsDropTarget -> pbRegister:*VARIANT_BOOL
-        "get_RegisterAsDropTarget": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(63, "get_RegisterAsDropTarget"),
+        "get_RegisterAsDropTarget": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 63,
+        },
         # put_RegisterAsDropTarget -> bRegister:VARIANT_BOOL
-        "put_RegisterAsDropTarget": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(64, "put_RegisterAsDropTarget"),
+        "put_RegisterAsDropTarget": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 64,
+        },
         # get_TheaterMode -> pbRegister:*VARIANT_BOOL
-        "get_TheaterMode": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(65, "get_TheaterMode"),
+        "get_TheaterMode": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 65,
+        },
         # put_TheaterMode -> bRegister:VARIANT_BOOL
-        "put_TheaterMode": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(66, "put_TheaterMode"),
+        "put_TheaterMode": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 66,
+        },
         # get_AddressBar -> Value:*VARIANT_BOOL
-        "get_AddressBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(67, "get_AddressBar"),
+        "get_AddressBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 67,
+        },
         # put_AddressBar -> Value:VARIANT_BOOL
-        "put_AddressBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(68, "put_AddressBar"),
+        "put_AddressBar": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 68,
+        },
         # get_Resizable -> Value:*VARIANT_BOOL
-        "get_Resizable": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(69, "get_Resizable"),
+        "get_Resizable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
+            "method_offset" : 69,
+        },
         # put_Resizable -> Value:VARIANT_BOOL
-        "put_Resizable": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(70, "put_Resizable"),
+        "put_Resizable": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL),
+            "method_offset" : 70,
+        },
     }
 
 # class IEnumWbemClassObjectImplem(windows.com.COMImplementation):
@@ -7744,21 +11722,45 @@ IWebBrowser2._functions_ = {
 #
 IEnumWbemClassObject._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(3, "Reset"),
+        "Reset": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 3,
+        },
         # Next -> lTimeout:LONG, uCount:ULONG, apObjects:**IWbemClassObject, puReturned:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG, POINTER(IWbemClassObject), POINTER(ULONG))(4, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG, POINTER(IWbemClassObject), POINTER(ULONG)),
+            "method_offset" : 4,
+        },
         # NextAsync -> uCount:ULONG, pSink:*IWbemObjectSink
-        "NextAsync": ctypes.WINFUNCTYPE(HRESULT, ULONG, IWbemObjectSink)(5, "NextAsync"),
+        "NextAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, ULONG, IWbemObjectSink),
+            "method_offset" : 5,
+        },
         # Clone -> ppEnum:**IEnumWbemClassObject
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumWbemClassObject))(6, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumWbemClassObject)),
+            "method_offset" : 6,
+        },
         # Skip -> lTimeout:LONG, nCount:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG)(7, "Skip"),
+        "Skip": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG),
+            "method_offset" : 7,
+        },
     }
 
 # class IWbemCallResultImplem(windows.com.COMImplementation):
@@ -7782,19 +11784,40 @@ IEnumWbemClassObject._functions_ = {
 #
 IWbemCallResult._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetResultObject -> lTimeout:LONG, ppResultObject:**IWbemClassObject
-        "GetResultObject": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "GetResultObject"),
+        "GetResultObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject)),
+            "method_offset" : 3,
+        },
         # GetResultString -> lTimeout:LONG, pstrResultString:*BSTR
-        "GetResultString": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(4, "GetResultString"),
+        "GetResultString": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR)),
+            "method_offset" : 4,
+        },
         # GetResultServices -> lTimeout:LONG, ppServices:**IWbemServices
-        "GetResultServices": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemServices))(5, "GetResultServices"),
+        "GetResultServices": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemServices)),
+            "method_offset" : 5,
+        },
         # GetCallStatus -> lTimeout:LONG, plStatus:*LONG
-        "GetCallStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(LONG))(6, "GetCallStatus"),
+        "GetCallStatus": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(LONG)),
+            "method_offset" : 6,
+        },
     }
 
 # class IWbemClassObjectImplem(windows.com.COMImplementation):
@@ -7898,59 +11921,140 @@ IWbemCallResult._functions_ = {
 #
 IWbemClassObject._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetQualifierSet -> ppQualSet:**IWbemQualifierSet
-        "GetQualifierSet": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemQualifierSet))(3, "GetQualifierSet"),
+        "GetQualifierSet": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemQualifierSet)),
+            "method_offset" : 3,
+        },
         # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
-        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(4, "Get"),
+        "Get": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG)),
+            "method_offset" : 4,
+        },
         # Put -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, Type:CIMTYPE
-        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), CIMTYPE)(5, "Put"),
+        "Put": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), CIMTYPE),
+            "method_offset" : 5,
+        },
         # Delete -> wszName:LPCWSTR
-        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Delete"),
+        "Delete": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 6,
+        },
         # GetNames -> wszQualifierName:LPCWSTR, lFlags:LONG, pQualifierVal:*VARIANT, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(POINTER(SAFEARRAY)))(7, "GetNames"),
+        "GetNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(POINTER(SAFEARRAY))),
+            "method_offset" : 7,
+        },
         # BeginEnumeration -> lEnumFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(8, "BeginEnumeration"),
+        "BeginEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 8,
+        },
         # Next -> lFlags:LONG, strName:*BSTR, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(9, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG)),
+            "method_offset" : 9,
+        },
         # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(10, "EndEnumeration"),
+        "EndEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 10,
+        },
         # GetPropertyQualifierSet -> wszProperty:LPCWSTR, ppQualSet:**IWbemQualifierSet
-        "GetPropertyQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(11, "GetPropertyQualifierSet"),
+        "GetPropertyQualifierSet": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet)),
+            "method_offset" : 11,
+        },
         # Clone -> ppCopy:**IWbemClassObject
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemClassObject))(12, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemClassObject)),
+            "method_offset" : 12,
+        },
         # GetObjectText -> lFlags:LONG, pstrObjectText:*BSTR
-        "GetObjectText": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(13, "GetObjectText"),
+        "GetObjectText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR)),
+            "method_offset" : 13,
+        },
         # SpawnDerivedClass -> lFlags:LONG, ppNewClass:**IWbemClassObject
-        "SpawnDerivedClass": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(14, "SpawnDerivedClass"),
+        "SpawnDerivedClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject)),
+            "method_offset" : 14,
+        },
         # SpawnInstance -> lFlags:LONG, ppNewInstance:**IWbemClassObject
-        "SpawnInstance": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(15, "SpawnInstance"),
+        "SpawnInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject)),
+            "method_offset" : 15,
+        },
         # CompareTo -> lFlags:LONG, pCompareTo:*IWbemClassObject
-        "CompareTo": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject)(16, "CompareTo"),
+        "CompareTo": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject),
+            "method_offset" : 16,
+        },
         # GetPropertyOrigin -> wszName:LPCWSTR, pstrClassName:*BSTR
-        "GetPropertyOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(17, "GetPropertyOrigin"),
+        "GetPropertyOrigin": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR)),
+            "method_offset" : 17,
+        },
         # InheritsFrom -> strAncestor:LPCWSTR
-        "InheritsFrom": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(18, "InheritsFrom"),
+        "InheritsFrom": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 18,
+        },
         # GetMethod -> wszName:LPCWSTR, lFlags:LONG, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
-        "GetMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(IWbemClassObject), POINTER(IWbemClassObject))(19, "GetMethod"),
+        "GetMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(IWbemClassObject), POINTER(IWbemClassObject)),
+            "method_offset" : 19,
+        },
         # PutMethod -> wszName:LPCWSTR, lFlags:LONG, pInSignature:*IWbemClassObject, pOutSignature:*IWbemClassObject
-        "PutMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, IWbemClassObject, IWbemClassObject)(20, "PutMethod"),
+        "PutMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, IWbemClassObject, IWbemClassObject),
+            "method_offset" : 20,
+        },
         # DeleteMethod -> wszName:LPCWSTR
-        "DeleteMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(21, "DeleteMethod"),
+        "DeleteMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 21,
+        },
         # BeginMethodEnumeration -> lEnumFlags:LONG
-        "BeginMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(22, "BeginMethodEnumeration"),
+        "BeginMethodEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 22,
+        },
         # NextMethod -> lFlags:LONG, pstrName:*BSTR, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
-        "NextMethod": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(IWbemClassObject), POINTER(IWbemClassObject))(23, "NextMethod"),
+        "NextMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(IWbemClassObject), POINTER(IWbemClassObject)),
+            "method_offset" : 23,
+        },
         # EndMethodEnumeration -> 
-        "EndMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT)(24, "EndMethodEnumeration"),
+        "EndMethodEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 24,
+        },
         # GetMethodQualifierSet -> wszMethod:LPCWSTR, ppQualSet:**IWbemQualifierSet
-        "GetMethodQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(25, "GetMethodQualifierSet"),
+        "GetMethodQualifierSet": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet)),
+            "method_offset" : 25,
+        },
         # GetMethodOrigin -> wszMethodName:LPCWSTR, pstrClassName:*BSTR
-        "GetMethodOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(26, "GetMethodOrigin"),
+        "GetMethodOrigin": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR)),
+            "method_offset" : 26,
+        },
     }
 
 # class IWbemContextImplem(windows.com.COMImplementation):
@@ -7994,29 +12098,65 @@ IWbemClassObject._functions_ = {
 #
 IWbemContext._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Clone -> ppNewCopy:**IWbemContext
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemContext))(3, "Clone"),
+        "Clone": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemContext)),
+            "method_offset" : 3,
+        },
         # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(4, "GetNames"),
+        "GetNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY))),
+            "method_offset" : 4,
+        },
         # BeginEnumeration -> lFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(5, "BeginEnumeration"),
+        "BeginEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 5,
+        },
         # Next -> lFlags:LONG, pstrName:*BSTR, pValue:*VARIANT
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT))(6, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT)),
+            "method_offset" : 6,
+        },
         # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(7, "EndEnumeration"),
+        "EndEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 7,
+        },
         # SetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
-        "SetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(8, "SetValue"),
+        "SetValue": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT)),
+            "method_offset" : 8,
+        },
         # GetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
-        "GetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(9, "GetValue"),
+        "GetValue": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT)),
+            "method_offset" : 9,
+        },
         # DeleteValue -> wszName:LPCWSTR, lFlags:LONG
-        "DeleteValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG)(10, "DeleteValue"),
+        "DeleteValue": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG),
+            "method_offset" : 10,
+        },
         # DeleteAll -> 
-        "DeleteAll": ctypes.WINFUNCTYPE(HRESULT)(11, "DeleteAll"),
+        "DeleteAll": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 11,
+        },
     }
 
 # class IWbemLocatorImplem(windows.com.COMImplementation):
@@ -8028,13 +12168,25 @@ IWbemContext._functions_ = {
 #
 IWbemLocator._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # ConnectServer -> strNetworkResource:BSTR, strUser:BSTR, strPassword:BSTR, strLocale:BSTR, lSecurityFlags:LONG, strAuthority:BSTR, pCtx:*IWbemContext, ppNamespace:**IWbemServices
-        "ConnectServer": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, BSTR, BSTR, LONG, BSTR, IWbemContext, POINTER(IWbemServices))(3, "ConnectServer"),
+        "ConnectServer": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, BSTR, BSTR, LONG, BSTR, IWbemContext, POINTER(IWbemServices)),
+            "method_offset" : 3,
+        },
     }
 
 # class IWbemObjectSinkImplem(windows.com.COMImplementation):
@@ -8050,15 +12202,30 @@ IWbemLocator._functions_ = {
 #
 IWbemObjectSink._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Indicate -> lObjectCount:LONG, apObjArray:**IWbemClassObject
-        "Indicate": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "Indicate"),
+        "Indicate": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject)),
+            "method_offset" : 3,
+        },
         # SetStatus -> lFlags:LONG, hResult:HRESULT, strParam:BSTR, pObjParam:*IWbemClassObject
-        "SetStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject)(4, "SetStatus"),
+        "SetStatus": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject),
+            "method_offset" : 4,
+        },
     }
 
 # class IWbemObjectTextSrcImplem(windows.com.COMImplementation):
@@ -8074,15 +12241,30 @@ IWbemObjectSink._functions_ = {
 #
 IWbemObjectTextSrc._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # GetText -> lFlags:LONG, pObj:*IWbemClassObject, uObjTextFormat:ULONG, pCtx:*IWbemContext, strText:*BSTR
-        "GetText": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject, ULONG, IWbemContext, POINTER(BSTR))(3, "GetText"),
+        "GetText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject, ULONG, IWbemContext, POINTER(BSTR)),
+            "method_offset" : 3,
+        },
         # CreateFromText -> lFlags:LONG, strText:BSTR, uObjTextFormat:ULONG, pCtx:*IWbemContext, pNewObj:**IWbemClassObject
-        "CreateFromText": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, ULONG, IWbemContext, POINTER(IWbemClassObject))(4, "CreateFromText"),
+        "CreateFromText": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, ULONG, IWbemContext, POINTER(IWbemClassObject)),
+            "method_offset" : 4,
+        },
     }
 
 # class IWbemQualifierSetImplem(windows.com.COMImplementation):
@@ -8118,25 +12300,55 @@ IWbemObjectTextSrc._functions_ = {
 #
 IWbemQualifierSet._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, plFlavor:*LONG
-        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(LONG))(3, "Get"),
+        "Get": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(LONG)),
+            "method_offset" : 3,
+        },
         # Put -> wszName:LPCWSTR, pVal:*VARIANT, lFlavor:LONG
-        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(VARIANT), LONG)(4, "Put"),
+        "Put": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(VARIANT), LONG),
+            "method_offset" : 4,
+        },
         # Delete -> wszName:LPCWSTR
-        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Delete"),
+        "Delete": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR),
+            "method_offset" : 5,
+        },
         # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(6, "GetNames"),
+        "GetNames": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY))),
+            "method_offset" : 6,
+        },
         # BeginEnumeration -> lFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(7, "BeginEnumeration"),
+        "BeginEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
+            "method_offset" : 7,
+        },
         # Next -> lFlags:LONG, pstrName:*BSTR, pVal:*VARIANT, plFlavor:*LONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(LONG))(8, "Next"),
+        "Next": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(LONG)),
+            "method_offset" : 8,
+        },
         # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(9, "EndEnumeration"),
+        "EndEnumeration": {
+            "type": ctypes.WINFUNCTYPE(HRESULT),
+            "method_offset" : 9,
+        },
     }
 
 # class IWbemServicesImplem(windows.com.COMImplementation):
@@ -8236,56 +12448,134 @@ IWbemQualifierSet._functions_ = {
 #
 IWbemServices._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        "QueryInterface": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
+            "method_offset" : 0,
+        },
         # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        "AddRef": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 1,
+        },
         # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        "Release": {
+            "type": ctypes.WINFUNCTYPE(ULONG),
+            "method_offset" : 2,
+        },
         # OpenNamespace -> strNamespace:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppWorkingNamespace:**IWbemServices, ppResult:**IWbemCallResult
-        "OpenNamespace": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemServices), POINTER(IWbemCallResult))(3, "OpenNamespace"),
+        "OpenNamespace": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemServices), POINTER(IWbemCallResult)),
+            "method_offset" : 3,
+        },
         # CancelAsyncCall -> pSink:*IWbemObjectSink
-        "CancelAsyncCall": ctypes.WINFUNCTYPE(HRESULT, IWbemObjectSink)(4, "CancelAsyncCall"),
+        "CancelAsyncCall": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IWbemObjectSink),
+            "method_offset" : 4,
+        },
         # QueryObjectSink -> lFlags:LONG, ppResponseHandler:**IWbemObjectSink
-        "QueryObjectSink": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemObjectSink))(5, "QueryObjectSink"),
+        "QueryObjectSink": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemObjectSink)),
+            "method_offset" : 5,
+        },
         # GetObject -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppObject:**IWbemClassObject, ppCallResult:**IWbemCallResult
-        "GetObject": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(6, "GetObject"),
+        "GetObject": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemClassObject), POINTER(IWbemCallResult)),
+            "method_offset" : 6,
+        },
         # GetObjectAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "GetObjectAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(7, "GetObjectAsync"),
+        "GetObjectAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 7,
+        },
         # PutClass -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "PutClass": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(8, "PutClass"),
+        "PutClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult)),
+            "method_offset" : 8,
+        },
         # PutClassAsync -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "PutClassAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(9, "PutClassAsync"),
+        "PutClassAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 9,
+        },
         # DeleteClass -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "DeleteClass": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(10, "DeleteClass"),
+        "DeleteClass": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult)),
+            "method_offset" : 10,
+        },
         # DeleteClassAsync -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "DeleteClassAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(11, "DeleteClassAsync"),
+        "DeleteClassAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 11,
+        },
         # CreateClassEnum -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "CreateClassEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(12, "CreateClassEnum"),
+        "CreateClassEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject)),
+            "method_offset" : 12,
+        },
         # CreateClassEnumAsync -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "CreateClassEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(13, "CreateClassEnumAsync"),
+        "CreateClassEnumAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 13,
+        },
         # PutInstance -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "PutInstance": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(14, "PutInstance"),
+        "PutInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult)),
+            "method_offset" : 14,
+        },
         # PutInstanceAsync -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "PutInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(15, "PutInstanceAsync"),
+        "PutInstanceAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 15,
+        },
         # DeleteInstance -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "DeleteInstance": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(16, "DeleteInstance"),
+        "DeleteInstance": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult)),
+            "method_offset" : 16,
+        },
         # DeleteInstanceAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "DeleteInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(17, "DeleteInstanceAsync"),
+        "DeleteInstanceAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 17,
+        },
         # CreateInstanceEnum -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "CreateInstanceEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(18, "CreateInstanceEnum"),
+        "CreateInstanceEnum": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject)),
+            "method_offset" : 18,
+        },
         # CreateInstanceEnumAsync -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "CreateInstanceEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(19, "CreateInstanceEnumAsync"),
+        "CreateInstanceEnumAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 19,
+        },
         # ExecQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "ExecQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(20, "ExecQuery"),
+        "ExecQuery": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject)),
+            "method_offset" : 20,
+        },
         # ExecQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "ExecQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(21, "ExecQueryAsync"),
+        "ExecQueryAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 21,
+        },
         # ExecNotificationQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "ExecNotificationQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(22, "ExecNotificationQuery"),
+        "ExecNotificationQuery": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject)),
+            "method_offset" : 22,
+        },
         # ExecNotificationQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "ExecNotificationQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(23, "ExecNotificationQueryAsync"),
+        "ExecNotificationQueryAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink),
+            "method_offset" : 23,
+        },
         # ExecMethod -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, ppOutParams:**IWbemClassObject, ppCallResult:**IWbemCallResult
-        "ExecMethod": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(24, "ExecMethod"),
+        "ExecMethod": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, POINTER(IWbemClassObject), POINTER(IWbemCallResult)),
+            "method_offset" : 24,
+        },
         # ExecMethodAsync -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, pResponseHandler:*IWbemObjectSink
-        "ExecMethodAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, IWbemObjectSink)(25, "ExecMethodAsync"),
+        "ExecMethodAsync": {
+            "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, IWbemObjectSink),
+            "method_offset" : 25,
+        },
     }
 

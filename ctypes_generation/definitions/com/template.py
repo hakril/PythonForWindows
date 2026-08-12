@@ -31,9 +31,12 @@ class COMInterface(ctypes.c_void_p):
 
     def __getattr__(self, name):
         if name in self._functions_:
-            winfunc = self._functions_[name]
+            funcdefinition = self._functions_[name]
             # Hacking the HRESULT _check_retval_ and
             # letting COMInterface.errcheck do the work of validating / raising
+            # https://docs.python.org/2/library/ctypes.html#ctypes.PYFUNCTYPE
+            # prototype(vtbl_index, name[, paramflags[, iid]])
+            winfunc = funcdefinition["type"](funcdefinition["method_offset"], name)
             winfunc.restype = COMHRESULT
             winfunc.errcheck = self.errcheck
             return functools.partial(winfunc, self)
