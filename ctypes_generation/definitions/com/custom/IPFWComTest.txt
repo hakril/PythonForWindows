@@ -1,0 +1,24 @@
+@IID b8b44ed5-eb34-497b-a79d-1515718d83f6
+typedef struct IPFWComTestVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            IPFWComTest * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            IPFWComTest * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            IPFWComTest * This);
+
+        HRESULT ( STDMETHODCALLTYPE *TestFunc1)(
+            IPFWComTest * This,
+            ULONG param,
+            ULONG *result);
+
+        END_INTERFACE
+    } IPFWComTestVtbl;

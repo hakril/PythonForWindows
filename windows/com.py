@@ -81,7 +81,7 @@ class MemoryIStream(gdef.IStream):
     @classmethod
     def create(cls):
         self = cls()
-        windows.winproxy.CreateStreamOnHGlobal(ppstm=self)
+        windows.winproxy.CreateStreamOnHGlobal(fDeleteOnRelease=True, ppstm=self)
         return self
 
 def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
@@ -334,8 +334,7 @@ class COMImplementation(object):
         return int(rpr[len("<COM method offset "): rpr.index(":")])
 
     def extract_methods_order(self, interface):
-        index_and_method = sorted((self.get_index_of_method(m),name, m) for name, m in interface._functions_.items())
-        return index_and_method
+        return sorted(interface._functions_.items(), key=lambda kv: kv[1]["method_offset"])
 
 
     def _get_implemented_interfaces(self):
@@ -378,18 +377,19 @@ class COMImplementation(object):
     def _create_vtable(self, interface):
         implems = []
         names = []
-        for index, name, method in self.extract_methods_order(interface):
-            explicit_func_name = "{}_{}".format(interface.__name__, name)
+        for methodname, methodinfos in self.extract_methods_order(interface):
+            explicit_func_name = "{}_{}".format(interface.__name__, methodname)
             # Explicit name (IPersist_GetClassID)
             func_implem = getattr(self, explicit_func_name, None)
             if func_implem is None:
                 # Implicit name (GetClassID) # Collision have been checked in verify_interfaces_implem()
-                func_implem = getattr(self, name, None)
+                func_implem = getattr(self, methodname, None)
 
+            methodtype = methodinfos["type"]
             #'this' is a COM-interface of the type we are implementing
-            types = [method.restype, interface] + list(method.argtypes)
+            types = [methodtype._restype_, interface] + list(methodtype._argtypes_)
             implems.append(ctypes.WINFUNCTYPE(*types)(func_implem))
-            names.append(name)
+            names.append(methodname)
         class Vtable(ctypes.Structure):
             _fields_ = [(name, ctypes.c_void_p) for name in names]
         vtable = Vtable(*[ctypes.cast(x, ctypes.c_void_p) for x in implems])

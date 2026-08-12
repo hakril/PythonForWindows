@@ -207,3 +207,26 @@ def test_com_multiple_implementation_with_collision():
     idlesetting.Invoke(0, None, 0, 0, None, None, None, None)
     assert obj.itaskfoldercollection_invoke == 2
     assert obj.iidlesettings_invoke == 1
+
+
+class IPFWCOMTestImplem(windows.com.COMImplementation):
+    IMPLEMENT = [
+        gdef.IPFWComTest
+    ]
+    def __init__(self):
+        super(IPFWCOMTestImplem, self).__init__()
+        self.target = None
+
+    def TestFunc1(self, This, param, result):
+        if param < 4:
+            return self.target.TestFunc1(param + 1, result)
+        result[0] = 1234
+        return gdef.S_OK
+
+def test_com_interface_reentry():
+    """Test that COMInterface ar reentrant. Will crash cpython if not :)"""
+    impl = IPFWCOMTestImplem()
+    res = gdef.ULONG()
+    impl.target = impl.as_interface(gdef.IPFWComTest)
+    impl.as_interface(gdef.IPFWComTest).TestFunc1(0, res)
+    assert res.value == 1234

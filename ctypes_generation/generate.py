@@ -266,7 +266,7 @@ class ParsedDirectory(object):
     def __init__(self, filetype, src, recurse=False):
         if not recurse:
             if os.path.isdir(src):
-                srcglob = pjoin(src, "*.txt")
+                srcglob = pjoin(src, "**.txt")
             else:
                 srcglob = src
             files = glob.glob(srcglob)
@@ -582,36 +582,42 @@ class COMCtypesGenerator(CtypesGenerator):
             self.emitline("#")
 
     def emit_com_interface_functions(self, cominterface):
-        indent = " " * 8
         for method_nb, method in enumerate(cominterface.methods):
-            args_to_define = method.args[1:] # ctypes doesnt not need the This
-            name = method.name
-            params = ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])
-            self.emitline(indent + "# {name} -> {params}".format(name=name, params=params))
-
-            str_args = []
-            for arg in args_to_define:
-                if arg.type == "void" and arg.byreflevel > 0:
-                    arg = type(arg)("PVOID", arg.byreflevel - 1, arg.name)
-                atype = arg.type
-                byreflevel = arg.byreflevel
-                if atype in self.generated_interfaces_names:
-                    # If the parameter is a COM interface, remove a *
-                    # (as PFW ComInterface are PVOID)
-                    byreflevel = arg.byreflevel - 1
-                    if atype in self.IGNORED_INTERFACE:
-                        # If the interface if ignored -> replace by a raw pointer
-                        atype = "PVOID"
-
-                for i in range(byreflevel):
-                    atype = "POINTER({0})".format(atype)
-                str_args.append(atype)
-
-            params = ", ".join([method.ret_type] + str_args)
-            ctypes_functype = 'WINFUNCTYPE' if method.functype == 'stdcall' else 'CFUNCTYPE'
-            self.emitline(indent + '"{0}": ctypes.{functype}({1})({2}, "{0}"),'.format(name, params, method_nb, functype=ctypes_functype))
+            self.emit_com_interface_function(method_nb, method, indent=" " * 8)
         return
 
+    def emit_com_interface_function(self, method_nb, method, indent=""):
+        args_to_define = method.args[1:] # ctypes doesnt not need the This
+        name = method.name
+        params = ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])
+        self.emitline(indent + "# {name} -> {params}".format(name=name, params=params))
+
+        str_args = []
+        for arg in args_to_define:
+            if arg.type == "void" and arg.byreflevel > 0:
+                arg = type(arg)("PVOID", arg.byreflevel - 1, arg.name)
+            atype = arg.type
+            byreflevel = arg.byreflevel
+            if atype in self.generated_interfaces_names:
+                # If the parameter is a COM interface, remove a *
+                # (as PFW ComInterface are PVOID)
+                byreflevel = arg.byreflevel - 1
+                if atype in self.IGNORED_INTERFACE:
+                    # If the interface if ignored -> replace by a raw pointer
+                    atype = "PVOID"
+
+            for i in range(byreflevel):
+                atype = "POINTER({0})".format(atype)
+            str_args.append(atype)
+
+        params = ", ".join([method.ret_type] + str_args)
+        ctypes_functype = 'WINFUNCTYPE' if method.functype == 'stdcall' else 'CFUNCTYPE'
+        # We cannot directly emit an instanciated WINFUNCTYPE/CFUNCTYPE that we reuse as it would break reentry
+        # Generate the type/offset & let COMInterface.__getattr__ instanciate the function
+        self.emitline(indent + '"{0}": {{'.format(method.name))
+        self.emitline(indent + '    "type": ctypes.{functype}({params}),'.format(params=params, functype=ctypes_functype))
+        self.emitline(indent + '    "method_offset" : {method_nb},'.format(method_nb=method_nb))
+        self.emitline(indent + '},')
 
     def parse_iid(self, iid_str):
         part_iid = iid_str.split("-")
@@ -908,8 +914,8 @@ class ModuleGenerator(object):
         print("Missing name <{0}> in file <{1}>".format(import_, node.filename))
         self.missing_interfaces.append((import_, node))
 
-    def generate(self):
-        self.parse_source_directory()
+    def generate(self, recurse=False):
+        self.parse_source_directory(recurse=recurse)
         # Flatten the graph
         template_exports = self.get_template_exports()
         if template_exports:
@@ -975,7 +981,7 @@ definemodulegenerator = ModuleGenerator("windef", DefinitionParsedFile, DefineCt
 #  ValueError: Missing dependancy <CTL_CODE> of <DefinitionParsedFile "XXX">
 # Give a nive way to the template to give its list of exports ?
 definemodulegenerator.get_template_exports = lambda : ["CTL_CODE"]
-definemodulegenerator.generate()
+definemodulegenerator.generate(recurse=True)
 definemodulegenerator.generate_doc(from_here(r"..\docs\source\windef_generated.rst"))
 
 print("== Generating NTSTATUS ==")

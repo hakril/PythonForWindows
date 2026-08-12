@@ -895,6 +895,14 @@ Interfaces
     .. method:: CreateInstance
 
 
+.. class:: IPFWComTest
+
+    .. method:: QueryInterface
+    .. method:: AddRef
+    .. method:: Release
+    .. method:: TestFunc1
+
+
 .. class:: IBindCtx
 
     .. method:: QueryInterface
