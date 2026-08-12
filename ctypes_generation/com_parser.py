@@ -15,7 +15,7 @@ class WinComParser(Parser):
             "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
             "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string",
             "__RPC__deref_out_ecount_full_opt", "__out_ecount_part", "__deref_out_range", "__out_bcount_part",
-            "_Outptr_result_buffer_"]
+            "_Outptr_result_buffer_", "_Out_writes_opt_", "_Out_writes_", "_In_reads_opt_", "_In_reads_", "_Out_writes_bytes_opt_", "_Out_writes_bytes_", "_In_reads_bytes_"]
 
     def __init__(self, data):
         # data = self.initial_processing(data)
@@ -50,6 +50,11 @@ class WinComParser(Parser):
         if type_name.value.startswith("_"):
             print("type_name = <{0}> might be a PARAM_INFO".format(type_name.value))
 
+        if type_name.value == "bool":
+            type_name_value = "BOOL" # Autopromote bool to BOOL
+        else:
+            type_name_value = type_name.value
+
         while type(self.peek()) == StarToken:
             byreflevel += 1
             discard_star = self.next_token()
@@ -58,7 +63,7 @@ class WinComParser(Parser):
             raise ParsingError("COM PARSING: argument decl should finish by <,> or <)> (arg {0})".format(type_name.value))
         if type(self.peek()) == CommaToken:
             self.assert_token_type(CommaToken)
-        return type_name.value, byreflevel, arg_name.value
+        return type_name_value, byreflevel, arg_name.value
 
     def parse_method(self):
         ret_type = self.assert_token_type(NameToken)
@@ -94,6 +99,8 @@ class WinComParser(Parser):
         assert stddef_macro.value in ("STDMETHOD", "STDMETHODV", "STDMETHOD_"), "Unknown COM definition macro : {0}".format(stddef_macro)
         if stddef_macro.value == "STDMETHOD_":
             ret_type = self.assert_token_type(NameToken).value
+            if ret_type == "bool":
+                ret_type = "BOOL" # Make a self._promote_native_type(name) ?
             self.assert_token_type(CommaToken)
             method_name = self.assert_token_type(NameToken)
         else: # STDMETHOD(QueryInterface) | STDMETHODV(Name)(Arg, Arg, ...)
