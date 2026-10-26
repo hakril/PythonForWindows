@@ -5,10 +5,10 @@ from .pfwtest import *
 
 @cross_heaven_gates # windows.system.handles
 def test_handle_process_id():
-    handle_with_process = [h for h in windows.system.handles if h.dwProcessId]
+    handle_with_process = [h for h in windows.system.handles if h.pid]
     handle = handle_with_process[-1]
     proc = handle.process
-    assert proc.pid == handle.dwProcessId == handle.pid
+    assert proc.pid == handle.UniqueProcessId == handle.pid
 
 @cross_heaven_gates # windows.current_process.handles
 def test_local_handle_type():
