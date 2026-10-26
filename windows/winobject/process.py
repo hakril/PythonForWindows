@@ -581,7 +581,7 @@ class Process(utils.AutoHandle):
     @property # Document ?
     def handles(self):
         pid = self.pid
-        return [h for h in windows.system.handles if h.dwProcessId == pid]
+        return [h for h in windows.system.handles if h.pid == pid]
 
     def __del__(self):
         # sys.path is not None -> check if python shutdown
