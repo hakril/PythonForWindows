@@ -20,15 +20,15 @@ class BaseSystemHandle(object):
         :type: :class:`WinProcess <windows.winobject.process.WinProcess>`"""
         # "TODO: something smart ? :D"
         # return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]
-        return windows.WinProcess(pid=self.dwProcessId)
+        return windows.WinProcess(pid=self.pid)
 
     @property
     def pid(self):
-        return self.dwProcessId
+        raise NotImplementedError("{}.pid".format(type(self)))
 
     @property
     def value(self):
-        return self.wValue
+        raise NotImplementedError("{}.value".format(type(self)))
 
 
     @windows.utils.fixedpropety
@@ -85,10 +85,10 @@ class BaseSystemHandle(object):
         """A local copy of the handle, acquired with ``DuplicateHandle``
 
         :type: :class:`int`"""
-        if self.dwProcessId == windows.current_process.pid:
-            return self.wValue
+        if self.pid == windows.current_process.pid:
+            return self.value
         res = gdef.HANDLE()
-        winproxy.DuplicateHandle(self.process.handle, self.wValue, windows.current_process.handle, ctypes.byref(res), dwOptions=gdef.DUPLICATE_SAME_ACCESS)
+        winproxy.DuplicateHandle(self.process.handle, self.value, windows.current_process.handle, ctypes.byref(res), dwOptions=gdef.DUPLICATE_SAME_ACCESS)
         return res.value
 
     def description(self):
@@ -99,47 +99,78 @@ class BaseSystemHandle(object):
         return descr_func()
 
     def description_Process(self):
-        proc = windows.WinProcess(handle=self.wValue)
+        proc = windows.WinProcess(handle=self.value)
         res = str(proc)
         del proc._handle
         return res
 
     def description_Thread(self):
-        thread = windows.WinThread(handle=self.wValue)
+        thread = windows.WinThread(handle=self.value)
         res = str(thread)
         del thread._handle
         return res
 
     def __repr__(self):
-        return "<{0} value=<0x{1:x}> in process pid={2}>".format(type(self).__name__, self.wValue, self.dwProcessId)
+        return "<{0} value=<0x{1:x}> in process pid={2}>".format(type(self).__name__, self.value, self.pid)
 
     def __del__(self):
-        if self.dwProcessId == current_process_pid:
+        if self.pid == current_process_pid:
             return
         if hasattr(self, "_local_handle"):
             return self._close_function(self._local_handle)
 
 class Handle(gdef.SYSTEM_HANDLE, BaseSystemHandle):
-    pass
+    @property
+    def pid(self):
+        return self.dwProcessId
+
+    @property
+    def value(self):
+        return self.wValue
 
 class HandleWow64(gdef.SYSTEM_HANDLE64, BaseSystemHandle):
-    pass # For wow64 process
+    @property
+    def pid(self):
+        return self.dwProcessId
+
+    @property
+    def value(self):
+        return self.wValue
+
+
+class HandleEx(gdef.SYSTEM_HANDLE_EX, BaseSystemHandle):
+    @property
+    def pid(self):
+        return self.UniqueProcessId
+
+    @property
+    def value(self):
+        return self.HandleValue
+
+class HandleExWow64(gdef.SYSTEM_HANDLE_EX64, BaseSystemHandle):
+    @property
+    def pid(self):
+        return self.UniqueProcessId
+
+    @property
+    def value(self):
+        return self.HandleValue
 
 def enumerate_handles():
     if windows.current_process.is_wow_64:
         return enumerate_handles_syswow64()
     size_needed = gdef.ULONG()
     # Should at least be sizeof(gdef.SYSTEM_HANDLE_INFORMATION)
-    tmp_buffer = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION)()
+    tmp_buffer = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION_EX)()
     try:
-        winproxy.NtQuerySystemInformation(gdef.SystemHandleInformation, tmp_buffer, tmp_buffer.real_size, ReturnLength=ctypes.byref(size_needed))
+        winproxy.NtQuerySystemInformation(gdef.SystemExtendedHandleInformation, tmp_buffer, tmp_buffer.real_size, ReturnLength=ctypes.byref(size_needed))
     except WindowsError as e:
         pass
     size = size_needed.value + 0x1000 # In case we have some more handle created
-    buf = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION)(size=size)
+    buf = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION_EX)(size=size)
     size_needed.value = 0
-    winproxy.NtQuerySystemInformation(gdef.SystemHandleInformation, buf, buf.real_size, ReturnLength=ctypes.byref(size_needed))
-    handle_array = windows.utils.resized_array(buf[0].Handles, buf[0].HandleCount, Handle)
+    winproxy.NtQuerySystemInformation(gdef.SystemExtendedHandleInformation, buf, buf.real_size, ReturnLength=ctypes.byref(size_needed))
+    handle_array = windows.utils.resized_array(buf[0].Handles, buf[0].HandleCount, HandleEx)
     return list(handle_array)
 
 
@@ -148,16 +179,16 @@ def enumerate_handles_syswow64():
         raise NotImplementedError("Crossing heaven gate x86 -> arm64 not implemented")
     size_needed = gdef.ULONG()
     # Should at least be sizeof(gdef.SYSTEM_HANDLE_INFORMATION)
-    tmp_buffer = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION64)()
+    tmp_buffer = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION_EX64)()
     try:
-        windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemHandleInformation, tmp_buffer, tmp_buffer.real_size, ReturnLength=ctypes.byref(size_needed))
+        windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemExtendedHandleInformation, tmp_buffer, tmp_buffer.real_size, ReturnLength=ctypes.byref(size_needed))
     except WindowsError as e:
         pass
     size = size_needed.value + 0x1000 # In case we have some more handle created
-    buf = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION64)(size=size)
+    buf = windows.utils.BUFFER(gdef.SYSTEM_HANDLE_INFORMATION_EX64)(size=size)
     size_needed.value = 0
-    windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemHandleInformation, buf, buf.real_size, ReturnLength=ctypes.byref(size_needed))
-    handle_array = windows.utils.resized_array(buf[0].Handles, buf[0].HandleCount, HandleWow64)
+    windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemExtendedHandleInformation, buf, buf.real_size, ReturnLength=ctypes.byref(size_needed))
+    handle_array = windows.utils.resized_array(buf[0].Handles, buf[0].HandleCount, HandleExWow64)
     return list(handle_array)
 
 

@@ -1,0 +1,76 @@
+// SystemHandleInformation
+
+typedef struct _SYSTEM_HANDLE
+{
+    DWORD    dwProcessId;
+    BYTE     bObjectType;
+    BYTE     bFlags;
+    WORD     wValue;
+    PVOID    pAddress;
+    DWORD    GrantedAccess;
+}
+SYSTEM_HANDLE;
+
+typedef struct _SYSTEM_HANDLE64
+{
+    DWORD    dwProcessId;
+    BYTE     bObjectType;
+    BYTE     bFlags;
+    WORD     wValue;
+    ULONG64    pAddress;
+    DWORD    GrantedAccess;
+} SYSTEM_HANDLE64;
+
+
+typedef struct _SYSTEM_HANDLE_INFORMATION
+{
+    ULONG HandleCount;
+    SYSTEM_HANDLE Handles[1];
+} SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
+
+typedef struct _SYSTEM_HANDLE_INFORMATION64
+{
+    ULONG HandleCount;
+    SYSTEM_HANDLE64 Handles[1];
+} SYSTEM_HANDLE_INFORMATION64, *PSYSTEM_HANDLE_INFORMATION64;
+
+// SystemExtendedHandleInformation
+
+typedef struct _SYSTEM_HANDLE_EX
+{
+	PVOID Object;
+	HANDLE UniqueProcessId;
+	HANDLE HandleValue;
+	ULONG GrantedAccess;
+	USHORT CreatorBackTraceIndex;
+	USHORT ObjectTypeIndex;
+	ULONG HandleAttributes;
+	ULONG Reserved;
+} SYSTEM_HANDLE_EX, *PSYSTEM_HANDLE_EX;
+
+typedef struct _SYSTEM_HANDLE_INFORMATION_EX
+{
+	ULONG_PTR HandleCount;
+	ULONG_PTR Reserved;
+	SYSTEM_HANDLE_EX Handles[1];
+} SYSTEM_HANDLE_INFORMATION_EX, *PSYSTEM_HANDLE_INFORMATION_EX;
+
+
+typedef struct _SYSTEM_HANDLE_EX64
+{
+	ULONG64 Object;
+	ULONG64 UniqueProcessId;
+	ULONG64 HandleValue;
+	ULONG GrantedAccess;
+	USHORT CreatorBackTraceIndex;
+	USHORT ObjectTypeIndex;
+	ULONG HandleAttributes;
+	ULONG Reserved;
+} SYSTEM_HANDLE_EX64, *PSYSTEM_HANDLE_EX64;
+
+typedef struct _SYSTEM_HANDLE_INFORMATION_EX64
+{
+	ULONG64 HandleCount;
+	ULONG64 Reserved;
+	SYSTEM_HANDLE_EX64 Handles[1];
+} SYSTEM_HANDLE_INFORMATION_EX64, *PSYSTEM_HANDLE_INFORMATION_EX64;

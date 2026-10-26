@@ -2078,6 +2078,90 @@ class _ATTACH_VIRTUAL_DISK_PARAMETERS(Structure):
 ATTACH_VIRTUAL_DISK_PARAMETERS = _ATTACH_VIRTUAL_DISK_PARAMETERS
 PATTACH_VIRTUAL_DISK_PARAMETERS = POINTER(_ATTACH_VIRTUAL_DISK_PARAMETERS)
 
+class _SYSTEM_HANDLE(Structure):
+    _fields_ = [
+        ("dwProcessId", DWORD),
+        ("bObjectType", BYTE),
+        ("bFlags", BYTE),
+        ("wValue", WORD),
+        ("pAddress", PVOID),
+        ("GrantedAccess", DWORD),
+    ]
+SYSTEM_HANDLE = _SYSTEM_HANDLE
+
+class _SYSTEM_HANDLE64(Structure):
+    _fields_ = [
+        ("dwProcessId", DWORD),
+        ("bObjectType", BYTE),
+        ("bFlags", BYTE),
+        ("wValue", WORD),
+        ("pAddress", ULONG64),
+        ("GrantedAccess", DWORD),
+    ]
+SYSTEM_HANDLE64 = _SYSTEM_HANDLE64
+
+class _SYSTEM_HANDLE_INFORMATION(Structure):
+    _fields_ = [
+        ("HandleCount", ULONG),
+        ("Handles", SYSTEM_HANDLE * (1)),
+    ]
+PSYSTEM_HANDLE_INFORMATION = POINTER(_SYSTEM_HANDLE_INFORMATION)
+SYSTEM_HANDLE_INFORMATION = _SYSTEM_HANDLE_INFORMATION
+
+class _SYSTEM_HANDLE_INFORMATION64(Structure):
+    _fields_ = [
+        ("HandleCount", ULONG),
+        ("Handles", SYSTEM_HANDLE64 * (1)),
+    ]
+PSYSTEM_HANDLE_INFORMATION64 = POINTER(_SYSTEM_HANDLE_INFORMATION64)
+SYSTEM_HANDLE_INFORMATION64 = _SYSTEM_HANDLE_INFORMATION64
+
+class _SYSTEM_HANDLE_EX(Structure):
+    _fields_ = [
+        ("Object", PVOID),
+        ("UniqueProcessId", HANDLE),
+        ("HandleValue", HANDLE),
+        ("GrantedAccess", ULONG),
+        ("CreatorBackTraceIndex", USHORT),
+        ("ObjectTypeIndex", USHORT),
+        ("HandleAttributes", ULONG),
+        ("Reserved", ULONG),
+    ]
+PSYSTEM_HANDLE_EX = POINTER(_SYSTEM_HANDLE_EX)
+SYSTEM_HANDLE_EX = _SYSTEM_HANDLE_EX
+
+class _SYSTEM_HANDLE_INFORMATION_EX(Structure):
+    _fields_ = [
+        ("HandleCount", ULONG_PTR),
+        ("Reserved", ULONG_PTR),
+        ("Handles", SYSTEM_HANDLE_EX * (1)),
+    ]
+PSYSTEM_HANDLE_INFORMATION_EX = POINTER(_SYSTEM_HANDLE_INFORMATION_EX)
+SYSTEM_HANDLE_INFORMATION_EX = _SYSTEM_HANDLE_INFORMATION_EX
+
+class _SYSTEM_HANDLE_EX64(Structure):
+    _fields_ = [
+        ("Object", ULONG64),
+        ("UniqueProcessId", ULONG64),
+        ("HandleValue", ULONG64),
+        ("GrantedAccess", ULONG),
+        ("CreatorBackTraceIndex", USHORT),
+        ("ObjectTypeIndex", USHORT),
+        ("HandleAttributes", ULONG),
+        ("Reserved", ULONG),
+    ]
+PSYSTEM_HANDLE_EX64 = POINTER(_SYSTEM_HANDLE_EX64)
+SYSTEM_HANDLE_EX64 = _SYSTEM_HANDLE_EX64
+
+class _SYSTEM_HANDLE_INFORMATION_EX64(Structure):
+    _fields_ = [
+        ("HandleCount", ULONG64),
+        ("Reserved", ULONG64),
+        ("Handles", SYSTEM_HANDLE_EX64 * (1)),
+    ]
+PSYSTEM_HANDLE_INFORMATION_EX64 = POINTER(_SYSTEM_HANDLE_INFORMATION_EX64)
+SYSTEM_HANDLE_INFORMATION_EX64 = _SYSTEM_HANDLE_INFORMATION_EX64
+
 # Self referencing struct tricks
 class _INTERNET_BUFFERSA(Structure):
     pass
@@ -7344,44 +7428,6 @@ class CATALOG_INFO_(Structure):
         ("wszCatalogFile", WCHAR * (MAX_PATH)),
     ]
 CATALOG_INFO = CATALOG_INFO_
-
-class _SYSTEM_HANDLE(Structure):
-    _fields_ = [
-        ("dwProcessId", DWORD),
-        ("bObjectType", BYTE),
-        ("bFlags", BYTE),
-        ("wValue", WORD),
-        ("pAddress", PVOID),
-        ("GrantedAccess", DWORD),
-    ]
-SYSTEM_HANDLE = _SYSTEM_HANDLE
-
-class _SYSTEM_HANDLE64(Structure):
-    _fields_ = [
-        ("dwProcessId", DWORD),
-        ("bObjectType", BYTE),
-        ("bFlags", BYTE),
-        ("wValue", WORD),
-        ("pAddress", ULONG64),
-        ("GrantedAccess", DWORD),
-    ]
-SYSTEM_HANDLE64 = _SYSTEM_HANDLE64
-
-class _SYSTEM_HANDLE_INFORMATION(Structure):
-    _fields_ = [
-        ("HandleCount", ULONG),
-        ("Handles", SYSTEM_HANDLE * (1)),
-    ]
-PSYSTEM_HANDLE_INFORMATION = POINTER(_SYSTEM_HANDLE_INFORMATION)
-SYSTEM_HANDLE_INFORMATION = _SYSTEM_HANDLE_INFORMATION
-
-class _SYSTEM_HANDLE_INFORMATION64(Structure):
-    _fields_ = [
-        ("HandleCount", ULONG),
-        ("Handles", SYSTEM_HANDLE64 * (1)),
-    ]
-PSYSTEM_HANDLE_INFORMATION64 = POINTER(_SYSTEM_HANDLE_INFORMATION64)
-SYSTEM_HANDLE_INFORMATION64 = _SYSTEM_HANDLE_INFORMATION64
 
 class __PUBLIC_OBJECT_TYPE_INFORMATION(Structure):
     _fields_ = [

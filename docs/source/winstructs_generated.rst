@@ -3814,6 +3814,276 @@ _ATTACH_VIRTUAL_DISK_PARAMETERS
 
         :class:`_ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1`
 
+_SYSTEM_HANDLE
+''''''''''''''
+.. class:: SYSTEM_HANDLE
+
+    Alias for :class:`_SYSTEM_HANDLE`
+
+.. class:: _SYSTEM_HANDLE
+
+    .. attribute:: dwProcessId
+
+        :class:`DWORD`
+
+
+    .. attribute:: bObjectType
+
+        :class:`BYTE`
+
+
+    .. attribute:: bFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: wValue
+
+        :class:`WORD`
+
+
+    .. attribute:: pAddress
+
+        :class:`PVOID`
+
+
+    .. attribute:: GrantedAccess
+
+        :class:`DWORD`
+
+_SYSTEM_HANDLE64
+''''''''''''''''
+.. class:: SYSTEM_HANDLE64
+
+    Alias for :class:`_SYSTEM_HANDLE64`
+
+.. class:: _SYSTEM_HANDLE64
+
+    .. attribute:: dwProcessId
+
+        :class:`DWORD`
+
+
+    .. attribute:: bObjectType
+
+        :class:`BYTE`
+
+
+    .. attribute:: bFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: wValue
+
+        :class:`WORD`
+
+
+    .. attribute:: pAddress
+
+        :class:`ULONG64`
+
+
+    .. attribute:: GrantedAccess
+
+        :class:`DWORD`
+
+_SYSTEM_HANDLE_INFORMATION
+''''''''''''''''''''''''''
+.. class:: PSYSTEM_HANDLE_INFORMATION
+
+    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION`
+
+.. class:: SYSTEM_HANDLE_INFORMATION
+
+    Alias for :class:`_SYSTEM_HANDLE_INFORMATION`
+
+.. class:: _SYSTEM_HANDLE_INFORMATION
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handles
+
+        :class:`SYSTEM_HANDLE`
+
+_SYSTEM_HANDLE_INFORMATION64
+''''''''''''''''''''''''''''
+.. class:: PSYSTEM_HANDLE_INFORMATION64
+
+    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION64`
+
+.. class:: SYSTEM_HANDLE_INFORMATION64
+
+    Alias for :class:`_SYSTEM_HANDLE_INFORMATION64`
+
+.. class:: _SYSTEM_HANDLE_INFORMATION64
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handles
+
+        :class:`SYSTEM_HANDLE64`
+
+_SYSTEM_HANDLE_EX
+'''''''''''''''''
+.. class:: PSYSTEM_HANDLE_EX
+
+    Pointer to :class:`_SYSTEM_HANDLE_EX`
+
+.. class:: SYSTEM_HANDLE_EX
+
+    Alias for :class:`_SYSTEM_HANDLE_EX`
+
+.. class:: _SYSTEM_HANDLE_EX
+
+    .. attribute:: Object
+
+        :class:`PVOID`
+
+
+    .. attribute:: UniqueProcessId
+
+        :class:`HANDLE`
+
+
+    .. attribute:: HandleValue
+
+        :class:`HANDLE`
+
+
+    .. attribute:: GrantedAccess
+
+        :class:`ULONG`
+
+
+    .. attribute:: CreatorBackTraceIndex
+
+        :class:`USHORT`
+
+
+    .. attribute:: ObjectTypeIndex
+
+        :class:`USHORT`
+
+
+    .. attribute:: HandleAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+_SYSTEM_HANDLE_INFORMATION_EX
+'''''''''''''''''''''''''''''
+.. class:: PSYSTEM_HANDLE_INFORMATION_EX
+
+    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION_EX`
+
+.. class:: SYSTEM_HANDLE_INFORMATION_EX
+
+    Alias for :class:`_SYSTEM_HANDLE_INFORMATION_EX`
+
+.. class:: _SYSTEM_HANDLE_INFORMATION_EX
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG_PTR`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG_PTR`
+
+
+    .. attribute:: Handles
+
+        :class:`SYSTEM_HANDLE_EX`
+
+_SYSTEM_HANDLE_EX64
+'''''''''''''''''''
+.. class:: PSYSTEM_HANDLE_EX64
+
+    Pointer to :class:`_SYSTEM_HANDLE_EX64`
+
+.. class:: SYSTEM_HANDLE_EX64
+
+    Alias for :class:`_SYSTEM_HANDLE_EX64`
+
+.. class:: _SYSTEM_HANDLE_EX64
+
+    .. attribute:: Object
+
+        :class:`ULONG64`
+
+
+    .. attribute:: UniqueProcessId
+
+        :class:`ULONG64`
+
+
+    .. attribute:: HandleValue
+
+        :class:`ULONG64`
+
+
+    .. attribute:: GrantedAccess
+
+        :class:`ULONG`
+
+
+    .. attribute:: CreatorBackTraceIndex
+
+        :class:`USHORT`
+
+
+    .. attribute:: ObjectTypeIndex
+
+        :class:`USHORT`
+
+
+    .. attribute:: HandleAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+_SYSTEM_HANDLE_INFORMATION_EX64
+'''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_HANDLE_INFORMATION_EX64
+
+    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION_EX64`
+
+.. class:: SYSTEM_HANDLE_INFORMATION_EX64
+
+    Alias for :class:`_SYSTEM_HANDLE_INFORMATION_EX64`
+
+.. class:: _SYSTEM_HANDLE_INFORMATION_EX64
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Handles
+
+        :class:`SYSTEM_HANDLE_EX64`
+
 _INTERNET_BUFFERSA
 ''''''''''''''''''
 .. class:: INTERNET_BUFFERSA
@@ -15410,122 +15680,6 @@ CATALOG_INFO_
     .. attribute:: wszCatalogFile
 
         :class:`WCHAR` ``[MAX_PATH]``
-
-_SYSTEM_HANDLE
-''''''''''''''
-.. class:: SYSTEM_HANDLE
-
-    Alias for :class:`_SYSTEM_HANDLE`
-
-.. class:: _SYSTEM_HANDLE
-
-    .. attribute:: dwProcessId
-
-        :class:`DWORD`
-
-
-    .. attribute:: bObjectType
-
-        :class:`BYTE`
-
-
-    .. attribute:: bFlags
-
-        :class:`BYTE`
-
-
-    .. attribute:: wValue
-
-        :class:`WORD`
-
-
-    .. attribute:: pAddress
-
-        :class:`PVOID`
-
-
-    .. attribute:: GrantedAccess
-
-        :class:`DWORD`
-
-_SYSTEM_HANDLE64
-''''''''''''''''
-.. class:: SYSTEM_HANDLE64
-
-    Alias for :class:`_SYSTEM_HANDLE64`
-
-.. class:: _SYSTEM_HANDLE64
-
-    .. attribute:: dwProcessId
-
-        :class:`DWORD`
-
-
-    .. attribute:: bObjectType
-
-        :class:`BYTE`
-
-
-    .. attribute:: bFlags
-
-        :class:`BYTE`
-
-
-    .. attribute:: wValue
-
-        :class:`WORD`
-
-
-    .. attribute:: pAddress
-
-        :class:`ULONG64`
-
-
-    .. attribute:: GrantedAccess
-
-        :class:`DWORD`
-
-_SYSTEM_HANDLE_INFORMATION
-''''''''''''''''''''''''''
-.. class:: PSYSTEM_HANDLE_INFORMATION
-
-    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION`
-
-.. class:: SYSTEM_HANDLE_INFORMATION
-
-    Alias for :class:`_SYSTEM_HANDLE_INFORMATION`
-
-.. class:: _SYSTEM_HANDLE_INFORMATION
-
-    .. attribute:: HandleCount
-
-        :class:`ULONG`
-
-
-    .. attribute:: Handles
-
-        :class:`SYSTEM_HANDLE`
-
-_SYSTEM_HANDLE_INFORMATION64
-''''''''''''''''''''''''''''
-.. class:: PSYSTEM_HANDLE_INFORMATION64
-
-    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION64`
-
-.. class:: SYSTEM_HANDLE_INFORMATION64
-
-    Alias for :class:`_SYSTEM_HANDLE_INFORMATION64`
-
-.. class:: _SYSTEM_HANDLE_INFORMATION64
-
-    .. attribute:: HandleCount
-
-        :class:`ULONG`
-
-
-    .. attribute:: Handles
-
-        :class:`SYSTEM_HANDLE64`
 
 __PUBLIC_OBJECT_TYPE_INFORMATION
 ''''''''''''''''''''''''''''''''
