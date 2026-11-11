@@ -12,6 +12,7 @@ Here are the things to know about :mod:`windows.winproxy`
     * All parameters can be passed by ordinal or keyword
     * The call will fail if an argument with default value ``NeededParamater`` have been called without another value.
     * The call will raise a subclass of :class:`WindowsError` if it fails.
+    * Win32 last-error codes are captured by ctypes at the native call boundary before error checks run.
     * Some functions are 'transparent proxy' it means that all parameters are mandatory
 
 Example: ``VirtualAlloc``

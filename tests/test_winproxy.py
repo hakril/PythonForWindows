@@ -1,3 +1,7 @@
+import ctypes
+import sys
+import threading
+
 import pytest
 
 import windows
@@ -37,4 +41,36 @@ def test_resolve():
     ntdll = windows.current_process.peb.modules[1]
     assert ntdll.name == "ntdll.dll"
     assert ntdll.pe.exports["NtCreateFile"] == windows.winproxy.resolve(windows.winproxy.NtCreateFile)
+
+
+def test_last_error_preserved_during_gil_contention():
+    token = windows.current_process.token
+    size = gdef.DWORD()
+    stop = threading.Event()
+
+    def contend_for_gil():
+        while not stop.is_set():
+            sum(range(1000))
+
+    worker = threading.Thread(target=contend_for_gil)
+    switch_interval = sys.getswitchinterval()
+    sys.setswitchinterval(0.00001)
+    try:
+        worker.start()
+        for _ in range(256):
+            with pytest.raises(WindowsError) as exc_info:
+                windows.winproxy.GetTokenInformation(
+                    token.handle,
+                    gdef.TokenUser,
+                    None,
+                    0,
+                    ctypes.byref(size),
+                )
+            assert exc_info.value.winerror == gdef.ERROR_INSUFFICIENT_BUFFER
+            assert windows.winproxy.GetLastError() == gdef.ERROR_INSUFFICIENT_BUFFER
+    finally:
+        stop.set()
+        if worker.ident is not None:
+            worker.join()
+        sys.setswitchinterval(switch_interval)
 
