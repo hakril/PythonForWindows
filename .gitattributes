@@ -1,0 +1,3 @@
+# Generated code is always stored with LF, whatever the generating platform or git config
+windows/generated_def/*.py text
+docs/source/*_generated.rst text
