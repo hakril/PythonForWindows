@@ -8,6 +8,8 @@ import windows
 import windows.generated_def as gdef
 
 from .pfwtest import *
+from windows.winproxy.apis.advapi32 import Advapi32Proxy
+from windows.winproxy.error import fail_on_zero
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
@@ -43,6 +45,23 @@ def test_resolve():
     assert ntdll.pe.exports["NtCreateFile"] == windows.winproxy.resolve(windows.winproxy.NtCreateFile)
 
 
+def test_last_error_captured_before_error_check():
+    def check_after_native_error_is_overwritten(func_name, result, func, args):
+        ctypes.windll.kernel32.SetLastError(0)
+        return fail_on_zero(func_name, result, func, args)
+
+    @Advapi32Proxy("GetTokenInformation", error_check=check_after_native_error_is_overwritten)
+    def get_token_information(token, size):
+        return get_token_information.ctypes_function(
+            token.handle, gdef.TokenUser, None, 0, ctypes.byref(size)
+        )
+
+    token = windows.current_process.token
+    with pytest.raises(WindowsError) as exc_info:
+        get_token_information(token, gdef.DWORD())
+    assert exc_info.value.winerror == gdef.ERROR_INSUFFICIENT_BUFFER
+
+
 def test_last_error_preserved_during_gil_contention():
     token = windows.current_process.token
     size = gdef.DWORD()
@@ -53,8 +72,12 @@ def test_last_error_preserved_during_gil_contention():
             sum(range(1000))
 
     worker = threading.Thread(target=contend_for_gil)
-    switch_interval = sys.getswitchinterval()
-    sys.setswitchinterval(0.00001)
+    if sys.version_info[0] == 2:
+        get_interval, set_interval, interval = sys.getcheckinterval, sys.setcheckinterval, 1
+    else:
+        get_interval, set_interval, interval = sys.getswitchinterval, sys.setswitchinterval, 0.00001
+    original_interval = get_interval()
+    set_interval(interval)
     try:
         worker.start()
         for _ in range(256):
@@ -72,5 +95,5 @@ def test_last_error_preserved_during_gil_contention():
         stop.set()
         if worker.ident is not None:
             worker.join()
-        sys.setswitchinterval(switch_interval)
+        set_interval(original_interval)
 
