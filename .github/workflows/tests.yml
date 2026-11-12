@@ -14,12 +14,25 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 5
     steps:
+        # Generated files are written with CRLF on Windows: autocrlf makes git compare them
+        # to the committed versions without EOL noise (explicit, to not rely on the runner default)
+        - run: git config --global core.autocrlf true
         - uses: actions/checkout@v4
         - uses: actions/setup-python@v5
           with:
             python-version: '3.11'
-        - run:
-            py .\ctypes_generation\generate.py
+        # Delete generated files before regenerating: allow to detect all mismatches between generation & committed files
+        - name: Generate code
+          shell: bash
+          run: |
+            find windows/generated_def -type f ! -name __init__.py -delete
+            rm docs/source/*_generated.rst
+            py ctypes_generation/generate.py
+        - name: Check generated code matches the committed one
+          shell: bash
+          run: |
+            git add --all windows/generated_def docs/source
+            git diff --cached --exit-code
         - name: Check generated code can execute
           run: py -c "import windows.generated_def"
   tests:
