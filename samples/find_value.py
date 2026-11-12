@@ -54,6 +54,9 @@ def search_name_in_interface(target):
         for mname, mvalue in interface._functions_.items():
             if match(target, mname):
                 print("Method <{0}> of <{1}>: {2}".format(mname, name, mvalue))
+        # print(str(interface.IID), name)
+        if match(target, str(interface.IID)):
+            print("GUID of <{0}>: {1}".format(name, str(interface.IID)))
 
 
 def search_name(target):
