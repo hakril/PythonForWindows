@@ -14,9 +14,6 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 5
     steps:
-        # Generated files are written with CRLF on Windows: autocrlf makes git compare them
-        # to the committed versions without EOL noise (explicit, to not rely on the runner default)
-        - run: git config --global core.autocrlf true
         - uses: actions/checkout@v4
         - uses: actions/setup-python@v5
           with:

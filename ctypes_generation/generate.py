@@ -590,7 +590,8 @@ class COMCtypesGenerator(CtypesGenerator):
         args_to_define = method.args[1:] # ctypes doesnt not need the This
         name = method.name
         params = ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])
-        self.emitline(indent + "# {name} -> {params}".format(name=name, params=params))
+        space = " " if params else ""
+        self.emitline(indent + "# {name} ->{space}{params}".format(name=name, space=space, params=params))
 
         str_args = []
         for arg in args_to_define:

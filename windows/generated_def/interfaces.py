@@ -456,12 +456,12 @@ IUnknown._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -481,12 +481,12 @@ ICallFactory._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -583,12 +583,12 @@ ICallFrame._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -608,7 +608,7 @@ ICallFrame._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR)),
             "method_offset" : 5,
         },
-        # GetStackLocation -> 
+        # GetStackLocation ->
         "GetStackLocation": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 6,
@@ -623,7 +623,7 @@ ICallFrame._functions_ = {
             "type": ctypes.WINFUNCTYPE(VOID, HRESULT),
             "method_offset" : 8,
         },
-        # GetReturnValue -> 
+        # GetReturnValue ->
         "GetReturnValue": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
@@ -703,12 +703,12 @@ ICallFrameEvents._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -733,12 +733,12 @@ ICallFrameWalker._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -783,12 +783,12 @@ ICallInterceptor._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -842,12 +842,12 @@ IClassFactory._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -885,12 +885,12 @@ IClientSecurity._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -961,12 +961,12 @@ IComCatalog._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1011,7 +1011,7 @@ IComCatalog._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, REFIID, POINTER(PVOID)),
             "method_offset" : 10,
         },
-        # FlushCache -> 
+        # FlushCache ->
         "FlushCache": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 11,
@@ -1048,12 +1048,12 @@ IDispatch._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1105,12 +1105,12 @@ IEnumVARIANT._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1125,7 +1125,7 @@ IEnumVARIANT._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -1150,12 +1150,12 @@ IInternalUnknown._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1200,12 +1200,12 @@ IMarshal._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1331,12 +1331,12 @@ IMoniker._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1346,7 +1346,7 @@ IMoniker._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
             "method_offset" : 3,
         },
-        # IsDirty -> 
+        # IsDirty ->
         "IsDirty": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 4,
@@ -1556,12 +1556,12 @@ INetFwPolicy2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -1661,7 +1661,7 @@ INetFwPolicy2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG, BSTR, POINTER(VARIANT_BOOL)),
             "method_offset" : 21,
         },
-        # RestoreLocalFirewallDefaults -> 
+        # RestoreLocalFirewallDefaults ->
         "RestoreLocalFirewallDefaults": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 22,
@@ -1867,12 +1867,12 @@ INetFwRule._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2124,12 +2124,12 @@ INetFwRules._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2218,12 +2218,12 @@ INetFwServiceRestriction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2318,12 +2318,12 @@ IObjContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2348,37 +2348,37 @@ IObjContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumContextProps)),
             "method_offset" : 6,
         },
-        # Reserved1 -> 
+        # Reserved1 ->
         "Reserved1": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 7,
         },
-        # Reserved2 -> 
+        # Reserved2 ->
         "Reserved2": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 8,
         },
-        # Reserved3 -> 
+        # Reserved3 ->
         "Reserved3": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 9,
         },
-        # Reserved4 -> 
+        # Reserved4 ->
         "Reserved4": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 10,
         },
-        # Reserved5 -> 
+        # Reserved5 ->
         "Reserved5": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 11,
         },
-        # Reserved6 -> 
+        # Reserved6 ->
         "Reserved6": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 12,
         },
-        # Reserved7 -> 
+        # Reserved7 ->
         "Reserved7": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 13,
@@ -2398,12 +2398,12 @@ IPersist._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2448,12 +2448,12 @@ IPersistFile._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2463,7 +2463,7 @@ IPersistFile._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID)),
             "method_offset" : 3,
         },
-        # IsDirty -> 
+        # IsDirty ->
         "IsDirty": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 4,
@@ -2511,12 +2511,12 @@ IRemUnknown._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2619,12 +2619,12 @@ IShellLinkA._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2802,12 +2802,12 @@ IShellLinkW._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2913,12 +2913,12 @@ IStdIdentity._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -2994,12 +2994,12 @@ IStorage._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3039,7 +3039,7 @@ IStorage._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
             "method_offset" : 9,
         },
-        # Revert -> 
+        # Revert ->
         "Revert": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 10,
@@ -3134,12 +3134,12 @@ IStream._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3174,7 +3174,7 @@ IStream._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, DWORD),
             "method_offset" : 8,
         },
-        # Revert -> 
+        # Revert ->
         "Revert": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
@@ -3218,12 +3218,12 @@ ITypeComp._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3325,12 +3325,12 @@ ITypeInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3481,17 +3481,17 @@ ITypeLib._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
         },
-        # GetTypeInfoCount -> 
+        # GetTypeInfoCount ->
         "GetTypeInfoCount": {
             "type": ctypes.WINFUNCTYPE(UINT),
             "method_offset" : 3,
@@ -3564,12 +3564,12 @@ IBackgroundCopyCallback._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3620,12 +3620,12 @@ IBackgroundCopyError._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3678,12 +3678,12 @@ IBackgroundCopyFile._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3734,12 +3734,12 @@ IBackgroundCopyFile2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -3816,12 +3816,12 @@ IBackgroundCopyFile3._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4010,12 +4010,12 @@ IBackgroundCopyJob._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4035,22 +4035,22 @@ IBackgroundCopyJob._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles)),
             "method_offset" : 5,
         },
-        # Suspend -> 
+        # Suspend ->
         "Suspend": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 6,
         },
-        # Resume -> 
+        # Resume ->
         "Resume": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
         },
-        # Cancel -> 
+        # Cancel ->
         "Cancel": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 8,
         },
-        # Complete -> 
+        # Complete ->
         "Complete": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
@@ -4175,7 +4175,7 @@ IBackgroundCopyJob._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR)),
             "method_offset" : 33,
         },
-        # TakeOwnership -> 
+        # TakeOwnership ->
         "TakeOwnership": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 34,
@@ -4351,12 +4351,12 @@ IBackgroundCopyJob2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4376,22 +4376,22 @@ IBackgroundCopyJob2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles)),
             "method_offset" : 5,
         },
-        # Suspend -> 
+        # Suspend ->
         "Suspend": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 6,
         },
-        # Resume -> 
+        # Resume ->
         "Resume": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
         },
-        # Cancel -> 
+        # Cancel ->
         "Cancel": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 8,
         },
-        # Complete -> 
+        # Complete ->
         "Complete": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
@@ -4516,7 +4516,7 @@ IBackgroundCopyJob2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR)),
             "method_offset" : 33,
         },
-        # TakeOwnership -> 
+        # TakeOwnership ->
         "TakeOwnership": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 34,
@@ -4588,12 +4588,12 @@ IBackgroundCopyManager._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4649,12 +4649,12 @@ IEnumBackgroundCopyFiles._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4669,7 +4669,7 @@ IEnumBackgroundCopyFiles._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -4715,12 +4715,12 @@ IEnumBackgroundCopyJobs._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4735,7 +4735,7 @@ IEnumBackgroundCopyJobs._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -4801,12 +4801,12 @@ IActivationProperties._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4888,12 +4888,12 @@ IActivationPropertiesOut._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -4969,12 +4969,12 @@ IActivationPropertiesIn._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5052,12 +5052,12 @@ IActivationStageInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5116,12 +5116,12 @@ IClassClassicInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5228,12 +5228,12 @@ IComClassInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5298,12 +5298,12 @@ IComClassInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(DWORD)),
             "method_offset" : 14,
         },
-        # Lock -> 
+        # Lock ->
         "Lock": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 15,
         },
-        # Unlock -> 
+        # Unlock ->
         "Unlock": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 16,
@@ -5335,12 +5335,12 @@ IContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5396,12 +5396,12 @@ IEnumContextProps._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5416,7 +5416,7 @@ IEnumContextProps._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -5458,12 +5458,12 @@ IEnumSTATSTG._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5478,7 +5478,7 @@ IEnumSTATSTG._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -5523,12 +5523,12 @@ IInitActivationPropertiesIn._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5594,12 +5594,12 @@ IOpaqueDataInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5700,12 +5700,12 @@ IPrivActivationPropertiesIn._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5824,12 +5824,12 @@ IPrivActivationPropertiesOut._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5896,12 +5896,12 @@ IScmReplyInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -5953,12 +5953,12 @@ IScmRequestInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6014,12 +6014,12 @@ IStandardActivator._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6044,7 +6044,7 @@ IStandardActivator._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(COSERVERINFO), POINTER(CLSID), IUnknown, DWORD, IStorage, DWORD, POINTER(MULTI_QI)),
             "method_offset" : 6,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
@@ -6068,12 +6068,12 @@ ISystemActivator._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6103,12 +6103,12 @@ IPFWComTest._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6169,12 +6169,12 @@ IBindCtx._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6189,7 +6189,7 @@ IBindCtx._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
             "method_offset" : 4,
         },
-        # ReleaseBoundObjects -> 
+        # ReleaseBoundObjects ->
         "ReleaseBoundObjects": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -6256,12 +6256,12 @@ IEnumExplorerCommand._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6276,7 +6276,7 @@ IEnumExplorerCommand._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -6313,12 +6313,12 @@ IEnumMoniker._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6333,7 +6333,7 @@ IEnumMoniker._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -6370,12 +6370,12 @@ IEnumShellItems._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6390,7 +6390,7 @@ IEnumShellItems._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -6427,12 +6427,12 @@ IEnumString._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6447,7 +6447,7 @@ IEnumString._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, ULONG),
             "method_offset" : 4,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 5,
@@ -6500,12 +6500,12 @@ IExplorerCommand._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6589,12 +6589,12 @@ IRunningObjectTable._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6665,12 +6665,12 @@ IShellItem._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6739,12 +6739,12 @@ IShellItemArray._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6835,12 +6835,12 @@ IProxyManager._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6850,7 +6850,7 @@ IProxyManager._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(REFCLSID), POINTER(DWORD), POINTER(PVOID)),
             "method_offset" : 3,
         },
-        # IsConnected -> 
+        # IsConnected ->
         "IsConnected": {
             "type": ctypes.WINFUNCTYPE(BOOL),
             "method_offset" : 4,
@@ -6860,32 +6860,32 @@ IProxyManager._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, BOOL, BOOL),
             "method_offset" : 5,
         },
-        # Disconnect -> 
+        # Disconnect ->
         "Disconnect": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 6,
         },
-        # GetConnectionStatus -> 
+        # GetConnectionStatus ->
         "GetConnectionStatus": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
         },
-        # ScalarDeletingDestructor -> 
+        # ScalarDeletingDestructor ->
         "ScalarDeletingDestructor": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 8,
         },
-        # SetMapping -> 
+        # SetMapping ->
         "SetMapping": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
         },
-        # GetMapping -> 
+        # GetMapping ->
         "GetMapping": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 10,
         },
-        # GetServerObjectContext -> 
+        # GetServerObjectContext ->
         "GetServerObjectContext": {
             "type": ctypes.WINFUNCTYPE(IObjContext),
             "method_offset" : 11,
@@ -6914,12 +6914,12 @@ IProxyServerIdentity._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -6957,12 +6957,12 @@ IApplicationActivationManager._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7053,12 +7053,12 @@ IPackageDebugSettings._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7153,12 +7153,12 @@ IPackageExecutionStateChangeNotification._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7203,12 +7203,12 @@ IChannelHook._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7274,12 +7274,12 @@ IRpcChannelBuffer._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7304,7 +7304,7 @@ IRpcChannelBuffer._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(PVOID)),
             "method_offset" : 6,
         },
-        # IsConnected -> 
+        # IsConnected ->
         "IsConnected": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
@@ -7328,12 +7328,12 @@ IRpcHelper._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7367,12 +7367,12 @@ IRpcOptions._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7426,12 +7426,12 @@ IRpcStubBuffer._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7441,7 +7441,7 @@ IRpcStubBuffer._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, IUnknown),
             "method_offset" : 3,
         },
-        # Disconnect -> 
+        # Disconnect ->
         "Disconnect": {
             "type": ctypes.WINFUNCTYPE(PVOID),
             "method_offset" : 4,
@@ -7456,7 +7456,7 @@ IRpcStubBuffer._functions_ = {
             "type": ctypes.WINFUNCTYPE(PVOID, REFIID),
             "method_offset" : 6,
         },
-        # CountRefs -> 
+        # CountRefs ->
         "CountRefs": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 7,
@@ -7510,12 +7510,12 @@ IAction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7622,12 +7622,12 @@ IActionCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7687,7 +7687,7 @@ IActionCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
             "method_offset" : 13,
         },
-        # Clear -> 
+        # Clear ->
         "Clear": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 14,
@@ -7757,12 +7757,12 @@ IComHandlerAction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -7941,12 +7941,12 @@ IEmailAction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8149,12 +8149,12 @@ IExecAction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8283,12 +8283,12 @@ IIdleSettings._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8396,12 +8396,12 @@ INetworkSettings._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8521,12 +8521,12 @@ IPrincipal._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8710,12 +8710,12 @@ IRegisteredTask._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -8869,12 +8869,12 @@ IRegisteredTaskCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9013,12 +9013,12 @@ IRegistrationInfo._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9184,12 +9184,12 @@ IRepetitionPattern._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9303,12 +9303,12 @@ IRunningTask._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9358,12 +9358,12 @@ IRunningTask._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR)),
             "method_offset" : 11,
         },
-        # Stop -> 
+        # Stop ->
         "Stop": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 12,
         },
-        # Refresh -> 
+        # Refresh ->
         "Refresh": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 13,
@@ -9412,12 +9412,12 @@ IRunningTaskCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9512,12 +9512,12 @@ IShowMessageAction._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9660,12 +9660,12 @@ ITaskDefinition._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9839,12 +9839,12 @@ ITaskFolder._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -9973,12 +9973,12 @@ ITaskFolderCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -10069,12 +10069,12 @@ ITaskNamedValueCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -10124,7 +10124,7 @@ ITaskNamedValueCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG),
             "method_offset" : 11,
         },
-        # Clear -> 
+        # Clear ->
         "Clear": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 12,
@@ -10172,12 +10172,12 @@ ITaskNamedValuePair._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -10285,12 +10285,12 @@ ITaskService._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -10547,12 +10547,12 @@ ITaskSettings._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -10856,12 +10856,12 @@ ITrigger._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -11002,12 +11002,12 @@ ITriggerCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -11057,7 +11057,7 @@ ITriggerCollection._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, VARIANT),
             "method_offset" : 11,
         },
-        # Clear -> 
+        # Clear ->
         "Clear": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 12,
@@ -11345,12 +11345,12 @@ IWebBrowser2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -11375,22 +11375,22 @@ IWebBrowser2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT)),
             "method_offset" : 6,
         },
-        # GoBack -> 
+        # GoBack ->
         "GoBack": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
         },
-        # GoForward -> 
+        # GoForward ->
         "GoForward": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 8,
         },
-        # GoHome -> 
+        # GoHome ->
         "GoHome": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
         },
-        # GoSearch -> 
+        # GoSearch ->
         "GoSearch": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 10,
@@ -11400,7 +11400,7 @@ IWebBrowser2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT)),
             "method_offset" : 11,
         },
-        # Refresh -> 
+        # Refresh ->
         "Refresh": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 12,
@@ -11410,7 +11410,7 @@ IWebBrowser2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT)),
             "method_offset" : 13,
         },
-        # Stop -> 
+        # Stop ->
         "Stop": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 14,
@@ -11500,7 +11500,7 @@ IWebBrowser2._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL)),
             "method_offset" : 31,
         },
-        # Quit -> 
+        # Quit ->
         "Quit": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 32,
@@ -11726,17 +11726,17 @@ IEnumWbemClassObject._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
         },
-        # Reset -> 
+        # Reset ->
         "Reset": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 3,
@@ -11788,12 +11788,12 @@ IWbemCallResult._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -11925,12 +11925,12 @@ IWbemClassObject._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -11970,7 +11970,7 @@ IWbemClassObject._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG)),
             "method_offset" : 9,
         },
-        # EndEnumeration -> 
+        # EndEnumeration ->
         "EndEnumeration": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 10,
@@ -12040,7 +12040,7 @@ IWbemClassObject._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(IWbemClassObject), POINTER(IWbemClassObject)),
             "method_offset" : 23,
         },
-        # EndMethodEnumeration -> 
+        # EndMethodEnumeration ->
         "EndMethodEnumeration": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 24,
@@ -12102,12 +12102,12 @@ IWbemContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -12132,7 +12132,7 @@ IWbemContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT)),
             "method_offset" : 6,
         },
-        # EndEnumeration -> 
+        # EndEnumeration ->
         "EndEnumeration": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 7,
@@ -12152,7 +12152,7 @@ IWbemContext._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG),
             "method_offset" : 10,
         },
-        # DeleteAll -> 
+        # DeleteAll ->
         "DeleteAll": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 11,
@@ -12172,12 +12172,12 @@ IWbemLocator._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -12206,12 +12206,12 @@ IWbemObjectSink._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -12245,12 +12245,12 @@ IWbemObjectTextSrc._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -12304,12 +12304,12 @@ IWbemQualifierSet._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
@@ -12344,7 +12344,7 @@ IWbemQualifierSet._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(LONG)),
             "method_offset" : 8,
         },
-        # EndEnumeration -> 
+        # EndEnumeration ->
         "EndEnumeration": {
             "type": ctypes.WINFUNCTYPE(HRESULT),
             "method_offset" : 9,
@@ -12452,12 +12452,12 @@ IWbemServices._functions_ = {
             "type": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID)),
             "method_offset" : 0,
         },
-        # AddRef -> 
+        # AddRef ->
         "AddRef": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 1,
         },
-        # Release -> 
+        # Release ->
         "Release": {
             "type": ctypes.WINFUNCTYPE(ULONG),
             "method_offset" : 2,
