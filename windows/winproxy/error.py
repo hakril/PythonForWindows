@@ -15,7 +15,9 @@ class ExportNotFound(RuntimeError):
 # PFW Winproxy Exception type
 class WinproxyError(WindowsError):
     def __new__(cls, func_name, error_code=None):
-        win_error = ctypes.WinError(error_code) #GetLastError by default
+        if error_code is None:
+            error_code = ctypes.get_last_error()
+        win_error = ctypes.WinError(error_code)
         api_error = super(WinproxyError, cls).__new__(cls)
         api_error.api_name = func_name
         api_error.winerror = win_error.winerror & 0xffffffff

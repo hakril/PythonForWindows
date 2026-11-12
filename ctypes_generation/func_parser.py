@@ -24,7 +24,7 @@ class WinFunc(object):
         return model.format(self.name, ctypes_param_str)
 
     def generate_prototype_ctypes(self):
-        model = "{0} = WINFUNCTYPE({1})"
+        model = "{0} = WINFUNCTYPE({1}, use_last_error=True)"
         if isinstance(self.return_type, tuple) and self.return_type[0] == "PTR":
             ctypes_param = ["POINTER({0})".format(self.return_type[1])]
         else:
