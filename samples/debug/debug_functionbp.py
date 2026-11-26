@@ -33,7 +33,7 @@ class FollowNtCreateFile(windows.debug.FunctionBP):
             return
         print("NtCreateFile of <{0}>: handle = {1:#x}".format(filename, handle_value))
         # Manual verification
-        fhandle = [h for h in windows.system.handles if h.dwProcessId == dbg.current_process.pid and h.wValue == handle_value]
+        fhandle = [h for h in dbg.current_process.handles if h.value == handle_value]
         if not fhandle:
             raise ValueError("handle not found!")
         fhandle = fhandle[0]
