@@ -62,6 +62,7 @@ jobs:
           python-version: ${{ matrix.python-version}}
           architecture: x86
           update-environment: false
+
       ## Install the 64bits version of python3 asked
       - name: Set up Python3 ${{ matrix.python-version }} x64
         if: ${{ matrix.python-version != '2.7' }}
@@ -78,6 +79,15 @@ jobs:
         run: |
             choco install python2 --version=2.7.18 -y --no-progress --params '"/InstallDir:C:\tools\python27"'
             choco install python2 --version=2.7.18 -y --no-progress -x86 --params '"/InstallDir:C:\tools\python2732"' --force
+
+      # Install setuptool for Python 3.12
+      - name: Set up setuptools for ${{ matrix.python-version }}
+        shell: bash
+        if: ${{ matrix.python-version == '3.12' }}
+        run: |
+            py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install setuptools
+
+
 
       - name: Listing python versions availables
         run: py -0
