@@ -5,11 +5,10 @@ import functools
 from functools import partial
 from collections import namedtuple
 
-from ctypes.wintypes import *
-
 import windows.com
 import windows.generated_def as gdef
-from windows.generated_def.winstructs import *
+from ctypes import POINTER, cast
+from windows.generated_def.winstructs import BSTR, WBEMSTATUS, WBEM_FLAG_FORWARD_ONLY, WBEM_S_FALSE
 
 from windows.pycompat import basestring
 

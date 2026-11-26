@@ -8,7 +8,10 @@ from windows import utils
 from windows import winproxy
 from windows.pycompat import int_types
 import windows.generated_def as gdef
-from windows.generated_def import *
+from ctypes import byref
+from windows.generated_def import (BYTE, SC_ENUM_PROCESS_INFO, SERVICE_ADAPTER, SERVICE_DRIVER,
+    SERVICE_INTERACTIVE_PROCESS, SERVICE_STATE_ALL, SERVICE_STATUS, SERVICE_USERSERVICE_INSTANCE,
+    SERVICE_USER_SERVICE, SERVICE_WIN32, WCHAR)
 from windows import security
 from windows.pycompat import basestring, urepr_encode
 

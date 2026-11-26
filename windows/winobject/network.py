@@ -6,8 +6,10 @@ import struct
 from windows import winproxy
 import windows.generated_def as gdef
 from windows.com import interfaces as cominterfaces
-from windows.generated_def.winstructs import *
-from windows.generated_def.windef import *
+from ctypes import Structure
+from windows.generated_def.winstructs import (DWORD, MIB_TCP6ROW_OWNER_PID, MIB_TCPROW,
+    MIB_TCPROW_OWNER_PID, MIB_TCP_STATE_DELETE_TCB, MIB_TCP_STATE_ESTAB)
+from windows.generated_def.windef import AF_INET, AF_INET6
 
 
 class TCP4Connection(MIB_TCPROW_OWNER_PID):

@@ -4,7 +4,7 @@ import struct
 from windows.native_exec import native_function
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
-from windows.generated_def.winstructs import *
+from windows.generated_def.winstructs import DWORD, PVOID, ULONG64
 
 
 def _bitness():
