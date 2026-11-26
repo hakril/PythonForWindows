@@ -1,4 +1,4 @@
-from .debugger import Debugger, HXBreakpoint
+from .debugger import Debugger
 from .symboldbg import SymbolDebugger
 from .localdbg import LocalDebugger
-from .breakpoints import *
+from .breakpoints import HXBreakpoint
