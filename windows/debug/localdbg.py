@@ -5,9 +5,12 @@ import windows
 import windows.winobject.exception as winexception
 
 from windows import winproxy
+from windows.dbgprint import dbgprint
+from windows.pycompat import basestring
 from windows.generated_def import windef
-from windows.generated_def.winstructs import *
-from .breakpoints import *
+from windows.generated_def.winstructs import (EXCEPTION_BREAKPOINT, EXCEPTION_CONTINUE_EXECUTION,
+    EXCEPTION_SINGLE_STEP, PAGE_EXECUTE_READWRITE, PVOID)
+from .breakpoints import HARDWARE_EXEC_BP, STANDARD_BP
 
 class FakeDebuggerCurrentThread(object):
     """A pseudo thread representing the current thread at exception time"""

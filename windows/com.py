@@ -7,7 +7,10 @@ from collections import defaultdict
 
 import windows
 from windows import winproxy
-from windows.generated_def.winstructs import *
+from ctypes import POINTER
+from windows.generated_def.winstructs import (CLSCTX_LOCAL_SERVER, CLSID, E_NOINTERFACE,
+    LPSAFEARRAY, SAFEARRAY, VARIANT, VT_ARRAY, VT_BOOL, VT_BSTR, VT_DISPATCH, VT_EMPTY, VT_I2,
+    VT_I4, VT_I8, VT_NULL, VT_SAFEARRAY, VT_UI1, VT_UNKNOWN)
 
 import windows.generated_def as gdef
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER

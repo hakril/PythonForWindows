@@ -8,7 +8,8 @@ import threading
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
-from .generated_def.winstructs import *
+from .generated_def.winstructs import (DWORD, HANDLE, PROCESS_BASIC_INFORMATION,
+    STATUS_INFO_LENGTH_MISMATCH, ULONG, ULONG64)
 from windows.winobject import process
 from windows import winproxy
 from .winproxy import NeededParameter

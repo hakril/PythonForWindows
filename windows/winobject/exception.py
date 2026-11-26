@@ -1,6 +1,8 @@
 import ctypes
 import windows
-from windows.generated_def.winstructs import *
+import sys
+from windows.generated_def.winstructs import (CONTEXT32, CONTEXT64, DWORD, EXCEPTION_DEBUG_INFO,
+    EXCEPTION_RECORD, EXCEPTION_RECORD32, EXCEPTION_RECORD64, ULONGLONG, WOW64_CONTEXT)
 import windows.generated_def.windef as windef
 
 EXCEPTION_CONTINUE_SEARCH = (0x0)

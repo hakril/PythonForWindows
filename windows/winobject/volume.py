@@ -3,7 +3,8 @@ import ctypes
 import windows
 from windows import winproxy
 import windows.generated_def as gdef
-from windows.generated_def.winstructs import *
+from windows.generated_def.winstructs import (DRIVE_CDROM, DRIVE_FIXED, DRIVE_NO_ROOT_DIR,
+    DRIVE_RAMDISK, DRIVE_REMOTE, DRIVE_REMOVABLE, DRIVE_UNKNOWN, DWORD)
 
 from windows.utils import AutoHandle
 

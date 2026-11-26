@@ -6,7 +6,7 @@ import windows.utils as utils
 from . import native_exec
 from .generated_def import winfuncs
 from .generated_def.windef import PAGE_EXECUTE_READWRITE
-from .generated_def.winstructs import *
+from .generated_def.winstructs import PVOID
 
 # TODO Not a big fan of importing 'meta' every load
 # Should do an Hook API that take the winproxy function (not generate every hook possible)

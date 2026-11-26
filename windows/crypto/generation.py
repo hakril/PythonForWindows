@@ -1,6 +1,9 @@
 import windows
 from windows import winproxy
-from windows.generated_def import *
+import ctypes
+from windows.generated_def import (AT_KEYEXCHANGE, CERT_OID_NAME_STR, CRYPT_DATA_BLOB,
+    CRYPT_EXPORTABLE, EXPORT_PRIVATE_KEYS, HCRYPTKEY, REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY,
+    REPORT_NO_PRIVATE_KEY, ULONG, X509_ASN_ENCODING)
 from windows.crypto import DEFAULT_ENCODING, CertificateStore
 
 

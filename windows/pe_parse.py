@@ -4,7 +4,12 @@ import windows.hooks as hooks
 import windows.utils as utils
 
 import windows.generated_def as gdef
-from windows.generated_def.winstructs import *
+from ctypes import sizeof
+from windows.generated_def.winstructs import (BYTE, CHAR, DWORD, IMAGE_DIRECTORY_ENTRY_EXPORT,
+    IMAGE_DIRECTORY_ENTRY_IMPORT, IMAGE_EXPORT_DIRECTORY, IMAGE_IMPORT_DESCRIPTOR,
+    IMAGE_NT_HEADERS32, IMAGE_NT_HEADERS64, IMAGE_NT_OPTIONAL_HDR32_MAGIC,
+    IMAGE_NT_OPTIONAL_HDR64_MAGIC, IMAGE_OPTIONAL_HEADER32, IMAGE_OPTIONAL_HEADER64,
+    IMAGE_SECTION_HEADER, INT, PVOID, WORD)
 from windows.utils import transform_ctypes_fields
 import windows.remotectypes as rctypes
 

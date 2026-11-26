@@ -1,7 +1,8 @@
 from collections import OrderedDict
 
 import windows
-from windows.generated_def.winstructs import *
+import ctypes
+from windows.generated_def.winstructs import PVOID
 from windows.generated_def import windef
 from windows.winobject.process import WinProcess, WinThread
 from windows.pycompat import basestring

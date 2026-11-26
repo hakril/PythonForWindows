@@ -12,9 +12,16 @@ import windows.native_exec.simple_x64 as x64
 from windows.winobject.process import WinProcess, WinThread
 from windows.dbgprint import dbgprint
 from windows import winproxy
-from windows.generated_def.winstructs import *
+import ctypes
+from windows.generated_def.winstructs import (CREATE_PROCESS_DEBUG_EVENT, CREATE_THREAD_DEBUG_EVENT,
+    DBG_CONTINUE, DBG_EXCEPTION_NOT_HANDLED, DEBUG_EVENT, DEBUG_PROCESS, DUPLICATE_SAME_ACCESS,
+    DWORD, EXCEPTION_ACCESS_VIOLATION, EXCEPTION_BREAKPOINT, EXCEPTION_DEBUG_EVENT,
+    EXCEPTION_SINGLE_STEP, EXIT_PROCESS_DEBUG_EVENT, EXIT_THREAD_DEBUG_EVENT, HANDLE,
+    LOAD_DLL_DEBUG_EVENT, LONG, MEM_FREE, OUTPUT_DEBUG_STRING_EVENT, PAGE_EXECUTE_READ,
+    PAGE_NOACCESS, PAGE_READONLY, PAGE_READWRITE, RIP_EVENT, STATUS_WX86_BREAKPOINT,
+    STATUS_WX86_SINGLE_STEP, UNLOAD_DLL_DEBUG_EVENT)
 from windows.generated_def import windef
-from .breakpoints import *
+from .breakpoints import HARDWARE_EXEC_BP, MEMORY_BREAKPOINT, ProxyBreakpoint, STANDARD_BP
 
 #from windows.syswow64 import CS_32bits
 from windows.winobject.exception import VectoredException

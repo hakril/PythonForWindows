@@ -2,7 +2,11 @@ from os import urandom
 
 from windows import winproxy
 from windows.crypto import DEFAULT_ENCODING
-from windows.generated_def import *
+import ctypes
+from windows.generated_def import (BYTE, CERT_CONTEXT, CRYPT_ALGORITHM_IDENTIFIER, CRYPT_DATA_BLOB,
+    CRYPT_DECRYPT_MESSAGE_PARA, CRYPT_ENCRYPT_MESSAGE_PARA, DWORD, PCERT_CONTEXT, X509_OCTET_STRING,
+    szOID_NIST_AES128_CBC, szOID_NIST_AES192_CBC, szOID_NIST_AES256_CBC, szOID_OIWSEC_desCBC,
+    szOID_RSA_DES_EDE3_CBC)
 
 __all__ = ["encrypt", "decrypt"]
 

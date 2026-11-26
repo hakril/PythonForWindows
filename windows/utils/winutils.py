@@ -13,7 +13,10 @@ from windows.dbgprint import dbgprint
 import windows.generated_def as gdef
 
 from .. import winproxy
-from ..generated_def.winstructs import *
+from ctypes import byref, sizeof
+from ..generated_def.winstructs import (DWORD, HANDLE, INVALID_HANDLE_VALUE, LUID,
+    PROCESS_INFORMATION, PSID, PULONG, PVOID, SE_PRIVILEGE_ENABLED, STARTUPINFOW, TOKEN_ALL_ACCESS,
+    TOKEN_ELEVATION, TOKEN_PRIVILEGES, TokenElevation)
 
 
 # Function resolution !

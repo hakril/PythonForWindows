@@ -2,7 +2,6 @@ import windows
 
 import windows.native_exec.simple_x64 as x64
 import windows.native_exec.simple_x86 as x86
-from windows.generated_def.winstructs import *
 
 
 StrlenW64  = x64.MultipleInstr()
