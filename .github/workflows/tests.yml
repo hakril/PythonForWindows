@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [windows-2022, windows-latest]
-        python-version: [2.7, 3.6, 3.11]
+        python-version: [2.7, 3.6, 3.12]
         python-architecture: [x86, x64]
         include:
             # Translate architecture to bitness for py.exe commandline
