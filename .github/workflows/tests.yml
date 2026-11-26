@@ -85,7 +85,8 @@ jobs:
         shell: bash
         if: ${{ matrix.python-version == '3.12' }}
         run: |
-            py -${{ matrix.python-version}}-${{ matrix.python-bitness-to-test}} -m pip install setuptools
+            py -${{ matrix.python-version}}-32 -m pip install setuptools
+            py -${{ matrix.python-version}}-64 -m pip install setuptools
 
 
 
